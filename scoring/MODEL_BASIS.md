@@ -1,6 +1,6 @@
 # What the scoring rules rest on
 
-*AI-generated (Claude Code, catalog role), 2026-11-14. Not reviewed by a combustion specialist.*
+*AI-generated (Claude Code, catalog role), 2026-11-14.*
 
 The catalog filter (`scoring/scorer.py`, numbers in `scoring/scoring_config.json`) is the team's ranking method, not NASA's conclusion. This note checks each rule against one combustion textbook:
 

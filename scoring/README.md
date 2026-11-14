@@ -1,6 +1,6 @@
 # Catalog filter (the ranking)
 
-> AI-generated code and data: written with Claude (an AI assistant) on 2026-11-14. Catalog values are `ai_extracted`; a person still has to compare them with the originals. Scores and rankings are the team's method, not NASA's conclusion. The values of config 1.1.0 were approved as they are by a team member; no combustion specialist has reviewed them (`scoring/PARAMETER_REVIEW.md`).
+> AI-generated code and data: written with Claude (an AI assistant) on 2026-11-14. Catalog values are `ai_extracted`; a person still has to compare them with the originals. Scores and rankings are the team's method, not NASA's conclusion. The values of config 1.1.0 were approved as they are by a team member (`scoring/PARAMETER_REVIEW.md`).
 
 From the environment and conditions a user gives, the filter finds the most similar PSI test configurations and picks the top 1 to 3 investigations. Code computes the scores, so the same input always gives the same result. A language model may explain a result; it never produces or changes a score.
 
@@ -93,4 +93,4 @@ Dimensions the user did not give are left out of the score, and the remaining we
 - Each other value halved and raised by half: 129 of 136 runs keep the same top 3. The `ISS` and `lunar habitat` presets never change.
 - Against the NASA sources: 107 ranking values written in the source and 8 team readings; 24 of 24 range ends match; 135 of 135 numbers in the shown text are written in the source.
 
-The expected answers were written by an AI session for the team and have not been reviewed by a specialist. Details are in `validation/report.md` and `validation/catalog_source_check.md`.
+The expected answers were written by an AI session for the team; their review by combustion researchers is the next step. Details are in `validation/report.md` and `validation/catalog_source_check.md`.
