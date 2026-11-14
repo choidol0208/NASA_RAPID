@@ -1,6 +1,6 @@
 # How the ranking works: weighting rules, validation, data preprocessing
 
-*AI-generated (Claude Code, catalog role), 2026-11-14, config 1.1.0. Written for the team.*
+*AI-generated (Claude Code, catalog role), 2026-11-14, config 1.2.0. Written for the team. How the weights are derived (AHP), with the evidence and the checks for each purpose, is in `scoring/WEIGHTING.md`.*
 
 Scores and rankings are the team's computation, not NASA's conclusion, and not safety guidance. All values live in `scoring/scoring_config.json`; the code is `scoring/scorer.py` (Python) and its port `web/scorer.js` (the page).
 
@@ -35,9 +35,11 @@ score = 100 × M × G × Σ_d ( w_d × S_d )
 
 | Profile | o2 | pressure | flow | fuel | geometry | role | diluent | Why |
 |---|---|---|---|---|---|---|---|---|
-| prevention (default) | 0.25 | 0.10 | 0.20 | 0.25 | 0.10 | 0.10 | 0 | Microgravity flammability of solids is mapped on oxygen against flow speed, so O2 and flow carry 0.45. Fuel comes next. Pressure and shape refine the match |
-| detection | 0.10 | 0.05 | 0.10 | 0.30 | 0.05 | 0.40 | 0 | Smoke depends mostly on the material and on whether the study measured smoke |
-| suppression | 0.15 | 0.05 | 0.10 | 0.20 | 0.05 | 0.30 | 0.15 | Whether extinguishment was tested, and with which diluent, matters most; the O2 after dilution still governs extinction |
+| prevention (default) | 0.285 | 0.090 | 0.166 | 0.267 | 0.111 | 0.081 | 0 | Microgravity flammability of solids is mapped on oxygen against flow speed, and limits are found material by material, so O2 and fuel lead and flow follows. Shape, pressure and purpose refine the match |
+| detection | 0.085 | 0.049 | 0.136 | 0.221 | 0.051 | 0.458 | 0 | Only a study that measured smoke can answer; then the material that smokes, then the flow that shapes the particles |
+| suppression | 0.162 | 0.080 | 0.089 | 0.162 | 0.059 | 0.286 | 0.162 | Whether extinguishment was tested matters most; the limiting oxygen belongs to a fuel and a diluent together, and depends on pressure |
+
+**How the weights are derived (config 1.2.0):** by the analytic hierarchy process (AHP). For each profile every pair of dimensions is compared on Saaty's 1–9 scale (51 judgements, each with its basis in a NASA record sentence, the textbook or the team's reasoning, in `scoring/ahp_judgements.json`). `scoring/derive_weights.py` takes the principal eigenvector of each matrix as the weights and checks consistency: CR 0.012, 0.014 and 0.006, below the 0.10 limit. The judgements were written by an AI session; the human lead approved them as they are and decided to apply them (19:26). Configs 1.0.0 and 1.1.0 used directly allocated weights (0.25, 0.10, 0.20, 0.25, 0.10, 0.10 for prevention); the comparison is in `scoring/WEIGHTING.md` 3.4.
 
 The question type comes from words in the query: "smoke" and "detector" give detection; "extinguish" and "suppression" give suppression. Otherwise the type is prevention.
 
@@ -84,19 +86,22 @@ The question type comes from words in the query: "smoke" and "detector" give det
 
 ## 2. How it was validated
 
-Every check below can be rerun with the command given. Numbers are from 2026-11-14, config 1.1.0.
+Every check below can be rerun with the command given. Numbers are from 2026-11-14, config 1.2.0.
 
 | Check | What it shows | Result | Command |
 |---|---|---|---|
-| Unit tests | Each similarity formula, hand-calculated examples, the reading of queries, the wording of reasons and warnings | 39 of 39 pass | `python3 -m unittest scoring.test_scorer` |
+| Unit tests | Each similarity formula, hand-calculated examples, the reading of queries, the wording of reasons and warnings, and that the config holds exactly the AHP weights | 45 of 45 pass | `python3 -m unittest scoring.test_scorer` |
+| AHP consistency | Whether the 51 pairwise judgements fit together | CR 0.012 (prevention), 0.014 (detection), 0.006 (suppression); limit 0.10 | `python3 scoring/derive_weights.py --check` |
 | Validation scenarios | 38 typed questions with an expected answer: rough inputs, prevention, detection, suppression, liquids, fuel phase, equipment, sentences, traps such as "spacesuit" or "rocket" | 38 of 38 pass | `python3 validation/run_validation.py` |
 | Weight stability | Each weight moved by ±0.05 in five key scenarios | Rank 1 unchanged in 5 of 5 | in `validation/report.md` |
-| Weight sensitivity | Each prevention weight halved and raised by half (rescaled to 1) on four demo queries | 45 of 48 variants keep the same top 3 in order; rank 1 never changes | `python3 validation/sensitivity.py` |
-| Sensitivity to the other values | Each similarity scale, the gate, the evidence factor, the tie margin and each similarity table halved and raised by half | 129 of 136 runs keep the same top 3. The `ISS` and `lunar habitat` presets never change. The changes are in the two cotton-fabric queries, through the O2 decay above a test's maximum and the fuel table | `python3 validation/sensitivity.py` |
+| Weight sensitivity | Each weight of each profile halved and raised by half (rescaled to 1), on four queries per profile | 146 of 152 variants keep the same top 3 in order; rank 1 changes in 1 (`lunar habitat cotton fabric`) | `python3 validation/sensitivity.py` |
+| Weighting by purpose | Equal weights, rank-order centroid weights, and the other profiles' weights on each profile's queries | Rank-order centroid keeps the same top 3 in 11 of 12. Prevention weights change the top 3 in 5 of 8 detection and suppression queries: the purpose changes the answer | `python3 validation/sensitivity.py` |
+| Weight uncertainty (SMAA) | 300 random weight vectors per profile that keep only the AHP order of importance | Rank 1 holds in every draw for 9 of 12 queries and in 80% or more for 11 of 12; `lunar habitat cotton fabric` has no clear winner (SAFFIRE-II 46%, ACME-BRE 54%) | `python3 validation/sensitivity.py` |
+| Sensitivity to the other values | Each similarity scale, the gate, the evidence factor, the tie margin and each similarity table halved and raised by half | 127 of 136 runs keep the same top 3. The `lunar habitat` preset never changes, and `ISS` changes only at rank 3 (2 runs). The other changes are in the two cotton-fabric queries, through the O2 decay scales, the gate threshold and the fuel table | `python3 validation/sensitivity.py` |
 | Python against JavaScript | The page gives exactly what the reference code gives | 99 of 99 queries identical; the deploy stops on any difference | `python3 web/parity_check.py` |
 | Catalog against the NASA sources | An independent second reading of the PSI records and tables, without the build script or the data pipeline | 107 ranking values written in their source, plus 8 team readings; 24 of 24 range ends match the source column; 14 test counts match, and 1 differs with its reason in `source_notes`; 135 of 135 numbers in the shown text are in the source | `python3 validation/check_catalog_sources.py` |
 | Rules against a combustion textbook | Direction and form of each rule (Turns 2012, chapter and section) | Consistent; flame spread over solids is not covered by the book | `scoring/MODEL_BASIS.md` |
-| Review of every value | Role, basis and sensitivity of each value; approval by the human lead | Weights approved 16:51, all other values 17:03 | `scoring/PARAMETER_REVIEW.md` |
+| Review of every value | Role, basis and sensitivity of each value; approval by the human lead | Direct weights approved 16:51, all other values 17:03; AHP judgements approved and applied 19:26 | `scoring/PARAMETER_REVIEW.md`, `scoring/WEIGHTING.md` |
 | Human check sheet | The catalog values behind the demo, with the NASA rows to compare | 96 checks for 12 configurations, ready for a person | `validation/verification_sheet.csv` |
 
 **What these checks do not show:**

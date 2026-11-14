@@ -1,146 +1,49 @@
 ---
 role: catalog
-updated: 2026-11-14 19:00 KST
+updated: 2026-11-14 19:36 KST
 state: working
 blocked_on: none
 ---
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`. Core work is done and live with config 1.1.0. Pre-freeze check at 18:25:
+*AI-generated (Claude Code), catalog role.*
 
-**19:00 `scoring/METHOD.md` (new; teammates asked).** One document covers three things:
-- the weighting rules: the score formula, the profiles, the similarity rule of each dimension, the gate, the evidence factor, selection and query reading;
-- how they were validated: every check with its command and today's result;
-- the data preprocessing of the catalog.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **Config 1.2.0 is on `catalog-scoring`, waiting for pm's integration.** The freeze is lifted (pm 1920; answered `done` with the plan for the extra day).
 
-Both READMEs link to it. pm: it can back the Project Details and the method slide.
-
-While checking it, I added the one missing note: FLEX row 115 writes a pressure of 0, which is not read. Text only; no value or ranking changed.
-
-**18:35 Sentence queries (ui request 1817, done, `9769982`).**
-- A pressure followed by a Korean particle ("70 kPa의") is now read.
-- "spacecraft cabin" and 우주선 (spacecraft) read as the ISS cabin when no other environment is named.
-- An unnamed planet or base sets gravity `planetary` and the partial-gravity warning.
-- The demo rankings are identical.
-- **pm: the numbers in the submission text change to 39 unit tests, 38 of 38 validation scenarios and 99 of 99 parity queries.** The sensitivity numbers are unchanged (45/48, 129/136) and so is the source check.
-- At 18:53: `catalog-filter` has both; `main` has `a39cba4` and still needs `9769982` (the 1817 fix) at the freeze integration.
-- `main` has every catalog commit except the 18:14 wording change (`a39cba4`, text only); pm integrates it at the freeze.
-- On a worktree of `origin/main`, 11 demo queries (ISS, lunar habitat, spacesuit, Mars base, the cotton-fabric pair, the Korean form, three equipment queries, CO2 suppression) give the same status, warnings, `not_understood`, configurations, scores, confidence and reasons as `catalog-scoring`. Unit tests and parity 86/86 pass on `main`.
-- The live site serves config 1.1.0 with the same values (only the `_about` text differs until the next deploy), and the same `scorer.js` and `configurations.csv`.
-- At 19:16 I repeat the check on `main` after the switch to deploying from `main` only.
-- No value changes after the 18:00 freeze.
-
-**17:18 English only (pm request 1656, done).** All catalog files are translated, and the Korean input words are glossed.
-- The READMEs, the data dictionary and the workbook are in English. The dictionary column `meaning_ko` is now `meaning`.
-- The scenarios explain themselves in English (`why`), and the 4 Korean queries carry `query_en`.
-- The `label_ko` fields are removed from the config, and the new map `keywords._gloss_ko` gives the English of every Korean keyword.
-- No score changes; all checks pass.
-- 17:57: the reviewer is now written as "the human lead", with no personal name, in `scoring_config.json` `_about` and in my two rows of `compliance/AI_USAGE_LOG.md`. No Hangul is left in catalog files except the glossed input words. pm: keep "the human lead" in the log translation.
-
-**18:14 Wording (ui request 1809, the human lead's decision).** The "no specialist reviewed" sentences are removed from every catalog file. Review by combustion researchers is written as a next step. Text only; no value changed.
-
-**17:03 All values of config 1.1.0 approved as they are.** After reading the AI review (`scoring/PARAMETER_REVIEW.md`), the human lead approved every value other than the weights, findings 1 and 2 included. The weights were approved at 16:51.
-- The 8 questions at the end of the file are written as the next step, for combustion researchers.
-- `scoring/scoring_config.json` `_about` records both approvals. No value changed.
-- pm: the submission text can say "a team member reviewed and approved all ranking values". Review by combustion researchers goes under next steps, as a plan (ui request 1809).
-
-**17:01 AI review of the other values** (`scoring/PARAMETER_REVIEW.md`, with `validation/sensitivity.py`). Each similarity scale, the gate, the evidence factor, the tie margin and each similarity table is set to x0.5 and x1.5 on the four demo queries.
-- 129 of 136 runs keep the same top 3; 3 keep the same three in another order; rank 1 changes in 3.
-- The page's `ISS` and `lunar habitat` presets never change.
-- The changes come only from the two cotton-fabric queries, through the O2 decay above a test's maximum and the fuel table: same material at lower oxygen against another fuel at the user's oxygen.
-- This is an AI review, approved by the human lead at 17:03. The file ends with 8 questions for combustion researchers (next step).
-- No value changed.
-- pm: the numbers can go into the checks table of the submission text ("Each other value halved and raised by half: 129 of 136 keep the top three; the two presets never change").
-
-**16:51 Weights reviewed.** The human lead approved the profile weights of config 1.1.0 as they are.
-- `scoring/scoring_config.json` `_about` now names the reviewer, a team member, with the date. No value changed, so scores, the demo rankings and every number in the slides stay as they are.
-- The review covered the weights only; the other values were approved at 17:03.
-- pm: the submission text may say that a team member reviewed the weights.
-
-Checked 16:48: the ranking numbers in pm's `docs/submission/submission_text.md` and `slides_outline.md` match the current state:
-- tests 38/38, validation 35/35, parity 86/86;
-- sensitivity 45/48 with rank 1 never changing;
-- source check: 107 values found plus 8 team readings, 24/24 range ends, 135/135 numbers in text;
-- demo scores: ISS 94, 94, 92.7; lunar habitat 79.1, 79.1, 76.1.
-
-Role, as the human lead set it at 14:29:
-- catalog: the user's conditions in, weights computed from the catalog, the top 1 to 3 experiments out;
-- ui: shows the processed data of those experiments and checks that the parts work together;
-- data: its processed files are checked by another teammate.
-
-Done since last sync (branch `catalog-scoring`):
-- 14:59 pm request 1453 done (`bbea891`). New output key `not_understood` (Python and JS) with a scenario-level warning `not_understood`: the query words the scorer cannot read, for example "battery enclosure", "3d printer", "water mist" or "glove box".
-  - Equipment words were added only where PSI backs them: detectors, sensors, extinguishers, inerting, garments, wiring, cables and others.
-  - Scores do not change; demo rankings are identical.
-  - 38 tests, validation 35/35, parity 86/86.
-  - ui: the warning prints from the config as usual.
-- 14:56 data request 1442 done. The SAME-C01 key finding now calls the weight-loss rate a planned target of the test matrix, not a measured condition (`a8dfa0f`). Nothing else in the catalog or the scorer uses the counts.
-- 14:34 `validation/check_catalog_pipeline.py` removed. ui first replaced the deploy step with its own integration check (request 1429, done). I no longer compare the catalog with `tests.csv`.
-- 14:31 `validation/check_catalog_sources.py` (new, not a deploy step) checks the catalog against the NASA records and tables directly, without the pipeline. Report: `validation/catalog_source_check.md`.
-  - The O2, pressure and flow ends the scorer compares: 107 of 107 found.
-  - Range ends against the source column: 24 of 24.
-  - Test counts: 14 match, and 1 differs with its reason in `source_notes` (SAME).
-  - Numbers in the text the page shows: 135 of 135 found.
-  - The run fixed two texts: the BASS-II-C03 label now reads "1/4 to 1/2 inch", and the ACME-BRE-C01 `source_notes` gained a note.
-  - pm: this replaces my dependence on `ai/audit_catalog.py`; you need not rerun it for me.
-- 14:33 Weight sensitivity: `validation/sensitivity.py`, also printed in `validation/report.md`. Each prevention weight is set to x0.5 and x1.5 on the four demo queries.
-  - 45 of 48 variants keep the same top 3, in order.
-  - 1 keeps the same three in another order.
-  - 2 change rank 3.
-  - Rank 1 never changes (config 1.0.0: 43 of 48, with 1 rank-1 change).
-- 14:35 BASS-II-C04 `source_notes` say why its flow (1–29 cm/s) differs from the pipeline's starting speeds (5–11). The catalog range covers every speed the cells record, which is what the ranking compares.
-- 14:24 **Scoring config 1.1.0: changes A and B applied (the human lead's decision).**
-  - A: the O2 distance is the log of the O2 ratio. Near air it is the same as before.
-  - B: a different inert diluent is compared by molar heat capacity at 298 K (CO2, N2, He).
-  - Python and JS together.
-  - `config_version` in `rank()` output is now `1.1.0`.
-  - ui, pm:
-    - `ISS` and `lunar habitat` keep their top 3; scores move by less than 2 points.
-    - Typed demo queries changed: `ISS cotton fabric` swaps ranks 2 and 3 (SAFFIRE-III, then BASS-II-C04). `lunar habitat cotton fabric` and `달 기지 면직물` (Korean: lunar base cotton fabric) rank SAFFIRE-I-C01 second, where BASS-II-C05 was.
-    - If a slide or a screenshot shows those two queries, retake it.
-  - `validation/verification_sheet.csv` rebuilt: 12 configurations; BASS-II-C05 is no longer in a demo result.
-- 14:19 `scoring/MODEL_BASIS.md` (new, English). It checks each scoring rule against a combustion textbook the human lead supplied: Turns, *An Introduction to Combustion*, 3rd ed., McGraw-Hill 2012. The book is copyrighted, so it was read as background only; nothing from it is reproduced, and it is listed in `compliance/SOURCES.md`.
-  - Supported: the direction of the oxygen rule, the log form of the pressure rule, the gravity warnings, quiescent against forced flow, the fuel-phase gate, and the oxidizer-stream rule.
-  - Not covered by the book: flame spread over solids (thin or thick, opposed or concurrent), which rests on the PSI records.
-  - Two candidate changes, A and B, applied at 14:24 (above).
-  - pm: it may help the Validity part of the write-up. No code changed.
-- Review fixes asked by the human lead (14:00):
-  - `74b206e` "CO2 30%" is no longer read as 30% oxygen; Korean "천장" (ceiling) is no longer read as "천" (cloth).
-  - `5f1627e` Confidence counts only values compared with a recorded value. Assumed (fallback) O2 and pressure no longer count.
-    - ISS #2 BASS-C01 now shows low confidence (0.3).
-    - ISS cotton fabric #1 BASS-C01 now shows medium (0.65).
-  - `93b193a` A flow speed inside a one-sided range ("up to 40 cm/s", PSI-26) scores unknown (0.5), not a miss. There is no jump at 40.
-  - `8d39b1c` "tested" is used only for table values. New catalog columns `o2_source`, `pressure_source`, `flow_source` (table | record | test_matrix | team). The reasons word non-table values by source:
-    - ACME-BRE-C01 pressure is "named in the PSI record, not a test value". The objective names 8.2 to 14.7 psia, and the table says pressures "are not identified".
-    - FLEX-2 values are "from the test matrix".
-    - 0 cm/s for FLEX, CFI and BRE is a "team reading".
-- pm decisions 14:15, `8a352cd`:
-  - `human_verified` scores like `ai_extracted` (0.7).
-  - New result warning `ranges_separate`. It is on all three lunar-habitat results; it is not on ISS, whose atmosphere is assumed.
-- ui request 1409 (pm's audit), `1d361b2`: FLEX-2 objectives, FLEX-2-C02 and SAFFIRE-III labels, and SAFFIRE-II key findings now read as the NASA sources write them. Answered `done`.
-- Closed my requests 1332 and 1345 (pm answered both).
-- Checks: 35 unit tests, validation 29/29, parity 68/68, catalog against tests.csv OK, `catalog.xlsx` rebuilt.
+Done since last sync:
+- **19:26 config 1.2.0: the profile weights are derived by AHP (the human lead's decision).**
+  - `scoring/ahp_judgements.json` holds 51 pairwise judgements on Saaty's 1–9 scale, each with its basis: a NASA PSI record sentence, a textbook point or the team's reasoning. An AI session wrote them; the human lead approved them as they are.
+  - `scoring/derive_weights.py` takes the principal eigenvector of each matrix as the weights. CR is 0.012 (prevention), 0.014 (detection) and 0.006 (suppression), against a limit of 0.10.
+  - A unit test locks the config to the derivation.
+  - New weights:
+    - prevention: o2 0.285, fuel 0.267, flow 0.166, geometry 0.111, pressure 0.090, role 0.081;
+    - detection: role 0.458, fuel 0.221, flow 0.136, o2 0.085, geometry 0.051, pressure 0.049;
+    - suppression: role 0.286; fuel, o2 and diluent 0.162 each; flow 0.089, pressure 0.080, geometry 0.059.
+  - Effect:
+    - the four presets keep their top 3 and confidence levels; scores move by at most 3.3 points (`ISS` 94.4, 94.4, 92.8);
+    - 35 of 38 scenarios keep their top 3, and the other 3 change at rank 2 or 3; all 38 pass.
+- **New checks** in `validation/sensitivity.py`, also in `validation/report.md`:
+  - every profile with each weight ×0.5 and ×1.5: 146 of 152 keep the top 3, and rank 1 changes once;
+  - equal weights and rank-order-centroid weights;
+  - each profile's queries with the other profiles' weights: the purpose changes the top 3 in 5 of 8 detection and suppression queries;
+  - SMAA keeping only the order of importance: rank 1 holds in every draw for 9 of 12 queries;
+  - `lunar habitat cotton fabric` has no clear winner (SAFFIRE-II 46%, ACME-BRE 54%).
+- **`scoring/WEIGHTING.md` (new; teammates asked):** how the purpose is read, the technique (weighted sum, rescaling, gate, evidence factor), the AHP derivation, the record sentences behind each judgement, the checks, the limits and next steps. `METHOD.md`, the README, `MODEL_BASIS.md` and `PARAMETER_REVIEW.md` are updated to 1.2.0.
+- Checks: 45 of 45 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean. The verification sheet was rebuilt: 96 checks; `lunar habitat` rank 4–5 now brings ACME-S-FLAME-C01 in place of FLEX-2-C01. No row had a human entry.
+- Requests opened:
+  - pm 1933: merge, rebuild the AI layer (`robustness.json` hashes the old config), and update the four preset scores and the weighting sentence in `docs/submission/`;
+  - ui 1933: check the page after integration and retake score captures at the final freeze; optional wording for the close call.
 
 Next:
-- Weights: reviewed and approved as they are (16:51). No weight change after 18:00 without the human lead. If one is ever made, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the new numbers.
-- Optional, for a person on the team: `validation/verification_sheet.csv` (96 checks, 12 configurations). Checking the rows of the ISS and lunar habitat top results first is enough for the demo.
-- 19:00 freeze: after ui switches Pages to `main` only, confirm that `main` gives the same demo rankings. After that, fixes only.
-- Sync every 20 minutes. If any ranking number changes, tell pm, because the submission text and slides quote them.
+- After pm says the English compliance logs are on `main`: merge `main`, then append my rows to `AI_USAGE_LOG.md` (AHP and SMAA work, 19:00–19:36) and `SOURCES.md` (Saaty 1980; Lahdelma, Hokkanen and Salminen 1998; Barron and Barrett 1996, method references).
+- After pm's integration: check that `main` and the live site give the 1.2.0 scores for the four presets.
+- Extra day (as in my answer to 1920): more detection and suppression scenarios; a rank-1 acceptability field for close calls, if ui agrees; the human check of the verification sheet, which needs a person.
+- Weights change only through `scoring/ahp_judgements.json` and `scoring/derive_weights.py --write`, with the human lead's decision. After any change, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the numbers.
 
 Published for others:
-- `data/catalog/configurations.csv`: three new columns after `atmosphere_basis` (additive), `o2_source`, `pressure_source`, `flow_source`. Values: `table`, `record`, `test_matrix`, `team`, or empty. The other columns are unchanged in name and order.
-  - Text changes: `config_label` of FLEX-2-C02, SAFFIRE-III-C01 and C02.
-  - Value change: BASS-II-C04 `flow_max_cms` 29.
-- `data/catalog/investigations.csv`: text of FLEX-2 `objectives` and SAFFIRE-II `key_findings`.
-- `scoring.scorer.rank`:
-  - Same shape.
-  - New warning code `ranges_separate` (text in `scoring_config.json`).
-  - `coverage` and `confidence` now leave out assumed values.
-  - The text of `why` and `main_gap` changed: "named in the PSI record, not a test value", "from the test matrix, not individual tests", "team reading, not in the table", "up to 40 cm/s".
-- Demo rankings:
-  - Up to 14:19 (review fixes): `ISS`, `lunar habitat`, `spacesuit`, `Mars base`, `ISS cotton fabric` and `lunar habitat cotton fabric` kept their top 3 and scores. Only confidence labels and warnings changed.
-  - Since config 1.1.0 (14:24): `ISS`, `lunar habitat`, `spacesuit` and `Mars base` keep their top 3. `ISS cotton fabric` and `lunar habitat cotton fabric` changed (see above).
-- `scoring_config.json` 1.1.0: `similarity.o2` uses `above_scale_ln` and `below_scale_ln` in place of `above_scale_pct` and `below_scale_pct`. `similarity.diluent` gains `molar_cp_298K_kJ_per_kmolK` and `cp_ratio_exponent`. If the page draws anything from the old o2 keys, it needs the new ones.
-- Queries with a flow speed changed, for example "SIBAL 45 cm/s" and "PMMA rod 35 cm/s": BASS's "up to 40 cm/s" is no longer treated as a test at 40.
+- `scoring/scoring_config.json` 1.2.0: same keys and shape; the seven weights of each profile changed, plus the `_about` and `rationale` text. `config_version` in `rank()` output is `1.2.0`.
+- `scoring.scorer.rank` and `web/scorer.js`: unchanged code, same output shape.
+- `data/catalog/*.csv`: unchanged since 19:00.
 
 Notes for other roles:
-- ui: the page prints the new warning from the config. A result can now carry `ranges_separate` next to `outside_range`.
-- data: the scorer still reads catalog ranges, not test rows, so `ranges_separate` is a caveat, not a joint check. A joint check would need `tests.csv` in the browser.
+- pm: the submission text can say "the weights of each question type are derived by the analytic hierarchy process from 51 pairwise judgements (consistency ratio 0.006 to 0.014, limit 0.10), each citing a NASA PSI record sentence, a textbook point or the team's reasoning; an AI session wrote the judgements and the human lead approved them".
+- pm: earlier numbers that changed: unit tests 39 → 45; weight sensitivity "45 of 48, rank 1 never changes" → "146 of 152 over all three profiles, rank 1 changes once"; other values 129/136 → 127/136. In that last check `ISS` now changes at rank 3 in 2 runs.
+- Earlier history of this status is in git (`git log -p coord/status/catalog.md`).
