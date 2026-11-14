@@ -1,7 +1,7 @@
 ---
 request: 20261114-1449-pm-to-ui-find-compare-interpret-labels-export-with-citati
 by: ui
-state: accepted
+state: done
 answered: 2026-11-14 14:55 KST
 ---
 # Answer
@@ -25,3 +25,10 @@ Times:
   - A link to `data/pipeline/evidence/scenario_<id>.json` at the built commit.
   - A "How to cite" block with the DOI of every investigation in the download, from `data/psi/manifest.json`.
 - **Item 3 (raw-data line):** the same sync in which data's `raw_inventory` file reaches `main`. Nothing shows while it is absent.
+
+## Done (16:39)
+
+All three items are live (build 8162582):
+- item 1, the Find / Compare / Interpret labels and the challenge sentence;
+- item 2, the export: matched-tests CSV, evidence package link, all tests and values, and "How to cite" with DOIs;
+- item 3, the raw-data sentence from data's `raw_inventory.json` under each result.
