@@ -1,0 +1,437 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "purpose": "Parameters and fixed sentences of the lab numbers (pipeline/lab/envelope.py, pipeline/lab/order_changes.py, branch data-lab). Every choice the two scripts make is a parameter of this file; the outputs copy the parameters they used under 'choices'. No model, fitted relation, weight, interpolation or probability is used. Every number of the outputs is a value copied from data/pipeline/tests.csv or from a reference item's 'values', or a count, minimum, maximum, difference or the stated rank statistic of such values.",
+  "status": "Experiment on branch data-lab, not merged into the pipeline."
+ },
+ "inputs": {
+  "tests": "data/pipeline/tests.csv",
+  "need_tests": "data/pipeline/need_tests.csv",
+  "scenario_needs": "data/pipeline/scenario_needs.csv",
+  "scenarios": "pipeline/spec/scenarios.json",
+  "needs": "pipeline/spec/needs.json",
+  "sources": "pipeline/spec/sources.json",
+  "references": "pipeline/spec/references.json"
+ },
+ "output_dir": "data/pipeline/lab/numbers",
+ "forbidden_words": [
+  "safe",
+  "acceptable",
+  "sufficient",
+  "representative",
+  "proven"
+ ],
+ "envelope": {
+  "choices": {
+   "counted_tests": {
+    "value": "need_tests.csv rows with objective_link equal to 'stated'",
+    "column": "objective_link",
+    "equals": "stated"
+   },
+   "ambient_oxygen": {
+    "value": "o2_pct recorded and o2_basis equal to 'ambient' (the rule of match_environments in pipeline/run.py: any other basis is marked not_ambient)",
+    "column": "o2_basis",
+    "equals": "ambient"
+   },
+   "axes": {
+    "value": [
+     "o2_pct",
+     "pressure_kpa"
+    ]
+   },
+   "number_reading": {
+    "value": "every cell and every spec number is read as the exact decimal it is written as (Python fractions.Fraction of the written string); differences are exact"
+   },
+   "gap_sign": {
+    "value": "gap = nearest recorded value minus nominal value; positive means the nearest recorded value is above the nominal value; 0 means a test has exactly the nominal value; where two recorded values are equally near (one above, one below), both are listed"
+   },
+   "hull": {
+    "value": "convex hull of the distinct recorded (o2_pct, pressure_kpa) points, monotone chain, exact rational arithmetic, no tolerance"
+   },
+   "hull_boundary": {
+    "value": "a point on an edge or a vertex of the hull is reported as position 'boundary' and counted as inside"
+   },
+   "degenerate_hull": {
+    "value": "fewer than 3 non-collinear distinct points: hull kind 'point' or 'segment', reported as 'no area'; inside is true only where the nominal point coincides with the point or lies on the segment"
+   },
+   "pareto": {
+    "value": "a test is listed when no other test of the set has |delta o2_pct| <= its |delta o2_pct| and |delta pressure_kpa| <= its |delta pressure_kpa| with at least one of the two strictly smaller; deltas = test value minus nominal value; no combined distance, no weight, no scaling; tests with identical deltas are all listed"
+   },
+   "gravity": {
+    "value": "count of tests whose gravity_level string equals the scenario's gravity_level string; a scenario with gravity_level null sets none"
+   },
+   "ranges": {
+    "value": "the in_range rule of pipeline/run.py (RANGE_DEFAULTS: min inclusive, max exclusive unless stated) applied to the scenario's ranges; a range the scenario does not set is reported as not set; the joint count requires oxygen and pressure both inside and is asserted equal to tests_atmosphere of scenario_needs.csv"
+   },
+   "scenarios_without_nominal": {
+    "value": "a scenario whose nominal is empty gets no nominal-point numbers; its ranges are reported where set"
+   }
+  },
+  "sentences": {
+   "hull_inside": "Inside the hull of tested conditions means only that tests exist on several sides of this point; it says nothing about the outcome at this point.",
+   "hull_outside": "Outside means no arithmetic on these tests reaches this point.",
+   "counts_not_added": "Counts of different needs are not added: one test can be counted for several needs.",
+   "values_source": "Every value is copied from data/pipeline/tests.csv (the pipeline's standardized value, with source file and row); every other number is a count, minimum, maximum or difference of those values.",
+   "no_outcome": "These numbers say where tests were run, not what happened in them; no outcome variable is read.",
+   "nominal_not_design": "The nominal point is the one written in scenarios.json; its note there says what it is.",
+   "no_nominal": "scenarios.json gives no nominal point for this environment, so no nominal-point numbers are computed.",
+   "gravity_constant": "gravity_level in tests.csv is not a column of any PSI table: it is a constant that the team's source mapping (pipeline/spec/sources.json, 'constants') sets for the whole table. The count below therefore counts tests of tables the team mapped as microgravity.",
+   "gravity_column": "gravity_level in tests.csv comes from a column of the PSI table for at least one of these tests.",
+   "gravity_not_set": "The scenario sets no gravity level.",
+   "no_tests": "No counted test of this need has a recorded ambient oxygen."
+  }
+ },
+ "order_changes": {
+  "choices": {
+   "values": {
+    "value": "values are read as printed in the reference item's 'values' (exact decimals; JSON numbers read as decimal strings), no tolerance"
+   },
+   "classes": {
+    "value": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0"
+   },
+   "kendall_tau_b": {
+    "value": "tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0"
+   },
+   "tau_b_digits": {
+    "value": 6
+   },
+   "column_pairs": {
+    "value": "every unordered pair of condition columns, in the column order of the spec"
+   },
+   "material_pairs": {
+    "value": "every unordered pair of materials, in the row order of the item"
+   }
+  },
+  "tables": [
+   {
+    "id": "H2006.table2",
+    "item": "H2006.table2",
+    "layout": "dict_of_lists",
+    "path": [
+     "moc_vol_pct_by_total_pressure_kpa"
+    ],
+    "columns_key": "columns_kpa",
+    "column_label": "total pressure (kPa)",
+    "quantities": [
+     {
+      "id": "MOC",
+      "label": "maximum oxygen concentration, vol %"
+     }
+    ],
+    "notes": [
+     "The item states normal gravity and quiescent conditions for every cell."
+    ]
+   },
+   {
+    "id": "OF2012.table1",
+    "item": "OF2012.table1",
+    "layout": "rows",
+    "material_key": "material",
+    "held_key": "pressure_psia",
+    "held_label": "test pressure (psia, as printed)",
+    "column_label": "gravity level",
+    "quantities": [
+     {
+      "id": "ULOI",
+      "label": "upward limiting oxygen index (1g) and ULOI* (low gravity), % O2",
+      "columns": [
+       [
+        "1g",
+        "uloi_o2_pct_1g"
+       ],
+       [
+        "martian",
+        "uloi_star_o2_pct_martian"
+       ],
+       [
+        "lunar",
+        "uloi_star_o2_pct_lunar"
+       ],
+       [
+        "0g",
+        "uloi_star_o2_pct_0g"
+       ]
+      ]
+     },
+     {
+      "id": "MOC",
+      "label": "maximum oxygen concentration (1g) and MOC* (low gravity), % O2",
+      "columns": [
+       [
+        "1g",
+        "moc_o2_pct_1g"
+       ],
+       [
+        "martian",
+        "moc_star_o2_pct_martian"
+       ],
+       [
+        "lunar",
+        "moc_star_o2_pct_lunar"
+       ],
+       [
+        "0g",
+        "moc_star_o2_pct_0g"
+       ]
+      ]
+     }
+    ],
+    "notes": [
+     "ULOI and MOC are reported separately and are not compared with each other.",
+     "The item states that the low-gravity limits come from 5.18 s drop tower tests and that their criteria are not the same as in 1g.",
+     "The delta O2 rows of the table are a difference the paper computes from the other rows and are not used here."
+    ],
+    "held_differs_note": "The held values say that the materials were tested at different pressures; a pair of materials at different pressures compares two conditions at once."
+   }
+  ],
+  "fixed_notes": [
+   "Values are as printed.",
+   "Measurement uncertainty or step size: not stated in the item. A difference of one printed unit may or may not be resolved by the test method.",
+   "These counts describe the order of printed values; they say nothing about why the order changes."
+  ],
+  "search": {
+   "rule": "every reference item with a 'values' field is looked at; a table qualifies with at least 3 materials (rows) and at least 2 condition columns holding the same quantity. Every item with 'values' that is not in 'tables' must be listed here with a reason, or the script stops.",
+   "rejected": [
+    {
+     "item": "6001B.T1.specimen",
+     "reason": "test specimen dimensions; no materials"
+    },
+    {
+     "item": "6001B.T1.pass",
+     "reason": "one criterion value; no materials"
+    },
+    {
+     "item": "6001B.T1.ambient",
+     "reason": "one atmosphere; no materials"
+    },
+    {
+     "item": "3001.T6.2-3",
+     "reason": "measurement ranges of four gases, one column; no condition columns"
+    },
+    {
+     "item": "SMAC.co",
+     "reason": "one substance (carbon monoxide) by exposure duration; fewer than 3 materials"
+    },
+    {
+     "item": "SMAC.atmospheres",
+     "reason": "list of pressures; no materials"
+    },
+    {
+     "item": "EAWG.atmospheres",
+     "reason": "list of atmospheres; no materials"
+    },
+    {
+     "item": "EAWG.testing",
+     "reason": "one value; no materials"
+    },
+    {
+     "item": "EA.8.2-34",
+     "reason": "one atmosphere; no materials"
+    },
+    {
+     "item": "CH.moonbase",
+     "reason": "one bound; no materials"
+    },
+    {
+     "item": "CH.spacesuit",
+     "reason": "one atmosphere; no materials"
+    },
+    {
+     "item": "TB14639.worstcase",
+     "reason": "one atmosphere; no materials"
+    },
+    {
+     "item": "ICES19.issflow",
+     "reason": "one flow range; no materials"
+    },
+    {
+     "item": "ICES19.limits",
+     "reason": "one material (PMMA rod) under four conditions; fewer than 3 materials"
+    },
+    {
+     "item": "ICES19.coratio",
+     "reason": "one range; no materials"
+    },
+    {
+     "item": "OF2012.margin",
+     "reason": "the minima of the delta O2 rows of OF2012.table1; not a table of its own"
+    },
+    {
+     "item": "OF2012.test1env",
+     "reason": "one atmosphere; no materials"
+    },
+    {
+     "item": "SAF.result",
+     "reason": "two spread rates of one test series; fewer than 3 materials"
+    },
+    {
+     "item": "SAF.starting_o2",
+     "reason": "two oxygen values of two flights; no materials"
+    },
+    {
+     "item": "SAME.sizes",
+     "reason": "one range and one flow; no materials"
+    },
+    {
+     "item": "SAME.baseline",
+     "reason": "one range and one time; no materials"
+    },
+    {
+     "item": "MST14.loi",
+     "reason": "two fuels (methanol, heptane) by two diluents; fewer than 3 materials"
+    },
+    {
+     "item": "SAF456.conditions",
+     "reason": "one row per sample, each sample at its own condition; no material is held under 2 condition columns"
+    },
+    {
+     "item": "SAF17.o2_initial_I",
+     "reason": "one oxygen value and one flow; no materials"
+    },
+    {
+     "item": "SAF17.o2_initial_II",
+     "reason": "one value; no materials"
+    },
+    {
+     "item": "SAF17.table1_o2",
+     "reason": "oxygen as written per sample (text); no materials and no condition columns"
+    },
+    {
+     "item": "SAF17S.o2_I",
+     "reason": "one value; no materials"
+    },
+    {
+     "item": "SAF17S.o2_II",
+     "reason": "one value; no materials"
+    },
+    {
+     "item": "SAF123.table1",
+     "reason": "oxygen as written per sample (text); no materials and no condition columns"
+    },
+    {
+     "item": "SAF2PMMA.hatch",
+     "reason": "one atmosphere; no materials"
+    },
+    {
+     "item": "CNF23.table1",
+     "reason": "conditions per sample; no material is held under 2 condition columns"
+    },
+    {
+     "item": "SAF45.table2",
+     "reason": "one oxygen value per sample and one pressure; no materials"
+    },
+    {
+     "item": "THOMSEN19.conditions",
+     "reason": "one atmosphere; no materials"
+    },
+    {
+     "item": "PSISAF.pressure_column",
+     "reason": "pressure readings per sample file; no materials"
+    },
+    {
+     "item": "SAMEEIRD.matrix",
+     "reason": "ranges of a test matrix; no materials"
+    },
+    {
+     "item": "SAMEEIRD.massmeas",
+     "reason": "one accuracy value; no materials"
+    },
+    {
+     "item": "SAMEEIRD.ratio",
+     "reason": "one mass and one time; no materials"
+    },
+    {
+     "item": "SAMEFSR.flown",
+     "reason": "one count and one range; no materials"
+    },
+    {
+     "item": "SAMER.rtr0.limit",
+     "reason": "one limit; no materials"
+    },
+    {
+     "item": "SAMER.matrix",
+     "reason": "two counts; no materials"
+    },
+    {
+     "item": "SAMER.baseline",
+     "reason": "one range and one time; no materials"
+    },
+    {
+     "item": "SAMEOPS.setpoint",
+     "reason": "four materials with one value each (a heater setpoint); fewer than 2 condition columns"
+    },
+    {
+     "item": "ICES12.baseline",
+     "reason": "one range and one time; no materials"
+    },
+    {
+     "item": "ICES15.cstr",
+     "reason": "one pressure; no materials"
+    },
+    {
+     "item": "BASS2SUM.pressure_range",
+     "reason": "one range; no materials"
+    },
+    {
+     "item": "BASS2SUM.idealgas",
+     "reason": "one pressure; no materials"
+    },
+    {
+     "item": "H2006.pressures",
+     "reason": "the column headings of H2006.table2; no materials"
+    },
+    {
+     "item": "H2006.range",
+     "reason": "one range; no materials"
+    },
+    {
+     "item": "H2007.fixedpressure",
+     "reason": "one pressure; no materials"
+    },
+    {
+     "item": "H2011.linear",
+     "reason": "three slopes summarized over materials; no per-material values"
+    },
+    {
+     "item": "H2011.cannot",
+     "reason": "two atmospheres of one statement; no materials"
+    },
+    {
+     "item": "THOMSEN18.saffire",
+     "reason": "one pressure; no materials"
+    },
+    {
+     "item": "NIEHAUS15.expected",
+     "reason": "one atmosphere; no materials"
+    }
+   ]
+  }
+ },
+ "readme": {
+  "cannot_say": [
+   "Whether a material burns, or how, at a scenario's nominal point: no outcome variable is read by the envelope numbers.",
+   "Anything about a point inside the hull beyond the existence of tests on several sides of it: no value is interpolated.",
+   "Anything about gravity levels other than the ones in tests.csv: every test there carries a gravity level that the team's source mapping sets as a constant per table.",
+   "Which of two materials is more flammable in a scenario: the order tables are normal-gravity or drop-tower results printed by the authors, at the printed conditions only.",
+   "Whether a difference of one printed unit is a real difference: the items state no measurement uncertainty or step size.",
+   "Whether the counted tests are the right tests for a need: that is the pipeline's linking rule (needs.json, stated_by), not arithmetic."
+  ],
+  "numbers": {
+   "counted_tests": "Number of tests of need_tests.csv with objective_link 'stated' for the need.",
+   "counted_tests_with_ambient_oxygen": "Of those, the tests with o2_pct recorded and o2_basis 'ambient'.",
+   "axes.tests_recorded": "Of the tests with ambient oxygen, the number with the axis (o2_pct or pressure_kpa) recorded.",
+   "axes.min, axes.max": "Smallest and largest recorded value of the axis over those tests.",
+   "axes.nominal_within_min_max": "Whether min <= nominal value <= max.",
+   "axes.nearest": "The recorded value(s) closest to the nominal value on that axis alone, the gap (value minus nominal) and the number of tests at that value.",
+   "joint.tests_with_both_recorded, joint.distinct_points": "Tests with ambient oxygen and pressure both recorded, and the number of distinct (o2_pct, pressure_kpa) points among them.",
+   "joint.hull_kind, joint.hull_vertices_ccw": "Convex hull of those points: 'area', 'segment', 'point' or 'none', with its vertices counter-clockwise.",
+   "joint.nominal_position, joint.nominal_inside_hull": "'interior', 'boundary' or 'outside' of the nominal point relative to the hull; boundary counts as inside.",
+   "joint.nearest_tests_pareto": "Tests not dominated in (|delta o2_pct|, |delta pressure_kpa|), each with both deltas and its source file and row.",
+   "gravity.*": "Number of tests whose gravity_level equals the scenario's, and where gravity_level in tests.csv comes from.",
+   "ranges.*": "Number of tests inside the scenario's oxygen range, inside its pressure range, and inside both; the last equals tests_atmosphere of scenario_needs.csv (checked).",
+   "order.counts": "For one table, one quantity and one pair of condition columns: the number of material pairs in each class (same_order, reversed, tie_in_one, tie_in_both).",
+   "order.kendall_tau_b": "Kendall tau-b of the two columns over all material pairs, as numerator, integer under the square root and rounded decimal.",
+   "order.reversed_and_tie_in_one_pairs": "Every material pair that is reversed or tied in one column only, with the four printed values."
+  }
+ }
+}

@@ -148,3 +148,78 @@ The summary counts claims, undeveloped claims, evidence leaves, inferences by ba
 - `covers` copies only what the item states. "not stated in the item" may mean that the paper states it elsewhere; the item was not re-read for this step.
 - The defeater kind is not defined in the three method sources that could be read; it is described in the team's own words.
 - The argument shows where the case rests on documents, on team reasoning, or on nothing held. It does not say whether the top claim is true, and it is not a criterion or a judgement on any material.
+
+# Lab numbers: envelope position and order changes (experiment, branch `data-lab`)
+
+*AI-generated (Claude Code) during the NASA Space Apps Challenge 2026 hackathon, 2026-11-14. Not human-reviewed. Experiment on the branch `data-lab`, not merged into the pipeline.*
+
+Numbers that follow from the data by arithmetic alone: no model, no fitted relation, no weight, no interpolation, no probability, and no sentence written by a language model at run time. Every number is a value copied from `data/pipeline/tests.csv` or from a reference item's `values`, or a count, minimum, maximum, difference or the stated rank statistic (Kendall tau-b) of such values. Every choice is a parameter of `pipeline/spec/lab_numbers.json`, and every output copies the choices it used under `choices`. All sentences of the outputs are fixed sentences of that spec.
+
+## Files
+
+| File | What |
+|---|---|
+| `pipeline/spec/lab_numbers.json` | Parameters (choices), fixed sentences, tables to read, items looked at and rejected, forbidden words, the README lists below |
+| `pipeline/lab/numlib.py` | Exact decimal reading and writing (fractions), forbidden-word scan, deterministic output |
+| `pipeline/lab/envelope.py` | Envelope position per scenario and need; writes `data/pipeline/lab/numbers/envelope_<scenario_id>.json` and `.md` |
+| `pipeline/lab/order_changes.py` | Order changes per held table; writes `data/pipeline/lab/numbers/order_<table_id>.json` and `.md` |
+| `pipeline/lab/run_numbers.py` | Runs both and writes `data/pipeline/lab/numbers/index.json` |
+
+Run (after `python3 pipeline/run.py`): `python3 pipeline/lab/run_numbers.py`. Python standard library; the range rule is imported from `pipeline/run.py` (`in_range`), which loads pandas. The same input gives the same bytes (sorted keys, fixed order, no timestamps; checked by two runs, one with a different `PYTHONHASHSEED`).
+
+The script stops if: the joint range count of a scenario and need differs from `tests_atmosphere` of `scenario_needs.csv`; the float reading of the pipeline and the exact decimal reading put a different set of tests inside the ranges; a test of `need_tests.csv` is missing from `tests.csv`; the counted value of `objective_link` is not among the values of the column; a reference item with `values` is neither a table of the spec nor listed as rejected; a table has fewer than 3 materials or 2 columns; a forbidden word (safe, acceptable, sufficient, representative, proven) appears in an output.
+
+## What each number is
+
+- `counted_tests`: Number of tests of need_tests.csv with objective_link 'stated' for the need.
+- `counted_tests_with_ambient_oxygen`: Of those, the tests with o2_pct recorded and o2_basis 'ambient'.
+- `axes.tests_recorded`: Of the tests with ambient oxygen, the number with the axis (o2_pct or pressure_kpa) recorded.
+- `axes.min, axes.max`: Smallest and largest recorded value of the axis over those tests.
+- `axes.nominal_within_min_max`: Whether min <= nominal value <= max.
+- `axes.nearest`: The recorded value(s) closest to the nominal value on that axis alone, the gap (value minus nominal) and the number of tests at that value.
+- `joint.tests_with_both_recorded, joint.distinct_points`: Tests with ambient oxygen and pressure both recorded, and the number of distinct (o2_pct, pressure_kpa) points among them.
+- `joint.hull_kind, joint.hull_vertices_ccw`: Convex hull of those points: 'area', 'segment', 'point' or 'none', with its vertices counter-clockwise.
+- `joint.nominal_position, joint.nominal_inside_hull`: 'interior', 'boundary' or 'outside' of the nominal point relative to the hull; boundary counts as inside.
+- `joint.nearest_tests_pareto`: Tests not dominated in (|delta o2_pct|, |delta pressure_kpa|), each with both deltas and its source file and row.
+- `gravity.*`: Number of tests whose gravity_level equals the scenario's, and where gravity_level in tests.csv comes from.
+- `ranges.*`: Number of tests inside the scenario's oxygen range, inside its pressure range, and inside both; the last equals tests_atmosphere of scenario_needs.csv (checked).
+- `order.counts`: For one table, one quantity and one pair of condition columns: the number of material pairs in each class (same_order, reversed, tie_in_one, tie_in_both).
+- `order.kendall_tau_b`: Kendall tau-b of the two columns over all material pairs, as numerator, integer under the square root and rounded decimal.
+- `order.reversed_and_tie_in_one_pairs`: Every material pair that is reversed or tied in one column only, with the four printed values.
+
+## Choices made (each a parameter of `lab_numbers.json`)
+
+- `envelope.choices.counted_tests`: need_tests.csv rows with objective_link equal to 'stated'
+- `envelope.choices.ambient_oxygen`: o2_pct recorded and o2_basis equal to 'ambient' (the rule of match_environments in pipeline/run.py: any other basis is marked not_ambient)
+- `envelope.choices.axes`: ['o2_pct', 'pressure_kpa']
+- `envelope.choices.number_reading`: every cell and every spec number is read as the exact decimal it is written as (Python fractions.Fraction of the written string); differences are exact
+- `envelope.choices.gap_sign`: gap = nearest recorded value minus nominal value; positive means the nearest recorded value is above the nominal value; 0 means a test has exactly the nominal value; where two recorded values are equally near (one above, one below), both are listed
+- `envelope.choices.hull`: convex hull of the distinct recorded (o2_pct, pressure_kpa) points, monotone chain, exact rational arithmetic, no tolerance
+- `envelope.choices.hull_boundary`: a point on an edge or a vertex of the hull is reported as position 'boundary' and counted as inside
+- `envelope.choices.degenerate_hull`: fewer than 3 non-collinear distinct points: hull kind 'point' or 'segment', reported as 'no area'; inside is true only where the nominal point coincides with the point or lies on the segment
+- `envelope.choices.pareto`: a test is listed when no other test of the set has |delta o2_pct| <= its |delta o2_pct| and |delta pressure_kpa| <= its |delta pressure_kpa| with at least one of the two strictly smaller; deltas = test value minus nominal value; no combined distance, no weight, no scaling; tests with identical deltas are all listed
+- `envelope.choices.gravity`: count of tests whose gravity_level string equals the scenario's gravity_level string; a scenario with gravity_level null sets none
+- `envelope.choices.ranges`: the in_range rule of pipeline/run.py (RANGE_DEFAULTS: min inclusive, max exclusive unless stated) applied to the scenario's ranges; a range the scenario does not set is reported as not set; the joint count requires oxygen and pressure both inside and is asserted equal to tests_atmosphere of scenario_needs.csv
+- `envelope.choices.scenarios_without_nominal`: a scenario whose nominal is empty gets no nominal-point numbers; its ranges are reported where set
+- `order_changes.choices.values`: values are read as printed in the reference item's 'values' (exact decimals; JSON numbers read as decimal strings), no tolerance
+- `order_changes.choices.classes`: for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0
+- `order_changes.choices.kendall_tau_b`: tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0
+- `order_changes.choices.tau_b_digits`: 6
+- `order_changes.choices.column_pairs`: every unordered pair of condition columns, in the column order of the spec
+- `order_changes.choices.material_pairs`: every unordered pair of materials, in the row order of the item
+
+Tables read: `H2006.table2`, `OF2012.table1`. Every other reference item with `values` (53 items) is listed in the spec under `order_changes.search.rejected` with its reason and copied into `index.json`.
+
+Fixed sentences shown with the envelope numbers:
+
+- Inside the hull of tested conditions means only that tests exist on several sides of this point; it says nothing about the outcome at this point.
+- Outside means no arithmetic on these tests reaches this point.
+
+## What these numbers cannot say
+
+- Whether a material burns, or how, at a scenario's nominal point: no outcome variable is read by the envelope numbers.
+- Anything about a point inside the hull beyond the existence of tests on several sides of it: no value is interpolated.
+- Anything about gravity levels other than the ones in tests.csv: every test there carries a gravity level that the team's source mapping sets as a constant per table.
+- Which of two materials is more flammable in a scenario: the order tables are normal-gravity or drop-tower results printed by the authors, at the printed conditions only.
+- Whether a difference of one printed unit is a real difference: the items state no measurement uncertainty or step size.
+- Whether the counted tests are the right tests for a need: that is the pipeline's linking rule (needs.json, stated_by), not arithmetic.

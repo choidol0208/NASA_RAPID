@@ -1,0 +1,469 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "inputs": {
+   "need_tests": "data/pipeline/need_tests.csv",
+   "needs": "pipeline/spec/needs.json",
+   "references": "pipeline/spec/references.json",
+   "scenario_needs": "data/pipeline/scenario_needs.csv",
+   "scenarios": "pipeline/spec/scenarios.json",
+   "sources": "pipeline/spec/sources.json",
+   "tests": "data/pipeline/tests.csv"
+  },
+  "numbers": "exact decimal strings",
+  "script": "pipeline/lab/envelope.py",
+  "spec": "pipeline/spec/lab_numbers.json"
+ },
+ "choices": {
+  "ambient_oxygen": "o2_pct recorded and o2_basis equal to 'ambient' (the rule of match_environments in pipeline/run.py: any other basis is marked not_ambient)",
+  "axes": [
+   "o2_pct",
+   "pressure_kpa"
+  ],
+  "counted_tests": "need_tests.csv rows with objective_link equal to 'stated'",
+  "degenerate_hull": "fewer than 3 non-collinear distinct points: hull kind 'point' or 'segment', reported as 'no area'; inside is true only where the nominal point coincides with the point or lies on the segment",
+  "gap_sign": "gap = nearest recorded value minus nominal value; positive means the nearest recorded value is above the nominal value; 0 means a test has exactly the nominal value; where two recorded values are equally near (one above, one below), both are listed",
+  "gravity": "count of tests whose gravity_level string equals the scenario's gravity_level string; a scenario with gravity_level null sets none",
+  "hull": "convex hull of the distinct recorded (o2_pct, pressure_kpa) points, monotone chain, exact rational arithmetic, no tolerance",
+  "hull_boundary": "a point on an edge or a vertex of the hull is reported as position 'boundary' and counted as inside",
+  "number_reading": "every cell and every spec number is read as the exact decimal it is written as (Python fractions.Fraction of the written string); differences are exact",
+  "pareto": "a test is listed when no other test of the set has |delta o2_pct| <= its |delta o2_pct| and |delta pressure_kpa| <= its |delta pressure_kpa| with at least one of the two strictly smaller; deltas = test value minus nominal value; no combined distance, no weight, no scaling; tests with identical deltas are all listed",
+  "ranges": "the in_range rule of pipeline/run.py (RANGE_DEFAULTS: min inclusive, max exclusive unless stated) applied to the scenario's ranges; a range the scenario does not set is reported as not set; the joint count requires oxygen and pressure both inside and is asserted equal to tests_atmosphere of scenario_needs.csv",
+  "scenarios_without_nominal": "a scenario whose nominal is empty gets no nominal-point numbers; its ranges are reported where set"
+ },
+ "needs": [
+  {
+   "counted_tests": 133,
+   "counted_tests_with_ambient_oxygen": 133,
+   "gravity": {
+    "levels_recorded": [
+     "microgravity"
+    ],
+    "origin_of_gravity_level": [
+     "constant"
+    ],
+    "scenario_gravity_level": null,
+    "tests_same_level_of_ambient_oxygen_tests": "not set",
+    "tests_same_level_of_joint_tests": "not set"
+   },
+   "need": "Flammability limit",
+   "need_id": "P1",
+   "nominal": {
+    "axes": {
+     "o2_pct": {
+      "max": "22.2",
+      "min": "13.6",
+      "nearest": [
+       {
+        "gap": "-4.3",
+        "tests_at_value": 13,
+        "value": "22.2"
+       }
+      ],
+      "nominal_within_min_max": false,
+      "tests_recorded": 133
+     },
+     "pressure_kpa": {
+      "tests_recorded": 0
+     }
+    },
+    "joint": {
+     "distinct_points": 0,
+     "hull_has_area": false,
+     "hull_kind": "none",
+     "hull_vertices_ccw": [],
+     "investigations": [],
+     "nearest_tests_pareto": [],
+     "nominal_inside_hull": false,
+     "nominal_position": "outside",
+     "tests_with_both_recorded": 0
+    }
+   },
+   "ranges": {
+    "both_inside": 0,
+    "both_inside_equals_scenario_needs_tests_atmosphere": true,
+    "both_inside_test_ids": [],
+    "o2_pct": {
+     "of_tests": 133,
+     "set": true,
+     "tests_inside": 0
+    },
+    "pressure_kpa": {
+     "of_tests": 0,
+     "set": true,
+     "tests_inside": 0
+    }
+   }
+  },
+  {
+   "counted_tests": 0,
+   "counted_tests_with_ambient_oxygen": 0,
+   "gravity": {
+    "levels_recorded": [],
+    "origin_of_gravity_level": [],
+    "scenario_gravity_level": null,
+    "tests_same_level_of_ambient_oxygen_tests": "not set",
+    "tests_same_level_of_joint_tests": "not set"
+   },
+   "need": "Ignition",
+   "need_id": "P2",
+   "nominal": {
+    "note": "No counted test of this need has a recorded ambient oxygen."
+   },
+   "ranges": {
+    "both_inside": 0,
+    "both_inside_equals_scenario_needs_tests_atmosphere": true,
+    "both_inside_test_ids": [],
+    "o2_pct": {
+     "of_tests": 0,
+     "set": true,
+     "tests_inside": 0
+    },
+    "pressure_kpa": {
+     "of_tests": 0,
+     "set": true,
+     "tests_inside": 0
+    }
+   }
+  },
+  {
+   "counted_tests": 2,
+   "counted_tests_with_ambient_oxygen": 2,
+   "gravity": {
+    "levels_recorded": [
+     "microgravity"
+    ],
+    "origin_of_gravity_level": [
+     "constant"
+    ],
+    "scenario_gravity_level": null,
+    "tests_same_level_of_ambient_oxygen_tests": "not set",
+    "tests_same_level_of_joint_tests": "not set"
+   },
+   "need": "Flame spread and growth",
+   "need_id": "P3",
+   "nominal": {
+    "axes": {
+     "o2_pct": {
+      "max": "21.7",
+      "min": "21.5",
+      "nearest": [
+       {
+        "gap": "-4.8",
+        "tests_at_value": 1,
+        "value": "21.7"
+       }
+      ],
+      "nominal_within_min_max": false,
+      "tests_recorded": 2
+     },
+     "pressure_kpa": {
+      "tests_recorded": 0
+     }
+    },
+    "joint": {
+     "distinct_points": 0,
+     "hull_has_area": false,
+     "hull_kind": "none",
+     "hull_vertices_ccw": [],
+     "investigations": [],
+     "nearest_tests_pareto": [],
+     "nominal_inside_hull": false,
+     "nominal_position": "outside",
+     "tests_with_both_recorded": 0
+    }
+   },
+   "ranges": {
+    "both_inside": 0,
+    "both_inside_equals_scenario_needs_tests_atmosphere": true,
+    "both_inside_test_ids": [],
+    "o2_pct": {
+     "of_tests": 2,
+     "set": true,
+     "tests_inside": 0
+    },
+    "pressure_kpa": {
+     "of_tests": 0,
+     "set": true,
+     "tests_inside": 0
+    }
+   }
+  },
+  {
+   "counted_tests": 298,
+   "counted_tests_with_ambient_oxygen": 298,
+   "gravity": {
+    "levels_recorded": [
+     "microgravity"
+    ],
+    "origin_of_gravity_level": [
+     "constant"
+    ],
+    "scenario_gravity_level": null,
+    "tests_same_level_of_ambient_oxygen_tests": "not set",
+    "tests_same_level_of_joint_tests": "not set"
+   },
+   "need": "Extinction conditions",
+   "need_id": "S1",
+   "nominal": {
+    "axes": {
+     "o2_pct": {
+      "max": "34",
+      "min": "12",
+      "nearest": [
+       {
+        "gap": "-1.5",
+        "tests_at_value": 6,
+        "value": "25"
+       }
+      ],
+      "nominal_within_min_max": true,
+      "tests_recorded": 298
+     },
+     "pressure_kpa": {
+      "max": "309.2946",
+      "min": "70.1676",
+      "nearest": [
+       {
+        "gap": "0.0409",
+        "tests_at_value": 1,
+        "value": "70.3409"
+       }
+      ],
+      "nominal_within_min_max": true,
+      "tests_recorded": 273
+     }
+    },
+    "joint": {
+     "distinct_points": 250,
+     "hull_has_area": true,
+     "hull_kind": "area",
+     "hull_vertices_ccw": [
+      [
+       "12",
+       "101.5383"
+      ],
+      [
+       "15",
+       "71.1275"
+      ],
+      [
+       "18",
+       "70.1676"
+      ],
+      [
+       "34",
+       "71.2341"
+      ],
+      [
+       "34",
+       "72.3674"
+      ],
+      [
+       "21",
+       "309.2946"
+      ],
+      [
+       "12",
+       "102.9249"
+      ]
+     ],
+     "investigations": [
+      "PSI-69"
+     ],
+     "nearest_tests_pareto": [
+      {
+       "delta_o2_pct": "-1.5",
+       "delta_pressure_kpa": "1.2008",
+       "investigation_id": "PSI-69",
+       "o2_pct": "25",
+       "pressure_kpa": "71.5008",
+       "source_file": "PSI-69_Experimental table_FLEX.csv",
+       "source_row": "93",
+       "test_id": "FLEX-92"
+      },
+      {
+       "delta_o2_pct": "-2.5",
+       "delta_pressure_kpa": "0.5875",
+       "investigation_id": "PSI-69",
+       "o2_pct": "24",
+       "pressure_kpa": "70.8875",
+       "source_file": "PSI-69_Experimental table_FLEX.csv",
+       "source_row": "175",
+       "test_id": "FLEX-174"
+      },
+      {
+       "delta_o2_pct": "-5.5",
+       "delta_pressure_kpa": "0.2275",
+       "investigation_id": "PSI-69",
+       "o2_pct": "21",
+       "pressure_kpa": "70.5275",
+       "source_file": "PSI-69_Experimental table_FLEX.csv",
+       "source_row": "260",
+       "test_id": "FLEX-259"
+      },
+      {
+       "delta_o2_pct": "-6.5",
+       "delta_pressure_kpa": "0.0409",
+       "investigation_id": "PSI-69",
+       "o2_pct": "20",
+       "pressure_kpa": "70.3409",
+       "source_file": "PSI-69_Experimental table_FLEX.csv",
+       "source_row": "263",
+       "test_id": "FLEX-262"
+      }
+     ],
+     "nominal_inside_hull": false,
+     "nominal_position": "outside",
+     "tests_with_both_recorded": 273
+    }
+   },
+   "ranges": {
+    "both_inside": 6,
+    "both_inside_equals_scenario_needs_tests_atmosphere": true,
+    "both_inside_test_ids": [
+     "FLEX-88",
+     "FLEX-89",
+     "FLEX-90",
+     "FLEX-91",
+     "FLEX-92",
+     "FLEX-93"
+    ],
+    "o2_pct": {
+     "of_tests": 298,
+     "set": true,
+     "tests_inside": 6
+    },
+    "pressure_kpa": {
+     "of_tests": 273,
+     "set": true,
+     "tests_inside": 103
+    }
+   }
+  },
+  {
+   "counted_tests": 122,
+   "counted_tests_with_ambient_oxygen": 122,
+   "gravity": {
+    "levels_recorded": [
+     "microgravity"
+    ],
+    "origin_of_gravity_level": [
+     "constant"
+    ],
+    "scenario_gravity_level": null,
+    "tests_same_level_of_ambient_oxygen_tests": "not set",
+    "tests_same_level_of_joint_tests": "not set"
+   },
+   "need": "Combustion products",
+   "need_id": "D1",
+   "nominal": {
+    "axes": {
+     "o2_pct": {
+      "max": "22.2",
+      "min": "13.6",
+      "nearest": [
+       {
+        "gap": "-4.3",
+        "tests_at_value": 13,
+        "value": "22.2"
+       }
+      ],
+      "nominal_within_min_max": false,
+      "tests_recorded": 122
+     },
+     "pressure_kpa": {
+      "tests_recorded": 0
+     }
+    },
+    "joint": {
+     "distinct_points": 0,
+     "hull_has_area": false,
+     "hull_kind": "none",
+     "hull_vertices_ccw": [],
+     "investigations": [],
+     "nearest_tests_pareto": [],
+     "nominal_inside_hull": false,
+     "nominal_position": "outside",
+     "tests_with_both_recorded": 0
+    }
+   },
+   "ranges": {
+    "both_inside": 0,
+    "both_inside_equals_scenario_needs_tests_atmosphere": true,
+    "both_inside_test_ids": [],
+    "o2_pct": {
+     "of_tests": 122,
+     "set": true,
+     "tests_inside": 0
+    },
+    "pressure_kpa": {
+     "of_tests": 0,
+     "set": true,
+     "tests_inside": 0
+    }
+   }
+  },
+  {
+   "counted_tests": 0,
+   "counted_tests_with_ambient_oxygen": 0,
+   "gravity": {
+    "levels_recorded": [],
+    "origin_of_gravity_level": [],
+    "scenario_gravity_level": null,
+    "tests_same_level_of_ambient_oxygen_tests": "not set",
+    "tests_same_level_of_joint_tests": "not set"
+   },
+   "need": "Smoke generation conditions",
+   "need_id": "D2",
+   "nominal": {
+    "note": "No counted test of this need has a recorded ambient oxygen."
+   },
+   "ranges": {
+    "both_inside": 0,
+    "both_inside_equals_scenario_needs_tests_atmosphere": true,
+    "both_inside_test_ids": [],
+    "o2_pct": {
+     "of_tests": 0,
+     "set": true,
+     "tests_inside": 0
+    },
+    "pressure_kpa": {
+     "of_tests": 0,
+     "set": true,
+     "tests_inside": 0
+    }
+   }
+  }
+ ],
+ "notes": [
+  "Every value is copied from data/pipeline/tests.csv (the pipeline's standardized value, with source file and row); every other number is a count, minimum, maximum or difference of those values.",
+  "These numbers say where tests were run, not what happened in them; no outcome variable is read.",
+  "Inside the hull of tested conditions means only that tests exist on several sides of this point; it says nothing about the outcome at this point.",
+  "Outside means no arithmetic on these tests reaches this point.",
+  "Counts of different needs are not added: one test can be counted for several needs.",
+  "The nominal point is the one written in scenarios.json; its note there says what it is.",
+  "gravity_level in tests.csv is not a column of any PSI table: it is a constant that the team's source mapping (pipeline/spec/sources.json, 'constants') sets for the whole table. The count below therefore counts tests of tables the team mapped as microgravity.",
+  "The scenario sets no gravity level."
+ ],
+ "scenario": {
+  "gravity_level": null,
+  "id": "exploration_10_2_26_5",
+  "label": "Exploration atmosphere 10.2 psia / 26.5% O2",
+  "nominal": {
+   "o2_pct": "26.5",
+   "pressure_kpa": "70.3"
+  },
+  "ranges": {
+   "o2_pct": {
+    "max": "28.5",
+    "max_inclusive": true,
+    "min": "24.5"
+   },
+   "pressure_kpa": {
+    "max": "85.8",
+    "min": "62.8"
+   }
+  }
+ }
+}

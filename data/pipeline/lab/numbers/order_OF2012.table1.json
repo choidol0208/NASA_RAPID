@@ -1,0 +1,458 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "numbers": "exact decimal strings, as printed in the item",
+  "script": "pipeline/lab/order_changes.py",
+  "spec": "pipeline/spec/lab_numbers.json"
+ },
+ "choices": {
+  "classes": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0",
+  "column_pairs": "every unordered pair of condition columns, in the column order of the spec",
+  "kendall_tau_b": "tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0",
+  "material_pairs": "every unordered pair of materials, in the row order of the item",
+  "tau_b_digits": 6,
+  "values": "values are read as printed in the reference item's 'values' (exact decimals; JSON numbers read as decimal strings), no tolerance"
+ },
+ "notes": [
+  "Values are as printed.",
+  "Measurement uncertainty or step size: not stated in the item. A difference of one printed unit may or may not be resolved by the test method.",
+  "These counts describe the order of printed values; they say nothing about why the order changes.",
+  "ULOI and MOC are reported separately and are not compared with each other.",
+  "The item states that the low-gravity limits come from 5.18 s drop tower tests and that their criteria are not the same as in 1g.",
+  "The delta O2 rows of the table are a difference the paper computes from the other rows and are not used here.",
+  "The held values say that the materials were tested at different pressures; a pair of materials at different pressures compares two conditions at once."
+ ],
+ "quantities": [
+  {
+   "column_pairs": [
+    {
+     "column_1": "1g",
+     "column_2": "martian",
+     "counts": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [
+      {
+       "a_col1": "23.5",
+       "a_col2": "22",
+       "b_col1": "23.5",
+       "b_col2": "19.9",
+       "class": "tie_in_one",
+       "held_a": "10.2",
+       "held_b": "14.7",
+       "held_same": false,
+       "material_a": "Ultem 1000",
+       "material_b": "Nomex HT90-40"
+      }
+     ],
+     "ties_in_column_1": 1,
+     "ties_in_column_2": 0
+    },
+    {
+     "column_1": "1g",
+     "column_2": "lunar",
+     "counts": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 1,
+      "tie_in_one": 0
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 4,
+      "value": "1.000000",
+      "value_exact": "1"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [],
+     "ties_in_column_1": 1,
+     "ties_in_column_2": 1
+    },
+    {
+     "column_1": "1g",
+     "column_2": "0g",
+     "counts": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [
+      {
+       "a_col1": "23.5",
+       "a_col2": "24",
+       "b_col1": "23.5",
+       "b_col2": "23",
+       "class": "tie_in_one",
+       "held_a": "10.2",
+       "held_b": "14.7",
+       "held_same": false,
+       "material_a": "Ultem 1000",
+       "material_b": "Nomex HT90-40"
+      }
+     ],
+     "ties_in_column_1": 1,
+     "ties_in_column_2": 0
+    },
+    {
+     "column_1": "martian",
+     "column_2": "lunar",
+     "counts": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [
+      {
+       "a_col1": "22",
+       "a_col2": "21",
+       "b_col1": "19.9",
+       "b_col2": "21",
+       "class": "tie_in_one",
+       "held_a": "10.2",
+       "held_b": "14.7",
+       "held_same": false,
+       "material_a": "Ultem 1000",
+       "material_b": "Nomex HT90-40"
+      }
+     ],
+     "ties_in_column_1": 0,
+     "ties_in_column_2": 1
+    },
+    {
+     "column_1": "martian",
+     "column_2": "0g",
+     "counts": {
+      "reversed": 0,
+      "same_order": 3,
+      "tie_in_both": 0,
+      "tie_in_one": 0
+     },
+     "kendall_tau_b": {
+      "numerator": 3,
+      "under_sqrt": 9,
+      "value": "1.000000",
+      "value_exact": "1"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [],
+     "ties_in_column_1": 0,
+     "ties_in_column_2": 0
+    },
+    {
+     "column_1": "lunar",
+     "column_2": "0g",
+     "counts": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [
+      {
+       "a_col1": "21",
+       "a_col2": "24",
+       "b_col1": "21",
+       "b_col2": "23",
+       "class": "tie_in_one",
+       "held_a": "10.2",
+       "held_b": "14.7",
+       "held_same": false,
+       "material_a": "Ultem 1000",
+       "material_b": "Nomex HT90-40"
+      }
+     ],
+     "ties_in_column_1": 1,
+     "ties_in_column_2": 0
+    }
+   ],
+   "columns": [
+    "1g",
+    "martian",
+    "lunar",
+    "0g"
+   ],
+   "label": "upward limiting oxygen index (1g) and ULOI* (low gravity), % O2",
+   "materials": 3,
+   "quantity": "ULOI",
+   "values": [
+    {
+     "held": "10.2",
+     "material": "Mylar G",
+     "values": [
+      "21.2",
+      "18",
+      "15.6",
+      "17"
+     ]
+    },
+    {
+     "held": "10.2",
+     "material": "Ultem 1000",
+     "values": [
+      "23.5",
+      "22",
+      "21",
+      "24"
+     ]
+    },
+    {
+     "held": "14.7",
+     "material": "Nomex HT90-40",
+     "values": [
+      "23.5",
+      "19.9",
+      "21",
+      "23"
+     ]
+    }
+   ]
+  },
+  {
+   "column_pairs": [
+    {
+     "column_1": "1g",
+     "column_2": "martian",
+     "counts": {
+      "reversed": 0,
+      "same_order": 3,
+      "tie_in_both": 0,
+      "tie_in_one": 0
+     },
+     "kendall_tau_b": {
+      "numerator": 3,
+      "under_sqrt": 9,
+      "value": "1.000000",
+      "value_exact": "1"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [],
+     "ties_in_column_1": 0,
+     "ties_in_column_2": 0
+    },
+    {
+     "column_1": "1g",
+     "column_2": "lunar",
+     "counts": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [
+      {
+       "a_col1": "23",
+       "a_col2": "19.9",
+       "b_col1": "22.1",
+       "b_col2": "19.9",
+       "class": "tie_in_one",
+       "held_a": "10.2",
+       "held_b": "14.7",
+       "held_same": false,
+       "material_a": "Ultem 1000",
+       "material_b": "Nomex HT90-40"
+      }
+     ],
+     "ties_in_column_1": 0,
+     "ties_in_column_2": 1
+    },
+    {
+     "column_1": "1g",
+     "column_2": "0g",
+     "counts": {
+      "reversed": 0,
+      "same_order": 3,
+      "tie_in_both": 0,
+      "tie_in_one": 0
+     },
+     "kendall_tau_b": {
+      "numerator": 3,
+      "under_sqrt": 9,
+      "value": "1.000000",
+      "value_exact": "1"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [],
+     "ties_in_column_1": 0,
+     "ties_in_column_2": 0
+    },
+    {
+     "column_1": "martian",
+     "column_2": "lunar",
+     "counts": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [
+      {
+       "a_col1": "21.1",
+       "a_col2": "19.9",
+       "b_col1": "19",
+       "b_col2": "19.9",
+       "class": "tie_in_one",
+       "held_a": "10.2",
+       "held_b": "14.7",
+       "held_same": false,
+       "material_a": "Ultem 1000",
+       "material_b": "Nomex HT90-40"
+      }
+     ],
+     "ties_in_column_1": 0,
+     "ties_in_column_2": 1
+    },
+    {
+     "column_1": "martian",
+     "column_2": "0g",
+     "counts": {
+      "reversed": 0,
+      "same_order": 3,
+      "tie_in_both": 0,
+      "tie_in_one": 0
+     },
+     "kendall_tau_b": {
+      "numerator": 3,
+      "under_sqrt": 9,
+      "value": "1.000000",
+      "value_exact": "1"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [],
+     "ties_in_column_1": 0,
+     "ties_in_column_2": 0
+    },
+    {
+     "column_1": "lunar",
+     "column_2": "0g",
+     "counts": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
+     "reversed_and_tie_in_one_pairs": [
+      {
+       "a_col1": "19.9",
+       "a_col2": "23",
+       "b_col1": "19.9",
+       "b_col2": "22",
+       "class": "tie_in_one",
+       "held_a": "10.2",
+       "held_b": "14.7",
+       "held_same": false,
+       "material_a": "Ultem 1000",
+       "material_b": "Nomex HT90-40"
+      }
+     ],
+     "ties_in_column_1": 1,
+     "ties_in_column_2": 0
+    }
+   ],
+   "columns": [
+    "1g",
+    "martian",
+    "lunar",
+    "0g"
+   ],
+   "label": "maximum oxygen concentration (1g) and MOC* (low gravity), % O2",
+   "materials": 3,
+   "quantity": "MOC",
+   "values": [
+    {
+     "held": "10.2",
+     "material": "Mylar G",
+     "values": [
+      "20",
+      "17",
+      "14.1",
+      "16"
+     ]
+    },
+    {
+     "held": "10.2",
+     "material": "Ultem 1000",
+     "values": [
+      "23",
+      "21.1",
+      "19.9",
+      "23"
+     ]
+    },
+    {
+     "held": "14.7",
+     "material": "Nomex HT90-40",
+     "values": [
+      "22.1",
+      "19",
+      "19.9",
+      "22"
+     ]
+    }
+   ]
+  }
+ ],
+ "table": {
+  "column_label": "gravity level",
+  "document": "NTRS-20130010991",
+  "held_label": "test pressure (psia, as printed)",
+  "id": "OF2012.table1",
+  "item": "OF2012.table1",
+  "quote": "Table I: Limiting Oxygen Molar Concentrations and Oxygen Margin of Safety for Different Gravity Levels",
+  "url": "https://ntrs.nasa.gov/citations/20130010991",
+  "where": "Table I, p. 6"
+ }
+}
