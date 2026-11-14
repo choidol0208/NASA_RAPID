@@ -485,7 +485,7 @@ CONFIGS = [
      source_notes="Flow: 'Air display' column read as for BASS-II-C03. Highest air value 29 (row 115, '9 29'). "
                   "Rows 117 ('6 53') and 121 ('11 max(47)') hold numbers above the record's 40 cm/s limit and are not read as air speed: "
                   "47 is in brackets, which the table uses for fan readings, and 53 is the size of the fan reading of row 121 (52). Lowest 1 cm/s; row 107 also records '<1'. "
-                  "The pipeline's flow_cms is each cell's starting flow (5 to 11). Classification columns are team judgement."),
+                  "The pipeline's flow_cms is each cell's starting flow (5 to 11). The two differ on purpose: the catalog range covers every air speed the cells record during the tests, raised or lowered (for example '10   2   1'), which is what the ranking compares; the pipeline keeps the speed each test started at. Classification columns are team judgement."),
  cfg("BASS-II-C05", "PSI-25", "Nomex III fabric",
      fuel_phase="solid", fuel_material="Nomex III", fuel_class="fabric", melt_behavior="chars", sooting_tendency="medium",
      sample_geometry="flat_sheet", thermal_regime="thin", flame_type="diffusion",
