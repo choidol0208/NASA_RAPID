@@ -50,6 +50,11 @@
 | 11/14 15:05–16:15 | Claude Code (Anthropic, Fable 5.2), pm 역할 워크플로 | BASS-II 영상 시범의 최종 검토: 화면 수치 판독을 추가 106프레임으로 재확인하고, 공개해도 되는 것과 안 되는 것을 판정 | 저장소 밖 작업 폴더(제품 미반영) | 사용자에게 결과 보고 |
 | 11/14 15:15– | Claude Code (Anthropic; Opus 계열과 Fable 5.2), pm 역할 워크플로 | 제출문과 7장 슬라이드 개요의 초안 작성(사실 확인, 규정 확인, 심사위원 시각 검토 포함). 팀이 자기 말로 고쳐 쓰는 초안 | `docs/submission/` | 팀이 고쳐 쓸 예정 |
 | 11/14 16:20 | Claude Code (Anthropic, Fable 5.2), pm 역할 | 최신 data 문구와 합친 뒤 재빌드. 'no need of this file covers it'(data 역할의 범위 설명 문장)가 금지어 검사에 걸려, 이 문구만 예외로 두는 규칙과 테스트 추가 | `ai/checks.py`, `ai/lint_patterns.py`, `ai/test_checks.py`, `ai/review/README.md`, `docs/ai_layer_design.json` | 미검토 |
+| 11/14 15:50–16:10 | Claude Code (Anthropic; 지휘 Fable 5.2, 에이전트 Sonnet·Opus 계열 16개), data 역할 워크플로 | 팀 대표가 낸 씨앗 아이디어(검증된 절차로 근거를 만들고 언어모델은 선택만 한다)에 대해 변형안을 AI가 생성·평가. 채택 여부는 사람이 정함. AI가 아이디어 변형을 제안했다는 사실을 그대로 적음 | 저장소 산출물 없음(작업 메모만) | 미검토 |
+| 11/14 16:00–16:35 | Claude Code (Anthropic; 에이전트 Opus 계열), data 역할 | 실험 브랜치 `data-lab`에서 달 기지 재료 가연성에 대한 추론 지도와 논증 구조(주장–추론–근거–반박) 초안 작성. 근거 칸은 기존 참고문헌 항목과 PSI 집계만, 추론은 '팀의 추론(AI 초안)'으로 표시. 제출물에는 아직 포함되지 않음 | `data-lab` 브랜치의 `pipeline/lab/*`, `pipeline/spec/inference_map.json`, `pipeline/spec/argument_lunar_habitat.json`, `data/pipeline/lab/*` | 미검토 |
+| 11/14 16:35– | Claude Code (Anthropic; 에이전트 Opus·Sonnet 계열 11개), data 역할 워크플로 | 위 논증의 추론마다 독립 검토 에이전트가 반박을 찾고, 편집 에이전트 하나가 확인된 것만 기록, 별도 에이전트가 검증 | `data-lab` 브랜치의 논증 파일 | 미검토 |
+| 11/14 16:26 | Claude Code (Anthropic, Fable 5.2), data 역할 | pm 요청 1622의 문구 3건 수정(README의 시험 수, 달 기지 주의문, not_covered 문구), 재빌드와 검사 | `pipeline/README.md`, `pipeline/spec/needs.json`, `pipeline/spec/scenarios.json`, `data/pipeline/*` | 미검토 |
+| 11/14 16:40– | Claude Code (Anthropic; 에이전트 Sonnet·Opus 계열 17개), data 역할 워크플로 | 보드 과제 D5: 모델이 쓴 카드 문장 61개를 독립 독자 둘이 PSI 기록과 대조, 인용·틀 문장은 독자 하나가 확인. 결과는 `reviewer_kind = ai_session`으로 기록(사람이 읽은 것으로 적지 않음) | `ai/review/review_sheet.csv`의 판정 칸 | 미검토 |
 
 ## 제품 안에서 동작하는 AI
 
