@@ -29,3 +29,7 @@ A reading order that anyone can recompute is the decision-theory part of the ans
 ## Until then
 
 Nothing blocks you: step 6 can start on `retrieval_queue.csv` as it is.
+
+## Addendum 01:10: video counts in the recount (video design, build step 7)
+
+`docs/video_design/design.md` section 12 has fixtures for the videos (link states 662 / 374 / 10 / 1,217 / 330 / 30; counted tests with a video of the test: P1 99 of 133, D1 98 of 122, S1 19 of 298, P3 0 of 2; ISS P1 55 counted: 42 / 4 / 0 / 9). Please add a block to `validation/raw_chain_recount.py` that reproduces them from the PSI listing snapshot and the tables without importing the pipeline (about 0.25 h).

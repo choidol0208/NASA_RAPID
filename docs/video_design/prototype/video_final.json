@@ -1,0 +1,1237 @@
+{
+ "_meta": {
+  "made_by": "AI-generated (Claude Code), 2026-11-15, not human-reviewed",
+  "inputs": [
+   "videodesign/video_index_names.csv",
+   "data/pipeline/tests.csv",
+   "need_tests.csv",
+   "scenario_tests.csv"
+  ]
+ },
+ "totals": {
+  "videos": 2623,
+  "bytes": 426053691302
+ },
+ "tie_scope": {
+  "test": {
+   "videos": 1046,
+   "bytes": 238966365726
+  },
+  "day": {
+   "videos": 1188,
+   "bytes": 97871246079
+  },
+  "none": {
+   "videos": 360,
+   "bytes": 84974655158
+  },
+  "run": {
+   "videos": 3,
+   "bytes": 1046973725
+  },
+  "several_days": {
+   "videos": 26,
+   "bytes": 3194450614
+  }
+ },
+ "link_state": {
+  "one_label": {
+   "videos": 374,
+   "bytes": 81527352372
+  },
+  "day_only": {
+   "videos": 1217,
+   "bytes": 102112670418
+  },
+  "none": {
+   "videos": 30,
+   "bytes": 1519722834
+  },
+  "id_not_in_table": {
+   "videos": 330,
+   "bytes": 83454932324
+  },
+  "two_labels_agree": {
+   "videos": 662,
+   "bytes": 152320655239
+  },
+  "labels_disagree": {
+   "videos": 10,
+   "bytes": 5118358115
+  }
+ },
+ "link_state_by_investigation": {
+  "PSI-10": {
+   "one_label": 306,
+   "day_only": 11
+  },
+  "PSI-20": {
+   "none": 3,
+   "day_only": 163,
+   "id_not_in_table": 33
+  },
+  "PSI-21": {
+   "day_only": 358,
+   "id_not_in_table": 2,
+   "none": 3
+  },
+  "PSI-22": {
+   "none": 6,
+   "day_only": 215
+  },
+  "PSI-23": {
+   "day_only": 285,
+   "id_not_in_table": 1,
+   "none": 4
+  },
+  "PSI-25": {
+   "two_labels_agree": 244,
+   "one_label": 47,
+   "labels_disagree": 5
+  },
+  "PSI-26": {
+   "id_not_in_table": 1,
+   "day_only": 113
+  },
+  "PSI-39": {
+   "one_label": 5,
+   "id_not_in_table": 118,
+   "day_only": 20,
+   "two_labels_agree": 101,
+   "labels_disagree": 2
+  },
+  "PSI-69": {
+   "none": 11,
+   "one_label": 5,
+   "labels_disagree": 1,
+   "two_labels_agree": 3,
+   "id_not_in_table": 163
+  },
+  "PSI-101": {
+   "day_only": 8
+  },
+  "PSI-102": {
+   "none": 2
+  },
+  "PSI-106": {
+   "none": 1,
+   "day_only": 27
+  },
+  "PSI-107": {
+   "id_not_in_table": 12,
+   "day_only": 7
+  },
+  "PSI-159": {
+   "two_labels_agree": 314,
+   "day_only": 10,
+   "labels_disagree": 2,
+   "one_label": 11
+  }
+ },
+ "labels_disagree_list": [
+  {
+   "investigation": "PSI-25",
+   "file_name": "PSI-25_Raw Data_BASS_GMT183_SAMPLE_175_TESTB15.mp4",
+   "tied_to": "BASS2-B17",
+   "agree": [
+    "folder_id"
+   ],
+   "against": [
+    "name_id"
+   ],
+   "conflict": "name B15 vs folder B17",
+   "notes": "name says B15 but its GMT and sample match the table row of folder test B17; tied to the folder test (team rule)"
+  },
+  {
+   "investigation": "PSI-25",
+   "file_name": "PSI-25_Raw Data_BASS_GMT183_SAMPLE_175_TESTB15_2ND_VIEW.mp4",
+   "tied_to": "BASS2-B17",
+   "agree": [
+    "folder_id"
+   ],
+   "against": [
+    "name_id"
+   ],
+   "conflict": "name B15 vs folder B17",
+   "notes": "name says B15 but its GMT and sample match the table row of folder test B17; tied to the folder test (team rule)"
+  },
+  {
+   "investigation": "PSI-25",
+   "file_name": "PSI-25_Raw Data_BASS_GMT203_SAMPLE_210_TEST_O10_2ND_VIEW.mp4",
+   "tied_to": "BASS2-O10",
+   "agree": [
+    "name_id",
+    "folder_id"
+   ],
+   "against": [
+    "name_gmt_or_sample_vs_table"
+   ],
+   "conflict": "",
+   "notes": "GMT in name 203 vs table 213"
+  },
+  {
+   "investigation": "PSI-25",
+   "file_name": "PSI-25_Raw Data_BASS_GMT203_SAMPLE_210_TEST_O10_Still_Sequence.mp4",
+   "tied_to": "BASS2-O10",
+   "agree": [
+    "name_id",
+    "folder_id"
+   ],
+   "against": [
+    "name_gmt_or_sample_vs_table"
+   ],
+   "conflict": "",
+   "notes": "GMT in name 203 vs table 213"
+  },
+  {
+   "investigation": "PSI-25",
+   "file_name": "PSI-25_Raw Data_BASS_GMT50_SAMPLE_148_TEST_B3.mp4",
+   "tied_to": "BASS2-B3",
+   "agree": [
+    "name_id"
+   ],
+   "against": [
+    "folder_id"
+   ],
+   "conflict": "name B3 vs folder B1",
+   "notes": ""
+  },
+  {
+   "investigation": "PSI-39",
+   "file_name": "PSI-39_Raw Data_vlc-record-2017-07-10-16h15m31s-udp_F191D05.mp4",
+   "tied_to": "CFI-1323",
+   "agree": [
+    "name_id"
+   ],
+   "against": [
+    "folder_id"
+   ],
+   "conflict": "name F191D05 vs folder F195D01",
+   "notes": ""
+  },
+  {
+   "investigation": "PSI-39",
+   "file_name": "PSI-39_Raw Data_vlc-record-2017-07-10-16h15m31s-udp_F191D05.ts",
+   "tied_to": "CFI-1323",
+   "agree": [
+    "name_id"
+   ],
+   "against": [
+    "folder_id"
+   ],
+   "conflict": "name F191D05 vs folder F195D01",
+   "notes": ""
+  },
+  {
+   "investigation": "PSI-69",
+   "file_name": "PSI-69_Raw Data__ISS_20090625_153031_256R002.mpg",
+   "tied_to": "FLEX-13",
+   "agree": [
+    "name_id"
+   ],
+   "against": [
+    "folder_id"
+   ],
+   "conflict": "",
+   "notes": ""
+  },
+  {
+   "investigation": "PSI-159",
+   "file_name": "PSI-159_Raw Data_vlc-record-2021-05-05-16h29m30s-udp____211125A2.ts",
+   "tied_to": "CFIG-N-21125A2",
+   "agree": [
+    "folder_id"
+   ],
+   "against": [
+    "name_id_unreadable_or_mistyped"
+   ],
+   "conflict": "",
+   "notes": ""
+  },
+  {
+   "investigation": "PSI-159",
+   "file_name": "PSI-159_Raw Data_vlc-record-2021-06-23-14h52m10s-udp____2117A4.ts",
+   "tied_to": "CFIG-N-21174A4",
+   "agree": [
+    "folder_id"
+   ],
+   "against": [
+    "name_id_unreadable_or_mistyped"
+   ],
+   "conflict": "",
+   "notes": ""
+  }
+ ],
+ "one_label_by_investigation": {
+  "PSI-10:name_id": 306,
+  "PSI-25:name_id": 47,
+  "PSI-39:folder_id": 5,
+  "PSI-69:folder_id": 5,
+  "PSI-159:name_id": 11
+ },
+ "tests_with_video_by_best_state": {
+  "one_label": 344,
+  "two_labels_agree": 463,
+  "labels_disagree": 6
+ },
+ "tests_total": 1824,
+ "tests_by_investigation_best_state": {
+  "PSI-10": {
+   "one_label": 306
+  },
+  "PSI-25": {
+   "two_labels_agree": 101,
+   "one_label": 20,
+   "labels_disagree": 2
+  },
+  "PSI-39": {
+   "one_label": 3,
+   "two_labels_agree": 46,
+   "labels_disagree": 1
+  },
+  "PSI-69": {
+   "one_label": 4,
+   "labels_disagree": 1,
+   "two_labels_agree": 3
+  },
+  "PSI-159": {
+   "two_labels_agree": 313,
+   "labels_disagree": 2,
+   "one_label": 11
+  }
+ },
+ "counted_tests_with_video": {
+  "D1": {
+   "tests": 122,
+   "two_labels_agree": 98,
+   "labels_disagree": 2,
+   "no_video_of_the_test": 6,
+   "one_label": 16,
+   "files_two_labels": 239,
+   "bytes_two_labels": 14218714894,
+   "by_investigation": {
+    "PSI-25:two_labels_agree": 98,
+    "PSI-25:labels_disagree": 2,
+    "PSI-25:no_video": 6,
+    "PSI-25:one_label": 16
+   }
+  },
+  "P1": {
+   "tests": 133,
+   "two_labels_agree": 99,
+   "labels_disagree": 2,
+   "no_video_of_the_test": 14,
+   "one_label": 18,
+   "files_two_labels": 241,
+   "bytes_two_labels": 14232089573,
+   "by_investigation": {
+    "PSI-25:two_labels_agree": 99,
+    "PSI-25:labels_disagree": 2,
+    "PSI-25:no_video": 6,
+    "PSI-25:one_label": 18,
+    "PSI-99:no_video": 8
+   }
+  },
+  "P3": {
+   "tests": 2,
+   "no_video_of_the_test": 2,
+   "files_two_labels": 0,
+   "bytes_two_labels": 0,
+   "by_investigation": {
+    "PSI-98:no_video": 2
+   }
+  },
+  "S1": {
+   "tests": 298,
+   "no_video_of_the_test": 268,
+   "labels_disagree": 1,
+   "two_labels_agree": 19,
+   "one_label": 10,
+   "files_two_labels": 40,
+   "bytes_two_labels": 3448177226,
+   "by_investigation": {
+    "PSI-69:no_video": 265,
+    "PSI-69:labels_disagree": 1,
+    "PSI-69:two_labels_agree": 3,
+    "PSI-69:one_label": 4,
+    "PSI-25:two_labels_agree": 16,
+    "PSI-25:one_label": 6,
+    "PSI-25:no_video": 3
+   }
+  }
+ },
+ "by_scenario_placement": {
+  "iss": {
+   "all_tests": {
+    "inside": {
+     "tests": 179,
+     "no_video_of_the_test": 84,
+     "two_labels_agree": 41,
+     "one_label": 54,
+     "files_two_labels": 50,
+     "bytes_two_labels": 16334987674,
+     "by_investigation": {
+      "PSI-69:no_video": 54,
+      "PSI-69:two_labels_agree": 2,
+      "PSI-39:no_video": 13,
+      "PSI-39:two_labels_agree": 12,
+      "PSI-159:two_labels_agree": 27,
+      "PSI-10:one_label": 54,
+      "PSI-10:no_video": 17
+     }
+    },
+    "outside_by_recorded_value": {
+     "tests": 800,
+     "no_video_of_the_test": 243,
+     "labels_disagree": 6,
+     "two_labels_agree": 336,
+     "one_label": 215,
+     "files_two_labels": 466,
+     "bytes_two_labels": 119789281745,
+     "by_investigation": {
+      "PSI-69:no_video": 211,
+      "PSI-69:labels_disagree": 1,
+      "PSI-69:two_labels_agree": 1,
+      "PSI-69:one_label": 4,
+      "PSI-25:two_labels_agree": 57,
+      "PSI-25:labels_disagree": 2,
+      "PSI-25:one_label": 14,
+      "PSI-25:no_video": 5,
+      "PSI-39:no_video": 16,
+      "PSI-39:one_label": 3,
+      "PSI-39:two_labels_agree": 34,
+      "PSI-39:labels_disagree": 1,
+      "PSI-159:two_labels_agree": 244,
+      "PSI-159:no_video": 7,
+      "PSI-159:labels_disagree": 2,
+      "PSI-159:one_label": 11,
+      "PSI-10:one_label": 183,
+      "PSI-10:no_video": 4
+     }
+    },
+    "cannot_be_placed_from_table": {
+     "tests": 739,
+     "no_video_of_the_test": 684,
+     "two_labels_agree": 44,
+     "one_label": 11,
+     "files_two_labels": 104,
+     "bytes_two_labels": 6528525300,
+     "by_investigation": {
+      "PSI-69:no_video": 1,
+      "PSI-25:two_labels_agree": 44,
+      "PSI-25:no_video": 1,
+      "PSI-25:one_label": 6,
+      "PSI-26:no_video": 121,
+      "PSI-98:no_video": 2,
+      "PSI-99:no_video": 9,
+      "PSI-100:no_video": 2,
+      "PSI-10:one_label": 5,
+      "PSI-102:no_video": 4,
+      "PSI-101:no_video": 109,
+      "PSI-107:no_video": 435
+     }
+    },
+    "oxygen_of_oxidizer_stream": {
+     "tests": 106,
+     "two_labels_agree": 42,
+     "one_label": 64,
+     "files_two_labels": 42,
+     "bytes_two_labels": 9667860520,
+     "by_investigation": {
+      "PSI-159:two_labels_agree": 42,
+      "PSI-10:one_label": 64
+     }
+    }
+   },
+   "D1": {
+    "cannot_be_placed_from_table (oxygen in, pressure not_recorded)": {
+     "tests": 45,
+     "two_labels_agree": 42,
+     "no_video_of_the_test": 1,
+     "one_label": 2,
+     "files_two_labels": 101,
+     "bytes_two_labels": 6491440486,
+     "by_investigation": {
+      "PSI-25:two_labels_agree": 42,
+      "PSI-25:no_video": 1,
+      "PSI-25:one_label": 2
+     }
+    },
+    "outside_by_recorded_value": {
+     "tests": 77,
+     "two_labels_agree": 56,
+     "labels_disagree": 2,
+     "one_label": 14,
+     "no_video_of_the_test": 5,
+     "files_two_labels": 138,
+     "bytes_two_labels": 7727274408,
+     "by_investigation": {
+      "PSI-25:two_labels_agree": 56,
+      "PSI-25:labels_disagree": 2,
+      "PSI-25:one_label": 14,
+      "PSI-25:no_video": 5
+     }
+    }
+   },
+   "P1": {
+    "cannot_be_placed_from_table (oxygen in, pressure not_recorded)": {
+     "tests": 55,
+     "two_labels_agree": 42,
+     "no_video_of_the_test": 9,
+     "one_label": 4,
+     "files_two_labels": 101,
+     "bytes_two_labels": 6491440486,
+     "by_investigation": {
+      "PSI-25:two_labels_agree": 42,
+      "PSI-25:no_video": 1,
+      "PSI-25:one_label": 4,
+      "PSI-99:no_video": 8
+     }
+    },
+    "outside_by_recorded_value": {
+     "tests": 78,
+     "two_labels_agree": 57,
+     "labels_disagree": 2,
+     "one_label": 14,
+     "no_video_of_the_test": 5,
+     "files_two_labels": 140,
+     "bytes_two_labels": 7740649087,
+     "by_investigation": {
+      "PSI-25:two_labels_agree": 57,
+      "PSI-25:labels_disagree": 2,
+      "PSI-25:one_label": 14,
+      "PSI-25:no_video": 5
+     }
+    }
+   },
+   "P3": {
+    "cannot_be_placed_from_table (oxygen in, pressure not_recorded)": {
+     "tests": 2,
+     "no_video_of_the_test": 2,
+     "files_two_labels": 0,
+     "bytes_two_labels": 0,
+     "by_investigation": {
+      "PSI-98:no_video": 2
+     }
+    }
+   },
+   "S1": {
+    "inside": {
+     "tests": 56,
+     "no_video_of_the_test": 54,
+     "two_labels_agree": 2,
+     "files_two_labels": 2,
+     "bytes_two_labels": 65710958,
+     "by_investigation": {
+      "PSI-69:no_video": 54,
+      "PSI-69:two_labels_agree": 2
+     }
+    },
+    "outside_by_recorded_value": {
+     "tests": 235,
+     "no_video_of_the_test": 214,
+     "labels_disagree": 1,
+     "two_labels_agree": 14,
+     "one_label": 6,
+     "files_two_labels": 31,
+     "bytes_two_labels": 2648675196,
+     "by_investigation": {
+      "PSI-69:no_video": 211,
+      "PSI-69:labels_disagree": 1,
+      "PSI-69:two_labels_agree": 1,
+      "PSI-69:one_label": 4,
+      "PSI-25:two_labels_agree": 13,
+      "PSI-25:one_label": 2,
+      "PSI-25:no_video": 3
+     }
+    },
+    "cannot_be_placed_from_table (oxygen in, pressure not_recorded)": {
+     "tests": 7,
+     "two_labels_agree": 3,
+     "one_label": 4,
+     "files_two_labels": 7,
+     "bytes_two_labels": 733791072,
+     "by_investigation": {
+      "PSI-25:two_labels_agree": 3,
+      "PSI-25:one_label": 4
+     }
+    }
+   }
+  },
+  "lunar_habitat": {
+   "all_tests": {
+    "outside_by_recorded_value": {
+     "tests": 1059,
+     "no_video_of_the_test": 319,
+     "labels_disagree": 6,
+     "two_labels_agree": 427,
+     "one_label": 307,
+     "files_two_labels": 626,
+     "bytes_two_labels": 142569084335,
+     "by_investigation": {
+      "PSI-69:no_video": 249,
+      "PSI-69:labels_disagree": 1,
+      "PSI-69:two_labels_agree": 3,
+      "PSI-69:one_label": 4,
+      "PSI-25:two_labels_agree": 101,
+      "PSI-25:labels_disagree": 2,
+      "PSI-25:no_video": 6,
+      "PSI-25:one_label": 20,
+      "PSI-39:no_video": 29,
+      "PSI-39:one_label": 3,
+      "PSI-39:two_labels_agree": 46,
+      "PSI-39:labels_disagree": 1,
+      "PSI-98:no_video": 2,
+      "PSI-99:no_video": 8,
+      "PSI-159:two_labels_agree": 277,
+      "PSI-159:no_video": 5,
+      "PSI-159:labels_disagree": 2,
+      "PSI-10:one_label": 280,
+      "PSI-10:no_video": 20
+     }
+    },
+    "inside": {
+     "tests": 26,
+     "no_video_of_the_test": 18,
+     "two_labels_agree": 8,
+     "files_two_labels": 8,
+     "bytes_two_labels": 2640554564,
+     "by_investigation": {
+      "PSI-69:no_video": 17,
+      "PSI-159:two_labels_agree": 8,
+      "PSI-159:no_video": 1
+     }
+    },
+    "cannot_be_placed_from_table": {
+     "tests": 676,
+     "no_video_of_the_test": 673,
+     "one_label": 3,
+     "files_two_labels": 0,
+     "bytes_two_labels": 0,
+     "by_investigation": {
+      "PSI-26:no_video": 121,
+      "PSI-99:no_video": 1,
+      "PSI-100:no_video": 2,
+      "PSI-10:no_video": 1,
+      "PSI-10:one_label": 3,
+      "PSI-102:no_video": 4,
+      "PSI-101:no_video": 109,
+      "PSI-107:no_video": 435
+     }
+    },
+    "oxygen_of_oxidizer_stream": {
+     "tests": 63,
+     "two_labels_agree": 28,
+     "one_label": 34,
+     "no_video_of_the_test": 1,
+     "files_two_labels": 28,
+     "bytes_two_labels": 7111016340,
+     "by_investigation": {
+      "PSI-159:two_labels_agree": 28,
+      "PSI-159:one_label": 11,
+      "PSI-159:no_video": 1,
+      "PSI-10:one_label": 23
+     }
+    }
+   },
+   "D1": {
+    "outside_by_recorded_value": {
+     "tests": 122,
+     "two_labels_agree": 98,
+     "labels_disagree": 2,
+     "no_video_of_the_test": 6,
+     "one_label": 16,
+     "files_two_labels": 239,
+     "bytes_two_labels": 14218714894,
+     "by_investigation": {
+      "PSI-25:two_labels_agree": 98,
+      "PSI-25:labels_disagree": 2,
+      "PSI-25:no_video": 6,
+      "PSI-25:one_label": 16
+     }
+    }
+   },
+   "P1": {
+    "outside_by_recorded_value": {
+     "tests": 133,
+     "two_labels_agree": 99,
+     "labels_disagree": 2,
+     "no_video_of_the_test": 14,
+     "one_label": 18,
+     "files_two_labels": 241,
+     "bytes_two_labels": 14232089573,
+     "by_investigation": {
+      "PSI-25:two_labels_agree": 99,
+      "PSI-25:labels_disagree": 2,
+      "PSI-25:no_video": 6,
+      "PSI-25:one_label": 18,
+      "PSI-99:no_video": 8
+     }
+    }
+   },
+   "P3": {
+    "outside_by_recorded_value": {
+     "tests": 2,
+     "no_video_of_the_test": 2,
+     "files_two_labels": 0,
+     "bytes_two_labels": 0,
+     "by_investigation": {
+      "PSI-98:no_video": 2
+     }
+    }
+   },
+   "S1": {
+    "outside_by_recorded_value": {
+     "tests": 281,
+     "no_video_of_the_test": 251,
+     "labels_disagree": 1,
+     "two_labels_agree": 19,
+     "one_label": 10,
+     "files_two_labels": 40,
+     "bytes_two_labels": 3448177226,
+     "by_investigation": {
+      "PSI-69:no_video": 248,
+      "PSI-69:labels_disagree": 1,
+      "PSI-69:two_labels_agree": 3,
+      "PSI-69:one_label": 4,
+      "PSI-25:two_labels_agree": 16,
+      "PSI-25:one_label": 6,
+      "PSI-25:no_video": 3
+     }
+    },
+    "inside": {
+     "tests": 17,
+     "no_video_of_the_test": 17,
+     "files_two_labels": 0,
+     "bytes_two_labels": 0,
+     "by_investigation": {
+      "PSI-69:no_video": 17
+     }
+    }
+   }
+  }
+ },
+ "bass2_views": {
+  "main:whole_recording_no_extra_words": {
+   "files": 114,
+   "bytes": 7547979401,
+   "tests": 114
+  },
+  "still_sequence": {
+   "files": 52,
+   "bytes": 450216042,
+   "tests": 50
+  },
+  "main:excerpt_or_other_named_clip": {
+   "files": 7,
+   "bytes": 226328298,
+   "tests": 5
+  },
+  "second_view": {
+   "files": 102,
+   "bytes": 9044985674,
+   "tests": 94
+  },
+  "main:ignition_attempt": {
+   "files": 5,
+   "bytes": 145791486,
+   "tests": 3
+  },
+  "main:portion_during_loss_of_signal": {
+   "files": 7,
+   "bytes": 127092674,
+   "tests": 6
+  },
+  "main:part": {
+   "files": 2,
+   "bytes": 101068017,
+   "tests": 1
+  },
+  "other:rack_monitor_or_other_camera": {
+   "files": 4,
+   "bytes": 59808704,
+   "tests": 3
+  },
+  "other:post_burn_picture": {
+   "files": 3,
+   "bytes": 4492854,
+   "tests": 2
+  }
+ },
+ "bass2_clip_words": {
+  "": 116,
+  "still_sequence": 50,
+  "shifted_video": 1,
+  "second_view": 90,
+  "ignition_attempt": 5,
+  "second_view;ignition_attempt": 5,
+  "still_sequence;ignition_attempt": 1,
+  "loss_of_signal_portion": 9,
+  "part_of_recording": 2,
+  "second_view;part_of_recording": 2,
+  "still_sequence;part_of_recording": 1,
+  "second_view;loss_of_signal_portion": 5,
+  "flame_blowoff_clip": 1,
+  "loss_of_signal_portion;rack_or_monitor_view": 1,
+  "post_burn_picture;rack_or_monitor_view": 1,
+  "post_burn_picture": 2,
+  "rack_or_monitor_view": 1,
+  "stream_recording": 3
+ },
+ "shortlists": {
+  "iss_P1_oxygen_inside_pressure_not_in_table_all": {
+   "counted_tests": 55,
+   "by_investigation": {
+    "PSI-25": 47,
+    "PSI-99": 8
+   }
+  },
+  "iss_P1_bass2": {
+   "tests": 47,
+   "tests_with_main_view": 45,
+   "tests_with_plain_main_only_definition": 44,
+   "files": 49,
+   "bytes": 3515643202,
+   "plain_files": 44,
+   "plain_bytes": 3406968026,
+   "los_files": 5,
+   "los_bytes": 108675176,
+   "los_names": [
+    "PSI-25_Raw Data_BASS_GMT195_SAMPLE_202_TEST_P5-LOS-portion.mp4",
+    "PSI-25_Raw Data_BASS_GMT204_SAMPLE_180_TEST_M10_LOS_Portion_1754-1756.mp4",
+    "PSI-25_Raw Data_BASS_GMT211_SAMPLE_193_TEST_P18_LOS_Portion_10h52m52s_to_end_of_test.mp4",
+    "PSI-25_Raw Data_BASS_GMT211_SAMPLE_195_TEST_P20_LOS_Portion_15h33m45s_to_end_of_test.ts.mp4",
+    "PSI-25_Raw Data_M10experimentvideo-LOS.mp4"
+   ],
+   "files_two_labels_agree": 44,
+   "bytes_two_labels_agree": 3167200708,
+   "states": {
+    "two_labels_agree": 44,
+    "one_label": 4,
+    "labels_disagree": 1
+   },
+   "kinds": {
+    "main:whole_recording_no_extra_words": 44,
+    "main:portion_during_loss_of_signal": 5
+   },
+   "tests_by_best_state_of_main": {
+    "0": 40,
+    "2": 1,
+    "1": 4,
+    "9": 2
+   },
+   "on_disk_files": 7,
+   "not_on_disk_files": 42,
+   "not_on_disk_bytes": 2867152457,
+   "not_on_disk_days": 11,
+   "tests_without_main_view": [
+    "BASS2-F2",
+    "BASS2-M3"
+   ],
+   "transcribed_tests": [
+    "BASS2-B21",
+    "BASS2-P13a",
+    "BASS2-P13b",
+    "BASS2-P22a",
+    "BASS2-P22b",
+    "BASS2-P25",
+    "BASS2-P5"
+   ],
+   "all_views_files": 109,
+   "all_views_bytes": 7216795144,
+   "tests_with_any_video": 46
+  },
+  "iss_D1_bass2": {
+   "tests": 45,
+   "tests_with_main_view": 43,
+   "tests_with_plain_main_only_definition": 42,
+   "files": 47,
+   "bytes": 3409470024,
+   "plain_files": 42,
+   "plain_bytes": 3300794848,
+   "los_files": 5,
+   "los_bytes": 108675176,
+   "los_names": [
+    "PSI-25_Raw Data_BASS_GMT195_SAMPLE_202_TEST_P5-LOS-portion.mp4",
+    "PSI-25_Raw Data_BASS_GMT204_SAMPLE_180_TEST_M10_LOS_Portion_1754-1756.mp4",
+    "PSI-25_Raw Data_BASS_GMT211_SAMPLE_193_TEST_P18_LOS_Portion_10h52m52s_to_end_of_test.mp4",
+    "PSI-25_Raw Data_BASS_GMT211_SAMPLE_195_TEST_P20_LOS_Portion_15h33m45s_to_end_of_test.ts.mp4",
+    "PSI-25_Raw Data_M10experimentvideo-LOS.mp4"
+   ],
+   "files_two_labels_agree": 44,
+   "bytes_two_labels_agree": 3167200708,
+   "states": {
+    "two_labels_agree": 44,
+    "one_label": 2,
+    "labels_disagree": 1
+   },
+   "kinds": {
+    "main:whole_recording_no_extra_words": 42,
+    "main:portion_during_loss_of_signal": 5
+   },
+   "tests_by_best_state_of_main": {
+    "0": 40,
+    "2": 1,
+    "1": 2,
+    "9": 2
+   },
+   "on_disk_files": 5,
+   "not_on_disk_files": 42,
+   "not_on_disk_bytes": 2867152457,
+   "not_on_disk_days": 11,
+   "tests_without_main_view": [
+    "BASS2-F2",
+    "BASS2-M3"
+   ],
+   "transcribed_tests": [
+    "BASS2-B21",
+    "BASS2-P13a",
+    "BASS2-P13b",
+    "BASS2-P25",
+    "BASS2-P5"
+   ],
+   "all_views_files": 105,
+   "all_views_bytes": 6980690113,
+   "tests_with_any_video": 44
+  },
+  "iss_S1_bass2": {
+   "tests": 7,
+   "tests_with_main_view": 7,
+   "tests_with_plain_main_only_definition": 7,
+   "files": 8,
+   "bytes": 662517006,
+   "plain_files": 7,
+   "plain_bytes": 648490745,
+   "los_files": 1,
+   "los_bytes": 14026261,
+   "los_names": [
+    "PSI-25_Raw Data_BASS_GMT195_SAMPLE_202_TEST_P5-LOS-portion.mp4"
+   ],
+   "files_two_labels_agree": 4,
+   "bytes_two_labels_agree": 322079929,
+   "states": {
+    "one_label": 4,
+    "two_labels_agree": 4
+   },
+   "kinds": {
+    "main:whole_recording_no_extra_words": 7,
+    "main:portion_during_loss_of_signal": 1
+   },
+   "tests_by_best_state_of_main": {
+    "0": 3,
+    "1": 4
+   },
+   "on_disk_files": 7,
+   "not_on_disk_files": 1,
+   "not_on_disk_bytes": 14026261,
+   "not_on_disk_days": 1,
+   "tests_without_main_view": [],
+   "transcribed_tests": [
+    "BASS2-B21",
+    "BASS2-P13a",
+    "BASS2-P13b",
+    "BASS2-P22a",
+    "BASS2-P22b",
+    "BASS2-P25",
+    "BASS2-P5"
+   ],
+   "all_views_files": 14,
+   "all_views_bytes": 1451140313,
+   "tests_with_any_video": 7
+  },
+  "P1_counted_bass2": {
+   "tests": 125,
+   "tests_with_main_view": 115,
+   "tests_with_plain_main_only_definition": 110,
+   "files": 131,
+   "bytes": 8109546024,
+   "plain_files": 110,
+   "plain_bytes": 7509265549,
+   "los_files": 21,
+   "los_bytes": 600280475,
+   "los_names": [
+    "PSI-25_Raw Data_BASS_GMT100_sample139_test-T16-shifted-video.mp4",
+    "PSI-25_Raw Data_BASS_GMT178_SAMPLE_182_TEST_T3_First_Ignition_Attempts.mp4",
+    "PSI-25_Raw Data_BASS_GMT190_SAMPLE_182_TEST_T7_First_Ignition_Attempts.mp4",
+    "PSI-25_Raw Data_BASS_GMT190_SAMPLE_182_TEST_T7_Second_Ignition_Attempts.mp4",
+    "PSI-25_Raw Data_BASS_GMT195_SAMPLE_202_TEST_P5-LOS-portion.mp4",
+    "PSI-25_Raw Data_BASS_GMT202_SAMPLE_220_TEST_O5a_Part-1.mp4",
+    "PSI-25_Raw Data_BASS_GMT202_SAMPLE_220_TEST_O5a_Part-2.mp4",
+    "PSI-25_Raw Data_BASS_GMT202_SAMPLE_221_TEST_O13a_LOS_Portion_1741-1743.mp4",
+    "PSI-25_Raw Data_BASS_GMT204_SAMPLE_180_TEST_M10_LOS_Portion_1754-1756.mp4",
+    "PSI-25_Raw Data_BASS_GMT210_SAMPLE_199_TEST_P12_LOS_Portion_1132-1133.mp4",
+    "PSI-25_Raw Data_BASS_GMT210_SAMPLE_219_TEST_O16_First_Ignition_Attempt.mp4",
+    "PSI-25_Raw Data_BASS_GMT210_SAMPLE_219_TEST_O16_Second_Ignition_Attempt.mp4",
+    "PSI-25_Raw Data_BASS_GMT211_SAMPLE_193_TEST_P18_LOS_Portion_10h52m52s_to_end_of_test.mp4",
+    "PSI-25_Raw Data_BASS_GMT211_SAMPLE_195_TEST_P20_LOS_Portion_15h33m45s_to_end_of_test.ts.mp4",
+    "PSI-25_Raw Data_BASS_GMT_100_sample137_test T13.mp4",
+    "PSI-25_Raw Data_Flame-Blowoff-BASS-GMT177-Test-O7.mp4",
+    "PSI-25_Raw Data_M10experimentvideo-LOS.mp4",
+    "PSI-25_Raw Data_O5a-all.mp4",
+    "PSI-25_Raw Data_vlc-record-2014-12-05-17h06m58s-BASS_GMT190_SAMPLE_145_TEST_T21.ts-.mp4",
+    "PSI-25_Raw Data_vlc-record-2014-12-05-17h07m02s-BASS_GMT190_SAMPLE_145_TEST_T21.ts-.mp4",
+    "PSI-25_Raw Data_vlc-record-2015-06-04-17h20m14s-BASS_GMT190_SAMPLE_145_TEST_T21.ts-.mp4"
+   ],
+   "files_two_labels_agree": 108,
+   "bytes_two_labels_agree": 6577362162,
+   "states": {
+    "two_labels_agree": 108,
+    "one_label": 21,
+    "labels_disagree": 2
+   },
+   "kinds": {
+    "main:whole_recording_no_extra_words": 110,
+    "main:excerpt_or_other_named_clip": 7,
+    "main:ignition_attempt": 5,
+    "main:portion_during_loss_of_signal": 7,
+    "main:part": 2
+   },
+   "tests_by_best_state_of_main": {
+    "0": 95,
+    "1": 18,
+    "9": 10,
+    "2": 2
+   },
+   "on_disk_files": 19,
+   "not_on_disk_files": 112,
+   "not_on_disk_bytes": 6308405144,
+   "not_on_disk_days": 28,
+   "tests_without_main_view": [
+    "BASS2-F2",
+    "BASS2-M3",
+    "BASS2-O10",
+    "BASS2-O17",
+    "BASS2-O20",
+    "BASS2-O21",
+    "BASS2-O22",
+    "BASS2-P10",
+    "BASS2-P8",
+    "BASS2-T20"
+   ],
+   "transcribed_tests": [
+    "BASS2-B21",
+    "BASS2-M17",
+    "BASS2-O11",
+    "BASS2-O12",
+    "BASS2-O14",
+    "BASS2-O19",
+    "BASS2-O4",
+    "BASS2-O7",
+    "BASS2-O8a",
+    "BASS2-O8b",
+    "BASS2-O9",
+    "BASS2-P1",
+    "BASS2-P13a",
+    "BASS2-P13b",
+    "BASS2-P22a",
+    "BASS2-P22b",
+    "BASS2-P25",
+    "BASS2-P5",
+    "BASS2-P9"
+   ],
+   "all_views_files": 289,
+   "all_views_bytes": 17635014678,
+   "tests_with_any_video": 119
+  },
+  "all_bass2": {
+   "tests": 129,
+   "tests_with_main_view": 119,
+   "tests_with_plain_main_only_definition": 114,
+   "files": 135,
+   "bytes": 8148259876,
+   "plain_files": 114,
+   "plain_bytes": 7547979401,
+   "los_files": 21,
+   "los_bytes": 600280475,
+   "los_names": [
+    "PSI-25_Raw Data_BASS_GMT100_sample139_test-T16-shifted-video.mp4",
+    "PSI-25_Raw Data_BASS_GMT178_SAMPLE_182_TEST_T3_First_Ignition_Attempts.mp4",
+    "PSI-25_Raw Data_BASS_GMT190_SAMPLE_182_TEST_T7_First_Ignition_Attempts.mp4",
+    "PSI-25_Raw Data_BASS_GMT190_SAMPLE_182_TEST_T7_Second_Ignition_Attempts.mp4",
+    "PSI-25_Raw Data_BASS_GMT195_SAMPLE_202_TEST_P5-LOS-portion.mp4",
+    "PSI-25_Raw Data_BASS_GMT202_SAMPLE_220_TEST_O5a_Part-1.mp4",
+    "PSI-25_Raw Data_BASS_GMT202_SAMPLE_220_TEST_O5a_Part-2.mp4",
+    "PSI-25_Raw Data_BASS_GMT202_SAMPLE_221_TEST_O13a_LOS_Portion_1741-1743.mp4",
+    "PSI-25_Raw Data_BASS_GMT204_SAMPLE_180_TEST_M10_LOS_Portion_1754-1756.mp4",
+    "PSI-25_Raw Data_BASS_GMT210_SAMPLE_199_TEST_P12_LOS_Portion_1132-1133.mp4",
+    "PSI-25_Raw Data_BASS_GMT210_SAMPLE_219_TEST_O16_First_Ignition_Attempt.mp4",
+    "PSI-25_Raw Data_BASS_GMT210_SAMPLE_219_TEST_O16_Second_Ignition_Attempt.mp4",
+    "PSI-25_Raw Data_BASS_GMT211_SAMPLE_193_TEST_P18_LOS_Portion_10h52m52s_to_end_of_test.mp4",
+    "PSI-25_Raw Data_BASS_GMT211_SAMPLE_195_TEST_P20_LOS_Portion_15h33m45s_to_end_of_test.ts.mp4",
+    "PSI-25_Raw Data_BASS_GMT_100_sample137_test T13.mp4",
+    "PSI-25_Raw Data_Flame-Blowoff-BASS-GMT177-Test-O7.mp4",
+    "PSI-25_Raw Data_M10experimentvideo-LOS.mp4",
+    "PSI-25_Raw Data_O5a-all.mp4",
+    "PSI-25_Raw Data_vlc-record-2014-12-05-17h06m58s-BASS_GMT190_SAMPLE_145_TEST_T21.ts-.mp4",
+    "PSI-25_Raw Data_vlc-record-2014-12-05-17h07m02s-BASS_GMT190_SAMPLE_145_TEST_T21.ts-.mp4",
+    "PSI-25_Raw Data_vlc-record-2015-06-04-17h20m14s-BASS_GMT190_SAMPLE_145_TEST_T21.ts-.mp4"
+   ],
+   "files_two_labels_agree": 110,
+   "bytes_two_labels_agree": 6598357481,
+   "states": {
+    "two_labels_agree": 110,
+    "one_label": 23,
+    "labels_disagree": 2
+   },
+   "kinds": {
+    "main:whole_recording_no_extra_words": 114,
+    "main:excerpt_or_other_named_clip": 7,
+    "main:ignition_attempt": 5,
+    "main:portion_during_loss_of_signal": 7,
+    "main:part": 2
+   },
+   "tests_by_best_state_of_main": {
+    "0": 97,
+    "1": 20,
+    "2": 2,
+    "9": 10
+   },
+   "on_disk_files": 19,
+   "not_on_disk_files": 116,
+   "not_on_disk_bytes": 6347118996,
+   "not_on_disk_days": 28,
+   "tests_without_main_view": [
+    "BASS2-F2",
+    "BASS2-M3",
+    "BASS2-O10",
+    "BASS2-O17",
+    "BASS2-O20",
+    "BASS2-O21",
+    "BASS2-O22",
+    "BASS2-P10",
+    "BASS2-P8",
+    "BASS2-T20"
+   ],
+   "transcribed_tests": [
+    "BASS2-B21",
+    "BASS2-M17",
+    "BASS2-O11",
+    "BASS2-O12",
+    "BASS2-O14",
+    "BASS2-O19",
+    "BASS2-O4",
+    "BASS2-O7",
+    "BASS2-O8a",
+    "BASS2-O8b",
+    "BASS2-O9",
+    "BASS2-P1",
+    "BASS2-P13a",
+    "BASS2-P13b",
+    "BASS2-P22a",
+    "BASS2-P22b",
+    "BASS2-P25",
+    "BASS2-P5",
+    "BASS2-P9"
+   ],
+   "all_views_files": 296,
+   "all_views_bytes": 17707763150,
+   "tests_with_any_video": 123
+  }
+ },
+ "lunar_inside": {
+  "tests": 26,
+  "by_investigation": {
+   "PSI-69": 17,
+   "PSI-159": 9
+  },
+  "with_video_by_state": {
+   "no_video_of_the_test": 18,
+   "two_labels_agree": 8
+  },
+  "video_files": [
+   {
+    "test": "CFIG-N-21106F1",
+    "file": "PSI-159_Raw Data_vlc-record-2021-04-16-19h19m26s-udp____21106F1.ts",
+    "bytes": 323223888,
+    "state": "two_labels_agree"
+   },
+   {
+    "test": "CFIG-N-21106F2",
+    "file": "PSI-159_Raw Data_vlc-record-2021-04-16-19h37m22s-udp____21106F2.ts",
+    "bytes": 317097344,
+    "state": "two_labels_agree"
+   },
+   {
+    "test": "CFIG-N-21106F3",
+    "file": "PSI-159_Raw Data_vlc-record-2021-04-16-19h56m20s-udp____21106F3.ts",
+    "bytes": 249043788,
+    "state": "two_labels_agree"
+   },
+   {
+    "test": "CFIG-N-21106F5",
+    "file": "PSI-159_Raw Data_vlc-record-2021-04-16-20h51m27s-udp____21106F5.ts",
+    "bytes": 178367820,
+    "state": "two_labels_agree"
+   },
+   {
+    "test": "CFIG-N-21153F1",
+    "file": "PSI-159_Raw Data_vlc-record-2021-06-02-17h05m11s-udp____21153F1.ts",
+    "bytes": 305884648,
+    "state": "two_labels_agree"
+   },
+   {
+    "test": "CFIG-N-21153A4",
+    "file": "PSI-159_Raw Data_vlc-record-2021-06-02-17h41m30s-udp____21153A4.ts",
+    "bytes": 220311372,
+    "state": "two_labels_agree"
+   },
+   {
+    "test": "CFIG-N-21153A5",
+    "file": "PSI-159_Raw Data_vlc-record-2021-06-02-17h51m51s-udp____21153A5.ts",
+    "bytes": 685075760,
+    "state": "two_labels_agree"
+   },
+   {
+    "test": "CFIG-N-21174B1",
+    "file": "PSI-159_Raw Data_vlc-record-2021-06-23-15h32m06s-udp____21174B1.ts",
+    "bytes": 361549944,
+    "state": "two_labels_agree"
+   }
+  ],
+  "S1_counted_inside": 17,
+  "S1_counted_inside_with_video": 0,
+  "video_bytes": 2640554564
+ },
+ "iss_inside": {
+  "tests": 179,
+  "by_investigation": {
+   "PSI-69": 56,
+   "PSI-39": 25,
+   "PSI-159": 27,
+   "PSI-10": 71
+  },
+  "with_video_by_state": {
+   "no_video_of_the_test": 84,
+   "two_labels_agree": 41,
+   "one_label": 54
+  },
+  "S1_counted_inside": 56,
+  "S1_counted_inside_states": {
+   "no_video_of_the_test": 54,
+   "two_labels_agree": 2
+  },
+  "S1_counted_inside_video_bytes": 65710958
+ },
+ "overlay_investigations": {
+  "files": 457,
+  "bytes": 46570199389
+ },
+ "ext": {
+  "ts": 773,
+  "mp4": 1847,
+  "mpg": 2,
+  "avi": 1
+ },
+ "videos_tied_to_counted_tests": {
+  "files": 298,
+  "bytes": 17993880758,
+  "by_investigation": {
+   "PSI-25": 289,
+   "PSI-69": 9
+  },
+  "by_ext": {
+   "mp4": 297,
+   "mpg": 1
+  }
+ }
+}

@@ -1,0 +1,107 @@
+need,investigation_id,role,variable,tests_in_scope,tests_without_value_in_table,tests_with_video_tied_to_the_test_by_name,video_files,video_bytes,of_those_only_day_tied,investigation_day_tied_video_files,investigation_day_tied_video_bytes,documented_ok,form_a_video_could_carry
+P1,PSI-25,required,pressure_kpa,129,129,122,294,17655139022,0,0,0,yes,nothing
+P1,PSI-25,outcome,flow_event,129,104,100,246,13369160525,0,0,0,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+P1,PSI-25,outcome,o2_consumed_pct_points,129,7,7,13,322228182,0,0,0,,nothing
+P1,PSI-25,outcome,burn_time_s,129,129,122,294,17655139022,0,0,0,,duration between two labelled events (team-derived)
+P1,PSI-25,outcome,burn_length_cm,129,129,122,294,17655139022,0,0,0,,"measurable_with_calibration (length scale, frame times)"
+P1,PSI-26,required,o2_pct,121,121,0,0,0,41,110,22057962547,,nothing
+P1,PSI-26,required,pressure_kpa,121,121,0,0,0,41,110,22057962547,yes,nothing
+P1,PSI-26,outcome,flow_event,121,121,0,0,0,41,110,22057962547,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+P1,PSI-26,outcome,o2_consumed_pct_points,121,121,0,0,0,41,110,22057962547,,nothing
+P1,PSI-26,outcome,burn_time_s,121,121,0,0,0,41,110,22057962547,,duration between two labelled events (team-derived)
+P1,PSI-26,outcome,burn_length_cm,121,121,0,0,0,41,110,22057962547,,"measurable_with_calibration (length scale, frame times)"
+P1,PSI-101,required,o2_pct,109,109,0,0,0,21,8,3686907389,,nothing
+P1,PSI-101,required,pressure_kpa,109,109,0,0,0,21,8,3686907389,yes,nothing
+P1,PSI-101,outcome,flow_event,109,109,0,0,0,21,8,3686907389,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P1,PSI-101,outcome,o2_consumed_pct_points,109,109,0,0,0,21,8,3686907389,,nothing
+P1,PSI-101,outcome,burn_time_s,109,109,0,0,0,21,8,3686907389,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P1,PSI-101,outcome,burn_length_cm,109,109,0,0,0,21,8,3686907389,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P1,PSI-102,required,o2_pct,4,4,0,0,0,0,0,0,,nothing
+P1,PSI-102,required,pressure_kpa,4,4,0,0,0,0,0,0,yes,nothing
+P1,PSI-102,outcome,flow_event,4,4,0,0,0,0,0,0,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P1,PSI-102,outcome,o2_consumed_pct_points,4,4,0,0,0,0,0,0,,nothing
+P1,PSI-102,outcome,burn_time_s,4,4,0,0,0,0,0,0,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P1,PSI-102,outcome,burn_length_cm,4,4,0,0,0,0,0,0,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P2,PSI-25,outcome,hot_ignition,129,129,122,294,17655139022,0,0,0,,"qualitative_event (flame appears, igniter glow), timed by the on-screen clock where present"
+P2,PSI-26,required,o2_pct,121,121,0,0,0,41,110,22057962547,,nothing
+P2,PSI-26,outcome,hot_ignition,121,121,0,0,0,41,110,22057962547,,"qualitative_event (flame appears, igniter glow), timed by the on-screen clock where present"
+P2,PSI-101,required,o2_pct,109,109,0,0,0,21,8,3686907389,,nothing
+P2,PSI-101,outcome,hot_ignition,109,109,0,0,0,21,8,3686907389,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P2,PSI-102,required,o2_pct,4,4,0,0,0,0,0,0,,nothing
+P2,PSI-102,outcome,hot_ignition,4,4,0,0,0,0,0,0,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P3,PSI-25,required,flow_cms,129,10,9,21,1730084833,0,0,0,,number_on_screen (AIR cm/s; FAN voltage x10 -> flow only through the day fan calibration)
+P3,PSI-25,required,flow_direction,129,129,122,294,17655139022,0,0,0,,qualitative (geometry visible); NASA/TM-20210011385 App. A states it per test (Opposed/Concurrent/Stagnation)
+P3,PSI-25,outcome,spread_rate_mm_s,129,129,122,294,17655139022,0,0,0,,"measurable_with_calibration (length scale, frame times)"
+P3,PSI-25,outcome,burn_length_cm,129,129,122,294,17655139022,0,0,0,,"measurable_with_calibration (length scale, frame times)"
+P3,PSI-25,outcome,burn_time_s,129,129,122,294,17655139022,0,0,0,,duration between two labelled events (team-derived)
+P3,PSI-26,required,flow_cms,121,121,0,0,0,41,110,22057962547,,number_on_screen (AIR cm/s; FAN voltage x10 -> flow only through the day fan calibration)
+P3,PSI-26,required,flow_direction,121,121,0,0,0,41,110,22057962547,,qualitative (geometry visible); no per-test document found in this job
+P3,PSI-26,outcome,spread_rate_mm_s,121,121,0,0,0,41,110,22057962547,,"measurable_with_calibration (length scale, frame times)"
+P3,PSI-26,outcome,burn_length_cm,121,121,0,0,0,41,110,22057962547,,"measurable_with_calibration (length scale, frame times)"
+P3,PSI-26,outcome,burn_time_s,121,121,0,0,0,41,110,22057962547,,duration between two labelled events (team-derived)
+P3,PSI-101,required,flow_direction,109,109,0,0,0,21,8,3686907389,,qualitative (geometry visible); no per-test document found in this job
+P3,PSI-101,outcome,spread_rate_mm_s,109,109,0,0,0,21,8,3686907389,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P3,PSI-101,outcome,burn_length_cm,109,109,0,0,0,21,8,3686907389,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P3,PSI-101,outcome,burn_time_s,109,109,0,0,0,21,8,3686907389,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P3,PSI-102,required,flow_direction,4,4,0,0,0,0,0,0,,qualitative (geometry visible); no per-test document found in this job
+P3,PSI-102,outcome,spread_rate_mm_s,4,4,0,0,0,0,0,0,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P3,PSI-102,outcome,burn_length_cm,4,4,0,0,0,0,0,0,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+P3,PSI-102,outcome,burn_time_s,4,4,0,0,0,0,0,0,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+S1,PSI-10,required,o2_pct,327,11,10,10,2375881772,0,0,0,,nothing
+S1,PSI-10,outcome,test_end,327,327,306,306,73059079124,0,0,0,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-10,outcome,extinction_diameter_mm,327,327,306,306,73059079124,0,0,0,,"measurable_with_calibration (length scale, frame times)"
+S1,PSI-10,outcome,flow_event,327,327,306,306,73059079124,0,0,0,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-25,required,pressure_kpa,129,129,122,294,17655139022,0,0,0,yes,nothing
+S1,PSI-25,outcome,test_end,129,129,122,294,17655139022,0,0,0,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-25,outcome,extinction_diameter_mm,129,129,122,294,17655139022,0,0,0,,"measurable_with_calibration (length scale, frame times)"
+S1,PSI-25,outcome,flow_event,129,104,100,246,13369160525,0,0,0,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-26,required,o2_pct,121,121,0,0,0,41,110,22057962547,,nothing
+S1,PSI-26,required,pressure_kpa,121,121,0,0,0,41,110,22057962547,yes,nothing
+S1,PSI-26,outcome,test_end,121,121,0,0,0,41,110,22057962547,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-26,outcome,extinction_diameter_mm,121,121,0,0,0,41,110,22057962547,,"measurable_with_calibration (length scale, frame times)"
+S1,PSI-26,outcome,flow_event,121,121,0,0,0,41,110,22057962547,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-39,outcome,test_end,79,79,47,103,65611073849,6,20,13531970006,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-39,outcome,extinction_diameter_mm,79,79,47,103,65611073849,6,20,13531970006,,"measurable_with_calibration (length scale, frame times)"
+S1,PSI-39,outcome,flow_event,79,79,47,103,65611073849,6,20,13531970006,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-69,required,pressure_kpa,274,1,0,0,0,0,0,0,yes,nothing
+S1,PSI-69,outcome,extinction_diameter_mm,274,77,1,1,189122560,0,0,0,,"measurable_with_calibration (length scale, frame times)"
+S1,PSI-69,outcome,flow_event,274,274,4,4,335507931,0,0,0,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-101,required,o2_pct,109,109,0,0,0,21,8,3686907389,,nothing
+S1,PSI-101,required,pressure_kpa,109,109,0,0,0,21,8,3686907389,yes,nothing
+S1,PSI-101,outcome,test_end,109,109,0,0,0,21,8,3686907389,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+S1,PSI-101,outcome,extinction_diameter_mm,109,109,0,0,0,21,8,3686907389,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+S1,PSI-101,outcome,flow_event,109,109,0,0,0,21,8,3686907389,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+S1,PSI-102,required,o2_pct,4,4,0,0,0,0,0,0,,nothing
+S1,PSI-102,required,pressure_kpa,4,4,0,0,0,0,0,0,yes,nothing
+S1,PSI-102,outcome,test_end,4,4,0,0,0,0,0,0,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+S1,PSI-102,outcome,extinction_diameter_mm,4,4,0,0,0,0,0,0,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+S1,PSI-102,outcome,flow_event,4,4,0,0,0,0,0,0,,"nothing (smoke tests; SAME-R videos not opened, SAME videos are 2 engineering clips)"
+S1,PSI-107,required,o2_pct,435,435,0,0,0,36,7,2266507671,,nothing
+S1,PSI-107,required,pressure_kpa,435,435,0,0,0,36,7,2266507671,yes,nothing
+S1,PSI-107,outcome,test_end,435,435,0,0,0,36,7,2266507671,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-107,outcome,extinction_diameter_mm,435,435,0,0,0,36,7,2266507671,,"measurable_with_calibration (length scale, frame times)"
+S1,PSI-107,outcome,flow_event,435,435,0,0,0,36,7,2266507671,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-159,outcome,test_end,333,61,57,57,11006966096,0,0,0,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+S1,PSI-159,outcome,extinction_diameter_mm,333,333,324,325,79521600566,2,10,1344826980,,"measurable_with_calibration (length scale, frame times)"
+S1,PSI-159,outcome,flow_event,333,333,324,325,79521600566,2,10,1344826980,,"qualitative_event (flame went out / blew off / did not ignite), timed by the on-screen clock where present"
+D1,PSI-25,outcome,co_produced_ppm,129,11,11,22,1064529614,0,0,0,,nothing
+D1,PSI-25,outcome,co2_produced_pct_points,129,8,8,15,577761680,0,0,0,,nothing
+D1,PSI-25,outcome,co_to_co2_molar_ratio,129,42,41,93,2207726807,0,0,0,,nothing
+D1,PSI-26,outcome,co_produced_ppm,121,121,0,0,0,41,110,22057962547,,nothing
+D1,PSI-26,outcome,co2_produced_pct_points,121,121,0,0,0,41,110,22057962547,,nothing
+D1,PSI-26,outcome,co_to_co2_molar_ratio,121,121,0,0,0,41,110,22057962547,,nothing
+D1,PSI-101,outcome,co_produced_ppm,109,109,0,0,0,21,8,3686907389,,nothing
+D1,PSI-101,outcome,co2_produced_pct_points,109,109,0,0,0,21,8,3686907389,,nothing
+D1,PSI-101,outcome,co_to_co2_molar_ratio,109,109,0,0,0,21,8,3686907389,,nothing
+D1,PSI-102,outcome,co_produced_ppm,4,4,0,0,0,0,0,0,,nothing
+D1,PSI-102,outcome,co2_produced_pct_points,4,4,0,0,0,0,0,0,,nothing
+D1,PSI-102,outcome,co_to_co2_molar_ratio,4,4,0,0,0,0,0,0,,nothing
+D2,PSI-25,required,flow_cms,129,10,9,21,1730084833,0,0,0,,number_on_screen (AIR cm/s; FAN voltage x10 -> flow only through the day fan calibration)
+D2,PSI-25,required,aging_time_s,129,129,122,294,17655139022,0,0,0,,nothing
+D2,PSI-25,outcome,smoke_particle_size_um,129,129,122,294,17655139022,0,0,0,,nothing
+D2,PSI-26,required,flow_cms,121,121,0,0,0,41,110,22057962547,,number_on_screen (AIR cm/s; FAN voltage x10 -> flow only through the day fan calibration)
+D2,PSI-26,required,aging_time_s,121,121,0,0,0,41,110,22057962547,,nothing
+D2,PSI-26,outcome,smoke_particle_size_um,121,121,0,0,0,41,110,22057962547,,nothing
+D2,PSI-101,required,aging_time_s,109,5,0,0,0,0,0,0,,nothing
+D2,PSI-101,outcome,smoke_particle_size_um,109,109,0,0,0,21,8,3686907389,,nothing
+D2,PSI-102,outcome,smoke_particle_size_um,4,4,0,0,0,0,0,0,,nothing

@@ -34,3 +34,7 @@ It is the answer to "which data do I need out of all this" that a user can act o
 ## Until then
 
 pm sends the fixed sentences for pile 3 and the claims wording as soon as the data role's files show their final field names.
+
+## Addendum 01:10: video rows inside the same blocks (video design, build step 8)
+
+No separate video block. In the per-test file list, a video row shows: NASA's file name, bytes, the tie phrase for its link state ("video of this test" only for two agreeing labels; otherwise "tied by the file name only", "tied to the recording day only"), the kind of clip from its name, and either "on-screen readings transcribed (link)" or "on-screen readings per NASA's ReadMe, not transcribed". Per question, one line in pile 2 for video, generated from the chain counts; for the lunar habitat it says that none of the 17 counted tests has a linked video. The transcription warning stands next to every transcription link ("a transcription of NASA's display, not a measurement"). This replaces the single side-pilot sentence now shown for PSI-25. No minimum, maximum or last value of a transcribed column is shown anywhere. Sentences and counts come from the data role's files; pm sends the wording. About 0.75 h on top of the block; if it is not merged and checked by late afternoon, leave it out.

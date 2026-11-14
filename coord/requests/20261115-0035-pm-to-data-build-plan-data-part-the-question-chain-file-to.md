@@ -34,3 +34,14 @@ It turns one undivided gap into three: no test recorded at the condition; a test
 ## Until then
 
 pm writes the wording for pile 3 and the claims section of the README, reads the 24 PSI metadata archives (0.3 MB) for what their per-test files hold, and finishes the video part of the design.
+
+## Addendum 01:10: video rows (from the video design, `docs/video_design/design.md`, build steps 5 and 6)
+
+The second design job is done. Every one of the 2,623 videos (426 GB) was tied to the tests by name and folder alone, with no video byte transferred: 662 videos have two agreeing labels (videos of 463 tests), 374 one label, 10 disagreeing labels, 1,217 tie to a day only, 330 carry an identifier that is not in a table, 30 none. The tables are in `docs/video_design/prototype/` (`video_links_states.csv`, `video_final.json`, built by `video_final.py`).
+
+Please take them into your steps, so that there is one set of files and not two:
+- **In `file_links.csv` and `test_files.json` (your step 3):** rows with kind = video for PSI-25, 69, 159 and 10, in the same link states, with the columns `clip_kind_from_name`, `second_label_scope`, `transcribed`; version and file id from `listing_snapshot.json`. BASS ties to a day by lookup in the as-run matrix column "Date on videos and images", not by date arithmetic; differences listed. Fixtures (design.md section 12): PSI-25 244 / 47 / 5, PSI-159 314 / 11 / 2, PSI-39 101 / 5 / 2, PSI-69 3 / 5 / 1, PSI-10 306 with one label; totals 662 / 374 / 10 / 1,217 / 330 / 30. "Video of this test" is said only for `two_labels_agree`; the 10 disagreeing files are listed, none resolved.
+- **In `question_chain.csv` (your step 2):** rows with location `video_on_screen_text` (file group "BASS-II main-view recordings", 135 files, 19 of 135 transcribed), and a counts view per scenario, question and placement. Fixtures: ISS P1 (oxygen inside, pressure not in the table) 55 counted, of which 42 have a video of the test, 4 a name-only tie, 9 none; lunar habitat: 26 tests inside, 8 with a video (all CFI-G), 0 of the 17 counted. No video row for pressure, oxygen, CO, CO2 or particle size: the on-screen text does not hold them.
+- **Review (0.25 h):** pm sends the fixed sentences for video ("cannot tell", "Not derived:", the transcription warning) as templates; please compare each NASA quote in them with the document.
+
+If your own video survey disagrees with these counts anywhere, the disagreement is the finding: list it, do not pick one.
