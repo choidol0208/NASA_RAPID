@@ -34,6 +34,11 @@ EXTRA = [
     "wire insulation for a pressurized rover", "water mist suppression system for a lunar habitat",
     "battery enclosure for the ISS", "3D printer on the Moon", "glove box", "천장 배선 과열", "달 기지 배터리 보관함",  # Korean: ceiling wiring overheating; lunar base battery box
     "oxygen sensor, ISS cabin (CO2 30%)", {"text": "battery enclosure", "preset": "iss"},
+    # sentence queries (ui request 1817). Korean: lunar base at 30% oxygen and 70 kPa; a base at 30% oxygen and 70 kPa;
+    # a fire-detection device for a Mars base at 25% oxygen and 70 kPa; spacecraft cabin; a base on a planet at 30% oxygen
+    "산소 30% 기압 70 kPa의 달 기지", "산소 30%, 70kPa인 기지", "산소 농도 25%, 기압 70 kPa인 화성 기지에서 화재 감지 장치를 설계하려고 해",
+    "spacecraft cabin", "우주선 선실", "A spacecraft cabin at 21% oxygen and 101 kPa", "lunar spacecraft",
+    "산소 농도 30%의 행성에서 기지를 건설하려고 하는데", "a base on a planet whose atmosphere has 30% oxygen", "5 atmospheres of pressure",
 ]
 
 

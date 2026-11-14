@@ -87,12 +87,12 @@ function spans(text, key) { // mirrors _spans: where key matches, by the same ru
 // Korean input words in the patterns: 산소 = oxygen, 농도 = concentration.
 const NUMBER_PATTERNS = [/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])/g,
   /(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/g,
-  /(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![\p{L}\p{N}_])/gu, /(\d+(?:\.\d+)?)\s*(cm\/s|mm\/s|m\/s)/g];
+  /(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![a-z])/g, /(\d+(?:\.\d+)?)\s*(cm\/s|mm\/s|m\/s)/g];
 export function notUnderstood(query, cfg) { // mirrors not_understood in scorer.py
   const text = String((query && typeof query === "object" ? query.text : query) || "");
   const t = " " + text.toLowerCase().trim() + " ";
   const kw = cfg.keywords;
-  let keys = Object.values(cfg.presets).flatMap((p) => p.aliases);
+  let keys = Object.values(cfg.presets).flatMap((p) => p.aliases.concat(p.weak_aliases || []));
   for (const g of ["gravity", "flow_state", "concern", "diluent"]) keys = keys.concat(Object.values(kw[g]).flat());
   keys = keys.concat(kw.materials.flatMap((m) => m.keys));
   for (const g of ["thin", "thick", "rod", "out_of_scope", "generic"]) keys = keys.concat(kw[g] || []);
@@ -137,6 +137,11 @@ export function interpret(query, cfg) {
     for (const [name, p] of Object.entries(cfg.presets)) {
       if (any(t, p.aliases)) { preset = name; break; }
     }
+    if (!preset) { // weak aliases ("spacecraft") count only when no preset is named (mirrors scorer.py)
+      for (const [name, p] of Object.entries(cfg.presets)) {
+        if (any(t, p.weak_aliases || [])) { preset = name; break; }
+      }
+    }
   }
   if (preset) {
     if (!(preset in cfg.presets)) throw new Error("unknown preset: " + preset);
@@ -156,7 +161,7 @@ export function interpret(query, cfg) {
   let m = t.match(/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])/) ||
     t.match(/(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/);
   if (m) put("o2_pct", parseFloat(m[1]), "text");
-  m = t.match(/(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![\p{L}\p{N}_])/u);
+  m = t.match(/(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![a-z])/);
   if (m) put("pressure_kpa", pyRound(parseFloat(m[1]) * UNITS_TO_KPA[m[2]], 1), "text");
   m = t.match(/(\d+(?:\.\d+)?)\s*(cm\/s|mm\/s|m\/s)/);
   if (m) put("flow_cms", parseFloat(m[1]) * { "cm/s": 1.0, "mm/s": 0.1, "m/s": 100.0 }[m[2]], "text");
@@ -460,7 +465,7 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
     const weights = { ...cfg.profiles[profile].weights, ...(weightsOverride || {}) };
     const warnings = [...unreadW];
     const g = sc.gravity;
-    if (g === "lunar" || g === "martian") warnings.push({ code: "partial_gravity", message: W.partial_gravity });
+    if (g === "lunar" || g === "martian" || g === "planetary") warnings.push({ code: "partial_gravity", message: W.partial_gravity });
     else if (g === "earth") warnings.push({ code: "earth_gravity", message: W.earth_gravity });
     let maxO2 = null, maxC = null;
     // Highest O2 of any surrounding atmosphere tested (oxidizer streams of inverse flames excluded).

@@ -168,6 +168,26 @@ class Interpretation(unittest.TestCase):
         b = [(r["config_id"], r["score"]) for r in scorer.rank("battery enclosure for the ISS")["ranking"]]
         self.assertEqual(a, b)
 
+    def test_sentence_queries_ui_1817(self):
+        # 1. a Korean particle right after the unit ("70 kPa의", "70kPa인") must not hide the typed pressure
+        for q in ("산소 30% 기압 70 kPa의 달 기지",  # Korean: lunar base, 30% oxygen, air pressure 70 kPa
+                  "산소 30%, 70kPa인 기지"):          # Korean: a base at 30% oxygen and 70 kPa
+            sc, src, *_ = scorer.interpret(q, CFG)
+            self.assertEqual((sc["pressure_kpa"], src["pressure_kpa"]), (70.0, "text"), q)
+            self.assertEqual(sc["o2_pct"], 30.0, q)
+        # 2. "spacecraft cabin" reads as the ISS cabin, but a named preset still wins
+        for q in ("spacecraft cabin", "우주선 선실"):  # Korean: spacecraft cabin
+            self.assertEqual(scorer.rank(q)["scenario"].get("preset"), "iss", q)
+        self.assertEqual(scorer.rank("lunar spacecraft")["scenario"].get("preset"), "lunar_habitat")
+        # 3. a planet or base that is not named gets the partial-gravity warning, with no value guessed
+        for q in ("a base on a planet whose atmosphere has 30% oxygen",
+                  "산소 농도 30%의 행성에서 기지를 건설"):  # Korean: building a base on a planet at 30% oxygen
+            out = scorer.rank(q)
+            self.assertEqual(out["scenario"].get("gravity"), "planetary", q)
+            self.assertIn("partial_gravity", [w["code"] for w in out["warnings"]], q)
+            self.assertNotIn("pressure_kpa", out["scenario"], q)
+        self.assertEqual(scorer.rank("Mars base")["scenario"].get("gravity"), "martian")
+
     def test_ceiling_is_not_fabric(self):
         sc, *_ = scorer.interpret("천장 배선 과열", CFG)  # Korean: "ceiling wiring overheating"; 천장 = ceiling, not 천 (cloth)
         self.assertNotEqual(sc.get("fuel_class"), "fabric")

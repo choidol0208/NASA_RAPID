@@ -14,13 +14,13 @@ From the environment and conditions a user gives, the filter finds the most simi
 | `data/catalog/data_dictionary.csv` | Column name, meaning, allowed values, where it is used |
 | `scoring/scoring_config.json` | Weight profiles, similarity scales, presets, keywords, warning texts. The dashboard reads the same file. Korean keywords are user input; `keywords._gloss_ko` gives their English |
 | `scoring/scorer.py` | Reading the query, scoring, picking the top 1 to 3 (standard library only) |
-| `scoring/test_scorer.py` | 38 unit tests, hand-calculated examples included |
-| `validation/scenarios.json` | 35 validation scenarios with expected results |
+| `scoring/test_scorer.py` | 39 unit tests, hand-calculated examples included |
+| `validation/scenarios.json` | 38 validation scenarios with expected results |
 | `validation/run_validation.py` | Runs the scenarios, the weight stability check and the sensitivity checks; writes `validation/report.md` |
 | `validation/sensitivity.py` | Each weight and each other value halved and raised by half, on four demo queries |
 | `validation/check_catalog_sources.py` | Checks the catalog against the NASA records and tables directly; writes `validation/catalog_source_check.md` |
 | `validation/build_verification_sheet.py` | Writes `validation/verification_sheet.csv`: the catalog values behind the demo rankings, with the NASA rows to check them against |
-| `web/scorer.js`, `web/parity_check.py` | The JavaScript port used by the page, and the check that Python and JavaScript give the same results (86 queries) |
+| `web/scorer.js`, `web/parity_check.py` | The JavaScript port used by the page, and the check that Python and JavaScript give the same results (99 queries) |
 | `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py` | Rebuild the catalog from the PSI sources |
 | `scoring/MODEL_BASIS.md` | What each scoring rule rests on, checked against a combustion textbook (Turns 2012), what stays the team's choice, and the two changes applied in config 1.1.0 |
 | `scoring/PARAMETER_REVIEW.md` | AI review of every value other than the weights: role, basis, demo sensitivity, two findings, open questions |
@@ -66,6 +66,8 @@ A query is read in layers, each later one overriding the earlier: default < pres
 | One word such as `fabric` or `smoke` | ranked by the material or the question alone |
 | `ISS at 30% O2 and 10.2 psi` | numbers in the text override the preset |
 | `battery enclosure for the ISS` | the ISS environment; `not_understood` = ["battery enclosure"] and a warning that these words change nothing |
+| `spacecraft cabin` | the ISS cabin preset, only when no other environment is named |
+| `a base on a planet whose atmosphere has 30% oxygen` | 30% O2 and gravity `planetary`: the partial-gravity warning, no pressure guessed |
 | Empty input | no ranking; says what to enter (`need_input`) |
 | `로켓 추진제` (Korean: rocket propellant) and the like | out of scope (`out_of_scope`) |
 
@@ -86,9 +88,9 @@ Dimensions the user did not give are left out of the score, and the remaining we
 
 ## Checks (2026-11-14, config 1.1.0)
 
-- Validation scenarios 35 of 35 pass.
-- Unit tests 38 of 38 pass.
-- Python and JavaScript give the same results on 86 of 86 queries.
+- Validation scenarios 38 of 38 pass.
+- Unit tests 39 of 39 pass.
+- Python and JavaScript give the same results on 99 of 99 queries.
 - Each prevention weight halved and raised by half: 45 of 48 variants keep the same top 3, and rank 1 never changes.
 - Each other value halved and raised by half: 129 of 136 runs keep the same top 3. The `ISS` and `lunar habitat` presets never change.
 - Against the NASA sources: 107 ranking values written in the source and 8 team readings; 24 of 24 range ends match; 135 of 135 numbers in the shown text are written in the source.

@@ -1,7 +1,7 @@
 # Catalog filter validation report
 
-- Run: 2026-11-14 17:15 · target `scoring.scorer:rank`
-- Result: **35/35 scenarios passed**
+- Run: 2026-11-14 18:34 · target `scoring.scorer:rank`
+- Result: **38/38 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
 |---|---|---|---|---|---|
@@ -36,6 +36,9 @@
 | E04 | equipment | battery enclosure for the ISS | BASS-II, BASS, SAFFIRE-II | not_understood | PASS |
 | E05 | equipment | water mist suppression system for a lunar habitat | FLEX, ACME-BRE, BASS | not_understood, partial_gravity | PASS |
 | E06 | equipment | glove box |  | need_input, not_understood | PASS |
+| Q01 | sentence | 산소 30% 기압 70 kPa의 달 기지 (Korean: lunar base at 30% oxygen and air pressure 70 kPa) | ACME-BRE, FLEX, ACME-CFI-G | partial_gravity | PASS |
+| Q02 | sentence | spacecraft cabin | BASS-II, BASS, SAFFIRE-II |  | PASS |
+| Q03 | sentence | a base on a planet whose atmosphere has 30% oxygen | ACME-BRE, FLEX, ACME-CFI-G | partial_gravity | PASS |
 | T01 | trap | spacesuit | ACME-BRE, ACME-CFI-G, FLEX | o2_above_all | PASS |
 | T02 | trap | Mars base | BASS-II, SAFFIRE-II, BASS | partial_gravity, mars_atmosphere | PASS |
 | T03 | trap | hybrid rocket combustion chamber fire |  | out_of_scope | PASS |

@@ -138,6 +138,16 @@
      "why": "There is no condition to read. It must not make up a ranking, must ask for input, and must say that 'glove box' was not understood.",
      "expect": {"status": "need_input", "not_understood": ["glove box"], "warnings_include": ["need_input", "not_understood"]}},
 
+    {"id": "Q01", "group": "sentence", "query": "산소 30% 기압 70 kPa의 달 기지", "query_en": "lunar base at 30% oxygen and air pressure 70 kPa",
+     "why": "A Korean particle right after the unit must not hide the typed pressure: 70 kPa is the user's value, not the preset's 70.3.",
+     "expect": {"status": "ok", "scenario": {"preset": "lunar_habitat", "o2_pct": 30.0, "pressure_kpa": 70.0}, "warnings_include": ["partial_gravity"]}},
+    {"id": "Q02", "group": "sentence", "query": "spacecraft cabin",
+     "why": "A spacecraft cabin with no other environment named reads as the ISS cabin preset, so the page is not empty.",
+     "expect": {"status": "ok", "scenario": {"preset": "iss"}, "not_understood": []}},
+    {"id": "Q03", "group": "sentence", "query": "a base on a planet whose atmosphere has 30% oxygen",
+     "why": "A planet that is not named is not microgravity: the partial-gravity warning must appear, and no pressure is guessed.",
+     "expect": {"status": "ok", "scenario": {"o2_pct": 30.0, "gravity": "planetary", "pressure_kpa": null}, "warnings_include": ["partial_gravity"], "not_understood": []}},
+
     {"id": "T01", "group": "trap", "query": "spacesuit",
      "why": "A spacesuit's 100% oxygen is above the highest surrounding-atmosphere oxygen tested in PSI (40%). The extrapolation warning must appear, and the investigations tested at the highest oxygen (ACME-BRE, ACME-CFI-G) must show. The oxidizer stream of inverse flames (up to 85%) is not an atmosphere and is not compared.",
      "expect": {"status": "ok", "warnings_include": ["o2_above_all"], "top_k_includes_any": ["ACME-BRE", "ACME-CFI-G"]}},

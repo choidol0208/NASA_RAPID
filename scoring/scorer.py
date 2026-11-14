@@ -102,7 +102,7 @@ def _spans(text, key):
 # Korean input words in the patterns: 산소 = oxygen, 농도 = concentration.
 NUMBER_PATTERNS = [r"(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])",
                    r"(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?",
-                   r"(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)\b", r"(\d+(?:\.\d+)?)\s*(cm/s|mm/s|m/s)"]
+                   r"(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![a-z])", r"(\d+(?:\.\d+)?)\s*(cm/s|mm/s|m/s)"]
 
 
 def not_understood(query, cfg):
@@ -112,7 +112,7 @@ def not_understood(query, cfg):
     text = str((query.get("text") if isinstance(query, dict) else query) or "")
     t = " " + text.lower().strip() + " "
     kw = cfg["keywords"]
-    keys = [a for p in cfg["presets"].values() for a in p["aliases"]]
+    keys = [a for p in cfg["presets"].values() for a in p["aliases"] + p.get("weak_aliases", [])]
     for group in ("gravity", "flow_state", "concern", "diluent"):
         keys += [k for v in kw[group].values() for k in v]
     keys += [k for m in kw["materials"] for k in m["keys"]]
@@ -158,6 +158,11 @@ def interpret(query, cfg):
             if _any(t, p["aliases"]):
                 preset = name
                 break
+        if not preset:  # weak aliases ("spacecraft") count only when no preset is named
+            for name, p in cfg["presets"].items():
+                if _any(t, p.get("weak_aliases", [])):
+                    preset = name
+                    break
     if preset:
         if preset not in cfg["presets"]:
             raise ValueError(f"unknown preset: {preset}")
@@ -198,7 +203,7 @@ def interpret(query, cfg):
         re.search(r"(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?", t)
     if m:
         put("o2_pct", float(m.group(1)), "text")
-    m = re.search(r"(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)\b", t)
+    m = re.search(r"(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![a-z])", t)
     if m:
         put("pressure_kpa", _r(float(m.group(1)) * UNITS_TO_KPA[m.group(2)], 1), "text")
     m = re.search(r"(\d+(?:\.\d+)?)\s*(cm/s|mm/s|m/s)", t)
@@ -584,7 +589,7 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
         weights.update(weights_override)
     warnings = list(unread_w)
     g = sc.get("gravity")
-    if g in ("lunar", "martian"):
+    if g in ("lunar", "martian", "planetary"):  # planetary: a planet or base that is not named
         warnings.append({"code": "partial_gravity", "message": W["partial_gravity"]})
     elif g == "earth":
         warnings.append({"code": "earth_gravity", "message": W["earth_gravity"]})
