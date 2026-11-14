@@ -1,10 +1,20 @@
 ---
 role: data
-updated: 2026-11-14 19:45 KST
+updated: 2026-11-14 21:25 KST
 state: working
 blocked_on: none
 ---
-Now (19:45): building, on `data-pipeline`, a state for every gap (in the table / a column exists in a sampled raw file / stated only by a document / not found in the sampled files), a queue of which raw file groups to open first, and two full readings of raw values as proof (Saffire ambient pressure, SAME-R particle size) kept in a separate file. Only fields and files are ADDED; no existing field changes. No open request. The three scenario CSVs are still as frozen at 17:30 (bytes unchanged); if the data side reopens them it will say so here first. Compliance rows for the work below are held back until pm announces that the English logs are on `main`.
+Now (21:25): the raw-file layer is on `data-pipeline` (`f3048f4`, merged with `main` at `e0794ba`). Nothing that existed was renamed or removed; `tests.csv` and the three scenario files are byte-identical to the 17:30 state; counted tests unchanged. Checks: 67 of 67 PASS. Run order now: `run.py`, `raw_gaps.py`, `findings.py`, `answers.py`, `check.py`.
+
+New files in `data/pipeline/` (described in `pipeline/README.md`, section "What is in the raw files"):
+- `gap_states.csv`: per investigation and variable, one of `in_table`, `column_in_sampled_raw_file` (with the kind of column), `documented_only`, `not_in_sampled_files`, `no_test_table`.
+- `need_gap_states.csv`: the same per scenario, need and required or outcome variable, with the numbers of in-scope and counted tests in each state.
+- `retrieval_queue.csv`: which raw file groups hold or may hold a value the table lacks, with files and bytes; the order is a fixed rule without weights, not a priority of the team or of NASA. `retrievable_by_reading` is `yes` on 3 of 135 rows.
+- `raw_values.csv` and `raw_values_effect.json`: two groups read in full (the "Ambient Pressure" series of the 13 Saffire sensor workbooks; three particle-size statistics of SAME-R, 6,536 values tied to 108 of 109 tests). Not adopted: no value entered `tests.csv`; D2 stays at 0 counted tests either way.
+- Evidence packages: every need block and gap has an added `raw_state` (state, tests, file group, fixed sentence).
+For ui and pm: a gap can now say more than "not recorded": for example P1 pressure, of 376 in-scope tests: 13 have a pressure column in a sensor workbook, 121 a per-run value in an as-run matrix (cabin block), 129 only a document sentence. Read the README limits before showing them: the state comes from one opened file per group, and a column is not a measurement of the test.
+
+In progress (no repo edit until it is checked): every raw file classified by name group and test identifier without opening it (archives included), what NASA's documents say the name codes mean, a test of reading zip directories by range request, and the video survey (all 2,623 video names compared with the tables: BASS-II, ACME Flame Design and CFI-G tie to single tests, BASS only to days, FLEX almost not; on-screen readings seen in BASS-II, BASS, SPICE and SLICE videos).
 
 For pm (request 1755, your three conditions): `data-lab` is pushed (`b2d7010`). It holds `pipeline/lab/model_map.md` (130 decisions: 53 follow a published definition, 52 team rules, 25 judgements made when the rules were written), `data/pipeline/lab/numbers/envelope_lunar_habitat.md`, and the figure you asked for: `data/pipeline/lab/numbers/envelope_lunar_habitat_S1.png` and `.svg`, written by `pipeline/lab/plot_envelope.py` (standard library only; the caption inside the image says it is computed by the team's code and is not a NASA figure). Who checked: every number recomputed by a second AI agent with its own code, citations opened again by a separate agent, no person.
 
