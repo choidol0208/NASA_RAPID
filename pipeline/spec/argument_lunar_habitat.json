@@ -363,7 +363,7 @@
    "id": "I1",
    "kind": "inference",
    "supports": "C1",
-   "text": "Test 1 as written gives a pass or a fail at one atmosphere (E1a, E1b). The same standard defines the maximum oxygen concentration at which specimens pass (E1c), and researchers define an upward limiting oxygen index from the same burn-length criterion and a modified Test 1 that measures it (E1d, E1e). Such a threshold can put materials in order. CP2003.prev.margin states this step: augment the go/no-go criteria with a quantitative test method that provides a ranking or an indication of flammability margin.",
+   "text": "Test 1 as written gives a pass or a fail at one atmosphere (E1a, E1b). The same standard defines the maximum oxygen concentration at which specimens pass (E1c), and researchers define an upward limiting oxygen index from the same burn-length criterion and a modified Test 1 that measures it (E1d, E1e). Such a threshold can put materials in order; no held item states this step. CP2003.prev.margin recommends adding to the go/no-go criteria a quantitative test method that provides a ranking or an indication of flammability margin.",
    "assumptions": [
     {"text": "The maximum oxygen concentration and the upward limiting oxygen index put the same materials in the same order."},
     {"text": "The pressure at which a threshold was measured is recorded with it, so that thresholds measured at the same pressure can be compared."},
@@ -380,8 +380,7 @@
     {"text": "An order by flaming-ignition threshold stands for 'flammability' although the standard tests leave out smoldering (CP2003.prev.smolder).", "added_by": "review pass"}
    ],
    "authorship": "team reasoning (AI-drafted), not a NASA statement",
-   "basis": "documented",
-   "item": "CP2003.prev.margin",
+   "basis": "team",
    "defeaters": ["D1a", "D1b", "D1c", "D1d", "D1e", "D1f", "D1g", "D1h", "D1i", "D1j", "D1k", "D1l", "D1m", "D1n", "D1o", "D1p", "D1q", "D1r", "D1s", "D1t", "D1u", "D1v", "D1w"]
   },
   {
@@ -483,7 +482,7 @@
    "id": "D1j",
    "kind": "defeater",
    "attacks": {"inference": "I1", "assumption": null},
-   "text": "The basis item does not state the step it is cited for. CP2003.prev.margin is typed knowledge_gap and recommends that a quantitative method be added; read plainly, it says the method of that time gave no ranking. It names LOI or a radiation panel, not MOC or ULOI, and asks for 'ranking or indication of flammability margin', so a method that gives only a margin would meet it. It does not say that an oxygen threshold puts materials in order.",
+   "text": "The item named in the inference does not state the step. CP2003.prev.margin is typed knowledge_gap and recommends that a quantitative method be added. It names LOI or a radiation panel, not MOC or ULOI, and asks for 'ranking or indication of flammability margin', so a method that gives only a margin would meet it. It does not say that an oxygen threshold puts materials in order.",
    "basis": "documented",
    "item": "CP2003.prev.margin",
    "item_words": "Augment existing go/no go criteria with a quantitative test method which provides ranking or indication of flammability margin, e.g. LOI or radiation panel.",
@@ -713,7 +712,7 @@
    "id": "D2h",
    "kind": "defeater",
    "attacks": {"inference": "I2", "assumption": 1},
-   "text": "A held conference paper takes the test target to be the lowest expected total pressure for a spacecraft, an exploration atmosphere other than the challenge-page wording. Held documents choose different targets for the same purpose, so the challenge-page atmosphere is not the agreed target. The words are from the item's 'where' field, the sentence before its quote.",
+   "text": "A held conference paper takes the test target to be the lowest expected total pressure for a spacecraft, an exploration atmosphere other than the challenge-page wording. The held items do not name one target. The words are from the item's 'where' field, the sentence before its quote.",
    "basis": "documented",
    "item": "ICES14.trend",
    "item_words": "start at the lowest expected total pressure for a spacecraft",

@@ -1211,7 +1211,7 @@
    "id": "D1j",
    "item_words": "Augment existing go/no go criteria with a quantitative test method which provides ranking or indication of flammability margin, e.g. LOI or radiation panel.",
    "kind": "defeater",
-   "text": "The basis item does not state the step it is cited for. CP2003.prev.margin is typed knowledge_gap and recommends that a quantitative method be added; read plainly, it says the method of that time gave no ranking. It names LOI or a radiation panel, not MOC or ULOI, and asks for 'ranking or indication of flammability margin', so a method that gives only a margin would meet it. It does not say that an oxygen threshold puts materials in order."
+   "text": "The item named in the inference does not state the step. CP2003.prev.margin is typed knowledge_gap and recommends that a quantitative method be added. It names LOI or a radiation panel, not MOC or ULOI, and asks for 'ranking or indication of flammability margin', so a method that gives only a margin would meet it. It does not say that an oxygen threshold puts materials in order."
   },
   "D1k": {
    "added_by": "review pass",
@@ -1676,7 +1676,7 @@
    "id": "D2h",
    "item_words": "start at the lowest expected total pressure for a spacecraft",
    "kind": "defeater",
-   "text": "A held conference paper takes the test target to be the lowest expected total pressure for a spacecraft, an exploration atmosphere other than the challenge-page wording. Held documents choose different targets for the same purpose, so the challenge-page atmosphere is not the agreed target. The words are from the item's 'where' field, the sentence before its quote."
+   "text": "A held conference paper takes the test target to be the lowest expected total pressure for a spacecraft, an exploration atmosphere other than the challenge-page wording. The held items do not name one target. The words are from the item's 'where' field, the sentence before its quote."
   },
   "D2i": {
    "added_by": "review pass",
@@ -7229,18 +7229,7 @@
     }
    ],
    "authorship": "team reasoning (AI-drafted), not a NASA statement",
-   "basis": "documented",
-   "basis_item": {
-    "access": "full_text_read",
-    "document": "NASA-CP-2003-212103",
-    "item": "CP2003.prev.margin",
-    "quote": "Augment existing go/no go criteria with a quantitative test method which provides ranking or indication of flammability margin, e.g. LOI or radiation panel.",
-    "text": "Recommendation of the prevention working group: add to the go/no-go criteria a quantitative test method that ranks materials or indicates a flammability margin.",
-    "title": "Research Needs in Fire Safety for the Human Exploration and Utilization of Space: Proceedings and Research Plan (Ruff, ed.)",
-    "type": "knowledge_gap",
-    "url": "https://ntrs.nasa.gov/citations/20030053425",
-    "where": "Fire Prevention and Material Flammability, Issue 2, item 1, p. 8"
-   },
+   "basis": "team",
    "defeaters": [
     "D1a",
     "D1b",
@@ -7269,7 +7258,7 @@
    "id": "I1",
    "kind": "inference",
    "supports": "C1",
-   "text": "Test 1 as written gives a pass or a fail at one atmosphere (E1a, E1b). The same standard defines the maximum oxygen concentration at which specimens pass (E1c), and researchers define an upward limiting oxygen index from the same burn-length criterion and a modified Test 1 that measures it (E1d, E1e). Such a threshold can put materials in order. CP2003.prev.margin states this step: augment the go/no-go criteria with a quantitative test method that provides a ranking or an indication of flammability margin."
+   "text": "Test 1 as written gives a pass or a fail at one atmosphere (E1a, E1b). The same standard defines the maximum oxygen concentration at which specimens pass (E1c), and researchers define an upward limiting oxygen index from the same burn-length criterion and a modified Test 1 that measures it (E1d, E1e). Such a threshold can put materials in order; no held item states this step. CP2003.prev.margin recommends adding to the go/no-go criteria a quantitative test method that provides a ranking or an indication of flammability margin."
   },
   "I2": {
    "assumptions": [
@@ -8027,8 +8016,8 @@
    "total": 32
   },
   "inferences_by_basis": {
-   "documented": 1,
-   "team": 7
+   "documented": 0,
+   "team": 8
   },
   "inferences_with_no_defeater_yet": [],
   "note": "Counts only. No overall verdict is computed or implied.",
