@@ -579,7 +579,7 @@
        "value": 0
       }
      ],
-     "text": "Need {need.need_id} ({need.need}) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). {need.usable_tests} of the {need.tests_in_scope with test row|test rows} within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "text": "Need {need.need_id} ({need.need}) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). {need.usable_tests} of the {need.tests_in_scope with test row|test rows} within the scope of this need meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of the need."
     },
     {
      "id": "need.stated.no_tests",
@@ -595,7 +595,7 @@
        "value": 0
       }
      ],
-     "text": "Need {need.need_id} ({need.need}) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of {investigation.investigation_id} records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: {need.statuses as pairs})."
+     "text": "Need {need.need_id} ({need.need}) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of {investigation.investigation_id} meets every required condition variable and records an outcome variable of the need (status per table in the capability matrix: {need.statuses as pairs})."
     },
     {
      "id": "need.not_stated.recorded",
@@ -611,7 +611,7 @@
        "value": 0
       }
      ],
-     "text": "{need.usable_tests with test row|test rows} of {investigation.investigation_id} record every required condition variable and at least one outcome variable of need {need.need_id} ({need.need}), but the team's needs list has no supported purpose sentence for this need and this investigation. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
+     "text": "{need.usable_tests with test row|test rows} of {investigation.investigation_id} meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of need {need.need_id} ({need.need}), but the team's needs list has no supported purpose sentence for this need and this investigation. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
     }
    ]
   },

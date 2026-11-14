@@ -196,8 +196,8 @@
    "need_id": "P1",
    "need": "Flammability limit",
    "pillar": "prevention",
-   "reading": "A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit.",
-   "note": "The Saffire tables hold one oxygen level near cabin air per test (for Saffire-II derived by NASA from CO2 production, Note 1 of the table), and Saffire-III has no oxygen column. A limit cannot be located from one oxygen level. Pressure is not a required variable of this need, although the cited definition of a threshold holds at a given total pressure, flow and gravity level (ISO16697.threshold): the BASS-II and Saffire tables have no pressure column, so no counted test records a pressure. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions); counts of different needs must not be added.",
+   "reading": "A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. Its pressure is not in the table: it is documented for the investigation as a whole (ICES19.pressure, SAF17.pressure), not read per test. Its gravity level is a constant of the table in the team's source mapping. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit.",
+   "note": "The counted tests are BASS-II tests (PSI-25) and Saffire-II tests (PSI-99). The Saffire-II table holds one oxygen level near cabin air per test, and a limit cannot be located from one oxygen level. That value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the measured CO2 production (SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. The on-board oxygen sensor traces in the PSI raw data show other levels (PSISAF.o2_traces, read by eye from graphs), and the files do not comment on the difference. A Saffire cell with two numbers gives a value only where a publication names the initial oxygen (sources.json 'documented_start'); no midpoint is computed, and one Saffire-II test has no oxygen value for that reason and is not counted. The Saffire investigators give the flammability-limit objective to Saffire-II alone (SAF16.saffire2, SAF16b.saffire2) and describe the Saffire-I sample as one expected to burn in cabin air (SAF16.saffire1.o2). The links of PSI-98 and PSI-100, which rest on a sentence that the three records share, therefore have verdict 'differs': the Saffire-I tests are reported as recorded outside the stated objective, and the Saffire-III table has no oxygen column. The PSI-26 link rests on a sentence of a NASA guide about improving the 1-g material fire safety rating tests (RG.bass); no sentence about a limit was found for BASS, and its table adds no counted test. Of the four outcome variables, the event word and the burn length have a counterpart in the cited documents (ICES19.boundary, 6001B.T1.pass); the burn time and the oxygen consumed are the team's choice, and no document read names them as a measure of a flammability limit. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions): the documents state the oxygen limit under prevention (CP2003.roadmap.limit) and under suppression (CP2004.supp.q3). Counts of different needs must not be added.",
    "status": "oxygen_only",
    "counts": {
     "usable_tests": 133,
@@ -3298,7 +3298,7 @@
       "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For the Saffire tests the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Of the Saffire tests only those of Saffire-II are counted for this need. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here, and no midpoint is computed.",
      "test_ids": [
       "BASS2-F1",
       "BASS2-F2"
@@ -3337,7 +3337,7 @@
       "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For the Saffire tests the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Of the Saffire tests only those of Saffire-II are counted for this need. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here, and no midpoint is computed.",
      "test_ids": [
       "BASS2-B1",
       "BASS2-B10",
@@ -3389,7 +3389,7 @@
       "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For the Saffire tests the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Of the Saffire tests only those of Saffire-II are counted for this need. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here, and no midpoint is computed.",
      "test_ids": [
       "BASS2-O1",
       "BASS2-O2",
@@ -3437,7 +3437,7 @@
       "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For the Saffire tests the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Of the Saffire tests only those of Saffire-II are counted for this need. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here, and no midpoint is computed.",
      "test_ids": [
       "SAFFIRE-2-2-8"
      ]
@@ -3475,7 +3475,7 @@
       "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For the Saffire tests the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Of the Saffire tests only those of Saffire-II are counted for this need. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here, and no midpoint is computed.",
      "test_ids": [
       "BASS2-M1",
       "BASS2-M10",
@@ -3527,7 +3527,7 @@
       "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For the Saffire tests the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Of the Saffire tests only those of Saffire-II are counted for this need. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here, and no midpoint is computed.",
      "test_ids": [
       "SAFFIRE-2-2-7"
      ]
@@ -3565,7 +3565,7 @@
       "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For the Saffire tests the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Of the Saffire tests only those of Saffire-II are counted for this need. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here, and no midpoint is computed.",
      "test_ids": [
       "BASS2-T25",
       "BASS2-T26",
@@ -3606,7 +3606,7 @@
       "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For the Saffire tests the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Of the Saffire tests only those of Saffire-II are counted for this need. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here, and no midpoint is computed.",
      "test_ids": [
       "SAFFIRE-2-2-5",
       "SAFFIRE-2-2-6"
@@ -3645,7 +3645,7 @@
       "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For the Saffire tests the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Of the Saffire tests only those of Saffire-II are counted for this need. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here, and no midpoint is computed.",
      "test_ids": [
       "SAFFIRE-2-2-1",
       "SAFFIRE-2-2-2",
@@ -4006,7 +4006,7 @@
      "compare_with": [
       "ICES19.limits"
      ],
-     "reading": "Final oxygen reading of the tests in which the table notes an extinction. The BASS-II investigators use the post-test oxygen as the extinction oxygen (ICES19.sensors). Each value belongs to one test at its own flow setting, and in many of these tests the flame went out as the flow was lowered; a value here is not the lowest oxygen at which the material burns. Tests whose final reading is above the initial reading or implausibly low have no value and carry a flag.",
+     "reading": "Final oxygen reading of the tests in which the table notes an extinction. The BASS-II investigators write that the sensors served 'to determine oxygen depletion, extinction oxygen concentrations, and the completeness of combustion' (ICES19.sensors); taking the final reading of a test with an extinction noted as that oxygen is the team's step. Each value belongs to one test at its own flow setting, and in many of these tests the flame went out as the flow was lowered; a value here is not the lowest oxygen at which the material burns. Tests whose final reading is above the initial reading or implausibly low have no value and carry a flag.",
      "test_ids": [
       "BASS2-B21"
      ]
@@ -4043,7 +4043,7 @@
      "compare_with": [
       "ICES19.limits"
      ],
-     "reading": "Final oxygen reading of the tests in which the table notes an extinction. The BASS-II investigators use the post-test oxygen as the extinction oxygen (ICES19.sensors). Each value belongs to one test at its own flow setting, and in many of these tests the flame went out as the flow was lowered; a value here is not the lowest oxygen at which the material burns. Tests whose final reading is above the initial reading or implausibly low have no value and carry a flag.",
+     "reading": "Final oxygen reading of the tests in which the table notes an extinction. The BASS-II investigators write that the sensors served 'to determine oxygen depletion, extinction oxygen concentrations, and the completeness of combustion' (ICES19.sensors); taking the final reading of a test with an extinction noted as that oxygen is the team's step. Each value belongs to one test at its own flow setting, and in many of these tests the flame went out as the flow was lowered; a value here is not the lowest oxygen at which the material burns. Tests whose final reading is above the initial reading or implausibly low have no value and carry a flag.",
      "test_ids": [
       "BASS2-P13a",
       "BASS2-P13b",
@@ -4065,7 +4065,7 @@
     },
     {
      "id": "need.reading",
-     "text": "A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit."
+     "text": "A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. Its pressure is not in the table: it is documented for the investigation as a whole (ICES19.pressure, SAF17.pressure), not read per test. Its gravity level is a constant of the table in the team's source mapping. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit."
     },
     {
      "id": "tiers.counts",
@@ -4097,7 +4097,7 @@
     },
     {
      "id": "outside_objective",
-     "text": "2 other tests record every required condition and at least one outcome variable of this need but come from investigations whose PSI record does not state this need as an objective. These tests are not counted for this need and are not in its counts."
+     "text": "2 other tests record every required condition (in the table or, where the need allows it, in a document about the whole table) and at least one outcome variable of this need but come from investigations that no supported purpose sentence of the investigators or of a NASA project document links to this need. These tests are not counted for this need and are not in its counts."
     },
     {
      "id": "elsewhere.oxygen",
@@ -4109,7 +4109,7 @@
     },
     {
      "id": "need.note",
-     "text": "The Saffire tables hold one oxygen level near cabin air per test (for Saffire-II derived by NASA from CO2 production, Note 1 of the table), and Saffire-III has no oxygen column. A limit cannot be located from one oxygen level. Pressure is not a required variable of this need, although the cited definition of a threshold holds at a given total pressure, flow and gravity level (ISO16697.threshold): the BASS-II and Saffire tables have no pressure column, so no counted test records a pressure. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions); counts of different needs must not be added."
+     "text": "The counted tests are BASS-II tests (PSI-25) and Saffire-II tests (PSI-99). The Saffire-II table holds one oxygen level near cabin air per test, and a limit cannot be located from one oxygen level. That value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the measured CO2 production (SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. The on-board oxygen sensor traces in the PSI raw data show other levels (PSISAF.o2_traces, read by eye from graphs), and the files do not comment on the difference. A Saffire cell with two numbers gives a value only where a publication names the initial oxygen (sources.json 'documented_start'); no midpoint is computed, and one Saffire-II test has no oxygen value for that reason and is not counted. The Saffire investigators give the flammability-limit objective to Saffire-II alone (SAF16.saffire2, SAF16b.saffire2) and describe the Saffire-I sample as one expected to burn in cabin air (SAF16.saffire1.o2). The links of PSI-98 and PSI-100, which rest on a sentence that the three records share, therefore have verdict 'differs': the Saffire-I tests are reported as recorded outside the stated objective, and the Saffire-III table has no oxygen column. The PSI-26 link rests on a sentence of a NASA guide about improving the 1-g material fire safety rating tests (RG.bass); no sentence about a limit was found for BASS, and its table adds no counted test. Of the four outcome variables, the event word and the burn length have a counterpart in the cited documents (ICES19.boundary, 6001B.T1.pass); the burn time and the oxygen consumed are the team's choice, and no document read names them as a measure of a flammability limit. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions): the documents state the oxygen limit under prevention (CP2003.roadmap.limit) and under suppression (CP2004.supp.q3). Counts of different needs must not be added."
     },
     {
      "id": "gap.pressure.not_recorded",
@@ -4470,7 +4470,7 @@
    "need": "Ignition",
    "pillar": "prevention",
    "reading": "A counted test would record the material, the oxygen and an ignition result. No mapped table records one for a solid fuel.",
-   "note": "Igniter power and on-time are settings of a test, not results, and are listed as conditions. No PSI experimental table gives an ignition energy, an ignition delay or an ignite / no-ignite result for a solid fuel in a mapped column, so this need has no counted test. One BASS-II cell says 'no ign at any flow'; it is kept as a flow event under P1.",
+   "note": "In the mapped tables igniter power and on-time are columns of settings (Saffire-I and Saffire-II) and are listed as conditions. The BASS-II investigators define an ignition delay from the igniter on and off times and report it against the initial oxygen concentration for PMMA rods (BASS2TM.igndelay). The PSI-25 experimental table has no column for it; the raw-data files of PSI-25 were not searched for it. No PSI experimental table gives a time to ignition, an ignition delay or an ignite / no-ignite result for a solid fuel in a mapped column, so this need has no counted test. That holds for the mapped table columns, not for the investigation. The outcome variable 'hot_ignition' is the team's name; the quantities the documents name for a material are a time to ignition and a critical heat flux (RG.ignition, CP2004.flam.fist). One BASS-II cell says 'no ign at any flow'; it is kept as a flow event under P1.",
    "status": "not_measured",
    "counts": {
     "usable_tests": 0,
@@ -4533,13 +4533,13 @@
    "gaps": [
     {
      "code": "need:no_usable_test",
-     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need."
     }
    ],
    "statements": [
     {
      "id": "status.not_measured",
-     "text": "No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective."
+     "text": "No test in the mapped PSI tables is counted for this need: no test meets every required condition, holds a value for at least one outcome variable of the need and comes from an investigation linked to the need by a supported purpose sentence of the investigators or of a NASA project document."
     },
     {
      "id": "need.reading",
@@ -4547,11 +4547,11 @@
     },
     {
      "id": "need.note",
-     "text": "Igniter power and on-time are settings of a test, not results, and are listed as conditions. No PSI experimental table gives an ignition energy, an ignition delay or an ignite / no-ignite result for a solid fuel in a mapped column, so this need has no counted test. One BASS-II cell says 'no ign at any flow'; it is kept as a flow event under P1."
+     "text": "In the mapped tables igniter power and on-time are columns of settings (Saffire-I and Saffire-II) and are listed as conditions. The BASS-II investigators define an ignition delay from the igniter on and off times and report it against the initial oxygen concentration for PMMA rods (BASS2TM.igndelay). The PSI-25 experimental table has no column for it; the raw-data files of PSI-25 were not searched for it. No PSI experimental table gives a time to ignition, an ignition delay or an ignite / no-ignite result for a solid fuel in a mapped column, so this need has no counted test. That holds for the mapped table columns, not for the investigation. The outcome variable 'hot_ignition' is the team's name; the quantities the documents name for a material are a time to ignition and a critical heat flux (RG.ignition, CP2004.flam.fist). One BASS-II cell says 'no ign at any flow'; it is kept as a flow event under P1."
     },
     {
      "id": "gap.need.no_usable_test",
-     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need."
     }
    ],
    "references": [
@@ -4594,8 +4594,8 @@
    "need_id": "P3",
    "need": "Flame spread and growth",
    "pillar": "prevention",
-   "reading": "A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. Most counted tests record a length or a time and no spread rate; a burn time or a burn length is not a spread rate.",
-   "note": "Oxygen is not a required variable of this need, although a listed abstract relates spread rate to flow velocity, oxygen concentration and pressure (SAE2008.spread). Among the mapped tables only the Saffire-II table has a spread-rate column; the Saffire-I tests are counted on a burn time alone. The BASS-II table has no flow-direction column, so its tests are not counted here; the PSI-25 record says \"Flame appearance, flame growth, and spread rates were determined in both the opposed and concurrent flow\" (approach field), and these rates are not in the experimental table.",
+   "reading": "A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. In the current tables the counted tests record a burn time and no spread rate or burn length; a burn time is not a spread rate.",
+   "note": "The counted tests are the Saffire-I tests (PSI-98), counted on a burn time alone; the burn time as an outcome is the team's choice. Oxygen is not a required variable of this need, although the documents name it among the variables that flame spread depends on (RG.growth, SAE2008.spread): the team's choice. The Saffire investigators give the fire-growth objective to Saffire-I and Saffire-III and the flammability-limit objective to Saffire-II (SAF16b.saffire13, SAF16b.saffire2). The link of PSI-99, which rests on a sentence that the three records share, therefore has verdict 'differs': the Saffire-II tests are reported as recorded outside the stated objective, and the only spread-rate column among the mapped tables, that of the Saffire-II table, is not in the counts. The Saffire-III table has no outcome column. The BASS-II table has no flow-direction column, so its tests are not counted here; the PSI-25 record says \"Flame appearance, flame growth, and spread rates were determined in both the opposed and concurrent flow\" (approach field), and these rates are not in the experimental table. The documents read list flame spread both under prevention and material flammability (CP2003.roadmap.spread, CP2003.prev.thickthin, SMT.gap.flammability) and under response (CP2003.resp.spread, BASS2TM.growth); placing the need under prevention is the team's choice.",
    "status": "oxygen_only",
    "counts": {
     "usable_tests": 2,
@@ -4837,7 +4837,7 @@
       "CP2003.response"
      ],
      "compare_with": [],
-     "reading": "Burn time as written in the table.",
+     "reading": "Burn time as written in the table. In the current outputs the values are those of the Saffire-I tests (PSI-98). A burn time is not a spread rate; using it as an outcome of this need is the team's choice.",
      "test_ids": [
       "SAFFIRE-1-S1"
      ]
@@ -4871,7 +4871,7 @@
       "CP2003.response"
      ],
      "compare_with": [],
-     "reading": "Burn time as written in the table.",
+     "reading": "Burn time as written in the table. In the current outputs the values are those of the Saffire-I tests (PSI-98). A burn time is not a spread rate; using it as an outcome of this need is the team's choice.",
      "test_ids": [
       "SAFFIRE-1-S2"
      ]
@@ -4890,7 +4890,7 @@
     },
     {
      "id": "need.reading",
-     "text": "A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. Most counted tests record a length or a time and no spread rate; a burn time or a burn length is not a spread rate."
+     "text": "A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. In the current tables the counted tests record a burn time and no spread rate or burn length; a burn time is not a spread rate."
     },
     {
      "id": "tiers.counts",
@@ -4922,11 +4922,11 @@
     },
     {
      "id": "outside_objective",
-     "text": "9 other tests record every required condition and at least one outcome variable of this need but come from investigations whose PSI record does not state this need as an objective. These tests are not counted for this need and are not in its counts."
+     "text": "9 other tests record every required condition (in the table or, where the need allows it, in a document about the whole table) and at least one outcome variable of this need but come from investigations that no supported purpose sentence of the investigators or of a NASA project document links to this need. These tests are not counted for this need and are not in its counts."
     },
     {
      "id": "need.note",
-     "text": "Oxygen is not a required variable of this need, although a listed abstract relates spread rate to flow velocity, oxygen concentration and pressure (SAE2008.spread). Among the mapped tables only the Saffire-II table has a spread-rate column; the Saffire-I tests are counted on a burn time alone. The BASS-II table has no flow-direction column, so its tests are not counted here; the PSI-25 record says \"Flame appearance, flame growth, and spread rates were determined in both the opposed and concurrent flow\" (approach field), and these rates are not in the experimental table."
+     "text": "The counted tests are the Saffire-I tests (PSI-98), counted on a burn time alone; the burn time as an outcome is the team's choice. Oxygen is not a required variable of this need, although the documents name it among the variables that flame spread depends on (RG.growth, SAE2008.spread): the team's choice. The Saffire investigators give the fire-growth objective to Saffire-I and Saffire-III and the flammability-limit objective to Saffire-II (SAF16b.saffire13, SAF16b.saffire2). The link of PSI-99, which rests on a sentence that the three records share, therefore has verdict 'differs': the Saffire-II tests are reported as recorded outside the stated objective, and the only spread-rate column among the mapped tables, that of the Saffire-II table, is not in the counts. The Saffire-III table has no outcome column. The BASS-II table has no flow-direction column, so its tests are not counted here; the PSI-25 record says \"Flame appearance, flame growth, and spread rates were determined in both the opposed and concurrent flow\" (approach field), and these rates are not in the experimental table. The documents read list flame spread both under prevention and material flammability (CP2003.roadmap.spread, CP2003.prev.thickthin, SMT.gap.flammability) and under response (CP2003.resp.spread, BASS2TM.growth); placing the need under prevention is the team's choice."
     },
     {
      "id": "gap.pressure.not_recorded",
@@ -5002,8 +5002,8 @@
    "need_id": "S1",
    "need": "Extinction conditions",
    "pillar": "suppression",
-   "reading": "A counted test records the fuel, the oxygen and how the burn ended or an event word. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending.",
-   "note": "The one investigation of an extinguishing agent on solid fuels, PSI-26, has an experimental table with sample names only. The counted solid-fuel tests are BASS-II tests with an event word beside the flow settings (extinction, blowoff, no ignition, not sustained); they are also counted for P1 (Flammability limit), and counts of different needs must not be added. Every counted test with added carbon dioxide or helium is a FLEX droplet test. The PSI-69 objective names CO2, He and SF6; the FLEX table has no SF6 column. The other investigations linked to this need add no counted test: PSI-10 and PSI-39 have no column mapped to an outcome variable of this need, and the tables of PSI-20, 21, 23 and 68 are not one row per test.",
+   "reading": "A counted test records the fuel, the oxygen and how the burn ended or an event word. Its pressure is a value of the table (FLEX) or, for BASS-II, a statement of the investigators about the investigation as a whole (ICES19.pressure), not a reading per test. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending.",
+   "note": "The one investigation of an extinguishing agent on solid fuels, PSI-26, has an experimental table with sample names only; its link rests on a NASA guide (RG.bass). The investigators' slides report a nitrogen-jet result (BASS13.nitrogen), and no sentence stating an objective was found in them. The counted solid-fuel tests are BASS-II tests with an event word beside the flow settings (extinction, blowoff, no ignition, not sustained); they are also counted for P1 (Flammability limit), because the documents state the oxygen limit under prevention (CP2003.roadmap.limit) and under suppression (CP2004.supp.q3), and counts of different needs must not be added. Every counted test with added carbon dioxide or helium is a FLEX droplet test. The PSI-69 objective names CO2, He and SF6; the FLEX table has no SF6 column. Six other records name extinction in their objective field and are not counted for this need. NASA's project scientists write that the ACME experiments 'are primarily focused on energy and environmental concerns' and name BRE (PSI-20) as the one focused on spacecraft fire prevention (ACME14.focus, ACME14.bre): PSI-20 has verdict 'differs'. The stated primary goal of Flame Design (PSI-10) is soot inception and control (ACME14.flamedesign), and the Researcher's Guide gives energy conversion as the motivation of FLEX-2 (PSI-68; RG.flex2): both have verdict 'topic_only'. For PSI-21, PSI-23 and PSI-39 the link holds no purpose sentence, and the verdict is 'topic_only'; a paper of the CFI investigators (PSI-39) gives liquid-fuel combustion as its motivation and does not use the words 'fire' or 'safety' (CFI14.motivation). The papers of the principal investigators of PSI-10, PSI-21 and PSI-23 were not read, and the verdicts say nothing about documents that were not read. PSI-10 and PSI-39 also have no column mapped to an outcome variable of this need, and the tables of PSI-20, 21, 23 and 68 are not one row per test. The CFI-G tests (PSI-159) hold the variables of this need without a link and are reported as recorded outside the stated objective.",
    "status": "in_atmosphere",
    "counts": {
     "usable_tests": 298,
@@ -8871,7 +8871,7 @@
     },
     {
      "id": "need.reading",
-     "text": "A counted test records the fuel, the oxygen and how the burn ended or an event word. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending."
+     "text": "A counted test records the fuel, the oxygen and how the burn ended or an event word. Its pressure is a value of the table (FLEX) or, for BASS-II, a statement of the investigators about the investigation as a whole (ICES19.pressure), not a reading per test. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending."
     },
     {
      "id": "tiers.counts",
@@ -8907,7 +8907,7 @@
     },
     {
      "id": "outside_objective",
-     "text": "272 other tests record every required condition and at least one outcome variable of this need but come from investigations whose PSI record does not state this need as an objective. These tests are not counted for this need and are not in its counts."
+     "text": "272 other tests record every required condition (in the table or, where the need allows it, in a document about the whole table) and at least one outcome variable of this need but come from investigations that no supported purpose sentence of the investigators or of a NASA project document links to this need. These tests are not counted for this need and are not in its counts."
     },
     {
      "id": "elsewhere.oxygen",
@@ -8919,7 +8919,7 @@
     },
     {
      "id": "need.note",
-     "text": "The one investigation of an extinguishing agent on solid fuels, PSI-26, has an experimental table with sample names only. The counted solid-fuel tests are BASS-II tests with an event word beside the flow settings (extinction, blowoff, no ignition, not sustained); they are also counted for P1 (Flammability limit), and counts of different needs must not be added. Every counted test with added carbon dioxide or helium is a FLEX droplet test. The PSI-69 objective names CO2, He and SF6; the FLEX table has no SF6 column. The other investigations linked to this need add no counted test: PSI-10 and PSI-39 have no column mapped to an outcome variable of this need, and the tables of PSI-20, 21, 23 and 68 are not one row per test."
+     "text": "The one investigation of an extinguishing agent on solid fuels, PSI-26, has an experimental table with sample names only; its link rests on a NASA guide (RG.bass). The investigators' slides report a nitrogen-jet result (BASS13.nitrogen), and no sentence stating an objective was found in them. The counted solid-fuel tests are BASS-II tests with an event word beside the flow settings (extinction, blowoff, no ignition, not sustained); they are also counted for P1 (Flammability limit), because the documents state the oxygen limit under prevention (CP2003.roadmap.limit) and under suppression (CP2004.supp.q3), and counts of different needs must not be added. Every counted test with added carbon dioxide or helium is a FLEX droplet test. The PSI-69 objective names CO2, He and SF6; the FLEX table has no SF6 column. Six other records name extinction in their objective field and are not counted for this need. NASA's project scientists write that the ACME experiments 'are primarily focused on energy and environmental concerns' and name BRE (PSI-20) as the one focused on spacecraft fire prevention (ACME14.focus, ACME14.bre): PSI-20 has verdict 'differs'. The stated primary goal of Flame Design (PSI-10) is soot inception and control (ACME14.flamedesign), and the Researcher's Guide gives energy conversion as the motivation of FLEX-2 (PSI-68; RG.flex2): both have verdict 'topic_only'. For PSI-21, PSI-23 and PSI-39 the link holds no purpose sentence, and the verdict is 'topic_only'; a paper of the CFI investigators (PSI-39) gives liquid-fuel combustion as its motivation and does not use the words 'fire' or 'safety' (CFI14.motivation). The papers of the principal investigators of PSI-10, PSI-21 and PSI-23 were not read, and the verdicts say nothing about documents that were not read. PSI-10 and PSI-39 also have no column mapped to an outcome variable of this need, and the tables of PSI-20, 21, 23 and 68 are not one row per test. The CFI-G tests (PSI-159) hold the variables of this need without a link and are reported as recorded outside the stated objective."
     },
     {
      "id": "documented.elsewhere",
@@ -9144,8 +9144,8 @@
    "need_id": "D1",
    "need": "Combustion products",
    "pillar": "detection",
-   "reading": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
-   "note": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The material is the only required variable, so the status conditions_only says only that the sample is named.",
+   "reading": "A counted test records the material and the difference between the final and the initial CO or CO2 reading of the on-board sensors of the experiment (ICES19.sensors). The readings are not cabin concentrations and are not compared with crew exposure limits (SMAC.scope). The investigators state the purpose of the readings as evaluating the levels of combustion products and the completeness of combustion (BASS2TM.products, ICES15.purpose); in the passages read they do not present them as a detection measurement. The count is a count of tests that hold such a difference; it says nothing about what a detector would register.",
+   "note": "All counted tests are BASS-II tests (PSI-25). The link rests on the investigators' purpose sentence for the gas measurements (BASS2TM.products; the same purpose is stated in ICES15.purpose). The objective field of the PSI-25 record names no gas species, so the link carries no record sentence. The investigators call the result 'the first extensive data on the stoichiometry and toxicity of combustion products in microgravity' (ICES15.first) and frame the readings as completeness of combustion, stoichiometry and heat release (BASS2TM.products, BASS2TM.sensors), not as detection. The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The investigators present the CO/CO2 ratio as a measure of completeness of combustion of interest to the combustion community (BASS2TM.coratio); using it for this need is the team's choice, and the ratio in the pipeline is a team computation. Carbon dioxide is named as a species to sense or to measure (CP2003.det.sensors, SMT.gap.postfire) and is not in Table 6.2-3 of NASA-STD-3001 (3001.T6.2-3). The material is the only required variable, so the status conditions_only says only that the sample is named.",
    "status": "oxygen_only",
    "counts": {
     "usable_tests": 122,
@@ -11573,7 +11573,7 @@
      "need_id": "D1",
      "label": "Change in the CO reading (final minus initial)",
      "template": "summary",
-     "population": "recorded",
+     "population": "usable",
      "group": "material_id=nomex;sample_geometry=fabric sheet",
      "variable": "co_produced_ppm",
      "unit": "ppm",
@@ -11600,10 +11600,13 @@
      ],
      "definition_ref": [
       "3001.T6.2-3",
-      "TB008.co"
+      "TB008.co",
+      "BASS2TM.products",
+      "ICES15.purpose",
+      "ICES19.sensors"
      ],
      "compare_with": [],
-     "reading": "Final minus initial CO reading of the on-board sensor of the experiment (ICES19.sensors). Not the amount produced by one test: many tests start with a CO reading above zero, and a difference can be negative (flag final_below_initial). Not a cabin concentration: it is not compared with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors).",
+     "reading": "Final minus initial CO reading of the on-board sensor of the experiment (ICES19.sensors). Not the amount produced by one test: many tests start with a CO reading above zero, and a difference can be negative (flag final_below_initial). Not a cabin concentration: it is not compared with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. The tests are counted for this need through the investigators' purpose sentence for the gas measurements (BASS2TM.products, ICES15.purpose). The investigators describe the sensors as measuring the completeness of combustion (ICES19.sensors); in the passages read they do not present the readings as a detection measurement.",
      "test_ids": [
       "BASS2-F1",
       "BASS2-F2"
@@ -11614,7 +11617,7 @@
      "need_id": "D1",
      "label": "Change in the CO reading (final minus initial)",
      "template": "summary",
-     "population": "recorded",
+     "population": "usable",
      "group": "material_id=pmma;sample_geometry=film",
      "variable": "co_produced_ppm",
      "unit": "ppm",
@@ -11641,10 +11644,13 @@
      ],
      "definition_ref": [
       "3001.T6.2-3",
-      "TB008.co"
+      "TB008.co",
+      "BASS2TM.products",
+      "ICES15.purpose",
+      "ICES19.sensors"
      ],
      "compare_with": [],
-     "reading": "Final minus initial CO reading of the on-board sensor of the experiment (ICES19.sensors). Not the amount produced by one test: many tests start with a CO reading above zero, and a difference can be negative (flag final_below_initial). Not a cabin concentration: it is not compared with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors).",
+     "reading": "Final minus initial CO reading of the on-board sensor of the experiment (ICES19.sensors). Not the amount produced by one test: many tests start with a CO reading above zero, and a difference can be negative (flag final_below_initial). Not a cabin concentration: it is not compared with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. The tests are counted for this need through the investigators' purpose sentence for the gas measurements (BASS2TM.products, ICES15.purpose). The investigators describe the sensors as measuring the completeness of combustion (ICES19.sensors); in the passages read they do not present the readings as a detection measurement.",
      "test_ids": [
       "BASS2-B1",
       "BASS2-B10",
@@ -11668,7 +11674,7 @@
      "need_id": "D1",
      "label": "Change in the CO reading (final minus initial)",
      "template": "summary",
-     "population": "recorded",
+     "population": "usable",
      "group": "material_id=pmma;sample_geometry=rod",
      "variable": "co_produced_ppm",
      "unit": "ppm",
@@ -11695,10 +11701,13 @@
      ],
      "definition_ref": [
       "3001.T6.2-3",
-      "TB008.co"
+      "TB008.co",
+      "BASS2TM.products",
+      "ICES15.purpose",
+      "ICES19.sensors"
      ],
      "compare_with": [],
-     "reading": "Final minus initial CO reading of the on-board sensor of the experiment (ICES19.sensors). Not the amount produced by one test: many tests start with a CO reading above zero, and a difference can be negative (flag final_below_initial). Not a cabin concentration: it is not compared with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors).",
+     "reading": "Final minus initial CO reading of the on-board sensor of the experiment (ICES19.sensors). Not the amount produced by one test: many tests start with a CO reading above zero, and a difference can be negative (flag final_below_initial). Not a cabin concentration: it is not compared with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. The tests are counted for this need through the investigators' purpose sentence for the gas measurements (BASS2TM.products, ICES15.purpose). The investigators describe the sensors as measuring the completeness of combustion (ICES19.sensors); in the passages read they do not present the readings as a detection measurement.",
      "test_ids": [
       "BASS2-O1",
       "BASS2-O2",
@@ -11716,7 +11725,7 @@
      "need_id": "D1",
      "label": "Change in the CO reading (final minus initial)",
      "template": "summary",
-     "population": "recorded",
+     "population": "usable",
      "group": "material_id=pmma;sample_geometry=slab",
      "variable": "co_produced_ppm",
      "unit": "ppm",
@@ -11743,10 +11752,13 @@
      ],
      "definition_ref": [
       "3001.T6.2-3",
-      "TB008.co"
+      "TB008.co",
+      "BASS2TM.products",
+      "ICES15.purpose",
+      "ICES19.sensors"
      ],
      "compare_with": [],
-     "reading": "Final minus initial CO reading of the on-board sensor of the experiment (ICES19.sensors). Not the amount produced by one test: many tests start with a CO reading above zero, and a difference can be negative (flag final_below_initial). Not a cabin concentration: it is not compared with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors).",
+     "reading": "Final minus initial CO reading of the on-board sensor of the experiment (ICES19.sensors). Not the amount produced by one test: many tests start with a CO reading above zero, and a difference can be negative (flag final_below_initial). Not a cabin concentration: it is not compared with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. The tests are counted for this need through the investigators' purpose sentence for the gas measurements (BASS2TM.products, ICES15.purpose). The investigators describe the sensors as measuring the completeness of combustion (ICES19.sensors); in the passages read they do not present the readings as a detection measurement.",
      "test_ids": [
       "BASS2-M1",
       "BASS2-M10",
@@ -11769,7 +11781,7 @@
      "need_id": "D1",
      "label": "Change in the CO reading (final minus initial)",
      "template": "summary",
-     "population": "recorded",
+     "population": "usable",
      "group": "material_id=sibal;sample_geometry=fabric sheet",
      "variable": "co_produced_ppm",
      "unit": "ppm",
@@ -11796,10 +11808,13 @@
      ],
      "definition_ref": [
       "3001.T6.2-3",
-      "TB008.co"
+      "TB008.co",
+      "BASS2TM.products",
+      "ICES15.purpose",
+      "ICES19.sensors"
      ],
      "compare_with": [],
-     "reading": "Final minus initial CO reading of the on-board sensor of the experiment (ICES19.sensors). Not the amount produced by one test: many tests start with a CO reading above zero, and a difference can be negative (flag final_below_initial). Not a cabin concentration: it is not compared with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors).",
+     "reading": "Final minus initial CO reading of the on-board sensor of the experiment (ICES19.sensors). Not the amount produced by one test: many tests start with a CO reading above zero, and a difference can be negative (flag final_below_initial). Not a cabin concentration: it is not compared with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. The tests are counted for this need through the investigators' purpose sentence for the gas measurements (BASS2TM.products, ICES15.purpose). The investigators describe the sensors as measuring the completeness of combustion (ICES19.sensors); in the passages read they do not present the readings as a detection measurement.",
      "test_ids": [
       "BASS2-T25",
       "BASS2-T26",
@@ -11812,7 +11827,7 @@
      "need_id": "D1",
      "label": "Ratio of the change in CO to the change in CO2",
      "template": "summary",
-     "population": "recorded",
+     "population": "usable",
      "group": "material_id=pmma;sample_geometry=film",
      "variable": "co_to_co2_molar_ratio",
      "unit": "mol/mol",
@@ -11838,12 +11853,15 @@
       }
      ],
      "definition_ref": [
-      "ICES19.sensors"
+      "ICES19.sensors",
+      "BASS2TM.coratio",
+      "BASS2TM.products",
+      "ICES15.purpose"
      ],
      "compare_with": [
       "ICES19.coratio"
      ],
-     "reading": "Molar ratio computed by the pipeline (formula in variables.json) from the differences between the final and the initial CO and CO2 readings. A team computation, not the investigators' value. No ratio is computed for a test whose CO reading is over range or missing, whose CO difference is zero or negative, or whose CO2 difference is below 0.05 percentage points. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors).",
+     "reading": "Molar ratio computed by the pipeline (formula in variables.json) from the differences between the final and the initial CO and CO2 readings. A team computation, not the investigators' value. No ratio is computed for a test whose CO reading is over range or missing, whose CO difference is zero or negative, or whose CO2 difference is below 0.05 percentage points. The investigators present the CO/CO2 ratio as a measure of completeness of combustion of interest to the combustion community (BASS2TM.coratio); using it for a detection need is the team's choice. The tests are counted for this need through the investigators' purpose sentence for the gas measurements (BASS2TM.products, ICES15.purpose).",
      "test_ids": [
       "BASS2-B10",
       "BASS2-B11",
@@ -11864,7 +11882,7 @@
      "need_id": "D1",
      "label": "Ratio of the change in CO to the change in CO2",
      "template": "summary",
-     "population": "recorded",
+     "population": "usable",
      "group": "material_id=pmma;sample_geometry=rod",
      "variable": "co_to_co2_molar_ratio",
      "unit": "mol/mol",
@@ -11890,12 +11908,15 @@
       }
      ],
      "definition_ref": [
-      "ICES19.sensors"
+      "ICES19.sensors",
+      "BASS2TM.coratio",
+      "BASS2TM.products",
+      "ICES15.purpose"
      ],
      "compare_with": [
       "ICES19.coratio"
      ],
-     "reading": "Molar ratio computed by the pipeline (formula in variables.json) from the differences between the final and the initial CO and CO2 readings. A team computation, not the investigators' value. No ratio is computed for a test whose CO reading is over range or missing, whose CO difference is zero or negative, or whose CO2 difference is below 0.05 percentage points. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors).",
+     "reading": "Molar ratio computed by the pipeline (formula in variables.json) from the differences between the final and the initial CO and CO2 readings. A team computation, not the investigators' value. No ratio is computed for a test whose CO reading is over range or missing, whose CO difference is zero or negative, or whose CO2 difference is below 0.05 percentage points. The investigators present the CO/CO2 ratio as a measure of completeness of combustion of interest to the combustion community (BASS2TM.coratio); using it for a detection need is the team's choice. The tests are counted for this need through the investigators' purpose sentence for the gas measurements (BASS2TM.products, ICES15.purpose).",
      "test_ids": [
       "BASS2-O1",
       "BASS2-O2",
@@ -11913,7 +11934,7 @@
      "need_id": "D1",
      "label": "Ratio of the change in CO to the change in CO2",
      "template": "summary",
-     "population": "recorded",
+     "population": "usable",
      "group": "material_id=pmma;sample_geometry=slab",
      "variable": "co_to_co2_molar_ratio",
      "unit": "mol/mol",
@@ -11939,12 +11960,15 @@
       }
      ],
      "definition_ref": [
-      "ICES19.sensors"
+      "ICES19.sensors",
+      "BASS2TM.coratio",
+      "BASS2TM.products",
+      "ICES15.purpose"
      ],
      "compare_with": [
       "ICES19.coratio"
      ],
-     "reading": "Molar ratio computed by the pipeline (formula in variables.json) from the differences between the final and the initial CO and CO2 readings. A team computation, not the investigators' value. No ratio is computed for a test whose CO reading is over range or missing, whose CO difference is zero or negative, or whose CO2 difference is below 0.05 percentage points. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors).",
+     "reading": "Molar ratio computed by the pipeline (formula in variables.json) from the differences between the final and the initial CO and CO2 readings. A team computation, not the investigators' value. No ratio is computed for a test whose CO reading is over range or missing, whose CO difference is zero or negative, or whose CO2 difference is below 0.05 percentage points. The investigators present the CO/CO2 ratio as a measure of completeness of combustion of interest to the combustion community (BASS2TM.coratio); using it for a detection need is the team's choice. The tests are counted for this need through the investigators' purpose sentence for the gas measurements (BASS2TM.products, ICES15.purpose).",
      "test_ids": [
       "BASS2-M1",
       "BASS2-M10",
@@ -11967,7 +11991,7 @@
      "need_id": "D1",
      "label": "Ratio of the change in CO to the change in CO2",
      "template": "summary",
-     "population": "recorded",
+     "population": "usable",
      "group": "material_id=sibal;sample_geometry=fabric sheet",
      "variable": "co_to_co2_molar_ratio",
      "unit": "mol/mol",
@@ -11993,12 +12017,15 @@
       }
      ],
      "definition_ref": [
-      "ICES19.sensors"
+      "ICES19.sensors",
+      "BASS2TM.coratio",
+      "BASS2TM.products",
+      "ICES15.purpose"
      ],
      "compare_with": [
       "ICES19.coratio"
      ],
-     "reading": "Molar ratio computed by the pipeline (formula in variables.json) from the differences between the final and the initial CO and CO2 readings. A team computation, not the investigators' value. No ratio is computed for a test whose CO reading is over range or missing, whose CO difference is zero or negative, or whose CO2 difference is below 0.05 percentage points. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors).",
+     "reading": "Molar ratio computed by the pipeline (formula in variables.json) from the differences between the final and the initial CO and CO2 readings. A team computation, not the investigators' value. No ratio is computed for a test whose CO reading is over range or missing, whose CO difference is zero or negative, or whose CO2 difference is below 0.05 percentage points. The investigators present the CO/CO2 ratio as a measure of completeness of combustion of interest to the combustion community (BASS2TM.coratio); using it for a detection need is the team's choice. The tests are counted for this need through the investigators' purpose sentence for the gas measurements (BASS2TM.products, ICES15.purpose).",
      "test_ids": [
       "BASS2-T26"
      ]
@@ -12017,7 +12044,7 @@
     },
     {
      "id": "need.reading",
-     "text": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations."
+     "text": "A counted test records the material and the difference between the final and the initial CO or CO2 reading of the on-board sensors of the experiment (ICES19.sensors). The readings are not cabin concentrations and are not compared with crew exposure limits (SMAC.scope). The investigators state the purpose of the readings as evaluating the levels of combustion products and the completeness of combustion (BASS2TM.products, ICES15.purpose); in the passages read they do not present them as a detection measurement. The count is a count of tests that hold such a difference; it says nothing about what a detector would register."
     },
     {
      "id": "tiers.counts",
@@ -12057,7 +12084,7 @@
     },
     {
      "id": "need.note",
-     "text": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The material is the only required variable, so the status conditions_only says only that the sample is named."
+     "text": "All counted tests are BASS-II tests (PSI-25). The link rests on the investigators' purpose sentence for the gas measurements (BASS2TM.products; the same purpose is stated in ICES15.purpose). The objective field of the PSI-25 record names no gas species, so the link carries no record sentence. The investigators call the result 'the first extensive data on the stoichiometry and toxicity of combustion products in microgravity' (ICES15.first) and frame the readings as completeness of combustion, stoichiometry and heat release (BASS2TM.products, BASS2TM.sensors), not as detection. The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The investigators present the CO/CO2 ratio as a measure of completeness of combustion of interest to the combustion community (BASS2TM.coratio); using it for this need is the team's choice, and the ratio in the pipeline is a team computation. Carbon dioxide is named as a species to sense or to measure (CP2003.det.sensors, SMT.gap.postfire) and is not in Table 6.2-3 of NASA-STD-3001 (3001.T6.2-3). The material is the only required variable, so the status conditions_only says only that the sample is named."
     },
     {
      "id": "gap.pressure.not_recorded",
@@ -12071,55 +12098,55 @@
     },
     {
      "id": "indicator.summary",
-     "text": "Change in the CO reading (final minus initial) (material nomex, sample shape fabric sheet): min -23 ppm, median -10.5 ppm, max 2 ppm, over 2 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective.",
+     "text": "Change in the CO reading (final minus initial) (material nomex, sample shape fabric sheet): min -23 ppm, median -10.5 ppm, max 2 ppm, over 2 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "D1.co_produced",
      "group": "material_id=nomex;sample_geometry=fabric sheet"
     },
     {
      "id": "indicator.summary",
-     "text": "Change in the CO reading (final minus initial) (material pmma, sample shape film): min 0.3 ppm, median 16 ppm, max 131 ppm, over 15 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective.",
+     "text": "Change in the CO reading (final minus initial) (material pmma, sample shape film): min 0.3 ppm, median 16 ppm, max 131 ppm, over 15 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "D1.co_produced",
      "group": "material_id=pmma;sample_geometry=film"
     },
     {
      "id": "indicator.summary",
-     "text": "Change in the CO reading (final minus initial) (material pmma, sample shape rod): min 24 ppm, median 76 ppm, max 525 ppm, over 9 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective.",
+     "text": "Change in the CO reading (final minus initial) (material pmma, sample shape rod): min 24 ppm, median 76 ppm, max 525 ppm, over 9 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "D1.co_produced",
      "group": "material_id=pmma;sample_geometry=rod"
     },
     {
      "id": "indicator.summary",
-     "text": "Change in the CO reading (final minus initial) (material pmma, sample shape slab): min 60 ppm, median 349 ppm, max 559 ppm, over 14 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective.",
+     "text": "Change in the CO reading (final minus initial) (material pmma, sample shape slab): min 60 ppm, median 349 ppm, max 559 ppm, over 14 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "D1.co_produced",
      "group": "material_id=pmma;sample_geometry=slab"
     },
     {
      "id": "indicator.summary",
-     "text": "Change in the CO reading (final minus initial) (material sibal, sample shape fabric sheet): min 10 ppm, median 14.5 ppm, max 25 ppm, over 4 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective.",
+     "text": "Change in the CO reading (final minus initial) (material sibal, sample shape fabric sheet): min 10 ppm, median 14.5 ppm, max 25 ppm, over 4 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "D1.co_produced",
      "group": "material_id=sibal;sample_geometry=fabric sheet"
     },
     {
      "id": "indicator.summary",
-     "text": "Ratio of the change in CO to the change in CO2 (material pmma, sample shape film): min 0.00038 mol/mol, median 0.02146 mol/mol, max 0.0524 mol/mol, over 12 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective.",
+     "text": "Ratio of the change in CO to the change in CO2 (material pmma, sample shape film): min 0.00038 mol/mol, median 0.02146 mol/mol, max 0.0524 mol/mol, over 12 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "D1.co_to_co2",
      "group": "material_id=pmma;sample_geometry=film"
     },
     {
      "id": "indicator.summary",
-     "text": "Ratio of the change in CO to the change in CO2 (material pmma, sample shape rod): min 0.00291 mol/mol, median 0.0225 mol/mol, max 0.03889 mol/mol, over 9 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective.",
+     "text": "Ratio of the change in CO to the change in CO2 (material pmma, sample shape rod): min 0.00291 mol/mol, median 0.0225 mol/mol, max 0.03889 mol/mol, over 9 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "D1.co_to_co2",
      "group": "material_id=pmma;sample_geometry=rod"
     },
     {
      "id": "indicator.summary",
-     "text": "Ratio of the change in CO to the change in CO2 (material pmma, sample shape slab): min 0.02832 mol/mol, median 0.03743 mol/mol, max 0.0494 mol/mol, over 14 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective.",
+     "text": "Ratio of the change in CO to the change in CO2 (material pmma, sample shape slab): min 0.02832 mol/mol, median 0.03743 mol/mol, max 0.0494 mol/mol, over 14 tests with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "D1.co_to_co2",
      "group": "material_id=pmma;sample_geometry=slab"
     },
     {
      "id": "indicator.summary",
-     "text": "Ratio of the change in CO to the change in CO2 (material sibal, sample shape fabric sheet): min 0.03571 mol/mol, median 0.03571 mol/mol, max 0.03571 mol/mol, over 1 test with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective.",
+     "text": "Ratio of the change in CO to the change in CO2 (material sibal, sample shape fabric sheet): min 0.03571 mol/mol, median 0.03571 mol/mol, max 0.03571 mol/mol, over 1 test with a recorded value, from PSI-25. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "D1.co_to_co2",
      "group": "material_id=sibal;sample_geometry=fabric sheet"
     }
@@ -12220,7 +12247,7 @@
    "need": "Smoke generation conditions",
    "pillar": "detection",
    "reading": "A row of this need holds the conditions of a smoke test: material, air flow, aging time and the heating level (a target weight loss rate in the planned SAME matrix, SAMEEIRD.target; the heater resistance ratio Rt/R0 in SAME-R, SAMER.rtr0). No row holds a measured smoke property, so no test is counted for this need.",
-   "note": "The PSI experimental tables of SAME (PSI-102) and SAME-R (PSI-101) hold conditions of the smoke tests only. The measured smoke properties (moments of the particle size distribution, mean diameters, smoke detector signals) are reported in the investigators' final reports and papers (SAMEFSR.results, SAME.sizes, SAME.detector) and are not in the tables. The four value rows of the SAME table carry the same values as the planned test matrix of the 2005 requirements document (SAMEEIRD.matrix); the weight loss rate there is a target value (SAMEEIRD.target), and the sample mass actually lost was determined by weighing and is not in the table (AST15P.balance). Do not write that the SAME tests were run at 1 or 2 mg/min. The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included.",
+   "note": "The PSI experimental tables of SAME (PSI-102) and SAME-R (PSI-101) hold conditions of the smoke tests only. The measured smoke properties (moments of the particle size distribution, mean diameters, smoke detector signals) are reported in the investigators' final reports and papers (SAMEFSR.results, SAME.sizes, SAME.detector) and are not in the tables. The four value rows of the SAME table carry the same values as the planned test matrix of the 2005 requirements document (SAMEEIRD.matrix): they are planned test points, and whether tests were flown at exactly these conditions was not verified. The weight loss rate there is a target value (SAMEEIRD.target): the SAME investigators write that the baseline temperature of each material was selected 'to produce 1 to 2 mg of sample mass loss in 60 sec of heating' (SAME.massloss). The sample mass actually lost was determined by weighing and is not in the table (AST15P.balance). Do not write that the SAME tests were run at 1 or 2 mg/min. In SAME-R the heating level is the heater resistance ratio Rt/R0 (SAMER.rtr0), which is not the sample temperature (SAMER.rtr0.limit). Listing the heating level as useful and not required is the team's choice, although the heating temperature is one of the three controlled parameters (SAME.controls). The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included.",
    "status": "not_measured",
    "counts": {
     "usable_tests": 0,
@@ -12291,13 +12318,13 @@
    "gaps": [
     {
      "code": "need:no_usable_test",
-     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need."
     }
    ],
    "statements": [
     {
      "id": "status.not_measured",
-     "text": "No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective."
+     "text": "No test in the mapped PSI tables is counted for this need: no test meets every required condition, holds a value for at least one outcome variable of the need and comes from an investigation linked to the need by a supported purpose sentence of the investigators or of a NASA project document."
     },
     {
      "id": "need.reading",
@@ -12305,11 +12332,11 @@
     },
     {
      "id": "need.note",
-     "text": "The PSI experimental tables of SAME (PSI-102) and SAME-R (PSI-101) hold conditions of the smoke tests only. The measured smoke properties (moments of the particle size distribution, mean diameters, smoke detector signals) are reported in the investigators' final reports and papers (SAMEFSR.results, SAME.sizes, SAME.detector) and are not in the tables. The four value rows of the SAME table carry the same values as the planned test matrix of the 2005 requirements document (SAMEEIRD.matrix); the weight loss rate there is a target value (SAMEEIRD.target), and the sample mass actually lost was determined by weighing and is not in the table (AST15P.balance). Do not write that the SAME tests were run at 1 or 2 mg/min. The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included."
+     "text": "The PSI experimental tables of SAME (PSI-102) and SAME-R (PSI-101) hold conditions of the smoke tests only. The measured smoke properties (moments of the particle size distribution, mean diameters, smoke detector signals) are reported in the investigators' final reports and papers (SAMEFSR.results, SAME.sizes, SAME.detector) and are not in the tables. The four value rows of the SAME table carry the same values as the planned test matrix of the 2005 requirements document (SAMEEIRD.matrix): they are planned test points, and whether tests were flown at exactly these conditions was not verified. The weight loss rate there is a target value (SAMEEIRD.target): the SAME investigators write that the baseline temperature of each material was selected 'to produce 1 to 2 mg of sample mass loss in 60 sec of heating' (SAME.massloss). The sample mass actually lost was determined by weighing and is not in the table (AST15P.balance). Do not write that the SAME tests were run at 1 or 2 mg/min. In SAME-R the heating level is the heater resistance ratio Rt/R0 (SAMER.rtr0), which is not the sample temperature (SAMER.rtr0.limit). Listing the heating level as useful and not required is the team's choice, although the heating temperature is one of the three controlled parameters (SAME.controls). The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included."
     },
     {
      "id": "gap.need.no_usable_test",
-     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need."
     }
    ],
    "references": [

@@ -17,7 +17,7 @@
    "source_columns_not_mapped": "Per table, the source columns that are not mapped to a standard variable (run_report.json).",
    "statements": "Fixed sentences of pipeline/spec/fact_statements.json filled with the fields of the same entry. 'about' names the table (source id) or need the sentence is about."
   },
-  "status_rule": "measured = at least one outcome variable has values and every 'conditions_required' variable has values; partial = an outcome has values but a required condition is missing from the table; conditions_only = no outcome variable in the table; none = neither. 'measured' is a status name kept for the other sessions: it says that the columns hold values, not that the question of the need was measured or answered",
+  "status_rule": "measured = at least one test has a value for an outcome variable and meets every 'conditions_required' variable, by a value in the table or, where the need lists the variable under 'conditions_documented_ok', by a document about the whole table (see 'documented_rule'); partial = an outcome has values but a required condition is missing from the table and is not documented; conditions_only = no outcome variable in the table; none = neither. 'measured' is a status name kept for the other sessions: it says that the columns hold values, not that the question of the need was measured or answered",
   "max_category_values": 12,
   "investigations": 24,
   "tests": 1824
@@ -2768,27 +2768,27 @@
     {
      "id": "need.stated.with_tests",
      "about": "P1",
-     "text": "Need P1 (Flammability limit) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 125 of the 129 test rows within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "text": "Need P1 (Flammability limit) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 125 of the 129 test rows within the scope of this need meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of the need."
     },
     {
      "id": "need.stated.no_tests",
      "about": "P2",
-     "text": "Need P2 (Ignition) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-25 records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: bass2: conditions_only)."
+     "text": "Need P2 (Ignition) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-25 meets every required condition variable and records an outcome variable of the need (status per table in the capability matrix: bass2: conditions_only)."
     },
     {
      "id": "need.stated.no_tests",
      "about": "P3",
-     "text": "Need P3 (Flame spread and growth) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-25 records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: bass2: none)."
+     "text": "Need P3 (Flame spread and growth) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-25 meets every required condition variable and records an outcome variable of the need (status per table in the capability matrix: bass2: none)."
     },
     {
      "id": "need.stated.with_tests",
      "about": "S1",
-     "text": "Need S1 (Extinction conditions) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 25 of the 129 test rows within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "text": "Need S1 (Extinction conditions) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 25 of the 129 test rows within the scope of this need meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of the need."
     },
     {
      "id": "need.stated.with_tests",
      "about": "D1",
-     "text": "Need D1 (Combustion products) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 122 of the 129 test rows within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "text": "Need D1 (Combustion products) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 122 of the 129 test rows within the scope of this need meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of the need."
     },
     {
      "id": "need_table.conditions_only",
@@ -3337,12 +3337,12 @@
     {
      "id": "need.stated.no_tests",
      "about": "P1",
-     "text": "Need P1 (Flammability limit) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-26 records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: bass: none)."
+     "text": "Need P1 (Flammability limit) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-26 meets every required condition variable and records an outcome variable of the need (status per table in the capability matrix: bass: none)."
     },
     {
      "id": "need.stated.no_tests",
      "about": "S1",
-     "text": "Need S1 (Extinction conditions) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-26 records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: bass: none)."
+     "text": "Need S1 (Extinction conditions) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-26 meets every required condition variable and records an outcome variable of the need (status per table in the capability matrix: bass: none)."
     },
     {
      "id": "need_table.required_missing",
@@ -5146,7 +5146,7 @@
     {
      "id": "need.stated.with_tests",
      "about": "S1",
-     "text": "Need S1 (Extinction conditions) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 273 of the 274 test rows within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "text": "Need S1 (Extinction conditions) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 273 of the 274 test rows within the scope of this need meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of the need."
     },
     {
      "id": "inv.flags",
@@ -5903,12 +5903,12 @@
     {
      "id": "need.not_stated.recorded",
      "about": "P1",
-     "text": "2 test rows of PSI-98 record every required condition variable and at least one outcome variable of need P1 (Flammability limit), but the team's needs list has no supported purpose sentence for this need and this investigation. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
+     "text": "2 test rows of PSI-98 meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of need P1 (Flammability limit), but the team's needs list has no supported purpose sentence for this need and this investigation. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
     },
     {
      "id": "need.stated.with_tests",
      "about": "P3",
-     "text": "Need P3 (Flame spread and growth) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 2 of the 2 test rows within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "text": "Need P3 (Flame spread and growth) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 2 of the 2 test rows within the scope of this need meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of the need."
     },
     {
      "id": "inv.flags",
@@ -6766,12 +6766,12 @@
     {
      "id": "need.stated.with_tests",
      "about": "P1",
-     "text": "Need P1 (Flammability limit) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 8 of the 9 test rows within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "text": "Need P1 (Flammability limit) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). 8 of the 9 test rows within the scope of this need meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of the need."
     },
     {
      "id": "need.not_stated.recorded",
      "about": "P3",
-     "text": "9 test rows of PSI-99 record every required condition variable and at least one outcome variable of need P3 (Flame spread and growth), but the team's needs list has no supported purpose sentence for this need and this investigation. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
+     "text": "9 test rows of PSI-99 meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of need P3 (Flame spread and growth), but the team's needs list has no supported purpose sentence for this need and this investigation. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
     },
     {
      "id": "inv.flags",
@@ -7378,7 +7378,7 @@
     {
      "id": "need.stated.no_tests",
      "about": "P3",
-     "text": "Need P3 (Flame spread and growth) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-100 records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: saffire3: conditions_only)."
+     "text": "Need P3 (Flame spread and growth) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-100 meets every required condition variable and records an outcome variable of the need (status per table in the capability matrix: saffire3: conditions_only)."
     },
     {
      "id": "need_table.conditions_only",
@@ -7889,7 +7889,7 @@
     {
      "id": "need.stated.no_tests",
      "about": "D2",
-     "text": "Need D2 (Smoke generation conditions) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-101 records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: same_r: conditions_only)."
+     "text": "Need D2 (Smoke generation conditions) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-101 meets every required condition variable and records an outcome variable of the need (status per table in the capability matrix: same_r: conditions_only)."
     },
     {
      "id": "need_table.conditions_only",
@@ -8380,7 +8380,7 @@
     {
      "id": "need.stated.no_tests",
      "about": "D2",
-     "text": "Need D2 (Smoke generation conditions) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-102 records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: same: conditions_only)."
+     "text": "Need D2 (Smoke generation conditions) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of PSI-102 meets every required condition variable and records an outcome variable of the need (status per table in the capability matrix: same: conditions_only)."
     },
     {
      "id": "need_table.conditions_only",
@@ -10338,7 +10338,7 @@
     {
      "id": "need.not_stated.recorded",
      "about": "S1",
-     "text": "272 test rows of PSI-159 record every required condition variable and at least one outcome variable of need S1 (Extinction conditions), but the team's needs list has no supported purpose sentence for this need and this investigation. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
+     "text": "272 test rows of PSI-159 meet every required condition variable (by a value in the table or, where the need allows it, by a document about the whole table) and record at least one outcome variable of need S1 (Extinction conditions), but the team's needs list has no supported purpose sentence for this need and this investigation. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
     },
     {
      "id": "need_table.oxidizer_stream",
