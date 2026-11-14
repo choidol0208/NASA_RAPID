@@ -1858,9 +1858,13 @@
       "flow_min_cms": {
        "cell_says_flow_went_lower_than_written": 25,
        "potentiometer_or_bracketed_values_in_cell_not_read": 17,
-       "below_1_cms_in_source": 4
+       "below_1_cms_in_source": 4,
+       "cell_does_not_start_with_a_flow_speed": 2,
+       "approximate_in_source": 1
       },
       "o2_final_pct": {
+       "implausibly_low_in_source": 3,
+       "above_initial_in_source": 2,
        "not_a_number_in_source": 2
       },
       "co2_initial_pct": {
@@ -1877,10 +1881,6 @@
        "not_a_number_in_source": 4,
        "over_range_in_source": 3,
        "lower_bound_in_source": 1
-      },
-      "o2_consumed_pct_points": {
-       "final_o2_implausibly_low_in_source": 3,
-       "final_o2_above_initial_in_source": 2
       },
       "co2_produced_pct_points": {
        "final_below_initial": 2
@@ -2036,12 +2036,12 @@
        ]
       },
       "flow_min_cms": {
-       "n": 105,
+       "n": 103,
        "unit": "cm/s",
        "kind": "condition",
        "type": "number",
        "min": 0.0,
-       "max": 28.0,
+       "max": 15.0,
        "source_columns": [
         "Air display"
        ]
@@ -2079,12 +2079,12 @@
        ]
       },
       "o2_final_pct": {
-       "n": 127,
+       "n": 122,
        "unit": "% by volume",
        "kind": "outcome",
        "type": "number",
-       "min": 0.6,
-       "max": 40.4,
+       "min": 13.5,
+       "max": 22.2,
        "source_columns": [
         "Calibrated final O2 % by vol"
        ]
@@ -2298,12 +2298,12 @@
      "max": 20.0
     },
     "flow_min_cms": {
-     "n": 105,
+     "n": 103,
      "unit": "cm/s",
      "kind": "condition",
      "type": "number",
      "min": 0.0,
-     "max": 28.0
+     "max": 15.0
     },
     "gravity_level": {
      "n": 129,
@@ -2331,12 +2331,12 @@
      "values_truncated": false
     },
     "o2_final_pct": {
-     "n": 127,
+     "n": 122,
      "unit": "% by volume",
      "kind": "outcome",
      "type": "number",
-     "min": 0.6,
-     "max": 40.4
+     "min": 13.5,
+     "max": 22.2
     },
     "co2_initial_pct": {
      "n": 127,
@@ -2610,15 +2610,17 @@
     "flow_min_cms:below_1_cms_in_source": 4,
     "co_final_ppm:over_range_in_source": 3,
     "flow_cms:fan_reading_in_flow_cell_ignored": 3,
-    "o2_consumed_pct_points:final_o2_implausibly_low_in_source": 3,
+    "o2_final_pct:implausibly_low_in_source": 3,
     "co2_initial_pct:not_a_number_in_source": 2,
     "co2_produced_pct_points:final_below_initial": 2,
     "co_initial_ppm:not_a_number_in_source": 2,
-    "o2_consumed_pct_points:final_o2_above_initial_in_source": 2,
+    "flow_min_cms:cell_does_not_start_with_a_flow_speed": 2,
+    "o2_final_pct:above_initial_in_source": 2,
     "o2_final_pct:not_a_number_in_source": 2,
     "co_final_ppm:lower_bound_in_source": 1,
     "co_initial_ppm:over_range_in_source": 1,
-    "co_produced_ppm:final_below_initial": 1
+    "co_produced_ppm:final_below_initial": 1,
+    "flow_min_cms:approximate_in_source": 1
    },
    "source_columns_not_mapped": {
     "bass2": [
@@ -2650,7 +2652,7 @@
     {
      "id": "inv.variables",
      "about": "PSI-25",
-     "text": "Variables with at least one value in the test rows of PSI-25, with the number of test rows that have a value: fuel_material (129); material_id (129); fuel_phase (129); sample_geometry (129); sample_thickness_mm (42); sample_width_cm (71); rod_diameter_mm (54); o2_pct (129); o2_basis (129); flow_cms (119); flow_min_cms (105); gravity_level (129); flow_event (25); o2_final_pct (127); co2_initial_pct (127); co2_final_pct (123); co_initial_ppm (126); co_final_ppm (120); o2_consumed_pct_points (122); co2_produced_pct_points (121); co_produced_ppm (118); co_to_co2_molar_ratio (87)."
+     "text": "Variables with at least one value in the test rows of PSI-25, with the number of test rows that have a value: fuel_material (129); material_id (129); fuel_phase (129); sample_geometry (129); sample_thickness_mm (42); sample_width_cm (71); rod_diameter_mm (54); o2_pct (129); o2_basis (129); flow_cms (119); flow_min_cms (103); gravity_level (129); flow_event (25); o2_final_pct (122); co2_initial_pct (127); co2_final_pct (123); co_initial_ppm (126); co_final_ppm (120); o2_consumed_pct_points (122); co2_produced_pct_points (121); co_produced_ppm (118); co_to_co2_molar_ratio (87)."
     },
     {
      "id": "table.rows",
@@ -2755,7 +2757,7 @@
     {
      "id": "inv.flags",
      "about": "PSI-25",
-     "text": "Flags the pipeline set on the test rows of PSI-25 (variable:reason, with the number of occurrences): fuel_material:not_written_in_cell_named_in_readme (57); flow_min_cms:cell_says_flow_went_lower_than_written (25); flow_min_cms:potentiometer_or_bracketed_values_in_cell_not_read (17); co2_final_pct:not_a_number_in_source (5); flow_cms:not_parsed (5); co_final_ppm:not_a_number_in_source (4); flow_min_cms:below_1_cms_in_source (4); co_final_ppm:over_range_in_source (3); flow_cms:fan_reading_in_flow_cell_ignored (3); o2_consumed_pct_points:final_o2_implausibly_low_in_source (3); co2_initial_pct:not_a_number_in_source (2); co2_produced_pct_points:final_below_initial (2); co_initial_ppm:not_a_number_in_source (2); o2_consumed_pct_points:final_o2_above_initial_in_source (2); o2_final_pct:not_a_number_in_source (2); co_final_ppm:lower_bound_in_source (1); co_initial_ppm:over_range_in_source (1); co_produced_ppm:final_below_initial (1). A flag marks a problem in a source cell or in a computed value; the pipeline does not correct it."
+     "text": "Flags the pipeline set on the test rows of PSI-25 (variable:reason, with the number of occurrences): fuel_material:not_written_in_cell_named_in_readme (57); flow_min_cms:cell_says_flow_went_lower_than_written (25); flow_min_cms:potentiometer_or_bracketed_values_in_cell_not_read (17); co2_final_pct:not_a_number_in_source (5); flow_cms:not_parsed (5); co_final_ppm:not_a_number_in_source (4); flow_min_cms:below_1_cms_in_source (4); co_final_ppm:over_range_in_source (3); flow_cms:fan_reading_in_flow_cell_ignored (3); o2_final_pct:implausibly_low_in_source (3); co2_initial_pct:not_a_number_in_source (2); co2_produced_pct_points:final_below_initial (2); co_initial_ppm:not_a_number_in_source (2); flow_min_cms:cell_does_not_start_with_a_flow_speed (2); o2_final_pct:above_initial_in_source (2); o2_final_pct:not_a_number_in_source (2); co_final_ppm:lower_bound_in_source (1); co_initial_ppm:over_range_in_source (1); co_produced_ppm:final_below_initial (1); flow_min_cms:approximate_in_source (1). A flag marks a problem in a source cell or in a computed value; the pipeline does not correct it."
     },
     {
      "id": "inv.team_computation",
@@ -5111,7 +5113,7 @@
       {
        "variable": "pressure_kpa",
        "record_field": "approach",
-       "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction"
+       "quote": "solid state sensors were used to measure pressure"
       }
      ],
      "require": [
@@ -5829,7 +5831,7 @@
       {
        "variable": "pressure_kpa",
        "record_field": "approach",
-       "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction"
+       "quote": "solid state sensors were used to measure pressure"
       }
      ],
      "require": [
@@ -6644,7 +6646,7 @@
       {
        "variable": "pressure_kpa",
        "record_field": "approach",
-       "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction"
+       "quote": "solid state sensors were used to measure pressure"
       }
      ],
      "require": [
@@ -7747,18 +7749,7 @@
      "rows_excluded": 0,
      "rows_repeated": 0,
      "row_note": "Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read.",
-     "documented_elsewhere": [
-      {
-       "variable": "o2_pct",
-       "record_field": "approach",
-       "quote": "The crew installed the near field hardware in the Glovebox"
-      },
-      {
-       "variable": "pressure_kpa",
-       "record_field": "approach",
-       "quote": "The crew installed the near field hardware in the Glovebox"
-      }
-     ],
+     "documented_elsewhere": [],
      "require": [
       "Air Flow (cm/s)"
      ],

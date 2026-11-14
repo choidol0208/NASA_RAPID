@@ -25,7 +25,7 @@ run.py               1 ingest → 2 standardize → 3 validate → 4 derive → 
 rules.py             the named cell rules (unit factors, text-with-unit, BASS material and flow)
 ```
 
-Run: `python3 pipeline/run.py` (after `python3 scripts/fetch_psi.py`).
+Run: `python3 pipeline/run.py` (after `python3 scripts/fetch_psi.py`) writes every output except the validation report; `python3 pipeline/check.py` then recomputes them and writes `validation_report.json`.
 
 ## Outputs (`data/pipeline/`)
 
@@ -93,7 +93,7 @@ The needs themselves are the team's wording. `needs.json` says which parts come 
 
 ## Scenarios
 
-A scenario is a set of ranges (`scenarios.json`), not a prediction. A test is marked `in`, `out` or `not_recorded` for each variable. Tier `atmosphere` means oxygen and pressure are both recorded and inside the ranges; `oxygen_only` means oxygen is inside and the table records no pressure. Status per need: `in_atmosphere`, `oxygen_only`, `pressure_only`, `other_atmosphere`, `not_measured`. The status names are kept for the other sessions and say less than they seem to: `in_atmosphere` says only that at least one counted test has oxygen and pressure inside the ranges, whatever its fuel, flow, gravity or added gas; `not_measured` says that the need has no counted test, while tests recorded outside the stated objective may exist (D1). Gap codes say which variable (oxygen, pressure, flow, gravity) has no usable test in range or is not in the table. "Not recorded" always means that the experimental table holds no value; where a NASA record or a paper of the investigators says something about the missing variable, the sentence is carried next to the gap (`documented_elsewhere` in `sources.json`) and is never used as a value. Each test is also marked for carbon dioxide or helium added to the atmosphere (`added_gas`); the mark does not change the tier. A scenario can point to records or table cells that name its atmosphere and are not in the counts (`see_also`). All PSI tests in the tables are microgravity tests, so a lunar or Martian scenario always carries a gravity gap.
+A scenario is a set of ranges (`scenarios.json`), not a prediction. A test is marked `in`, `out` or `not_recorded` for each variable. Tier `atmosphere` means oxygen and pressure are both recorded and inside the ranges; `oxygen_only` means oxygen is inside and the table records no pressure. Status per need: `in_atmosphere`, `oxygen_only`, `pressure_only`, `other_atmosphere`, `not_measured`, and `atmosphere_not_specified` for a scenario that sets no oxygen and no pressure range. The status names are kept for the other sessions and say less than they seem to: `in_atmosphere` says only that at least one counted test has oxygen and pressure inside the ranges, whatever its fuel, flow, gravity or added gas; `not_measured` says that the need has no counted test, while tests recorded outside the stated objective may exist (D1). Gap codes say which variable (oxygen, pressure, flow, gravity) has no usable test in range or is not in the table. "Not recorded" always means that the experimental table holds no value; where a NASA record or a paper of the investigators says something about the missing variable, the sentence is carried next to the gap (`documented_elsewhere` in `sources.json`) and is never used as a value. Each test is also marked for carbon dioxide or helium added to the atmosphere (`added_gas`); the mark does not change the tier. A scenario can point to records or table cells that name its atmosphere and are not in the counts (`see_also`). All PSI tests in the tables are microgravity tests, so a lunar or Martian scenario always carries a gravity gap.
 
 ## Evidence packages
 
@@ -131,7 +131,7 @@ Rules:
 
 ## Checking
 
-`python3 pipeline/check.py` recomputes every output from the raw tables and the rules written in the spec files, with code that does not import `run.py`, `rules.py`, `evidence.py` or `facts.py`, and writes `data/pipeline/validation_report.json`. `python3 pipeline/check.py --spot-check` writes `reports/spot_check.csv`: 20 values per table with the raw cell, for a person to compare with the NASA page.
+`python3 pipeline/check.py` recomputes every output from the raw tables and the rules written in the spec files, with code that does not import `run.py`, `rules.py`, `evidence.py` or `facts.py`, and writes `data/pipeline/validation_report.json`. `python3 pipeline/check.py --spot-check` writes `reports/spot_check.csv`: up to 20 values per table (268 rows; row 1 is the header) with the raw cell, for a person to compare with the NASA page. The check on wording covers the template sentences; readings and notes copied from the spec files are not scanned. The raw tables are compared with the manifest by size, not by hash.
 
 ## Limits
 
@@ -140,6 +140,7 @@ Rules:
 - A "test" is one row of a NASA table. In SAME-R (PSI-101) 42 of the 109 rows are a second reading of the same smoke after aging; in SPICE (PSI-107) a row is one flow setting of a flame. In SAME (PSI-102) four rows say "same conditions as 1-4" for four more materials and are not read.
 - Results written as text are not carried: the 1-g columns of Saffire-II ("Complete" in normal gravity next to "~ 0" in microgravity), the comment columns of CFI-G, the fan-display notes of BASS-II other than the event word.
 - "Pressure not in the table" for the solid-fuel tests does not mean the pressure is unknown to NASA: BASS-II ran in the ISS glovebox at 1 atmosphere per the investigators' paper. The pipeline does not turn such a sentence into a value.
+- The lunar-habitat scenario counts as "inside" every recorded pressure below 85.8 kPa. The 17 counted tests in its oxygen range are FLEX droplets recorded at 71.2 to 72.4 kPa, that is 1 to 2 kPa above the 70.3 kPa (10.2 psi) of the challenge statement; the only tests at or below 70.3 kPa with 30% oxygen or more are 9 gas-burner tests of PSI-159 at 50.7 kPa, which are not counted for a need. The scenario carries this as `caveat`.
 - Oxygen and pressure in range do not make a test representative of a habitat: the counted tests in elevated oxygen and reduced pressure are fuel droplets and burner flames in microgravity, some with carbon dioxide or helium added.
 - The needs, their required variables, their scope and the link between a record sentence and a need are a team draft, not a NASA standard, and have not been reviewed by a combustion specialist.
 - The challenge statement cannot be opened from the work environment of the data role. Its Moon Base bound (oxygen likely 30% or more, pressure 10.2 psi or less) and spacesuit values were checked on the official page by another session of the team on 2026-11-14 (`access: read_by_teammate`); the items give the wording as reported, not a verbatim quote.
@@ -149,7 +150,7 @@ Rules:
 - The ISS ranges are bins, not an ISS operating range: 19 to 23% oxygen and 85.8 to below 116.8 kPa. No reference item gives an ISS operating range for oxygen or pressure. The scenarios below 62.8 kPa accept any recorded pressure below that edge.
 - The variables `o2_consumed_pct_points`, `co2_produced_pct_points` and `co_produced_ppm` are differences between a final and an initial sensor reading. The names say "consumed" and "produced"; the values are not amounts consumed or produced by one test, and many BASS-II tests start with a CO reading above zero.
 - The SAME table does not say whether its "Weight loss rate (mg/min)" is a set value or a result; the pipeline lists it as the outcome of need D2. The aging time of D2 merges two source columns, "Aging Duration (minutes)" (SAME) and "Net aging time (sec)" (SAME-R).
-- `reports/indicators_ko.json` holds Korean labels and readings written for an earlier wording of `indicators.json`; the English texts in `spec/` are the authority.
+- `reports/indicators_ko.json` holds a Korean rendering of the labels and readings for the team's internal page; the English texts in `spec/` are the authority.
 
 ## Investigations with no counted test
 

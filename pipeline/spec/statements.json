@@ -10,8 +10,9 @@
     "status": "once per need block; exactly one sentence must apply",
     "need": "once per need block; every sentence that applies is written, in this order",
     "gap": "once per gap code of the need block; 'code' is the gap code, with placeholders allowed; exactly one sentence must apply",
-    "indicator": "once per indicator group of the need block; exactly one sentence must apply. 'each_value' is filled once per value of the group and the results, joined by 'join', become the field 'values'.",
-    "documented": "once per entry of documented_elsewhere of the need block; exactly one sentence must apply"
+    "indicator": "once per indicator group of the need block; exactly one sentence must apply. 'each_value' is filled once per value of the group and the results, joined by 'join', become the field 'values'. The reading of the indicator is not part of the sentence; it is the field 'reading' of the indicator entry.",
+    "documented": "once per entry of documented_elsewhere of the need block; exactly one sentence must apply",
+    "environment": "once per entry of environment.recorded_tests; exactly one sentence must apply; written to environment.statements"
    },
    "order": "In a need block the sentences are written in the order status, need, gap, documented, indicator."
   }
@@ -44,7 +45,7 @@
    "recorded": "all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective",
    "in_scope": "the tests within the scope of this need that record every required condition, with or without an outcome, from investigations that state this need as an objective"
   },
-  "group_item": "{name} = {value}",
+  "group_item": "{name} {value}",
   "group_join": ", ",
   "group_value_empty": "not recorded",
   "group_none": "all tests"
@@ -87,7 +88,15 @@
    "matched_added_gas": "counts.matched_added_gas; counted over the tests of tier atmosphere or oxygen_only",
    "need_reading": "reading of the need (needs.json); empty if none",
    "need_note": "note of the need (needs.json); empty if none",
-   "matched_fuel_phases": "matched_by_fuel_phase written as 'phase count'"
+   "matched_fuel_phases": "matched_by_fuel_phase written as 'phase count'",
+   "matched_o2_recorded": "matched_ranges.o2_pct.recorded",
+   "matched_o2_min": "matched_ranges.o2_pct.min; empty if none recorded",
+   "matched_o2_max": "matched_ranges.o2_pct.max; empty if none recorded",
+   "matched_o2_unit": "matched_ranges.o2_pct.unit",
+   "matched_pressure_recorded": "matched_ranges.pressure_kpa.recorded",
+   "matched_pressure_min": "matched_ranges.pressure_kpa.min; empty if none recorded",
+   "matched_pressure_max": "matched_ranges.pressure_kpa.max; empty if none recorded",
+   "matched_pressure_unit": "matched_ranges.pressure_kpa.unit"
   },
   "gap": {
    "gap": "the gap code; the fields of 'need' are available too"
@@ -118,7 +127,18 @@
    "doc_investigation_id": "documented_elsewhere[].investigation_id",
    "doc_variable": "documented_elsewhere[].variable",
    "doc_quote": "documented_elsewhere[].quote",
-   "doc_said_in": "documented_elsewhere[].said_in: a field of the PSI record or a reference item id"
+   "doc_said_in": "documented_elsewhere[].said_in: a field of the PSI record or a reference item id",
+   "doc_variable_label": "documented_elsewhere[].variable_label: the variable in words ('labels' of this file)"
+  },
+  "environment": {
+   "investigation_id": "environment.recorded_tests[].investigation_id",
+   "title": "...title",
+   "fuel_phase": "...fuel_phase",
+   "atmosphere": "...atmosphere",
+   "oxygen_only": "...oxygen_only",
+   "pressure_only": "...pressure_only",
+   "counted_for": "...counted_for: ids of the needs for which matched tests of this investigation and fuel phase are counted",
+   "counted_for_n": "number of entries of counted_for"
   }
  },
  "statements": {
@@ -163,9 +183,56 @@
       "status",
       "==",
       "other_atmosphere"
+     ],
+     [
+      "elsewhere_o2_recorded",
+      ">",
+      0
      ]
     ],
     "text": "None of the {usable_tests} [usable_tests|test|tests] counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
+   },
+   {
+    "id": "status.other_atmosphere.pressure_only_recorded",
+    "when": [
+     [
+      "status",
+      "==",
+      "other_atmosphere"
+     ],
+     [
+      "elsewhere_o2_recorded",
+      "==",
+      0
+     ],
+     [
+      "elsewhere_pressure_recorded",
+      ">",
+      0
+     ]
+    ],
+    "text": "None of the {usable_tests} [usable_tests|test|tests] counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
+   },
+   {
+    "id": "status.other_atmosphere.nothing_in_table",
+    "when": [
+     [
+      "status",
+      "==",
+      "other_atmosphere"
+     ],
+     [
+      "elsewhere_o2_recorded",
+      "==",
+      0
+     ],
+     [
+      "elsewhere_pressure_recorded",
+      "==",
+      0
+     ]
+    ],
+    "text": "The experimental tables of the {usable_tests} [usable_tests|test|tests] counted for this need hold no oxygen value and no pressure value, so none of them could be compared with the ranges of this environment."
    },
    {
     "id": "status.not_measured",
@@ -271,6 +338,44 @@
      ]
     ],
     "text": "The {matched_tests} matched [matched_tests|test|tests] by fuel phase: {matched_fuel_phases}."
+   },
+   {
+    "id": "matched.oxygen",
+    "when": [
+     [
+      "matched_o2_recorded",
+      ">",
+      0
+     ]
+    ],
+    "text": "Oxygen of the {matched_tests} matched [matched_tests|test|tests]: recorded in {matched_o2_recorded}, from {matched_o2_min} to {matched_o2_max} {matched_o2_unit}."
+   },
+   {
+    "id": "matched.pressure",
+    "when": [
+     [
+      "matched_pressure_recorded",
+      ">",
+      0
+     ]
+    ],
+    "text": "Pressure of the {matched_tests} matched [matched_tests|test|tests]: recorded in {matched_pressure_recorded}, from {matched_pressure_min} to {matched_pressure_max} {matched_pressure_unit}."
+   },
+   {
+    "id": "matched.pressure_not_in_table",
+    "when": [
+     [
+      "matched_tests",
+      ">",
+      0
+     ],
+     [
+      "matched_pressure_recorded",
+      "==",
+      0
+     ]
+    ],
+    "text": "Pressure of the {matched_tests} matched [matched_tests|test|tests]: not in the experimental tables."
    },
    {
     "id": "matched.added_gas",
@@ -498,7 +603,7 @@
     "id": "gap.need.no_usable_test",
     "code": "need:no_usable_test",
     "when": [],
-    "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+    "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
    }
   ],
   "indicator": [
@@ -513,7 +618,7 @@
     ],
     "each_value": "{stat} {value} {unit}",
     "join": ", ",
-    "text": "{label} ({group_text}): {values}, over {n_tests} [n_tests|test|tests] with a recorded value, from {investigation_ids}. Tests in this figure: those matched to this environment among {population_text}. {reading}"
+    "text": "{label} ({group_text}): {values}, over {n_tests} [n_tests|test|tests] with a recorded value, from {investigation_ids}. Tests in this figure: those matched to this environment among {population_text}."
    },
    {
     "id": "indicator.count_by",
@@ -526,7 +631,7 @@
     ],
     "each_value": "{category} in {value} [value|test|tests]",
     "join": ", ",
-    "text": "{label} ({group_text}): {values}, over {n_tests} [n_tests|test|tests] with a recorded value, from {investigation_ids}. Tests in this figure: those matched to this environment among {population_text}. {reading}"
+    "text": "{label} ({group_text}): {values}, over {n_tests} [n_tests|test|tests] with a recorded value, from {investigation_ids}. Tests in this figure: those matched to this environment among {population_text}."
    },
    {
     "id": "indicator.count",
@@ -537,16 +642,54 @@
       "count"
      ]
     ],
-    "text": "{label} ({group_text}): {n_tests} [n_tests|test|tests], from {investigation_ids}. Tests in this figure: those matched to this environment among {population_text}. {reading}"
+    "text": "{label} ({group_text}): {n_tests} [n_tests|test|tests], from {investigation_ids}. Tests in this figure: those matched to this environment among {population_text}."
    }
   ],
   "documented": [
    {
     "id": "documented.elsewhere",
     "when": [],
-    "text": "The experimental table of {doc_investigation_id} holds no value of {doc_variable}; {doc_said_in} says \"{doc_quote}\" (a sentence of a document, not a value of any test)."
+    "text": "The experimental table of {doc_investigation_id} holds no {doc_variable_label}. A NASA record or a paper of the investigators says: \"{doc_quote}\" (source: {doc_said_in}). The sentence is not used as a value of any test."
+   }
+  ],
+  "environment": [
+   {
+    "id": "recorded.counted",
+    "when": [
+     [
+      "counted_for_n",
+      ">",
+      0
+     ]
+    ],
+    "text": "{investigation_id} ({fuel_phase}): {atmosphere} [atmosphere|test|tests] recorded with oxygen and pressure both inside the ranges, {oxygen_only} with oxygen inside the range and no pressure in the table, {pressure_only} with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: {counted_for}."
+   },
+   {
+    "id": "recorded.not_counted",
+    "when": [
+     [
+      "counted_for_n",
+      "==",
+      0
+     ]
+    ],
+    "text": "{investigation_id} ({fuel_phase}): {atmosphere} [atmosphere|test|tests] recorded with oxygen and pressure both inside the ranges, {oxygen_only} with oxygen inside the range and no pressure in the table, {pressure_only} with pressure inside the range and no oxygen in the table. None of these tests is counted for a need."
    }
   ]
  },
- "phase_not_recorded": "fuel phase not recorded"
+ "phase_not_recorded": "fuel phase not recorded",
+ "sections_without_need_fields": [
+  "environment"
+ ],
+ "labels": {
+  "o2_pct": "oxygen concentration",
+  "pressure_kpa": "pressure",
+  "material_id": "material",
+  "sample_geometry": "sample shape",
+  "fuel_phase": "fuel phase",
+  "flow_direction": "flow direction",
+  "test_end": "test end",
+  "flow_event": "event",
+  "fuel_material": "material"
+ }
 }
