@@ -153,9 +153,11 @@ def main():
                 with open(os.path.join(DIST, "data", "answers", f"{sid}_index.json"), "w", encoding="utf-8") as fh:
                     json.dump(index, fh, ensure_ascii=False)
                 OPTIONAL_BUILT.append(f"data/answers/{sid}_index.json")
-    og = os.path.join(HERE, "media", "02_lunar_top.png")
-    if os.path.exists(og):  # link preview image; retaken with the final page at U5
-        shutil.copy(og, os.path.join(DIST, "og.png"))
+    # Link preview image: web/media/og.png (1200 x 630, written by capture_media.mjs), else the old draft.
+    for og in (os.path.join(HERE, "media", "og.png"), os.path.join(HERE, "media", "02_lunar_top.png")):
+        if os.path.exists(og):
+            shutil.copy(og, os.path.join(DIST, "og.png"))
+            break
     # The commit the site was built from, so links to source files and rows point at
     # exactly the files the page reads (GITHUB_SHA in Actions, git HEAD locally).
     sha = os.environ.get("GITHUB_SHA")
