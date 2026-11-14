@@ -88,7 +88,7 @@ P4,prevention,Exploration atmosphere,PSI-23,acme_s_flame,test_day,not_test_level
 P4,prevention,Exploration atmosphere,PSI-47,daft,session,not_test_level,0,0,0,0,,,One row per sampling session; no combustion test
 P4,prevention,Exploration atmosphere,PSI-142,data_summary_table,dataset_index,not_test_level,0,0,0,0,,,Index of figures in publications
 S1,suppression,Extinction conditions,PSI-69,flex,test,measured,274,274,274,274,,test_end;extinction_diameter_mm,
-S1,suppression,Extinction conditions,PSI-25,bass2,test,measured,129,129,18,18,,flow_event,
+S1,suppression,Extinction conditions,PSI-25,bass2,test,measured,129,129,20,20,,flow_event,
 S1,suppression,Extinction conditions,PSI-26,bass,test,none,122,0,0,0,o2_pct,,
 S1,suppression,Extinction conditions,PSI-39,cfi,test,conditions_only,87,87,0,0,,,
 S1,suppression,Extinction conditions,PSI-98,saffire1,test,conditions_only,2,2,0,0,,,
@@ -132,18 +132,18 @@ D1,detection,Combustion products,PSI-23,acme_s_flame,test_day,not_test_level,0,0
 D1,detection,Combustion products,PSI-47,daft,session,not_test_level,0,0,0,0,,,One row per sampling session; no combustion test
 D1,detection,Combustion products,PSI-142,data_summary_table,dataset_index,not_test_level,0,0,0,0,,,Index of figures in publications
 D2,detection,Smoke generation conditions,PSI-69,flex,test,out_of_scope,0,0,0,0,,,no test within the scope of this need
-D2,detection,Smoke generation conditions,PSI-25,bass2,test,conditions_only,129,122,0,0,,,
-D2,detection,Smoke generation conditions,PSI-26,bass,test,none,122,0,0,0,flow_cms,,
+D2,detection,Smoke generation conditions,PSI-25,bass2,test,none,129,0,0,0,aging_time_s,,
+D2,detection,Smoke generation conditions,PSI-26,bass,test,none,122,0,0,0,flow_cms;aging_time_s,,
 D2,detection,Smoke generation conditions,PSI-39,cfi,test,out_of_scope,0,0,0,0,,,no test within the scope of this need
-D2,detection,Smoke generation conditions,PSI-98,saffire1,test,conditions_only,2,2,0,0,,,
-D2,detection,Smoke generation conditions,PSI-99,saffire2,test,conditions_only,9,7,0,0,,,
-D2,detection,Smoke generation conditions,PSI-100,saffire3,test,conditions_only,2,2,0,0,,,
+D2,detection,Smoke generation conditions,PSI-98,saffire1,test,none,2,0,0,0,aging_time_s,,
+D2,detection,Smoke generation conditions,PSI-99,saffire2,test,none,9,0,0,0,aging_time_s,,
+D2,detection,Smoke generation conditions,PSI-100,saffire3,test,none,2,0,0,0,aging_time_s,,
 D2,detection,Smoke generation conditions,PSI-159,cfig_normal,test,out_of_scope,0,0,0,0,,,no test within the scope of this need
 D2,detection,Smoke generation conditions,PSI-159,cfig_inverse,test,out_of_scope,0,0,0,0,,,no test within the scope of this need
 D2,detection,Smoke generation conditions,PSI-10,flame_design_normal,test,out_of_scope,0,0,0,0,,,no test within the scope of this need
 D2,detection,Smoke generation conditions,PSI-10,flame_design_inverse,test,out_of_scope,0,0,0,0,,,no test within the scope of this need
 D2,detection,Smoke generation conditions,PSI-102,same,test,measured,4,4,4,4,,mass_loss_rate_mg_min,
-D2,detection,Smoke generation conditions,PSI-101,same_r,test,conditions_only,109,109,0,0,,,
+D2,detection,Smoke generation conditions,PSI-101,same_r,test,conditions_only,109,104,0,0,,,
 D2,detection,Smoke generation conditions,PSI-107,spice,test,out_of_scope,0,0,0,0,,,no test within the scope of this need
 D2,detection,Smoke generation conditions,PSI-106,slice,test_day,not_test_level,0,0,0,0,,,One row per test day; no per-test conditions
 D2,detection,Smoke generation conditions,PSI-68,flex2,planned_matrix,not_test_level,0,0,0,0,,,"One row per fuel with the planned ranges of conditions, not tests"

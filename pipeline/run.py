@@ -10,6 +10,9 @@ declared in pipeline/spec/:
     sources.json    how each PSI table maps onto the standard variables
     references.json the standards, requirements and published results behind each need
     coverage.json   bin edges for the coverage grid
+    scenarios.json  crewed environments to compare the recorded tests with
+    indicators.json what is computed per need, by fixed templates
+    materials.json  one id per material, with the names used in the tables
 
 Stages
     1 ingest       read each PSI table as text; nothing is changed
@@ -50,6 +53,10 @@ TRACE_COLS = ["flags", "source_file", "source_row"]
 def spec(name):
     with open(os.path.join(HERE, "spec", name), encoding="utf-8") as f:
         return json.load(f)
+
+
+MATERIAL_IDS = {alias.strip().lower(): m["id"]
+                for m in spec("materials.json")["materials"] for alias in m["aliases"]}
 
 
 def empty(v):
@@ -103,6 +110,13 @@ def standardize(source, variables, report):
             for k, v in (result if isinstance(result, dict) else {var: result}).items():
                 if not empty(v):
                     rec[k], origin[k] = v, c["from"]
+        name = rec.get("fuel_material")
+        if not empty(name):
+            mid = MATERIAL_IDS.get(str(name).strip().lower())
+            if mid:
+                rec["material_id"], origin["material_id"] = mid, "(materials.json from fuel_material)"
+            else:
+                flags.append("material_id:not_in_vocabulary")
         rec["_flags"], rec["_origin"] = flags, origin
         rec["source_file"], rec["source_row"] = source["file"], source_row
         tests.append(rec)
@@ -238,6 +252,161 @@ def coverage_grid(tests, cov):
     return pd.DataFrame(rows)
 
 
+def in_range(value, r):
+    low = r.get("min") is None or value > r["min"] or (value == r["min"] and r.get("min_inclusive", True))
+    high = r.get("max") is None or value < r["max"] or (value == r["max"] and r.get("max_inclusive", False))
+    return low and high
+
+
+def match_scenarios(tests, links, needs, scen_spec, report):
+    """Per scenario: mark every test against the scenario ranges, then count
+    the tests usable for each need by match tier (scenarios.json)."""
+    usable = {}
+    for row in links.itertuples():
+        usable.setdefault(row.need_id, set()).add(row.test_id)
+    test_rows, need_rows = [], []
+    tiers = ["atmosphere", "oxygen_only", "pressure_only", "other"]
+    for sc in scen_spec["scenarios"]:
+        marks = {}
+        for t in tests:
+            m = {}
+            for var in ("o2_pct", "pressure_kpa", "flow_cms"):
+                r = sc["ranges"].get(var)
+                v = t.get(var)
+                m[var] = ("not_specified" if r is None else "not_recorded" if empty(v)
+                          else "in" if in_range(v, r) else "out")
+            if m["o2_pct"] in ("in", "out") and t.get("o2_basis") != "ambient":
+                m["o2_pct"] = "not_ambient"
+            m["gravity"] = "same" if t.get("gravity_level") == sc["gravity_level"] else "different"
+            o, p = m["o2_pct"], m["pressure_kpa"]
+            m["tier"] = ("atmosphere" if o == "in" and p == "in"
+                         else "oxygen_only" if o == "in" and p == "not_recorded"
+                         else "pressure_only" if p == "in" and o == "not_recorded" else "other")
+            marks[t["test_id"]] = m
+            test_rows.append({"scenario_id": sc["id"], "test_id": t["test_id"],
+                              "investigation_id": t["investigation_id"], "source_id": t["source_id"],
+                              "fuel_phase": t.get("fuel_phase"), "o2_match": o, "pressure_match": p,
+                              "flow_match": m["flow_cms"], "gravity_match": m["gravity"],
+                              "tier": m["tier"]})
+        by_id = {t["test_id"]: t for t in tests}
+        for need in needs:
+            ids = usable.get(need["id"], set())
+            row = {"scenario_id": sc["id"], "need_id": need["id"], "need": need["name"],
+                   "usable_tests": len(ids)}
+            for tier in tiers:
+                hit = [i for i in ids if marks[i]["tier"] == tier]
+                row[f"tests_{tier}"] = len(hit)
+                row[f"investigations_{tier}"] = ";".join(sorted(
+                    {by_id[i]["investigation_id"] for i in hit}, key=lambda x: int(x.split("-")[1])))
+            row["status"] = next((name for name, tier in (("in_atmosphere", "atmosphere"),
+                                                           ("oxygen_only", "oxygen_only"),
+                                                           ("pressure_only", "pressure_only"))
+                                  if row[f"tests_{tier}"]),
+                                 "other_atmosphere" if ids else "not_measured")
+            best = [i for i in ids if marks[i]["tier"] in ("atmosphere", "oxygen_only")]
+            row["matched_tests_flow_in_range"] = sum(marks[i]["flow_cms"] == "in" for i in best)
+            row["matched_tests_flow_not_recorded"] = sum(marks[i]["flow_cms"] == "not_recorded" for i in best)
+            row["matched_tests_same_gravity"] = sum(marks[i]["gravity"] == "same" for i in best)
+            gaps = []
+            if ids and not any(marks[i]["o2_pct"] == "in" for i in ids):
+                gaps.append("oxygen:not_recorded" if all(marks[i]["o2_pct"] == "not_recorded" for i in ids)
+                            else "oxygen:no_usable_test_in_range")
+            if ids and not any(marks[i]["pressure_kpa"] == "in" for i in ids):
+                gaps.append("pressure:not_recorded" if all(marks[i]["pressure_kpa"] == "not_recorded" for i in ids)
+                            else "pressure:no_usable_test_in_range")
+            if ids and not any(marks[i]["gravity"] == "same" for i in ids):
+                gaps.append(f"gravity:no_usable_test_at_{sc['gravity_level']}")
+            if not ids:
+                gaps.append("need:no_usable_test")
+            row["gaps"] = ";".join(gaps)
+            row["scenario_gravity_level"] = sc["gravity_level"]
+            need_rows.append(row)
+    # consistency with the ui presets
+    path = os.path.join(ROOT, "scoring", "scoring_config.json")
+    mismatch = []
+    if os.path.exists(path):
+        presets = json.load(open(path, encoding="utf-8")).get("presets", {})
+        for sc in scen_spec["scenarios"]:
+            values = presets.get(sc["id"], {}).get("values")
+            if values is None:
+                mismatch.append(f"{sc['id']}: no preset with this id")
+            else:
+                mismatch += [f"{sc['id']}.{k}: {v} here, {values.get(k)} in preset"
+                             for k, v in sc["nominal"].items() if values.get(k) != v]
+    report["scenario_preset_mismatch"] = mismatch
+    return pd.DataFrame(test_rows), pd.DataFrame(need_rows)
+
+
+OPS = {"==": lambda a, b: a == b, "!=": lambda a, b: a != b, ">": lambda a, b: a > b,
+       ">=": lambda a, b: a >= b, "<": lambda a, b: a < b, "<=": lambda a, b: a <= b}
+
+
+def passes(t, cond):
+    var, op = cond[0], cond[1]
+    v = ";".join(t["_flags"]) if var == "flags" else t.get(var)
+    if op == "notnull":
+        return not empty(v)
+    if op == "contains":
+        return cond[2] in (v or "")
+    return not empty(v) and OPS[op](v, cond[2])
+
+
+def indicators(tests, links, needs, ind_spec, variables, derived, ref_items):
+    """Apply the fixed templates of indicators.json. Returns the indicator
+    table and the list of tests behind every row."""
+    units = {k: v["unit"] for k, v in {**variables, **derived}.items()}
+    need_by_id = {n["id"]: n for n in needs}
+    usable = {}
+    for row in links.itertuples():
+        usable.setdefault(row.need_id, set()).add(row.test_id)
+    rows, members = [], []
+    for ind in ind_spec["indicators"]:
+        need = need_by_id[ind["need_id"]]
+        for ref in ind["definition_ref"] + ind.get("compare_with", []):
+            if ref not in ref_items:
+                raise SystemExit(f"indicator {ind['id']}: unknown reference item {ref}")
+        var = ind.get("variable")
+        if var and var not in units and var != "flags":
+            raise SystemExit(f"indicator {ind['id']}: unknown variable {var}")
+        if ind["population"] == "usable":
+            pop = [t for t in tests if t["test_id"] in usable.get(need["id"], set())]
+        else:
+            pop = [t for t in tests
+                   if all(t.get(k) in allowed for k, allowed in need.get("scope", {}).items())
+                   and all(not empty(t.get(v)) for v in need["conditions_required"])]
+        pop = [t for t in pop if all(passes(t, c) for c in ind["where"])]
+        if ind["template"] != "count":
+            pop = [t for t in pop if not empty(t.get(var))]
+        groups = {}
+        for t in pop:
+            key = tuple("" if empty(t.get(g)) else str(t.get(g)) for g in ind["group_by"])
+            groups.setdefault(key, []).append(t)
+        for key, ts in sorted(groups.items()):
+            group = ";".join(f"{g}={v}" for g, v in zip(ind["group_by"], key))
+            base = {"indicator_id": ind["id"], "need_id": ind["need_id"], "label": ind["label"],
+                    "group": group, "variable": var, "unit": units.get(var, ""), "n_tests": len(ts),
+                    "investigation_ids": ";".join(sorted({t["investigation_id"] for t in ts},
+                                                         key=lambda x: int(x.split("-")[1]))),
+                    "definition_ref": ";".join(ind["definition_ref"]),
+                    "compare_with": ";".join(ind.get("compare_with", [])),
+                    "reading": ind["reading"]}
+            if ind["template"] == "summary":
+                values = pd.Series([t[var] for t in ts], dtype=float)
+                for stat in ind["stats"]:
+                    rows.append({**base, "stat": stat, "category": "",
+                                 "value": round(float(getattr(values, stat)()), 5)})
+            elif ind["template"] == "count_by":
+                for cat, n in sorted(Counter(str(t[var]) for t in ts).items()):
+                    rows.append({**base, "stat": "count", "category": cat, "value": n})
+            else:
+                rows.append({**base, "stat": "count", "category": "", "value": len(ts)})
+            members += [{"indicator_id": ind["id"], "group": group, "test_id": t["test_id"],
+                         "value": t.get(var) if var != "flags" else ""} for t in ts]
+    cols = ["indicator_id", "need_id", "label", "group", "stat", "category", "value", "unit",
+            "n_tests", "investigation_ids", "variable", "definition_ref", "compare_with", "reading"]
+    return pd.DataFrame(rows, columns=cols), pd.DataFrame(members)
+
+
 def need_references(needs, references):
     """Need -> reference items. Fails if a need points to an unknown item."""
     items = {i["id"]: (r, i) for r in references for i in r["items"]}
@@ -305,6 +474,17 @@ def main():
     grid = coverage_grid(tests, spec("coverage.json"))
     assert grid.tests.sum() == len(tests)
     grid.to_csv(os.path.join(OUT, "coverage_grid.csv"), index=False)
+    sc_tests, sc_needs = match_scenarios(tests, links, needs["needs"], spec("scenarios.json"), report)
+    sc_tests.to_csv(os.path.join(OUT, "scenario_tests.csv"), index=False)
+    sc_needs.to_csv(os.path.join(OUT, "scenario_needs.csv"), index=False)
+    with open(os.path.join(OUT, "run_report.json"), "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=1, ensure_ascii=False)
+    all_refs = spec("references.json")["references"]
+    ref_items = {i["id"] for r in all_refs for i in r["items"]}
+    ind_table, ind_tests = indicators(tests, links, needs["needs"], spec("indicators.json"),
+                                      variables, derived, ref_items)
+    ind_table.to_csv(os.path.join(OUT, "indicators.csv"), index=False)
+    ind_tests.to_csv(os.path.join(OUT, "indicator_tests.csv"), index=False)
     refs = need_references(needs["needs"], spec("references.json")["references"])
     refs.to_csv(os.path.join(OUT, "need_references.csv"), index=False)
 

@@ -159,7 +159,9 @@ def bass_flow(cell, flags, var, max_cms=40.0, **_):
     return {
         "flow_cms": numbers[0] if numbers and not s.strip().startswith("<") else None,
         "flow_min_cms": min(numbers) if numbers else None,
-        "flow_event": "blowoff" if "blowoff" in s else "extinction" if "ext" in s else None,
+        "flow_event": ("blowoff" if "blowoff" in s else "no_ignition" if "no ign" in s
+                       else "not_sustained" if "would not stay lit" in s
+                       else "extinction" if "ext" in s else None),
     }
 
 

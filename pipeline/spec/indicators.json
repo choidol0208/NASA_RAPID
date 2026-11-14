@@ -1,0 +1,499 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "purpose": "What is computed for each information need from the tests linked to it. Every indicator is one of three fixed templates applied to one variable; this file only chooses the variable, the filter and the grouping. An indicator describes what was recorded. Its 'reading' says what it does not mean. Nothing here is a NASA result; where a published result exists for the same investigation, 'compare_with' points to it in references.json.",
+  "templates": {
+   "summary": "number of tests with a value, and the listed statistics (min, median, max) of the variable",
+   "count_by": "number of tests for each value of the variable",
+   "count": "number of tests that pass the filter"
+  },
+  "population": {
+   "usable": "tests linked to the need in need_tests.csv",
+   "in_scope": "tests within the need's scope that record every required condition, with or without an outcome"
+  },
+  "where": "filters as [variable, operator, value]; operators: ==, !=, >, >=, <, <=, notnull, contains"
+ },
+ "indicators": [
+  {
+   "id": "P1.o2_tested",
+   "need_id": "P1",
+   "label": "Initial oxygen of the tests run",
+   "template": "summary",
+   "population": "usable",
+   "variable": "o2_pct",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id",
+    "sample_geometry"
+   ],
+   "definition_ref": [
+    "ISO16697.threshold",
+    "6001B.T1.moc"
+   ],
+   "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there."
+  },
+  {
+   "id": "P1.o2_with_oxygen_drop",
+   "need_id": "P1",
+   "label": "Initial oxygen of tests in which the oxygen reading fell",
+   "template": "summary",
+   "population": "usable",
+   "variable": "o2_pct",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [
+    [
+     "o2_consumed_pct_points",
+     ">",
+     0
+    ]
+   ],
+   "group_by": [
+    "material_id",
+    "sample_geometry"
+   ],
+   "definition_ref": [
+    "ICES19.boundary"
+   ],
+   "compare_with": [
+    "ICES19.limits"
+   ],
+   "reading": "A fall of the oxygen reading during the test is used as a sign that the sample burned. No threshold is put on the size of the fall. The minimum is the lowest initial oxygen with that sign in this table, not the limiting oxygen concentration."
+  },
+  {
+   "id": "P1.flow_events",
+   "need_id": "P1",
+   "label": "Events noted next to the flow settings",
+   "template": "count_by",
+   "population": "usable",
+   "variable": "flow_event",
+   "where": [
+    [
+     "flow_event",
+     "notnull"
+    ]
+   ],
+   "group_by": [
+    "material_id",
+    "sample_geometry"
+   ],
+   "definition_ref": [
+    "ICES19.boundary"
+   ],
+   "reading": "Number of tests in which the operator noted an extinction or a blowoff beside the flow settings. Extinction at low flow and blowoff at high flow are the two branches of the flammability boundary."
+  },
+  {
+   "id": "P1.o2_at_flow_event",
+   "need_id": "P1",
+   "label": "Initial oxygen of tests with a noted flow event",
+   "template": "summary",
+   "population": "usable",
+   "variable": "o2_pct",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [
+    [
+     "flow_event",
+     "notnull"
+    ]
+   ],
+   "group_by": [
+    "material_id",
+    "sample_geometry",
+    "flow_event"
+   ],
+   "definition_ref": [
+    "ICES19.boundary"
+   ],
+   "compare_with": [
+    "ICES19.limits"
+   ],
+   "reading": "Initial oxygen of the tests in which an extinction or blowoff was noted. The oxygen at the moment of the event is not in the table."
+  },
+  {
+   "id": "P1.lowest_flow_listed_at_extinction",
+   "need_id": "P1",
+   "label": "Lowest flow setting listed in tests with a noted extinction",
+   "template": "summary",
+   "population": "usable",
+   "variable": "flow_min_cms",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [
+    [
+     "flow_event",
+     "==",
+     "extinction"
+    ]
+   ],
+   "group_by": [
+    "material_id",
+    "sample_geometry"
+   ],
+   "definition_ref": [
+    "ICES19.boundary",
+    "ICES19.fanoff",
+    "ICES19.issflow"
+   ],
+   "reading": "The lowest flow speed written in the cell of a test where extinction was noted. The table does not say at which setting the flame went out."
+  },
+  {
+   "id": "P2.ignition_power",
+   "need_id": "P2",
+   "label": "Igniter power",
+   "template": "summary",
+   "population": "usable",
+   "variable": "ignition_power_w",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id"
+   ],
+   "definition_ref": [
+    "6001B.T1.purpose"
+   ],
+   "reading": "Power of the igniter used, as recorded. It is the setting of the experiment, not the minimum energy needed to ignite the material."
+  },
+  {
+   "id": "P2.ignition_time",
+   "need_id": "P2",
+   "label": "Igniter on-time",
+   "template": "summary",
+   "population": "usable",
+   "variable": "ignition_time_s",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id"
+   ],
+   "definition_ref": [
+    "6001B.T1.purpose"
+   ],
+   "reading": "How long the igniter was on, as recorded. Not a measured ignition delay."
+  },
+  {
+   "id": "P3.spread_rate",
+   "need_id": "P3",
+   "label": "Flame spread rate in microgravity",
+   "template": "summary",
+   "population": "usable",
+   "variable": "spread_rate_mm_s",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id",
+    "flow_direction"
+   ],
+   "definition_ref": [
+    "SAE2008.spread",
+    "CP2003.response"
+   ],
+   "compare_with": [
+    "SAF.result"
+   ],
+   "reading": "Spread rate as written in the table. Cells with text instead of a number are not counted."
+  },
+  {
+   "id": "P3.burn_length",
+   "need_id": "P3",
+   "label": "Length burned in microgravity",
+   "template": "summary",
+   "population": "usable",
+   "variable": "burn_length_cm",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id",
+    "flow_direction"
+   ],
+   "definition_ref": [
+    "6001B.T1.pass"
+   ],
+   "reading": "Burn length as written in the table. The 15 cm criterion of NASA-STD-6001B Test 1 is defined for a 30 cm specimen in normal gravity without air flow; these tests were not run under that standard and are not judged against it."
+  },
+  {
+   "id": "P3.burn_time",
+   "need_id": "P3",
+   "label": "Burn time",
+   "template": "summary",
+   "population": "usable",
+   "variable": "burn_time_s",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id",
+    "flow_direction"
+   ],
+   "definition_ref": [
+    "CP2003.response"
+   ],
+   "reading": "Burn time as written in the table."
+  },
+  {
+   "id": "S1.test_end",
+   "need_id": "S1",
+   "label": "How the tests ended",
+   "template": "count_by",
+   "population": "usable",
+   "variable": "test_end",
+   "where": [
+    [
+     "test_end",
+     "notnull"
+    ]
+   ],
+   "group_by": [
+    "fuel_phase",
+    "material_id"
+   ],
+   "definition_ref": [
+    "FLEX.loi",
+    "FLEX.objectives"
+   ],
+   "reading": "Number of tests by the recorded end: extinction, disruption or completion for droplets (FLEX); self-extinction or flow termination for burner flames (CFI-G)."
+  },
+  {
+   "id": "S1.o2_by_test_end",
+   "need_id": "S1",
+   "label": "Initial oxygen by how the test ended",
+   "template": "summary",
+   "population": "usable",
+   "variable": "o2_pct",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [
+    [
+     "test_end",
+     "notnull"
+    ],
+    [
+     "o2_basis",
+     "==",
+     "ambient"
+    ]
+   ],
+   "group_by": [
+    "fuel_phase",
+    "material_id",
+    "test_end"
+   ],
+   "definition_ref": [
+    "FLEX.loi"
+   ],
+   "compare_with": [
+    "MST14.loi"
+   ],
+   "reading": "Range of ambient oxygen of the tests that ended in each way. Not the limiting oxygen index: the LOI is found from extinction diameters, which this indicator does not use."
+  },
+  {
+   "id": "S1.co2_added",
+   "need_id": "S1",
+   "label": "Carbon dioxide added to the atmosphere",
+   "template": "summary",
+   "population": "usable",
+   "variable": "co2_pct",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [
+    [
+     "co2_pct",
+     ">",
+     0
+    ]
+   ],
+   "group_by": [
+    "material_id"
+   ],
+   "definition_ref": [
+    "FLEX.mec",
+    "TB008.ventilation"
+   ],
+   "reading": "Range of carbon dioxide concentration in the tests where it was added as a suppressant. Not a minimum extinction concentration."
+  },
+  {
+   "id": "S1.helium_added",
+   "need_id": "S1",
+   "label": "Helium added to the atmosphere",
+   "template": "summary",
+   "population": "usable",
+   "variable": "he_pct",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [
+    [
+     "he_pct",
+     ">",
+     0
+    ]
+   ],
+   "group_by": [
+    "material_id"
+   ],
+   "definition_ref": [
+    "FLEX.mec"
+   ],
+   "reading": "Range of helium concentration in the tests where it was added. Not a minimum extinction concentration."
+  },
+  {
+   "id": "D1.co_produced",
+   "need_id": "D1",
+   "label": "Rise in carbon monoxide over the test",
+   "template": "summary",
+   "population": "usable",
+   "variable": "co_produced_ppm",
+   "stats": [
+    "min",
+    "median",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id",
+    "sample_geometry"
+   ],
+   "definition_ref": [
+    "3001.T6.2-3",
+    "TB008.co"
+   ],
+   "reading": "Final minus initial CO reading in the test duct. A duct reading, not a cabin concentration: it is not comparable with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range."
+  },
+  {
+   "id": "D1.co_over_range",
+   "need_id": "D1",
+   "label": "Tests with the CO reading over range",
+   "template": "count",
+   "population": "usable",
+   "variable": "co_final_ppm",
+   "where": [
+    [
+     "flags",
+     "contains",
+     "co_final_ppm:over_range"
+    ]
+   ],
+   "group_by": [
+    "material_id",
+    "sample_geometry"
+   ],
+   "definition_ref": [
+    "3001.T6.2-3"
+   ],
+   "reading": "Number of tests in which the final CO reading was recorded as over range (above 1000 ppm per the BASS-II ReadMe)."
+  },
+  {
+   "id": "D1.co_to_co2",
+   "need_id": "D1",
+   "label": "CO produced per CO2 produced",
+   "template": "summary",
+   "population": "usable",
+   "variable": "co_to_co2_molar_ratio",
+   "stats": [
+    "min",
+    "median",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id",
+    "sample_geometry"
+   ],
+   "definition_ref": [
+    "TB008.co"
+   ],
+   "reading": "Molar ratio computed by the pipeline (variables.json) from the rises in CO and CO2. A team computation."
+  },
+  {
+   "id": "D2.flow",
+   "need_id": "D2",
+   "label": "Air flow past the heated sample",
+   "template": "summary",
+   "population": "in_scope",
+   "variable": "flow_cms",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id"
+   ],
+   "definition_ref": [
+    "SAME.controls",
+    "SAME.sizes"
+   ],
+   "reading": "Range of air flow in the smoke tests. Particle sizes, which the flow affects, are not in the PSI tables."
+  },
+  {
+   "id": "D2.aging",
+   "need_id": "D2",
+   "label": "Smoke aging time",
+   "template": "summary",
+   "population": "in_scope",
+   "variable": "aging_time_s",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id"
+   ],
+   "definition_ref": [
+    "SAME.controls",
+    "SAME.sizes"
+   ],
+   "reading": "Range of aging time in the smoke tests."
+  },
+  {
+   "id": "D2.mass_loss",
+   "need_id": "D2",
+   "label": "Sample mass loss rate",
+   "template": "summary",
+   "population": "usable",
+   "variable": "mass_loss_rate_mg_min",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [],
+   "group_by": [
+    "material_id"
+   ],
+   "definition_ref": [
+    "SAME.controls"
+   ],
+   "reading": "Mass loss rate as written in the SAME table."
+  }
+ ]
+}
