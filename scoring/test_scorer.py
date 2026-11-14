@@ -151,6 +151,23 @@ class Interpretation(unittest.TestCase):
         sc, *_ = scorer.interpret("CO2 5% and O2 25%", CFG)
         self.assertEqual(sc["o2_pct"], 25.0)
 
+    def test_not_understood_words(self):
+        out = scorer.rank("battery enclosure for the ISS")
+        self.assertEqual(out["not_understood"], ["battery enclosure"])
+        self.assertIn("not_understood", [w["code"] for w in out["warnings"]])
+        self.assertEqual(scorer.rank("3D printer on the Moon")["not_understood"], ["3d printer"])
+        out = scorer.rank("glove box")
+        self.assertEqual((out["status"], out["not_understood"]), ("need_input", ["glove box"]))
+        for q in ("ISS", "lunar habitat", "ISS cotton fabric", "lunar habitat cotton fabric", "달 기지 면직물",
+                  "ISS at 30% O2 and 10.2 psi", "CO2 suppression of heptane fire"):
+            out = scorer.rank(q)
+            self.assertEqual(out["not_understood"], [], q)
+            self.assertNotIn("not_understood", [w["code"] for w in out["warnings"]], q)
+        # words that are not read change no score
+        a = [(r["config_id"], r["score"]) for r in scorer.rank("ISS")["ranking"]]
+        b = [(r["config_id"], r["score"]) for r in scorer.rank("battery enclosure for the ISS")["ranking"]]
+        self.assertEqual(a, b)
+
     def test_ceiling_is_not_fabric(self):
         sc, *_ = scorer.interpret("천장 배선 과열", CFG)  # 천장 = ceiling, not 천 (cloth)
         self.assertNotEqual(sc.get("fuel_class"), "fabric")
