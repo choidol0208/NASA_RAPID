@@ -139,6 +139,37 @@ class Ranking(unittest.TestCase):
             self.assertLessEqual(r["score"], 100)
 
 
+class AssumedAtmosphereWording(unittest.TestCase):
+    """A value filled in by the atmosphere fallback was not recorded, so it is never worded as 'tested'."""
+
+    def test_bass_c01_iss_cotton_not_tested(self):
+        out = scorer.rank("ISS cotton fabric")
+        rows = [r for r in out["ranking"] + out["results"] if r["config_id"] == "BASS-C01"]
+        self.assertTrue(rows, "BASS-C01 should be ranked for 'ISS cotton fabric'")
+        for r in rows:
+            self.assertIn("O2", r["assumed_dims"])
+            self.assertNotIn("tested 21%", r["why"])
+            self.assertNotIn("tested 21%", r["main_gap"])
+
+    def test_no_assumed_value_worded_as_tested(self):
+        for q in ("ISS cotton fabric", "lunar habitat", "heptane droplet ISS", "smoke detector on ISS", "ISS"):
+            for r in scorer.rank(q)["ranking"]:
+                text = r["why"] + " " + r["main_gap"]
+                if "O2" in r["assumed_dims"]:
+                    self.assertNotIn("O2 tested", text, (q, r["config_id"]))
+                if "pressure" in r["assumed_dims"]:
+                    self.assertNotIn("pressure tested", text, (q, r["config_id"]))
+
+    def test_recorded_reasons_come_first(self):
+        for r in scorer.rank("ISS cotton fabric")["ranking"]:
+            assumed = {"o2"} if "O2" in r["assumed_dims"] else set()
+            if "pressure" in r["assumed_dims"]:
+                assumed.add("pressure")
+            recorded = [d for d in r["contributions"] if d not in r["unknown_dims"] and d not in assumed]
+            if assumed and len(recorded) >= 2:
+                self.assertNotRegex(r["why"].split(";")[0], r"^(O2|pressure) match", r["config_id"])
+
+
 class CatalogIntegrity(unittest.TestCase):
     def test_counts_and_links(self):
         self.assertEqual(len(INV), 24)

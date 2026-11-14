@@ -307,11 +307,17 @@ function explain(sc, c, s, cfg, fallback, speed) {
   const sim = s.similarity, W = cfg.warnings;
   const labels = { o2: "O2", pressure: "pressure", flow: "flow", fuel: "fuel", geometry: "sample shape", role: "research purpose", diluent: "diluent" };
   const known = Object.keys(s.contributions).filter((d) => !s.unknown.includes(d));
-  const best = [...known].sort((a, b) => -s.contributions[a] - -s.contributions[b]).slice(0, 2);
+  const fb = fallback || [];
+  const assumed = new Set([...(fb.includes("O2") ? ["o2"] : []), ...(fb.includes("pressure") ? ["pressure"] : [])]);
+  // Reasons come from recorded values first; an assumed (not recorded) value is a reason only if nothing else is left.
+  const best = [...known].sort((a, b) => (assumed.has(a) - assumed.has(b)) || (-s.contributions[a] - -s.contributions[b])).slice(0, 2);
   const gaps = [...known].sort((a, b) => sim[a] - sim[b]).slice(0, 1);
   const detail = {
-    o2: `O2 tested ${fmtRange(c, "o2_min_pct", "o2_max_pct", "%")}`,
-    pressure: `pressure tested ${fmtRange(c, "pressure_min_kpa", "pressure_max_kpa", " kPa")}`,
+    // A value filled in by the atmosphere fallback was not recorded: never word it as "tested".
+    o2: (fallback || []).includes("O2") ? `O2 not recorded, assumed ${fmtRange(c, "o2_min_pct", "o2_max_pct", "%")}`
+      : `O2 tested ${fmtRange(c, "o2_min_pct", "o2_max_pct", "%")}`,
+    pressure: (fallback || []).includes("pressure") ? `pressure not recorded, assumed ${fmtRange(c, "pressure_min_kpa", "pressure_max_kpa", " kPa")}`
+      : `pressure tested ${fmtRange(c, "pressure_min_kpa", "pressure_max_kpa", " kPa")}`,
     flow: `flow ${c.flow_config || "n/a"} at ${fmtRange(c, "flow_min_cms", "flow_max_cms", " cm/s")}`,
     fuel: `fuel ${c.fuel_material}`,
     geometry: `${c.sample_geometry} (${c.thermal_regime || "regime n/a"})`,

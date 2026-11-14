@@ -404,11 +404,18 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
     labels = {"o2": "O2", "pressure": "pressure", "flow": "flow", "fuel": "fuel", "geometry": "sample shape",
               "role": "research purpose", "diluent": "diluent"}
     known = [d for d in s["contributions"] if d not in s["unknown"]]
-    best = sorted(known, key=lambda d: -s["contributions"][d])[:2]
+    assumed = {"o2"} if "O2" in fallback else set()
+    if "pressure" in fallback:
+        assumed.add("pressure")
+    # Reasons come from recorded values first; an assumed (not recorded) value is a reason only if nothing else is left.
+    best = sorted(known, key=lambda d: (d in assumed, -s["contributions"][d]))[:2]
     gaps = sorted(known, key=lambda d: sim[d])[:1]
     detail = {
-        "o2": f"O2 tested {_fmt_range(c, 'o2_min_pct', 'o2_max_pct', '%')}",
-        "pressure": f"pressure tested {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}",
+        # A value filled in by the atmosphere fallback was not recorded: never word it as "tested".
+        "o2": (f"O2 not recorded, assumed {_fmt_range(c, 'o2_min_pct', 'o2_max_pct', '%')}" if "O2" in fallback
+               else f"O2 tested {_fmt_range(c, 'o2_min_pct', 'o2_max_pct', '%')}"),
+        "pressure": (f"pressure not recorded, assumed {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}" if "pressure" in fallback
+                     else f"pressure tested {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}"),
         "flow": f"flow {c.get('flow_config') or 'n/a'} at {_fmt_range(c, 'flow_min_cms', 'flow_max_cms', ' cm/s')}",
         "fuel": f"fuel {c.get('fuel_material')}",
         "geometry": f"{c.get('sample_geometry')} ({c.get('thermal_regime') or 'regime n/a'})",
