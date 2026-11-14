@@ -8,8 +8,9 @@
    "count": "number of tests that pass the filter"
   },
   "population": {
-   "usable": "tests linked to the need in need_tests.csv",
-   "in_scope": "tests within the need's scope that record every required condition, with or without an outcome"
+   "usable": "tests linked to the need whose investigation states the need as an objective (needs.json 'stated_by')",
+   "recorded": "tests that record the needed variables, whether or not their investigation states the need",
+   "in_scope": "tests within the need's scope that record every required condition, with or without an outcome, from investigations that state the need"
   },
   "where": "filters as [variable, operator, value]; operators: ==, !=, >, >=, <, <=, notnull, contains"
  },
@@ -370,7 +371,7 @@
    "need_id": "D1",
    "label": "Rise in carbon monoxide over the test",
    "template": "summary",
-   "population": "usable",
+   "population": "recorded",
    "variable": "co_produced_ppm",
    "stats": [
     "min",
@@ -386,14 +387,14 @@
     "3001.T6.2-3",
     "TB008.co"
    ],
-   "reading": "Final minus initial CO reading in the test duct. A duct reading, not a cabin concentration: it is not comparable with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range."
+   "reading": "Final minus initial CO reading in the test duct. A duct reading, not a cabin concentration: it is not comparable with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. Side measurement: no investigation states combustion-product measurement as an objective."
   },
   {
    "id": "D1.co_over_range",
    "need_id": "D1",
    "label": "Tests with the CO reading over range",
    "template": "count",
-   "population": "usable",
+   "population": "recorded",
    "variable": "co_final_ppm",
    "where": [
     [
@@ -409,14 +410,14 @@
    "definition_ref": [
     "3001.T6.2-3"
    ],
-   "reading": "Number of tests in which the final CO reading was recorded as over range (above 1000 ppm per the BASS-II ReadMe)."
+   "reading": "Number of tests in which the final CO reading was recorded as over range (above 1000 ppm per the BASS-II ReadMe). Side measurement: no investigation states combustion-product measurement as an objective."
   },
   {
    "id": "D1.co_to_co2",
    "need_id": "D1",
    "label": "CO produced per CO2 produced",
    "template": "summary",
-   "population": "usable",
+   "population": "recorded",
    "variable": "co_to_co2_molar_ratio",
    "stats": [
     "min",
@@ -431,7 +432,7 @@
    "definition_ref": [
     "TB008.co"
    ],
-   "reading": "Molar ratio computed by the pipeline (variables.json) from the rises in CO and CO2. A team computation."
+   "reading": "Molar ratio computed by the pipeline (variables.json) from the rises in CO and CO2. A team computation. Side measurement: no investigation states combustion-product measurement as an objective."
   },
   {
    "id": "D2.flow",

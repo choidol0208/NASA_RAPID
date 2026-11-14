@@ -71,11 +71,13 @@ def main():
                           "label": ko["indicators"][s["id"]]["label"],
                           "reading": ko["indicators"][s["id"]]["reading"],
                           "compare": s.get("compare_with", []), "groups": groups})
+        stated = [{"inv": l["investigation_id"], "quote": l["quote"]} for l in need.get("stated_by", [])]
         docs = refs[refs.need_id == need["id"]][["title", "version", "url"]].drop_duplicates("title")
         k = ko["needs"][need["id"]]
         page_needs.append({"id": need["id"], "name": k["name"], "pillar": k["pillar"],
                            "question": k["question"], "criterion": k["criterion"],
-                           "docs": docs.to_dict("records"), "indicators": items})
+                           "docs": docs.to_dict("records"), "stated": stated,
+                           "stated_note": need.get("stated_by_note", ""), "indicators": items})
 
     scenarios = []
     for sid, g in sc.groupby("scenario_id", sort=False):
@@ -84,6 +86,7 @@ def main():
                                      "status_label": ko["status"][r.status],
                                      "usable": int(r.usable_tests), "atmosphere": int(r.tests_atmosphere),
                                      "oxygen_only": int(r.tests_oxygen_only),
+                                     "outside": int(r.tests_recorded_outside_objective),
                                      "inv": (r.investigations_atmosphere or r.investigations_oxygen_only).replace(";", ", "),
                                      "gaps": [ko["gaps"][c] for c in r.gaps.split(";") if c]}
                                     for r in g.itertuples()]})

@@ -1,12 +1,15 @@
 ---
 role: data
-updated: 2026-11-14 11:32 KST
+updated: 2026-11-14 11:58 KST
 state: working
 blocked_on: none
 ---
-Now: D6 pass on `compliance/SOURCES.md`; waiting for `data/insights/cards.json` to start D5.
+Now: per-scenario evidence package (one JSON per scenario).
 
 Done since last sync:
+- Evidence rule: a test counts for a need only if its investigation states the need as an objective in its PSI record (`stated_by` in `needs.json`, verified quotes, `objective_links.csv`). Scenario counts changed; see request 20261114-data-to-all "Evidence now requires a stated objective".
+- Scenarios added at pm's request: `mars_habitat`, `spacesuit`, `exploration_8_2_34`.
+- Found and fixed a stale-fetch problem in my clone (request to pm about `coord.py pull`).
 - Merged `origin/main` into `data-pipeline` (fast-forward).
 - Indicators: `indicators.csv`, `indicator_tests.csv`, spec `pipeline/spec/indicators.json` (20 indicators over 7 needs, three fixed templates).
 - Material vocabulary: `pipeline/spec/materials.json`; new column `material_id` in `tests.csv` (the same fabric was written three ways in BASS, Saffire-I/III and Saffire-II). `fuel_material` is unchanged.
@@ -32,6 +35,8 @@ Published for others (all written by `python3 pipeline/run.py`; shapes below are
 - `data/pipeline/indicator_tests.csv` — NEW, 1,850 rows: `indicator_id`, `group`, `test_id`, `value`. The tests behind each indicator row.
 - `pipeline/spec/indicators.json`, `pipeline/spec/materials.json` — NEW.
 - `pipeline/spec/scenarios.json` — NEW: the scenario ranges and their basis. Ids equal the scorer presets `iss`, `lunar_habitat`.
+- `data/pipeline/objective_links.csv` — NEW, 19 rows: `need_id`, `investigation_id`, `record_field`, `quote`.
+- `capability_matrix.csv` and `need_tests.csv` gained `objective_link` (and `objective_quote` in the matrix). `scenario_needs.csv` gained `tests_recorded_outside_objective`; it now has 35 rows (5 scenarios).
 - `data/pipeline/need_references.csv` — NEW, 56 rows: for each need, the standard or published item behind it (`item_type`, `text`, `where`, `values`, `reference_id`, `title`, `version`, `access`, `url`). Stable.
 - `pipeline/spec/needs.json` — need ids `P1`-`P4`, `S1`, `D1`, `D2` are stable. Each need now also has `scope` and `references`.
 - `pipeline/spec/references.json`, `pipeline/spec/coverage.json` — NEW.

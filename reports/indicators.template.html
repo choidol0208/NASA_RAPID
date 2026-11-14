@@ -58,6 +58,9 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; font-family:
 .state.in_atmosphere { color: var(--good); background: var(--good-bg); }
 .state.oxygen_only, .state.pressure_only { color: var(--warn); background: var(--warn-bg); }
 .state.other_atmosphere, .state.not_measured { color: var(--bad); background: var(--bad-bg); }
+.state.atmosphere_not_specified { color: var(--muted); background: var(--track); }
+.stated { margin: 10px 0 0; padding: 0; list-style: none; font-size: 13.5px; display: grid; gap: 6px; }
+.stated li { border-left: 2px solid var(--line); padding-left: 10px; max-width: 86ch; }
 .scen td { min-width: 190px; }
 .scen td:first-child { min-width: 150px; }
 .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
@@ -97,7 +100,7 @@ footer p { max-width: none; }
 
   <section id="scenarios">
     <h2>환경별 비교</h2>
-    <p class="lead">각 환경의 산소·압력 범위 안에서 기록된 시험이 있는지를 질문별로 센 것입니다. 그 환경에서 재료가 어떻게 타는지에 대한 예측이 아닙니다.</p>
+    <p class="lead">각 환경의 산소·압력 범위 안에서 기록된 시험이 있는지를 질문별로 센 것입니다. 그 환경에서 재료가 어떻게 타는지에 대한 예측이 아닙니다. 실험 기록이 그 질문을 목적으로 밝힌 시험만 셉니다.</p>
     <div class="scroll"><table class="scen" id="scen"></table></div>
   </section>
 
@@ -151,6 +154,7 @@ DATA.needs.forEach(need => {
     c.append($("div", "sub", n ? `일치 시험 ${n}건 / 쓸 수 있는 시험 ${r.usable}건` : `쓸 수 있는 시험 ${r.usable}건 중 0건`));
     if (r.inv) c.append($("div", "id", r.inv));
     if (r.gaps.length) c.append($("div", "sub", "빈 곳: " + r.gaps.join(", ")));
+    if (r.outside) c.append($("div", "sub", `목적 밖 기록 ${r.outside}건은 세지 않음`));
     tr.append(c);
   });
   sbody.append(tr);
@@ -217,6 +221,8 @@ function showNeed(id) {
     if (d.url) { const a = $("a", null, d.title); a.href = d.url; a.target = "_blank"; a.rel = "noopener"; docs.append(a); } else docs.append(document.createTextNode(d.title));
   });
   headBox.append(docs);
+  headBox.append($("p", "crit", need.stated.length ? "이 질문을 실험 목적으로 밝힌 PSI 기록 (원문):" : "이 질문을 실험 목적으로 밝힌 PSI 기록이 없습니다. " + need.stated_note));
+  if (need.stated.length) { const ul = $("ul", "stated"); need.stated.forEach(s => { const li = $("li"); li.append($("span", "id", s.inv + "  "), document.createTextNode(s.quote)); ul.append(li); }); headBox.append(ul); }
   const parts = [headBox];
   if (!need.indicators.length) parts.push($("p", "empty", "이 질문은 위의 환경별 비교 표가 지표입니다."));
   need.indicators.forEach(ind => parts.push(renderIndicator(ind)));

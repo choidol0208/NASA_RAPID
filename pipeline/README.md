@@ -40,6 +40,7 @@ Run: `python3 pipeline/run.py` (after `python3 scripts/fetch_psi.py`).
 | `scenario_needs.csv` | Scenario × need: usable tests by match tier, investigations, status, and gap codes |
 | `indicators.csv` | Per need and group: count, min, median, max of a recorded variable, with the indicator's reading and reference items |
 | `indicator_tests.csv` | The tests behind every indicator row |
+| `objective_links.csv` | Need × investigation: the sentence in the PSI record that states the need as an objective |
 | `need_references.csv` | For each need, the reference items (criterion text, values, document, section, URL) |
 | `run_report.json` | Row counts, flags, unmapped source columns, fill count per variable |
 
@@ -51,6 +52,12 @@ Status in the capability matrix: `measured`, `partial` (an outcome exists but a 
 - A cell that a rule cannot read stays empty and gets a flag (`variable:reason`). Problems are flagged, not fixed.
 - Every value keeps its source file, row and column.
 - To add a table, a variable or a need, edit the spec files; `run.py` does not change.
+
+## Why a test counts for a need
+
+Recording the right variables is not enough. A test counts as evidence for a need only if the PSI record of its investigation states that need as an objective; the sentence is copied into `needs.json` (`stated_by`) and the engine checks that it is in the record. `capability_matrix.csv` and `need_tests.csv` carry `objective_link` (`stated` or `not_stated`). Scenario counts and indicators use `stated` tests only; the others are reported as recorded outside the stated objective. Example: the CFI-G burner tests record oxygen, pressure and how the flame ended, but the investigation studies cool flames, so they are not counted for the extinction need. The combustion-products need (D1) has no investigation that states it; its indicators are side measurements and say so.
+
+The needs themselves are the team's wording. `needs.json` says which parts come from NASA documents and lists the areas NASA names that the PSI tables cannot address (`not_covered`).
 
 ## Indicators
 
