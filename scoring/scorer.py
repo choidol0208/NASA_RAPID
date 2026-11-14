@@ -215,9 +215,13 @@ def s_o2(x, c, p):
     lo, hi = r
     if lo <= x <= hi:
         return 1.0
+    # Distance on the log of the O2 ratio (config "log_ratio"): oxygen acts through ratios of its
+    # mole fraction, so 15 against 21% is a larger gap than 30 against 36% (scoring/MODEL_BASIS.md).
     if x > hi:
-        return math.exp(-(x - hi) / p["above_scale_pct"])
-    return math.exp(-(lo - x) / p["below_scale_pct"])
+        return math.exp(-math.log(x / hi) / p["above_scale_ln"])
+    if x <= 0:
+        return 0.0
+    return math.exp(-math.log(lo / x) / p["below_scale_ln"])
 
 
 def _log_gauss(x, lo, hi, sigma, offset=0.0):
@@ -326,7 +330,13 @@ def s_diluent(dil, c, p):
     cd = [x.lower() for x in _split(c.get("diluent"))]
     if not cd:
         return p["none"]
-    return p["same"] if dil.lower() in cd else p["other_inert"]
+    if dil.lower() in cd:
+        return p["same"]
+    # Another inert: compared by molar heat capacity, the thermal effect of a diluent (scoring/MODEL_BASIS.md).
+    cp = {k.lower(): v for k, v in (p.get("molar_cp_298K_kJ_per_kmolK") or {}).items()}
+    u = cp.get(dil.lower())
+    vals = [(min(u, cp[x]) / max(u, cp[x])) ** p.get("cp_ratio_exponent", 1) for x in cd if u is not None and x in cp]
+    return max(vals) if vals else p["other_inert"]
 
 
 def evidence(c, e):

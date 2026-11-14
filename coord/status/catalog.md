@@ -1,6 +1,6 @@
 ---
 role: catalog
-updated: 2026-11-14 14:21 KST
+updated: 2026-11-14 14:25 KST
 state: working
 blocked_on: none
 ---
@@ -9,10 +9,20 @@ Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog
 **pm: the scorer, its config and `data/catalog/` changed in this push. Please rerun `python3 ai/audit_catalog.py` and `python3 ai/check_all.py`.**
 
 Done since last sync (branch `catalog-scoring`):
+- 14:24 **Scoring config 1.1.0: changes A and B applied (the human lead's decision).**
+  - A: the O2 distance is the log of the O2 ratio. Near air it is the same as before.
+  - B: a different inert diluent is compared by molar heat capacity at 298 K (CO2, N2, He).
+  - Python and JS together.
+  - `config_version` in `rank()` output is now `1.1.0`.
+  - ui, pm:
+    - `ISS` and `lunar habitat` keep their top 3; scores move by less than 2 points.
+    - Typed demo queries changed: `ISS cotton fabric` swaps ranks 2 and 3 (SAFFIRE-III, then BASS-II-C04). `lunar habitat cotton fabric` and `달 기지 면직물` rank SAFFIRE-I-C01 second, where BASS-II-C05 was.
+    - If a slide or a screenshot shows those two queries, retake it.
+  - `validation/verification_sheet.csv` rebuilt: 12 configurations; BASS-II-C05 is no longer in a demo result.
 - 14:19 `scoring/MODEL_BASIS.md` (new, English). It checks each scoring rule against a combustion textbook the human lead supplied: Turns, *An Introduction to Combustion*, 3rd ed., McGraw-Hill 2012. The book is copyrighted, so it was read as background only; nothing from it is reproduced, and it is listed in `compliance/SOURCES.md`.
   - Supported: the direction of the oxygen rule, the log form of the pressure rule, the gravity warnings, quiescent against forced flow, the fuel-phase gate, and the oxidizer-stream rule.
   - Not covered by the book: flame spread over solids (thin or thick, opposed or concurrent), which rests on the PSI records.
-  - Two candidate changes, not applied: O2 distance on a log ratio (A) and diluent similarity by heat capacity (B).
+  - Two candidate changes, A and B, applied at 14:24 (above).
   - pm: it may help the Validity part of the write-up. No code changed.
 - Review fixes asked by the human lead (14:00):
   - `74b206e` "CO2 30%" is no longer read as 30% oxygen; "천장" (ceiling) is no longer read as cloth.
@@ -45,7 +55,10 @@ Published for others:
   - New warning code `ranges_separate` (text in `scoring_config.json`).
   - `coverage` and `confidence` now leave out assumed values.
   - The text of `why` and `main_gap` changed: "named in the PSI record, not a test value", "from the test matrix, not individual tests", "team reading, not in the table", "up to 40 cm/s".
-- Demo rankings: the top 3 and the scores of `ISS`, `lunar habitat`, `spacesuit`, `Mars base`, `ISS cotton fabric` and `lunar habitat cotton fabric` are unchanged. Only confidence labels and warnings changed.
+- Demo rankings:
+  - Up to 14:19 (review fixes): `ISS`, `lunar habitat`, `spacesuit`, `Mars base`, `ISS cotton fabric` and `lunar habitat cotton fabric` kept their top 3 and scores. Only confidence labels and warnings changed.
+  - Since config 1.1.0 (14:24): `ISS`, `lunar habitat`, `spacesuit` and `Mars base` keep their top 3. `ISS cotton fabric` and `lunar habitat cotton fabric` changed (see above).
+- `scoring_config.json` 1.1.0: `similarity.o2` uses `above_scale_ln` and `below_scale_ln` in place of `above_scale_pct` and `below_scale_pct`. `similarity.diluent` gains `molar_cp_298K_kJ_per_kmolK` and `cp_ratio_exponent`. If the page draws anything from the old o2 keys, it needs the new ones.
 - Queries with a flow speed changed, for example "SIBAL 45 cm/s" and "PMMA rod 35 cm/s": BASS's "up to 40 cm/s" is no longer treated as a test at 40.
 
 Notes for other roles:

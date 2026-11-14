@@ -42,6 +42,7 @@
 | 11/14 14:25– | Claude Code | BASS-II 원본 영상에서 불꽃 유지 시간을 재는 시범 분석(영상 처리와 작은 예측 모델). 사용자가 시범 진행을 결정 | 저장소 밖 시범 코드와 결과. 표의 기록과 맞는지 검증을 통과해야 제품에 넣음 | 미검토 |
 | 11/14 14:00– | Claude Code (Opus 5.5, catalog 역할) | 사용자 요청으로 순위 계산기의 이론적 오류 검토. 찾은 것 중 사용자가 고르게 한 5건을 수정: CO2를 산소로 읽던 정규식, '천장'을 직물로 읽던 키워드, 가정값을 신뢰도에 넣던 계산, 한쪽만 기록된 유속 범위의 유사도, 기록·시험 행렬·팀 판독 값을 'tested'로 쓰던 문구(카탈로그 출처 열 3개 추가). pm 결정 반영(사람 확인은 점수에 영향 없음, `ranges_separate` 경고). pm 점검에서 출처를 못 찾은 카탈로그 문구 4건을 원문 표기대로 수정 | `scoring/scorer.py`, `web/scorer.js`, `scoring/scoring_config.json`, `scoring/test_scorer.py`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `data/catalog/*`, `validation/scenarios.json` | 미검토. 원 표와 기록은 직접 대조했고 시험 35개·검증 29/29·parity 68/68 자동 통과. 데모 순위 불변 확인 |
 | 11/14 14:19– | Claude Code (Opus 5.5, catalog 역할) | 사용자가 준 연소공학 교재(Turns 2012, 저작권 자료)의 해당 장을 읽고, 순위 규칙의 방향과 함수 형태를 대조해 근거 문서를 작성. 교재 문장·그림·표는 옮기지 않음. 점수 코드는 바꾸지 않음 | `scoring/MODEL_BASIS.md`, `scoring/README.md`, `compliance/SOURCES.md` | 미검토. 교재 해석은 AI의 요약이며 연소 전공 팀원 확인 필요 |
+| 11/14 14:24 | Claude Code (Opus 5.5, catalog 역할) | 사용자 결정으로 교재 대조에서 나온 두 변경을 적용: 산소 거리를 몰분율 비의 로그로, 다른 불활성 희석제를 298 K 몰 열용량 비로 비교(CO2·N2 값은 교재 부록 표, He는 5R/2). 공기 근처 척도는 기존과 같게 맞춤. 설정 1.1.0 | `scoring/scoring_config.json`, `scoring/scorer.py`, `web/scorer.js`, `scoring/test_scorer.py`, `scoring/MODEL_BASIS.md`, `validation/verification_sheet.csv` | 미검토. 시험 37개·검증 29/29·parity 68/68 자동 통과. 지수 2와 척도는 팀의 선택 |
 
 ## 제품 안에서 동작하는 AI
 
