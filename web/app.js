@@ -214,9 +214,12 @@ function renderResults(out, cat, insights, sc) {
     const rawSentence = insights.raw && insights.raw.sentences ? insights.raw.sentences[r.psi_accession] : null;
     const rawLine = rawSentence ? h("p", { class: "raw-line" }, h("b", {}, "Raw data in PSI: "), rawSentence, " ",
       link(REPO + insights.raw.source, "(team count from the PSI file listing)")) : null;
+    const robust = robustLine(insights.robustRun, r);
+    const robustEl = robust ? h("p", { class: "raw-line rob-line" }, h("b", {}, "Weight check: "), robust, " ",
+      h("a", { href: "#ai-use" }, "(team computation)")) : null;
     const note = noteFor(sc, r);
     const noteEl = note ? h("div", { class: "ai-note" }, h("p", {}, h("b", {}, "Team note: "), note.text, " ", sourceLinks(note.sources, cat)), itemTag(note, sc)) : null;
-    ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, links, rawLine, more));
+    ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, links, rawLine, robustEl, more));
   }
 }
 
@@ -1004,6 +1007,65 @@ function renderCoverage(out, pipe) {
     ". Counts: ", link(REPO + FILE, FILE), ", built from ", link(REPO + "data/pipeline/tests.csv", "data/pipeline/tests.csv"), " by the team's pipeline."));
 }
 
+// ------------------------------------------------------------------ how AI is used here (pm request 1705)
+// Reads pm's data/insights/quality.json, model_readiness.json and robustness.json. Every sentence and
+// number is printed as the files give it; the page computes nothing here.
+const normQuery = (s) => String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
+function robustRunFor(rb, q, config) {
+  if (!rb || !Array.isArray(rb.runs)) return null;
+  const run = rb.runs.find((x) => normQuery(x.query) === normQuery(q));
+  // a sampling run of another scoring version describes another ranking: show nothing
+  if (!run || (run.config_version && config && config.version && run.config_version !== config.version)) return null;
+  return run;
+}
+function robustLine(run, r) {
+  if (!run || !Array.isArray(run.results)) return null;
+  const x = run.results.find((e) => e.investigation_id === r.investigation_id);
+  return x && typeof x.display_line === "string" && x.display_line ? x.display_line : null;
+}
+const countTag = () => h("span", { class: "tag" }, "Counted by team code");
+function renderAiUse(ai, onQuery) {
+  const body = $("#ai-use-body");
+  const parts = [];
+  const q = ai.quality;
+  if (q && typeof q.proposed === "number") {
+    const before = q.removed_before_review && typeof q.removed_before_review === "object" ? q.removed_before_review.n : q.removed_before_review;
+    const steps = [[q.proposed, "sentences written by the model"], [q.dropped_by_gates, "refused by code checks"],
+      [before, "removed by a first reading"], [q.removed_by_review, "removed by the review"], [q.shipped_model_sentences, "shown"]]
+      .filter(([n]) => typeof n === "number");
+    parts.push(h("div", { class: "ai-part" },
+      h("h3", {}, "1. The language model, measured"),
+      h("ul", { class: "ai-funnel", "aria-label": "Model-written sentences at each check" }, steps.map(([n, t]) => h("li", {}, h("b", {}, String(n)), " ", t))),
+      h("p", {}, `Reviewed by a second AI session: ${q.reviewed_ai_session ?? "not recorded"}. Reviewed by a person: ${q.reviewed_person ?? "not recorded"}.`),
+      h("p", {}, "A sentence is shown or not shown; none is reworded. Every shown sentence cites the NASA sentences it rests on."),
+      q.description ? h("p", { class: "gap" }, q.description) : null,
+      h("p", { class: "gap" }, "Counts: ", link(REPO + "data/insights/quality.json", "data/insights/quality.json"), " ", countTag())));
+  }
+  const m = ai.readiness;
+  if (m && Array.isArray(m.rows) && m.rows.length) {
+    parts.push(h("div", { class: "ai-part" },
+      h("h3", {}, "2. ", m.title || "Can these NASA tables support an outcome model?"),
+      m.labels_and_limits ? h("p", { class: "gap" }, m.labels_and_limits) : null,
+      h("ul", { class: "ai-rows" }, m.rows.map((r) => h("li", {}, h("b", {}, r.label), ": ", r.verdict,
+        r.baseline && r.model ? h("span", { class: "ai-metric" }, `${r.model.name}: ${r.model.metric} ${r.model.mean}, against ${r.baseline.mean} for the base rate`) : null))),
+      m.fixed_line ? h("p", {}, h("b", {}, m.fixed_line)) : null,
+      h("p", { class: "gap" }, "Diagnostics: ", link(REPO + "data/insights/model_readiness.json", "data/insights/model_readiness.json"), " ", computedTag())));
+  }
+  const rb = ai.robust;
+  if (rb && Array.isArray(rb.runs) && rb.runs.length) {
+    const qs = rb.runs.map((x) => x.query).filter(Boolean);
+    parts.push(h("div", { class: "ai-part" },
+      h("h3", {}, "3. Does the ranking depend on the team's weights?"),
+      rb.label ? h("p", { class: "gap" }, rb.label) : null,
+      h("p", {}, "Each result card of these queries shows its line, under \"Weight check\": ",
+        ...qs.flatMap((x, i) => [i ? ", " : "", h("a", { href: "?q=" + encodeURIComponent(x), "data-q": x }, x)]), "."),
+      h("p", { class: "gap" }, "Sampling: ", link(REPO + "data/insights/robustness.json", "data/insights/robustness.json"), " ", countTag())));
+  }
+  body.replaceChildren(...parts);
+  body.querySelectorAll("a[data-q]").forEach((a) => a.addEventListener("click", (e) => { e.preventDefault(); onQuery(a.dataset.q); }));
+  show("#ai-use", parts.length > 0);
+}
+
 // ------------------------------------------------------------------ evidence map (pm role, data/insights/evidence_map.json)
 // One oxygen axis, three lanes, one dot per group of recorded tests. Every number and label is read
 // from the file; the page only draws it and marks the oxygen value the query was read as.
@@ -1210,6 +1272,8 @@ async function main() {
     OPTIONAL_HAS("data/scenario_tests.csv") ? fetch(vurl("data/scenario_tests.csv"), { method: "HEAD" }).then((r) => r.ok).catch(() => false) : false]);
   pipe.scenarioNeeds = sn ? parseRows(sn) : null;
   pipe.evidenceMap = OPTIONAL_HAS("data/insights/evidence_map.json") ? await loadJSON("data/insights/evidence_map.json", null) : null;
+  const [aiQuality, aiReadiness, aiRobust] = await Promise.all([optJSON("data/insights/quality.json", null),
+    optJSON("data/insights/model_readiness.json", null), optJSON("data/insights/robustness.json", null)]);
   pipe.scenarioSpec = ss && Array.isArray(ss.scenarios) ? ss : null;
   pipe.hasScenarioTests = Boolean(stHead && pipe.scenarioSpec);
   // line numbers in the CSV files (header is line 1), for links to the exact source row
@@ -1237,6 +1301,7 @@ async function main() {
     }
     setStatus("");
     const sc = scenarioNotes(q, out, insights);
+    insights.robustRun = robustRunFor(aiRobust, q, config);
     renderResults(out, cat, insights, sc);
     renderScenarioText(out, sc, cat);
     renderRanking(out);
@@ -1254,6 +1319,7 @@ async function main() {
     show("#top", true); show("#all", true); show("#needs", true); show("#stops", true); // #answers, #shown and #criteria are set by renderAnswers()
   }
 
+  renderAiUse({ quality: aiQuality, readiness: aiReadiness, robust: aiRobust }, (q2) => { run(q2); $("#top").scrollIntoView({ behavior: "smooth", block: "start" }); });
   $("#ask-form").addEventListener("submit", (e) => { e.preventDefault(); run($("#q").value.trim()); });
   // "How the score works" links open the folded method text.
   document.querySelectorAll('a[href="#method"]').forEach((a) => a.addEventListener("click", () => { const d = $("#method details"); if (d) d.open = true; }));

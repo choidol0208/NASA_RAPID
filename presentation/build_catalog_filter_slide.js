@@ -131,10 +131,11 @@ async function main() {
   }
 
   s.addNotes([
-    "발표 메모 (한국어)",
-    "1) 개념: 미세중력에는 부력이 없어서 팬 기류가 산소를 공급합니다. 기류가 너무 약하면 복사 열손실과 산소 부족으로, 너무 세면 반응할 시간이 모자라(담쾰러 수 감소) 꺼집니다. 그래서 가연 한계는 산소 농도–기류 속도 평면에서 U자 모양이고, 우리는 이 두 축과 연료를 가장 크게 봅니다. 시험 범위보다 산소가 높으면 실제 불이 더 심할 수 있어서(비보수적) 위쪽 이탈을 더 크게 감점합니다.",
-    "2) 구현: 사용자가 'ISS'처럼 한 단어만 넣어도 프리셋(21% O2, 101.3 kPa, 환기)으로 해석하고, 가정한 값은 화면에 모두 보여줍니다. 24개 조사를 41개 시험 구성으로 나눠 7개 차원 유사도를 계산하고, 질문 유형(예방·감지·진압)별 가중치로 합칩니다. 연료나 산소가 크게 다르면 다른 점수로 메울 수 없게 게이트를 걸고, 데이터 품질로 0.7~1.0을 곱합니다. 같은 조사에서는 가장 비슷한 구성 하나만 보여줍니다.",
-    "3) 검증: 팀이 연소 지식으로 기대 답을 먼저 정한 22개 시나리오를 자동으로 돌립니다. 우주복 100% 산소는 PSI 최고치(역화염 산화제 85%)를 넘어서 외삽 경고가 나오고, 화성은 부분중력 데이터 없음, 로켓은 범위 밖으로 처리합니다. 가중치를 ±0.05 바꿔도 1위가 그대로인지 확인했습니다. 기대 답은 팀 판단이라 전문가 검토가 남아 있다고 정직하게 말합니다.",
+    "Speaker notes",
+    "1) Concept: in microgravity there is no buoyancy, so the fan's airflow supplies the oxygen. If the flow is too weak, the flame goes out from radiative heat loss and lack of oxygen; if it is too strong, there is too little time to react (the Damköhler number falls). So the flammability limit is U-shaped on the plane of oxygen concentration and flow speed, and we weigh these two axes and the fuel most. Oxygen above the tested range could mean a worse real fire (non-conservative), so a departure upwards costs more points.",
+    "2) Implementation: even a single word such as 'ISS' is read as a preset (21% O2, 101.3 kPa, ventilated), and every assumed value is shown on screen. The 24 investigations are split into 41 test configurations; similarity is computed on 7 dimensions and combined with weights for the kind of question (prevention, detection, suppression). A gate keeps other scores from making up for a very different fuel or oxygen level, and the total is multiplied by 0.7 to 1.0 for data quality. For each investigation only the most similar configuration is shown.",
+    "3) Validation: 22 scenarios, whose expected answers the team set first from combustion reasoning, run automatically. A 100% oxygen spacesuit is above the PSI maximum (the 85% oxidizer stream of the inverse flames), so it gets an extrapolation warning; Mars is handled as having no partial-gravity data, and a rocket as out of scope. We checked that rank 1 stays the same when the weights change by ±0.05. We say plainly that the expected answers are the team's judgement and still await expert review.",
+    "(These notes describe the first version, 14 Nov 2026, 10:30 KST. Since then: 35 validation scenarios; oxygen above the range is measured against the highest surrounding-atmosphere oxygen tested, 40%, and the 85% burner stream is no longer compared with a habitat atmosphere; weight sensitivity is checked at x0.5 and x1.5 of each weight.)",
   ].join("\n\n"));
 
   await pres.writeFile({ fileName: out });
