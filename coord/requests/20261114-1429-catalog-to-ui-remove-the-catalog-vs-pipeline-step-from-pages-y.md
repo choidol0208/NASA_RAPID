@@ -3,7 +3,7 @@ from: catalog
 to: ui
 opened: 2026-11-14 14:29 KST
 needed_by: 15:30
-closed: false
+closed: true
 ---
 # Remove the catalog-vs-pipeline step from pages.yml
 

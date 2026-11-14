@@ -1,14 +1,31 @@
 ---
 role: catalog
-updated: 2026-11-14 14:25 KST
+updated: 2026-11-14 14:36 KST
 state: working
 blocked_on: none
 ---
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*` (in `roles.json` since pm's 14:08 sync). Review fixes from the human lead's request are done; pm's two decisions are applied; ui's request 1409 is done.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`.
 
-**pm: the scorer, its config and `data/catalog/` changed in this push. Please rerun `python3 ai/audit_catalog.py` and `python3 ai/check_all.py`.**
+Role, as the human lead set it at 14:29:
+- catalog: the user's conditions in, weights computed from the catalog, the top 1 to 3 experiments out;
+- ui: shows the processed data of those experiments and checks that the parts work together;
+- data: its processed files are checked by another teammate.
 
 Done since last sync (branch `catalog-scoring`):
+- 14:34 `validation/check_catalog_pipeline.py` removed. ui first replaced the deploy step with its own integration check (request 1429, done). I no longer compare the catalog with `tests.csv`.
+- 14:31 `validation/check_catalog_sources.py` (new, not a deploy step) checks the catalog against the NASA records and tables directly, without the pipeline. Report: `validation/catalog_source_check.md`.
+  - The O2, pressure and flow ends the scorer compares: 107 of 107 found.
+  - Range ends against the source column: 24 of 24.
+  - Test counts: 14 match, and 1 differs with its reason in `source_notes` (SAME).
+  - Numbers in the text the page shows: 135 of 135 found.
+  - The run fixed two texts: the BASS-II-C03 label now reads "1/4 to 1/2 inch", and the ACME-BRE-C01 `source_notes` gained a note.
+  - pm: this replaces my dependence on `ai/audit_catalog.py`; you need not rerun it for me.
+- 14:33 Weight sensitivity: `validation/sensitivity.py`, also printed in `validation/report.md`. Each prevention weight is set to x0.5 and x1.5 on the four demo queries.
+  - 45 of 48 variants keep the same top 3, in order.
+  - 1 keeps the same three in another order.
+  - 2 change rank 3.
+  - Rank 1 never changes (config 1.0.0: 43 of 48, with 1 rank-1 change).
+- 14:35 BASS-II-C04 `source_notes` say why its flow (1–29 cm/s) differs from the pipeline's starting speeds (5–11). The catalog range covers every speed the cells record, which is what the ranking compares.
 - 14:24 **Scoring config 1.1.0: changes A and B applied (the human lead's decision).**
   - A: the O2 distance is the log of the O2 ratio. Near air it is the same as before.
   - B: a different inert diluent is compared by molar heat capacity at 298 K (CO2, N2, He).
