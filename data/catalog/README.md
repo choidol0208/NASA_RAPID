@@ -14,6 +14,10 @@
 - 가이드라인 문서 대비 추가 열: 조사표 `psi_accession`, `license` / 구성표 `psi_accession`, `o2_reference`(ambient 또는 oxidizer_stream), `atmosphere_basis`.
 - 원문과 다른 점, 기록끼리 맞지 않는 점은 `source_notes`에 적었습니다 (예: Saffire-I 기록의 날짜, Saffire 표의 두께 단위).
 
+## Human verification (added 2026-11-14 by the catalog role, AI-generated)
+
+`validation/verification_sheet.csv` lists the catalog values behind the demo rankings (`ISS`, `lunar habitat`, `ISS cotton fabric`, `lunar habitat cotton fabric`): fuel, oxygen, pressure and flow ranges, and test counts. Each value comes with the NASA table rows and raw cells, or the PSI record text, where a person can check it. Rebuild it with `python3 validation/build_verification_sheet.py` after any catalog or scorer change. A person fills in `checked_by`, `matches_source` and `comment`. A row becomes `human_verified` only through `scripts/build_catalog.py`. Row numbers are CSV row numbers (header = row 1), the same numbers that `source_notes` and `data/pipeline/*.csv` use.
+
 ## 다시 만들기
 
 ```bash

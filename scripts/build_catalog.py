@@ -97,6 +97,27 @@ def bass2_air(cell):
     return [v for v in vals if v <= BASS2_TUNNEL_MAX_CMS]
 
 
+def bass2_family(material):
+    """Sample family of one BASS-II row ('Fuel Sample Material'); one configuration per family."""
+    m = material.lower()
+    if "sibal" in m:
+        return "sibal"
+    if "nomex" in m:
+        return "nomex"
+    if "rod" in m:
+        return "rod"
+    if "spher" in m or "wax" in m or "candle" in m:
+        return "other"
+    if "film" in m or "micron" in m or re.search(r"0\.[1-4] mm", m):
+        return "film"
+    return "slab"
+
+
+# Configuration id -> BASS-II sample family (the fl("B2_<family>", ...) keys in CONFIGS below).
+BASS2_CONFIG_FAMILY = {"BASS-II-C01": "film", "BASS-II-C02": "slab", "BASS-II-C03": "rod",
+                       "BASS-II-C04": "sibal", "BASS-II-C05": "nomex", "BASS-II-C06": "other"}
+
+
 # ----------------------------------------------------------------- computed table facts
 def facts():
     f = {}
@@ -160,24 +181,9 @@ def facts():
         f[key] = dict(flames=int(sum(num(r[j]) or 0 for r in rows if j < len(r))))
     # BASS-II (PSI-25): group the 129 tests by sample family
     _, rows = load_table("PSI-25_Experimental table_BASS-II.csv")
-
-    def fam(m):
-        m = m.lower()
-        if "sibal" in m:
-            return "sibal"
-        if "nomex" in m:
-            return "nomex"
-        if "rod" in m:
-            return "rod"
-        if "spher" in m or "wax" in m or "candle" in m:
-            return "other"
-        if "film" in m or "micron" in m or re.search(r"0\.[1-4] mm", m):
-            return "film"
-        return "slab"
-
     groups = {}
     for r in rows:
-        groups.setdefault(fam(r[5]), []).append(r)
+        groups.setdefault(bass2_family(r[5]), []).append(r)
     for g, rs in groups.items():
         air = [a for r in rs for a in bass2_air(r[8])]
         f[f"B2_{g}"] = dict(n=len(rs), o2=rng([num(r[11]) for r in rs], 1, 1),
