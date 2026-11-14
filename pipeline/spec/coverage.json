@@ -1,0 +1,101 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "purpose": "Bin edges for the coverage grid: how many recorded tests fall in each combination of fuel phase, oxygen and pressure. The bins are the team's choice, placed around atmospheres named in references.json. A test is counted only where the table records the value; a missing value goes to 'not_recorded' and is never filled in.",
+  "o2_basis_rule": "o2_basis says what o2_pct describes. 'ambient' = the atmosphere around the flame. 'oxidizer_stream' = the gas issuing from the burner of an inverse flame, which burns in a fuel atmosphere; it is not a habitat atmosphere and is kept in separate rows. 'not_recorded' = the table has no oxygen column. For a view of the surrounding atmosphere, read the rows with o2_basis = ambient."
+ },
+ "group_by": [
+  "fuel_phase",
+  "o2_basis"
+ ],
+ "dimensions": {
+  "o2_pct": {
+   "unit": "% by volume",
+   "bins": [
+    {
+     "id": "o2_lt19",
+     "label": "below 19%",
+     "min": null,
+     "max": 19,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    {
+     "id": "o2_19_23",
+     "label": "19 to 23% (air, 21 +/- 2)",
+     "min": 19,
+     "max": 23,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    {
+     "id": "o2_23_30",
+     "label": "above 23% and below 30%",
+     "min": 23,
+     "max": 30,
+     "min_inclusive": false,
+     "max_inclusive": false
+    },
+    {
+     "id": "o2_30_36",
+     "label": "30 to 36%",
+     "min": 30,
+     "max": 36,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    {
+     "id": "o2_gt36",
+     "label": "above 36%",
+     "min": 36,
+     "max": null,
+     "min_inclusive": false,
+     "max_inclusive": false
+    }
+   ],
+   "rationale": "21% with the +/-2.0 point control box (EAWG.atmospheres); 30% is the Moon Base lower bound in the challenge text and the current worst-case test oxygen (CH.moonbase, TB14639.worstcase); 36% is the highest exploration design value, 34% (EA.8.2-34, EAWG.testing), plus the same 2-point box, which is the team's extension."
+  },
+  "pressure_kpa": {
+   "unit": "kPa",
+   "bins": [
+    {
+     "id": "p_lt62_8",
+     "label": "below 62.8 kPa",
+     "min": null,
+     "max": 62.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    {
+     "id": "p_62_8_85_8",
+     "label": "62.8 to below 85.8 kPa (around 70.3 kPa = 10.2 psia)",
+     "min": 62.8,
+     "max": 85.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    {
+     "id": "p_85_8_116_8",
+     "label": "85.8 to below 116.8 kPa (around 101.3 kPa = 14.7 psia)",
+     "min": 85.8,
+     "max": 116.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    {
+     "id": "p_ge116_8",
+     "label": "116.8 kPa and above",
+     "min": 116.8,
+     "max": null,
+     "min_inclusive": true,
+     "max_inclusive": false
+    }
+   ],
+   "rationale": "Edges are midpoints between pressures named in the references: 55.2 kPa (8.0 psia), 70.3 kPa (10.2 psia) and 101.3 kPa (14.7 psia) (EAWG.atmospheres, CH.moonbase). The upper edge of the 101.3 bin mirrors its lower edge. FLEX tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa, so a bin around 70.3 is used instead of a strict 'at or below 70.3'."
+  }
+ },
+ "not_recorded": {
+  "id": "not_recorded",
+  "label": "not recorded"
+ }
+}

@@ -46,35 +46,42 @@ Rules that come with these:
 - Scores are computed by code. A language model explains a result and never changes it.
 - For an atmosphere the record does not report, the scorer uses a fallback and attaches a `fallback` warning. Whoever shows the result shows the warning.
 
-## From the pm role (draft; examples in `contracts/examples/`)
+## From the pm role (agreed with ui on 11/14 11:12; examples in `contracts/examples/`)
 
-The shape below is a proposal. The ui role decides what the dashboard actually shows; pm adapts the files to that through a request.
+Where a file is missing the dashboard shows "Not available yet". Arbitrary queries get no model-written text; the page shows the scorer's own `why` and `main_gap` lines.
+
+A `source` (in every file below) is one of three forms, or an array of them, so the page can turn each into a link:
+
+- `PSI-25.objective`: a field of the PSI record JSON in `data/psi/catalog/`
+- `doi:10.xxxx/yyyy`: a publication
+- `data/pipeline/tests.csv#FLEX-12`: a file and a test id
 
 ### `data/insights/cards.json`
 
-One entry per investigation: a short model-written summary to sit next to the catalog row.
+One entry per investigation: a short model-written summary shown next to the catalog row.
 
 | Field | Type | Meaning |
 |---|---|---|
-| `investigation_id` | string | PSI accession, `PSI-25` |
-| `summary` | string | two or three English sentences written from the PSI record only |
-| `key_points` | array of `{ "text", "source" }` | each statement with the PSI field (`PSI-25.objective`) or publication DOI it comes from |
+| `investigation_id` | string | PSI accession, `PSI-25`. The page joins it to `rank()` results through their `psi_accession` |
+| `summary` | string | at most 3 English sentences written from the PSI record only |
+| `key_points` | array of `{ "text", "source" }` | at most 4, each with its source |
 | `ai_generated` | boolean | `true` |
 | `model` | string | the model that wrote the text |
-| `reviewed_by` | string or null | who checked it against the PSI text; `null` until checked |
+| `reviewed_by` | string or null | who checked it against the PSI text; `null` until checked. The page shows "Reviewed by <name>" or "Not reviewed yet" |
+| `updated` | string | ISO time |
 
 ### `data/insights/scenarios.json`
 
-One entry per preset scenario: model-written explanation around results that the scorer and the pipeline produce.
+One entry per preset scenario. Order of writing: `iss` and `lunar_habitat` (the demo), then `spacesuit` and `mars_habitat`.
 
 | Field | Type | Meaning |
 |---|---|---|
-| `id` | string | a preset id from `scoring/scoring_config.json` |
-| `query` | string | the query passed to `scoring.scorer.rank` |
-| `ranking_source` | string | always `scoring.scorer.rank`; scores are not copied into this file |
-| `result_notes` | array of `{ "investigation_id", "text", "sources" }` | plain-language explanation of why a result ranks where it does |
-| `needs` | array of `{ "need_id", "statement", "sources" }` | what the recorded tests can and cannot say about each need for this scenario, from `capability_matrix.csv` |
+| `id` | string | preset id from `scoring/scoring_config.json` |
+| `query` | string | exactly the string the page passes to `rank()`: `"ISS"`, `"lunar habitat"`, `"spacesuit"`, `"Mars base"` |
+| `ranking_source` | string | always `scoring.scorer.rank`; the page computes the ranking live and scores are not copied here |
+| `result_notes` | array of `{ "investigation_id", "text", "sources" }` | plain-language explanation of why a result ranks where it does. A note whose investigation is not in the live top 3 is shown under "Other investigations" |
+| `needs` | array of `{ "need_id", "statement", "sources" }` | one per need id (`P1`–`P4`, `S1`, `D1`, `D2`): what the recorded tests can and cannot say for this scenario |
 | `gaps` | array of `{ "text", "needed_data" }` | what PSI does not contain for this scenario |
-| `ai_generated`, `model`, `reviewed_by` | as above | |
+| `ai_generated`, `model`, `reviewed_by`, `updated` | as above | |
 
 Pressure is in kPa everywhere (14.7 psi = 101.3 kPa, 10.2 psi = 70.3 kPa).

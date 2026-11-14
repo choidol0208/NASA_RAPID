@@ -9,6 +9,7 @@ declared in pipeline/spec/:
     variables.json  the standard variables, their valid ranges, derived formulas
     sources.json    how each PSI table maps onto the standard variables
     references.json the standards, requirements and published results behind each need
+    coverage.json   bin edges for the coverage grid
 
 Stages
     1 ingest       read each PSI table as text; nothing is changed
@@ -191,6 +192,52 @@ def assess(tests, needs, sources):
     return pd.DataFrame(matrix), pd.DataFrame(links)
 
 
+def coverage_grid(tests, cov):
+    """Count recorded tests per fuel phase, oxygen basis, oxygen bin and
+    pressure bin (coverage.json). Missing values go to 'not_recorded'."""
+    nr = cov["not_recorded"]["id"]
+
+    def bin_of(value, bins):
+        if empty(value):
+            return nr
+        for b in bins:
+            low = b["min"] is None or value > b["min"] or (value == b["min"] and b["min_inclusive"])
+            high = b["max"] is None or value < b["max"] or (value == b["max"] and b["max_inclusive"])
+            if low and high:
+                return b["id"]
+        raise SystemExit(f"coverage.json: no bin for value {value}")
+
+    dims = cov["dimensions"]
+    labels = {nr: cov["not_recorded"]["label"]}
+    order = {}
+    for name, d in dims.items():
+        labels.update({b["id"]: b["label"] for b in d["bins"]})
+        order[name] = [b["id"] for b in d["bins"]] + [nr]
+    cells = {}
+    for t in tests:
+        basis = t.get("o2_basis") if not empty(t.get("o2_basis")) else nr
+        key = (t.get("fuel_phase") or nr, basis,
+               bin_of(t.get("o2_pct"), dims["o2_pct"]["bins"]),
+               bin_of(t.get("pressure_kpa"), dims["pressure_kpa"]["bins"]))
+        cells.setdefault(key, []).append(t)
+    # every cell for the ambient basis, so that empty cells are visible as 0
+    phases = sorted({k[0] for k in cells})
+    for phase in phases:
+        for o in order["o2_pct"]:
+            for p in order["pressure_kpa"]:
+                cells.setdefault((phase, "ambient", o, p), [])
+    rows = []
+    for (phase, basis, o, p), ts in sorted(
+            cells.items(), key=lambda kv: (kv[0][0], kv[0][1], order["o2_pct"].index(kv[0][2]),
+                                           order["pressure_kpa"].index(kv[0][3]))):
+        rows.append({"fuel_phase": phase, "o2_basis": basis, "o2_bin": o, "o2_bin_label": labels[o],
+                     "pressure_bin": p, "pressure_bin_label": labels[p], "tests": len(ts),
+                     "investigation_ids": ";".join(sorted({t["investigation_id"] for t in ts},
+                                                          key=lambda x: int(x.split("-")[1]))),
+                     "source_ids": ";".join(sorted({t["source_id"] for t in ts}))})
+    return pd.DataFrame(rows)
+
+
 def need_references(needs, references):
     """Need -> reference items. Fails if a need points to an unknown item."""
     items = {i["id"]: (r, i) for r in references for i in r["items"]}
@@ -255,6 +302,9 @@ def main():
     derive(tests, derived)
     matrix, links = assess(tests, needs["needs"], src_spec["sources"])
     export(tests, variables, derived, matrix, links, report)
+    grid = coverage_grid(tests, spec("coverage.json"))
+    assert grid.tests.sum() == len(tests)
+    grid.to_csv(os.path.join(OUT, "coverage_grid.csv"), index=False)
     refs = need_references(needs["needs"], spec("references.json")["references"])
     refs.to_csv(os.path.join(OUT, "need_references.csv"), index=False)
 
