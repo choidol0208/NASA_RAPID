@@ -24,11 +24,55 @@
    "none": "not tied"
   },
   "units": "bytes as the PSI listing reports them",
-  "archive_sample": "A sample: directories of 23 archives chosen by size class and name pattern (3 by size, then the median-size archive of the 20 largest name-pattern groups); member names were read, members were not opened."
+  "archive_sample": "A sample: directories of 23 archives chosen by size class and name pattern (3 by size, then the median-size archive of the 20 largest name-pattern groups); member names were read, members were not opened.",
+  "quote_relation": {
+   "states_meaning": "the quote says what files with this name part are or hold, or what the name part denotes",
+   "expansion_only": "the quote expands an abbreviation (a glossary or acronym entry); it does not say what files with this name part hold",
+   "about_another_thing": "the quote is about a related thing (a file type, the PSI web record, one named file, a camera, a procedure step or a recording format), not about what files with this name part hold",
+   "name_form_only": "the quote gives the form of the name only, not what the files hold"
+  },
+  "several_rows_and_other_ties": "A file whose tie reaches several rows is counted once for each row in test_files.csv (column files_also_counted_for_another_row); summing files over rows counts such files more than once. data/pipeline/name_tie_alternatives.csv lists every file where another rule, or another match of the same rule, would tie a different set of rows; the first match in rule order decides (rule_order).",
+  "open_points": [
+   {
+    "investigation_id": "PSI-106",
+    "rule": "R4",
+    "text": "Folders 'Legacy/OMA Format/059_UT058_forHSV_splice_images_DSC957_data' (1,910 files) and 'Legacy/OMA Format/084_ForHSV_splice_UT083c_DSC957_data' (1,878 files) carry two day-like numbers; the first (059, 084) equals no 'Test Date' day, so the files are tied by the second (058, 083). A person decides whether to keep these ties."
+   },
+   {
+    "investigation_id": "PSI-22",
+    "rule": "R1",
+    "text": "'18269D1_for 18274D1_ACME.zip' carries two test days; the first (18269) decides, 18274 is not tied (name_tie_alternatives.csv)."
+   },
+   {
+    "investigation_id": "PSI-20",
+    "rule": "R1",
+    "text": "'vlc-record-2020-12-05-01h42m50s-udp____20339_IgniterCheck' (.mp4 and .zip) ties day 20339 by rule R1; the date 2020-12-05 in the same name would tie another row by rule R3 (name_tie_alternatives.csv)."
+   },
+   {
+    "investigation_id": "PSI-39",
+    "rule": "C, CF, D, DM",
+    "text": "Table rows 81-88 repeat Flex Number, CIR and date of rows 24-31 and are not tests of tests.csv; files tied to rows 24-31 are also tied to rows 81-88 (files_also_counted_for_another_row of test_files.csv)."
+   },
+   {
+    "investigation_id": "PSI-39",
+    "rule": "C, D",
+    "text": "Five files whose names carry CIR 'F180D02' and the date 2017-06-29 are tied by rule C to row 38 (Flex Number 1301, CIR 'f180d02', Test Date '29-Jul-17'); the date in the same names equals the Test Date '29-Jun-17' of row 37 (Flex Number 1300) (name_tie_alternatives.csv)."
+   },
+   {
+    "investigation_id": "PSI-26",
+    "rule": "A1, A2",
+    "text": "Archive names carry either the 'Date on videos and images' (rule A1) or a date that is only an 'Actual Date' (rule A2); the documents do not say which date the archives are named by."
+   },
+   {
+    "investigation_id": "PSI-25, PSI-26, PSI-106, PSI-107",
+    "rule": "videos",
+    "text": "The fixed sentence 'Opened videos of this investigation show readings as on-screen text: ...' is attached to raw_state items of every variable of these investigations, also of variables that are not among the labels seen. A person decides whether to keep it."
+   }
+  ]
  },
  "sentences": [
   "A tie by name means that the name carries the identifier of that test (or day), equal to a cell of the experimental table; the content of the file was not checked.",
-  "Of 60866 listed files, 12934 are tied to a test by name, 30595 to a day or session, and 17337 are not tied.",
+  "Of 60866 listed files, 12934 are tied to a test by name, 30634 to a day or session, and 17298 are not tied.",
   "219 sample files were opened for their headers, keys or labels; one file of a group does not show what the other files of the group hold.",
   "15 files were read in full for values (raw_values.csv); no value of a raw file is used by the pipeline.",
   "The directory of 23 of 12689 archives was read by byte ranges without downloading them (4401457 bytes fetched for 52471079132 bytes of archives); the member names are a sample.",
@@ -44,12 +88,12 @@
     "bytes": 5342050234623
    },
    "day_or_session": {
-    "files": 30595,
-    "bytes": 5597247690025
+    "files": 30634,
+    "bytes": 5709841691007
    },
    "none": {
-    "files": 17337,
-    "bytes": 2532552201708
+    "files": 17298,
+    "bytes": 2419958200726
    }
   },
   "names_by_kind": {
@@ -59,12 +103,12 @@
      "bytes": 5101016571796
     },
     "day_or_session": {
-     "files": 5679,
-     "bytes": 5470718172341
+     "files": 5718,
+     "bytes": 5583312173323
     },
     "none": {
-     "files": 3472,
-     "bytes": 2427654635057
+     "files": 3433,
+     "bytes": 2315060634075
     }
    },
    "document": {
@@ -167,6 +211,352 @@
    }
   },
   "tests_reached_by_name": 1179,
+  "files_tied_to_several_rows": 937,
+  "files_with_another_tie_by_name": 20,
+  "suffix_codes": {
+   "entries": 289,
+   "entries_with_a_quote": {
+    "about_another_thing": 13,
+    "expansion_only": 19,
+    "name_form_only": 1,
+    "states_meaning": 76
+   },
+   "entries_without_a_quote": 180,
+   "entries_matching_no_file": [
+    {
+     "investigation_id": "PSI-10",
+     "code": ".next",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-10",
+     "code": "_Intensifier (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-10",
+     "code": "_LLL-UV (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-10",
+     "code": "_IPSUG (archive or log)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": true
+    },
+    {
+     "investigation_id": "PSI-10",
+     "code": "_VoltageSweep.txt",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-10",
+     "code": "_ACME_CAM3_Exposures",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-10",
+     "code": "_Logs.zip",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-10",
+     "code": "Fiber",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-20",
+     "code": "_LLL-UV (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-20",
+     "code": "_VoltageSweep.txt",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-20",
+     "code": "_ACME_CAM3_Exposures",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-20",
+     "code": "moduleDataACD (GCIP data)",
+     "has_quote": true,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-20",
+     "code": "ACME.log / log file",
+     "has_quote": true,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-21",
+     "code": "_LLL-UV (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-21",
+     "code": "_VoltageSweep.txt",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-21",
+     "code": "moduleDataACD (GCIP data)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-21",
+     "code": "GC",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-21",
+     "code": "_Logs.zip",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-21",
+     "code": "daily test point log",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-21",
+     "code": "flow traces",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-21",
+     "code": "test parameter notes",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "as run (parameter file)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": ".next",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "_ACME_Converted (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "_INTNS (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": true
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "_LLL-UV (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "moduleDataACD (GCIP data)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "GC",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "_Logs.zip",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "test sheets",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "daily test point log",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "flow traces",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "test parameter notes",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "Chamber Calculator",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-22",
+     "code": "Fiber",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-23",
+     "code": "_Intensifier (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-23",
+     "code": "_VoltageSweep.txt",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-23",
+     "code": "_ACME_CAM3_Exposures",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-23",
+     "code": "GC",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-23",
+     "code": "_Logs.zip",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-23",
+     "code": "test sheets",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-23",
+     "code": "flow traces",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-23",
+     "code": "test parameter notes",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-23",
+     "code": "Chamber Calculator",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-106",
+     "code": "Flame BC scans",
+     "has_quote": true,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-159",
+     "code": "_INTNS (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": true
+    },
+    {
+     "investigation_id": "PSI-159",
+     "code": "_Intensifier (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-159",
+     "code": "_LLL-UV (archive)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-159",
+     "code": "_VoltageSweep.txt",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-159",
+     "code": "_ACME_CAM3_Exposures",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-159",
+     "code": "moduleDataACD (GCIP data)",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-159",
+     "code": "GC",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-159",
+     "code": "_Logs.zip",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    },
+    {
+     "investigation_id": "PSI-159",
+     "code": "Fiber",
+     "has_quote": false,
+     "pattern_found_in_a_name_of_an_earlier_entry": false
+    }
+   ],
+   "files_by_quote_relation": {
+    "about_another_thing": 10591,
+    "expansion_only": 4187,
+    "name_form_only": 205,
+    "no quote": 35090,
+    "no suffix code": 4848,
+    "states_meaning": 5945
+   }
+  },
   "opened_for_structure": {
    "files": 219,
    "bytes": 215794305
@@ -318,6 +708,8 @@
    },
    "tests_reached_by_name": 308,
    "table_rows_reached_by_name": 310,
+   "files_tied_to_several_rows": 78,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 16,
     "bytes": 5374071
@@ -454,6 +846,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 15,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 2,
    "opened_for_structure": {
     "files": 7,
     "bytes": 8541836
@@ -590,6 +984,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 32,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 10,
     "bytes": 1627591
@@ -726,6 +1122,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 21,
+   "files_tied_to_several_rows": 130,
+   "files_with_another_tie_by_name": 1,
    "opened_for_structure": {
     "files": 9,
     "bytes": 1837299
@@ -848,6 +1246,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 18,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 10,
     "bytes": 974744
@@ -984,6 +1384,8 @@
    },
    "tests_reached_by_name": 124,
    "table_rows_reached_by_name": 124,
+   "files_tied_to_several_rows": 2,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 7,
     "bytes": 3501909
@@ -1010,12 +1412,12 @@
      "bytes": 0
     },
     "day_or_session": {
-     "files": 125,
-     "bytes": 48414860352
+     "files": 164,
+     "bytes": 161008861334
     },
     "none": {
-     "files": 85,
-     "bytes": 115135404674
+     "files": 46,
+     "bytes": 2541403692
     }
    },
    "names_by_kind": {
@@ -1025,12 +1427,12 @@
       "bytes": 0
      },
      "day_or_session": {
-      "files": 15,
-      "bytes": 26356897805
+      "files": 54,
+      "bytes": 138950898787
      },
      "none": {
-      "files": 45,
-      "bytes": 114365186959
+      "files": 6,
+      "bytes": 1771185977
      }
     },
     "document": {
@@ -1091,7 +1493,9 @@
     }
    },
    "tests_reached_by_name": 0,
-   "table_rows_reached_by_name": 81,
+   "table_rows_reached_by_name": 112,
+   "files_tied_to_several_rows": 164,
+   "files_with_another_tie_by_name": 2,
    "opened_for_structure": {
     "files": 11,
     "bytes": 15502349
@@ -1228,6 +1632,8 @@
    },
    "tests_reached_by_name": 70,
    "table_rows_reached_by_name": 84,
+   "files_tied_to_several_rows": 215,
+   "files_with_another_tie_by_name": 5,
    "opened_for_structure": {
     "files": 19,
     "bytes": 3486553
@@ -1364,6 +1770,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 1,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 6,
     "bytes": 1450884
@@ -1416,6 +1824,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 0,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 0,
     "bytes": 0
@@ -1468,6 +1878,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 0,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 0,
     "bytes": 0
@@ -1590,6 +2002,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 0,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 7,
     "bytes": 177489
@@ -1712,6 +2126,8 @@
    },
    "tests_reached_by_name": 266,
    "table_rows_reached_by_name": 266,
+   "files_tied_to_several_rows": 15,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 20,
     "bytes": 1302552
@@ -1820,6 +2236,8 @@
    },
    "tests_reached_by_name": 2,
    "table_rows_reached_by_name": 4,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 9,
     "bytes": 42604512
@@ -1928,6 +2346,8 @@
    },
    "tests_reached_by_name": 9,
    "table_rows_reached_by_name": 11,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 8,
     "bytes": 34051467
@@ -2036,6 +2456,8 @@
    },
    "tests_reached_by_name": 2,
    "table_rows_reached_by_name": 2,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 10,
     "bytes": 30354276
@@ -2186,6 +2608,8 @@
    },
    "tests_reached_by_name": 70,
    "table_rows_reached_by_name": 79,
+   "files_tied_to_several_rows": 16,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 15,
     "bytes": 21005477
@@ -2308,6 +2732,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 0,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 15,
     "bytes": 25898349
@@ -2416,6 +2842,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 12,
+   "files_tied_to_several_rows": 5,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 7,
     "bytes": 1251941
@@ -2552,6 +2980,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 456,
+   "files_tied_to_several_rows": 96,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 15,
     "bytes": 11556523
@@ -2632,6 +3062,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 0,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 0,
     "bytes": 0
@@ -2726,6 +3158,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 0,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 0,
     "bytes": 0
@@ -2806,6 +3240,8 @@
    },
    "tests_reached_by_name": 0,
    "table_rows_reached_by_name": 0,
+   "files_tied_to_several_rows": 0,
+   "files_with_another_tie_by_name": 0,
    "opened_for_structure": {
     "files": 0,
     "bytes": 0
@@ -2956,6 +3392,8 @@
    },
    "tests_reached_by_name": 328,
    "table_rows_reached_by_name": 333,
+   "files_tied_to_several_rows": 216,
+   "files_with_another_tie_by_name": 10,
    "opened_for_structure": {
     "files": 18,
     "bytes": 5294483

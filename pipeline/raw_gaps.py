@@ -146,7 +146,7 @@ class States:
 
     def video_sentences(self, inv, test_ids):
         """Fixed sentences where videos are tied by name to tests that lack a
-        value; they never say that a quantity is in a video."""
+        value; they never say that the quantity can be read from a video."""
         files, _, tests = self.tied_to(test_ids)["video"]
         if not files:
             return []

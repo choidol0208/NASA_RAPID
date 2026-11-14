@@ -10,7 +10,10 @@ the ordered name rules of the spec to every file of the saved PSI listing
   raw_file_groups.csv      investigation x PSI category x kind x name pattern
                            x suffix code: files, bytes, ties by level
   test_files.csv           test (or table row) x link level x kind x suffix
-                           code: files and bytes tied by name
+                           code: files and bytes tied by name (a file tied
+                           to several rows counts for each row)
+  name_tie_alternatives.csv  files where another rule or match would tie
+                           other rows than the deciding first match
   raw_layers_summary.json  per investigation and overall: what the names,
                            the sampled structure, the archive directories and
                            the values read cover, by files and by bytes
@@ -68,7 +71,7 @@ def read_csv(path):
         return list(csv.DictReader(f))
 
 
-NASA_TEXT = ("psi_category", "name_pattern", "suffix_code", "example_name", "archive_name", "member_name_pattern")
+NASA_TEXT = ("psi_category", "name_pattern", "suffix_code", "example_name", "archive_name", "member_name_pattern", "name")
 
 
 def team_text(row):
@@ -196,10 +199,16 @@ def key_value(tr, s):
     raise SystemExit("raw_names: unknown key transform %r" % tr)
 
 
-def cell_values(tr, cells):
+def cell_values(tr, cells, lookup=None):
     """The set of values the cells of one table row stand for under the cell
-    transform tr (cells: the cells of the columns of the field, in order)."""
+    transform tr (cells: the cells of the columns of the field, in order).
+    Transforms over several columns (ymd_cols, each_upper) come before the
+    test for a blank first cell: a blank 'Camera 1' cell does not hide the
+    'Camera 2' cell of the same row. lookup: the pairs of a 'lookups' entry
+    of the investigation, for lookup_date."""
     c = cells[0].strip() if cells else ""
+    if tr == "each_upper":
+        return {x.strip().upper() for x in cells if x.strip()}
     if tr == "ymd_cols":
         y, mo, d = (x.strip() for x in cells)
         if not (y.isdigit() and d.isdigit()) or month_number(mo) is None:
@@ -236,8 +245,9 @@ def cell_values(tr, cells):
     if tr == "gmt_int":
         m = re.match(r"GMT\s*(\d+)", c)
         return {str(int(m.group(1)))} if m else set()
-    if tr == "each_upper":
-        return {x.strip().upper() for x in cells if x.strip()}
+    if tr == "lookup_date":
+        v = parse_date(c)
+        return set(lookup.get(v, [])) if v else set()
     if tr == "after_hyphen":
         return {c.split("-", 1)[1].strip()} if "-" in c else set()
     if tr == "upper_prefix6":
@@ -276,7 +286,8 @@ class Investigation:
                         continue
                     if any(c not in cells for c in fld["columns"]):
                         raise SystemExit("raw_names: %s %s: column not in %s: %s" % (self.id, r["id"], t, fld["columns"]))
-                    self.values[(r["id"], g, t, n)] = cell_values(fld["cell"], [cells[c] for c in fld["columns"]])
+                    lk = spec.get("lookups", {})[fld["lookup"]]["pairs"] if fld.get("lookup") else None
+                    self.values[(r["id"], g, t, n)] = cell_values(fld["cell"], [cells[c] for c in fld["columns"]], lk)
 
     def row_key(self, t, n):
         return "%s#row%d" % (t, n)
@@ -284,6 +295,13 @@ class Investigation:
     def tie(self, name, folder, category, kind):
         """(rule id, level, [(table, row)]) of the first rule that ties the
         file to at least one row; (None, 'none', []) if no rule does."""
+        ties = self.all_ties(name, folder, category, kind)
+        return ties[0] if ties else (None, "none", [])
+
+    def all_ties(self, name, folder, category, kind):
+        """Every (rule id, level, [(table, row)]) that a match of a rule gives,
+        in rule order and, within a rule, from left to right."""
+        out = []
         for r in self.rules:
             if r.get("categories") and category not in r["categories"]:
                 continue
@@ -311,8 +329,8 @@ class Investigation:
                     level = r["level"]
                     if len(rows) > 1 and r.get("level_if_several_rows"):
                         level = r["level_if_several_rows"]
-                    return r["id"], level, rows
-        return None, "none", []
+                    out.append((r["id"], level, rows))
+        return out
 
     def suffix(self, name):
         for s in self.suffixes:
@@ -367,24 +385,40 @@ def link_files(spec, tests, kinds):
         I = Investigation(inv, spec["investigations"][inv], tests)
         recs = []
         for f in listing_files(inv, kinds):
-            rule, level, rows = I.tie(f["base"], f["folder"], f["category"], f["kind"])
+            ties = I.all_ties(f["base"], f["folder"], f["category"], f["kind"])
+            rule, level, rows = ties[0] if ties else (None, "none", [])
+            others = []
+            for t in ties[1:]:
+                # a tie whose rows contain, or are contained in, the deciding
+                # rows (a test and its day) agrees with it; only others count
+                o, d = set(t[2]), set(rows)
+                if not (o <= d or d <= o) and t not in others:
+                    others.append(t)
             s = I.suffix(f["base"])
             recs.append({**f, "rule": rule or "", "level": level,
                          "rows": [I.row_key(t, n) for t, n in rows],
                          "tests": sorted({I.test_of[(t, n)] for t, n in rows if (t, n) in I.test_of}),
                          "suffix": s["code"] if s else "(no suffix code)",
                          "suffix_meaning": meaning_text(s),
+                         "quote_relation": (s.get("meaning") or {}).get("quote_relation", "") if s else "",
+                         "other_ties": [(o[0], o[1], [I.row_key(t, n) for t, n in o[2]]) for o in others],
                          "pattern": name_pattern(f["base"])})
         out[inv] = (I, recs)
     return out
+
+
+QUOTE_LEAD = {"states_meaning": "quoted",
+              "expansion_only": "quoted, expands the abbreviation only and does not say what these files hold",
+              "about_another_thing": "quoted, about a related thing, not about what these files hold",
+              "name_form_only": "quoted, gives the form of the name only, not what these files hold"}
 
 
 def meaning_text(s):
     if not s:
         return ""
     m = s.get("meaning")
-    return 'quoted: "%s" (%s, PSI file id %s, %s)' % (m["quote"], m["document"], m["file_id"], m["where"]) if m \
-        else "no stated meaning found"
+    return '%s: "%s" (%s, PSI file id %s, %s)' % (QUOTE_LEAD[m["quote_relation"]], m["quote"], m["document"],
+                                                  m["file_id"], m["where"]) if m else "no stated meaning found"
 
 
 def group_rows(linked):
@@ -409,7 +443,10 @@ def group_rows(linked):
                          "distinct_tests_reached": len({t for r in by["test"] for t in r["tests"]}),
                          "distinct_table_rows_reached": len({x for r in g for x in r["rows"]}),
                          "suffix_meaning": ex["suffix_meaning"],
-                         "example_name": ex["name"], "example_file_id": ex["file_id"]})
+                         "example_name": ex["name"], "example_file_id": ex["file_id"],
+                         "quote_relation": ex["quote_relation"],
+                         "files_with_another_tie_by_name": sum(1 for r in g if r["other_ties"]),
+                         "files_tied_to_several_rows": sum(1 for r in g if len(r["rows"]) > 1)})
     return rows
 
 
@@ -424,13 +461,60 @@ def test_file_rows(linked):
                 t, n = rk.rsplit("#row", 1)
                 tid = I.test_of.get((t, int(n)), "")
                 k = (tid, rk, r["level"], r["kind"], r["suffix"])
-                a = acc.setdefault(k, [0, 0])
+                a = acc.setdefault(k, [0, 0, 0])
                 a[0] += 1
                 a[1] += r["bytes"]
+                a[2] += len(r["rows"]) > 1
         for k in sorted(acc, key=lambda k: (k[1].rsplit("#row", 1)[0], int(k[1].rsplit("#row", 1)[1]), k[2], k[3], k[4])):
             rows.append({"investigation_id": inv, "test_id": k[0], "table_row_key": k[1], "link_level": k[2],
-                         "kind": k[3], "suffix_code": k[4], "files": acc[k][0], "bytes": acc[k][1]})
+                         "kind": k[3], "suffix_code": k[4], "files": acc[k][0], "bytes": acc[k][1],
+                         "files_also_counted_for_another_row": acc[k][2]})
     return rows
+
+
+def alternative_rows(linked):
+    """One row per file and other tie: files where another rule, or another
+    match of the same rule, would tie a set of rows that neither contains nor
+    is contained in the rows of the deciding (first) tie."""
+    rows = []
+    for inv, (I, recs) in linked.items():
+        for r in sorted(recs, key=lambda r: (r["base"], r["file_id"])):
+            for rule, level, rks in r["other_ties"]:
+                rows.append({"investigation_id": inv, "file_id": r["file_id"], "name": r["name"], "kind": r["kind"],
+                             "bytes": r["bytes"], "deciding_rule": r["rule"], "deciding_level": r["level"],
+                             "deciding_rows": ";".join(r["rows"]), "other_rule": rule, "other_level": level,
+                             "other_rows": ";".join(rks)})
+    return rows
+
+
+def suffix_entry_use(spec, linked):
+    """Per investigation, the suffix entries and how many files each one is
+    the code of; entries that are the code of no file are listed (they stay
+    in the spec), with whether their pattern is found in a name whose code is
+    an earlier entry."""
+    out = {"entries": 0, "entries_with_a_quote": {}, "entries_without_a_quote": 0, "entries_matching_no_file": [],
+           "files_by_quote_relation": {}}
+    for inv, (I, recs) in linked.items():
+        n = {}
+        for r in recs:
+            n[r["suffix"]] = n.get(r["suffix"], 0) + 1
+            rel = r["quote_relation"] or ("no quote" if r["suffix"] != "(no suffix code)" else "no suffix code")
+            out["files_by_quote_relation"][rel] = out["files_by_quote_relation"].get(rel, 0) + 1
+        for e in spec["investigations"][inv]["suffix_codes"]:
+            out["entries"] += 1
+            m = e.get("meaning")
+            if m:
+                out["entries_with_a_quote"][m["quote_relation"]] = out["entries_with_a_quote"].get(m["quote_relation"], 0) + 1
+            else:
+                out["entries_without_a_quote"] += 1
+            if not n.get(e["code"]):
+                rx = re.compile(e["pattern"], re.I if e.get("ignore_case") else 0)
+                out["entries_matching_no_file"].append({"investigation_id": inv, "code": e["code"], "has_quote": bool(m),
+                                                        "pattern_found_in_a_name_of_an_earlier_entry": any(
+                                                            rx.search(r["base"]) for r in recs)})
+    out["entries_with_a_quote"] = dict(sorted(out["entries_with_a_quote"].items()))
+    out["files_by_quote_relation"] = dict(sorted(out["files_by_quote_relation"].items()))
+    return out
 
 
 def opened_for_structure(raw_columns):
@@ -470,6 +554,8 @@ def summary(spec, linked, raw_columns, raw_values, zip_sample):
                                   for lv in LEVELS} for k in kinds}
         e["tests_reached_by_name"] = len({t for r in recs if r["level"] == "test" for t in r["tests"]})
         e["table_rows_reached_by_name"] = len({x for r in recs if r["level"] != "none" for x in r["rows"]})
+        e["files_tied_to_several_rows"] = sum(1 for r in recs if len(r["rows"]) > 1)
+        e["files_with_another_tie_by_name"] = sum(1 for r in recs if r["other_ties"])
         o = opened.get(inv, {})
         e["opened_for_structure"] = {"files": len(o), "bytes": sum(o.values())}
         v = values.get(inv, {})
@@ -489,6 +575,9 @@ def summary(spec, linked, raw_columns, raw_values, zip_sample):
                                          "bytes": sum(e["names_by_kind"].get(k, {}).get(lv, {}).get("bytes", 0) for e in invs)}
                                     for lv in LEVELS} for k in kinds}
     overall["tests_reached_by_name"] = sum(e["tests_reached_by_name"] for e in invs)
+    for key in ("files_tied_to_several_rows", "files_with_another_tie_by_name"):
+        overall[key] = sum(e[key] for e in invs)
+    overall["suffix_codes"] = suffix_entry_use(spec, linked)
     for key in ("opened_for_structure", "values_read"):
         overall[key] = {"files": sum(e[key]["files"] for e in invs), "bytes": sum(e[key]["bytes"] for e in invs)}
     overall["archive_directories_listed"] = {k: sum(e["archive_directories_listed"][k] for e in invs)
@@ -509,7 +598,10 @@ def summary(spec, linked, raw_columns, raw_values, zip_sample):
                        "pipeline/spec/raw_names.json", "pipeline/spec/raw_kinds.json", "pipeline/spec/raw_columns.json",
                        "data/pipeline/raw_values.csv", "data/pipeline/archive_members_sample.csv"],
             "layers": S["layers"], "levels": S["levels"], "units": S["units"],
-            "archive_sample": spec["archive_sample_note"]}
+            "archive_sample": spec["archive_sample_note"],
+            "quote_relation": spec["_meta"]["quote_relation"],
+            "several_rows_and_other_ties": spec["_meta"]["several_rows_and_other_ties"],
+            "open_points": spec["_meta"]["open_points"]}
     return {"_meta": meta, "sentences": sent, "overall": overall, "investigations": invs}
 
 
@@ -527,10 +619,15 @@ def main():
     gcols = ["investigation_id", "psi_category", "kind", "name_pattern", "suffix_code", "files", "bytes", "link_levels",
              "rules", "files_tied_to_a_test", "bytes_tied_to_a_test", "files_tied_to_a_day_or_session",
              "bytes_tied_to_a_day_or_session", "files_not_tied", "bytes_not_tied", "distinct_tests_reached",
-             "distinct_table_rows_reached", "suffix_meaning", "example_name", "example_file_id"]
+             "distinct_table_rows_reached", "suffix_meaning", "example_name", "example_file_id",
+             "quote_relation", "files_with_another_tie_by_name", "files_tied_to_several_rows"]
     write_csv(os.path.join(OUT, "raw_file_groups.csv"), gcols, group_rows(linked))
-    tcols = ["investigation_id", "test_id", "table_row_key", "link_level", "kind", "suffix_code", "files", "bytes"]
+    tcols = ["investigation_id", "test_id", "table_row_key", "link_level", "kind", "suffix_code", "files", "bytes",
+             "files_also_counted_for_another_row"]
     write_csv(os.path.join(OUT, "test_files.csv"), tcols, test_file_rows(linked))
+    acols = ["investigation_id", "file_id", "name", "kind", "bytes", "deciding_rule", "deciding_level", "deciding_rows",
+             "other_rule", "other_level", "other_rows"]
+    write_csv(os.path.join(OUT, "name_tie_alternatives.csv"), acols, alternative_rows(linked))
     sample_path = os.path.join(OUT, "archive_members_sample.csv")
     arows = read_csv(sample_path) if os.path.exists(sample_path) else []
     raw_columns = read_json(os.path.join(HERE, "spec", "raw_columns.json"))
@@ -538,7 +635,7 @@ def main():
     write_json(os.path.join(OUT, "raw_layers_summary.json"), summary(spec, linked, raw_columns, raw_values, arows))
     n = sum(len(r) for _, r in linked.values())
     print("raw_names: %d files of %d investigations; wrote raw_file_groups.csv, test_files.csv, "
-          "raw_layers_summary.json" % (n, len(linked)))
+          "name_tie_alternatives.csv, raw_layers_summary.json" % (n, len(linked)))
     return 0
 
 

@@ -5186,8 +5186,11 @@ def p_key(tr, s):
     raise ValueError("unknown key transform " + tr)
 
 
-def p_cells(tr, cells):
+def p_cells(tr, cells, pairs=None):
     c = cells[0].strip()
+    if tr == "lookup_date":
+        d = p_cell_date(c) if c else None
+        return set(pairs.get(d.isoformat(), [])) if d else set()
     if tr == "ymd_cols":
         y, mo, d = [x.strip() for x in cells]
         mo = mo.rstrip(".").lower()
@@ -5253,8 +5256,24 @@ def p_rows(spec_inv):
     return rows
 
 
+def p_pattern(base):
+    """name_pattern as _meta.name_pattern of raw_names.json defines it."""
+    m = re.search(r"\.[A-Za-z0-9]{1,5}$", base)
+    stem, ext = (base[:m.start()], m.group()) if m else (base, "")
+    parts = re.split(r"([\s_\-.()\[\],])", stem)
+    return "".join("<ID>" if any(ch.isdigit() for ch in x) and not re.fullmatch(r"[\s_\-.()\[\],]", x) else x
+                   for x in parts) + ext
+
+
+def p_nested(a, b):
+    a, b = set(a), set(b)
+    return a <= b or b <= a
+
+
 def p_ties(ctx):
-    """{investigation: [(file, level, [row keys], [test ids], suffix code)]} by the rules of raw_names.json."""
+    """{investigation: [(file, level, [row keys], [test ids], suffix code, rule id, [other ties])]} by the rules of
+    raw_names.json; other ties: (rule id, level, [row keys]) of later matches whose rows are not nested with the
+    deciding rows."""
     def load():
         spec = ctx.spec("raw_names")
         test_of = {(t["source_file"], int(t["source_row"])): t["test_id"] for t in ctx.tests}
@@ -5265,6 +5284,7 @@ def p_ties(ctx):
             res = []
             for f in files:
                 found = None
+                every = []
                 for r in si["rules"]:
                     fl = re.I if r.get("ignore_case") else 0
                     if (r.get("categories") and f["category"] not in r["categories"]) or f["kind"] in r.get("exclude_kinds", []):
@@ -5278,7 +5298,8 @@ def p_ties(ctx):
                         cand = [(t, n, c) for t, n, c in rows if (not r.get("tables") or t in r["tables"])
                                 and all(re.search(x["regex"], c[x["column"]]) for x in r.get("row_filter", []))]
                         hit = {g: [(t, n) for t, n, c in cand
-                                   if keys[g] in p_cells(r["fields"][g]["cell"], [c[k] for k in r["fields"][g]["columns"]])]
+                                   if keys[g] in p_cells(r["fields"][g]["cell"], [c[k] for k in r["fields"][g]["columns"]],
+                                                         si.get("lookups", {}).get(r["fields"][g].get("lookup"), {}).get("pairs"))]
                                for g in keys}
                         if r.get("mode") == "each_field_ties_union":
                             got = sorted({x for v in hit.values() for x in v}, key=[(t, n) for t, n, _ in rows].index) \
@@ -5287,14 +5308,17 @@ def p_ties(ctx):
                             got = [x for x in next(iter(hit.values())) if all(x in v for v in hit.values())]
                         if got:
                             lv = r.get("level_if_several_rows") if len(got) > 1 and r.get("level_if_several_rows") else r["level"]
-                            found = (lv, got)
-                            break
-                    if found:
-                        break
-                level, got = found or ("none", [])
+                            every.append((r["id"], lv, got))
+                found = every[0] if every else None
+                rule, level, got = found or ("", "none", [])
+                others = []
+                for o in every[1:]:
+                    if not p_nested(o[2], got) and o not in others:
+                        others.append(o)
                 suf = next((s["code"] for s in si["suffix_codes"]
                             if re.search(s["pattern"], f["base"], re.I if s.get("ignore_case") else 0)), "(no suffix code)")
-                res.append((f, level, ["%s#row%d" % x for x in got], sorted({test_of[x] for x in got if x in test_of}), suf))
+                res.append((f, level, ["%s#row%d" % x for x in got], sorted({test_of[x] for x in got if x in test_of}), suf,
+                            rule, [(o[0], o[1], ["%s#row%d" % x for x in o[2]]) for o in others]))
             out[inv] = res
         return out
     return ctx._get("p_ties", load)
@@ -5379,8 +5403,18 @@ def check_p3(ctx):
     ties = p_ties(ctx)
     tf, groups, summary = {}, {}, {}
     by_row = {"%s#row%s" % (t["source_file"], t["source_row"]): t["test_id"] for t in ctx.tests}
+    full, alt = {}, []
+    rel = {inv: {e["code"]: (e.get("meaning") or {}).get("quote_relation", "")
+                 for e in si["suffix_codes"]} for inv, si in ctx.spec("raw_names")["investigations"].items()}
     for inv, recs in ties.items():
-        for f, level, rows, tests, suf in recs:
+        for f, level, rows, tests, suf, rule, others in recs:
+            fg = full.setdefault((inv, f["category"], f["kind"], p_pattern(f["base"]), suf), [set(), 0, 0, rel[inv].get(suf, "")])
+            if rule:
+                fg[0].add(rule)
+            fg[1] += bool(others)
+            fg[2] += len(rows) > 1
+            for o in others:
+                alt.append((inv, f["id"], rule, level, ";".join(rows), o[0], o[1], ";".join(o[2])))
             res.checked += 1
             s = summary.setdefault(inv, {lv: [0, 0] for lv in P_LEVELS})
             s[level][0] += 1
@@ -5394,11 +5428,13 @@ def check_p3(ctx):
             if level == "none":
                 continue
             for rk in rows:
-                a = tf.setdefault((inv, by_row.get(rk, ""), rk, level, f["kind"], suf), [0, 0])
+                a = tf.setdefault((inv, by_row.get(rk, ""), rk, level, f["kind"], suf), [0, 0, 0])
                 a[0] += 1
                 a[1] += f["bytes"]
+                a[2] += len(rows) > 1
     got_tf = {(r["investigation_id"], r["test_id"], r["table_row_key"], r["link_level"], r["kind"], r["suffix_code"]):
-              [int(r["files"]), int(r["bytes"])] for r in ctx.table("test_files.csv")}
+              [int(r["files"]), int(r["bytes"]), int(r["files_also_counted_for_another_row"])]
+              for r in ctx.table("test_files.csv")}
     if got_tf != tf:
         diff = sorted(set(got_tf) ^ set(tf)) + sorted(k for k in set(got_tf) & set(tf) if got_tf[k] != tf[k])
         res.fail(problem="test_files.csv differs from the recount", rows=len(diff), examples=diff[:5])
@@ -5410,12 +5446,26 @@ def check_p3(ctx):
     if got_g != groups:
         res.fail(problem="raw_file_groups.csv by category, kind and suffix code differs from the recount",
                  examples=sorted(k for k in set(got_g) | set(groups) if got_g.get(k) != groups.get(k))[:5])
+    got_full = {(r["investigation_id"], r["psi_category"], r["kind"], r["name_pattern"], r["suffix_code"]):
+                [set(x for x in r["rules"].split(";") if x), int(r["files_with_another_tie_by_name"]),
+                 int(r["files_tied_to_several_rows"]), r["quote_relation"]] for r in ctx.table("raw_file_groups.csv")}
+    if got_full != full:
+        res.fail(problem="raw_file_groups.csv by name pattern: rules, other ties, several rows or quote relation "
+                         "differ from the recount",
+                 examples=sorted(k for k in set(got_full) | set(full) if got_full.get(k) != full.get(k))[:5])
+    if not ctx.has("name_tie_alternatives.csv"):
+        res.fail(problem="name_tie_alternatives.csv not written")
+    else:
+        got_alt = sorted((r["investigation_id"], r["file_id"], r["deciding_rule"], r["deciding_level"], r["deciding_rows"],
+                          r["other_rule"], r["other_level"], r["other_rows"]) for r in ctx.table("name_tie_alternatives.csv"))
+        if got_alt != sorted(alt):
+            res.fail(problem="name_tie_alternatives.csv differs from the recount", rows=len(got_alt), recount=len(alt))
     for e in ctx.json("raw_layers_summary.json")["investigations"]:
         want = summary.get(e["investigation_id"])
         if want is None or {lv: [e["names"][lv]["files"], e["names"][lv]["bytes"]] for lv in P_LEVELS} != want:
             res.fail(problem="names layer of the summary differs from the recount", investigation=e["investigation_id"])
     res.numbers = {"files": res.checked, "by_level": {lv: sum(s[lv][0] for s in summary.values()) for lv in P_LEVELS},
-                   "test_files_rows": len(tf)}
+                   "test_files_rows": len(tf), "name_patterns": len(full), "alternative_ties": len(alt)}
     return res
 
 
@@ -5480,6 +5530,41 @@ def check_p4(ctx):
     A = O["archive_directories_listed"]
     if [A["archives"], A["bytes_of_those_archives"], A["bytes_fetched"]] != tot["z"]:
         res.fail(problem="overall archive layer is not the sum")
+    sev = {}
+    for r in ctx.table("raw_file_groups.csv"):
+        a = sev.setdefault(r["investigation_id"], [0, 0])
+        a[0] += int(r["files_tied_to_several_rows"])
+        a[1] += int(r["files_with_another_tie_by_name"])
+    for e in S["investigations"]:
+        if [e["files_tied_to_several_rows"], e["files_with_another_tie_by_name"]] != sev.get(e["investigation_id"], [0, 0]):
+            res.fail(problem="several-rows or other-tie counts differ from raw_file_groups.csv", investigation=e["investigation_id"])
+    if [O["files_tied_to_several_rows"], O["files_with_another_tie_by_name"]] != [sum(v[0] for v in sev.values()),
+                                                                                 sum(v[1] for v in sev.values())]:
+        res.fail(problem="overall several-rows or other-tie counts are not the sum")
+    spec_n = ctx.spec("raw_names")
+    rel_n, none_n, n_entries = {}, 0, 0
+    for si in spec_n["investigations"].values():
+        for e in si["suffix_codes"]:
+            n_entries += 1
+            m = e.get("meaning")
+            if m:
+                rel_n[m["quote_relation"]] = rel_n.get(m["quote_relation"], 0) + 1
+            else:
+                none_n += 1
+    SC = O["suffix_codes"]
+    if [SC["entries"], SC["entries_with_a_quote"], SC["entries_without_a_quote"]] != [n_entries, rel_n, none_n]:
+        res.fail(problem="suffix code counts of the summary differ from the spec")
+    used = {(r["investigation_id"], r["suffix_code"]) for r in ctx.table("raw_file_groups.csv")}
+    unused = sorted((inv, e["code"]) for inv, si in spec_n["investigations"].items() for e in si["suffix_codes"]
+                    if (inv, e["code"]) not in used)
+    if sorted((x["investigation_id"], x["code"]) for x in SC["entries_matching_no_file"]) != unused:
+        res.fail(problem="suffix entries matching no file differ from raw_file_groups.csv")
+    byrel = {}
+    for r in ctx.table("raw_file_groups.csv"):
+        k = r["quote_relation"] or ("no quote" if r["suffix_code"] != "(no suffix code)" else "no suffix code")
+        byrel[k] = byrel.get(k, 0) + int(r["files"])
+    if SC["files_by_quote_relation"] != byrel:
+        res.fail(problem="files by quote relation differ from raw_file_groups.csv")
     text = " ".join(S["sentences"])
     for num in (O["files"], tot["names"]["test"][0], tot["names"]["day_or_session"][0], tot["names"]["none"][0],
                 tot["o"][0], tot["v"][0], tot["z"][0], tot["z"][2], tot["z"][1]):
@@ -5535,7 +5620,7 @@ def p_video_sentences(ctx, inv, ids):
        "The columns that the name layer added to gap_states.csv, retrieval_queue.csv and need_gap_states.csv (videos and "
        "archives tied by name to the tests that lack the value, the class of on-screen text) and the fields added to the "
        "raw_state items of the evidence packages are recounted from test_files.csv, tests.csv and spec/raw_names.json; "
-       "no sentence says that a quantity is in a video.")
+       "no sentence says that the quantity of an item can be read from a video.")
 def check_p5(ctx):
     res = Result()
     for name in ("test_files.csv", "gap_states.csv", "retrieval_queue.csv", "need_gap_states.csv"):
@@ -5635,6 +5720,8 @@ def check_p6(ctx):
                 res.fail(problem="quote too long or source incomplete", investigation=inv, code=e["code"])
             if ids is not None and m["file_id"] not in ids:
                 res.fail(problem="file id of the quote is not in the listing", investigation=inv, file_id=m["file_id"])
+            if m.get("quote_relation") not in spec["_meta"]["quote_relation"]:
+                res.fail(problem="quote without a known quote_relation", investigation=inv, code=e["code"])
         headers = {t: read_raw_table(t)[0] for t in si["tables"]}
         for r in si["rules"]:
             for g, f in r["fields"].items():
@@ -5643,6 +5730,10 @@ def check_p6(ctx):
                 for t in (r.get("tables") or si["tables"]):
                     if any(c not in headers[t] for c in f["columns"]):
                         res.fail(problem="column not in table", investigation=inv, rule=r["id"], table=t)
+                if f.get("lookup") and not (si.get("lookups", {}).get(f["lookup"], {}).get("pairs")):
+                    res.fail(problem="lookup of the field is not in the investigation", investigation=inv, rule=r["id"])
+                if (f["cell"] == "lookup_date") != bool(f.get("lookup")):
+                    res.fail(problem="lookup_date without a lookup, or a lookup without lookup_date", investigation=inv, rule=r["id"])
                 if "(?P<%s>" % g not in r["pattern"]:
                     res.fail(problem="field has no group in the pattern", investigation=inv, rule=r["id"], field=g)
     res.numbers = {"quotes": res.checked, "listings_present": have_list,

@@ -27,21 +27,69 @@
    "gmt_int": "the number after GMT in the cell",
    "slash_parts_upper": "the parts of the cell split at '/', upper case",
    "each_upper": "every cell of the field's columns, upper case",
-   "after_hyphen": "the part of the cell after the first hyphen"
+   "after_hyphen": "the part of the cell after the first hyphen",
+   "lookup_date": "the date of the cell (as 'date'), replaced by the dates that the investigation's 'lookups' entry named by the field's 'lookup' pairs with it"
   },
   "levels": {
    "test": "the name carries the identifier of one test (one row of the table; two rows where the table repeats an identifier)",
    "day_or_session": "the name carries a day, session or set key that several rows share, or a row key that is not a test of tests.csv",
    "none": "no rule ties the file"
   },
-  "suffix_rule": "The suffix code of a file is the first entry of 'suffix_codes' whose pattern is found in the name (case as the entry says); a file that no entry matches has '(no suffix code)'. A meaning is a quote of 25 words or fewer from a NASA document of the investigation, confirmed in the document text on 2026-11-14 (document, PSI file id, place); 'meaning': null means that no stated meaning was found in the documents read.",
-  "video_rule": "'videos.on_screen_text' is the class that the earlier video survey gave after opening a few videos per investigation and re-viewing the frames; 'labels_seen' are the labels read on screen; 'opened' and 'with_text' count the videos opened and those that showed readings. It says what the opened videos showed, not what the other videos show.",
+  "suffix_rule": "The suffix code of a file is the first entry of 'suffix_codes' whose pattern is found in the name (case as the entry says); a file that no entry matches has '(no suffix code)'. A meaning is a quote of 25 words or fewer from a NASA document of the investigation, confirmed in the document text on 2026-11-14 (document, PSI file id, place); 'meaning': null means that no stated meaning was found in the documents read. Each meaning carries 'quote_relation' (_meta.quote_relation); raw_file_groups.csv writes the relation in its column quote_relation and in the text of suffix_meaning, so that only a quote of relation states_meaning reads as a meaning. Four labels that named a kind wrong for some of their files were shortened on 2026-11-14 (the old label is kept in 'label_before_2026_11_14_review').",
+  "video_rule": "'videos.on_screen_text' is the class that the earlier video survey gave after opening a few videos per investigation and re-viewing the frames; 'labels_seen' are the labels read on screen; 'opened' and 'with_text' count the videos opened and those that showed readings. It says what the opened videos showed, not what the other videos show. 'no video opened' means that the survey opened no video of the investigation.",
   "quote_check": "Every quote under 'meaning' (suffix codes and identifier meanings) was searched for in the text of its document (pdftotext, or the XML text of docx, pptx and xlsx files) after folding white space, case and typographic quotes, on 2026-11-14; all 139 quotes were found, in 38 documents of 19 investigations. Quotes not found would have been dropped.",
   "differences_from_survey": [
    "PSI-69: 6 files that the survey tied through an identifier stated inside the opened file (FLEX-073_ResultsSummary.pdf and five others) are not tied here: the rules read names only.",
    "PSI-101: 43 HKPData_gmt<day> files that the survey tied to days by reading the day number as a day of 2010 are not tied here (no year in the name or the cell); 2 files whose only number is a test number in running text ('more 54.zip', 'SPV of 54-7L_21 ...') are not tied here.",
    "PSI-107: 41 'TP <number>' files that the survey tied to one test through the master sheet column 'No.' are tied to their day here (the master sheet is not in the repository).",
    "The other 60,706 of the 60,798 files of the 19 investigations with a survey links file have the same link level, and the test-level files the same tests, as the survey."
+  ],
+  "quote_relation": {
+   "states_meaning": "the quote says what files with this name part are or hold, or what the name part denotes",
+   "expansion_only": "the quote expands an abbreviation (a glossary or acronym entry); it does not say what files with this name part hold",
+   "about_another_thing": "the quote is about a related thing (a file type, the PSI web record, one named file, a camera, a procedure step or a recording format), not about what files with this name part hold",
+   "name_form_only": "the quote gives the form of the name only, not what the files hold"
+  },
+  "name_pattern": "name_pattern of raw_file_groups.csv: the name without the PSI prefix, its extension (a final dot and one to five letters or digits) set aside; the rest is split into tokens, maximal runs of characters other than white space and _ - . ( ) [ ] ,; every token that holds a digit becomes <ID>; the extension is put back as written.",
+  "group_columns": "example_name is the listing name of the file whose name without the PSI prefix comes first in code-point order (then by file id); link_levels lists the levels that have files in the order test;day_or_session;none; suffix_meaning is empty for '(no suffix code)'.",
+  "table_reading": "The experimental tables are read as raw_names.py, run.py and check.py read them: UTF-8 with a byte-order mark removed, bytes that are not UTF-8 replaced by U+FFFD, cells stripped. Only PSI-69 'FLEX' is not valid UTF-8 (34 cells of the two diameter columns hold a replaced byte); no rule reads those columns.",
+  "several_rows_and_other_ties": "A file whose tie reaches several rows is counted once for each row in test_files.csv (column files_also_counted_for_another_row); summing files over rows counts such files more than once. data/pipeline/name_tie_alternatives.csv lists every file where another rule, or another match of the same rule, would tie a different set of rows; the first match in rule order decides (rule_order).",
+  "open_points": [
+   {
+    "investigation_id": "PSI-106",
+    "rule": "R4",
+    "text": "Folders 'Legacy/OMA Format/059_UT058_forHSV_splice_images_DSC957_data' (1,910 files) and 'Legacy/OMA Format/084_ForHSV_splice_UT083c_DSC957_data' (1,878 files) carry two day-like numbers; the first (059, 084) equals no 'Test Date' day, so the files are tied by the second (058, 083). A person decides whether to keep these ties."
+   },
+   {
+    "investigation_id": "PSI-22",
+    "rule": "R1",
+    "text": "'18269D1_for 18274D1_ACME.zip' carries two test days; the first (18269) decides, 18274 is not tied (name_tie_alternatives.csv)."
+   },
+   {
+    "investigation_id": "PSI-20",
+    "rule": "R1",
+    "text": "'vlc-record-2020-12-05-01h42m50s-udp____20339_IgniterCheck' (.mp4 and .zip) ties day 20339 by rule R1; the date 2020-12-05 in the same name would tie another row by rule R3 (name_tie_alternatives.csv)."
+   },
+   {
+    "investigation_id": "PSI-39",
+    "rule": "C, CF, D, DM",
+    "text": "Table rows 81-88 repeat Flex Number, CIR and date of rows 24-31 and are not tests of tests.csv; files tied to rows 24-31 are also tied to rows 81-88 (files_also_counted_for_another_row of test_files.csv)."
+   },
+   {
+    "investigation_id": "PSI-39",
+    "rule": "C, D",
+    "text": "Five files whose names carry CIR 'F180D02' and the date 2017-06-29 are tied by rule C to row 38 (Flex Number 1301, CIR 'f180d02', Test Date '29-Jul-17'); the date in the same names equals the Test Date '29-Jun-17' of row 37 (Flex Number 1300) (name_tie_alternatives.csv)."
+   },
+   {
+    "investigation_id": "PSI-26",
+    "rule": "A1, A2",
+    "text": "Archive names carry either the 'Date on videos and images' (rule A1) or a date that is only an 'Actual Date' (rule A2); the documents do not say which date the archives are named by."
+   },
+   {
+    "investigation_id": "PSI-25, PSI-26, PSI-106, PSI-107",
+    "rule": "videos",
+    "text": "The fixed sentence 'Opened videos of this investigation show readings as on-screen text: ...' is attached to raw_state items of every variable of these investigations, also of variables that are not among the labels seen. A person decides whether to keep it."
+   }
   ]
  },
  "summary": {
@@ -67,7 +115,7 @@
  },
  "raw_state_sentences": {
   "_note": "Fixed sentences added by pipeline/raw_gaps.py to need_gap_states.csv and to the raw_state items of the evidence packages, where videos are tied by name to tests that lack the variable. {n}: videos tied by name to these tests (a file tied to two tests counts once per test); {m}: tests with at least one such video.",
-  "videos_tied": "{n} videos are tied by name to {m} of these tests; whether the quantity can be read from them was not checked.",
+  "videos_tied": "Videos tied by name to {m} of these tests: {n}; whether the quantity can be read from them was not checked.",
   "videos_on_screen": "Opened videos of this investigation show readings as on-screen text: {labels} ({seen})."
  },
  "archive_sample_note": "A sample: directories of 23 archives chosen by size class and name pattern (3 by size, then the median-size archive of the 20 largest name-pattern groups); member names were read, members were not opened.",
@@ -136,15 +184,17 @@
    "rules_not_applied": [],
    "suffix_codes": [
     {
-     "code": "vlc-record (operations camera video)",
+     "code": "vlc-record",
      "pattern": "vl[ci]-record",
      "meaning": {
       "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
       "file_id": "691f7eef17f78b371b2705e0",
       "where": "PDF page 93; the document does not mention vlc-record",
-      "quote": "the analog operations (ops) video was recorded on the ground in a Transport Stream (ts) format"
+      "quote": "the analog operations (ops) video was recorded on the ground in a Transport Stream (ts) format",
+      "quote_relation": "about_another_thing"
      },
-     "ignore_case": true
+     "ignore_case": true,
+     "label_before_2026_11_14_review": "vlc-record (operations camera video)"
     },
     {
      "code": "as run (parameter file)",
@@ -173,7 +223,8 @@
       "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
       "file_id": "691f7eef17f78b371b2705e0",
       "where": "PDF page 39, status of data analysis; the document does not name the archives",
-      "quote": "All of the raw (hobj) images obtained from the ACME camera have been successfully converted to tiff files for further analysis."
+      "quote": "All of the raw (hobj) images obtained from the ACME camera have been successfully converted to tiff files for further analysis.",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -202,7 +253,8 @@
       "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
       "file_id": "691f7eef17f78b371b2705e0",
       "where": "PDF page 29, glossary; the document does not say what a _HiBMS archive holds",
-      "quote": "High Bit-depth Multi-spectral camera"
+      "quote": "High Bit-depth Multi-spectral camera",
+      "quote_relation": "expansion_only"
      },
      "ignore_case": true
     },
@@ -231,7 +283,8 @@
       "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
       "file_id": "691f7eef17f78b371b2705e0",
       "where": "PDF page 93; the document does not name the file pattern",
-      "quote": "The key non-imaging data from a test is a comma-delimited file"
+      "quote": "The key non-imaging data from a test is a comma-delimited file",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -241,7 +294,8 @@
       "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
       "file_id": "691f7eef17f78b371b2705e0",
       "where": "PDF page 29, glossary (MFC); nothing is said about setpoint files",
-      "quote": "Mass Flow Controller"
+      "quote": "Mass Flow Controller",
+      "quote_relation": "expansion_only"
      },
      "ignore_case": true
     },
@@ -272,14 +326,16 @@
      "meaning": null
     },
     {
-     "code": "GC (archive or converter)",
+     "code": "GC",
      "pattern": "_GC\\.zip$|GC_Co",
      "meaning": {
       "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
       "file_id": "691f7eef17f78b371b2705e0",
       "where": "PDF page 28, glossary; the document does not mention GC_Coverter files",
-      "quote": "Gas Chromatograph"
-     }
+      "quote": "Gas Chromatograph",
+      "quote_relation": "expansion_only"
+     },
+     "label_before_2026_11_14_review": "GC (archive or converter)"
     },
     {
      "code": "ACME.log / log file",
@@ -340,7 +396,8 @@
       "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
       "file_id": "691f7eef17f78b371b2705e0",
       "where": "PDF page 24, Table 1, footnote 1; the document does not mention file names",
-      "quote": "Test day includes the year as the first two digits followed by the 3-digit day of the year."
+      "quote": "Test day includes the year as the first two digits followed by the 3-digit day of the year.",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -404,10 +461,11 @@
    "rules_not_applied": [],
    "suffix_codes": [
     {
-     "code": "vlc-record (operations camera video)",
+     "code": "vlc-record",
      "pattern": "vl[ci]-record",
      "meaning": null,
-     "ignore_case": true
+     "ignore_case": true,
+     "label_before_2026_11_14_review": "vlc-record (operations camera video)"
     },
     {
      "code": "as run (parameter file)",
@@ -416,7 +474,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 16, section 4.B.2",
-      "quote": "The parameter files, with names like 'as run21028C1.txt,' control the DataCam exposures and much more."
+      "quote": "The parameter files, with names like 'as run21028C1.txt,' control the DataCam exposures and much more.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -426,7 +485,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 15, section 4.B.2",
-      "quote": "This is an example of the metadata format from ACME_21028C1.mdipsug."
+      "quote": "This is an example of the metadata format from ACME_21028C1.mdipsug.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -436,7 +496,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 17, section 4.B.3",
-      "quote": "where INTNS designates the CFI intensified camera"
+      "quote": "where INTNS designates the CFI intensified camera",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -475,7 +536,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 11, section 4.B; the content of the archives is not stated",
-      "quote": "High Bit-depth Multi-spectral (HiBMs) camera"
+      "quote": "High Bit-depth Multi-spectral (HiBMs) camera",
+      "quote_relation": "expansion_only"
      },
      "ignore_case": true
     },
@@ -492,7 +554,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 22, section 4.C.5 Logs",
-      "quote": "the IPSU-G is the processing and storage unit for the images from the ACME DataCam and CFI intensified camera."
+      "quote": "the IPSU-G is the processing and storage unit for the images from the ACME DataCam and CFI intensified camera.",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -509,7 +572,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 7, section 4.A.1",
-      "quote": "The basic ACME non-imaging measurements for each test are together in a file"
+      "quote": "The basic ACME non-imaging measurements for each test are together in a file",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -519,7 +583,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 9, section 4.A.2",
-      "quote": "a separate file for each test with a name like 19039A1_mfcSetpoints.csv"
+      "quote": "a separate file for each test with a name like 19039A1_mfcSetpoints.csv",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -530,7 +595,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 21, section 4.C.4",
-      "quote": "Timing files with names such as 19039C1_TP.txt can be a convenient way to determine the phases of the test"
+      "quote": "Timing files with names such as 19039C1_TP.txt can be a convenient way to determine the phases of the test",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -556,13 +622,15 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 9, section 4.A.3 GCIP data",
-      "quote": "The raw data files are in a text (i.e.., ASCII) format"
+      "quote": "The raw data files are in a text (i.e.., ASCII) format",
+      "quote_relation": "states_meaning"
      }
     },
     {
-     "code": "GC (archive or converter)",
+     "code": "GC",
      "pattern": "_GC\\.zip$|GC_Co",
-     "meaning": null
+     "meaning": null,
+     "label_before_2026_11_14_review": "GC (archive or converter)"
     },
     {
      "code": "ACME.log / log file",
@@ -571,7 +639,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 22, section 4.C.5 Logs",
-      "quote": "created for each day of testing, rather than for each test"
+      "quote": "created for each day of testing, rather than for each test",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -586,7 +655,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 21, section 4.C.3 Notes",
-      "quote": "are summary notes about the conduct of each tests conducted that day"
+      "quote": "are summary notes about the conduct of each tests conducted that day",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -597,7 +667,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 21, section 4.C.3 Notes",
-      "quote": "chronologically list the tests and the image data acquired which was to be downlinked"
+      "quote": "chronologically list the tests and the image data acquired which was to be downlinked",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -608,7 +679,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 21, section 4.C.3 Notes",
-      "quote": "include preliminary plots of the flow rates"
+      "quote": "include preliminary plots of the flow rates",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -619,7 +691,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 21, section 4.C.3 Notes",
-      "quote": "show the parameter values which were planned in advance of the test day and the changes made during the test day"
+      "quote": "show the parameter values which were planned in advance of the test day and the changes made during the test day",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -630,7 +703,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 19, section 4.C.1",
-      "quote": "provide estimates of the composition of the combustion chamber before and after each BRE test"
+      "quote": "provide estimates of the composition of the combustion chamber before and after each BRE test",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -653,7 +727,8 @@
       "document": "PSI-20_Science Documents_ACME_BRE_Readme.docx",
       "file_id": "6841d82b1b4820d736ceccd6",
       "where": "first paragraph",
-      "quote": "Test names are formatted YYDDDX# where YY identifies year, DDD identifies day of year (GMT)"
+      "quote": "Test names are formatted YYDDDX# where YY identifies year, DDD identifies day of year (GMT)",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -662,7 +737,8 @@
       "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
       "file_id": "6841d8151b4820d736cecc0e",
       "where": "PDF page 7, section 4.A.1",
-      "quote": "the day portion of ACME test numbers is not changed when operations continue past midnight"
+      "quote": "the day portion of ACME test numbers is not changed when operations continue past midnight",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -723,15 +799,17 @@
    "rules_not_applied": [],
    "suffix_codes": [
     {
-     "code": "vlc-record (operations camera video)",
+     "code": "vlc-record",
      "pattern": "vl[ci]-record",
      "meaning": {
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 10, section 4.B.1; the text does not mention the file name vlc-record",
-      "quote": "in a Transport Stream (TS) format using VLC Media Player"
+      "quote": "in a Transport Stream (TS) format using VLC Media Player",
+      "quote_relation": "about_another_thing"
      },
-     "ignore_case": true
+     "ignore_case": true,
+     "label_before_2026_11_14_review": "vlc-record (operations camera video)"
     },
     {
      "code": "as run (parameter file)",
@@ -740,7 +818,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 15, section 4.B.2",
-      "quote": "control the DataCam exposures and much more."
+      "quote": "control the DataCam exposures and much more.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -750,7 +829,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 14, section 4.B.2",
-      "quote": "This is an example of the metadata format from ACME_21062M1.mdipsug."
+      "quote": "This is an example of the metadata format from ACME_21062M1.mdipsug.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -760,7 +840,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 15, section 4.B.3",
-      "quote": "where INTNS designates the CFI intensified camera"
+      "quote": "where INTNS designates the CFI intensified camera",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -799,7 +880,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 28, Appendix A; the text does not say what a _HiBMS archive holds",
-      "quote": "High Bit-depth Multi-spectral camera"
+      "quote": "High Bit-depth Multi-spectral camera",
+      "quote_relation": "expansion_only"
      },
      "ignore_case": true
     },
@@ -828,7 +910,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 2, section 1",
-      "quote": "a sample data file be opened, named for example 21050R1_data.csv, which has comma-separated values"
+      "quote": "a sample data file be opened, named for example 21050R1_data.csv, which has comma-separated values",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -838,7 +921,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 9, section 4.A.2",
-      "quote": "a separate file for each test with a name like 21050R1_mfcSetpoints.csv"
+      "quote": "a separate file for each test with a name like 21050R1_mfcSetpoints.csv",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -849,7 +933,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 20, section 4.C.4",
-      "quote": "Timing files with names such as 21062M1_TP.txt can be a convenient way to determine the phases of the test"
+      "quote": "Timing files with names such as 21062M1_TP.txt can be a convenient way to determine the phases of the test",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -874,9 +959,10 @@
      "meaning": null
     },
     {
-     "code": "GC (archive or converter)",
+     "code": "GC",
      "pattern": "_GC\\.zip$|GC_Co",
-     "meaning": null
+     "meaning": null,
+     "label_before_2026_11_14_review": "GC (archive or converter)"
     },
     {
      "code": "ACME.log / log file",
@@ -885,7 +971,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 21, section 4.C.5 Logs",
-      "quote": "These log files are created for each day of testing, rather than for each test"
+      "quote": "These log files are created for each day of testing, rather than for each test",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -900,7 +987,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 20, section 4.C.3 Notes",
-      "quote": "are summary notes about the conduct of each tests conducted that day"
+      "quote": "are summary notes about the conduct of each tests conducted that day",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -929,7 +1017,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 18, section 4.C.1",
-      "quote": "These files provide estimates of the composition of the combustion chamber before and after each test"
+      "quote": "These files provide estimates of the composition of the combustion chamber before and after each test",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -952,7 +1041,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 6, section 4.A.1",
-      "quote": "The test number is made up of the year (2-digts), day of year (3 digits), and test (a letter and single-digit number)."
+      "quote": "The test number is made up of the year (2-digts), day of year (3 digits), and test (a letter and single-digit number).",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -961,7 +1051,8 @@
       "document": "CLD_Flame_data_interpretation_20230825.pdf",
       "file_id": "66eb9297c6ad4bdc12fa0981",
       "where": "page 6, section 4.A.1",
-      "quote": "the day portion of ACME test numbers is not changed when operations continue past midnight"
+      "quote": "the day portion of ACME test numbers is not changed when operations continue past midnight",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -1025,15 +1116,17 @@
    "rules_not_applied": [],
    "suffix_codes": [
     {
-     "code": "vlc-record (operations camera video)",
+     "code": "vlc-record",
      "pattern": "vl[ci]-record",
      "meaning": {
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 13, section 4.B.1; the document does not name the vlc-record files",
-      "quote": "in a Transport Stream (TS) format using VLC Media Player"
+      "quote": "in a Transport Stream (TS) format using VLC Media Player",
+      "quote_relation": "about_another_thing"
      },
-     "ignore_case": true
+     "ignore_case": true,
+     "label_before_2026_11_14_review": "vlc-record (operations camera video)"
     },
     {
      "code": "as run (parameter file)",
@@ -1047,7 +1140,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 16, section 4.B.2",
-      "quote": "where ACME designates the DataCam"
+      "quote": "where ACME designates the DataCam",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1057,7 +1151,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 21, section 4.B.3",
-      "quote": "where INTNS designates the CFI intensified camera."
+      "quote": "where INTNS designates the CFI intensified camera.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1096,7 +1191,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 37, Appendix A; the archive content is not stated",
-      "quote": "High Bit-depth Multi-spectral camera"
+      "quote": "High Bit-depth Multi-spectral camera",
+      "quote_relation": "expansion_only"
      },
      "ignore_case": true
     },
@@ -1113,7 +1209,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 26, section 4.C.4 Logs",
-      "quote": "the IPSU-G is the processing and storage unit for the images from the ACME DataCam and CFI intensified camera"
+      "quote": "the IPSU-G is the processing and storage unit for the images from the ACME DataCam and CFI intensified camera",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -1130,7 +1227,8 @@
       "document": "PSI-22_Science Documents_ACME non-imaging data file description.pdf",
       "file_id": "6851e75a0eb4c08676005567",
       "where": "PDF page 2, section 8.1 Data Output File",
-      "quote": "where testpointName is the parameter received in the SystemOpenTestPoint command"
+      "quote": "where testpointName is the parameter received in the SystemOpenTestPoint command",
+      "quote_relation": "name_form_only"
      }
     },
     {
@@ -1140,7 +1238,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 9, section 4.A.2",
-      "quote": "a separate file for each test with a name like 18073A3_mfcSetpoints.csv"
+      "quote": "a separate file for each test with a name like 18073A3_mfcSetpoints.csv",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -1151,7 +1250,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 25, section 4.C.3",
-      "quote": "Timing files with names such as 18073A3_TP.txt can be a convenient way to determine the phases of the test"
+      "quote": "Timing files with names such as 18073A3_TP.txt can be a convenient way to determine the phases of the test",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1167,7 +1267,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 24, section 4.C.1",
-      "quote": "specifying settings for imaging, ignition, gas flow, and more"
+      "quote": "specifying settings for imaging, ignition, gas flow, and more",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1177,7 +1278,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 18, section 4.B.2",
-      "quote": "(despite the file naming) they primarily include pressures, flow rates, and temperatures"
+      "quote": "(despite the file naming) they primarily include pressures, flow rates, and temperatures",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1186,9 +1288,10 @@
      "meaning": null
     },
     {
-     "code": "GC (archive or converter)",
+     "code": "GC",
      "pattern": "_GC\\.zip$|GC_Co",
-     "meaning": null
+     "meaning": null,
+     "label_before_2026_11_14_review": "GC (archive or converter)"
     },
     {
      "code": "ACME.log / log file",
@@ -1197,7 +1300,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 26, section 4.C.4 Logs",
-      "quote": "Each of the four log files are created for each day of testing, rather than for each test."
+      "quote": "Each of the four log files are created for each day of testing, rather than for each test.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1254,7 +1358,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 6, section 4.A.1",
-      "quote": "The test number is made up of the year (2-digts), day of year (3 digits), and test (a letter and single-digit number)."
+      "quote": "The test number is made up of the year (2-digts), day of year (3 digits), and test (a letter and single-digit number).",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1263,7 +1368,8 @@
       "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
       "file_id": "6851e75b0eb4c08676005568",
       "where": "PDF page 6, section 4.A.1",
-      "quote": "the letter E ceased to be used because Excel software (for example) by default interpreted it as representing an exponential"
+      "quote": "the letter E ceased to be used because Excel software (for example) by default interpreted it as representing an exponential",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -1327,15 +1433,17 @@
    "rules_not_applied": [],
    "suffix_codes": [
     {
-     "code": "vlc-record (operations camera video)",
+     "code": "vlc-record",
      "pattern": "vl[ci]-record",
      "meaning": {
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 10, Section 4.B.1; the passage does not name the files",
-      "quote": "in a Transport Stream (TS) format using VLC Media Player"
+      "quote": "in a Transport Stream (TS) format using VLC Media Player",
+      "quote_relation": "about_another_thing"
      },
-     "ignore_case": true
+     "ignore_case": true,
+     "label_before_2026_11_14_review": "vlc-record (operations camera video)"
     },
     {
      "code": "as run (parameter file)",
@@ -1344,7 +1452,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 15, Section 4.B.2",
-      "quote": "control the DataCam exposures and much more."
+      "quote": "control the DataCam exposures and much more.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1354,7 +1463,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 14, Section 4.B.2",
-      "quote": "This is an example of the metadata format from ACME_20190A1.mdipsug."
+      "quote": "This is an example of the metadata format from ACME_20190A1.mdipsug.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1364,7 +1474,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 16, Section 4.B.3",
-      "quote": "where INTNS designates the CFI intensified camera."
+      "quote": "where INTNS designates the CFI intensified camera.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1403,7 +1514,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 21, Section 4.C.4; the archives are not named",
-      "quote": "IPSU1 and IPSU2 were respectively used to archive the HiBMs and LLL-UV images"
+      "quote": "IPSU1 and IPSU2 were respectively used to archive the HiBMs and LLL-UV images",
+      "quote_relation": "about_another_thing"
      },
      "ignore_case": true
     },
@@ -1414,7 +1526,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 31, Appendix A Nomenclature",
-      "quote": "Low Light Level Ultraviolet camera"
+      "quote": "Low Light Level Ultraviolet camera",
+      "quote_relation": "expansion_only"
      },
      "ignore_case": true
     },
@@ -1437,7 +1550,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 6, Section 4.A.1",
-      "quote": "The basic ACME non-imaging measurements for each test are together in a file"
+      "quote": "The basic ACME non-imaging measurements for each test are together in a file",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1447,7 +1561,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 8, Section 4.A.2",
-      "quote": "a separate file for each test with a name like 20190A1_mfcSetpoints.csv"
+      "quote": "a separate file for each test with a name like 20190A1_mfcSetpoints.csv",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -1458,7 +1573,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 21, Section 4.C.4",
-      "quote": "Timing files with names such as 20190A1_TP.txt can be a convenient way to determine the phases of the test"
+      "quote": "Timing files with names such as 20190A1_TP.txt can be a convenient way to determine the phases of the test",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1484,13 +1600,15 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 8, Section 4.A.3",
-      "quote": "The raw data files are in a text (i.e.., ASCII) format"
+      "quote": "The raw data files are in a text (i.e.., ASCII) format",
+      "quote_relation": "states_meaning"
      }
     },
     {
-     "code": "GC (archive or converter)",
+     "code": "GC",
      "pattern": "_GC\\.zip$|GC_Co",
-     "meaning": null
+     "meaning": null,
+     "label_before_2026_11_14_review": "GC (archive or converter)"
     },
     {
      "code": "ACME.log / log file",
@@ -1499,7 +1617,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 22, Section 4.C.5 Logs",
-      "quote": "created for each day of testing, rather than for each test"
+      "quote": "created for each day of testing, rather than for each test",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1520,7 +1639,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 20, Section 4.C.3 Notes; the passage names .pdf files",
-      "quote": "chronologically list the tests and the image data acquired which was to be downlinked"
+      "quote": "chronologically list the tests and the image data acquired which was to be downlinked",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -1561,7 +1681,8 @@
       "document": "PSI-23_Science Documents_ACME s-Flame  DoD.pdf",
       "file_id": "6841ce426daf91e274cecd4f",
       "where": "PDF page 1",
-      "quote": "Test names are formatted YYDDDX# where YY identifies year, DDD identifies day of year (GMT)"
+      "quote": "Test names are formatted YYDDDX# where YY identifies year, DDD identifies day of year (GMT)",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1570,7 +1691,8 @@
       "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
       "file_id": "6841ce426daf91e274cecd50",
       "where": "PDF page 5, Table 1 footnote 1",
-      "quote": "Test Day includes the year as the first two digits followed by the 3-digit day of the year."
+      "quote": "Test Day includes the year as the first two digits followed by the 3-digit day of the year.",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -1828,7 +1950,8 @@
       "document": "PSI-25_Engineering Documents_BASS-II_Ops.docx",
       "file_id": "6924805f7f6aa6a83021067e",
       "where": "step 9.12; the document does not name these videos",
-      "quote": "Photographing the Sample Post-Burn using the BASS Still Camera"
+      "quote": "Photographing the Sample Post-Burn using the BASS Still Camera",
+      "quote_relation": "about_another_thing"
      }
     },
     {
@@ -1844,7 +1967,8 @@
       "document": "PSI-25_Engineering Documents_BASS-II_Engineering Requirements.pptx",
       "file_id": "6924803a7f6aa6a8302103cb",
       "where": "slide 1, Imaging Requirements; the file names are not mentioned",
-      "quote": "Nikon model D300s digital still camera"
+      "quote": "Nikon model D300s digital still camera",
+      "quote_relation": "about_another_thing"
      }
     },
     {
@@ -1853,14 +1977,16 @@
      "meaning": null
     },
     {
-     "code": "BASS (test video or archive)",
+     "code": "BASS",
      "pattern": "^BASS|BASS_GMT",
      "meaning": {
       "document": "PSI-25_Engineering Documents_BASS-II_Engineering Requirements.pptx",
       "file_id": "6924803a7f6aa6a8302103cb",
       "where": "slide 1, General Requirements",
-      "quote": "Burning And Suppression of Solids-2 (BASS-2)"
-     }
+      "quote": "Burning And Suppression of Solids-2 (BASS-2)",
+      "quote_relation": "expansion_only"
+     },
+     "label_before_2026_11_14_review": "BASS (test video or archive)"
     }
    ],
    "identifier_meanings": [
@@ -1870,7 +1996,8 @@
       "document": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
       "file_id": "692480587f6aa6a830210602",
       "where": "section 'Columns in test matrix', line GMT; the document does not mention file names",
-      "quote": "GMT- number is day of the year."
+      "quote": "GMT- number is day of the year.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1879,7 +2006,8 @@
       "document": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
       "file_id": "692480587f6aa6a830210602",
       "where": "section 'Columns in test matrix', line Test number",
-      "quote": "Initial of PI name followed by test number from the initial matrix."
+      "quote": "Initial of PI name followed by test number from the initial matrix.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1888,7 +2016,8 @@
       "document": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
       "file_id": "692480587f6aa6a830210602",
       "where": "section 'Columns in test matrix', line Test number",
-      "quote": "If multiple runs with same sample on same day, a and b are used to designate."
+      "quote": "If multiple runs with same sample on same day, a and b are used to designate.",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -1948,11 +2077,28 @@
        "columns": [
         "Date"
        ],
+       "cell": "lookup_date",
+       "key": "ymd_date",
+       "lookup": "as_run_video_date"
+      }
+     },
+     "text": "Archive names 'yyyy_mm_dd...': the date equals a 'Date on videos and images' cell (column B) of the As Run workbook (lookups.as_run_video_date) whose 'Actual Date' (column A) equals the 'Date' cell of rows.",
+     "where": "name"
+    },
+    {
+     "id": "A2",
+     "level": "day_or_session",
+     "pattern": "^(?P<d>\\d{4}_\\d{2}_\\d{2})(?![0-9])",
+     "fields": {
+      "d": {
+       "columns": [
+        "Date"
+       ],
        "cell": "date",
        "key": "ymd_date"
       }
      },
-     "text": "Archive names 'yyyy_mm_dd...': the date equals the 'Date' cell (m/d/yyyy) of rows.",
+     "text": "Archive names 'yyyy_mm_dd...' whose date is no 'Date on videos and images' cell of rule A1: the date equals the 'Date' cell (m/d/yyyy) of rows. The As Run workbook calls that date 'Actual Date'; which of the two dates an archive name carries is not stated, so these ties may be one day off.",
      "where": "name"
     }
    ],
@@ -1985,7 +2131,8 @@
       "document": "PSI-26_Science Documents_DLD_BASS.pdf",
       "file_id": "67dafcfac3501a37c2c60ddf",
       "where": "page 1; the document does not say that the zip files are these collections",
-      "quote": "are both organized by date formatted yyyy_mm_dd"
+      "quote": "are both organized by date formatted yyyy_mm_dd",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -1995,7 +2142,8 @@
       "document": "PSI-26_Presentations_Crew Training 2011.pdf",
       "file_id": "67dafce9c3501a37c2c60d17",
       "where": "page 26, slide Acronyms",
-      "quote": "Burning and Suppression of Solids"
+      "quote": "Burning and Suppression of Solids",
+      "quote_relation": "expansion_only"
      }
     },
     {
@@ -2005,7 +2153,8 @@
       "document": "PSI-26_Presentations_Crew Training 2011.pdf",
       "file_id": "67dafce9c3501a37c2c60d17",
       "where": "page 26, slide Acronyms",
-      "quote": "Smoke Point in Coflow Experiment"
+      "quote": "Smoke Point in Coflow Experiment",
+      "quote_relation": "expansion_only"
      }
     }
    ],
@@ -2015,8 +2164,9 @@
      "meaning": {
       "document": "PSI-26_Science Documents_As Run_Test Matrix.xlsx",
       "file_id": "67dafcfac3501a37c2c60de0",
-      "where": "sheet '2012', cells A3 and B3",
-      "quote": "Date on videos and images"
+      "where": "column B header: sheet '2012' cell B3 and sheet '2013' cell B2; column A of the same sheets reads 'Actual Date  (for SPICE Display Date, add 1 for Leap Year)', and in every dated row of both sheets the column B date is the column A date plus one day",
+      "quote": "Date on videos and images",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -2037,6 +2187,119 @@
     "opened_with_readings_on_screen": 2,
     "seen_in": "seen in 2 of 2 opened videos; 114 videos in the listing",
     "videos_in_listing": 114
+   },
+   "lookups": {
+    "as_run_video_date": {
+     "document": "PSI-26_Science Documents_As Run_Test Matrix.xlsx",
+     "file_id": "67dafcfac3501a37c2c60de0",
+     "where": "sheets '2012' (rows 4-85) and '2013' (rows 4-46), columns A 'Actual Date  (for SPICE Display Date, add 1 for Leap Year)' and B 'Date on videos and images'",
+     "read": "2026-11-14, cell values as stored (date cells, and text cells written m/d/yyyy or m/d/yy); sheet '2012' row 46 is left out because its column A cell reads '6/29/`12', which is not a date as written (rows 45 and 47 give the same pair)",
+     "pairs_note": "column A date (ISO) -> the column B dates of the rows with that column A date",
+     "pairs": {
+      "2012-03-30": [
+       "2012-03-31"
+      ],
+      "2012-04-05": [
+       "2012-04-06"
+      ],
+      "2012-04-09": [
+       "2012-04-10"
+      ],
+      "2012-05-02": [
+       "2012-05-03"
+      ],
+      "2012-05-10": [
+       "2012-05-11"
+      ],
+      "2012-05-11": [
+       "2012-05-12"
+      ],
+      "2012-06-05": [
+       "2012-06-06"
+      ],
+      "2012-06-11": [
+       "2012-06-12"
+      ],
+      "2012-06-14": [
+       "2012-06-15"
+      ],
+      "2012-06-18": [
+       "2012-06-19"
+      ],
+      "2012-06-28": [
+       "2012-06-29"
+      ],
+      "2012-06-29": [
+       "2012-06-30"
+      ],
+      "2012-07-03": [
+       "2012-07-04"
+      ],
+      "2012-07-12": [
+       "2012-07-13"
+      ],
+      "2012-07-19": [
+       "2012-07-20"
+      ],
+      "2012-07-23": [
+       "2012-07-24"
+      ],
+      "2012-08-03": [
+       "2012-08-04"
+      ],
+      "2012-08-09": [
+       "2012-08-10"
+      ],
+      "2012-08-16": [
+       "2012-08-17"
+      ],
+      "2012-08-21": [
+       "2012-08-22"
+      ],
+      "2012-08-24": [
+       "2012-08-25"
+      ],
+      "2013-04-04": [
+       "2013-04-05"
+      ],
+      "2013-04-05": [
+       "2013-04-06"
+      ],
+      "2013-04-09": [
+       "2013-04-10"
+      ],
+      "2013-04-12": [
+       "2013-04-13"
+      ],
+      "2013-04-16": [
+       "2013-04-17"
+      ],
+      "2013-04-23": [
+       "2013-04-24"
+      ],
+      "2013-04-26": [
+       "2013-04-27"
+      ],
+      "2013-04-29": [
+       "2013-04-30"
+      ],
+      "2013-05-02": [
+       "2013-05-03"
+      ],
+      "2013-05-15": [
+       "2013-05-16"
+      ],
+      "2013-05-17": [
+       "2013-05-18"
+      ],
+      "2013-06-01": [
+       "2013-06-02"
+      ],
+      "2103-05-15": [
+       "2013-05-16"
+      ]
+     }
+    }
    }
   },
   "PSI-39": {
@@ -2165,7 +2428,8 @@
       "document": "PSI-39_Raw Data_FLEX-1223_TestSheet.txt",
       "file_id": "683f4b58da33c6f4c4cec481",
       "where": "lines 1-7 of the file",
-      "quote": "CIR Test Number"
+      "quote": "CIR Test Number",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -2210,7 +2474,8 @@
       "document": "PSI-39_Reports_CFI Science Final Report.pdf",
       "file_id": "683f4b7bda33c6f4c4cec613",
       "where": "PDF page 3, section 0 Nomenclature",
-      "quote": "Flame Extinguishment Experiment"
+      "quote": "Flame Extinguishment Experiment",
+      "quote_relation": "expansion_only"
      }
     },
     {
@@ -2220,7 +2485,8 @@
       "document": "PSI-39_Reports_CFI Science Final Report.pdf",
       "file_id": "683f4b7bda33c6f4c4cec613",
       "where": "PDF page 3, section 0 Nomenclature",
-      "quote": "Multi-used Droplet Combustion Apparatus"
+      "quote": "Multi-used Droplet Combustion Apparatus",
+      "quote_relation": "expansion_only"
      }
     }
    ],
@@ -2231,7 +2497,8 @@
       "document": "PSI-39_Raw Data_FLEX-1223_TestSheet.txt",
       "file_id": "683f4b58da33c6f4c4cec481",
       "where": "lines 1-7 of the file",
-      "quote": "CIR Test Number: F090A08"
+      "quote": "CIR Test Number: F090A08",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -2296,8 +2563,9 @@
      "meaning": {
       "document": "PSI-47_Reports_DAFT_30Day.PostFlightReport.pdf",
       "file_id": "683dbb3df91ab4427dbf4563",
-      "where": "PDF page 4, Appendix D sessions table",
-      "quote": "The first test point for DAFT was performed on February 22, 2005"
+      "where": "PDF page 4, Appendix D sessions table; the sentence stands under the heading 'DAFT 1 & 2, Session 1, GMT 54, 2005' and does not say what a GMT day is (day 54 of 2005 is 23 February)",
+      "quote": "The first test point for DAFT was performed on February 22, 2005",
+      "quote_relation": "about_another_thing"
      }
     }
    ],
@@ -2333,7 +2601,8 @@
       "document": "PSI-68_Engineering Documents_FLEX-2 Engineering Requirments Document.pdf",
       "file_id": "685da233ee20136af540136e",
       "where": "PDF page 36, acronym list (MDCA)",
-      "quote": "Multi-user Droplet Combustion Apparatus"
+      "quote": "Multi-user Droplet Combustion Apparatus",
+      "quote_relation": "expansion_only"
      }
     },
     {
@@ -2343,7 +2612,8 @@
       "document": "PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
       "file_id": "685da233ee20136af540136b",
       "where": "PDF page 50, section 5.2.6",
-      "quote": "the CIR HiBMS camera with the Liquid Crystal Tunable Filter (LCTF)"
+      "quote": "the CIR HiBMS camera with the Liquid Crystal Tunable Filter (LCTF)",
+      "quote_relation": "expansion_only"
      }
     },
     {
@@ -2393,7 +2663,8 @@
       "document": "PSI-68_Science Documents_FLEX-2 DoD.docx",
       "file_id": "685da422ee20136af5402524",
       "where": "paragraph 3; does not say which zip names",
-      "quote": "a .zip file provides the original images"
+      "quote": "a .zip file provides the original images",
+      "quote_relation": "about_another_thing"
      }
     },
     {
@@ -2403,7 +2674,8 @@
       "document": "PSI-68_Science Documents_FLEX-2 DoD.docx",
       "file_id": "685da422ee20136af5402524",
       "where": "paragraph 3",
-      "quote": "will contain .txt files of the experiment's raw data"
+      "quote": "will contain .txt files of the experiment's raw data",
+      "quote_relation": "about_another_thing"
      }
     }
    ],
@@ -2477,7 +2749,8 @@
       "document": "PSI-69_Raw Data_256R002_Readme.txt",
       "file_id": "684345af9e44646b740279de",
       "where": "line 6 of the file (about _ISS_ videos only)",
-      "quote": "Included on the DVD is the video image captured from ISS video using the color camera."
+      "quote": "Included on the DVD is the video image captured from ISS video using the color camera.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -2487,7 +2760,8 @@
       "document": "PSI-69_Engineering Documents_FLEX Engineering Requirements Document.pdf",
       "file_id": "684347449e44646b740289fe",
       "where": "PDF page 2",
-      "quote": "Multi-user Droplet Combustion Apparatus (MDCA)"
+      "quote": "Multi-user Droplet Combustion Apparatus (MDCA)",
+      "quote_relation": "expansion_only"
      }
     },
     {
@@ -2497,7 +2771,8 @@
       "document": "PSI-69_Engineering Documents_FLEX Overall Ext File-2.pdf",
       "file_id": "684347449e44646b740289fd",
       "where": "PDF page 4",
-      "quote": "High Bit Depth Multispectral Package (HiBMs)"
+      "quote": "High Bit Depth Multispectral Package (HiBMs)",
+      "quote_relation": "expansion_only"
      },
      "ignore_case": true
     },
@@ -2513,7 +2788,8 @@
       "document": "PSI-69_Engineering Documents_FLEX Overall Ext File-2.pdf",
       "file_id": "684347449e44646b740289fd",
       "where": "PDF page 8",
-      "quote": "The liquid crystal tunable filter is (LCTF) 10 nm bandpass"
+      "quote": "The liquid crystal tunable filter is (LCTF) 10 nm bandpass",
+      "quote_relation": "expansion_only"
      }
     },
     {
@@ -2570,7 +2846,8 @@
       "document": "PSI-69_Raw Data_256R002_Readme.txt",
       "file_id": "684345af9e44646b740279de",
       "where": "line 1 of the file",
-      "quote": "Readme for testpoint: 256R002"
+      "quote": "Readme for testpoint: 256R002",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -2651,7 +2928,8 @@
       "document": "PSI-98_Science Documents_SAFFIRE-I Image Directory Nomenclature.pdf",
       "file_id": "683f4a54746db1c87dcebebd",
       "where": "fourth entry",
-      "quote": "Raw2TIFF files annotated with ICMAD 'Exposure' and 'Gain' information."
+      "quote": "Raw2TIFF files annotated with ICMAD 'Exposure' and 'Gain' information.",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2662,7 +2940,8 @@
       "document": "PSI-98_Science Documents_SAFFIRE-I Image Directory Nomenclature.pdf",
       "file_id": "683f4a54746db1c87dcebebd",
       "where": "last entry",
-      "quote": "re-saved as .png format to prevent additional compression artifacts"
+      "quote": "re-saved as .png format to prevent additional compression artifacts",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2673,7 +2952,8 @@
       "document": "PSI-98_Science Documents_SAFFIRE-I Image Directory Nomenclature.pdf",
       "file_id": "683f4a54746db1c87dcebebd",
       "where": "second entry",
-      "quote": "RAW Distribution Master - 8 byte offset corrected using ImageJ."
+      "quote": "RAW Distribution Master - 8 byte offset corrected using ImageJ.",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2684,7 +2964,8 @@
       "document": "PSI-98_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "683f4a58746db1c87dcebee9",
       "where": "Table 3, row Jpeg_Mapped",
-      "quote": "where the distortion of the camera system is corrected, or mapped, to a flat grid"
+      "quote": "where the distortion of the camera system is corrected, or mapped, to a flat grid",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2701,7 +2982,8 @@
       "document": "PSI-98_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "683f4a58746db1c87dcebee9",
       "where": "Table 3, row DistortionGrids_Sample_ROI",
-      "quote": "Image sets characterize the camera distortion of the system (pre-flight) using a checkerboard pattern grid"
+      "quote": "Image sets characterize the camera distortion of the system (pre-flight) using a checkerboard pattern grid",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2712,7 +2994,8 @@
       "document": "PSI-98_Science Documents_SAFFIRE-I Image Directory Nomenclature.pdf",
       "file_id": "683f4a54746db1c87dcebebd",
       "where": "fifth entry",
-      "quote": "Flight hardware generated jpeg images, created on-board from the RAW Camera Original."
+      "quote": "Flight hardware generated jpeg images, created on-board from the RAW Camera Original.",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2723,7 +3006,8 @@
       "document": "PSI-98_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "683f4a58746db1c87dcebee9",
       "where": "paragraph after Table 1",
-      "quote": "The raw data is captured from each experimental sensor and presented in excel files."
+      "quote": "The raw data is captured from each experimental sensor and presented in excel files.",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     }
@@ -2735,7 +3019,8 @@
       "document": "PSI-98_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "683f4a58746db1c87dcebee9",
       "where": "paragraph 2",
-      "quote": "denoted as C1 for camera 1 and C2 for camera 2"
+      "quote": "denoted as C1 for camera 1 and C2 for camera 2",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -2744,7 +3029,8 @@
       "document": "PSI-98_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "683f4a58746db1c87dcebee9",
       "where": "paragraph 1",
-      "quote": "These image sets are denoted as F1 for pre-flow and F2 for post-flow."
+      "quote": "These image sets are denoted as F1 for pre-flow and F2 for post-flow.",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -2847,7 +3133,8 @@
       "document": "PSI-99_Science Documents_SAFFIRE-II_Image_Directory_Nomenclature v3.0.pdf",
       "file_id": "6840cdd64a0e24d624cebd81",
       "where": "page 1, entry Xn_Raw2TIFF_icmad",
-      "quote": "Raw2TIFF files annotated with ICMAD 'Exposure' and 'Gain' information."
+      "quote": "Raw2TIFF files annotated with ICMAD 'Exposure' and 'Gain' information.",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2864,7 +3151,8 @@
       "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
       "file_id": "6840cdd84a0e24d624cebd95",
       "where": "Table 4, row Jpeg_Mapped",
-      "quote": "where the distortion of the camera system is corrected, or mapped, to a flat grid"
+      "quote": "where the distortion of the camera system is corrected, or mapped, to a flat grid",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2875,7 +3163,8 @@
       "document": "PSI-99_Science Documents_SAFFIRE-II_Image_Directory_Nomenclature v3.0.pdf",
       "file_id": "6840cdd64a0e24d624cebd81",
       "where": "page 1, entry Xn_Raw2TIFF",
-      "quote": "color interpolated (demosaiced) using IrfanView Batch Conversion process"
+      "quote": "color interpolated (demosaiced) using IrfanView Batch Conversion process",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2886,7 +3175,8 @@
       "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
       "file_id": "6840cdd84a0e24d624cebd95",
       "where": "Table 4, row DistortionGrids_Sample_ROI",
-      "quote": "Image sets characterize the camera distortion of the system (pre-flight) using a checkerboard pattern grid"
+      "quote": "Image sets characterize the camera distortion of the system (pre-flight) using a checkerboard pattern grid",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2897,7 +3187,8 @@
       "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
       "file_id": "6840cdd84a0e24d624cebd95",
       "where": "Table 4, row BIT",
-      "quote": "Built-In Test images were captured immediately after the payload was powered on"
+      "quote": "Built-In Test images were captured immediately after the payload was powered on",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -2907,7 +3198,8 @@
       "document": "PSI-99_Science Documents_SAFFIRE-II_Image_Directory_Nomenclature v3.0.pdf",
       "file_id": "6840cdd64a0e24d624cebd81",
       "where": "page 1, entry Xn_jpeg",
-      "quote": "Jpeg images created on-board SAFFIRE payload and downlinked by command"
+      "quote": "Jpeg images created on-board SAFFIRE payload and downlinked by command",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -2918,7 +3210,8 @@
       "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
       "file_id": "6840cdd84a0e24d624cebd95",
       "where": "paragraph after Table 2",
-      "quote": "The raw data is captured from each experimental sensor and presented in excel files."
+      "quote": "The raw data is captured from each experimental sensor and presented in excel files.",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     }
@@ -2930,7 +3223,8 @@
       "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
       "file_id": "6840cdd84a0e24d624cebd95",
       "where": "paragraph 2",
-      "quote": "denoted as C1 for camera 1 and C2 for camera 2"
+      "quote": "denoted as C1 for camera 1 and C2 for camera 2",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -2939,7 +3233,8 @@
       "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
       "file_id": "6840cdd84a0e24d624cebd95",
       "where": "paragraph 2",
-      "quote": "The experiment data is organized in PSI by sample number and camera number."
+      "quote": "The experiment data is organized in PSI by sample number and camera number.",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -2993,7 +3288,8 @@
       "document": "PSI-100_Science Documents_SAFFIRE-III Image Directory Nomenclature_v3.0.pdf",
       "file_id": "6841ac428970fb41b9cebb9d",
       "where": "rows Xn_Raw2TIFF_icmad and Xn_jpeg2png_icmad",
-      "quote": "annotated with ICMAD 'Exposure' and 'Gain' information."
+      "quote": "annotated with ICMAD 'Exposure' and 'Gain' information.",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -3010,7 +3306,8 @@
       "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "6841ac428970fb41b9cebba1",
       "where": "Table 3, row Jpeg_Mapped",
-      "quote": "where the distortion of the camera system is corrected, or mapped, to a flat grid"
+      "quote": "where the distortion of the camera system is corrected, or mapped, to a flat grid",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -3021,7 +3318,8 @@
       "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "6841ac428970fb41b9cebba1",
       "where": "Table 3, row Raw2TIFF",
-      "quote": "color interpolated (demosaiced) using IrfanView Batch Conversion process"
+      "quote": "color interpolated (demosaiced) using IrfanView Batch Conversion process",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -3032,7 +3330,8 @@
       "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "6841ac428970fb41b9cebba1",
       "where": "Table 3, row DistortionGrids_Sample_ROI",
-      "quote": "Image sets characterize the camera distortion of the system (pre-flight) using a checkerboard pattern grid"
+      "quote": "Image sets characterize the camera distortion of the system (pre-flight) using a checkerboard pattern grid",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -3043,7 +3342,8 @@
       "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "6841ac428970fb41b9cebba1",
       "where": "Table 3, row BIT",
-      "quote": "Built-In Test images were captured immediately after the payload was powered on"
+      "quote": "Built-In Test images were captured immediately after the payload was powered on",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -3053,7 +3353,8 @@
       "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "6841ac428970fb41b9cebba1",
       "where": "Table 3, row Jpeg",
-      "quote": "Jpeg images created on-board SAFFIRE payload and downlinked by command"
+      "quote": "Jpeg images created on-board SAFFIRE payload and downlinked by command",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -3064,7 +3365,8 @@
       "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "6841ac428970fb41b9cebba1",
       "where": "paragraph 4",
-      "quote": "The raw data is captured from each experimental sensor and presented in excel files."
+      "quote": "The raw data is captured from each experimental sensor and presented in excel files.",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     }
@@ -3076,7 +3378,8 @@
       "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "6841ac428970fb41b9cebba1",
       "where": "paragraph 2",
-      "quote": "These image sets are denoted as F1 for pre-flow and F2 for post-flow."
+      "quote": "These image sets are denoted as F1 for pre-flow and F2 for post-flow.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -3085,7 +3388,8 @@
       "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
       "file_id": "6841ac428970fb41b9cebba1",
       "where": "paragraph 3",
-      "quote": "denoted as C1 for camera 1 and C2 for camera 2"
+      "quote": "denoted as C1 for camera 1 and C2 for camera 2",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -3186,7 +3490,8 @@
       "document": "PSI-101_Science Documents_SAME_Operations Manual_007.pdf",
       "file_id": "683dc54db8656d2315bf51de",
       "where": "page 13, section 6.1; describes .hkp files, not these csv files",
-      "quote": "Housekeeping files (.hkp) are transferred on the hour and upon shutdown"
+      "quote": "Housekeeping files (.hkp) are transferred on the hour and upon shutdown",
+      "quote_relation": "about_another_thing"
      }
     },
     {
@@ -3208,7 +3513,8 @@
       "document": "PSI-101_Reports_SAME-R_Final Report.pdf",
       "file_id": "683dc530b8656d2315bf508c",
       "where": "page 3, test-operations paragraph",
-      "quote": "The test conditions of each run can be found in Appendix A"
+      "quote": "The test conditions of each run can be found in Appendix A",
+      "quote_relation": "about_another_thing"
      },
      "ignore_case": true
     }
@@ -3220,17 +3526,18 @@
       "document": "PSI-101_Science Documents_SAME_Operations Manual_007.pdf",
       "file_id": "683dc54db8656d2315bf51de",
       "where": "page 13, section 6.1.1",
-      "quote": "Files are stored in a directory named according to GMT year and day."
+      "quote": "Files are stored in a directory named according to GMT year and day.",
+      "quote_relation": "states_meaning"
      }
     }
    ],
    "videos": {
     "labels_seen": [],
-    "on_screen_text": "no text seen",
+    "on_screen_text": "no video opened",
     "opened": 0,
     "opened_file_ids": [],
     "opened_with_readings_on_screen": 0,
-    "seen_in": "no readings seen in the 0 opened videos; 8 videos in the listing",
+    "seen_in": "none of the 8 videos in the listing was opened",
     "videos_in_listing": 8
    }
   },
@@ -3248,14 +3555,16 @@
       "document": "PSI-102_Science Documents_SAME_Operations Manual_007.pdf",
       "file_id": "683d9d56f91ab4427dbf445b",
       "where": "section 6.1, PDF page 13 (instrument files, not the Analyzed Data xls files)",
-      "quote": "Housekeeping files (.hkp) are transferred on the hour and upon shutdown"
+      "quote": "Housekeeping files (.hkp) are transferred on the hour and upon shutdown",
+      "quote_relation": "about_another_thing"
      },
      "ignore_case": true
     },
     {
-     "code": "TN001 / TN002 (video)",
+     "code": "TN001 / TN002",
      "pattern": "TN00\\d",
-     "meaning": null
+     "meaning": null,
+     "label_before_2026_11_14_review": "TN001 / TN002 (video)"
     },
     {
      "code": "zgy",
@@ -3271,7 +3580,8 @@
       "document": "PSI-102_Science Documents_SAME_Operations Manual_007.pdf",
       "file_id": "683d9d56f91ab4427dbf445b",
       "where": "section 6.1.1, PDF page 13 (instrument directories only)",
-      "quote": "Files are stored in a directory named according to GMT year and day."
+      "quote": "Files are stored in a directory named according to GMT year and day.",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -3414,7 +3724,8 @@
       "document": "SLICE Engineering Documents and Data Overview_Sept 2005.pdf",
       "file_id": "66eb982ec6ad4bdc12fc2b32",
       "where": "p. 7, section E a.ii; stated for the file 2492.dat only",
-      "quote": "This file is a processed OMA image that has been cropped around the thermocouple junction."
+      "quote": "This file is a processed OMA image that has been cropped around the thermocouple junction.",
+      "quote_relation": "about_another_thing"
      }
     },
     {
@@ -3424,7 +3735,8 @@
       "document": "SLICE Engineering Documents and Data Overview_Sept 2005.pdf",
       "file_id": "66eb982ec6ad4bdc12fc2b32",
       "where": "p. 7, section D",
-      "quote": "The raw images (in a Nikon Electronic Format, i.e., NEF)"
+      "quote": "The raw images (in a Nikon Electronic Format, i.e., NEF)",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -3439,7 +3751,8 @@
       "document": "InfoTxt.doc.docx",
       "file_id": "66eb9841c6ad4bdc12fc8561",
       "where": "item 4",
-      "quote": "Scan the velocity vertically along the Z axis."
+      "quote": "Scan the velocity vertically along the Z axis.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -3454,7 +3767,8 @@
       "document": "SLICE Engineering Documents and Data Overview_Sept 2005.pdf",
       "file_id": "66eb982ec6ad4bdc12fc2b32",
       "where": "p. 1, section Documents",
-      "quote": "where ED indicates Engineering Document"
+      "quote": "where ED indicates Engineering Document",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -3465,7 +3779,8 @@
       "document": "SLICE DoD.docx",
       "file_id": "6734174d81e6de7532ea1eb7",
       "where": "paragraph 1",
-      "quote": "The experiments are organized by GMT date, sample, or topic."
+      "quote": "The experiments are organized by GMT date, sample, or topic.",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -3474,7 +3789,8 @@
       "document": "SLICE Engineering Documents and Data Overview_Sept 2005.pdf",
       "file_id": "66eb982ec6ad4bdc12fc2b32",
       "where": "p. 5, section C",
-      "quote": "GMT 083 (i.e., March 23, 2012)"
+      "quote": "GMT 083 (i.e., March 23, 2012)",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -3556,7 +3872,8 @@
       "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
       "file_id": "683da128b8656d2315bf44ad",
       "where": "paragraph 4",
-      "quote": "has images pulled directly from the operations live feed"
+      "quote": "has images pulled directly from the operations live feed",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -3572,7 +3889,8 @@
       "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
       "file_id": "683da128b8656d2315bf44ad",
       "where": "paragraph 8",
-      "quote": "contains the color still jpeg images identified by the names in column AD"
+      "quote": "contains the color still jpeg images identified by the names in column AD",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -3583,7 +3901,8 @@
       "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
       "file_id": "683da128b8656d2315bf44ad",
       "where": "paragraph 9",
-      "quote": "contains color still Nikon raw file images identified by the names in column AD"
+      "quote": "contains color still Nikon raw file images identified by the names in column AD",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -3593,7 +3912,8 @@
       "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
       "file_id": "683da128b8656d2315bf44ad",
       "where": "paragraph 7",
-      "quote": "contact sheets of the image together with the name from column AD"
+      "quote": "contact sheets of the image together with the name from column AD",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -3613,8 +3933,10 @@
      "meaning": {
       "document": "PSI-107_Engineering Documents_SPICE-MEM-010.pdf",
       "file_id": "683da129b8656d2315bf44bb",
-      "where": "PDF page 1",
-      "quote": "three heights: 19, 36, and 57 mm off the floor of the duct"
+      "where": "PDF page 1; the same sentence names the position 20 mm towards the front window the “outside” position; the next sentence gives three heights, 19, 36 and 57 mm",
+      "quote": "measurements were taken at three width locations: the duct centerline, 20 mm off the centerline towards the back wall (called the “inside” position)",
+      "quote_relation": "states_meaning",
+      "quote_before_2026_11_14_review": "three heights: 19, 36, and 57 mm off the floor of the duct"
      }
     },
     {
@@ -3630,7 +3952,8 @@
       "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
       "file_id": "683da128b8656d2315bf44ad",
       "where": "paragraph 3",
-      "quote": "xxx is the number of the day of the year"
+      "quote": "xxx is the number of the day of the year",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -3639,7 +3962,8 @@
       "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
       "file_id": "683da128b8656d2315bf44ad",
       "where": "paragraph 4",
-      "quote": "where xxx is the GMT date (column A), yy is the test number (column H)"
+      "quote": "where xxx is the GMT date (column A), yy is the test number (column H)",
+      "quote_relation": "states_meaning"
      }
     }
    ],
@@ -3744,10 +4068,11 @@
    "rules_not_applied": [],
    "suffix_codes": [
     {
-     "code": "vlc-record (operations camera video)",
+     "code": "vlc-record",
      "pattern": "vl[ci]-record",
      "meaning": null,
-     "ignore_case": true
+     "ignore_case": true,
+     "label_before_2026_11_14_review": "vlc-record (operations camera video)"
     },
     {
      "code": "as run (parameter file)",
@@ -3800,7 +4125,8 @@
       "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
       "file_id": "691f7ea117f78b371b26f6f8",
       "where": "PDF page 26, Appendix A; the archive content is not stated",
-      "quote": "High Bit-depth Multi-spectral camera"
+      "quote": "High Bit-depth Multi-spectral camera",
+      "quote_relation": "expansion_only"
      },
      "ignore_case": true
     },
@@ -3817,7 +4143,8 @@
       "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
       "file_id": "691f7ea117f78b371b26f6f8",
       "where": "PDF page 26, Appendix A",
-      "quote": "IPSU for GigE cameras (including the DataCam and CFI intensified camera)"
+      "quote": "IPSU for GigE cameras (including the DataCam and CFI intensified camera)",
+      "quote_relation": "states_meaning"
      },
      "ignore_case": true
     },
@@ -3834,7 +4161,8 @@
       "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
       "file_id": "691f7ea117f78b371b26f6f8",
       "where": "PDF page 33, section D; the report does not name the file",
-      "quote": "were saved in a csv file format per each test"
+      "quote": "were saved in a csv file format per each test",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -3844,7 +4172,8 @@
       "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
       "file_id": "691f7ea117f78b371b26f6f8",
       "where": "PDF page 26, Appendix A (MFC)",
-      "quote": "Mass Flow Controller"
+      "quote": "Mass Flow Controller",
+      "quote_relation": "expansion_only"
      },
      "ignore_case": true
     },
@@ -3875,9 +4204,10 @@
      "meaning": null
     },
     {
-     "code": "GC (archive or converter)",
+     "code": "GC",
      "pattern": "_GC\\.zip$|GC_Co",
-     "meaning": null
+     "meaning": null,
+     "label_before_2026_11_14_review": "GC (archive or converter)"
     },
     {
      "code": "ACME.log / log file",
@@ -3938,7 +4268,8 @@
       "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
       "file_id": "691f7ea117f78b371b26f6f8",
       "where": "PDF page 25, Appendix A, entry #####",
-      "quote": "ACME days are identified by year (2 digits) and the day of the year (3 digits, 001-366)"
+      "quote": "ACME days are identified by year (2 digits) and the day of the year (3 digits, 001-366)",
+      "quote_relation": "states_meaning"
      }
     },
     {
@@ -3947,7 +4278,8 @@
       "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
       "file_id": "691f7ea117f78b371b26f6f8",
       "where": "PDF page 25, Appendix A, entry #####x#",
-      "quote": "ACME tests are identified by day (5 digits; see above), a letter, and a 1-digit number"
+      "quote": "ACME tests are identified by day (5 digits; see above), a letter, and a 1-digit number",
+      "quote_relation": "states_meaning"
      }
     }
    ],

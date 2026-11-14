@@ -1686,8 +1686,8 @@
    "verifies": "test_files.csv: every test_id is a test of tests.csv of the same investigation and is the test of its table row (source_file, source_row); every table_row_key names a row of an experimental table of the investigation; levels are test or day_or_session.",
    "status": "PASS",
    "numbers": {
-    "rows": 17243,
-    "with_test_id": 15590
+    "rows": 17354,
+    "with_test_id": 15701
    },
    "failures": 0,
    "failing_examples": []
@@ -1700,10 +1700,12 @@
     "files": 60866,
     "by_level": {
      "test": 12934,
-     "day_or_session": 30595,
-     "none": 17337
+     "day_or_session": 30634,
+     "none": 17298
     },
-    "test_files_rows": 17243
+    "test_files_rows": 17354,
+    "name_patterns": 1759,
+    "alternative_ties": 20
    },
    "failures": 0,
    "failing_examples": []
@@ -1724,7 +1726,7 @@
   },
   {
    "id": "P5_raw_state_tied_files",
-   "verifies": "The columns that the name layer added to gap_states.csv, retrieval_queue.csv and need_gap_states.csv (videos and archives tied by name to the tests that lack the value, the class of on-screen text) and the fields added to the raw_state items of the evidence packages are recounted from test_files.csv, tests.csv and spec/raw_names.json; no sentence says that a quantity is in a video.",
+   "verifies": "The columns that the name layer added to gap_states.csv, retrieval_queue.csv and need_gap_states.csv (videos and archives tied by name to the tests that lack the value, the class of on-screen text) and the fields added to the raw_state items of the evidence packages are recounted from test_files.csv, tests.csv and spec/raw_names.json; no sentence says that the quantity of an item can be read from a video.",
    "status": "PASS",
    "numbers": {
     "rows": 1283,
@@ -1740,7 +1742,7 @@
    "numbers": {
     "quotes": 139,
     "listings_present": true,
-    "rules": 53
+    "rules": 54
    },
    "failures": 0,
    "failing_examples": []
