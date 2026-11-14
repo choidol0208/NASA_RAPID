@@ -310,7 +310,7 @@ def place(sid, nid, fenv, findings_csv, findings_full, ref_items, rule):
                 seen.add(fid)
                 if fid not in findings_csv or fid not in findings_full:
                     stop("finding %s is not in findings.csv or in the findings list" % fid)
-                e = finding_entry(fid, listed, name, applies, findings_csv[fid],
+                e = finding_entry(fid, listed, src, applies, findings_csv[fid],
                                   findings_full[fid], ref_items)
                 if e["kind"] == "criterion":
                     out["criteria"].append(e)
@@ -404,7 +404,7 @@ def build_answer(sid, nid, ctx):
     frame_counts = {
         "n_criteria": len(crit),
         "n_criteria_at": sum(1 for e in crit if e["list"] == "at_environment"),
-        "n_criteria_about": sum(1 for e in crit if e["list"] == "about_a_stated_condition"),
+        "n_criteria_about": sum(1 for e in crit if e["list"] == "about_a_stated_condition_of_the_environment"),
         "n_criteria_general": sum(1 for e in crit if e["list"] == "general"),
         "n_nasa_questions": len(placed["nasa_questions"]),
     }

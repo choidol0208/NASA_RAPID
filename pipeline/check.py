@@ -2,10 +2,11 @@
 # during the NASA Space Apps Challenge 2026 hackathon (2026-11-14).
 """Independent validator of the pipeline outputs.
 
-It does not import run.py, rules.py, evidence.py or facts.py. Every check
-recomputes its result from the raw NASA PSI tables and from the rules as they
-are written in pipeline/spec/*.json ('_meta' blocks) and pipeline/README.md,
-then compares with the files in data/pipeline/.
+It does not import run.py, rules.py, evidence.py, facts.py, findings.py,
+answers.py or raw_inventory.py. Every check recomputes its result from the raw
+NASA PSI tables (and, for the raw inventory, the saved PSI file listings) and
+from the rules as they are written in pipeline/spec/*.json ('_meta' blocks)
+and pipeline/README.md, then compares with the files in data/pipeline/.
 
     python3 pipeline/check.py                 all checks, writes validation_report.json
     python3 pipeline/check.py --data DIR      check another copy of data/pipeline/
@@ -3239,6 +3240,1336 @@ def check_k1(ctx):
                    "files_on_disk": len(on_disk), "hashes_in_manifest": hashes}
     res.details = {"note": "The manifest carries sizes only; contents are compared by size, not by hash."} if not hashes else {}
     return res
+
+
+# ----------------------------------------------------------------------------
+# L. published findings (README "Published findings"; spec/findings.json _meta)
+# ----------------------------------------------------------------------------
+
+FINDING_LISTS = ("at_environment", "about_a_stated_condition_of_the_environment", "general")
+PARTIAL_GRAVITY_SCENARIOS = ("lunar", "martian")
+_MISSING = object()
+
+
+def findings_inputs(ctx):
+    for name in ("findings.csv", "findings_by_environment.json"):
+        if not ctx.has(name):
+            raise Skip("data/pipeline/%s does not exist yet" % name)
+    return ctx.table("findings.csv"), ctx.json("findings_by_environment.json")
+
+
+def finding_id_of(entry):
+    return entry["item"] + ("#" + str(entry["row"]) if entry.get("row") not in (None, "") else "")
+
+
+def spec_findings(ctx):
+    def load():
+        out = {}
+        for e in ctx.spec("findings")["findings"]:
+            out.setdefault(finding_id_of(e), e)
+        return out
+    return ctx._get("spec_findings", load)
+
+
+def range_ends(value):
+    """A condition of findings.json as (min, max): a value gives (v, v), a list [min, max] (None = open)."""
+    if value is None:
+        return None, None
+    if isinstance(value, (list, tuple)):
+        return (value[0] if len(value) > 0 else None), (value[1] if len(value) > 1 else None)
+    return value, value
+
+
+def same_number_text(cell, value):
+    """A CSV cell against a number of the spec (None = empty cell)."""
+    if value is None:
+        return cell == ""
+    return close(fnum(cell), float(value), 1e-12)
+
+
+@check("L1_findings_entries",
+       "Every entry of spec/findings.json points to an item of references.json; findings.csv has one row per "
+       "entry, and its text, quote, where, title, version, access, url and reference id are those of the item "
+       "and its document, its kind, needs and condition columns those of the entry; the 'findings' of "
+       "findings_by_environment.json carry the same text, quote, place and document.")
+def check_l1(ctx):
+    res = Result()
+    rows, fbe = findings_inputs(ctx)
+    items = ctx.reference_items
+    entries = ctx.spec("findings")["findings"]
+    seen = {}
+    for e in entries:
+        fid = finding_id_of(e)
+        if fid in seen:
+            res.fail(problem="finding id twice in spec/findings.json", finding_id=fid)
+        seen[fid] = e
+        if e.get("item") not in items:
+            res.fail(problem="item of spec/findings.json not in references.json", finding_id=fid, item=e.get("item"))
+    by_csv = {}
+    for r in rows:
+        if r["finding_id"] in by_csv:
+            res.fail(problem="finding id twice in findings.csv", finding_id=r["finding_id"])
+        by_csv[r["finding_id"]] = r
+    for fid in sorted(set(seen) - set(by_csv)):
+        res.fail(problem="entry of spec/findings.json has no row in findings.csv", finding_id=fid)
+    for fid in sorted(set(by_csv) - set(seen)):
+        res.fail(problem="row of findings.csv is not an entry of spec/findings.json", finding_id=fid)
+    compared = 0
+    for fid, r in by_csv.items():
+        e = seen.get(fid)
+        if e is None or e.get("item") not in items:
+            continue
+        res.checked += 1
+        ref, it = items[e["item"]]
+        c = e.get("conditions") or {}
+        expected = {"item_id": e["item"], "row": "" if e.get("row") is None else str(e["row"]), "kind": e.get("kind"),
+                    "needs": ";".join(e.get("needs") or []),
+                    "text": it.get("text") or "", "quote": it.get("quote") or "", "where": it.get("where") or "",
+                    "reference_id": ref.get("id") or "", "title": ref.get("title") or "",
+                    "version": ref.get("version") or "", "access": ref.get("access") or "", "url": ref.get("url") or "",
+                    "pressure_as_written": c.get("pressure_as_written") or "", "fuel_phase": c.get("fuel_phase") or "",
+                    "gravity_level": ";".join(c.get("gravity_level") or [])}
+        for col, want in expected.items():
+            compared += 1
+            if r.get(col) != want:
+                a, b = str(r.get(col)), str(want)
+                i = next((j for j, (x, y) in enumerate(zip(a, b)) if x != y), min(len(a), len(b)))
+                res.fail(finding_id=fid, column=col, first_difference_at=i, csv=a[max(0, i - 30):i + 50],
+                         expected=b[max(0, i - 30):i + 50])
+        for var in ("o2_pct", "pressure_kpa"):
+            lo, hi = range_ends(c.get(var))
+            for end, want in (("min", lo), ("max", hi)):
+                compared += 1
+                if not same_number_text(r.get("%s_%s" % (var, end), ""), want):
+                    res.fail(finding_id=fid, column="%s_%s" % (var, end), csv=r.get("%s_%s" % (var, end)), expected=want)
+        compared += 1
+        if not same_number_text(r.get("flow_cms", ""), c.get("flow_cms")):
+            res.fail(finding_id=fid, column="flow_cms", csv=r.get("flow_cms"), expected=c.get("flow_cms"))
+        compared += 1
+        if [x.strip() for x in split_list(r.get("material", ""))] != [str(m).strip() for m in c.get("material") or []]:
+            res.fail(finding_id=fid, column="material", csv=r.get("material", "")[:80], expected=c.get("material"))
+    published = fbe.get("findings") or {}
+    for fid in sorted(set(seen) - set(published)):
+        res.fail(problem="entry missing from findings_by_environment.json 'findings'", finding_id=fid)
+    for fid, f in sorted(published.items()):
+        e = seen.get(fid)
+        if e is None or e.get("item") not in items:
+            res.fail(problem="'findings' entry of findings_by_environment.json is not an entry of the spec", finding_id=fid)
+            continue
+        ref, it = items[e["item"]]
+        doc = f.get("reference") or {}
+        pairs = [("item_id", f.get("item_id"), e["item"]), ("kind", f.get("kind"), e.get("kind")),
+                 ("needs", f.get("needs"), e.get("needs")), ("text", f.get("text") or "", it.get("text") or ""),
+                 ("quote", f.get("quote") or "", it.get("quote") or ""), ("where", f.get("where") or "", it.get("where") or ""),
+                 ("conditions", f.get("conditions"), e.get("conditions"))]
+        pairs += [("reference." + k, doc.get(k), ref.get(k)) for k in ("id", "title", "version", "access", "url")]
+        for name, got, want in pairs:
+            compared += 1
+            if got != want:
+                res.fail(problem="findings_by_environment.json 'findings' differs", finding_id=fid, field=name,
+                         file=str(got)[:80], expected=str(want)[:80])
+    res.numbers = {"spec_entries": len(entries), "items": len({e.get("item") for e in entries}), "csv_rows": len(rows),
+                   "json_findings": len(published), "fields_compared": compared}
+    return res
+
+
+def basis_numbers(text):
+    """Numbers written in basis words, each with the unit word right after it (kpa, psi, atm or None). In a
+    range written 'a to b psia' the first number takes the unit of the second."""
+    text = text or ""
+    toks = []
+    for m in _TEXT_NUMBER.finditer(text):
+        unit = re.match(r"\s*(kpa|psi|atm)", text[m.end():], re.I)
+        toks.append([float(m.group(0)), unit.group(1).lower() if unit else None, m.start(), m.end()])
+    for i in range(len(toks) - 2, -1, -1):
+        if toks[i][1] is None and toks[i + 1][1] and \
+                re.match(r"^\s*(to|-|\u2013|and|or|,)\s*$", text[toks[i][3]:toks[i + 1][2]], re.I):
+            toks[i][1] = toks[i + 1][1]
+    return [(n, u) for n, u, _, _ in toks]
+
+
+def value_at(values, path):
+    """A value of an item's 'values' by a path such as 'rows[0].pressure_psia' or 'pressure_kpa[1]'."""
+    cur = values
+    for part in path.split("."):
+        m = re.match(r"^([^\[\]]+)((?:\[\d+\])*)$", part)
+        if not m or not isinstance(cur, dict) or m.group(1) not in cur:
+            return _MISSING
+        cur = cur[m.group(1)]
+        for idx in re.findall(r"\[(\d+)\]", m.group(2)):
+            if not isinstance(cur, list) or int(idx) >= len(cur):
+                return _MISSING
+            cur = cur[int(idx)]
+    return cur
+
+
+def plain_numbers(value):
+    out = []
+    if isinstance(value, bool) or value is None:
+        return out
+    if isinstance(value, (int, float)):
+        out.append(float(value))
+    elif isinstance(value, str):
+        out += [float(x) for x in _TEXT_NUMBER.findall(value)]
+    elif isinstance(value, dict):
+        for v in value.values():
+            out += plain_numbers(v)
+    elif isinstance(value, (list, tuple)):
+        for v in value:
+            out += plain_numbers(v)
+    return out
+
+
+@check("L2_findings_condition_basis",
+       "Every normalized number of an entry (oxygen, pressure, flow; each end of a range) follows from its "
+       "condition_basis: literally present in the basis words or values, or, for a pressure, a number of the "
+       "basis times the factor of its unit (1 psi = 6.894757 kPa, 1 atm = 101.325 kPa), rounded to 3 decimals. "
+       "The basis words are in the item's text or quote, a values key exists, and a gravity level or fuel "
+       "phase has a word of its vocabulary behind it.")
+def check_l2(ctx):
+    res = Result()
+    spec = ctx.spec("findings")
+    meta = spec["_meta"]
+    factors = {"kpa": 1.0, "psi": meta["units"]["psi_to_kpa"], "atm": meta["units"]["atm_to_kpa"]}
+    decimals = meta["units"].get("kpa_decimals", 3)
+    vocab = {"gravity_level": meta.get("gravity_vocabulary") or {}, "fuel_phase": meta.get("fuel_phase_vocabulary") or {}}
+    items = ctx.reference_items
+    numbers = 0
+    converted = 0
+    word_start_only = []
+    for e in spec["findings"]:
+        fid = finding_id_of(e)
+        if e.get("item") not in items:
+            continue
+        _, it = items[e["item"]]
+        conds = e.get("conditions") or {}
+        bases = e.get("condition_basis") or {}
+        for var, blist in bases.items():
+            for b in blist if isinstance(blist, list) else [blist]:
+                where = b.get("in")
+                if where in ("text", "quote"):
+                    if (b.get("words") or "") == "" or b["words"] not in (it.get(where) or ""):
+                        res.fail(problem="basis words not in the item", finding_id=fid, condition=var, words=b.get("words"), field=where)
+                elif where == "values":
+                    if value_at(it.get("values") or {}, b.get("key") or "") is _MISSING:
+                        res.fail(problem="basis key not in the item's values", finding_id=fid, condition=var, key=b.get("key"))
+                else:
+                    res.fail(problem="basis without 'in' text, quote or values", finding_id=fid, condition=var)
+        for var in ("o2_pct", "pressure_kpa", "flow_cms"):
+            if conds.get(var) is None:
+                continue
+            blist = bases.get(var) or []
+            blist = blist if isinstance(blist, list) else [blist]
+            if not blist:
+                res.fail(problem="normalized condition without a basis", finding_id=fid, condition=var)
+                continue
+            literal, scaled = set(), set()
+            for b in blist:
+                if b.get("in") in ("text", "quote"):
+                    pairs = basis_numbers(b.get("words") or "")
+                elif b.get("in") == "values":
+                    v = value_at(it.get("values") or {}, b.get("key") or "")
+                    key = (b.get("key") or "").split(".")[-1].lower()
+                    unit = "psi" if "psi" in key else "atm" if "atm" in key else None
+                    pairs = [] if v is _MISSING else [(n, unit) for n in plain_numbers(v)]
+                else:
+                    pairs = []
+                for n, unit in pairs:
+                    if var == "pressure_kpa" and unit in ("psi", "atm"):
+                        scaled.add(round(n * factors[unit], decimals))
+                    else:
+                        literal.add(round(n, 9))
+            for end in range_ends(conds[var]):
+                if end is None:
+                    continue
+                numbers += 1
+                x = round(float(end), 9)
+                if x in literal:
+                    continue
+                if var == "pressure_kpa" and round(x, decimals) in scaled:
+                    converted += 1
+                    continue
+                res.fail(problem="normalized number not reproducible from its basis", finding_id=fid, condition=var,
+                         value=end, literal=sorted(literal)[:8], by_factor=sorted(scaled)[:8])
+        for var in ("gravity_level", "fuel_phase"):
+            if not conds.get(var):
+                continue
+            levels = conds[var] if isinstance(conds[var], list) else [conds[var]]
+            blist = bases.get(var) or []
+            blist = blist if isinstance(blist, list) else [blist]
+            for level in levels:
+                res.checked += 1
+                words = vocab[var].get(level, [])
+                ok = whole = False
+                for b in blist:
+                    if var == "gravity_level" and b.get("level") != level:
+                        continue
+                    said = b.get("words") if b.get("in") in ("text", "quote") else b.get("key")
+                    if any(re.search(r"(?<![A-Za-z0-9])%s" % re.escape(w), said or "", re.I) for w in words):
+                        ok = True
+                    if any(re.search(r"(?<![A-Za-z0-9])%s(?![A-Za-z])" % re.escape(w), said or "", re.I) for w in words):
+                        whole = True
+                if ok and not whole:
+                    word_start_only.append("%s:%s" % (fid, level))
+                if not ok:
+                    res.fail(problem="level or phase without a word of the vocabulary in its basis", finding_id=fid,
+                             condition=var, level=level)
+    res.checked += numbers
+    res.numbers = {"normalized_numbers": numbers, "by_unit_factor": converted,
+                   "literally_in_basis": numbers - converted - len([f for f in res.failures if "value" in f]),
+                   "levels_or_phases_whose_vocabulary_word_starts_a_longer_word": len(word_start_only)}
+    if word_start_only:
+        res.details = {"note": "A vocabulary word is accepted where it starts a word of the basis ('solid' in 'thick "
+                               "solids'); the rule text does not say whole word. Such cases: " + ", ".join(word_start_only)}
+    return res
+
+
+def interval_of(rng):
+    """(lo, lo_inclusive, hi, hi_inclusive) of a scenario or bin range; None = open end."""
+    return (rng.get("min"), rng.get("min_inclusive", True), rng.get("max"), rng.get("max_inclusive", False))
+
+
+def intervals_meet(a, b):
+    lo_a, lo_ia, hi_a, hi_ia = a
+    lo_b, lo_ib, hi_b, hi_ib = b
+    if lo_a is None or (lo_b is not None and lo_b > lo_a):
+        lo, lo_i = lo_b, lo_ib
+    elif lo_b is None or lo_a > lo_b:
+        lo, lo_i = lo_a, lo_ia
+    else:
+        lo, lo_i = lo_a, lo_ia and lo_ib
+    if hi_a is None or (hi_b is not None and hi_b < hi_a):
+        hi, hi_i = hi_b, hi_ib
+    elif hi_b is None or hi_a < hi_b:
+        hi, hi_i = hi_a, hi_ia
+    else:
+        hi, hi_i = hi_a, hi_ia and hi_ib
+    if lo is None or hi is None:
+        return True
+    return lo < hi or (lo == hi and lo_i and hi_i)
+
+
+def stated_condition(row, var, entry):
+    """A condition of a findings.csv row: None (not stated), ('value', v) or ('range', interval)."""
+    lo, hi = fnum(row.get(var + "_min", "")), fnum(row.get(var + "_max", ""))
+    if lo is None and hi is None:
+        return None
+    if lo is not None and hi is not None and lo == hi and not isinstance((entry.get("conditions") or {}).get(var), list):
+        return ("value", lo)
+    excl = (entry.get("conditions") or {}).get(var + "_exclusive") or []
+    return ("range", (lo, "min" not in excl, hi, "max" not in excl))
+
+
+def condition_relation(cond, rng):
+    if not rng:
+        return "not_set"
+    if cond is None:
+        return "not_stated"
+    if cond[0] == "value":
+        return "inside" if in_range(cond[1], rng) else "outside"
+    lo, _, hi, _ = cond[1]
+    if lo is not None and hi is not None and in_range(lo, rng) and in_range(hi, rng):
+        return "inside"
+    return "overlaps" if intervals_meet(cond[1], interval_of(rng)) else "outside"
+
+
+def gravity_relation(levels, scen_level):
+    if not scen_level:
+        return "not_set"
+    if not levels:
+        return "not_stated"
+    if scen_level in levels:
+        return "same"
+    if "partial" in levels and scen_level in PARTIAL_GRAVITY_SCENARIOS:
+        return "finding_states_partial_gravity"
+    return "different"
+
+
+def place_finding(row, entry, scen):
+    """List of one entry for one scenario (findings.json _meta.lists) and the relations it rests on."""
+    ranges = scen.get("ranges") or {}
+    o2 = stated_condition(row, "o2_pct", entry)
+    p = stated_condition(row, "pressure_kpa", entry)
+    levels = split_list(row.get("gravity_level", ""))
+    rel = {"o2_pct": condition_relation(o2, ranges.get("o2_pct")),
+           "pressure_kpa": condition_relation(p, ranges.get("pressure_kpa")),
+           "gravity_level": gravity_relation(levels, scen.get("gravity_level"))}
+    if o2 is None and p is None and not levels:
+        return "general", rel
+    if rel["o2_pct"] == "inside" and rel["pressure_kpa"] == "inside":
+        return ("moved_for_gravity" if rel["gravity_level"] == "different" else "at_environment"), rel
+    good = rel["o2_pct"] in ("inside", "overlaps") or rel["pressure_kpa"] in ("inside", "overlaps") or \
+        rel["gravity_level"] in ("same", "finding_states_partial_gravity")
+    bad = "outside" in (rel["o2_pct"], rel["pressure_kpa"]) or rel["gravity_level"] == "different"
+    if good and not bad:
+        return "about_a_stated_condition_of_the_environment", rel
+    return "other_conditions", rel
+
+
+def expected_finding_lists(ctx, scen, key):
+    """The three lists, other_conditions and moved_for_gravity of one scenario and one need (or 'general')."""
+    rows, _ = findings_inputs(ctx)
+    spec = spec_findings(ctx)
+    out = {name: [] for name in FINDING_LISTS + ("other_conditions", "moved_for_gravity")}
+    rels = {}
+    for r in rows:
+        if key not in split_list(r.get("needs", "")):
+            continue
+        entry = spec.get(r["finding_id"]) or {}
+        lst, rel = place_finding(r, entry, scen)
+        rels[r["finding_id"]] = rel
+        if lst == "moved_for_gravity":
+            out["moved_for_gravity"].append(r["finding_id"])
+            out["other_conditions"].append(r["finding_id"])
+        else:
+            out[lst].append(r["finding_id"])
+    return out, rels
+
+
+def finding_blocks(ctx):
+    """(scenario spec, key, block of findings_by_environment.json) for every scenario and need or 'general'."""
+    _, fbe = findings_inputs(ctx)
+    envs = {e.get("id"): e for e in fbe.get("environments", [])}
+    for scen in ctx.spec("scenarios")["scenarios"]:
+        env = envs.get(scen["id"]) or {}
+        for key in [n["id"] for n in ctx.needs] + ["general"]:
+            yield scen, key, (env.get("needs") or {}).get(key)
+
+
+@check("L3_findings_lists",
+       "For each scenario and each need (and 'general'), the three lists of findings_by_environment.json, the "
+       "entries counted under other_conditions and moved_for_gravity, the counts, and for each listed entry "
+       "the relations of matched_on, not_stated and flow are recomputed from findings.csv and scenarios.json "
+       "by the rule of spec/findings.json _meta.lists.")
+def check_l3(ctx):
+    res = Result()
+    rows, fbe = findings_inputs(ctx)
+    spec = spec_findings(ctx)
+    by_id = {r["finding_id"]: r for r in rows}
+    env_ids = [e.get("id") for e in fbe.get("environments", [])]
+    scen_ids = [s["id"] for s in ctx.spec("scenarios")["scenarios"]]
+    if env_ids != scen_ids:
+        res.fail(problem="environments differ from scenarios.json", file=env_ids, spec=scen_ids)
+    listed = {name: 0 for name in FINDING_LISTS}
+    other = 0
+    for scen, key, block in finding_blocks(ctx):
+        k = {"scenario": scen["id"], "need": key}
+        if block is None:
+            res.fail(problem="block missing", **k)
+            continue
+        res.checked += 1
+        exp, rels = expected_finding_lists(ctx, scen, key)
+        for name in FINDING_LISTS:
+            got = [x.get("finding_id") for x in block.get(name, [])]
+            listed[name] += len(exp[name])
+            if len(set(got)) != len(got):
+                res.fail(problem="entry listed twice", list=name, **k)
+            if set(got) != set(exp[name]):
+                res.fail(list=name, missing=sorted(set(exp[name]) - set(got))[:6],
+                         not_expected=sorted(set(got) - set(exp[name]))[:6], **k)
+        oc = block.get("other_conditions") or {}
+        other += len(exp["other_conditions"])
+        if oc.get("count") != len(exp["other_conditions"]):
+            res.fail(field="other_conditions.count", file=oc.get("count"), recomputed=len(exp["other_conditions"]), **k)
+        moved = [m.get("finding_id") if isinstance(m, dict) else m for m in oc.get("moved_for_gravity", [])]
+        if sorted(moved) != sorted(exp["moved_for_gravity"]):
+            res.fail(field="other_conditions.moved_for_gravity", file=moved, recomputed=exp["moved_for_gravity"], **k)
+        n_listed = sum(len(exp[n]) for n in FINDING_LISTS)
+        counts = {"n_at": len(exp["at_environment"]), "n_about": len(exp["about_a_stated_condition_of_the_environment"]),
+                  "n_general": len(exp["general"]), "n_listed": n_listed,
+                  "n_not_full_text": sum(1 for n in FINDING_LISTS for f in exp[n] if by_id[f].get("access") != "full_text_read"),
+                  "n_other_conditions": len(exp["other_conditions"])}
+        for ck, want in counts.items():
+            if (block.get("counts") or {}).get(ck) != want:
+                res.fail(field="counts." + ck, file=(block.get("counts") or {}).get(ck), recomputed=want, **k)
+        ranges = scen.get("ranges") or {}
+        scen_sets = [v for v in ("o2_pct", "pressure_kpa") if ranges.get(v)] + (["gravity_level"] if scen.get("gravity_level") else [])
+        for name in FINDING_LISTS:
+            for x in block.get(name, []):
+                fid = x.get("finding_id")
+                if fid not in rels:
+                    continue
+                rel = rels[fid]
+                want_on = {v: r for v, r in rel.items() if r in ("inside", "overlaps", "same", "finding_states_partial_gravity")}
+                got_on = {v: (m or {}).get("relation") for v, m in (x.get("matched_on") or {}).items()}
+                if got_on != want_on:
+                    res.fail(field="matched_on", finding_id=fid, file=got_on, recomputed=want_on, **k)
+                want_ns = [v for v in scen_sets if rel[v] == "not_stated"]
+                if list(x.get("not_stated") or []) != want_ns:
+                    res.fail(field="not_stated", finding_id=fid, file=x.get("not_stated"), recomputed=want_ns, **k)
+                if ranges.get("flow_cms"):
+                    f = fnum(by_id[fid].get("flow_cms", ""))
+                    want_flow = "not_stated" if f is None else ("inside" if in_range(f, ranges["flow_cms"]) else "outside")
+                    if x.get("flow") != want_flow:
+                        res.fail(field="flow", finding_id=fid, file=x.get("flow"), recomputed=want_flow, **k)
+                if x.get("access") != by_id[fid].get("access") or x.get("kind") != by_id[fid].get("kind"):
+                    res.fail(field="access or kind", finding_id=fid, **k)
+                if name == "general":
+                    words = bool((spec.get(fid) or {}).get("condition_words"))
+                    if x.get("states_conditions_in_words") is not words:
+                        res.fail(field="states_conditions_in_words", finding_id=fid, file=x.get("states_conditions_in_words"),
+                                 recomputed=words, **k)
+    res.numbers = {"blocks": res.checked, "listed": listed, "other_conditions": other}
+    return res
+
+
+def forbidden_words_in(text, words):
+    if not words:
+        return []
+    return sorted({m.group(0).lower() for m in re.finditer(r"\b(%s)\b" % "|".join(map(re.escape, words)), text or "", re.I)})
+
+
+@check("L4_findings_sentences",
+       "Every number in a fixed sentence of findings_by_environment.json is one of the counts of its block "
+       "(n_at, n_about, n_general, n_listed, n_not_full_text), and no sentence or sentence template holds a "
+       "word of spec/findings.json forbidden_words.")
+def check_l4(ctx):
+    res = Result()
+    meta = ctx.spec("findings")["_meta"]
+    banned = meta.get("forbidden_words") or []
+    sentences = 0
+    for name, tpl in (meta.get("sentences") or {}).items():
+        for t in (tpl.values() if isinstance(tpl, dict) else [tpl]):
+            if name != "fields" and forbidden_words_in(t, banned):
+                res.fail(problem="forbidden word in a template", template=name, words=forbidden_words_in(t, banned))
+    for scen, key, block in finding_blocks(ctx):
+        if block is None:
+            continue
+        counts = block.get("counts") or {}
+        pool = {round(float(counts[c]), 9) for c in ("n_at", "n_about", "n_general", "n_listed", "n_not_full_text")
+                if isinstance(counts.get(c), (int, float))}
+        for s in block.get("statements", []):
+            text = s.get("text") if isinstance(s, dict) else s
+            sentences += 1
+            for n in text_numbers(text):
+                res.checked += 1
+                if n not in pool:
+                    res.fail(problem="number not a count of the lists", scenario=scen["id"], need=key, number=n, text=text[:160])
+            words = forbidden_words_in(text, banned)
+            if words:
+                res.fail(problem="forbidden word", scenario=scen["id"], need=key, words=words, text=text[:160])
+    res.numbers = {"sentences": sentences, "numbers_in_sentences": res.checked}
+    return res
+
+
+# ----------------------------------------------------------------------------
+# M. answer files (README "Answer files"; spec/answers.json)
+# ----------------------------------------------------------------------------
+
+ANSWER_RUNGS = {"frame": "frame", "rung1": "rung1_recorded_at_the_condition", "rung2": "rung2_recorded_near_the_condition",
+                "rung3": "rung3_published", "rung4": "rung4_not_known"}
+RUNG3_LISTS = {"at_environment": "at_the_environment",
+               "about_a_stated_condition_of_the_environment": "about_a_stated_condition",
+               "general": "stated_without_these_conditions"}
+ENTRY_PLACES = [("frame", "criteria"), ("frame", "nasa_questions"), ("rung3", "at_the_environment"),
+                ("rung3", "about_a_stated_condition"), ("rung3", "stated_without_these_conditions"),
+                ("rung4", "stated_open_elsewhere")]
+
+
+def answer_files(ctx):
+    """(scenario spec, need spec, file name, content or None) for every scenario x need."""
+    if not ctx.has(os.path.join("answers", "index.json")):
+        raise Skip("data/pipeline/answers/index.json does not exist yet")
+    out = []
+    for scen in ctx.spec("scenarios")["scenarios"]:
+        for need in ctx.needs:
+            name = "%s__%s.json" % (scen["id"], need["id"])
+            path = os.path.join("answers", name)
+            out.append((scen, need, name, ctx.json(path) if ctx.has(path) else None))
+    return out
+
+
+def package_block(ctx, env_file, need_id):
+    path = os.path.join("evidence", env_file)
+    if not ctx.has(path):
+        return None
+    for b in ctx.json(path).get("needs", []):
+        if isinstance(b, dict) and b.get("need_id") == need_id:
+            return b
+    return None
+
+
+def fill_template(template, fields):
+    """{field} and [field|one|many] of spec/answers.json _meta.format."""
+    def plural(m):
+        return m.group(2) if fields.get(m.group(1)) == 1 else m.group(3)
+    text = re.sub(r"\[(\w+)\|([^|\]]*)\|([^\]]*)\]", plural, template)
+    return re.sub(r"\{(\w+)\}", lambda m: str(fields.get(m.group(1), "{%s}" % m.group(1))), text)
+
+
+_OPS = {"==": lambda a, b: a == b, "!=": lambda a, b: a != b, ">": lambda a, b: a > b, ">=": lambda a, b: a >= b,
+        "<": lambda a, b: a < b, "<=": lambda a, b: a <= b}
+
+
+def conditions_hold(when, fields):
+    return all(_OPS[op](fields.get(f), v) for f, op, v in when)
+
+
+@check("M1_answers_files_and_index",
+       "answers/ holds one file per scenario of scenarios.json and need of needs.json (36) and index.json, and "
+       "nothing else; index.json lists them in spec order with the file's top line and the number of entries "
+       "of every list it names.")
+def check_m1(ctx):
+    res = Result()
+    files = answer_files(ctx)
+    expected = {name for _, _, name, _ in files} | {"index.json"}
+    on_disk = set(f for f in os.listdir(ctx.out_path("answers")) if not f.startswith("."))
+    for f in sorted(on_disk - expected):
+        res.fail(problem="file in answers/ that no scenario x need explains", file=f)
+    index = ctx.json(os.path.join("answers", "index.json"))
+    rows = index.get("answers", [])
+    if [r.get("file") for r in rows] != [name for _, _, name, _ in files]:
+        res.fail(problem="index order or files differ from scenarios x needs", index=[r.get("file") for r in rows][:8])
+    by_file = {r.get("file"): r for r in rows}
+    compared = 0
+    for scen, need, name, doc in files:
+        k = {"answer_file": name}
+        if doc is None:
+            res.fail(problem="answer file missing", **k)
+            continue
+        res.checked += 1
+        r = by_file.get(name) or {}
+        pairs = [("scenario", r.get("scenario"), scen["id"]), ("need", r.get("need"), need["id"]),
+                 ("top_line_id", r.get("top_line_id"), (doc.get("top_line") or {}).get("id")),
+                 ("top_line", r.get("top_line"), (doc.get("top_line") or {}).get("text")),
+                 ("environment.id", (doc.get("environment") or {}).get("id"), scen["id"]),
+                 ("need.need_id", (doc.get("need") or {}).get("need_id"), need["id"])]
+        for rung, lists in (r.get("entries") or {}).items():
+            block = doc.get(ANSWER_RUNGS.get(rung, rung)) or {}
+            for lname, n in lists.items():
+                if rung == "rung1" and lname == "matched_tests":
+                    got = block.get("matched")
+                else:
+                    got = len(block.get(lname) or []) if isinstance(block.get(lname), list) else None
+                pairs.append(("entries.%s.%s" % (rung, lname), n, got))
+        for field, a, b in pairs:
+            compared += 1
+            if a != b:
+                res.fail(field=field, index_or_file=str(a)[:80], expected=str(b)[:80], **k)
+    res.numbers = {"answer_files": res.checked, "index_rows": len(rows), "files_on_disk": len(on_disk),
+                   "fields_compared": compared}
+    return res
+
+
+@check("M2_answers_rung1",
+       "Rung 1 of every answer file: status, counts and the gap codes of rung 4 equal the scenario's row of "
+       "scenario_needs.csv; matched is the number of matched tests of the evidence package block; matched "
+       "ranges, fuel phases, investigations, documented sentences and indicator values are those of the block; "
+       "the copied sentences are the block's statements selected by answers.json rung1.copied_statements, in "
+       "order and unchanged, and the gap sentences are the block's gap texts.")
+def check_m2(ctx):
+    res = Result()
+    spec = ctx.spec("answers")
+    sel = spec["rung1"]["copied_statements"]
+    rows = {(r["scenario_id"], r["need_id"]): r for r in ctx.table("scenario_needs.csv")}
+    for scen, need, name, doc in answer_files(ctx):
+        if doc is None:
+            continue
+        res.checked += 1
+        k = {"answer_file": name}
+        r1 = doc.get("rung1_recorded_at_the_condition") or {}
+        row = rows.get((scen["id"], need["id"]))
+        if row is None:
+            res.fail(problem="no row in scenario_needs.csv", **k)
+            continue
+        if r1.get("status") != row["status"]:
+            res.fail(field="status", file=r1.get("status"), csv=row["status"], **k)
+        counts = r1.get("counts") or {}
+        for key, col in list(COUNT_KEYS.items()) + list(OPTIONAL_COUNT_KEYS.items()):
+            if col in row and counts.get(key) != int(row[col]):
+                res.fail(field="counts." + key, file=counts.get(key), csv=row[col], **k)
+        codes = [g.get("code") for g in (doc.get("rung4_not_known") or {}).get("gaps", [])]
+        if codes != split_list(row.get("gaps", "")):
+            res.fail(field="rung4.gaps codes", file=codes, csv=row.get("gaps"), **k)
+        block = package_block(ctx, "scenario_%s.json" % scen["id"], need["id"])
+        if block is None:
+            res.fail(problem="evidence package block missing", **k)
+            continue
+        if r1.get("matched") != len(block.get("matched_tests", [])):
+            res.fail(field="matched", file=r1.get("matched"), package=len(block.get("matched_tests", [])), **k)
+        for f in ("matched_ranges", "matched_by_fuel_phase", "investigations", "documented_elsewhere"):
+            if r1.get(f) != block.get(f):
+                res.fail(field=f, problem="differs from the evidence package block", **k)
+        pack_ind = [(i.get("indicator_id"), i.get("group"), i.get("n_tests"), i.get("values")) for i in block.get("indicators", [])]
+        file_ind = [(i.get("id"), i.get("group"), i.get("n_tests"), i.get("values")) for i in r1.get("indicators", [])]
+        if pack_ind != file_ind:
+            res.fail(field="indicators", problem="ids, groups, test counts or values differ from the package", **k)
+        want = [s.get("text") for s in block.get("statements", [])
+                if s.get("id") in sel["ids"] or any(str(s.get("id", "")).startswith(p) for p in sel["prefixes"])]
+        got = [s.get("text") for s in r1.get("sentences", [])]
+        if got != want:
+            res.fail(field="rung1.sentences", file_n=len(got), package_n=len(want),
+                     first_difference=next((g for g, w in zip(got + [None] * 99, want + [None] * 99) if g != w), None), **k)
+        want_gaps = [g.get("text") for g in block.get("gaps", [])]
+        got_gaps = [g.get("text") for g in (doc.get("rung4_not_known") or {}).get("gaps", [])]
+        if got_gaps != want_gaps:
+            res.fail(field="rung4.gaps texts", problem="differ from the package gap sentences", **k)
+    res.numbers = {"answer_files": res.checked}
+    return res
+
+
+def range_words(spec_words, rng):
+    if not rng:
+        return None
+    lo, hi = rng.get("min"), rng.get("max")
+    inc = rng.get("max_inclusive", False)
+    if lo is not None and hi is not None:
+        t = spec_words["both_max_inclusive" if inc else "both_max_exclusive"]
+    elif hi is not None:
+        t = spec_words["max_only_inclusive" if inc else "max_only_exclusive"]
+    else:
+        t = spec_words["min_only"]
+    return t.replace("{min}", str(lo)).replace("{max}", str(hi))
+
+
+@check("M3_answers_rung2_near",
+       "Rung 2 of every answer file: the scenario's cells, the candidate cells and the listed cells are "
+       "recomputed from coverage.json, scenarios.json and atmosphere_cells.csv by answers.json 'near'; every "
+       "listed cell carries the counts and status of its row, matched and also_matched_at_the_condition "
+       "recomputed from the evidence packages, the environment's range words, and the counts of the rung.")
+def check_m3(ctx):
+    res = Result()
+    spec = ctx.spec("answers")
+    dims = ctx.spec("coverage")["dimensions"]
+    obins, pbins = dims["o2_pct"]["bins"], dims["pressure_kpa"]["bins"]
+    cells_csv = {(r["scenario_id"], r["need_id"]): r for r in ctx.table("atmosphere_cells.csv")}
+    listed_total = 0
+    repeating_agree = 0
+    for scen, need, name, doc in answer_files(ctx):
+        if doc is None:
+            continue
+        res.checked += 1
+        k = {"answer_file": name}
+        r2 = doc.get("rung2_recorded_near_the_condition") or {}
+        ranges = scen.get("ranges") or {}
+        has = bool(ranges.get("o2_pct")) and bool(ranges.get("pressure_kpa"))
+        scen_cells, cand = [], []
+        if has:
+            oi = [i for i, b in enumerate(obins) if intervals_meet(interval_of(b), interval_of(ranges["o2_pct"]))]
+            pi = [j for j, b in enumerate(pbins) if intervals_meet(interval_of(b), interval_of(ranges["pressure_kpa"]))]
+            sc = {(i, j) for i in oi for j in pi}
+            near = set()
+            for i, j in sc:
+                for di, dj in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+                    c = (i + di, j + dj)
+                    if 0 <= c[0] < len(obins) and 0 <= c[1] < len(pbins) and c not in sc:
+                        near.add(c)
+            cid = lambda c: "cell_%s__%s" % (obins[c[0]]["id"], pbins[c[1]]["id"])
+            scen_cells = [cid(c) for c in sorted(sc)]
+            cand = [cid(c) for c in sorted(near)]
+            differs = {cid(c): ("oxygen" if any(c[1] == s[1] and abs(c[0] - s[0]) == 1 for s in sc) else "pressure")
+                       for c in near}
+        else:
+            differs = {}
+        listed = []
+        for c in cand:
+            row = cells_csv.get((c, need["id"]))
+            if row and int(row["tests_atmosphere"]) + int(row["tests_oxygen_only"]) + int(row["tests_pressure_only"]) >= 1:
+                listed.append(c)
+        if r2.get("scenario_cells", []) != scen_cells:
+            res.fail(field="scenario_cells", file=r2.get("scenario_cells"), recomputed=scen_cells, **k)
+        if r2.get("candidate_cells", []) != cand:
+            res.fail(field="candidate_cells", file=r2.get("candidate_cells"), recomputed=cand, **k)
+        got_cells = [c.get("cell_id") for c in r2.get("cells", [])]
+        if got_cells != listed:
+            res.fail(field="cells", file=got_cells, recomputed=listed, **k)
+        listed_total += len(listed)
+        words = {v: range_words(spec["range_words"][v], ranges.get(v)) for v in ("o2_pct", "pressure_kpa")} if has else {}
+        if has and r2.get("environment_words") != words:
+            res.fail(field="environment_words", file=r2.get("environment_words"), recomputed=words, **k)
+        scen_block = package_block(ctx, "scenario_%s.json" % scen["id"], need["id"]) or {}
+        scen_ids = {t.get("test_id") for t in scen_block.get("matched_tests", [])}
+        repeating = 0
+        for cell in r2.get("cells", []):
+            c = cell.get("cell_id")
+            row = cells_csv.get((c, need["id"]))
+            ck = dict(k, cell=c)
+            if row is None:
+                continue
+            for col, v in (cell.get("counts") or {}).items():
+                want = int(row[col]) if col.startswith("tests_") or col == "usable_tests" else row.get(col)
+                if v != want:
+                    res.fail(field="counts." + col, file=v, csv=row.get(col), **ck)
+            if cell.get("status") != row["status"]:
+                res.fail(field="status", file=cell.get("status"), csv=row["status"], **ck)
+            if cell.get("differs_in") != differs.get(c):
+                res.fail(field="differs_in", file=cell.get("differs_in"), recomputed=differs.get(c), **ck)
+            cb = package_block(ctx, c + ".json", need["id"])
+            if cb is None:
+                res.fail(problem="cell package block missing", **ck)
+                continue
+            ids = {t.get("test_id") for t in cb.get("matched_tests", [])}
+            tiers = int(row["tests_atmosphere"]) + int(row["tests_oxygen_only"]) + int(row["tests_pressure_only"])
+            if cell.get("matched") != len(ids) or len(ids) != tiers:
+                res.fail(field="matched", file=cell.get("matched"), package=len(ids), csv_tiers=tiers, **ck)
+            if cell.get("also_matched_at_the_condition") != len(ids & scen_ids):
+                res.fail(field="also_matched_at_the_condition", file=cell.get("also_matched_at_the_condition"),
+                         recomputed=len(ids & scen_ids), **ck)
+            if cell.get("matched_ranges") != cb.get("matched_ranges"):
+                res.fail(field="matched_ranges", problem="differs from the cell package", **ck)
+            if int(row["tests_oxygen_only"]) + int(row["tests_pressure_only"]) > 0:
+                repeating += 1
+        counts = r2.get("counts") or {}
+        want_counts = {"has_ranges": has, "n_scenario_cells": len(scen_cells), "n_candidates": len(cand), "n_cells": len(listed)}
+        for ck, v in want_counts.items():
+            if counts.get(ck) != v:
+                res.fail(field="counts." + ck, file=counts.get(ck), recomputed=v, **k)
+        if counts.get("n_cells_with_repeating_tier") == repeating:
+            repeating_agree += 1
+    res.numbers = {"answer_files": res.checked, "cells_listed": listed_total,
+                   "files_where_n_cells_with_repeating_tier_equals_cells_with_oxygen_only_or_pressure_only": repeating_agree}
+    res.details = {"note": "answers.json defines no rule for n_cells_with_repeating_tier; it is compared with the number "
+                           "of listed cells whose row has a test of tier oxygen_only or pressure_only and is reported, "
+                           "not failed."}
+    return res
+
+
+def nasa_question(ctx, fid):
+    rule = ctx.spec("answers")["placement"]["nasa_questions"]
+    row = {r["finding_id"]: r for r in findings_inputs(ctx)[0]}.get(fid) or {}
+    return row.get("kind") == "gap" and row.get("quote", "") != "" and row.get("reference_id") in rule["reference_ids"]
+
+
+def file_entries(doc):
+    """(rung, list name, entry) of every finding entry of an answer file."""
+    for rung, lname in ENTRY_PLACES:
+        for e in (doc.get(ANSWER_RUNGS[rung]) or {}).get(lname, []) or []:
+            yield rung, lname, e
+
+
+@check("M4_answers_findings_placement",
+       "Every finding that findings_by_environment.json lists for the scenario under the need or under "
+       "'general' is in the answer file exactly once, placed by its kind (answers.json placement: criterion -> "
+       "frame.criteria; gap -> frame.nasa_questions or rung4.stated_open_elsewhere; result, caveat -> the rung 3 "
+       "list of its list), with applies, the name of its list, text and quote equal to references.json, the "
+       "place and document of findings.csv, the order of placement.order, and the counts of frame, rung 3 and "
+       "rung 4 recomputed from the lists.")
+def check_m4(ctx):
+    res = Result()
+    rows, fbe = findings_inputs(ctx)
+    by_id = {r["finding_id"]: r for r in rows}
+    items = ctx.reference_items
+    envs = {e.get("id"): e for e in fbe.get("environments", [])}
+    spec = ctx.spec("answers")
+    not_covered = ctx.spec("needs")["_meta"].get("not_covered", [])
+    placed = 0
+    list_name_differs = 0
+    for scen, need, name, doc in answer_files(ctx):
+        if doc is None:
+            continue
+        res.checked += 1
+        k = {"answer_file": name}
+        blocks = (envs.get(scen["id"]) or {}).get("needs") or {}
+        expected = {}
+        for key, applies in ((need["id"], "need"), ("general", "general")):
+            for lst in FINDING_LISTS:
+                for x in (blocks.get(key) or {}).get(lst, []):
+                    fid = x.get("finding_id")
+                    kind = (by_id.get(fid) or {}).get("kind")
+                    if kind == "criterion":
+                        place = ("frame", "criteria")
+                    elif kind == "gap":
+                        place = ("frame", "nasa_questions") if nasa_question(ctx, fid) else ("rung4", "stated_open_elsewhere")
+                    else:
+                        place = ("rung3", RUNG3_LISTS[lst])
+                    expected.setdefault(fid, []).append((place, applies, lst))
+        got = {}
+        for rung, lname, e in file_entries(doc):
+            got.setdefault(e.get("finding_id"), []).append(((rung, lname), e))
+        for fid, wants in sorted(expected.items()):
+            if len(wants) > 1:
+                res.fail(problem="finding listed twice in findings_by_environment.json for this file", finding_id=fid, **k)
+            have = got.get(fid, [])
+            if len(have) != 1:
+                res.fail(problem="finding placed %d times" % len(have), finding_id=fid, **k)
+                continue
+            (place, e), (want_place, applies, lst) = have[0], wants[0]
+            placed += 1
+            if place != want_place:
+                res.fail(problem="placed in the wrong list", finding_id=fid, file=".".join(place), expected=".".join(want_place), **k)
+            if e.get("applies") != applies:
+                res.fail(field="applies", finding_id=fid, file=e.get("applies"), expected=applies, **k)
+            if e.get("list") != lst:
+                list_name_differs += 1
+                res.fail(field="list", problem="'list' is not the name of the entry's list in findings_by_environment.json",
+                         finding_id=fid, file=e.get("list"), expected=lst, **k)
+            r = by_id.get(fid) or {}
+            item = items.get(r.get("item_id"))
+            if item is None:
+                res.fail(problem="item not in references.json", finding_id=fid, **k)
+                continue
+            ref, it = item
+            for f, want in (("text", it.get("text") or ""), ("quote", it.get("quote") or ""), ("where", it.get("where") or ""),
+                            ("reference_id", ref.get("id")), ("title", ref.get("title")), ("version", ref.get("version")),
+                            ("access", ref.get("access")), ("url", ref.get("url")), ("kind", r.get("kind")),
+                            ("item_id", r.get("item_id")), ("row", r.get("row") or None)):
+                if (e.get(f) or "") != (want or ""):
+                    res.fail(field=f, finding_id=fid, file=str(e.get(f))[:60], expected=str(want)[:60], **k)
+        for fid in sorted(set(got) - set(expected)):
+            res.fail(problem="entry in the file that findings_by_environment.json does not list here", finding_id=fid, **k)
+        for rung, lname in ENTRY_PLACES:
+            lst = (doc.get(ANSWER_RUNGS[rung]) or {}).get(lname, []) or []
+            keys = [(e.get("reference_id") or "", e.get("item_id") or "", str(e.get("row") or "")) for e in lst]
+            if keys != sorted(keys):
+                res.fail(problem="entries not in placement.order (reference id, item id, row)", list=rung + "." + lname, **k)
+        fr, r3, r4 = (doc.get(ANSWER_RUNGS[x]) or {} for x in ("frame", "rung3", "rung4"))
+        crit = fr.get("criteria", [])
+        listof = lambda e: (expected.get(e.get("finding_id")) or [(None, None, None)])[0][2]
+        r3all = r3.get("at_the_environment", []) + r3.get("about_a_stated_condition", []) + r3.get("stated_without_these_conditions", [])
+        want = {("frame", "n_criteria"): len(crit), ("frame", "n_nasa_questions"): len(fr.get("nasa_questions", [])),
+                ("frame", "n_criteria_at"): sum(1 for e in crit if listof(e) == "at_environment"),
+                ("frame", "n_criteria_about"): sum(1 for e in crit if listof(e) == "about_a_stated_condition_of_the_environment"),
+                ("frame", "n_criteria_general"): sum(1 for e in crit if listof(e) == "general"),
+                ("rung3", "n_at"): len(r3.get("at_the_environment", [])),
+                ("rung3", "n_about"): len(r3.get("about_a_stated_condition", [])),
+                ("rung3", "n_general"): len(r3.get("stated_without_these_conditions", [])),
+                ("rung3", "n_listed"): len(r3all),
+                ("rung3", "n_not_full_text"): sum(1 for e in r3all if e.get("access") != "full_text_read"),
+                ("rung4", "n_gaps"): len(r4.get("gaps", [])), ("rung4", "n_stated_open_elsewhere"): len(r4.get("stated_open_elsewhere", [])),
+                ("rung4", "n_not_covered"): len(not_covered),
+                ("rung4", "n_searches"): sum(1 for s in spec.get("searches", []) if need["id"] in (s.get("needs") or []))}
+        for (rung, field), v in want.items():
+            got_v = ((doc.get(ANSWER_RUNGS[rung]) or {}).get("counts") or {}).get(field)
+            if got_v != v:
+                res.fail(field="%s.counts.%s" % (rung, field), file=got_v, recomputed=v, **k)
+        if [{x: a.get(x) for x in ("area", "source_item", "why")} for a in r4.get("not_covered", [])] != not_covered or \
+                any(a.get("applies") != "general" for a in r4.get("not_covered", [])):
+            res.fail(field="rung4.not_covered", problem="not the entries of needs.json _meta.not_covered with applies general", **k)
+        want_s = [s for s in spec.get("searches", []) if need["id"] in (s.get("needs") or [])]
+        if r4.get("searches", []) != want_s:
+            res.fail(field="rung4.searches", problem="not the searches of answers.json for this need", **k)
+    res.numbers = {"answer_files": res.checked, "entries_placed": placed,
+                   "entries_whose_list_field_is_not_the_list_name": list_name_differs}
+    return res
+
+
+def top_line_fields(doc):
+    r1 = doc.get("rung1_recorded_at_the_condition") or {}
+    c = r1.get("counts") or {}
+    r3 = doc.get("rung3_published") or {}
+    n_at, n_about = len(r3.get("at_the_environment", [])), len(r3.get("about_a_stated_condition", []))
+    return {"status": r1.get("status"), "usable_tests": c.get("usable_tests"), "atmosphere": c.get("atmosphere"),
+            "oxygen_only": c.get("oxygen_only"), "pressure_only": c.get("pressure_only"), "matched": r1.get("matched"),
+            "n_near_cells": len((doc.get("rung2_recorded_near_the_condition") or {}).get("cells", [])),
+            "n_at": n_at, "n_about": n_about, "n_published_here": n_at + n_about}
+
+
+@check("M5_answers_top_line",
+       "The top line of every answer file starts with the fixed start of answers.json and is the one its rule "
+       "selects: the first 'tests' sentence and the first 'published' sentence whose conditions hold for the "
+       "fields recomputed from rungs 1 to 3, filled with those fields; id and fields as the rule says.")
+def check_m5(ctx):
+    res = Result()
+    rule = ctx.spec("answers")["top_line"]
+    per_id = {}
+    for scen, need, name, doc in answer_files(ctx):
+        if doc is None:
+            continue
+        res.checked += 1
+        k = {"answer_file": name}
+        top = doc.get("top_line") or {}
+        fields = top_line_fields(doc)
+        t = next((s for s in rule["tests"] if conditions_hold(s["when"], fields)), None)
+        p = next((s for s in rule["published"] if conditions_hold(s["when"], fields)), None)
+        if t is None or p is None:
+            res.fail(problem="no sentence of the rule holds", fields=fields, **k)
+            continue
+        want_id = t["id"] + "+" + p["id"]
+        want_text = " ".join([rule["start"], fill_template(t["text"], fields), fill_template(p["text"], fields)])
+        per_id[want_id] = per_id.get(want_id, 0) + 1
+        if not str(top.get("text", "")).startswith(rule["start"]):
+            res.fail(problem="top line does not start with the fixed start", text=str(top.get("text"))[:80], **k)
+        if top.get("id") != want_id:
+            res.fail(field="id", file=top.get("id"), expected=want_id, **k)
+        if top.get("text") != want_text:
+            res.fail(field="text", file=str(top.get("text"))[:200], expected=want_text[:200], **k)
+        if top.get("fields") != fields:
+            res.fail(field="fields", file=top.get("fields"), recomputed=fields, **k)
+        first = (doc.get("sentences") or [{}])[0]
+        if first.get("rung") != "top" or first.get("text") != top.get("text"):
+            res.fail(problem="the first sentence of the file is not the top line", **k)
+    res.numbers = {"answer_files": res.checked, "by_top_line": dict(sorted(per_id.items()))}
+    return res
+
+
+def sentence_pools(doc):
+    """For every sentence of the file's 'sentences': the numbers of the block it belongs to."""
+    r1 = doc.get("rung1_recorded_at_the_condition") or {}
+    r2 = doc.get("rung2_recorded_near_the_condition") or {}
+    r4 = doc.get("rung4_not_known") or {}
+    rung1 = numbers_of({k: v for k, v in r1.items() if k != "sentences"})
+    cells = {}
+    for c in r2.get("cells", []):
+        pool = numbers_of({k: v for k, v in c.items() if k not in ("differs", "recorded")}) | numbers_of(r2.get("environment_words"))
+        cells[c.get("differs")] = pool
+        cells[c.get("recorded")] = pool
+    gap_texts = {g.get("text") for g in r4.get("gaps", [])}
+    for s in doc.get("sentences", []):
+        rung, sid, text = str(s.get("rung")), str(s.get("id", "")), s.get("text") or ""
+        if rung == "top":
+            yield s, numbers_of((doc.get("top_line") or {}).get("fields")), "top_line.fields"
+        elif rung == "frame":
+            yield s, numbers_of((doc.get("frame") or {}).get("counts")), "frame.counts"
+        elif rung == "1":
+            yield s, rung1, "rung1 (copied package block)"
+        elif rung == "2" and sid.startswith("rung2.cell."):
+            yield s, cells.get(text), "rung2 cell"
+        elif rung == "2":
+            yield s, numbers_of(r2.get("counts")), "rung2.counts"
+        elif rung == "3":
+            yield s, numbers_of((doc.get("rung3_published") or {}).get("counts")), "rung3.counts"
+        elif rung == "4" and sid.startswith("gap."):
+            yield s, (rung1 | numbers_of(r4.get("gaps"))) if text in gap_texts else None, "rung4 gap (copied package block)"
+        elif rung == "4" and sid == "rung4.search":
+            yield s, numbers_of(r4.get("searches")), "rung4.searches"
+        elif rung == "4":
+            yield s, numbers_of(r4.get("counts")), "rung4.counts"
+        else:
+            yield s, None, "unknown rung"
+
+
+@check("M6_answers_sentence_numbers",
+       "Every number in every sentence of an answer file is found in the block the sentence belongs to (top "
+       "line: its fields; frame, rung 2, 3 and 4 sentences: the counts of the rung; a cell sentence: its cell; "
+       "a copied package sentence: the copied package block of rung 1; a search sentence: the search entry), "
+       "and the file's 'sentences' are exactly the sentences of its blocks.")
+def check_m6(ctx):
+    res = Result()
+    sentences = 0
+    for scen, need, name, doc in answer_files(ctx):
+        if doc is None:
+            continue
+        k = {"answer_file": name}
+        blocks = [(doc.get("top_line") or {}).get("text")]
+        for key in ("frame", "rung1_recorded_at_the_condition", "rung2_recorded_near_the_condition", "rung3_published",
+                    "rung4_not_known"):
+            blocks += [s.get("text") for s in (doc.get(key) or {}).get("sentences", [])]
+        for c in (doc.get("rung2_recorded_near_the_condition") or {}).get("cells", []):
+            blocks += [c.get("differs"), c.get("recorded")]
+        listed = [s.get("text") for s in doc.get("sentences", [])]
+        if sorted(map(str, listed)) != sorted(map(str, blocks)):
+            res.fail(problem="'sentences' differ from the sentences of the blocks", only_in_list=sorted(set(listed) - set(blocks))[:2],
+                     only_in_blocks=sorted(set(map(str, blocks)) - set(map(str, listed)))[:2], **k)
+        for s, pool, where in sentence_pools(doc):
+            sentences += 1
+            if pool is None:
+                res.fail(problem="sentence without a block", rung=s.get("rung"), id=s.get("id"), text=(s.get("text") or "")[:120], **k)
+                continue
+            for n in text_numbers(s.get("text")):
+                res.checked += 1
+                if n not in pool:
+                    res.fail(number=n, block=where, id=s.get("id"), text=(s.get("text") or "")[:200], **k)
+    res.numbers = {"sentences": sentences, "numbers_in_sentences": res.checked}
+    return res
+
+
+def answer_templates(spec):
+    """Every template text of spec/answers.json (top line, sentences, cell, search, range words)."""
+    out = [("top_line.start", spec["top_line"]["start"])]
+    out += [("top_line." + s["id"], s["text"]) for part in ("tests", "published") for s in spec["top_line"][part]]
+    for part, v in spec["sentences"].items():
+        if isinstance(v, list):
+            out += [(s["id"], s["text"]) for s in v]
+        elif isinstance(v, dict):
+            out += [("sentences.%s.%s" % (part, kk), t) for kk, t in v.items()]
+        else:
+            out.append(("sentences." + part, v))
+    for var, d in spec.get("range_words", {}).items():
+        out += [("range_words.%s.%s" % (var, kk), t) for kk, t in d.items()]
+    return out
+
+
+@check("M7_answers_words",
+       "No template of spec/answers.json holds a digit or a word of its forbidden_words, and no sentence of an "
+       "answer file holds such a word (whole words; outside the need name, a reading copied from the spec and a "
+       "sentence quoted word for word from a NASA record or a publication, which are counted apart).")
+def check_m7(ctx):
+    res = Result()
+    spec = ctx.spec("answers")
+    banned = spec.get("forbidden_words") or []
+    for tid, text in answer_templates(spec):
+        res.checked += 1
+        if re.search(r"\d", re.sub(r"\{\w+\}|\[\w+\|", " ", text)):
+            res.fail(problem="digit in a template", template=tid, text=text[:120])
+        if forbidden_words_in(text, banned):
+            res.fail(problem="forbidden word in a template", template=tid, words=forbidden_words_in(text, banned))
+    copied = copied_spec_texts(ctx) + [n.get("reading", "") for n in ctx.needs]
+    quotes = verbatim_quotes(ctx)
+    exempt = 0
+    sentences = 0
+    for scen, need, name, doc in answer_files(ctx):
+        if doc is None:
+            continue
+        for s in doc.get("sentences", []):
+            sentences += 1
+            text = s.get("text") or ""
+            if not forbidden_words_in(text, banned):
+                continue
+            stripped = text
+            for piece in sorted([p for p in copied + quotes if p], key=len, reverse=True):
+                stripped = stripped.replace(piece, " ")
+            words = forbidden_words_in(stripped, banned)
+            if words:
+                res.fail(file=name, id=s.get("id"), words=words, text=text[:200])
+            else:
+                exempt += 1
+    res.numbers = {"templates": res.checked, "sentences": sentences,
+                   "sentences_with_such_a_word_only_inside_a_quote_or_copied_reading": exempt}
+    res.checked += sentences
+    return res
+
+
+# ----------------------------------------------------------------------------
+# N. raw inventory (README raw-data paragraph; spec/raw_kinds.json)
+# ----------------------------------------------------------------------------
+
+LISTINGS = os.path.join(ROOT, "data", "psi", "file_listings")
+
+
+def listing_records(listing):
+    """Every file record of a saved PSI listing (directories walked), in listing order."""
+    out = []
+
+    def walk(node):
+        for f in node.get("files", []) or []:
+            if f.get("directory") or ("bytes_size" not in f and f.get("files")):
+                walk(f)
+            else:
+                out.append(f)
+    walk(listing)
+    return out
+
+
+def raw_kind(spec, category, name):
+    """(kind, rule id, extension, name without prefix and extension) by the ordered rules of raw_kinds.json."""
+    ext = name.rsplit(".", 1)[1].strip().lower() if "." in name else "(none)"
+    core = name
+    for pat in spec["strip_prefix"]:
+        core = re.sub(pat.replace("{category}", re.escape(category)), "", core, count=1)
+    if "." in core:
+        core = core.rsplit(".", 1)[0]
+    for rule in spec["rules"]:
+        if "categories" in rule and category not in rule["categories"]:
+            continue
+        if "extensions" in rule and ext not in rule["extensions"]:
+            continue
+        if "name_pattern" in rule and not re.search(rule["name_pattern"], core):
+            continue
+        return rule["kind"], rule["id"], ext, core
+    return spec["default_kind"], "(no rule: default)", ext, core
+
+
+def archive_content(spec, category, core):
+    for rule in spec["archive_content"]["rules"]:
+        if "categories" in rule and category not in rule["categories"]:
+            continue
+        if "name_pattern" in rule and not re.search(rule["name_pattern"], core):
+            continue
+        return rule["content"]
+    return spec["archive_content"]["default"]
+
+
+def raw_inventory(ctx):
+    if not os.path.isdir(LISTINGS):
+        raise Skip("data/psi/file_listings/ is absent (git-ignored; fetched by pipeline/raw_inventory.py --refresh), "
+                   "so raw_inventory.json cannot be recounted")
+    if not ctx.has("raw_inventory.json"):
+        raise Skip("data/pipeline/raw_inventory.json does not exist yet")
+    return ctx.json("raw_inventory.json")
+
+
+def add_fb(d, key, size):
+    e = d.setdefault(key, {"files": 0, "bytes": 0})
+    e["files"] += 1
+    e["bytes"] += size
+    return e
+
+
+def recount_listing(spec, listing):
+    recs = listing_records(listing)
+    seen = set()
+    files = []
+    for f in recs:
+        fid = f.get("id") or f.get("key")
+        if fid in seen:
+            continue
+        seen.add(fid)
+        files.append(f)
+    out = {"files": len(files), "bytes": sum(int(f.get("bytes_size") or 0) for f in files),
+           "listing_rows": len(recs), "repeated_rows": len(recs) - len(files),
+           "listing_rows_bytes": sum(int(f.get("bytes_size") or 0) for f in recs),
+           "files_without_size": sum(1 for f in files if f.get("bytes_size") is None),
+           "by_category": {}, "by_kind": {}, "by_rule": {}, "largest": {}, "names": []}
+    for f in files:
+        category = f.get("sortingCategory") or ""
+        name = (f.get("key") or "").rsplit("/", 1)[-1]
+        size = int(f.get("bytes_size") or 0)
+        kind, rule, ext, core = raw_kind(spec, category, name)
+        cat = add_fb(out["by_category"], category, size)
+        add_fb(cat.setdefault("by_kind", {}), kind, size)
+        k = add_fb(out["by_kind"], kind, size)
+        add_fb(k.setdefault("extensions", {}), ext, size)
+        if kind == "archive":
+            add_fb(k.setdefault("archive_content", {}), archive_content(spec, category, core), size)
+        add_fb(out["by_rule"], rule, size)
+        out["largest"].setdefault(kind, []).append((size, name))
+        out["names"].append((category, name))
+    return out
+
+
+def fb_view(d):
+    """{key: {files, bytes, [nested ...]}} without other fields, for comparison."""
+    out = {}
+    for k, v in (d or {}).items():
+        e = {"files": v.get("files"), "bytes": v.get("bytes")}
+        for sub in ("by_kind", "extensions", "archive_content"):
+            if sub in v:
+                e[sub] = fb_view(v[sub])
+        out[k] = e
+    return out
+
+
+@check("N1_raw_inventory_counts",
+       "raw_inventory.json has one entry per PSI record (numeric order); files and bytes per investigation, per "
+       "PSI category and per kind (with extensions and archive content), the listing rows and repeats, the "
+       "largest file of each kind, the totals, and the id patterns of the file names are recounted from the "
+       "saved listings by the rules of raw_kinds.json, each file id counted once.")
+def check_n1(ctx):
+    res = Result()
+    inv = raw_inventory(ctx)
+    spec = ctx.spec("raw_kinds")
+    entries = inv.get("investigations", [])
+    ids = [e.get("investigation_id") for e in entries]
+    if ids != catalog_ids():
+        res.fail(problem="investigations differ from the PSI records", file=ids[:6], catalog=catalog_ids()[:6])
+    totals = {"files": 0, "bytes": 0, "listing_rows": 0, "repeated_rows": 0, "listing_rows_bytes": 0,
+              "files_without_size": 0, "by_kind": {}, "by_rule": {}}
+    tid = spec["test_id_patterns"]
+    distinct_agree = 0
+    patterns_found = 0
+    for e in entries:
+        inv_id = e.get("investigation_id")
+        k = {"investigation_id": inv_id}
+        path = os.path.join(LISTINGS, "%s.json" % inv_id)
+        if not os.path.exists(path):
+            res.fail(problem="no saved listing", **k)
+            continue
+        res.checked += 1
+        got = recount_listing(spec, read_json(path))
+        for f in ("files", "bytes", "listing_rows", "repeated_rows", "listing_rows_bytes", "files_without_size"):
+            totals[f] += got[f]
+            if e.get(f) != got[f]:
+                res.fail(field=f, file=e.get(f), recounted=got[f], **k)
+        for kind, v in got["by_kind"].items():
+            add = totals["by_kind"].setdefault(kind, {"files": 0, "bytes": 0})
+            add["files"] += v["files"]
+            add["bytes"] += v["bytes"]
+        for rule, v in got["by_rule"].items():
+            add = totals["by_rule"].setdefault(rule, {"files": 0, "bytes": 0})
+            add["files"] += v["files"]
+            add["bytes"] += v["bytes"]
+        if fb_view(e.get("by_category")) != fb_view(got["by_category"]):
+            diff = sorted(c for c in set(got["by_category"]) | set(e.get("by_category") or {})
+                          if fb_view({c: (e.get("by_category") or {}).get(c, {})}) != fb_view({c: got["by_category"].get(c, {})}))
+            res.fail(field="by_category", categories=diff[:5], **k)
+        if fb_view(e.get("by_kind")) != fb_view(got["by_kind"]):
+            diff = sorted(c for c in set(got["by_kind"]) | set(e.get("by_kind") or {})
+                          if fb_view({c: (e.get("by_kind") or {}).get(c, {})}) != fb_view({c: got["by_kind"].get(c, {})}))
+            res.fail(field="by_kind", kinds=diff[:5],
+                     file={c: (e.get("by_kind") or {}).get(c, {}).get("files") for c in diff[:3]},
+                     recounted={c: got["by_kind"].get(c, {}).get("files") for c in diff[:3]}, **k)
+        for kind, sizes in got["largest"].items():
+            top = max(s for s, _ in sizes)
+            ke = (e.get("by_kind") or {}).get(kind) or {}
+            if ke.get("example_bytes") != top or (top, ke.get("example")) not in sizes:
+                res.fail(field="by_kind.%s.example" % kind, file=[ke.get("example"), ke.get("example_bytes")], largest_bytes=top, **k)
+        searched = [n for c, n in got["names"] if c in tid["categories"]]
+        want = []
+        for p in tid["patterns"]:
+            hits = [n for n in searched if re.search(p["regex"], n)]
+            if len(hits) >= tid["min_files"] and searched and len(hits) >= tid["min_share"] * len(searched):
+                want.append((p["id"], len(searched), len(hits), {m for n in hits for m in re.findall(p["regex"], n)}, set(hits)))
+        have = e.get("test_id_in_file_names") or []
+        if [(h.get("pattern_id"), h.get("files_searched"), h.get("files_matching")) for h in have] != [w[:3] for w in want]:
+            res.fail(field="test_id_in_file_names", file=[(h.get("pattern_id"), h.get("files_searched"), h.get("files_matching")) for h in have],
+                     recounted=[w[:3] for w in want], **k)
+        for h, w in zip(have, want):
+            patterns_found += 1
+            if h.get("distinct_ids") == len(w[3]):
+                distinct_agree += 1
+            if any(x not in w[4] for x in h.get("examples") or []):
+                res.fail(field="test_id_in_file_names.examples", pattern=h.get("pattern_id"), problem="example does not carry the pattern", **k)
+    t = inv.get("_meta", {}).get("totals") or {}
+    for f in ("files", "bytes", "listing_rows", "repeated_rows", "listing_rows_bytes", "files_without_size"):
+        if t.get(f) != totals[f]:
+            res.fail(field="_meta.totals." + f, file=t.get(f), recounted=totals[f])
+    if t.get("investigations") != len(entries):
+        res.fail(field="_meta.totals.investigations", file=t.get("investigations"), recounted=len(entries))
+    for part in ("by_kind", "by_rule"):
+        if fb_view(t.get(part)) != fb_view(totals[part]):
+            res.fail(field="_meta.totals." + part, problem="differs from the recount")
+    res.numbers = {"investigations": res.checked, "files": totals["files"], "listing_rows": totals["listing_rows"],
+                   "repeated_rows": totals["repeated_rows"], "files_by_kind": {k: v["files"] for k, v in totals["by_kind"].items()},
+                   "id_patterns_reported": patterns_found,
+                   "distinct_ids_equal_to_distinct_matched_strings": distinct_agree}
+    res.details = {"note": "raw_kinds.json does not define 'distinct_ids'; it is compared with the number of distinct "
+                           "strings the pattern matches in the searched names and reported, not failed. Kinds are read "
+                           "from the name without prefix and extension (name_rule); id patterns from the whole name."}
+    return res
+
+
+_SIZE = re.compile(r"(\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?) (GB|MB)\b")
+_GROUPED_NUMBER = re.compile(r"\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?")
+
+
+def grouped_numbers(text):
+    """Numbers of a sentence that writes thousands with commas ('3,807')."""
+    return [round(float(m.replace(",", "")), 9) for m in _GROUPED_NUMBER.findall(text or "")]
+
+
+@check("N2_raw_inventory_sentences",
+       "Every number in the sentence of a raw_inventory.json entry is a field of the same entry, and every size "
+       "written in it (GB from 10^9 bytes, MB below, one decimal) is a byte count of the entry in that unit.")
+def check_n2(ctx):
+    res = Result()
+    inv = raw_inventory(ctx)
+    tiny = ctx.spec("raw_kinds")["sentence"].get("size_tiny", "")
+    sizes = 0
+    for e in inv.get("investigations", []):
+        text = e.get("sentence") or ""
+        k = {"investigation_id": e.get("investigation_id")}
+        pool = numbers_of({kk: v for kk, v in e.items() if kk != "sentence"})
+        byte_counts = [v for v in plain_byte_counts(e)]
+        rest = text.replace(tiny, " ") if tiny else text
+        for m in _SIZE.finditer(rest):
+            sizes += 1
+            res.checked += 1
+            unit = m.group(2)
+            ok = any((b >= 10 ** 9 if unit == "GB" else b < 10 ** 9) and
+                     ("%.1f" % (b / (1e9 if unit == "GB" else 1e6))) == m.group(1).replace(",", "") for b in byte_counts)
+            if not ok:
+                res.fail(problem="size not a byte count of the entry", size=m.group(0), text=text[:160], **k)
+        rest = _SIZE.sub(" ", rest)
+        for n in grouped_numbers(rest):
+            res.checked += 1
+            if n not in pool:
+                res.fail(number=n, text=text[:200], **k)
+    res.numbers = {"sentences": len(inv.get("investigations", [])), "numbers_in_sentences": res.checked, "sizes": sizes}
+    return res
+
+
+def plain_byte_counts(obj):
+    out = []
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if isinstance(v, int) and not isinstance(v, bool) and "bytes" in k:
+                out.append(v)
+            else:
+                out += plain_byte_counts(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            out += plain_byte_counts(v)
+    return out
 
 
 # ----------------------------------------------------------------------------
