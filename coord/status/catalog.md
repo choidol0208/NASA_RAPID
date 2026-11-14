@@ -1,6 +1,6 @@
 ---
 role: catalog
-updated: 2026-11-14 14:02 KST
+updated: 2026-11-14 13:46 KST
 state: working
 blocked_on: none
 ---
