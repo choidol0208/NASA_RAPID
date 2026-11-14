@@ -3,7 +3,7 @@ from: data
 to: all
 opened: 2026-11-14 11:16 KST
 needed_by: 14:30
-closed: false
+closed: true
 ---
 # New pipeline outputs for scenarios: scenario_needs.csv and scenario_tests.csv
 

@@ -163,7 +163,30 @@ def derive(tests, derived):
 
 
 # ------------------------------------------------------------------ 5 assess
-def assess(tests, needs, sources):
+def record_text(investigation_id, field):
+    """A text field of a PSI record, tags removed, whitespace collapsed."""
+    path = os.path.join(ROOT, "data", "psi", "catalog", f"{investigation_id}.json")
+    record = json.load(open(path, encoding="utf-8"))
+    return re.sub(r"<[^>]+>|\s+", " ", record.get(field) or "").strip()
+
+
+def objective_links(needs):
+    """Check that every 'stated_by' quote is in the PSI record. Returns
+    {need_id: {investigation_id: quote}} and the table of links."""
+    stated, rows = {}, []
+    for need in needs:
+        for link in need.get("stated_by", []):
+            text = record_text(link["investigation_id"], link["field"])
+            if link["quote"] not in text:
+                raise SystemExit(f"need {need['id']}: quote not found in {link['investigation_id']}."
+                                 f"{link['field']}: {link['quote'][:60]}")
+            stated.setdefault(need["id"], {}).setdefault(link["investigation_id"], link["quote"])
+            rows.append({"need_id": need["id"], "investigation_id": link["investigation_id"],
+                         "record_field": link["field"], "quote": link["quote"]})
+    return stated, pd.DataFrame(rows)
+
+
+def assess(tests, needs, sources, stated):
     """Need x source capability. Status follows needs.json 'status_rule'."""
     matrix, links = [], []
     by_source = {}
@@ -172,9 +195,12 @@ def assess(tests, needs, sources):
     for need in needs:
         req, outs = need["conditions_required"], need["outcomes_any"]
         for s in sources:
+            quote = stated.get(need["id"], {}).get(s["investigation_id"])
             row = {"need_id": need["id"], "pillar": need["pillar"], "need": need["name"],
                    "investigation_id": s["investigation_id"], "source_id": s["id"],
-                   "row_unit": s["row_unit"]}
+                   "row_unit": s["row_unit"],
+                   "objective_link": "stated" if quote else "not_stated",
+                   "objective_quote": quote or ""}
             if "not_standardized" in s:
                 row.update(status="not_test_level", tests=0, tests_with_required_conditions=0,
                            tests_with_outcome=0, usable_tests=0, required_missing="",
@@ -202,7 +228,8 @@ def assess(tests, needs, sources):
                 note="")
             matrix.append(row)
             links += [{"need_id": need["id"], "test_id": t["test_id"],
-                       "investigation_id": t["investigation_id"]} for t in usable]
+                       "investigation_id": t["investigation_id"],
+                       "objective_link": row["objective_link"]} for t in usable]
     return pd.DataFrame(matrix), pd.DataFrame(links)
 
 
@@ -261,9 +288,9 @@ def in_range(value, r):
 def match_scenarios(tests, links, needs, scen_spec, report):
     """Per scenario: mark every test against the scenario ranges, then count
     the tests usable for each need by match tier (scenarios.json)."""
-    usable = {}
+    usable, outside = {}, {}
     for row in links.itertuples():
-        usable.setdefault(row.need_id, set()).add(row.test_id)
+        (usable if row.objective_link == "stated" else outside).setdefault(row.need_id, set()).add(row.test_id)
     test_rows, need_rows = [], []
     tiers = ["atmosphere", "oxygen_only", "pressure_only", "other"]
     for sc in scen_spec["scenarios"]:
@@ -277,7 +304,8 @@ def match_scenarios(tests, links, needs, scen_spec, report):
                           else "in" if in_range(v, r) else "out")
             if m["o2_pct"] in ("in", "out") and t.get("o2_basis") != "ambient":
                 m["o2_pct"] = "not_ambient"
-            m["gravity"] = "same" if t.get("gravity_level") == sc["gravity_level"] else "different"
+            m["gravity"] = ("not_specified" if sc["gravity_level"] is None
+                            else "same" if t.get("gravity_level") == sc["gravity_level"] else "different")
             o, p = m["o2_pct"], m["pressure_kpa"]
             m["tier"] = ("atmosphere" if o == "in" and p == "in"
                          else "oxygen_only" if o == "in" and p == "not_recorded"
@@ -303,18 +331,21 @@ def match_scenarios(tests, links, needs, scen_spec, report):
                                                            ("pressure_only", "pressure_only"))
                                   if row[f"tests_{tier}"]),
                                  "other_atmosphere" if ids else "not_measured")
+            if not sc["ranges"].get("o2_pct") and not sc["ranges"].get("pressure_kpa"):
+                row["status"] = "atmosphere_not_specified" if ids else "not_measured"
+            row["tests_recorded_outside_objective"] = len(outside.get(need["id"], set()))
             best = [i for i in ids if marks[i]["tier"] in ("atmosphere", "oxygen_only")]
             row["matched_tests_flow_in_range"] = sum(marks[i]["flow_cms"] == "in" for i in best)
             row["matched_tests_flow_not_recorded"] = sum(marks[i]["flow_cms"] == "not_recorded" for i in best)
             row["matched_tests_same_gravity"] = sum(marks[i]["gravity"] == "same" for i in best)
             gaps = []
-            if ids and not any(marks[i]["o2_pct"] == "in" for i in ids):
+            if ids and sc["ranges"].get("o2_pct") and not any(marks[i]["o2_pct"] == "in" for i in ids):
                 gaps.append("oxygen:not_recorded" if all(marks[i]["o2_pct"] == "not_recorded" for i in ids)
                             else "oxygen:no_usable_test_in_range")
-            if ids and not any(marks[i]["pressure_kpa"] == "in" for i in ids):
+            if ids and sc["ranges"].get("pressure_kpa") and not any(marks[i]["pressure_kpa"] == "in" for i in ids):
                 gaps.append("pressure:not_recorded" if all(marks[i]["pressure_kpa"] == "not_recorded" for i in ids)
                             else "pressure:no_usable_test_in_range")
-            if ids and not any(marks[i]["gravity"] == "same" for i in ids):
+            if ids and sc["gravity_level"] and not any(marks[i]["gravity"] == "same" for i in ids):
                 gaps.append(f"gravity:no_usable_test_at_{sc['gravity_level']}")
             if not ids:
                 gaps.append("need:no_usable_test")
@@ -328,6 +359,8 @@ def match_scenarios(tests, links, needs, scen_spec, report):
         presets = json.load(open(path, encoding="utf-8")).get("presets", {})
         for sc in scen_spec["scenarios"]:
             values = presets.get(sc["id"], {}).get("values")
+            if sc["id"].startswith("exploration_"):
+                continue
             if values is None:
                 mismatch.append(f"{sc['id']}: no preset with this id")
             else:
@@ -356,9 +389,13 @@ def indicators(tests, links, needs, ind_spec, variables, derived, ref_items):
     table and the list of tests behind every row."""
     units = {k: v["unit"] for k, v in {**variables, **derived}.items()}
     need_by_id = {n["id"]: n for n in needs}
-    usable = {}
+    usable, recorded, stated_inv = {}, {}, {}
     for row in links.itertuples():
-        usable.setdefault(row.need_id, set()).add(row.test_id)
+        recorded.setdefault(row.need_id, set()).add(row.test_id)
+        if row.objective_link == "stated":
+            usable.setdefault(row.need_id, set()).add(row.test_id)
+    for n in needs:
+        stated_inv[n["id"]] = {l["investigation_id"] for l in n.get("stated_by", [])}
     rows, members = [], []
     for ind in ind_spec["indicators"]:
         need = need_by_id[ind["need_id"]]
@@ -368,11 +405,12 @@ def indicators(tests, links, needs, ind_spec, variables, derived, ref_items):
         var = ind.get("variable")
         if var and var not in units and var != "flags":
             raise SystemExit(f"indicator {ind['id']}: unknown variable {var}")
-        if ind["population"] == "usable":
-            pop = [t for t in tests if t["test_id"] in usable.get(need["id"], set())]
+        if ind["population"] in ("usable", "recorded"):
+            chosen = (usable if ind["population"] == "usable" else recorded).get(need["id"], set())
+            pop = [t for t in tests if t["test_id"] in chosen]
         else:
             pop = [t for t in tests
-                   if all(t.get(k) in allowed for k, allowed in need.get("scope", {}).items())
+                   if t["investigation_id"] in stated_inv[need["id"]] and all(t.get(k) in allowed for k, allowed in need.get("scope", {}).items())
                    and all(not empty(t.get(v)) for v in need["conditions_required"])]
         pop = [t for t in pop if all(passes(t, c) for c in ind["where"])]
         if ind["template"] != "count":
@@ -469,7 +507,12 @@ def main():
         tests += standardize(s, variables, report)
     validate(tests, ranges)
     derive(tests, derived)
-    matrix, links = assess(tests, needs["needs"], src_spec["sources"])
+    stated, obj_links = objective_links(needs["needs"])
+    obj_links.to_csv(os.path.join(OUT, "objective_links.csv"), index=False)
+    matrix, links = assess(tests, needs["needs"], src_spec["sources"], stated)
+    linked = set(obj_links.investigation_id)
+    report["investigations_with_tests_and_no_stated_need"] = sorted(
+        {t["investigation_id"] for t in tests} - linked, key=lambda x: int(x.split("-")[1]))
     export(tests, variables, derived, matrix, links, report)
     grid = coverage_grid(tests, spec("coverage.json"))
     assert grid.tests.sum() == len(tests)

@@ -1,18 +1,22 @@
 ---
 role: data
-updated: 2026-11-14 11:20 KST
+updated: 2026-11-14 11:58 KST
 state: working
 blocked_on: none
 ---
-Now: D6 pass on `compliance/SOURCES.md`; waiting for `data/insights/cards.json` to start D5.
+Now: per-scenario evidence package (one JSON per scenario).
 
 Done since last sync:
+- Evidence rule: a test counts for a need only if its investigation states the need as an objective in its PSI record (`stated_by` in `needs.json`, verified quotes, `objective_links.csv`). Scenario counts changed; see request 20261114-data-to-all "Evidence now requires a stated objective".
+- Scenarios added at pm's request: `mars_habitat`, `spacesuit`, `exploration_8_2_34`.
+- Found and fixed a stale-fetch problem in my clone (request to pm about `coord.py pull`).
 - Merged `origin/main` into `data-pipeline` (fast-forward).
 - Indicators: `indicators.csv`, `indicator_tests.csv`, spec `pipeline/spec/indicators.json` (20 indicators over 7 needs, three fixed templates).
 - Material vocabulary: `pipeline/spec/materials.json`; new column `material_id` in `tests.csv` (the same fabric was written three ways in BASS, Saffire-I/III and Saffire-II). `fuel_material` is unchanged.
 - Need D2 now also requires `aging_time_s`, so flame tests are no longer counted as smoke tests. In `capability_matrix.csv` the D2 rows for PSI-25, PSI-26, PSI-98, PSI-99, PSI-100 changed from `conditions_only` to `none`. No id or status value changed.
 - `flow_event` can now also be `no_ignition` or `not_sustained` (one BASS-II test each, as written in the source). Existing values unchanged.
 - Spot-checked six indicator values back to the NASA cells through `values_long.csv`; all matched.
+- Internal team page of the indicator results (Korean, not a submission item): `reports/indicators.html`, built by `python3 reports/build_indicators_page.py`.
 - Scenario matching: `scenario_needs.csv`, `scenario_tests.csv` (request 20261114-1116-data-to-all).
 - D3: confirmed pm's coverage counts and published `data/pipeline/coverage_grid.csv` with its bin spec `pipeline/spec/coverage.json` (answer to request 20261114-1056-pm-to-data).
 - Reference spec: `pipeline/spec/references.json` (21 documents, 56 items) and `data/pipeline/need_references.csv`.
@@ -31,6 +35,8 @@ Published for others (all written by `python3 pipeline/run.py`; shapes below are
 - `data/pipeline/indicator_tests.csv` — NEW, 1,850 rows: `indicator_id`, `group`, `test_id`, `value`. The tests behind each indicator row.
 - `pipeline/spec/indicators.json`, `pipeline/spec/materials.json` — NEW.
 - `pipeline/spec/scenarios.json` — NEW: the scenario ranges and their basis. Ids equal the scorer presets `iss`, `lunar_habitat`.
+- `data/pipeline/objective_links.csv` — NEW, 19 rows: `need_id`, `investigation_id`, `record_field`, `quote`.
+- `capability_matrix.csv` and `need_tests.csv` gained `objective_link` (and `objective_quote` in the matrix). `scenario_needs.csv` gained `tests_recorded_outside_objective`; it now has 35 rows (5 scenarios).
 - `data/pipeline/need_references.csv` — NEW, 56 rows: for each need, the standard or published item behind it (`item_type`, `text`, `where`, `values`, `reference_id`, `title`, `version`, `access`, `url`). Stable.
 - `pipeline/spec/needs.json` — need ids `P1`-`P4`, `S1`, `D1`, `D2` are stable. Each need now also has `scope` and `references`.
 - `pipeline/spec/references.json`, `pipeline/spec/coverage.json` — NEW.

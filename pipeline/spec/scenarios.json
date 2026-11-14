@@ -10,8 +10,9 @@
    "not_specified": "the scenario sets no range for this variable"
   },
   "tier_rule": "atmosphere = oxygen in and pressure in; oxygen_only = oxygen in and pressure not recorded; pressure_only = pressure in and oxygen not recorded; other = anything else. Flow and gravity are reported next to the tier and do not change it.",
-  "status_rule": "Per scenario and need, over the tests usable for the need (need_tests.csv): in_atmosphere if any test has tier atmosphere; else oxygen_only; else pressure_only; else other_atmosphere if any usable test exists; else not_measured.",
-  "ids": "Scenario ids and nominal values are the same as the presets in scoring/scoring_config.json (ui role). The engine reports a mismatch in run_report.json."
+  "status_rule": "Per scenario and need, over the tests usable for the need (need_tests.csv): in_atmosphere if any test has tier atmosphere; else oxygen_only; else pressure_only; else other_atmosphere if any usable test exists; else not_measured. A scenario without oxygen and pressure ranges gets atmosphere_not_specified.",
+  "ids": "Scenario ids and nominal values are the same as the presets in scoring/scoring_config.json (ui role). The engine reports a mismatch in run_report.json.",
+  "evidence_rule": "Only tests whose investigation states the need as an objective (needs.json 'stated_by') are counted. tests_recorded_outside_objective counts the other tests that record the needed variables."
  },
  "scenarios": [
   {
@@ -72,6 +73,68 @@
     "TB008.gaps"
    ],
    "note": "The challenge text gives 30% oxygen or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa. No flow range is given for this environment."
+  },
+  {
+   "id": "mars_habitat",
+   "label": "Mars habitat",
+   "nominal": {},
+   "ranges": {},
+   "gravity_level": "martian",
+   "basis": [
+    "TB008.gaps"
+   ],
+   "note": "The challenge text gives no Mars atmosphere, so no oxygen or pressure range is set. Only the gravity gap can be reported."
+  },
+  {
+   "id": "spacesuit",
+   "label": "Spacesuit",
+   "nominal": {
+    "o2_pct": 100.0,
+    "pressure_kpa": 29.6
+   },
+   "ranges": {
+    "o2_pct": {
+     "min": 95,
+     "max": 100,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": null,
+     "max": 62.8
+    }
+   },
+   "gravity_level": null,
+   "basis": [
+    "SMAC.atmospheres",
+    "EAWG.atmospheres"
+   ],
+   "note": "4.3 psia (29.6 kPa), 100% oxygen. The oxygen range 95 to 100% and the pressure bin below 62.8 kPa are the team's choice. No gravity level is set."
+  },
+  {
+   "id": "exploration_8_2_34",
+   "label": "Exploration atmosphere 8.2 psia / 34% O2",
+   "nominal": {
+    "o2_pct": 34.0,
+    "pressure_kpa": 56.5
+   },
+   "ranges": {
+    "o2_pct": {
+     "min": 32,
+     "max": 36,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": null,
+     "max": 62.8
+    }
+   },
+   "gravity_level": null,
+   "basis": [
+    "EA.8.2-34",
+    "SMAC.atmospheres",
+    "EAWG.atmospheres"
+   ],
+   "note": "8.2 psia (56.5 kPa), 34% oxygen. Oxygen is 34 +/- 2 points (the EAWG control box applied to 34%); pressure is the coverage bin below 62.8 kPa. No gravity level is set. Not a scorer preset."
   }
  ]
 }
