@@ -143,9 +143,9 @@ def interpret(query, cfg):
         put("thermal_regime", "thick", "text")
     if _any(t, kw["rod"]):
         put("sample_geometry", "rod", "text")
-    # numbers with units
-    m = re.search(r"(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)", t) or \
-        re.search(r"(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?", t)
+    # numbers with units ("o2" must stand alone: "CO2 30%" is not 30% oxygen)
+    m = re.search(r"(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])", t) or \
+        re.search(r"(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?", t)
     if m:
         put("o2_pct", float(m.group(1)), "text")
     m = re.search(r"(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)\b", t)
@@ -233,18 +233,32 @@ def s_pressure(x, c, p):
     return None if r is None else _log_gauss(x, r[0], r[1], p["sigma_ln"])
 
 
+def _speed(v, c, sim):
+    """Flow-speed similarity and the in-range signal for the outside_range warning.
+    With one end not recorded (PSI-26: "up to 40 cm/s", the tunnel's limit, not a test value), a
+    speed on the open side of that end is neither a match nor a miss: it scores unknown_value and
+    raises no warning. Beyond the end it decays from unknown_value, so the score has no jump there."""
+    a, b = _f(c.get("flow_min_cms")), _f(c.get("flow_max_cms"))
+    if a is None and b is None:
+        return None, None
+    p = sim["flow_speed"]
+    if a is None or b is None:
+        end = b if a is None else a
+        if (a is None and v <= end) or (b is None and v >= end):
+            return sim["unknown_value"], None
+        g = _log_gauss(v, end, end, p["sigma_ln"], p["offset_cms"])
+        return sim["unknown_value"] * g, g
+    s = _log_gauss(v, a, b, p["sigma_ln"], p["offset_cms"])
+    return s, s
+
+
 def s_flow(state, v, c, sim):
     cfgs = _split(c.get("flow_config"))
     s_cfg = None
     if state and cfgs:
         row = sim["flow_config_matrix"][state]
         s_cfg = max(row.get(k, 0.3) for k in cfgs)
-    s_v = None
-    if v is not None:
-        r = _range(c, "flow_min_cms", "flow_max_cms")
-        if r is not None:
-            p = sim["flow_speed"]
-            s_v = _log_gauss(v, r[0], r[1], p["sigma_ln"], p["offset_cms"])
+    s_v = _speed(v, c, sim)[0] if v is not None else None
     parts = [x for x in (s_cfg, s_v) if x is not None]
     if not parts:
         return None
@@ -351,9 +365,8 @@ def similarities(sc, c, cfg):
     speed_in_range = None
     if sc.get("flow_state") or sc.get("flow_cms") is not None:
         S["flow"] = s_flow(sc.get("flow_state"), sc.get("flow_cms"), c, sim)
-        r = _range(c, "flow_min_cms", "flow_max_cms")
-        if sc.get("flow_cms") is not None and r is not None:
-            speed_in_range = _log_gauss(sc["flow_cms"], r[0], r[1], sim["flow_speed"]["sigma_ln"], sim["flow_speed"]["offset_cms"])
+        if sc.get("flow_cms") is not None:
+            speed_in_range = _speed(sc["flow_cms"], c, sim)[1]
     if any(sc.get(k) for k in ("fuel_phase", "fuel_class", "fuel_material")):
         S["fuel"] = s_fuel(sc, c, sim["fuel"])
     if sc.get("sample_geometry") or sc.get("thermal_regime"):
@@ -364,7 +377,8 @@ def similarities(sc, c, cfg):
     return S, fallback, speed_in_range, c
 
 
-def score_config(sc, c, cfg, weights, raw_S, caps):
+def score_config(sc, c, cfg, weights, raw_S, caps, assumed=()):
+    """assumed: dimensions whose catalog value was filled by the atmosphere fallback ("o2", "pressure")."""
     sim = cfg["similarity"]
     S, unknown = {}, []
     for d, v in raw_S.items():
@@ -388,7 +402,9 @@ def score_config(sc, c, cfg, weights, raw_S, caps):
     M = evidence(c, cfg["evidence"])
     score = 100.0 * M * gate * raw
     full = sum(v for k, v in weights.items() if v > 0 and (k != "diluent" or sc["concern"] == "suppression"))
-    known_w = sum(weights[d] for d in w if d not in unknown)
+    # Confidence counts only what was compared with a recorded value: an assumed (fallback) value
+    # is scored, but it is not evidence that the configuration matches.
+    known_w = sum(weights[d] for d in w if d not in unknown and d not in assumed)
     coverage = known_w / full if full else 0.0
     return dict(score=score, raw=raw, gate=gate, evidence=M, similarity=S, weights=w,
                 unknown=unknown, coverage=coverage,
@@ -509,7 +525,8 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
             caps[d] = max(known)
     scored = []
     for c, S, fallback, speed, c_eff in pre:
-        s = score_config(sc, c, cfg, weights, S, caps)
+        assumed = {{"O2": "o2", "pressure": "pressure"}[x] for x in fallback}
+        s = score_config(sc, c, cfg, weights, S, caps, assumed)
         why, gap, warns = explain(sc, c_eff, s, cfg, fallback, speed)
         scored.append(dict(
             config_id=c["config_id"], investigation_id=c["investigation_id"], psi_accession=c["psi_accession"],
