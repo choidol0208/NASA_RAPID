@@ -1,0 +1,133 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "purpose": "Every text and rule of the answer files (data/pipeline/answers/): what is known for one environment and one need, and how well, in a frame and four rungs. pipeline/answers.py reads this file and the existing outputs; it holds no sentence of its own.",
+  "format": "'{field}' is replaced by a field of the block the sentence belongs to; '[field|one|many]' is replaced by 'one' if the field equals 1 and by 'many' otherwise. A placeholder that is not a field of the block stops the run. A template holds no digit: every number of a filled sentence is a field of the same answer file, and answers.py stops if a number of a sentence is not found in the block it was built from. 'when' is a list of [field, operator, value] conditions (==, !=, >, >=, <, <=); all must hold.",
+  "wording_rule": "A sentence states counts and where things are listed. It does not judge a material, an atmosphere or the amount of evidence, gives no value of a test or of a publication, and holds none of 'forbidden_words' (checked as whole words on every template and every filled sentence of this file; the need name is exempt). A verbatim quote or item text is carried as a field of an entry and is never merged into a template sentence. Sentences copied from an evidence package were written and checked under spec/statements.json; they are copied unchanged and marked with their package id."
+ },
+ "file_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "what_this_is": "What is known for this environment and this need, and how well. Not a judgement of safety, not a prediction for a condition without a test. Team computation from NASA PSI tables and quoted documents.",
+  "rules": "pipeline/README.md, section Answer files"
+ },
+ "index_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "note": "List of the answer files: scenarios of scenarios.json in spec order, needs in the order of needs.json. For each file the top line and the number of entries in each rung. Team computation, not a NASA conclusion and not safety guidance.",
+  "rules": "pipeline/README.md, section Answer files"
+ },
+ "forbidden_words": ["safe", "unsafe", "acceptable", "unacceptable", "sufficient", "insufficient", "adequate", "inadequate", "recommended", "prove", "proves", "proven", "confirm", "confirms", "confirmed", "representative", "flammable", "dangerous"],
+ "placement": {
+  "rule": "Every entry that findings_by_environment.json lists for the scenario under the need or under 'general' (lists at_environment, about_a_stated_condition_of_the_environment, general) is placed exactly once, by its kind: 'criterion' goes to frame.criteria; 'gap' goes to frame.nasa_questions if it meets nasa_questions, otherwise to rung4.stated_open_elsewhere; 'result' and 'caveat' go to rung 3, in the list they have in findings_by_environment.json. Entries counted there under other_conditions are not listed. An entry from the key 'general' carries applies = 'general', the others applies = 'need'. Each entry keeps the name of its list in 'list'. answers.py stops if an entry is placed twice or not at all.",
+  "nasa_questions": {
+   "rule": "kind is 'gap', the item has a verbatim quote, and the document is one of reference_ids: a NASA report, standard brief or guide that states questions or research needs, or (ICES-2016-SAFFIRE) the paper of NASA authors that reports the gaps named by the Spacecraft Fire Safety Systems Maturation Team.",
+   "reference_ids": ["NASA-CP-2003-212103", "NASA-CP-2004-213205-VOL1", "NASA-TM-2011-217036", "NASA-TP-2010-216134", "NP-2015-10-034-JSC", "OCHMO-TB-008", "ICES-2016-SAFFIRE"]
+  },
+  "order": "reference id, then item id, then row"
+ },
+ "rung1": {
+  "copied_statements": {
+   "rule": "The statements of the evidence package block whose id equals one of 'ids' or starts with one of 'prefixes', in the order of the package, copied unchanged.",
+   "ids": ["tiers.counts", "documented.elsewhere"],
+   "prefixes": ["status.", "matched.", "flow.", "gravity."]
+  }
+ },
+ "near": {
+  "rule": "The scenario's cells are the cells of the coverage grid (oxygen bin x pressure bin of coverage.json) whose oxygen bin intersects the scenario's oxygen range and whose pressure bin intersects its pressure range, with the inclusive flags of both. A scenario that does not set both an oxygen and a pressure range has no cells and no near cells. A candidate is a cell that is not a scenario cell and differs from a scenario cell by exactly one step in the oxygen bin order with the same pressure bin, or by exactly one step in the pressure bin order with the same oxygen bin. A candidate is listed as near for a need only if its row of atmosphere_cells.csv for that need has tests_atmosphere + tests_oxygen_only + tests_pressure_only >= 1. Cells are listed in bin order (oxygen, then pressure). Counts are those of the row and are not summed across cells.",
+  "also_matched_rule": "also_matched_at_the_condition is the number of matched test ids of the cell's evidence package block that are also matched test ids of the scenario's block for the same need: a count of entries of two lists."
+ },
+ "range_words": {
+  "o2_pct": {
+   "both_max_inclusive": "{min} to {max}%",
+   "both_max_exclusive": "{min} to below {max}%",
+   "max_only_inclusive": "up to {max}%",
+   "max_only_exclusive": "below {max}%",
+   "min_only": "{min}% and above"
+  },
+  "pressure_kpa": {
+   "both_max_inclusive": "{min} to {max} kPa",
+   "both_max_exclusive": "{min} to below {max} kPa",
+   "max_only_inclusive": "up to {max} kPa",
+   "max_only_exclusive": "below {max} kPa",
+   "min_only": "{min} kPa and above"
+  }
+ },
+ "top_line": {
+  "rule": "The top line is the fixed start, then the first sentence of 'tests' whose conditions hold, then the first sentence of 'published' whose conditions hold. Its id is the two sentence ids joined by '+'. Fields: status and the counts of rung 1 (usable_tests, atmosphere, oxygen_only, pressure_only; matched is the number of matched test ids of the package block), n_near_cells of rung 2, n_at and n_about of rung 3 (results and caveats; n_published_here is the number of entries of the two lists together). The fields are copied into top_line.fields.",
+  "start": "Not judged here.",
+  "tests": [
+   {"id": "tests.in_atmosphere", "when": [["status", "==", "in_atmosphere"]],
+    "text": "{atmosphere} of the {usable_tests} tests counted for this need [atmosphere|was|were] recorded with oxygen and pressure both inside the ranges of this environment; {oxygen_only} more with oxygen inside the range and no pressure in the table, and {pressure_only} more with pressure inside the range and no oxygen in the table."},
+   {"id": "tests.oxygen_only", "when": [["status", "==", "oxygen_only"]],
+    "text": "No test counted for this need was recorded with oxygen and pressure both inside the ranges of this environment; of the {usable_tests} counted tests, {oxygen_only} [oxygen_only|was|were] recorded with oxygen inside the range and no pressure in the table, and {pressure_only} with pressure inside the range and no oxygen in the table."},
+   {"id": "tests.pressure_only", "when": [["status", "==", "pressure_only"]],
+    "text": "No test counted for this need was recorded with oxygen and pressure both inside the ranges of this environment; of the {usable_tests} counted tests, {pressure_only} [pressure_only|was|were] recorded with pressure inside the range and no oxygen in the table, and {oxygen_only} with oxygen inside the range and no pressure in the table."},
+   {"id": "tests.other_atmosphere", "when": [["status", "==", "other_atmosphere"]],
+    "text": "None of the {usable_tests} tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none inside one of the two ranges with the other value not in the table."},
+   {"id": "tests.not_measured", "when": [["status", "==", "not_measured"]],
+    "text": "The PSI experimental tables hold no test counted for this need."},
+   {"id": "tests.atmosphere_not_specified", "when": [["status", "==", "atmosphere_not_specified"]],
+    "text": "This environment sets no oxygen range and no pressure range, so the {usable_tests} tests counted for this need were not compared with an atmosphere."}
+  ],
+  "published": [
+   {"id": "published.first_three_rungs_empty", "when": [["matched", "==", 0], ["n_near_cells", "==", 0], ["n_published_here", "==", 0]],
+    "text": "No counted test is recorded at this condition or in a neighbouring cell, and no published result or caveat of the reference list, tagged for this need or for fire safety in general, states a condition of this environment: the first three rungs hold only statements made without these conditions. What has not been found in these sources is listed."},
+   {"id": "published.none_here", "when": [["n_published_here", "==", 0]],
+    "text": "No published result or caveat of the reference list, tagged for this need or for fire safety in general, states a condition of this environment. What has not been found in these sources is listed."},
+   {"id": "published.here", "when": [["n_published_here", ">", 0]],
+    "text": "Published results and caveats quoted for this need or for fire safety in general: {n_at} at the oxygen and pressure of this environment and {n_about} about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed."}
+  ]
+ },
+ "sentences": {
+  "frame": [
+   {"id": "frame.heading", "when": [],
+    "text": "How NASA documents treat this question, as quoted items of the reference list: {n_criteria} criteria, requirements or definitions and {n_nasa_questions} questions or research needs."},
+   {"id": "frame.here", "when": [["n_criteria", ">", 0]],
+    "text": "Of the {n_criteria} criteria, {n_criteria_at} [n_criteria_at|states|state] an oxygen and a pressure inside the ranges of this environment, {n_criteria_about} [n_criteria_about|states|state] at least one of its conditions and none outside, and {n_criteria_general} [n_criteria_general|states|state] no oxygen, pressure or gravity level that can be compared."},
+   {"id": "frame.dates", "when": [["n_nasa_questions", ">", 0]],
+    "text": "The questions and research needs are quoted from documents of their own dates; the list does not say what NASA considers open today."},
+   {"id": "frame.team", "when": [],
+    "text": "The six needs are the team's construction, and which items are listed for a need is an AI reading of the items that was not checked by a person."}
+  ],
+  "rung2": [
+   {"id": "rung2.no_ranges", "when": [["has_ranges", "==", false]],
+    "text": "This environment sets no oxygen range and no pressure range, so it has no cell of the coverage grid and no neighbouring cell."},
+   {"id": "rung2.heading", "when": [["has_ranges", "==", true]],
+    "text": "This environment covers {n_scenario_cells} [n_scenario_cells|cell|cells] of the coverage grid (oxygen bin by pressure bin). Of the {n_candidates} cells one step away in oxygen or in pressure, {n_cells} [n_cells|holds|hold] a counted test of this need matched by oxygen, by pressure or by both."},
+   {"id": "rung2.not_evidence", "when": [["n_cells", ">", 0]],
+    "text": "A test at a neighbouring condition is not evidence for this condition."},
+   {"id": "rung2.repeats", "when": [["n_cells_with_repeating_tier", ">", 0]],
+    "text": "A test with oxygen in the table and no pressure is counted in every pressure bin of its oxygen bin, and a test with pressure and no oxygen in every oxygen bin of its pressure bin. The same test is therefore in more than one cell, and in a cell that shares a bin with this environment it can be a test already listed at the condition; each cell gives that number. Counts of cells are not to be added."}
+  ],
+  "cell": {
+   "differs_oxygen": "This cell differs from the condition asked in oxygen: the cell is oxygen {o2_bin_label}, and the environment sets oxygen {env_o2_words}. The pressure bin of the cell, {pressure_bin_label}, is one that the pressure range of the environment ({env_pressure_words}) reaches.",
+   "differs_pressure": "This cell differs from the condition asked in pressure: the cell is pressure {pressure_bin_label}, and the environment sets pressure {env_pressure_words}. The oxygen bin of the cell, {o2_bin_label}, is one that the oxygen range of the environment ({env_o2_words}) reaches.",
+   "recorded": "Counted tests of this need in this cell: {tests_atmosphere} with oxygen and pressure both inside the bins, {tests_oxygen_only} with oxygen inside the bin and no pressure in the table, {tests_pressure_only} with pressure inside the bin and no oxygen in the table. {also_matched_at_the_condition} of these {matched} [matched|is|are] also matched to the environment itself."
+  },
+  "rung3": [
+   {"id": "rung3.heading", "when": [],
+    "text": "Published by NASA and the investigators, not in PSI's experimental tables: the statements below are quoted, are not counted as tests, and nothing is computed on their values."},
+   {"id": "rung3.counts", "when": [],
+    "text": "Results and caveats listed: {n_at} at the oxygen and pressure of this environment; {n_about} about at least one of its conditions (oxygen, pressure or gravity level) and none outside; {n_general} stated without an oxygen, pressure or gravity level that can be compared."},
+   {"id": "rung3.access", "when": [["n_not_full_text", ">", 0]],
+    "text": "{n_not_full_text} of the {n_listed} listed [n_not_full_text|comes|come] from a document that was not read in full text; each entry gives the access level of its document."},
+   {"id": "rung3.limits", "when": [["n_listed", ">", 0]],
+    "text": "A listed statement can differ from this environment in material, scale, flow or gravity level; each entry shows the conditions it states and those it does not. A result is not carried from the condition where it was stated to another one. The tags are an AI reading of the quoted items and were not checked by a person."}
+  ],
+  "rung4": [
+   {"id": "rung4.heading", "when": [],
+    "text": "What has not been found in these sources for this environment and need: {n_gaps} [n_gaps|gap|gaps] in the counted tests, {n_stated_open_elsewhere} further [n_stated_open_elsewhere|statement|statements] of a document that something is not known, {n_not_covered} areas the mapped PSI tables cannot address, and {n_searches} dated [n_searches|search|searches] with no result."},
+   {"id": "rung4.not_covered", "when": [["n_not_covered", ">", 0]],
+    "text": "The {n_not_covered} areas are those listed in needs.json as named in the reference items and not addressed by the mapped tables. The list does not say which need an area belongs to, so all are given for every need and marked general."},
+   {"id": "rung4.sources", "when": [],
+    "text": "Not found in these sources means the PSI experimental tables mapped by the pipeline and the documents of the reference list; it does not mean that no test or document exists."}
+  ],
+  "gap_copied": "The gap sentences are those of the evidence package (ids gap.*), copied unchanged.",
+  "search": "A test record of {what} has not been found in these sources. Search: {where}, {when}, by the {by}. Result: {result}. Where a document of the reference list reports on it, the statement is quoted in the third rung and is not a test record."
+ },
+ "not_covered": {
+  "rule": "The entries of needs.json, _meta.not_covered, copied unchanged. They carry no need id, so all are listed in every answer file with applies = 'general'."
+ },
+ "searches": [
+  {"what": "Saffire IV, V and VI", "where": "NASA PSI public search", "result": "not found among the 133 public investigations; the term Saffire matches PSI-98, PSI-99 and PSI-100 only", "when": "2026-11-14 12:05 KST", "by": "pm session of the team", "needs": ["P1", "P3"]}
+ ]
+}

@@ -50,6 +50,7 @@ Run: `python3 pipeline/run.py` (after `python3 scripts/fetch_psi.py`) writes eve
 | `investigation_facts.json` | Per investigation (24): tables, test rows, recorded range or value counts of every variable, linked needs with the record sentence, the purpose sentence and the verdict, counted tests per need, flags, unmapped columns, and fixed sentences filled with these numbers (`facts.py`, templates in `spec/fact_statements.json`) |
 | `findings.csv` | One row per published finding: an entry of `spec/findings.json`, that is a reference item (or one row of it) with the needs it is about, its kind (result, criterion, gap, caveat), the conditions the item itself states (oxygen, pressure in kPa and as written, gravity level, flow, fuel phase, material), and the item's text, quote, place and document with its access level, copied unchanged (`findings.py`; see "Published findings") |
 | `findings_by_environment.json` | For each scenario and each need: the published findings in three lists (`at_environment`, `about_a_stated_condition_of_the_environment`, `general`) with what matched, the counts, and fixed sentences; `findings` holds each entry once (`findings.py`, rules and templates in `spec/findings.json`) |
+| `answers/<scenario_id>__<need_id>.json`, `answers/index.json` | Answer file of one scenario and one need (6 × 6 = 36): what is known and how well, as a rule-chosen top line, the frame (criteria and questions of NASA documents) and four rungs: recorded at the condition, recorded near it, published, not known; every sentence is a template of `spec/answers.json`. `index.json` lists the files with their top line and the number of entries per rung (`answers.py`; see "Answer files") |
 | `validation_report.json` | Result of `python3 pipeline/check.py`: every output recomputed from the raw tables and the spec rules by code that does not import the engine |
 | `raw_inventory.json` | Per investigation (24): what the PSI file listing names, without any file being downloaded: files and bytes per PSI category (names as PSI gives them) and per kind (video, still image, archive with what its name states, table named as sensor, telemetry or data, experimental table, document, document table, other), the extensions and the largest file name of each kind, id patterns carried by the raw file names, and one fixed sentence filled with these numbers (`raw_inventory.py`, rules and template in `spec/raw_kinds.json`) |
 
@@ -204,6 +205,39 @@ Limits:
 - The lists say which statements name the conditions of an environment. They do not say what happens in the environment, and a limit or a result is not carried from the condition where it was stated to another one.
 - The check on wording covers the template sentences. The quotes are carried verbatim and some contain words the sentences avoid ("safe", "sufficient").
 - Items of type `stated_objective` and `framework` are not tagged, even where their quote states fire behaviour (for example `WP21X.atmosphere`, `TM217036.threshold`); items of type `operational_practice`, `monitoring_range` and `exposure_limit` are not tagged either.
+
+## Answer files
+
+`answers.py` writes one file per scenario and need to `data/pipeline/answers/`: what is known for this environment and this need, and how well. It is a post-processing step like `facts.py`: it reads the evidence packages, `atmosphere_cells.csv`, `scenario_needs.csv`, `findings.csv`, `findings_by_environment.json` and the specs, imports none of the other scripts, and recomputes no count, status, gap or indicator. Every text and rule is in `spec/answers.json`. `check.py` does not cover it; the checks named below are inside `answers.py` and stop the run.
+
+| Part | Content |
+|---|---|
+| `top_line` | One line chosen by rule, starting with "Not judged here." |
+| `frame` | How NASA documents treat the question: the published findings of kind `criterion` (`criteria`) and those of kind `gap` that are a quoted question or research need of one of the NASA documents listed in the spec (`nasa_questions`) |
+| `rung1_recorded_at_the_condition` | The block of the evidence package for the need, copied: status, counts, matched ranges, indicators, and the package's status, tier, matched, flow, gravity and documented sentences |
+| `rung2_recorded_near_the_condition` | The neighbouring cells of the coverage grid that hold a matched counted test of the need, each with the counts of its row in `atmosphere_cells.csv`, the recorded ranges of its package, and a sentence that says how its condition differs from the one asked |
+| `rung3_published` | The published findings of kind `result` and `caveat`, in the three lists of `findings_by_environment.json`: at the environment, about one of its stated conditions, stated without these conditions |
+| `rung4_not_known` | The gap codes of the package with their sentences; the other findings of kind `gap` (`stated_open_elsewhere`); the areas of `needs.json` `_meta.not_covered` (they carry no need id, so all are listed for every need and marked general); the dated searches with no result (`searches` in the spec) |
+| `sentences` | Every sentence of the file in reading order, with rung, id and sources |
+
+Rules:
+
+- Placement. Every finding that `findings_by_environment.json` lists for the scenario under the need or under `general` is placed exactly once, by its kind. Entries from `general` carry `applies: general`. Each entry carries the item's `text`, `quote` and place, the document with its access level, the stated conditions as in `findings.csv`, `matched_on`, and `row_values`, `item_note` and `tagging_note` where they exist. `answers.py` stops if a `text` or `quote` differs from `references.json`.
+- No arithmetic on a published value: no difference, average, interpolation or trend. The only numbers made here are counts of the entries of a list. A published statement is never added to a count of tests and never changes a status or a gap; rung 1 is checked against `scenario_needs.csv` and stops the run on a difference.
+- Near (`near` in the spec). The scenario's cells are the cells (oxygen bin × pressure bin of `coverage.json`) that its oxygen and pressure ranges intersect, with the inclusive flags. A candidate is a cell that is not a scenario cell and is one step from a scenario cell in the oxygen bin order with the same pressure bin, or one step in the pressure bin order with the same oxygen bin. A candidate is listed for a need if its row of `atmosphere_cells.csv` has at least one test of tier `atmosphere`, `oxygen_only` or `pressure_only`. A scenario without both ranges (the Mars habitat) has no cells, and the rung says so. Tier `oxygen_only` repeats across the pressure bins of an oxygen bin, so a cell that differs from the environment in pressure only can hold the very tests of rung 1: each cell gives `also_matched_at_the_condition` (the number of its matched test ids that are also matched to the scenario), the rung says once that counts of cells are not to be added, and nothing is summed across cells.
+- Top line (`top_line` in the spec). The fixed start, then the first sentence of `tests` whose condition holds (one per rung-1 status), then the first of `published` (rungs 1 to 3 hold nothing for the condition; no result or caveat at or about the environment; some). It states counts only: counted tests by tier, results and caveats at the environment and about one of its conditions, and that what has not been found is listed. It gives no value of a test or of a publication.
+- Wording. A template holds no digit and none of `forbidden_words` (safe, acceptable, sufficient, adequate, recommended, proves, confirms, representative, flammable, dangerous and their variants), checked as whole words on the templates and on the filled sentences. Quotes and item texts are fields of an entry and are never merged into a sentence. A placeholder that is not a field of the block stops the run, and so does a sentence with a number that is not found in the block it was built from.
+- The files are deterministic: fixed key order, findings sorted by reference id, item id and row, cells in bin order, no timestamps. A file in `answers/` that the run did not write is removed.
+
+Rebuild: `python3 pipeline/run.py`, then `python3 pipeline/findings.py`, then `python3 pipeline/answers.py`.
+
+Limits:
+
+- An answer file is not a judgement of a material or an atmosphere and not a prediction for a condition without a test. It says what the sources hold.
+- Rung 2 is not evidence for the condition: a test in a neighbouring cell was recorded at another oxygen or pressure, and the cells are wide bins chosen by the team.
+- Rung 3 and the frame are quotes, tagged by an AI reading that no person checked. An entry made from one row of an item carries the `text` of the whole item; its own values are in `row_values`. A statement at the environment's oxygen and pressure may differ from it in material, scale, flow or gravity level.
+- The lists of NASA questions are from the dates of their documents and do not say what NASA considers open today. Which documents count as NASA question lists is the team's choice (`placement.nasa_questions` in the spec).
+- "Not found in these sources" means the mapped PSI tables and the documents of the reference list, not that no test or document exists.
 
 ## Checking
 
