@@ -968,12 +968,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T20:14:47+09:00",
+  "updated": "2026-11-14T23:33:34+09:00",
   "fresh": {
-   "ranker_config_version": "1.3.0",
-   "scoring_config_sha256": "845322d94deceef67b2233d2e77c32931fc236957259a445faffff48b078e7f8",
+   "ranker_config_version": "1.4.0",
+   "scoring_config_sha256": "83f3cff13cc4aa232574ae84500ca281483cae8129330c2dea2ffa7e176cf2f5",
    "catalog_sha256": "da58f2c7febd4dc01a82a0acefb4b0ff1c284bf4eafd142fdf3e9b8912996c82",
-   "scenario_inputs_sha256": "c34ad557d001482bd32a422c58e32c64d83900461263293c222885cce3e4d1b9",
+   "scenario_inputs_sha256": "8f2cb8091136a91b7669d3393ccdf887dfaa10495940ef0305df0c9f8729220d",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  },
@@ -2000,12 +2000,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T20:14:47+09:00",
+  "updated": "2026-11-14T23:33:34+09:00",
   "fresh": {
-   "ranker_config_version": "1.3.0",
-   "scoring_config_sha256": "845322d94deceef67b2233d2e77c32931fc236957259a445faffff48b078e7f8",
+   "ranker_config_version": "1.4.0",
+   "scoring_config_sha256": "83f3cff13cc4aa232574ae84500ca281483cae8129330c2dea2ffa7e176cf2f5",
    "catalog_sha256": "da58f2c7febd4dc01a82a0acefb4b0ff1c284bf4eafd142fdf3e9b8912996c82",
-   "scenario_inputs_sha256": "c34ad557d001482bd32a422c58e32c64d83900461263293c222885cce3e4d1b9",
+   "scenario_inputs_sha256": "8f2cb8091136a91b7669d3393ccdf887dfaa10495940ef0305df0c9f8729220d",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  },
@@ -2233,249 +2233,6 @@
      "fixed:spacesuit"
     ],
     "config_id": "FLEX-2-C01"
-   },
-   {
-    "investigation_id": "PSI-21",
-    "text": "Gas-fuel flame configuration; not a test of solid cabin materials (team catalog classification). PSI's table for this investigation has one row per test day (32 test days, 344 flames ignited in all), so its tests cannot be matched one by one. The team pipeline links none of the needs to an objective stated for this investigation. Listed because its team score is level with or close to the results shown, under the team's current weights. The catalog reports no oxygen for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value. No test in the mapped PSI tables has oxygen inside this scenario's team bin (95 to 100%); this investigation is listed for completeness.",
-    "sources": [
-     "data/catalog/configurations.csv#ACME-CLD-C01",
-     "pipeline/spec/sources.json#cld_flame",
-     "scoring/scoring_config.json#atmosphere_fallback"
-    ],
-    "facts": {
-     "test_days": 32,
-     "flames_ignited": 344,
-     "needs_stated": [],
-     "team_bins": {
-      "o2_pct": {
-       "min": 95,
-       "max": 100
-      }
-     }
-    },
-    "text_origin": "template",
-    "status": "near_tie",
-    "rule": [
-     "phase:gas",
-     "row_unit:test_day",
-     "near_tie",
-     "assumed_dims",
-     "fixed:spacesuit"
-    ],
-    "config_id": "ACME-CLD-C01"
-   },
-   {
-    "investigation_id": "PSI-25",
-    "text": "Solid-fuel configuration (team catalog classification). None of its 129 tests with recorded ambient oxygen has oxygen and pressure inside this scenario's team bins; pressure is not a column in the PSI experimental table of PSI-25 (BASS-II). The team pipeline links needs P1 (Flammability limit), P2 (Ignition), P3 (Flame spread and growth) and S1 (Extinction conditions) to objectives stated in this record, and need D1 (Combustion products) to an objective stated in a publication on this investigation. Tied with SAFFIRE-II, BASS, SAFFIRE-I and SAFFIRE-III under the team's current weights. Listed because its team score is level with or close to the results shown, under the team's current weights. The catalog reports no pressure for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value. No test in the mapped PSI tables has oxygen inside this scenario's team bin (95 to 100%); this investigation is listed for completeness.",
-    "sources": [
-     "data/catalog/configurations.csv#BASS-II-C01",
-     "pipeline/spec/sources.json#bass2",
-     "data/pipeline/scenario_tests.csv#spacesuit",
-     "data/pipeline/objective_links.csv#P1/PSI-25",
-     "PSI-25.objective",
-     "pipeline/spec/references.json#BASS2TM.limits",
-     "data/pipeline/objective_links.csv#P2/PSI-25",
-     "pipeline/spec/references.json#ICES19.goal",
-     "data/pipeline/objective_links.csv#P3/PSI-25",
-     "pipeline/spec/references.json#BASS2TM.growth",
-     "data/pipeline/objective_links.csv#S1/PSI-25",
-     "data/pipeline/objective_links.csv#D1/PSI-25",
-     "pipeline/spec/references.json#BASS2TM.products",
-     "scoring/scoring_config.json#atmosphere_fallback"
-    ],
-    "facts": {
-     "tests_ambient_o2": 129,
-     "tests_atmosphere": 0,
-     "tests_oxygen_only": 0,
-     "pressure_kpa_not_a_column_tests": 129,
-     "needs_stated": [
-      "P1",
-      "P2",
-      "P3",
-      "S1",
-      "D1"
-     ],
-     "needs_stated_in_a_publication_only": [
-      "D1"
-     ],
-     "team_bins": {
-      "o2_pct": {
-       "min": 95,
-       "max": 100
-      }
-     }
-    },
-    "text_origin": "template",
-    "status": "near_tie",
-    "rule": [
-     "phase:solid",
-     "row_unit:test",
-     "tie",
-     "near_tie",
-     "assumed_dims",
-     "fixed:spacesuit"
-    ],
-    "config_id": "BASS-II-C01"
-   },
-   {
-    "investigation_id": "PSI-99",
-    "text": "Solid-fuel configuration (team catalog classification). None of its 8 tests with recorded ambient oxygen has oxygen and pressure inside this scenario's team bins; pressure is not a column in the PSI experimental table of PSI-99 (SAFFIRE-II) (the PSI record of PSI-99 says pressure was measured; the value is not in the table). The team pipeline links need P1 (Flammability limit) to objectives stated in this record. Tied with BASS-II, BASS, SAFFIRE-I and SAFFIRE-III under the team's current weights. Listed because its team score is level with or close to the results shown, under the team's current weights. The catalog reports no pressure for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value. No test in the mapped PSI tables has oxygen inside this scenario's team bin (95 to 100%); this investigation is listed for completeness.",
-    "sources": [
-     "data/catalog/configurations.csv#SAFFIRE-II-C01",
-     "pipeline/spec/sources.json#saffire2",
-     "data/pipeline/scenario_tests.csv#spacesuit",
-     "PSI-99.approach",
-     "data/pipeline/objective_links.csv#P1/PSI-99",
-     "PSI-99.objective",
-     "pipeline/spec/references.json#SAF16.saffire2",
-     "scoring/scoring_config.json#atmosphere_fallback"
-    ],
-    "facts": {
-     "tests_ambient_o2": 8,
-     "tests_atmosphere": 0,
-     "tests_oxygen_only": 0,
-     "pressure_kpa_not_a_column_tests": 8,
-     "pressure_measured_per_record": {
-      "PSI-99": "APP-8"
-     },
-     "needs_stated": [
-      "P1"
-     ],
-     "team_bins": {
-      "o2_pct": {
-       "min": 95,
-       "max": 100
-      }
-     }
-    },
-    "text_origin": "template",
-    "status": "near_tie",
-    "rule": [
-     "phase:solid",
-     "row_unit:test",
-     "tie",
-     "near_tie",
-     "assumed_dims",
-     "fixed:spacesuit"
-    ],
-    "config_id": "SAFFIRE-II-C01"
-   },
-   {
-    "investigation_id": "PSI-26",
-    "text": "Solid-fuel configuration (team catalog classification). Its PSI table lists 121 tests, and oxygen and pressure are not columns in it, so none can be matched to this scenario's team bins. The team pipeline links needs P1 (Flammability limit) and S1 (Extinction conditions) to objectives stated in this record. Tied with BASS-II, SAFFIRE-II, SAFFIRE-I and SAFFIRE-III under the team's current weights. Listed because its team score is level with or close to the results shown, under the team's current weights. The catalog reports no oxygen or pressure for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value. No test in the mapped PSI tables has oxygen inside this scenario's team bin (95 to 100%); this investigation is listed for completeness.",
-    "sources": [
-     "data/catalog/configurations.csv#BASS-C01",
-     "pipeline/spec/sources.json#bass",
-     "data/pipeline/scenario_tests.csv#spacesuit",
-     "data/pipeline/objective_links.csv#P1/PSI-26",
-     "PSI-26.objective",
-     "pipeline/spec/references.json#RG.bass",
-     "data/pipeline/objective_links.csv#S1/PSI-26",
-     "scoring/scoring_config.json#atmosphere_fallback"
-    ],
-    "facts": {
-     "tests": 121,
-     "needs_stated": [
-      "P1",
-      "S1"
-     ],
-     "team_bins": {
-      "o2_pct": {
-       "min": 95,
-       "max": 100
-      }
-     }
-    },
-    "text_origin": "template",
-    "status": "near_tie",
-    "rule": [
-     "phase:solid",
-     "row_unit:test",
-     "tie",
-     "near_tie",
-     "assumed_dims",
-     "fixed:spacesuit"
-    ],
-    "config_id": "BASS-C01"
-   },
-   {
-    "investigation_id": "PSI-98",
-    "text": "Solid-fuel configuration (team catalog classification). None of its 2 tests with recorded ambient oxygen has oxygen and pressure inside this scenario's team bins; pressure is not a column in the PSI experimental table of PSI-98 (SAFFIRE-I) (the PSI record of PSI-98 says pressure was measured; the value is not in the table). The team pipeline links need P3 (Flame spread and growth) to objectives stated in this record. Tied with BASS-II, SAFFIRE-II, BASS and SAFFIRE-III under the team's current weights. Listed because its team score is level with or close to the results shown, under the team's current weights. The catalog reports no pressure for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value. No test in the mapped PSI tables has oxygen inside this scenario's team bin (95 to 100%); this investigation is listed for completeness.",
-    "sources": [
-     "data/catalog/configurations.csv#SAFFIRE-I-C01",
-     "pipeline/spec/sources.json#saffire1",
-     "data/pipeline/scenario_tests.csv#spacesuit",
-     "PSI-98.approach",
-     "data/pipeline/objective_links.csv#P3/PSI-98",
-     "PSI-98.objective",
-     "pipeline/spec/references.json#SAF16.saffire1",
-     "scoring/scoring_config.json#atmosphere_fallback"
-    ],
-    "facts": {
-     "tests_ambient_o2": 2,
-     "tests_atmosphere": 0,
-     "tests_oxygen_only": 0,
-     "pressure_kpa_not_a_column_tests": 2,
-     "pressure_measured_per_record": {
-      "PSI-98": "APP-9"
-     },
-     "needs_stated": [
-      "P3"
-     ],
-     "team_bins": {
-      "o2_pct": {
-       "min": 95,
-       "max": 100
-      }
-     }
-    },
-    "text_origin": "template",
-    "status": "near_tie",
-    "rule": [
-     "phase:solid",
-     "row_unit:test",
-     "tie",
-     "near_tie",
-     "assumed_dims",
-     "fixed:spacesuit"
-    ],
-    "config_id": "SAFFIRE-I-C01"
-   },
-   {
-    "investigation_id": "PSI-100",
-    "text": "Solid-fuel configuration (team catalog classification). Its PSI table lists 2 tests, and oxygen and pressure are not columns in it, so none can be matched to this scenario's team bins. The team pipeline links need P3 (Flame spread and growth) to objectives stated in this record. Tied with BASS-II, SAFFIRE-II, BASS and SAFFIRE-I under the team's current weights. Listed because its team score is level with or close to the results shown, under the team's current weights. The catalog reports no oxygen or pressure for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value. No test in the mapped PSI tables has oxygen inside this scenario's team bin (95 to 100%); this investigation is listed for completeness.",
-    "sources": [
-     "data/catalog/configurations.csv#SAFFIRE-III-C01",
-     "pipeline/spec/sources.json#saffire3",
-     "data/pipeline/scenario_tests.csv#spacesuit",
-     "data/pipeline/objective_links.csv#P3/PSI-100",
-     "PSI-100.objective",
-     "pipeline/spec/references.json#SAF16b.saffire13",
-     "scoring/scoring_config.json#atmosphere_fallback"
-    ],
-    "facts": {
-     "tests": 2,
-     "needs_stated": [
-      "P3"
-     ],
-     "team_bins": {
-      "o2_pct": {
-       "min": 95,
-       "max": 100
-      }
-     }
-    },
-    "text_origin": "template",
-    "status": "near_tie",
-    "rule": [
-     "phase:solid",
-     "row_unit:test",
-     "tie",
-     "near_tie",
-     "assumed_dims",
-     "fixed:spacesuit"
-    ],
-    "config_id": "SAFFIRE-III-C01"
    },
    {
     "investigation_id": "PSI-62",
@@ -3159,12 +2916,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T20:14:47+09:00",
+  "updated": "2026-11-14T23:33:34+09:00",
   "fresh": {
-   "ranker_config_version": "1.3.0",
-   "scoring_config_sha256": "845322d94deceef67b2233d2e77c32931fc236957259a445faffff48b078e7f8",
+   "ranker_config_version": "1.4.0",
+   "scoring_config_sha256": "83f3cff13cc4aa232574ae84500ca281483cae8129330c2dea2ffa7e176cf2f5",
    "catalog_sha256": "da58f2c7febd4dc01a82a0acefb4b0ff1c284bf4eafd142fdf3e9b8912996c82",
-   "scenario_inputs_sha256": "c34ad557d001482bd32a422c58e32c64d83900461263293c222885cce3e4d1b9",
+   "scenario_inputs_sha256": "8f2cb8091136a91b7669d3393ccdf887dfaa10495940ef0305df0c9f8729220d",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  },
@@ -3875,12 +3632,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T20:14:47+09:00",
+  "updated": "2026-11-14T23:33:34+09:00",
   "fresh": {
-   "ranker_config_version": "1.3.0",
-   "scoring_config_sha256": "845322d94deceef67b2233d2e77c32931fc236957259a445faffff48b078e7f8",
+   "ranker_config_version": "1.4.0",
+   "scoring_config_sha256": "83f3cff13cc4aa232574ae84500ca281483cae8129330c2dea2ffa7e176cf2f5",
    "catalog_sha256": "da58f2c7febd4dc01a82a0acefb4b0ff1c284bf4eafd142fdf3e9b8912996c82",
-   "scenario_inputs_sha256": "c34ad557d001482bd32a422c58e32c64d83900461263293c222885cce3e4d1b9",
+   "scenario_inputs_sha256": "8f2cb8091136a91b7669d3393ccdf887dfaa10495940ef0305df0c9f8729220d",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  }
