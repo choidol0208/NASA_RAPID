@@ -14,9 +14,10 @@ It is a research exploration tool. It is not operational fire-safety guidance an
 |---|---|---|
 | Ranking | `scorer.js` | A JavaScript port of `scoring/scorer.py`. It reads the same `scoring/scoring_config.json` and `data/catalog/*.csv`. |
 | Same answer as Python | `parity_check.py`, `parity_check.mjs` | Runs 61 queries (the 22 validation scenarios plus 39 more) through both and fails on any difference. |
-| Page | `index.html`, `style.css`, `app.js` | Renders the `rank()` output, `data/pipeline/capability_matrix.csv` (needs view), `data/pipeline/coverage_grid.csv` (coverage view) and, when present, `data/insights/*.json` (model-written text, labelled). |
-| Build | `build.py` | Copies the page and the data files into `web/dist/` and records the commit, so every link to a source file points at the exact version the page reads. |
-| Deploy | `.github/workflows/pages.yml` | On every push to `catalog-filter`: unit tests, validation, parity, build, then GitHub Pages. |
+| Page | `index.html`, `style.css`, `app.js` | Renders the `rank()` output, `data/pipeline/capability_matrix.csv` (needs view, and ISS against lunar habitat from `scenario_needs.csv`), `data/pipeline/coverage_grid.csv` (coverage view) and, when present, `data/insights/*.json` (team and model-written text, labelled; the evidence map). |
+| Build | `build.py` | Copies the page and the data files into `web/dist/` and records the commit, so every link to a source file points at the exact version the page reads. `tests.csv` and `scenario_tests.csv` are copied slimmed: only the columns the page reads, and only the two demo scenarios, values unchanged, with each test's line in the full file kept for links. |
+| Deploy | `.github/workflows/pages.yml` | On every push to `catalog-filter` or `main`: unit tests, validation, catalog against pipeline, parity, build, then GitHub Pages. |
+| Links | `check_links.py` | Run by hand before the freeze: every repository file the page links to exists; external pages answer (publishers that refuse scripts are listed to open by hand). |
 
 No language model runs in the page. No paid service, API key or server is involved; nothing is called on page load except the page's own files and Google Fonts.
 

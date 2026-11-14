@@ -60,6 +60,7 @@ Status values: todo, doing, done, cut.
 | U4 | ui | Labels (AI-generated, team computation, not safety guidance), narrow screens | 19:00 | done |
 | U5 | ui | Screenshots and one GIF of the scenario flow for the project page (after the differentiator decision) | 21:00 | todo |
 | U6 | ui | "Where the evidence stops" section with the oxygen-axis picture; lede and section names for the three promises (request 1310) | 16:30 | todo |
+| V1 | pm | Side track: BASS-II video reader as a re-runnable command with a per-experiment settings file and a procedure for new investigations; only if the pilot passes its checks | 19:00 | doing |
 | P1 | pm | Collaboration system and contracts | 11:15 | done |
 | P2 | pm | Agree with ui what model-written text the dashboard shows and in what shape | 12:30 | done |
 | P3 | pm | Design of the AI layer (methods beyond a language model alone), then `data/insights/`: summaries and scenario explanations, every statement with its source | 16:30 | doing |

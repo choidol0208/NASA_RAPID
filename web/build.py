@@ -6,6 +6,7 @@
 Usage:  python3 web/build.py
 Copies the page files and the data the page reads. No third-party packages.
 """
+import csv
 import json
 import os
 import shutil
@@ -17,12 +18,12 @@ ROOT = os.path.dirname(HERE)
 DIST = os.path.join(HERE, "dist")
 
 PAGE = ["index.html", "style.css", "app.js", "scorer.js"]
+DASH_SCENARIOS = {"iss", "lunar_habitat"}  # the only scenarios the page shows (same set as app.js)
 DATA = {
     "scoring/scoring_config.json": "data/scoring_config.json",
     "data/catalog/investigations.csv": "data/investigations.csv",
     "data/catalog/configurations.csv": "data/configurations.csv",
     "data/pipeline/capability_matrix.csv": "data/capability_matrix.csv",
-    "data/pipeline/tests.csv": "data/tests.csv",
     "pipeline/spec/needs.json": "data/needs.json",
     "data/pipeline/coverage_grid.csv": "data/coverage_grid.csv",
     "pipeline/spec/coverage.json": "data/coverage.json",
@@ -31,10 +32,30 @@ DATA = {
 OPTIONAL = {
     "data/insights/cards.json": "data/insights/cards.json",
     "data/insights/scenarios.json": "data/insights/scenarios.json",
+    "data/insights/evidence_map.json": "data/insights/evidence_map.json",
     "data/pipeline/scenario_needs.csv": "data/scenario_needs.csv",
-    "data/pipeline/scenario_tests.csv": "data/scenario_tests.csv",
     "pipeline/spec/scenarios.json": "data/scenario_spec.json",
 }
+
+
+def slim_csv(src, dst, columns, keep=lambda row: True, line_column=None):
+    """Copy only the columns (and rows) the page reads, so a phone downloads less.
+    Values are copied unchanged. With line_column, each row carries the line it starts on
+    in the source file, so links still point at the exact row of the full file."""
+    with open(src, encoding="utf-8-sig", newline="") as fh, open(dst, "w", encoding="utf-8", newline="") as out:
+        rd = csv.reader(fh)
+        header = next(rd)
+        idx = [header.index(c) for c in columns]
+        w = csv.writer(out, lineterminator="\n")
+        w.writerow(columns + ([line_column] if line_column else []))
+        start, n = rd.line_num + 1, 0
+        for row in rd:
+            rec = dict(zip(header, row))
+            if keep(rec):
+                w.writerow([row[i] if i < len(row) else "" for i in idx] + ([start] if line_column else []))
+                n += 1
+            start = rd.line_num + 1
+    return n
 
 
 def main():
@@ -48,6 +69,17 @@ def main():
     for src, dst in OPTIONAL.items():
         if os.path.exists(os.path.join(ROOT, src)):
             shutil.copy(os.path.join(ROOT, src), os.path.join(DIST, dst))
+    # Slim copies of the two large test files (the page links to the full files in the repository).
+    slim_csv(os.path.join(ROOT, "data/pipeline/tests.csv"), os.path.join(DIST, "data/tests.csv"),
+             ["test_id", "source_file", "source_row", "o2_pct", "pressure_kpa"], line_column="line")
+    st = os.path.join(ROOT, "data/pipeline/scenario_tests.csv")
+    if os.path.exists(st):
+        slim_csv(st, os.path.join(DIST, "data/scenario_tests.csv"),
+                 ["scenario_id", "test_id", "investigation_id", "fuel_phase", "flow_match", "gravity_match", "tier"],
+                 keep=lambda r: r.get("scenario_id") in DASH_SCENARIOS)
+    og = os.path.join(HERE, "media", "02_lunar_top.png")
+    if os.path.exists(og):  # link preview image; retaken with the final page at U5
+        shutil.copy(og, os.path.join(DIST, "og.png"))
     # The commit the site was built from, so links to source files and rows point at
     # exactly the files the page reads (GITHUB_SHA in Actions, git HEAD locally).
     sha = os.environ.get("GITHUB_SHA")
