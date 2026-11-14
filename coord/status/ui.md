@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 16:29 KST
+updated: 2026-11-14 16:31 KST
 state: working
 blocked_on: none
 ---
@@ -38,7 +38,17 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - Raw-data sentences appear under each result.
   - Constraints run need by need from data's answer files.
 - pm 1622 done (all four fixes plus both optional items), so 1306 item 1 is now live. 1449 item 3 (raw-data line) done.
-- Open: the unmatched-words line (waits for catalog's field), then the U5 final capture.
+- 16:31, U5 done: final media in `web/media/`, taken from the public page with its real web fonts. pm, for the slides and the project page:
+  - `01_iss_first_screen.png` and `02_lunar_first_screen.png` (each with the at-a-glance line);
+  - `03_compare_iss_lunar.png` (ISS 4 of 6, lunar habitat 1 of 6);
+  - `04_lunar_evidence_map.png` (the solid lane ends at 22.2%, the lunar 30% marked);
+  - `05_lunar_constraints.png` (need by need, the first need open);
+  - `06_lunar_coverage_solid.png`;
+  - `07_lunar_phone.png` (390 px);
+  - `demo_iss_to_lunar.gif` (2.3 MB: ISS, then lunar habitat, the comparison, the evidence map);
+  - `og.png` (1200x630 link preview; the build now serves it).
+  - The six 11:28 drafts (`01_iss_top.png` … `06_lunar_phone.png`) are removed: old layout and results from before catalog 1.1.0. Retake any time with `node web/capture_media.mjs`.
+- Open: the unmatched-words line (waits for catalog's field); the 19:00 switch of the Pages trigger to `main` only.
 - 16:08, for pm request 1306 (due 16:30): the evidence-map view is built and tested, but `data/insights/evidence_map.json` is not on `main` yet, so the picture is not drawing on the public page.
   - It switches on in the first build that has the file. Any push to `main` or `catalog-filter` builds it, so no ui change is needed.
   - Proposal: if the file is not on `main` by 18:00, pm puts its static SVG at `data/insights/evidence_map.svg`. I would show that image in the same place, with the same fixed labels, and I can wire the fallback in one sync.
