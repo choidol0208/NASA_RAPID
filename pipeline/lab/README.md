@@ -171,6 +171,7 @@ Numbers that follow from the data by arithmetic and the two established models n
 | `pipeline/lab/envelope.py` | Envelope position per scenario and need; writes `data/pipeline/lab/numbers/envelope_<scenario_id>.json` and `.md` |
 | `pipeline/lab/order_changes.py` | Order changes per held table; writes `data/pipeline/lab/numbers/order_<table_id>.json` and `.md` |
 | `pipeline/lab/run_numbers.py` | Runs both and writes `data/pipeline/lab/numbers/index.json` |
+| `pipeline/lab/plot_envelope.py` | Slide figure `data/pipeline/lab/numbers/envelope_lunar_habitat_S1.svg` (standard library, same bytes per run) and `.png` (rendered with the machine's Playwright Chromium, scale 2): the 273 counted S1 tests (selection imported from `envelope.py`), the hull, the nominal point and a zoom with the nearest tests and their deltas from the envelope output. Run after `run_numbers.py` |
 
 Run (after `python3 pipeline/run.py`): `python3 pipeline/lab/run_numbers.py`. Python standard library; the range rule is imported from `pipeline/run.py` (`in_range`), which loads pandas. The same input gives the same bytes (sorted keys, fixed order, no timestamps; checked by two runs, one with a different `PYTHONHASHSEED`).
 
@@ -301,33 +302,47 @@ What mathematics cannot remove (each a choice someone made):
 
 # Raw-file gaps (experiment, branch `data-lab`)
 
-*AI-generated (Claude Code) on 2026-11-14. Not reviewed by a person. The survey of the raw files and the mapping of headers to standard variables were done by AI agents.*
+*AI-generated (Claude Code) on 2026-11-14. Not reviewed by a person. The survey of the raw files, the mapping of headers to standard variables and the review of that mapping were done by AI agents.*
 
-The question it answers: for each PSI investigation and each standard variable that the six needs use, is the quantity in the experimental table, in a raw file that the table does not summarise, only in a document sentence, possibly only in videos or archives, or nowhere in what was sampled?
+The question it answers: for each PSI investigation and each standard variable that the six needs use, is the quantity in the experimental table, does a sampled raw file have a column whose header names it, is it only in a document sentence, or is it in none of the sampled files?
 
 ## Files
 
 | File | What |
 |---|---|
-| `pipeline/spec/raw_columns.json` | The survey as a spec: per investigation the file groups, the sample file with its PSI file id and listing size, the headers as written (re-opened on 2026-11-14 where `header_check` says so), what one file is per, the link to the experimental table, and the header-to-variable mappings (`mapping_by`: AI reading of the header, not confirmed by a document). Also the fixed sentences of the outputs |
-| `pipeline/lab/raw_gaps.py` | Decides one state per investigation and variable by rule; writes the two outputs |
-| `data/pipeline/lab/raw_gaps.json`, `raw_gaps.md` | States per investigation and variable; per need, the states of the required variables over the counted or recorded tests (`need_tests.csv`) and over all tests in scope, and the states of the outcome variables over all tests in scope |
+| `pipeline/spec/raw_columns.json` | The survey as a spec: per investigation the file groups, the sample file with its PSI file id and listing size, the headers as written, what one file is per, the link to the experimental table, the header-to-variable mappings (`mapping_by`: AI reading of the header, not confirmed by a document; `header_kind`; `column_is`), the columns not mapped with the reason (`related_columns_not_mapped`), and the unopened groups the checker named. Also the fixed sentences of the outputs |
+| `pipeline/lab/raw_gaps.py` | Decides one state per investigation and variable by rule; writes the two outputs; stops if a `column_is` is not one of the ten words or if a forbidden word appears |
+| `data/pipeline/lab/raw_gaps.json`, `raw_gaps.md` | States per investigation and variable; per need, the number of tests in each state for the required variables (counted or recorded tests, and all tests in scope) and for the outcome variables (all tests in scope), with `column_in_sampled_raw_file` split by `column_is` |
 
 Run: `python3 pipeline/lab/raw_gaps.py` (needs `data/pipeline/tests.csv`, `need_tests.csv` and `raw_inventory.json`). Standard library only; the same inputs give the same bytes.
+
+## States
+
+- `in_table`: recorded for n of N mapped tests.
+- `column_in_sampled_raw_file`: empty in the table; the fixed sentence is "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table." (for a `key = value` line of a text file the sentence says "key" instead of "column"). `column_is` is one of: sensor_reading_series, value_per_test_in_a_results_file, setting_or_set_point, calculated_by_the_workbook, event_timestamp, operator_entry, free_text, calibration_example, clock, unclear.
+- `documented_only`: a document sentence states it for the whole table.
+- `not_in_sampled_files`: none of the above. The sentence gives the listing counts by kind (videos, archives, documents, tables, other files) and the unopened groups that the checker named, and does not say where the quantity is.
+- `no_test_table`: the investigation has no per-test table.
+
+## Review of 2026-11-14
+
+An independent checker (model output) re-opened the sampled files. All headers were found, and all 93 `in_table` counts were recomputed without a difference. It found mappings that were not columns for their variable. Of 97 mappings, 58 were removed and are now listed under `related_columns_not_mapped` with the reason: end-of-event mixtures calculated by the ACME chamber calculator, the operators' Yes/No 'Ignite' choice, empty igniter columns, step timestamps for test end and burn time, the free-text comment column of BASS, cabin CO2 as a partial pressure, sample-side pressures among several pressures, a housekeeping clock, the first or last row of a time series, and a one-row mixture file. The PSI-10 and PSI-159 workbook findings were applied to the PSI-20 and PSI-21 workbooks of the same layout after a team check of those files. Other changes: the PSI-39 extinction diameter keeps the hot-flame column only; the PSI-101 smoke particle size is three mappings, one per statistic, which are different statistics; the PSI-39 and PSI-68 transducer ranges and the PSI-68 columns of a header-only file were also removed. 41 mappings remain. The state names and sentences no longer say that a quantity was measured or logged.
+
+PSI-69 videos: 229 listing rows have a video extension; 46 repeat an earlier row with the same file id, and `raw_inventory.json` counts a repeated row once, so 183 is used.
 
 ## What was opened
 
 - The survey (AI agents, 2026-11-14) downloaded 159 PSI files, 180,483,501 bytes in all, from 19 investigations, and read one sample file per group of files (the smallest in most groups). The list with PSI file ids and sizes is `_meta.downloaded_files` of `raw_columns.json`. The total is above the 150 MB that the task allowed; the largest single files were 24.9 MB (Saffire-I Sample 2) and 21.3 MB (Saffire-III 1 Hz telemetry).
-- This step re-opened the header lines (not the values) of 58 of those files to check the headers of the spec. Every mapped header of a re-opened group was found in the re-read text.
+- The header lines (not the values) of 58 of those files were re-opened to check the headers of the spec; the checker then re-opened the sampled files. Only headers were copied into the repository; no value and no other cell text of a downloaded file is in it. The downloaded files are outside the repository.
 - No `.zip` archive and no video was downloaded or opened. PDFs, Word and PowerPoint files were not opened.
-- Five investigations were not surveyed: PSI-60, PSI-62, PSI-115 and PSI-117 have no experimental table; PSI-142 is an index of figures. The survey result for PSI-39 and PSI-107 was empty; their entries were written from the agents' `reading.json` files and the header re-check.
+- Five investigations were not surveyed: PSI-60, PSI-62, PSI-115 and PSI-117 have no experimental table; PSI-142 is an index of figures. The survey result for PSI-39 and PSI-107 was empty; their entries were written from the agents' `reading.json` files and the header re-checks.
 
 ## Limits
 
 - One file per group. Other files of a group may have other columns (two header variants were seen in PSI-68 Chamber_Readings; the three smallest PSI-20 data files have no header row).
-- A mapping is a judgement on header text. Headers of a related but different quantity (a voltage for a power, a volume flow for a velocity, a total mass for a rate) are listed under `related_not_mapped` and are not counted.
-- `measured_not_summarised` says that a column exists. A column in a raw file says the quantity was logged; it does not say the log is complete, calibrated or usable. Many columns are time series, settings, event timestamps or free text (`column_is`), and turning them into one value per test would be a team computation.
-- `video_or_archive_only` is decided from counts in `raw_inventory.json`. It does not say that a video or an archive holds the quantity.
+- A mapping is a judgement on header text. A column of a different quantity, location or event, or an empty column, is not counted.
+- A header says only that a sampled file has such a column. It does not say that the values are complete, calibrated, pre-test or post-test, or for the same test as a table row. Turning a series or two timestamps into one value per test would be a team computation.
+- `not_in_sampled_files` does not say that a video, archive or document holds the quantity, or that it was not recorded.
 - Links of raw files to table rows are those the survey reported; several are by day or by time only, and some are unsettled (PSI-69 FLEX numbers, PSI-98/99/100 sample labels).
 - No file read states why a quantity is not in the experimental table.
-- The PSI-26 planned test matrix holds a note cell that appears to contain account names and passwords. Its text is not reproduced anywhere, and the file should not be published.
+- The PSI-26 planned test matrix holds a note cell that appears to contain account names and passwords. A search of the repository and its history on 2026-11-14 found none of its text; the file should not be published.

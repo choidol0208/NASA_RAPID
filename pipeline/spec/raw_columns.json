@@ -7,10 +7,10 @@
   "opened_note": "read by an AI agent from one sample file; other files of the group were not opened",
   "read_rule": "Every entry was read by an AI agent from one sample file per group; other files of the group were not opened. Archives (.zip) and videos were not downloaded or opened. No value was read into a standard variable: a mapping names a header, never a value.",
   "mapping_by": "AI reading of the header, not confirmed by a document",
-  "mapping_rule": "A header is mapped to a standard variable only when its text names the same quantity (unit differences are noted). Headers of a related but different quantity (a voltage for a power, a volume flow for a velocity, a total for a rate) are listed under 'related_not_mapped'. 'column_is' says whether the column is a reading, a setting, an event timestamp, free text, a calibration or an analysis by the investigators.",
+  "mapping_rule": "A header is mapped to a standard variable only when its text names the variable's quantity (unit differences are noted). A column of a different quantity, location or event, or a column with no values in the sampled file, is not a column for the variable: it is listed under 'related_columns_not_mapped' with the reason, and is not counted. Where several statistics exist for one variable, each is listed with its header and the note says they are different statistics. 'column_is' is one of the words of '_meta.column_is', decided from the file and the checker review.",
   "forms": {
-   "time_series_per_test": "a time series in each test file",
-   "single_value_per_test": "one value per test (a row or a key line)",
+   "time_series_per_file": "a time series in each file; the survey links a file to a test or a sample",
+   "one_value_per_row_or_key": "one value per row or per key line",
    "per_session_or_day": "one value per session, day or sample bag",
    "unclear": "the file does not say"
   },
@@ -20,20 +20,16 @@
    "header lines re-opened on 2026-11-14"
   ],
   "sentences": {
-   "caution": "A column in a raw file says the quantity was logged; it does not say the log is complete, calibrated or usable.",
+   "caution": "A header in a sampled raw file says only that the file has such a column or key. One file per group was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table.",
    "sampling": "Only one file per group was opened; other files of a group may have other columns.",
    "not_opened": "Archives (.zip) and videos were not downloaded or opened; what they hold is not known.",
    "reason": "No file read states why a quantity is not in the experimental table.",
    "in_table": "Recorded in the experimental table for {n} of {N} mapped tests.",
-   "measured_not_summarised": "Empty in the table; a sampled raw file has a column for it: '{header}' in {group} ({files} files in the group; {form}; {column_is}).",
    "documented_only": "Empty in the table; a document sentence states it for the whole table ({where}): '{quote}'.",
-   "video_or_archive_only": "Empty in the table and in every sampled table column; the listing has {videos} videos and {archives} archives that were not opened.",
-   "no_record_found": "Empty in the table; no column for it was found in what was sampled.",
    "no_test_table": "The investigation has no per-test table: {per}.",
-   "computable": "Each input of the team formula '{formula}' is in the table or in a sampled raw column.",
    "remaining": "For the other {m} tests: {state}.",
    "title": "Raw-file gaps per investigation and variable",
-   "intro": "For every PSI investigation and every standard variable that the six needs use, one state decided by rule from the counts in tests.csv and the spec pipeline/spec/raw_columns.json.",
+   "intro": "For every PSI investigation and every standard variable that the six needs use, one state decided by rule from the counts in tests.csv and the spec pipeline/spec/raw_columns.json, after the checker review of 2026-11-14.",
    "states_heading": "States",
    "need_heading": "Per need: states of the required variables",
    "need_counted_line": "Counted or recorded tests of the need (data/pipeline/need_tests.csv): {n}.",
@@ -42,14 +38,24 @@
    "outcome_heading": "Per need: states of the outcome variables, all tests in scope",
    "inv_heading": "Per investigation",
    "downloads_line": "The survey downloaded {files} PSI files ({bytes} bytes) and opened one sample per group; this step re-opened the header lines of {reopened} of them.",
-   "order_rule": "States are tried in this order: in_table, measured_not_summarised, documented_only, video_or_archive_only, no_record_found; no_test_table applies before all of them."
+   "order_rule": "States are tried in this order: in_table, column_in_sampled_raw_file, documented_only, not_in_sampled_files; no_test_table applies before all of them.",
+   "column_in_sampled_raw_file": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table.",
+   "column_in_sampled_raw_file_key": "A sampled file of this group has a key with this name in a text file. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table.",
+   "column_detail": "{header_kind}: '{header}' in group {group} ({files} files in the group; {form}); column_is {column_is}{note}.",
+   "not_in_sampled_files": "Empty in the table, and no sampled file has a column mapped to it. Files of this investigation by kind (raw_inventory.json listing counts): {kinds}; the survey opened one file in each of {opened} groups and no video or archive.{groups} The files read do not say whether any unopened file holds this quantity.",
+   "not_in_sampled_groups": " Unopened groups the checker named: {groups}.",
+   "related_line": " Related columns not mapped: {items}.",
+   "column_is_heading": "column_in_sampled_raw_file by column_is",
+   "review_line": "Checker review of 2026-11-14: {removed} of {before} header mappings were removed (a different quantity, location or event, or an empty column) and are listed under related_columns_not_mapped; {after} mappings remain.",
+   "video_count_line": "PSI-69: 229 listing rows have a video extension (228 .mp4, 1 .mpg). 46 of them repeat an earlier row with the same file id, and raw_inventory.json counts a repeated row once ('counting_rule'), so the count used here is 183 video files (182 .mp4, 1 .mpg), which is also the number of distinct names.",
+   "md_unopened_lead": "For every variable in state not_in_sampled_files below (full sentence in raw_gaps.json):",
+   "md_not_in_sampled_short": "Empty in the table, and no sampled file has a column mapped to it; the unopened files are listed above this table. The files read do not say whether any unopened file holds this quantity."
   },
   "states": {
    "in_table": "recorded for n of N mapped tests (tests.csv)",
-   "measured_not_summarised": "empty in the table, but a sampled raw file has a column for it",
+   "column_in_sampled_raw_file": "empty in the table; one sampled file of a group has a column (or a key in a text file) whose header names the quantity; 'column_is' says what kind of column",
    "documented_only": "a document sentence states it for the whole table (sources.json 'documented_elsewhere')",
-   "video_or_archive_only": "no sampled table column; videos or unopened archives exist (counts from raw_inventory.json)",
-   "no_record_found": "none of the above in what was sampled",
+   "not_in_sampled_files": "empty in the table and in the mapped columns of the sampled files; the unopened files are listed by kind; where the quantity is, if anywhere, is not stated",
    "no_test_table": "the investigation has no per-test table"
   },
   "survey_downloads": {
@@ -1172,7 +1178,40 @@
     "bytes_listing": 12086208,
     "bytes_downloaded": 12086208
    }
-  ]
+  ],
+  "column_is": {
+   "sensor_reading_series": "a time series of an instrument channel",
+   "value_per_test_in_a_results_file": "one value per test row or per-test file in a file of results or test records",
+   "setting_or_set_point": "a setting, set point or planned value",
+   "calculated_by_the_workbook": "a value the workbook calculates (formula cells)",
+   "event_timestamp": "the time of an event or step",
+   "operator_entry": "a choice entered by the operators",
+   "free_text": "a comment field",
+   "calibration_example": "a calibration or a worked example, not a value per test",
+   "clock": "an elapsed-time counter",
+   "unclear": "the file does not say which of the above"
+  },
+  "header_kinds": {
+   "column header": "the header cell of a table column",
+   "column header with the unit in the next row": "a header cell with the unit in the cell below",
+   "key in a text file": "the name of a 'key = value' or 'key: value' line of a text file, not a column header"
+  },
+  "review_2026_11_14": {
+   "by": "an independent checker (model output) re-opened the sampled files; the team applied its findings on 2026-11-14",
+   "findings_applied": [
+    "header_failures",
+    "doubtful_mappings",
+    "recount_failures",
+    "unsampled_groups",
+    "overstatements"
+   ],
+   "mappings_before": 97,
+   "mappings_removed": 58,
+   "mappings_after": 41,
+   "note": "PSI-101 smoke particle size was one mapping with three headers; it is now three mappings, one per statistic. PSI-39 extinction diameter keeps the hot-flame column only. The PSI-10, PSI-159 workbook findings were applied to the PSI-20 and PSI-21 workbooks of the same layout after a team check of those files."
+  },
+  "psi69_video_count": "PSI-69: 229 listing rows have a video extension (228 .mp4, 1 .mpg). 46 of them repeat an earlier row with the same file id, and raw_inventory.json counts a repeated row once ('counting_rule'), so the count used here is 183 video files (182 .mp4, 1 .mpg), which is also the number of distinct names.",
+  "caution_files": "Headers only were copied from the downloaded files. No value and no other cell text of a downloaded file is in this spec."
  },
  "investigations": [
   {
@@ -1491,129 +1530,170 @@
    ],
    "mappings": [
     {
-     "variable": "o2_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_O2 (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "which block is the test atmosphere was not determined",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_CO2 (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "which block is the test atmosphere was not determined",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "he_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_He (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "which block is the test atmosphere was not determined",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
      "variable": "pressure_kpa",
      "group": "chamber_calculator",
      "header_as_written": "Pstart (psia)",
-     "form": "single_value_per_test",
-     "column_is": "reading",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "unclear",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit psia",
+     "note": "a value without a formula in each event row of sheet 'EventData'; the file does not say where the value comes from; unit psia; a row can cover several tests",
      "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "fuel_material",
-     "group": "chamber_calculator",
-     "header_as_written": "Fuel Type",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "hot_ignition",
-     "group": "chamber_calculator",
-     "header_as_written": "Ignite",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "written Yes/No",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "ignition_power_w",
-     "group": "chamber_calculator",
-     "header_as_written": "Igniter Wattage",
-     "form": "single_value_per_test",
-     "column_is": "setting",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "ignition_time_s",
-     "group": "chamber_calculator",
-     "header_as_written": "Igniter On Time (ms)",
-     "form": "single_value_per_test",
-     "column_is": "setting",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit ms",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "test_end",
-     "group": "tp_txt",
-     "header_as_written": "Extinction detected",
-     "form": "single_value_per_test",
-     "column_is": "event timestamp",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "'***' where the step did not occur",
-     "files_in_group": 314,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "burn_time_s",
-     "group": "tp_txt",
-     "header_as_written": "Ignition and retraction / Extinction detected",
-     "form": "single_value_per_test",
-     "column_is": "event timestamps",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "two timestamps; a duration would be a team computation",
-     "files_in_group": 314,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "data_csv",
      "header_as_written": "MFCA1StaticMixerFlow, MFCA2BypassFlow, MFCA3FuelFlow",
-     "not_mapped_because": "controller flow signals with no unit written, not a velocity in cm/s"
+     "not_mapped_because": "controller flow signals with no unit written, not a velocity in cm/s",
+     "decided_by": "survey (model output)",
+     "for_variable": "flow_cms",
+     "column_is": "unclear"
     },
     {
      "group": "as_run",
      "header_as_written": "fuelBottleTestFlowRateN2Slpm",
-     "not_mapped_because": "a volume flow setting in Slpm, not a velocity"
+     "not_mapped_because": "a volume flow setting in Slpm, not a velocity",
+     "decided_by": "survey (model output)",
+     "for_variable": "flow_cms",
+     "column_is": "unclear"
     },
     {
      "group": "data_csv",
      "header_as_written": "PTA1, PTA2, PTA3",
-     "not_mapped_because": "no unit written and the file does not say what is measured"
+     "not_mapped_because": "no unit written and the file does not say what quantity the column holds",
+     "decided_by": "survey (model output)",
+     "for_variable": "pressure_kpa",
+     "column_is": "unclear"
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_O2 (block Finish Mixture (Percent))",
+     "for_variable": "o2_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_CO2 (block Finish Mixture (Percent))",
+     "for_variable": "co2_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_He (block Finish Mixture (Percent))",
+     "for_variable": "he_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Fuel Type",
+     "for_variable": "fuel_material",
+     "column_is": "unclear",
+     "not_mapped_because": "A column of the sheet 'Stoich Table' (one row per fuel), not one value per test.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Ignite",
+     "for_variable": "hot_ignition",
+     "column_is": "operator_entry",
+     "not_mapped_because": "A Yes/No pick list that the Notes sheet calls the decision during operations; it sets the workbook's burn fraction. No file read says that Yes means that a hot flame was seen.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Igniter Wattage",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear",
+     "not_mapped_because": "The column has no value in the data rows of the sampled workbook.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Igniter On Time (ms)",
+     "for_variable": "ignition_time_s",
+     "column_is": "unclear",
+     "not_mapped_because": "The column has no value in the data rows of the sampled workbook.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "tp_txt",
+     "header_as_written": "Extinction detected",
+     "for_variable": "test_end",
+     "column_is": "event_timestamp",
+     "not_mapped_because": "A timestamp of the step 'Extinction detected' ('***' where the step did not occur), written as a key in a text file. It says at most whether extinction was detected, not how the test ended.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "tp_txt",
+     "header_as_written": "Ignition and retraction / Extinction detected",
+     "for_variable": "burn_time_s",
+     "column_is": "event_timestamp",
+     "not_mapped_because": "Two step timestamps written as keys in a text file. 'Ignition and retraction' is the igniter retraction step, not flame ignition; a duration from two timestamps would be a team computation. In the sampled file the step 'Extinction detected' did not occur.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "logs",
+     "names": "GC_Coverter_*.log",
+     "files": "10"
+    },
+    {
+     "kind": "documents",
+     "names": "<id> test parameter notes.pdf",
+     "files": "18"
+    },
+    {
+     "kind": "documents",
+     "names": "<id> test sheets.pdf",
+     "files": "18"
+    },
+    {
+     "kind": "documents",
+     "names": "<id> flow traces etc.pdf",
+     "files": "18"
+    },
+    {
+     "kind": "documents",
+     "names": "<id> Daily Test Point Log.pdf",
+     "files": "14"
+    },
+    {
+     "kind": "text files",
+     "names": "<id>.txt as-run settings, letter groups other than the one opened",
+     "files": "49 in all"
+    },
+    {
+     "kind": "text files",
+     "names": "<id>_Comments.txt, files other than the one opened",
+     "files": "313 in the group"
+    },
+    {
+     "kind": "other",
+     "names": "ACME_<id>.mdipsug",
+     "files": "250"
+    },
+    {
+     "kind": "other",
+     "names": "INTNS_<id>.mdipsug",
+     "files": "240"
     }
    ]
   },
@@ -1910,120 +1990,115 @@
    ],
    "mappings": [
     {
-     "variable": "o2_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_O2 (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "written as a fraction 0-1 under a Percent heading",
-     "files_in_group": 5,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_CO2 (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 5,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "he_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_He (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 5,
-     "header_found_in_reopened_file": true
-    },
-    {
      "variable": "pressure_kpa",
      "group": "chamber_calculator",
      "header_as_written": "Pstart (psia)",
-     "form": "single_value_per_test",
-     "column_is": "reading",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "unclear",
      "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "a value without a formula in each event row of sheet 'EventData'; the file does not say where the value comes from; unit psia; a row can cover several tests",
      "files_in_group": 5,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "fuel_material",
-     "group": "chamber_calculator",
-     "header_as_written": "Fuel Type",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 5,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "hot_ignition",
-     "group": "chamber_calculator",
-     "header_as_written": "Ignite",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 5,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "ignition_power_w",
-     "group": "chamber_calculator",
-     "header_as_written": "Igniter Wattage",
-     "form": "single_value_per_test",
-     "column_is": "setting",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "empty in the first rows read",
-     "files_in_group": 5,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "ignition_time_s",
-     "group": "chamber_calculator",
-     "header_as_written": "Igniter On Time (ms)",
-     "form": "single_value_per_test",
-     "column_is": "setting",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "empty in the first rows read",
-     "files_in_group": 5,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "test_end",
-     "group": "tp_txt",
-     "header_as_written": "Extinction detected",
-     "form": "single_value_per_test",
-     "column_is": "event timestamp",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 211,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "burn_time_s",
-     "group": "tp_txt",
-     "header_as_written": "Ignition and retraction / MFCs off",
-     "form": "single_value_per_test",
-     "column_is": "event timestamps",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "a duration would be a team computation",
-     "files_in_group": 211,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "as_run",
      "header_as_written": "igniterIgnitionPowerV",
-     "not_mapped_because": "a voltage, not a power in W"
+     "not_mapped_because": "a voltage, not a power in W",
+     "decided_by": "survey (model output)",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear"
     },
     {
      "group": "data_csv",
      "header_as_written": "MFCA1StaticMixerFlow, MFCA2BypassFlow, MFCA3FuelFlow",
-     "not_mapped_because": "no unit written; not a velocity"
+     "not_mapped_because": "no unit written; not a velocity",
+     "decided_by": "survey (model output)",
+     "for_variable": "flow_cms",
+     "column_is": "unclear"
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_O2 (block Finish Mixture (Percent))",
+     "for_variable": "o2_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_CO2 (block Finish Mixture (Percent))",
+     "for_variable": "co2_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_He (block Finish Mixture (Percent))",
+     "for_variable": "he_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Fuel Type",
+     "for_variable": "fuel_material",
+     "column_is": "unclear",
+     "not_mapped_because": "A column of the sheet 'Stoich Table' (one row per fuel), not one value per test.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Ignite",
+     "for_variable": "hot_ignition",
+     "column_is": "operator_entry",
+     "not_mapped_because": "A Yes/No pick list that the Notes sheet calls the decision during operations; it sets the workbook's burn fraction. No file read says that Yes means that a hot flame was seen.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Igniter Wattage",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear",
+     "not_mapped_because": "The column has no value in the data rows of the sampled workbook.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Igniter On Time (ms)",
+     "for_variable": "ignition_time_s",
+     "column_is": "unclear",
+     "not_mapped_because": "The column has no value in the data rows of the sampled workbook.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "tp_txt",
+     "header_as_written": "Extinction detected",
+     "for_variable": "test_end",
+     "column_is": "event_timestamp",
+     "not_mapped_because": "A timestamp of the step 'Extinction detected' ('***' where the step did not occur), written as a key in a text file. It says at most whether extinction was detected, not how the test ended.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same file kind as the PSI-10 and PSI-159 TP files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "tp_txt",
+     "header_as_written": "Ignition and retraction / MFCs off",
+     "for_variable": "burn_time_s",
+     "column_is": "event_timestamp",
+     "not_mapped_because": "Two step timestamps written as keys in a text file. 'Ignition and retraction' is the igniter retraction step, not flame ignition; a duration from two timestamps would be a team computation. 'MFCs off' is a flow step.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied)",
+     "was_mapped_before_2026_11_14_review": true
     }
    ]
   },
@@ -2379,8 +2454,9 @@
      "variable": "flow_cms",
      "group": "tp_settings",
      "header_as_written": "velocityAirFinalMPerSec / velocityMixFinalMPerSec",
-     "form": "single_value_per_test",
-     "column_is": "setting",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
      "note": "unit m/s in the key name",
      "files_in_group": 299,
@@ -2390,10 +2466,11 @@
      "variable": "ignition_time_s",
      "group": "tp_settings",
      "header_as_written": "igniterIgnitionDurationMs",
-     "form": "single_value_per_test",
-     "column_is": "setting",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit ms",
+     "note": "unit ms in the key name",
      "files_in_group": 299,
      "header_found_in_reopened_file": true
     },
@@ -2401,89 +2478,86 @@
      "variable": "pressure_kpa",
      "group": "fcu_readings",
      "header_as_written": "FCU_MP_PT28(PSIA)",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "the calculator names FCU_MP_PT28 as the chamber pressure source (survey); 16 files only",
+     "note": "the survey reports that the chamber calculator names FCU_MP_PT28 as the chamber pressure source; unit psia; 16 files only",
      "files_in_group": 16,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "o2_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_O2 (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_CO2 (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "he_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_He (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "fuel_material",
-     "group": "chamber_calculator",
-     "header_as_written": "Fuel Type",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "hot_ignition",
-     "group": "chamber_calculator",
-     "header_as_written": "Ignite",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "ignition_power_w",
-     "group": "chamber_calculator",
-     "header_as_written": "Igniter Wattage",
-     "form": "single_value_per_test",
-     "column_is": "setting",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "test_end",
-     "group": "tp_txt",
-     "header_as_written": "Extinction detected",
-     "form": "single_value_per_test",
-     "column_is": "event timestamp",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 299,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "tp_settings",
      "header_as_written": "igniterIgnitionPowerV",
-     "not_mapped_because": "a voltage, not a power in W"
+     "not_mapped_because": "a voltage, not a power in W",
+     "decided_by": "survey (model output)",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear"
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_O2 (block Finish Mixture (Percent))",
+     "for_variable": "o2_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_CO2 (block Finish Mixture (Percent))",
+     "for_variable": "co2_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_He (block Finish Mixture (Percent))",
+     "for_variable": "he_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Fuel Type",
+     "for_variable": "fuel_material",
+     "column_is": "unclear",
+     "not_mapped_because": "A column of the sheet 'Stoich Table' (one row per fuel), not one value per test.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Ignite",
+     "for_variable": "hot_ignition",
+     "column_is": "operator_entry",
+     "not_mapped_because": "A Yes/No pick list that the Notes sheet calls the decision during operations; it sets the workbook's burn fraction. No file read says that Yes means that a hot flame was seen.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Igniter Wattage",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear",
+     "not_mapped_because": "The column has no value in the data rows of the sampled workbook.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same workbook layout as the PSI-10 and PSI-159 files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "tp_txt",
+     "header_as_written": "Extinction detected",
+     "for_variable": "test_end",
+     "column_is": "event_timestamp",
+     "not_mapped_because": "A timestamp of the step 'Extinction detected' ('***' where the step did not occur), written as a key in a text file. It says at most whether extinction was detected, not how the test ended.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same file kind as the PSI-10 and PSI-159 TP files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
     }
    ]
   },
@@ -2819,8 +2893,9 @@
      "variable": "flow_cms",
      "group": "voltage_sweep",
      "header_as_written": "velocityMixFinalMPerSec / velocityAirFinalMPerSec",
-     "form": "single_value_per_test",
-     "column_is": "setting",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
      "note": "unit m/s in the key name",
      "files_in_group": 202,
@@ -2830,34 +2905,40 @@
      "variable": "ignition_time_s",
      "group": "voltage_sweep",
      "header_as_written": "igniterIgnitionDurationMs",
-     "form": "single_value_per_test",
-     "column_is": "setting",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit ms",
-     "files_in_group": 202,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "test_end",
-     "group": "tp_txt",
-     "header_as_written": "Extinction detected",
-     "form": "single_value_per_test",
-     "column_is": "event timestamp",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "unit ms in the key name",
      "files_in_group": 202,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "voltage_sweep",
      "header_as_written": "igniterIgnitionPowerV",
-     "not_mapped_because": "a voltage, not a power in W"
+     "not_mapped_because": "a voltage, not a power in W",
+     "decided_by": "survey (model output)",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear"
     },
     {
      "group": "conversion_templates",
      "header_as_written": "Coflow Velocity (cm/s)",
-     "not_mapped_because": "a formula column of a template; no test values in it"
+     "not_mapped_because": "a formula column of a template; no test values in it",
+     "decided_by": "survey (model output)",
+     "for_variable": "flow_cms",
+     "column_is": "unclear"
+    },
+    {
+     "group": "tp_txt",
+     "header_as_written": "Extinction detected",
+     "for_variable": "test_end",
+     "column_is": "event_timestamp",
+     "not_mapped_because": "A timestamp of the step 'Extinction detected' ('***' where the step did not occur), written as a key in a text file. It says at most whether extinction was detected, not how the test ended.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same file kind as the PSI-10 and PSI-159 TP files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
     }
    ]
   },
@@ -3257,50 +3338,57 @@
      "variable": "ignition_time_s",
      "group": "as_run",
      "header_as_written": "igniterIgnitionDurationMs",
-     "form": "single_value_per_test",
-     "column_is": "setting",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "present in 20155C1.txt; absent from as run20155A1.txt",
+     "note": "unit ms in the key name; present in 20155C1.txt, absent from as run20155A1.txt",
      "files_in_group": 401,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "test_end",
-     "group": "tp_txt",
-     "header_as_written": "Extinction detected",
-     "form": "single_value_per_test",
-     "column_is": "event timestamp",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 266,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "burn_time_s",
-     "group": "tp_txt",
-     "header_as_written": "Ignition and retraction / MFCs off",
-     "form": "single_value_per_test",
-     "column_is": "event timestamps",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "a duration would be a team computation",
-     "files_in_group": 266,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "as_run",
      "header_as_written": "fuelBottleTestFlowRateN2Slpm",
-     "not_mapped_because": "a volume flow setting in Slpm, not a velocity"
+     "not_mapped_because": "a volume flow setting in Slpm, not a velocity",
+     "decided_by": "survey (model output)",
+     "for_variable": "flow_cms",
+     "column_is": "unclear"
     },
     {
      "group": "as_run",
      "header_as_written": "constantFlowTimeSec",
-     "not_mapped_because": "a planned duration, not a measured burn time"
+     "not_mapped_because": "a planned duration, not a burn time",
+     "decided_by": "survey (model output)",
+     "for_variable": "burn_time_s",
+     "column_is": "unclear"
     },
     {
      "group": "data_csv",
      "header_as_written": "PTA1, PTA2, PTA3",
-     "not_mapped_because": "no unit written and the file does not say what is measured"
+     "not_mapped_because": "no unit written and the file does not say what quantity the column holds",
+     "decided_by": "survey (model output)",
+     "for_variable": "pressure_kpa",
+     "column_is": "unclear"
+    },
+    {
+     "group": "tp_txt",
+     "header_as_written": "Extinction detected",
+     "for_variable": "test_end",
+     "column_is": "event_timestamp",
+     "not_mapped_because": "A timestamp of the step 'Extinction detected' ('***' where the step did not occur), written as a key in a text file. It says at most whether extinction was detected, not how the test ended.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same file kind as the PSI-10 and PSI-159 TP files the checker re-opened",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "tp_txt",
+     "header_as_written": "Ignition and retraction / MFCs off",
+     "for_variable": "burn_time_s",
+     "column_is": "event_timestamp",
+     "not_mapped_because": "Two step timestamps written as keys in a text file. 'Ignition and retraction' is the igniter retraction step, not flame ignition; a duration from two timestamps would be a team computation. 'MFCs off' is a flow step.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied)",
+     "was_mapped_before_2026_11_14_review": true
     }
    ]
   },
@@ -3381,24 +3469,41 @@
      "variable": "flow_cms",
      "group": "fan_calibration",
      "header_as_written": "U cm/s*",
+     "header_kind": "column header",
      "form": "per_session_or_day",
-     "column_is": "calibration",
+     "column_is": "calibration_example",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "filled in the first block only and labelled in the sheet as an example of how to estimate flow",
+     "note": "the sheet labels the column 'example of how to estimate flow'; only the first block is filled, a fan calibration dated 2014-04-01; not an imposed flow per test",
      "files_in_group": 1,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "test_matrices",
      "header_as_written": "calibrated initial O2 % by vol, calibrated final O2 % by vol, Initial CO2 % by vol, Final CO2 % by vol, Initial CO (ppm), Final CO (ppm)",
-     "not_mapped_because": "the same columns as the experimental table; nothing added"
+     "not_mapped_because": "the same columns as the experimental table; nothing added",
+     "decided_by": "survey (model output)"
     },
     {
      "group": "fan_calibration",
      "header_as_written": "Fan V",
-     "not_mapped_because": "a fan voltage, not a flow"
+     "not_mapped_because": "a fan voltage, not a flow",
+     "decided_by": "survey (model output)",
+     "for_variable": "flow_cms",
+     "column_is": "unclear"
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "documents",
+     "names": "BASS-II Summary Report.pdf, BASS-II_SRD.pdf, BASS-II_Ops.docx, BASS-II_ReadMe.docx",
+     "files": "4"
+    },
+    {
+     "kind": "documents",
+     "names": "ProofSheet.pdf images",
+     "files": "about 130"
     }
    ]
   },
@@ -3454,7 +3559,7 @@
       "Ignition time   -  seconds",
       "Extinguish ?"
      ],
-     "warning": "a note cell appears to hold account names and passwords; its text is not reproduced; the file should not be published",
+     "warning": "a note cell appears to hold account names and passwords; its text is not reproduced in any repository file (checked by search on 2026-11-14); the file should not be published",
      "samples": [
       {
        "psi_name": "PSI-26_Science Documents_Planned_Test Matrix.xlsx",
@@ -3496,10 +3601,11 @@
      "variable": "o2_pct",
      "group": "as_run_matrix",
      "header_as_written": "O2 % by volume",
-     "form": "single_value_per_test",
-     "column_is": "reading",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit as written; fraction or percent not stated",
+     "note": "under the group label 'ISS environment', which is the cabin; the file does not say that the test volume had the same atmosphere; written as a fraction",
      "files_in_group": 1,
      "header_found_in_reopened_file": true
     },
@@ -3507,51 +3613,11 @@
      "variable": "pressure_kpa",
      "group": "as_run_matrix",
      "header_as_written": "pressure, atm",
-     "form": "single_value_per_test",
-     "column_is": "reading",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit atm",
-     "files_in_group": 1,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_pct",
-     "group": "as_run_matrix",
-     "header_as_written": "CO2, mm Hg",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "a partial pressure in mm Hg, not % by volume",
-     "files_in_group": 1,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "burn_time_s",
-     "group": "as_run_matrix",
-     "header_as_written": "Test Observations and Anomalies (ignited, spread, extinguished, burn time, color, etc.)",
-     "form": "single_value_per_test",
-     "column_is": "free text",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 1,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "flow_event",
-     "group": "as_run_matrix",
-     "header_as_written": "Test Observations and Anomalies (ignited, spread, extinguished, burn time, color, etc.)",
-     "form": "single_value_per_test",
-     "column_is": "free text",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 1,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "hot_ignition",
-     "group": "as_run_matrix",
-     "header_as_written": "Test Observations and Anomalies (ignited, spread, extinguished, burn time, color, etc.)",
-     "form": "single_value_per_test",
-     "column_is": "free text",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "under the group label 'ISS environment', which is the cabin; the file does not say that the test volume had the same pressure; unit atm",
      "files_in_group": 1,
      "header_found_in_reopened_file": true
     },
@@ -3559,24 +3625,77 @@
      "variable": "ignition_time_s",
      "group": "planned_matrix",
      "header_as_written": "Ignition time   -  seconds",
-     "form": "single_value_per_test",
-     "column_is": "planned value",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "planned test points, not runs",
+     "note": "planned test points, not runs; the values are written as ranges of seconds, not single numbers; not linked to table rows one by one",
      "files_in_group": 1,
      "header_found_in_reopened_file": null
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "as_run_matrix",
      "header_as_written": "Fan display; Air display",
-     "not_mapped_because": "display readings; no cm/s column"
+     "not_mapped_because": "Display settings with no cm/s unit. The comment text of the same file writes flows in cm/s beside display values, and the PSI-25 fan calibration relates the fan and air display to U cm/s, but no column of this file holds a flow in cm/s (checker re-opening of 2026-11-14).",
+     "decided_by": "survey (model output)",
+     "for_variable": "flow_cms",
+     "column_is": "unclear"
     },
     {
      "group": "as_run_matrix",
      "header_as_written": "Radiometer display",
-     "not_mapped_because": "no standard variable"
+     "not_mapped_because": "no standard variable",
+     "decided_by": "survey (model output)"
+    },
+    {
+     "group": "as_run_matrix",
+     "header_as_written": "CO2, mm Hg",
+     "for_variable": "co2_pct",
+     "column_is": "value_per_test_in_a_results_file",
+     "not_mapped_because": "A partial pressure in mm Hg under the group label 'ISS environment' (the cabin), not CO2 added to the test atmosphere in % by volume.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "as_run_matrix",
+     "header_as_written": "Test Observations and Anomalies (ignited, spread, extinguished, burn time, color, etc.)",
+     "for_variable": "burn_time_s",
+     "column_is": "free_text",
+     "not_mapped_because": "One free-text comment column for all observations. The checker found words such as 'burn time' in 19 of 124 rows of the sheet 'as run matrix'. A comment field is not a column for this variable.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "as_run_matrix",
+     "header_as_written": "Test Observations and Anomalies (ignited, spread, extinguished, burn time, color, etc.)",
+     "for_variable": "flow_event",
+     "column_is": "free_text",
+     "not_mapped_because": "One free-text comment column for all observations. The checker found words such as 'burn time' in 19 of 124 rows of the sheet 'as run matrix'. A comment field is not a column for this variable.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "as_run_matrix",
+     "header_as_written": "Test Observations and Anomalies (ignited, spread, extinguished, burn time, color, etc.)",
+     "for_variable": "hot_ignition",
+     "column_is": "free_text",
+     "not_mapped_because": "One free-text comment column for all observations. The checker found words such as 'burn time' in 19 of 124 rows of the sheet 'as run matrix'. A comment field is not a column for this variable.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "documents",
+     "names": "Drawing_PMMA.Flat.Fuel.Sample2mm.pdf, Drawing_Sibal.Flat.Sample.pdf, Drawing_Flat.Sample.Frame_#cm.pdf and other drawings",
+     "files": "count not given"
+    },
+    {
+     "kind": "documents",
+     "names": "SRD_BASS.pdf, DLD_BASS.pdf, BASS ERD.pptx",
+     "files": "3"
     }
    ]
   },
@@ -3828,10 +3947,12 @@
     {
      "variable": "extinction_diameter_mm",
      "group": "cfi_data_summary",
-     "header_as_written": "Dext, hot ( mm ) / Dext,cool ( mm )",
-     "form": "single_value_per_test",
-     "column_is": "investigator analysis",
+     "header_as_written": "Dext, hot ( mm )",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "hot-flame extinction diameter only; the cool-flame column is listed under related_columns_not_mapped",
      "files_in_group": 1,
      "header_found_in_reopened_file": true
     },
@@ -3839,10 +3960,11 @@
      "variable": "burn_time_s",
      "group": "cfi_data_summary",
      "header_as_written": "HF Burn Time",
-     "form": "single_value_per_test",
-     "column_is": "investigator analysis",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit not written",
+     "note": "hot-flame burn time; unit not written",
      "files_in_group": 1,
      "header_found_in_reopened_file": true
     },
@@ -3850,8 +3972,9 @@
      "variable": "ignition_power_w",
      "group": "cfi_data_summary",
      "header_as_written": "Ignition Power ( W )",
-     "form": "single_value_per_test",
-     "column_is": "setting",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
      "note": "sheet 'Igniter'",
      "files_in_group": 1,
@@ -3861,35 +3984,79 @@
      "variable": "ignition_time_s",
      "group": "cfi_data_summary",
      "header_as_written": "Ignition Time ( ms )",
-     "form": "single_value_per_test",
-     "column_is": "setting",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "sheet 'Igniter'",
+     "note": "sheet 'Igniter'; unit ms",
      "files_in_group": 1,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "pressure_kpa",
-     "group": "chamber_readings",
-     "header_as_written": "FCU_MP_PT16(PSIA) ... FCU_MP_PT29(PSIA)",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "which transducer is the chamber is not stated in the file",
-     "files_in_group": 123,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "droplet_data",
      "header_as_written": "DropletDiameter_mm",
-     "not_mapped_because": "a diameter history; an extinction diameter would be a team reading of it"
+     "not_mapped_because": "a diameter history; an extinction diameter would be a team reading of it",
+     "decided_by": "survey (model output)",
+     "for_variable": "extinction_diameter_mm",
+     "column_is": "unclear"
     },
     {
      "group": "cfi_data_summary",
      "header_as_written": " khot ( mm^2/s ) / kcool ( mm^2/s )",
-     "not_mapped_because": "burning rate; not a variable used by the six needs"
+     "not_mapped_because": "burning rate; not a variable used by the six needs",
+     "decided_by": "survey (model output)"
+    },
+    {
+     "group": "cfi_data_summary",
+     "header_as_written": "Dext,cool ( mm )",
+     "for_variable": "extinction_diameter_mm",
+     "column_is": "value_per_test_in_a_results_file",
+     "not_mapped_because": "The droplet diameter at cool-flame extinction, a different event from the visible (hot) flame going out; the two columns hold different values in the same row.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_readings",
+     "header_as_written": "FCU_MP_PT16(PSIA) ... FCU_MP_PT29(PSIA)",
+     "for_variable": "pressure_kpa",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "Several pressure transducers; the file does not say which one is the ambient or chamber pressure.",
+     "decided_by": "team review of the survey note 2026-11-14",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "text files",
+     "names": "F<id>_MDCA_CFI_Testpoint_Settings.txt",
+     "files": "about 170"
+    },
+    {
+     "kind": "documents",
+     "names": "FLEX-<id>_TestSheet.txt and .rtf",
+     "files": "22 each"
+    },
+    {
+     "kind": "text files",
+     "names": "F<id>_Comments.txt",
+     "files": "about 190"
+    },
+    {
+     "kind": "text files",
+     "names": "F<id>A.txt, C.txt, D.txt",
+     "files": "about 215"
+    },
+    {
+     "kind": "documents",
+     "names": "Analyzed Data_FLEX-<id>_Summary.pdf",
+     "files": "about 30"
+    },
+    {
+     "kind": "documents",
+     "names": "CFI Science Final Report.pdf",
+     "files": "1"
     }
    ]
   },
@@ -4068,20 +4235,18 @@
      "header_check": "headers from the survey reading.json; not re-opened on 2026-11-14"
     }
    ],
-   "mappings": [
+   "mappings": [],
+   "related_columns_not_mapped": [
     {
-     "variable": "smoke_particle_size_um",
      "group": "summary",
      "header_as_written": "D (micon) / Average D (micron)",
-     "form": "per_session_or_day",
-     "column_is": "investigator analysis",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "one value per bag sample, sheet Logged Data Summary; aerosol (dust), not a combustion test",
-     "files_in_group": 1,
-     "header_found_in_reopened_file": null
+     "for_variable": "smoke_particle_size_um",
+     "column_is": "value_per_test_in_a_results_file",
+     "not_mapped_because": "Particle sizes of a dust aerosol, one per bag sample (the survey note); not smoke from a burn.",
+     "decided_by": "team review of the survey note 2026-11-14",
+     "was_mapped_before_2026_11_14_review": true
     }
-   ],
-   "related_not_mapped": []
+   ]
   },
   {
    "investigation_id": "PSI-68",
@@ -4255,57 +4420,51 @@
      "header_check": "headers from the survey reading.json; not re-opened on 2026-11-14"
     }
    ],
-   "mappings": [
-    {
-     "variable": "pressure_kpa",
-     "group": "chamber_readings",
-     "header_as_written": "FCU_MP_PT16(PSIA) ... FCU_MP_PT29(PSIA)",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "129-column variant only",
-     "files_in_group": 717,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "ignition_power_w",
-     "group": "chamber_readings",
-     "header_as_written": "IGNITER_WATTAGE(Watts) / TP_PARAMETER_IGNITER_WATTAGE(Watts)",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "62-column variant; the file opened has no data rows",
-     "files_in_group": 717,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "ignition_time_s",
-     "group": "chamber_readings",
-     "header_as_written": "TP_PARAMETER_IGNITER_ON_TIME(N/A)",
-     "form": "single_value_per_test",
-     "column_is": "setting",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit written N/A",
-     "files_in_group": 717,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "flow_cms",
-     "group": "chamber_readings",
-     "header_as_written": "FLOW_NOZZLE_1_SPEED(N/A) / FLOW_NOZZLE_2_SPEED(N/A)",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit written N/A; cm/s not confirmed",
-     "files_in_group": 717,
-     "header_found_in_reopened_file": true
-    }
-   ],
-   "related_not_mapped": [
+   "mappings": [],
+   "related_columns_not_mapped": [
     {
      "group": "chamber_readings",
      "header_as_written": "TP_PARAMETER_BURN_TO_COMPLETION_TIME(N/A)",
-     "not_mapped_because": "a test point setting, not a measured burn time"
+     "not_mapped_because": "a test point setting, not a burn time",
+     "decided_by": "survey (model output)",
+     "for_variable": "burn_time_s",
+     "column_is": "unclear"
+    },
+    {
+     "group": "chamber_readings",
+     "header_as_written": "FCU_MP_PT16(PSIA) ... FCU_MP_PT29(PSIA)",
+     "for_variable": "pressure_kpa",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "Several pressure transducers; the file does not say which one is the ambient or chamber pressure.",
+     "decided_by": "team review of the survey note 2026-11-14",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_readings",
+     "header_as_written": "IGNITER_WATTAGE(Watts) / TP_PARAMETER_IGNITER_WATTAGE(Watts)",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear",
+     "not_mapped_because": "The sampled file of this header variant has a header line and no data rows, so the column is empty in what was opened.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_readings",
+     "header_as_written": "TP_PARAMETER_IGNITER_ON_TIME(N/A)",
+     "for_variable": "ignition_time_s",
+     "column_is": "setting_or_set_point",
+     "not_mapped_because": "The sampled file of this header variant has a header line and no data rows, so the column is empty in what was opened.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_readings",
+     "header_as_written": "FLOW_NOZZLE_1_SPEED(N/A) / FLOW_NOZZLE_2_SPEED(N/A)",
+     "for_variable": "flow_cms",
+     "column_is": "unclear",
+     "not_mapped_because": "The sampled file of this header variant has a header line and no data rows, so the column is empty in what was opened. Unit written N/A.",
+     "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied)",
+     "was_mapped_before_2026_11_14_review": true
     }
    ]
   },
@@ -4601,10 +4760,11 @@
      "variable": "extinction_diameter_mm",
      "group": "test_sheet",
      "header_as_written": "Dext  (mm)",
-     "form": "single_value_per_test",
-     "column_is": "investigator analysis",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "key=value line, not a column",
+     "note": "a line of the per-test sheet",
      "files_in_group": 272,
      "header_found_in_reopened_file": true
     },
@@ -4612,9 +4772,11 @@
      "variable": "pressure_kpa",
      "group": "test_sheet",
      "header_as_written": "Pressure (atm)",
-     "form": "single_value_per_test",
-     "column_is": "reading",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "under the block 'AMBIENT ENVIRONMENT' of the per-test sheet; unit atm",
      "files_in_group": 272,
      "header_found_in_reopened_file": true
     },
@@ -4622,9 +4784,11 @@
      "variable": "o2_pct",
      "group": "test_sheet",
      "header_as_written": "O2 Mole Fraction",
-     "form": "single_value_per_test",
-     "column_is": "reading",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "under the block 'AMBIENT ENVIRONMENT' of the per-test sheet; a fraction",
      "files_in_group": 272,
      "header_found_in_reopened_file": true
     },
@@ -4632,9 +4796,11 @@
      "variable": "co2_pct",
      "group": "test_sheet",
      "header_as_written": "CO2 Mole Fraction",
-     "form": "single_value_per_test",
-     "column_is": "reading",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "under the block 'AMBIENT ENVIRONMENT' of the per-test sheet; a fraction",
      "files_in_group": 272,
      "header_found_in_reopened_file": true
     },
@@ -4642,9 +4808,11 @@
      "variable": "he_pct",
      "group": "test_sheet",
      "header_as_written": "He Mole Fraction",
-     "form": "single_value_per_test",
-     "column_is": "reading",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "under the block 'AMBIENT ENVIRONMENT' of the per-test sheet; a fraction",
      "files_in_group": 272,
      "header_found_in_reopened_file": true
     },
@@ -4652,10 +4820,11 @@
      "variable": "ignition_power_w",
      "group": "tp_log",
      "header_as_written": "Igniter Wattage",
-     "form": "single_value_per_test",
-     "column_is": "setting",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit not written",
+     "note": "unit not written; W is assumed from the word 'Wattage'",
      "files_in_group": 666,
      "header_found_in_reopened_file": true
     },
@@ -4663,45 +4832,91 @@
      "variable": "ignition_time_s",
      "group": "tp_log",
      "header_as_written": "Igniter On Time (milliseconds)",
-     "form": "single_value_per_test",
-     "column_is": "setting",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "unit ms in the key name",
      "files_in_group": 666,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "o2_final_pct",
-     "group": "mixture",
-     "header_as_written": "O2",
-     "form": "unclear",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "31 files; before or after the burn not known",
-     "files_in_group": 31,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_final_pct",
-     "group": "mixture",
-     "header_as_written": "CO2",
-     "form": "unclear",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "31 files; before or after the burn not known",
-     "files_in_group": 31,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "droplet_data",
      "header_as_written": "DropletDiameter_mm",
-     "not_mapped_because": "a diameter history; an extinction diameter or burn time would be a team reading of it"
+     "not_mapped_because": "a diameter history; an extinction diameter or burn time would be a team reading of it",
+     "decided_by": "survey (model output)",
+     "for_variable": "extinction_diameter_mm",
+     "column_is": "unclear"
     },
     {
      "group": "tp_log",
      "header_as_written": "Burn to Completion (milliseconds)",
-     "not_mapped_because": "a setting, not a measured burn time"
+     "not_mapped_because": "a setting, not a burn time",
+     "decided_by": "survey (model output)",
+     "for_variable": "burn_time_s",
+     "column_is": "unclear"
+    },
+    {
+     "group": "mixture",
+     "header_as_written": "O2",
+     "for_variable": "o2_final_pct",
+     "column_is": "unclear",
+     "not_mapped_because": "One row of a 31-file family; the file does not say whether it is before or after a burn, and it is not shown to belong to a test.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "mixture",
+     "header_as_written": "CO2",
+     "for_variable": "co2_final_pct",
+     "column_is": "unclear",
+     "not_mapped_because": "One row of a 31-file family; the file does not say whether it is before or after a burn, and it is not shown to belong to a test.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "text files",
+     "names": "Calibration_<id>_Chamber_Gases.txt",
+     "files": "8"
+    },
+    {
+     "kind": "text files",
+     "names": "<id>_Chamber_Contents.txt",
+     "files": "1"
+    },
+    {
+     "kind": "text files",
+     "names": "<id>_Comments.txt",
+     "files": "230"
+    },
+    {
+     "kind": "documents",
+     "names": "FLEX-<id>_Summary.pdf",
+     "files": "260"
+    },
+    {
+     "kind": "documents",
+     "names": "FLEX_<id>_Summary.pdf",
+     "files": "110"
+    },
+    {
+     "kind": "documents",
+     "names": "FLEX-<id>_ResultsSummary.pdf",
+     "files": "7"
+    },
+    {
+     "kind": "text files",
+     "names": "<id>_Testpoint_Settings.txt variants and LCTF#_MDCA_Testpoint_Settings.txt",
+     "files": "18"
+    },
+    {
+     "kind": "text files",
+     "names": "<id>_Readme.txt",
+     "files": "count not given"
     }
    ]
   },
@@ -4798,21 +5013,11 @@
      "variable": "o2_pct",
      "group": "sample_sensors",
      "header_as_written": "O2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row '%'",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "o2_final_pct",
-     "group": "sample_sensors",
-     "header_as_written": "O2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "the last reading of the series; unit row '%'",
+     "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 2,
      "header_found_in_reopened_file": true
     },
@@ -4820,32 +5025,11 @@
      "variable": "co2_pct",
      "group": "sample_sensors",
      "header_as_written": "CO2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row '%'",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_initial_pct",
-     "group": "sample_sensors",
-     "header_as_written": "CO2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "the first reading of the series",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_final_pct",
-     "group": "sample_sensors",
-     "header_as_written": "CO2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "the last reading of the series",
+     "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 2,
      "header_found_in_reopened_file": true
     },
@@ -4853,10 +5037,11 @@
      "variable": "pressure_kpa",
      "group": "sample_sensors",
      "header_as_written": "Ambient Pressure",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row 'PSIA'",
+     "note": "sheet 'Calibrated Data'; unit row 'PSIA'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 2,
      "header_found_in_reopened_file": true
     },
@@ -4864,24 +5049,73 @@
      "variable": "flow_cms",
      "group": "sample_sensors",
      "header_as_written": "Anemometer 1 / Anemometer 2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row 'cm/sec'",
+     "note": "unit row 'cm/sec'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 2,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "sample_sensors",
      "header_as_written": "Igniter Current / Igniter Voltage",
-     "not_mapped_because": "current and voltage, not a power or a duration"
+     "not_mapped_because": "Current and voltage series of the igniter, not a power or an on-time; a power or duration from them would be a team computation.",
+     "decided_by": "survey (model output)",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear"
     },
     {
      "group": "sample_sensors",
      "header_as_written": "Radiometer 1..4; Plume Temp 1..6; Sample Temp 1..6",
-     "not_mapped_because": "no standard variable"
+     "not_mapped_because": "no standard variable",
+     "decided_by": "survey (model output)"
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "O2",
+     "for_variable": "o2_final_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The first or last row of a whole time series. The file does not say that this row is the state before or after the burn; taking it would be a team computation on the series.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "CO2",
+     "for_variable": "co2_initial_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The first or last row of a whole time series. The file does not say that this row is the state before or after the burn; taking it would be a team computation on the series.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "CO2",
+     "for_variable": "co2_final_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The first or last row of a whole time series. The file does not say that this row is the state before or after the burn; taking it would be a team computation on the series.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "documents",
+     "names": "SAFFIRE Offgassing Testing Strategy.pdf",
+     "files": "1"
+    },
+    {
+     "kind": "documents",
+     "names": "Saffire-I Sample 1 and 2 TM graphs.docx",
+     "files": "2"
+    },
+    {
+     "kind": "documents",
+     "names": "SAFFIRE-I Operations.pdf",
+     "files": "1"
     }
    ]
   },
@@ -4962,21 +5196,11 @@
      "variable": "o2_pct",
      "group": "sample_sensors",
      "header_as_written": "O2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row '%'",
-     "files_in_group": 9,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "o2_final_pct",
-     "group": "sample_sensors",
-     "header_as_written": "O2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "the last reading of the series; unit row '%'",
+     "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 9,
      "header_found_in_reopened_file": true
     },
@@ -4984,32 +5208,11 @@
      "variable": "co2_pct",
      "group": "sample_sensors",
      "header_as_written": "CO2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row '%'",
-     "files_in_group": 9,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_initial_pct",
-     "group": "sample_sensors",
-     "header_as_written": "CO2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "the first reading of the series",
-     "files_in_group": 9,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_final_pct",
-     "group": "sample_sensors",
-     "header_as_written": "CO2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "the last reading of the series",
+     "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 9,
      "header_found_in_reopened_file": true
     },
@@ -5017,10 +5220,11 @@
      "variable": "pressure_kpa",
      "group": "sample_sensors",
      "header_as_written": "Ambient Pressure",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row 'PSIA'",
+     "note": "sheet 'Calibrated Data'; unit row 'PSIA'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 9,
      "header_found_in_reopened_file": true
     },
@@ -5028,24 +5232,78 @@
      "variable": "flow_cms",
      "group": "sample_sensors",
      "header_as_written": "Anemometer 1 / Anemometer 2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row 'cm/sec'",
+     "note": "unit row 'cm/sec'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 9,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "sample_sensors",
      "header_as_written": "Igniter Current / Igniter Voltage",
-     "not_mapped_because": "current and voltage, not a power or a duration"
+     "not_mapped_because": "Current and voltage series of the igniter, not a power or an on-time; a power or duration from them would be a team computation.",
+     "decided_by": "survey (model output)",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear"
     },
     {
      "group": "sample_sensors",
      "header_as_written": "Radiometer 1..4; Plume Temp 1..6; Sample Temp 1..6",
-     "not_mapped_because": "no standard variable"
+     "not_mapped_because": "no standard variable",
+     "decided_by": "survey (model output)"
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "O2",
+     "for_variable": "o2_final_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The first or last row of a whole time series. The file does not say that this row is the state before or after the burn; taking it would be a team computation on the series.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "CO2",
+     "for_variable": "co2_initial_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The first or last row of a whole time series. The file does not say that this row is the state before or after the burn; taking it would be a team computation on the series.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "CO2",
+     "for_variable": "co2_final_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The first or last row of a whole time series. The file does not say that this row is the state before or after the burn; taking it would be a team computation on the series.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "tables",
+     "names": "Saffire-II Telemetry Data.xlsx (the only telemetry workbook of PSI-99)",
+     "files": "1"
+    },
+    {
+     "kind": "documents",
+     "names": "SaffireIIStitchedCO2V7.pdf",
+     "files": "1"
+    },
+    {
+     "kind": "documents",
+     "names": "Saffire-II Sample <N> TM Graphs.docx",
+     "files": "9"
+    },
+    {
+     "kind": "documents",
+     "names": "SAFFIRE-II Operations.pdf",
+     "files": "1"
     }
    ]
   },
@@ -5169,21 +5427,11 @@
      "variable": "o2_pct",
      "group": "sample_sensors",
      "header_as_written": "O2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row '%'",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "o2_final_pct",
-     "group": "sample_sensors",
-     "header_as_written": "O2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "the last reading of the series; unit row '%'",
+     "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 2,
      "header_found_in_reopened_file": true
     },
@@ -5191,32 +5439,11 @@
      "variable": "co2_pct",
      "group": "sample_sensors",
      "header_as_written": "CO2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row '%'",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_initial_pct",
-     "group": "sample_sensors",
-     "header_as_written": "CO2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "the first reading of the series",
-     "files_in_group": 2,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_final_pct",
-     "group": "sample_sensors",
-     "header_as_written": "CO2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "the last reading of the series",
+     "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 2,
      "header_found_in_reopened_file": true
     },
@@ -5224,10 +5451,11 @@
      "variable": "pressure_kpa",
      "group": "sample_sensors",
      "header_as_written": "Ambient Pressure",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row 'PSIA'",
+     "note": "sheet 'Calibrated Data'; unit row 'PSIA'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 2,
      "header_found_in_reopened_file": true
     },
@@ -5235,24 +5463,73 @@
      "variable": "flow_cms",
      "group": "sample_sensors",
      "header_as_written": "Anemometer 1 / Anemometer 2",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "time_series_per_file",
+     "column_is": "sensor_reading_series",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit row 'cm/sec'",
+     "note": "unit row 'cm/sec'; one file per sample (the survey links a sample to a test)",
      "files_in_group": 2,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "sample_sensors",
      "header_as_written": "Igniter Current / Igniter Voltage",
-     "not_mapped_because": "current and voltage, not a power or a duration"
+     "not_mapped_because": "Current and voltage series of the igniter, not a power or an on-time; a power or duration from them would be a team computation.",
+     "decided_by": "survey (model output)",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear"
     },
     {
      "group": "sample_sensors",
      "header_as_written": "Radiometer 1..4; Plume Temp 1..6; Sample Temp 1..6",
-     "not_mapped_because": "no standard variable"
+     "not_mapped_because": "no standard variable",
+     "decided_by": "survey (model output)"
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "O2",
+     "for_variable": "o2_final_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The first or last row of a whole time series. The file does not say that this row is the state before or after the burn; taking it would be a team computation on the series.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "CO2",
+     "for_variable": "co2_initial_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The first or last row of a whole time series. The file does not say that this row is the state before or after the burn; taking it would be a team computation on the series.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "CO2",
+     "for_variable": "co2_final_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The first or last row of a whole time series. The file does not say that this row is the state before or after the burn; taking it would be a team computation on the series.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "tables",
+     "names": "Saffire-III 1 Hz Telemetry Data.xlsx and Raw telemetry file.csv (downloaded by the survey but not recorded as a sample group)",
+     "files": "2"
+    },
+    {
+     "kind": "documents",
+     "names": "SAFFIRE Offgassing Testing Strategy.pdf",
+     "files": "1"
+    },
+    {
+     "kind": "documents",
+     "names": "SAFFIRE-III Operations.pdf",
+     "files": "1"
     }
    ]
   },
@@ -5417,36 +5694,90 @@
     {
      "variable": "smoke_particle_size_um",
      "group": "results",
-     "header_as_written": "M1/M0 (micro-m)--AMD / Diameter of Average mass (micro-m) / Hatch Choate Dg",
-     "form": "single_value_per_test",
-     "column_is": "investigator analysis",
+     "header_as_written": "M1/M0 (micro-m)--AMD",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "sheets 'SAME R Results' and 'Reduced data sheet'",
+     "note": "sheets 'SAME R Results' and 'Reduced data sheet'; one of three different size statistics in this file, each under its own header; they give different numbers for the same row and are not one variable; the checker found zeros in 23 to 24 rows of each of the three columns on sheet 'Reduced data sheet'; written 'M1/M0 (micro-m)--CMD' on the sheets DBP, Pyrell, Lampwick, Silicone, Teflon and Kapton",
      "files_in_group": 1,
      "header_found_in_reopened_file": true
     },
     {
-     "variable": "pressure_kpa",
-     "group": "hkp_csv",
-     "header_as_written": "SampleSidePressure[AT20](PSIA)",
-     "form": "time_series_per_test",
-     "column_is": "reading",
+     "variable": "smoke_particle_size_um",
+     "group": "results",
+     "header_as_written": "Diameter of Average mass (micro-m)",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "which pressure is the ambient is not stated in the file",
-     "files_in_group": 44,
+     "note": "sheets 'SAME R Results' and 'Reduced data sheet'; one of three different size statistics in this file, each under its own header; they give different numbers for the same row and are not one variable; the checker found zeros in 23 to 24 rows of each of the three columns on sheet 'Reduced data sheet'",
+     "files_in_group": 1,
+     "header_found_in_reopened_file": true
+    },
+    {
+     "variable": "smoke_particle_size_um",
+     "group": "results",
+     "header_as_written": "Hatch Choate Dg",
+     "header_kind": "column header",
+     "form": "one_value_per_row_or_key",
+     "column_is": "value_per_test_in_a_results_file",
+     "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "sheets 'SAME R Results' and 'Reduced data sheet'; one of three different size statistics in this file, each under its own header; they give different numbers for the same row and are not one variable; the checker found zeros in 23 to 24 rows of each of the three columns on sheet 'Reduced data sheet'",
+     "files_in_group": 1,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "results",
      "header_as_written": "Mass Loss (mg)",
-     "not_mapped_because": "a total mass, not a rate in mg/min"
+     "not_mapped_because": "a total mass, not a rate in mg/min",
+     "decided_by": "survey (model output)",
+     "for_variable": "mass_loss_rate_mg_min",
+     "column_is": "unclear"
     },
     {
      "group": "hkp_csv",
      "header_as_written": "GasPlumeTemperature(DegC)",
-     "not_mapped_because": "no standard variable"
+     "not_mapped_because": "no standard variable",
+     "decided_by": "survey (model output)"
+    },
+    {
+     "group": "hkp_csv",
+     "header_as_written": "SampleSidePressure[AT20](PSIA)",
+     "for_variable": "pressure_kpa",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The sample-side pressure, one location among several pressures in the file (MFC, GN2 main, vacuum, drive side, sample side); the variable is the ambient pressure.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "tables",
+     "names": "HKPData_gmt#_#.csv, files other than the one opened",
+     "files": "43"
+    },
+    {
+     "kind": "tables",
+     "names": "Analyzed Data_*_run#.xls per-run workbooks for kapton (16), pyrell (11), teflon (11) and silicone (about 12); only lampwick opened",
+     "files": "about 50"
+    },
+    {
+     "kind": "documents",
+     "names": "SAME_Wire_Report.pdf",
+     "files": "1"
+    },
+    {
+     "kind": "documents",
+     "names": "Sample descriptions tables.docx",
+     "files": "1"
+    },
+    {
+     "kind": "tables",
+     "names": "SAME-R_ThermalPrecipitatorUsage.xlsx",
+     "files": "1"
     }
    ]
   },
@@ -5583,40 +5914,58 @@
      "header_check": "headers from the survey reading.json; not re-opened on 2026-11-14"
     }
    ],
-   "mappings": [
-    {
-     "variable": "pressure_kpa",
-     "group": "hkp_workbooks",
-     "header_as_written": "SampleSidePressure[AT20](PSIA)",
-     "form": "time_series_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "97-column layout only; which pressure is ambient is not stated",
-     "files_in_group": 42,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "burn_time_s",
-     "group": "hkp_workbooks",
-     "header_as_written": "ElapsedTestTime(Secs)",
-     "form": "time_series_per_test",
-     "column_is": "elapsed test time",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "a test clock, not a burn time",
-     "files_in_group": 42,
-     "header_found_in_reopened_file": true
-    }
-   ],
-   "related_not_mapped": [
+   "mappings": [],
+   "related_columns_not_mapped": [
     {
      "group": "hkp_workbooks",
      "header_as_written": "SampleResistance(Ohms)",
-     "not_mapped_because": "a resistance, not the heating ratio"
+     "not_mapped_because": "a resistance, not the heating ratio",
+     "decided_by": "survey (model output)",
+     "for_variable": "heating_ratio",
+     "column_is": "unclear"
     },
     {
      "group": "hkp_workbooks",
      "header_as_written": "PTrakMeasurement(PtPerCC); DustTrakAMeasurement(MgPerM3)",
-     "not_mapped_because": "concentrations, not a particle size"
+     "not_mapped_because": "concentrations, not a particle size",
+     "decided_by": "survey (model output)",
+     "for_variable": "smoke_particle_size_um",
+     "column_is": "unclear"
+    },
+    {
+     "group": "hkp_workbooks",
+     "header_as_written": "SampleSidePressure[AT20](PSIA)",
+     "for_variable": "pressure_kpa",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "The sample-side pressure, one location among several pressures in the file; the variable is the ambient pressure. The sheet of the sampled workbook is named 'Copy of GMT255hkp'.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "hkp_workbooks",
+     "header_as_written": "ElapsedTestTime(Secs)",
+     "for_variable": "burn_time_s",
+     "column_is": "clock",
+     "not_mapped_because": "A housekeeping test clock, not a burn time.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "tables",
+     "names": "GMT#<material>#.xls, GMT# ... hkp.xls and Run # GMT# testlog.xls/.xlsx",
+     "files": "about 60"
+    },
+    {
+     "kind": "documents",
+     "names": "SAME_IgnitorWireCharacterizationReport.pdf",
+     "files": "1"
+    },
+    {
+     "kind": "documents",
+     "names": "SAME_Final Science Report.pdf",
+     "files": "1"
     }
    ]
   },
@@ -5743,7 +6092,7 @@
     }
    ],
    "mappings": [],
-   "related_not_mapped": []
+   "related_columns_not_mapped": []
   },
   {
    "investigation_id": "PSI-107",
@@ -5890,40 +6239,69 @@
      "variable": "pressure_kpa",
      "group": "flight_test_data",
      "header_as_written": "Pressure (Pa)",
-     "form": "single_value_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "one_value_per_row_or_key",
+     "column_is": "unclear",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit Pa; header read from reading.json, the xls was not re-opened",
+     "note": "unit Pa in the next row; the sheet does not say whether the value is a reading or a nominal set point",
      "files_in_group": 1,
-     "header_found_in_reopened_file": null
+     "header_found_in_reopened_file": true
     },
     {
      "variable": "flow_cms",
      "group": "flight_test_data",
      "header_as_written": "Air Rate (cm/s)",
-     "form": "single_value_per_test",
-     "column_is": "reading",
+     "header_kind": "column header with the unit in the next row",
+     "form": "one_value_per_row_or_key",
+     "column_is": "unclear",
      "mapping_by": "AI reading of the header, not confirmed by a document",
+     "note": "unit cm/s in the next row; it may be computed from the 'Air' display setting, and the sheet does not say how",
      "files_in_group": 1,
-     "header_found_in_reopened_file": null
-    },
-    {
-     "variable": "burn_time_s",
-     "group": "flight_test_data",
-     "header_as_written": "GMT ignition / GMT  Flame Off ",
-     "form": "single_value_per_test",
-     "column_is": "event timestamps",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "a duration would be a team computation",
-     "files_in_group": 1,
-     "header_found_in_reopened_file": null
+     "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "flight_test_data",
      "header_as_written": "Smoke Height",
-     "not_mapped_because": "no standard variable"
+     "not_mapped_because": "no standard variable",
+     "decided_by": "survey (model output)"
+    },
+    {
+     "group": "flight_test_data",
+     "header_as_written": "GMT ignition / GMT  Flame Off ",
+     "for_variable": "burn_time_s",
+     "column_is": "event_timestamp",
+     "not_mapped_because": "Two event timestamps ('GMT ignition', 'GMT  Flame Off ', the second with a trailing space); a duration from them would be a team computation.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "tables",
+     "names": "SPICE Flow settings_w chart.xls, SPICE_FuelFlow_MFC_settings.xlsx, SPICE_Airflow_Test_VelocityData.xlsx, VelocityComparison.xlsx, Duct Velocity Profiles.xls, MASS_FLOW_CALIBRATION.xls",
+     "files": "6"
+    },
+    {
+     "kind": "tables",
+     "names": "SPICE Flow Duct Cal ... .xls",
+     "files": "18"
+    },
+    {
+     "kind": "tables",
+     "names": "GMT052nikon_propy.xls",
+     "files": "1"
+    },
+    {
+     "kind": "text files",
+     "names": "<id>_SPICE_num.txt, the file not opened",
+     "files": "1 of 2"
+    },
+    {
+     "kind": "documents",
+     "names": "SPICE_ScienceVerificationReport.pdf, SPICE_Phase III Flight Safety Data Package.pdf, SPICE_FinalReport.pdf",
+     "files": "3"
     }
    ]
   },
@@ -6235,72 +6613,93 @@
    ],
    "mappings": [
     {
-     "variable": "test_end",
-     "group": "tp_txt",
-     "header_as_written": "Extinction detected",
-     "form": "single_value_per_test",
-     "column_is": "event timestamp",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 305,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "co2_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_CO2 (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 1,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "he_pct",
-     "group": "chamber_calculator",
-     "header_as_written": "_He (block Finish Mixture (Percent))",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 1,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "ignition_power_w",
-     "group": "chamber_calculator",
-     "header_as_written": "Igniter Wattage",
-     "form": "single_value_per_test",
-     "column_is": "setting",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 1,
-     "header_found_in_reopened_file": true
-    },
-    {
      "variable": "ignition_time_s",
      "group": "as_run",
      "header_as_written": "igniterIgnitionDurationMs",
-     "form": "single_value_per_test",
-     "column_is": "setting",
+     "header_kind": "key in a text file",
+     "form": "one_value_per_row_or_key",
+     "column_is": "setting_or_set_point",
      "mapping_by": "AI reading of the header, not confirmed by a document",
-     "note": "unit ms",
+     "note": "unit ms in the key name",
      "files_in_group": 339,
-     "header_found_in_reopened_file": true
-    },
-    {
-     "variable": "hot_ignition",
-     "group": "chamber_calculator",
-     "header_as_written": "Ignite",
-     "form": "single_value_per_test",
-     "column_is": "reading",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "files_in_group": 1,
      "header_found_in_reopened_file": true
     }
    ],
-   "related_not_mapped": [
+   "related_columns_not_mapped": [
     {
      "group": "as_run",
      "header_as_written": "fuelTestFlow1Slpm",
-     "not_mapped_because": "a volume flow setting in Slpm, not a velocity"
+     "not_mapped_because": "a volume flow setting in Slpm, not a velocity",
+     "decided_by": "survey (model output)",
+     "for_variable": "flow_cms",
+     "column_is": "unclear"
+    },
+    {
+     "group": "tp_txt",
+     "header_as_written": "Extinction detected",
+     "for_variable": "test_end",
+     "column_is": "event_timestamp",
+     "not_mapped_because": "A timestamp of the step 'Extinction detected' ('***' where the step did not occur), written as a key in a text file. It says at most whether extinction was detected, not how the test ended.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_CO2 (block Finish Mixture (Percent))",
+     "for_variable": "co2_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "_He (block Finish Mixture (Percent))",
+     "for_variable": "he_pct",
+     "column_is": "calculated_by_the_workbook",
+     "not_mapped_because": "The block 'Finish Mixture (Percent)' is the mixture at the end of the event row, calculated by the workbook (its cells hold formulas; the Notes sheet says the calculator assumes that all fuel or oxygen of the test point was consumed when Ignite is Yes). The variable is the atmosphere at the start of the test, and the sheet has no start-percent block. The values are fractions under a heading that says Percent, and a row can cover several tests.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Igniter Wattage",
+     "for_variable": "ignition_power_w",
+     "column_is": "unclear",
+     "not_mapped_because": "The column has no value in the data rows of the sampled workbook.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    },
+    {
+     "group": "chamber_calculator",
+     "header_as_written": "Ignite",
+     "for_variable": "hot_ignition",
+     "column_is": "operator_entry",
+     "not_mapped_because": "A Yes/No pick list that the Notes sheet calls the decision during operations; it sets the workbook's burn fraction. No file read says that Yes means that a hot flame was seen.",
+     "decided_by": "checker re-opening of 2026-11-14 (model output)",
+     "was_mapped_before_2026_11_14_review": true
+    }
+   ],
+   "unopened_groups_named_by_checker": [
+    {
+     "kind": "documents",
+     "names": "<id> test parameter notes.pdf, test sheets.pdf, flow traces etc.pdf, daily test point log.pdf",
+     "files": "21 to 23 each"
+    },
+    {
+     "kind": "text files",
+     "names": "as run<id>.txt in 13 letter families, only 'D' opened",
+     "files": "count not given"
+    },
+    {
+     "kind": "text files",
+     "names": "<id>_Comments.txt, files other than the one opened",
+     "files": "317 in the group"
+    },
+    {
+     "kind": "text files",
+     "names": "<id>ImageComments.txt",
+     "files": "count not given"
     }
    ]
   },
@@ -6309,35 +6708,35 @@
    "survey": "not surveyed: no experimental table",
    "groups": [],
    "mappings": [],
-   "related_not_mapped": []
+   "related_columns_not_mapped": []
   },
   {
    "investigation_id": "PSI-62",
    "survey": "not surveyed: no experimental table",
    "groups": [],
    "mappings": [],
-   "related_not_mapped": []
+   "related_columns_not_mapped": []
   },
   {
    "investigation_id": "PSI-115",
    "survey": "not surveyed: no experimental table",
    "groups": [],
    "mappings": [],
-   "related_not_mapped": []
+   "related_columns_not_mapped": []
   },
   {
    "investigation_id": "PSI-117",
    "survey": "not surveyed: no experimental table",
    "groups": [],
    "mappings": [],
-   "related_not_mapped": []
+   "related_columns_not_mapped": []
   },
   {
    "investigation_id": "PSI-142",
    "survey": "not surveyed: the table is an index of figures in publications",
    "groups": [],
    "mappings": [],
-   "related_not_mapped": []
+   "related_columns_not_mapped": []
   }
  ]
 }

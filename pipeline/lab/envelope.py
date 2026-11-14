@@ -157,19 +157,15 @@ def gravity_origin(sources):
     return out
 
 
-def main():
+def selection():
+    """The test selection of the envelope: tests.csv rows by test id, the counted tests per need
+    (need_tests.csv rule of lab_numbers.json) and the ambient-oxygen rule (column, value).
+    Shared with plot_envelope.py, which draws exactly these tests."""
     S = spec()
     E = S["envelope"]
     inp = S["inputs"]
-    words = S["forbidden_words"]
-    sentences = E["sentences"]
     tests = {t["test_id"]: t for t in read_csv(inp["tests"])}
     links = read_csv(inp["need_tests"])
-    sn = {(r["scenario_id"], r["need_id"]): r for r in read_csv(inp["scenario_needs"])}
-    scenarios = load_json(ROOT / inp["scenarios"])["scenarios"]
-    scen_exact = load_json(ROOT / inp["scenarios"], exact=True)["scenarios"]
-    needs = load_json(ROOT / inp["needs"])["needs"]
-    g_origin = gravity_origin(load_json(ROOT / inp["sources"]))
     link_vals = sorted({r[E["choices"]["counted_tests"]["column"]] for r in links})
     if E["choices"]["counted_tests"]["equals"] not in link_vals:
         fail(f"objective_link values {link_vals} do not include the counted value")
@@ -180,6 +176,33 @@ def main():
                 fail(f"{r['test_id']} of need_tests.csv not in tests.csv")
             counted.setdefault(r["need_id"], set()).add(r["test_id"])
     basis_col, basis_val = E["choices"]["ambient_oxygen"]["column"], E["choices"]["ambient_oxygen"]["equals"]
+    return tests, counted, basis_col, basis_val
+
+
+def ambient_tests(tests, ids, basis_col, basis_val):
+    """Counted tests with oxygen recorded on the ambient basis, in the order of ids."""
+    return [tests[i] for i in ids if tests[i]["o2_pct"] != "" and tests[i][basis_col] == basis_val]
+
+
+def joint_tests(need_id):
+    """Counted ambient-oxygen tests of a need with pressure recorded too: the tests of the hull."""
+    tests, counted, basis_col, basis_val = selection()
+    amb = ambient_tests(tests, sorted(counted.get(need_id, set())), basis_col, basis_val)
+    return [t for t in amb if t["pressure_kpa"] != ""]
+
+
+def main():
+    S = spec()
+    E = S["envelope"]
+    inp = S["inputs"]
+    words = S["forbidden_words"]
+    sentences = E["sentences"]
+    tests, counted, basis_col, basis_val = selection()
+    sn = {(r["scenario_id"], r["need_id"]): r for r in read_csv(inp["scenario_needs"])}
+    scenarios = load_json(ROOT / inp["scenarios"])["scenarios"]
+    scen_exact = load_json(ROOT / inp["scenarios"], exact=True)["scenarios"]
+    needs = load_json(ROOT / inp["needs"])["needs"]
+    g_origin = gravity_origin(load_json(ROOT / inp["sources"]))
     prefix = E["choices"]["flagged_values"]["flag_prefix_by_axis"]
     sources = load_json(ROOT / inp["sources"])
     out_dir = ROOT / S["output_dir"]
@@ -194,7 +217,7 @@ def main():
         blocks = []
         for need in needs:
             ids = sorted(counted.get(need["id"], set()))
-            amb = [tests[i] for i in ids if tests[i]["o2_pct"] != "" and tests[i][basis_col] == basis_val]
+            amb = ambient_tests(tests, ids, basis_col, basis_val)
             b = {"need_id": need["id"], "need": need["name"], "counted_tests": len(ids),
                  "counted_tests_with_ambient_oxygen": len(amb),
                  "excluded_o2_not_recorded": sum(1 for i in ids if tests[i]["o2_pct"] == ""),
