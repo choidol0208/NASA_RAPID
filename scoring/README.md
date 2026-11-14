@@ -22,7 +22,7 @@ From the environment and conditions a user gives, the filter finds the most simi
 | `scoring/derive_data_weights.py` | NASA data stream: relative importance of each condition in the FLEX measurements (LMG, bootstrap), with theory checks; writes `scoring/data_weights.json` |
 | `scoring/literature_evidence.json`, `scoring/derive_literature_weights.py` | Literature stream (used in 1.4.0): evidence classes per question type with cited sources, turned into the 51 AHP judgements (`scoring/literature_judgements.csv`) and weights (`scoring/literature_weights.json`) |
 | `scoring/derive_expert_weights.py`, `scoring/expert_form.csv` | Expert stream: the AHP form for team members with combustion training, and group aggregation; writes `scoring/expert_weights.json` |
-| `scoring/flame_temperature.py` | Atmosphere flame temperature (oxygen consumption, NIST-JANAF enthalpies in `scoring/reference/janaf/`) and its check on FLEX |
+| `scoring/flame_temperature.py` | Atmosphere flame temperature (oxygen consumption, NIST-JANAF enthalpies) and its check on FLEX. The JANAF tables (NIST SRD 13, copyright U.S. Secretary of Commerce) are not in the repository; the script reads a local download |
 | `scoring/BUILDUP.md` | The build-up of the weighting model: what was added, the concepts and techniques, and the papers and textbooks behind them |
 | `validation/scenarios.json` | 38 validation scenarios with expected results |
 | `validation/run_validation.py` | Runs the scenarios, the weight stability check and the sensitivity checks; writes `validation/report.md` |

@@ -45,6 +45,13 @@ The human lead asked at 19:40 to build up the weighting model. The aims: less de
    - review by combustion researchers is the next step;
    - the form for team members (`scoring/expert_form.csv`) has not been filled in.
 
+3. **Licence fix (added 21:33).** `scoring/reference/janaf/` (five NIST-JANAF tables) reached `main` with your 20:16 integration.
+   - NIST-JANAF is NIST Standard Reference Database 13, copyrighted by the U.S. Secretary of Commerce under the Standard Reference Data Act, so it is not public-domain material. I removed the files on `catalog-scoring` and added `scoring/reference/janaf/` to `.gitignore`.
+   - Your next merge deletes them from `main`. Earlier commits keep them; I did not rewrite history.
+   - My `compliance/SOURCES.md` row states this.
+   - The flame-temperature check (no score uses it) is to be redone with NASA's own coefficients (NASA/TP-2002-211556).
+   - Please do not list JANAF as redistributed material in References.
+
 ## Why
 
 - The method text and the numbers in `docs/submission/` must match the live scorer.

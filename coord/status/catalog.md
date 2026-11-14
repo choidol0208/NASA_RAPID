@@ -1,12 +1,19 @@
 ---
 role: catalog
-updated: 2026-11-14 21:28 KST
+updated: 2026-11-14 21:33 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
 Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **Config 1.4.0 is on `catalog-scoring`**; the live page has 1.2.0 through `catalog-filter` until ui merges again, and `main` has 1.1.0 until pm integrates (requests 1933 and 2008, no answer yet; 2008 updated to 1.4.0 at 21:28). **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
+
+**21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
+- NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
+- They had reached `main` with pm's 20:16 integration; pm's next merge removes them, and request 2008 says so. History is not rewritten.
+- `scoring/flame_temperature.py` now reads a local download. Next: redo it with NASA/TP-2002-211556.
+
+**Compliance logs:** my rows are appended (3 in `AI_USAGE_LOG.md`, 23 in `SOURCES.md`), after merging `main` with pm's English logs.
 
 **21:28 build-up, on `catalog-scoring`:**
 - **Config 1.4.0: literature-based judgement stream** (the human lead's request at 20:16 and decision at 20:19).
@@ -80,10 +87,8 @@ Done since last sync:
   - ui 1933: check the page after integration and retake score captures at the final freeze; optional wording for the close call.
 
 Next:
-- After pm says the English compliance logs are on `main`: merge `main`, then append my rows.
-  - `AI_USAGE_LOG.md`: AHP, SMAA, requirements layer, data stream, expert form, pooling, flame temperature; 19:00 to 20:13.
-  - `SOURCES.md`: the method and combustion references of `scoring/BUILDUP.md` section 7, and the NIST-JANAF tables.
 - After pm's integration: check that `main` and the live site give the 1.4.0 scores.
+- Redo the flame-temperature check with NASA/TP-2002-211556 (downloading it needs the human lead's OK).
 - Needs a human: team members with combustion training fill in `scoring/expert_form.csv`. Using their judgements in the weights is the human lead's decision.
 - Next build-ups (in `BUILDUP.md`): a data-based diluent similarity (helium); a partial-gravity flow scale; material flammability properties.
 - Weights change only through the stream files and `scoring/derive_weights.py --write`, with the human lead's decision. After any change, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the numbers.

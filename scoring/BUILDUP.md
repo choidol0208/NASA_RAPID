@@ -36,7 +36,7 @@ top 1 to 3 investigations + a compliance line per requirement (B1)
 | Reading the question | Keyword rules (no model at run time) | The same rules, now shown as explicit requirements with their source | — |
 | Weights, suppression | AI session's AHP judgements | Literature-based judgements (B3a), pooled with NASA FLEX measurements (B2, B4); config 1.4.0 | Team members' judgements (B3b) |
 | Weights, prevention and detection | AI session's AHP judgements | Literature-based judgements (B3a); no NASA table records a response (spread rate, smoke size) to learn from; config 1.4.0 | Team members' judgements (B3b). The evidence classes were assigned by an AI session from the cited findings |
-| Similarity rules | AI proposal, checked against a textbook (`MODEL_BASIS.md`) | Unchanged. Checked against an atmosphere flame temperature on NASA data (B6): it supports separate O2 and diluent dimensions and shows that heat capacity alone is incomplete for helium | A data-based diluent similarity |
+| Similarity rules | AI proposal, checked against a textbook (`MODEL_BASIS.md`) | Unchanged. Checked against an atmosphere flame temperature on NASA data (B6): it supports separate O2 and diluent dimensions and shows that heat capacity alone is incomplete for helium | A data-based diluent similarity. Rerun B6 with NASA Glenn coefficients (licence) |
 
 ---
 
@@ -238,7 +238,12 @@ All are in `python3 validation/sensitivity.py` and `validation/report.md`.
 **What it does.** `scoring/flame_temperature.py` computes the stoichiometric adiabatic flame temperature of an atmosphere for a generic organic fuel:
 - **Heat:** about 13.1 kJ is released per gram of O2 consumed, for most organic fuels [C10].
 - **Products:** a generic CH2 fuel unit, so each mol of O2 consumed gives 2/3 mol CO2 and 2/3 mol H2O.
-- **Temperature:** the NIST-JANAF enthalpies [C12] of the products (in `scoring/reference/janaf/`, public US government data) are raised from 298 K until they absorb that heat.
+- **Temperature:** the NIST-JANAF enthalpies [C12] of the products are raised from 298 K until they absorb that heat.
+- **Licence of the input:**
+  - NIST-JANAF is NIST Standard Reference Database 13, copyrighted by the U.S. Secretary of Commerce under the Standard Reference Data Act. It is therefore not public-domain material.
+  - The five tables were in the repository from 20:08 to 21:32 and were removed when this was noticed. They stay in earlier commits, since pushed history is not rewritten.
+  - The script now reads tables that a user downloads locally (ignored by git).
+  - Next step: rerun with the NASA Glenn coefficients [C12b], a NASA publication.
 - **Neglected:** dissociation, so values above about 2200 K are upper bounds, and radiation.
 
 | Atmosphere | Flame temperature (K) |
@@ -321,7 +326,8 @@ Each entry gives where to read it; **open** = free full text.
   - The rule goes back to Thornton, W. M. (1917). *Philosophical Magazine* 33(194), 196–203. doi:10.1080/14786440208635627
 - [C11] Takahashi, F., Linteris, G. T., Katta, V. R. (2008). Extinguishment of methane diffusion flames by carbon dioxide in coflow air and oxygen-enriched microgravity environments. *Combustion and Flame* 155(1–2), 37–53. doi:10.1016/j.combustflame.2008.03.005. Maximum flame temperature at extinction about 1600 K†. Abstract: https://www.nist.gov/node/601146
   - Background: Macek, A. (1976). *Flammability Limits: Thermodynamics and Kinetics*. NBSIR 76-1076. doi:10.6028/NBS.IR.76-1076. **Open:** https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nbsir76-1076.pdf
-- [C12] Chase, M. W. Jr. (1998). NIST-JANAF Thermochemical Tables, 4th ed. *Journal of Physical and Chemical Reference Data*, Monograph 9. NIST SRD 13, doi:10.18434/T42S31. **Open:** https://janaf.nist.gov/tables/N-023.html and tables O-029, C-095, H-064, He-001; copies in `scoring/reference/janaf/`.
+- [C12] Chase, M. W. Jr. (1998). NIST-JANAF Thermochemical Tables, 4th ed. *Journal of Physical and Chemical Reference Data*, Monograph 9. NIST SRD 13, doi:10.18434/T42S31. **Open:** https://janaf.nist.gov/tables/N-023.html and tables O-029, C-095, H-064, He-001. NIST SRD, copyright U.S. Secretary of Commerce; not redistributed here.
+- [C12b] McBride, B. J., Zehe, M. J., Gordon, S. (2002). *NASA Glenn Coefficients for Calculating Thermodynamic Properties of Individual Species*. NASA/TP-2002-211556. **Open:** https://ntrs.nasa.gov/citations/20020085330
 - [C13] Spacecraft smoke:
   - Urban, D. L. et al. (2008). Spacecraft fire detection: smoke properties and transport in low-gravity. AIAA Aerospace Sciences Meeting. **Open:** https://ntrs.nasa.gov/citations/20080012612
   - Meyer, M. E., Urban, D. L., Mulholland, G. W., Bryg, V., Yuan, Z.-G., Ruff, G. A., Cleary, T., Yang, J. (2018). Evaluation of spacecraft smoke detector performance in the low-gravity environment. *Fire Safety Journal* 98, 74–81. doi:10.1016/j.firesaf.2018.04.004
