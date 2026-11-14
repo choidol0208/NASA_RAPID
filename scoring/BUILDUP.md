@@ -38,6 +38,64 @@ top 1 to 3 investigations + a compliance line per requirement (B1)
 | Weights, prevention and detection | AI session's AHP judgements | Literature-based judgements (B3a); no NASA table records a response (spread rate, smoke size) to learn from; config 1.4.0 | Team members' judgements (B3b). The evidence classes were assigned by an AI session from the cited findings |
 | Similarity rules | AI proposal, checked against a textbook (`MODEL_BASIS.md`) | Unchanged. Checked against an atmosphere flame temperature on NASA data (B6): it supports separate O2 and diluent dimensions and shows that heat capacity alone is incomplete for helium | A data-based diluent similarity. Rerun B6 with NASA Glenn coefficients (licence) |
 
+### Before and after, in numbers
+
+Three configurations, run through the same code and the same checks; only the weights differ (2026-11-14 21:36):
+- **1.1.0:** direct point allocation by an AI session, until 19:26;
+- **1.2.0:** AHP over the AI session's judgements, just before the build-up;
+- **1.4.0:** now.
+
+**Weights**
+
+| Question type | Dimension | 1.1.0 | 1.2.0 | 1.4.0 |
+|---|---|---|---|---|
+| prevention | o2 / flow / fuel | 0.25 / 0.20 / 0.25 | 0.285 / 0.166 / 0.267 | 0.251 / 0.250 / 0.250 |
+| | pressure / geometry / role | 0.10 / 0.10 / 0.10 | 0.090 / 0.111 / 0.081 | 0.083 / 0.083 / 0.083 |
+| detection | role / fuel / flow | 0.40 / 0.30 / 0.10 | 0.458 / 0.221 / 0.136 | 0.334 / 0.335 / 0.151 |
+| | o2 / pressure / geometry | 0.10 / 0.05 / 0.05 | 0.085 / 0.049 / 0.051 | 0.060 / 0.060 / 0.060 |
+| suppression | role / o2 / fuel | 0.30 / 0.15 / 0.20 | 0.286 / 0.162 / 0.162 | 0.235 / 0.256 / 0.253 |
+| | diluent / flow / pressure / geometry | 0.15 / 0.10 / 0.05 / 0.05 | 0.162 / 0.089 / 0.080 / 0.059 | 0.094 / 0.086 / 0.039 / 0.037 |
+
+**What each weight rests on**
+
+| | 1.1.0 | 1.2.0 | 1.4.0 |
+|---|---|---|---|
+| Unit of judgement | 19 weights set directly, one rationale sentence per question type | 51 pairwise judgements by an AI session | 19 evidence classes; the 51 judgements follow by rule |
+| Cited basis | none per weight | 35 of 51 judgements cite a NASA record or the textbook; 16 rest on the team's reasoning | 15 of 19 classes cite a paper, textbook or report; 2 cite a NASA record only; 2 have no source, which is why they are class 3. 12 of 19 include a finding checked only in an abstract |
+| NASA measurements in the weights | none | none | the 0.642 of suppression weight on o2, pressure, diluent and fuel is pooled with 274 FLEX tests |
+| Consistency check | none | CR 0.012, 0.014, 0.006 | CR 0, 0.009, 0.008 |
+
+**Results and checks**
+
+| Check | 1.1.0 | 1.2.0 | 1.4.0 |
+|---|---|---|---|
+| Validation scenarios passed | 38 of 38 | 38 of 38 | 38 of 38 |
+| Scenarios whose top 3 differ from 1.2.0 | 3 | — | 2 |
+| One weight ×0.5 or ×1.5: same top 3 | 146 of 152 | 146 of 152 | 146 of 152 |
+| One weight ×0.5 or ×1.5: rank 1 changes | 0 | 1 | 1 (`lunar habitat`, O2 halved) |
+| Order of importance only (rank-order centroid): same top 3 | 11 of 12 | 11 of 12 | 11 of 12 |
+| Purpose changes the answer (prevention weights on detection or suppression queries) | 5 of 8 | 5 of 8 | 5 of 8 |
+| SMAA: rank 1 in every draw | 8 of 12 | 9 of 12 | 8 of 12 |
+| SMAA: rank 1 in 80% of draws or more | 11 of 12 | 11 of 12 | 11 of 12 |
+| SMAA: `lunar habitat cotton fabric` keeps its rank 1 | 61% | 46% | 33% |
+| Unit tests | 39 | 45 | 56 |
+
+**Scores of the demo and test queries** (top 3 unchanged unless noted)
+
+| Query | 1.1.0 | 1.2.0 | 1.4.0 |
+|---|---|---|---|
+| `ISS` | 94.0 / 94.0 / 92.7 | 94.4 / 94.4 / 92.8 | 93.4 / 93.4 / 92.1 |
+| `lunar habitat` | 79.1 / 79.1 / 76.1 | 81.5 / 81.5 / 78.9 | 75.2 / 75.2 / 71.6 |
+| `ISS cotton fabric` | 95.1 / 95.1 / 94.0 | 95.4 / 95.4 / 94.2 | 94.6 / 94.6 / 93.5 |
+| `lunar habitat cotton fabric` | 75.3 / 74.9 / 65.5 | 73.2 / 72.7 / 65.8 | 75.0 / 74.5 / 63.9 |
+| `smoke detector on ISS` | 95.5 / 95.5 / 89.5 | 95.2 / 95.2 / 87.9 | 94.6 / 94.6 / 84.9 |
+| `CO2 suppression of heptane fire` | 97.0 / 74.9 / 68.1 | 97.0 / 73.9 / 68.4 | 97.0 / 78.6 / 68.3 |
+| `stagnant PMMA` | BASS-II 79.4, ACME-BRE 75.0, BASS 70.5 | BASS-II 81.3, BASS 73.5, ACME-BRE 71.8 | ACME-BRE 76.2, BASS-II 76.2, BASS-FGM-MODEL 69.1 |
+
+**Reading:**
+- The build-up changed what the weights rest on much more than the rankings it produces.
+- Robustness is about the same as before. One preset became more sensitive: `lunar habitat` changes rank 1 when the O2 weight is halved. The close call `lunar habitat cotton fabric` became closer.
+
 ---
 
 ## B1. Requirements identification (systems engineering)
