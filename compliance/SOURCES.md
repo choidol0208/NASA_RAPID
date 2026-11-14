@@ -59,6 +59,9 @@
 | 11/14 14:40 | 라이브러리 | NumPy 2.1.3 | https://github.com/numpy/numpy | BSD-3-Clause | NumPy 개발팀 | `ai/model_readiness.py`, `ai/robustness.py` (수치 계산, 고정 시드 난수 표본) |
 | 11/14 14:40 | 라이브러리 | scikit-learn 1.6.1 | https://github.com/scikit-learn/scikit-learn | BSD-3-Clause | scikit-learn 개발팀 | `ai/model_readiness.py` (실험 단위 교차검증으로 '예측 모델을 만들 만큼 데이터가 되는지'를 진단하는 데만 사용. 학습된 예측기는 제품에 싣지 않음) |
 | 11/14 15:19 | 데이터 | PSI 연소 조사 24건의 파일 목록(이름·크기·분류만; 원자료 파일은 내려받지 않음) | https://psi.nasa.gov/ | 실험별 CC0-1.0 (PSI-10은 기록에 라이선스 없음) | NASA Biological and Physical Sciences, PSI | `pipeline/raw_inventory.py`, `data/pipeline/raw_inventory.json`, `scripts/psi_whats_new.py` |
+| 11/14 16:20 | 문서 | Safety Case Notations: Alternatives for the Non-Graphically Inclined? (Holloway, 2008) | https://ntrs.nasa.gov/citations/20080042416 | NTRS 기록: PUBLIC, GOV_PUBLIC_USE_PERMITTED | NASA Langley | 실험 브랜치 `data-lab`(제출물에 아직 포함 안 됨)의 논증 구조 형식에만 사용(본문 인용 없음). AI 에이전트가 NTRS에서 내려받아 읽음, 사람 미확인. 가져온 것: GSN 요소 목록(주장, 전략, 근거, 가정) |
+| 11/14 16:20 | 문서 | NASA/TM-2017-219650 (Heavner, Holloway, 2017) | https://ntrs.nasa.gov/citations/20170007188 | NTRS 기록: PUBLIC_USE_PERMITTED | NASA Langley | 실험 브랜치 `data-lab`(제출물에 아직 포함 안 됨)의 논증 구조 형식에만 사용(본문 인용 없음). AI 에이전트가 NTRS에서 내려받아 읽음, 사람 미확인. 가져온 것: warrant와 assumption의 정의 |
+| 11/14 16:20 | 문서 | Making the Implicit Explicit: Towards an Assurance Case for DO-178C (Holloway, 2013) | https://ntrs.nasa.gov/citations/20140002745 | NTRS 기록: GOV_PUBLIC_USE_PERMITTED | NASA Langley | 실험 브랜치 `data-lab`(제출물에 아직 포함 안 됨)의 논증 구조 형식에만 사용(본문 인용 없음). AI 에이전트가 NTRS에서 내려받아 읽음, 사람 미확인. 가져온 것: 'undeveloped' 표시 |
 
 실험별 DOI는 `data/psi/manifest.json`에 있다. PSI는 데이터를 쓸 때 실험의 DOI로 인용하라고 요구한다.
 
