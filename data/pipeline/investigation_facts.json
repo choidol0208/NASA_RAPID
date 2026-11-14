@@ -7808,7 +7808,7 @@
      "tests": 4,
      "rows_excluded": 0,
      "rows_repeated": 0,
-     "row_note": "Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read.",
+     "row_note": "The four value rows carry the same values as Table 3-6 of the SAME requirements document of 2005, the planned test matrix (SAMEEIRD.matrix); the weight loss rate is a target value (SAMEEIRD.target). Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read.",
      "documented_elsewhere": [],
      "require": [
       "Air Flow (cm/s)"
@@ -7918,7 +7918,7 @@
       "mass_loss_rate_mg_min": {
        "n": 4,
        "unit": "mg/min",
-       "kind": "outcome",
+       "kind": "condition",
        "type": "number",
        "min": 1.0,
        "max": 2.0,
@@ -7994,7 +7994,7 @@
     "mass_loss_rate_mg_min": {
      "n": 4,
      "unit": "mg/min",
-     "kind": "outcome",
+     "kind": "condition",
      "type": "number",
      "min": 1.0,
      "max": 2.0
@@ -8123,24 +8123,22 @@
      "pillar": "detection",
      "objective_link": "not_stated",
      "tests_in_scope": 4,
-     "usable_tests": 4,
+     "usable_tests": 0,
      "counted_tests": 0,
-     "recorded_outside_objective": 4,
+     "recorded_outside_objective": 0,
      "statuses": {
-      "same": "measured"
+      "same": "conditions_only"
      },
      "by_table": [
       {
        "source_id": "same",
-       "status": "measured",
+       "status": "conditions_only",
        "tests_in_scope": 4,
        "tests_with_required_conditions": 4,
-       "tests_with_outcome": 4,
-       "usable_tests": 4,
+       "tests_with_outcome": 0,
+       "usable_tests": 0,
        "required_missing": [],
-       "outcomes_present": [
-        "mass_loss_rate_mg_min"
-       ]
+       "outcomes_present": []
       }
      ]
     },
@@ -8150,24 +8148,22 @@
      "pillar": "detection",
      "objective_link": "stated",
      "tests_in_scope": 4,
-     "usable_tests": 4,
-     "counted_tests": 4,
+     "usable_tests": 0,
+     "counted_tests": 0,
      "recorded_outside_objective": 0,
      "statuses": {
-      "same": "measured"
+      "same": "conditions_only"
      },
      "by_table": [
       {
        "source_id": "same",
-       "status": "measured",
+       "status": "conditions_only",
        "tests_in_scope": 4,
        "tests_with_required_conditions": 4,
-       "tests_with_outcome": 4,
-       "usable_tests": 4,
+       "tests_with_outcome": 0,
+       "usable_tests": 0,
        "required_missing": [],
-       "outcomes_present": [
-        "mass_loss_rate_mg_min"
-       ]
+       "outcomes_present": []
       }
      ]
     }
@@ -8205,7 +8201,7 @@
     {
      "id": "table.row_note",
      "about": "same",
-     "text": "What a row of \"PSI-102_Experimental table_SAME.csv\" is: Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read."
+     "text": "What a row of \"PSI-102_Experimental table_SAME.csv\" is: The four value rows carry the same values as Table 3-6 of the SAME requirements document of 2005, the planned test matrix (SAMEEIRD.matrix); the weight loss rate is a target value (SAMEEIRD.target). Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read."
     },
     {
      "id": "table.rows_left_out",
@@ -8248,14 +8244,14 @@
      "text": "The team's needs list links need D2 (Smoke generation conditions) to this sentence in the objective field of the PSI record of PSI-102: \"relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment\""
     },
     {
-     "id": "need.not_stated.recorded",
-     "about": "D1",
-     "text": "4 test rows of PSI-102 record every required condition variable and at least one outcome variable of need D1 (Combustion products), but the team's needs list has no sentence of the PSI record that states this need as an objective. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
+     "id": "need.stated.no_tests",
+     "about": "D2",
+     "text": "Need D2 (Smoke generation conditions) is stated as an objective in the PSI record. No test row of PSI-102 records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: same: conditions_only)."
     },
     {
-     "id": "need.stated.with_tests",
-     "about": "D2",
-     "text": "Need D2 (Smoke generation conditions) is stated as an objective in the PSI record. 4 of the 4 test rows within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "id": "need_table.conditions_only",
+     "about": "D2/same",
+     "text": "In \"PSI-102_Experimental table_SAME.csv\", 4 test rows record every required condition variable of need D2 (Smoke generation conditions), and no outcome variable of this need has a value in the table."
     },
     {
      "id": "inv.team_computation",

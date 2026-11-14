@@ -423,7 +423,7 @@
     "SAME.controls",
     "SAME.sizes"
    ],
-   "reading": "Range of air flow in the smoke tests. Particle sizes, which the flow affects, are not in the PSI tables."
+   "reading": "Range of air flow in the smoke tests. Particle sizes, which the flow affects, are not in the PSI tables. The rows hold test conditions; no measured smoke property is in the table."
   },
   {
    "id": "D2.aging",
@@ -444,14 +444,14 @@
     "SAME.controls",
     "SAME.sizes"
    ],
-   "reading": "Range of aging time in the smoke tests. Two source columns are read as this one variable: \"Aging Duration (minutes)\" of the SAME table (PSI-102), multiplied by 60, and \"Net aging time (sec)\" of the SAME-R table (PSI-101). The SAME-R columns \"Primary aging time (sec)\" and \"Primary mixing time (sec)\" are not read."
+   "reading": "Range of aging time in the smoke tests. Two source columns are read as this one variable: \"Aging Duration (minutes)\" of the SAME table (PSI-102), multiplied by 60, and \"Net aging time (sec)\" of the SAME-R table (PSI-101). The SAME-R columns \"Primary aging time (sec)\" and \"Primary mixing time (sec)\" are not read. The rows hold test conditions; no measured smoke property is in the table."
   },
   {
    "id": "D2.mass_loss",
    "need_id": "D2",
-   "label": "Sample mass loss rate",
+   "label": "Target weight loss rate of the planned test matrix",
    "template": "summary",
-   "population": "usable",
+   "population": "in_scope",
    "variable": "mass_loss_rate_mg_min",
    "stats": [
     "min",
@@ -462,9 +462,10 @@
     "material_id"
    ],
    "definition_ref": [
-    "SAME.controls"
+    "SAMEEIRD.target",
+    "SAMEEIRD.matrix"
    ],
-   "reading": "Mass loss rate as written in the column \"Weight loss rate (mg/min)\" of the SAME table (PSI-102). The table does not say whether it is a set value or a measured result. Four more rows name other materials with \"same conditions as 1-4\" and no values; they are not read."
+   "reading": "Value of the column \"Weight loss rate (mg/min)\" of the SAME table (PSI-102). The requirements document calls these target mass loss rates of the test matrix (SAMEEIRD.target); they are planned values, not measured results, and the mass actually lost is not in the table."
   }
  ]
 }

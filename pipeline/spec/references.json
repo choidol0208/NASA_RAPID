@@ -948,6 +948,42 @@
      "variables": [
       "fuel_material"
      ]
+    },
+    {
+     "id": "SAME.feedback",
+     "type": "definition",
+     "text": "The heating wire was held at constant resistance by feedback control; the resistances were correlated to wire temperatures and held within a few degrees Celsius of target values that depended on the material.",
+     "where": "Methods, Instruments",
+     "variables": [
+      "heating_ratio"
+     ],
+     "quote": "As current was applied to the wire, its resistivity was monitored with a feedback control system to maintain constant resistance throughout the heating duration. These resistances were correlated to wire temperatures and were maintained within a few degrees Celsius of target values, which varied according to the fuel sample material."
+    },
+    {
+     "id": "SAME.baseline",
+     "type": "definition",
+     "text": "The baseline sample temperature of each material was selected to produce 1 to 2 mg of sample mass loss in 60 s of heating.",
+     "where": "Results and Discussion",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "values": {
+      "mass_loss_mg_range": [
+       1,
+       2
+      ],
+      "heating_time_s": 60
+     },
+     "quote": "The sample baseline temperatures for each material were selected to produce 1 to 2 mg of sample mass loss in 60 sec of heating and have reasonable signal on each of the moment instruments."
+    },
+    {
+     "id": "SAME.instruments",
+     "type": "definition",
+     "text": "Instruments: a thermal precipitator for microscopy samples, three real-time instruments for particle mass and number concentration, an ionization detector calibrated to estimate the first moment, and two spacecraft smoke detectors.",
+     "where": "Abstract",
+     "variables": [],
+     "quote": "Additional equipment in the experiment included a thermal precipitator to sample particles for microscopic analysis upon return to Earth, and three commercial-off-the-shelf real-time instruments to measure particle mass and number concentration, and an ionization detector calibrated to estimate the first moment of the size distribution."
     }
    ],
    "note": "Particle sizes are not in the PSI experimental tables; the pipeline maps only the test conditions."
@@ -1611,6 +1647,435 @@
     }
    ],
    "note": "Files downloaded on 2026-11-14 through the PSI download service; licence of both investigations CC0-1.0 per the PSI records. AI-read, not checked by a human."
+  },
+  {
+   "id": "SAME-EIRD-2005",
+   "kind": "nasa_report",
+   "title": "Exploration Investigation Requirements Document for SAME a.k.a. Smoke Aerosol Measurement Experiment (PI D. Urban; Co-Is G. Mulholland, Z.-G. Yuan, J. Yang, T. Cleary)",
+   "issuer": "NASA GRC",
+   "version": "Rev. 2.0, February 25, 2005 (PSI file PSI-102_Engineering Documents_SAME_EIRD.pdf, 72 pages)",
+   "url": "https://doi.org/10.60555/gd4k-8h62",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?file=PSI-102_Engineering%20Documents_SAME_EIRD.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMEEIRD.matrix",
+     "type": "definition",
+     "text": "The requirements document plans a test matrix of two weight loss rates, two air flow rates and two aging durations (Table 3-6: Teflon at 5 cm/s, 2 mg/minute, 1 minute; 5, 1, 1; 5, 2, 20; 10, 2, 1; the other materials 'same conditions as 1-4'). The PSI-102 experimental table carries the same values.",
+     "where": "3.6 Test matrix, PDF pages 45-46 (Table 3-6)",
+     "variables": [
+      "flow_cms",
+      "mass_loss_rate_mg_min",
+      "aging_time_s",
+      "fuel_material"
+     ],
+     "values": {
+      "flow_cms": [
+       5,
+       10
+      ],
+      "weight_loss_rate_mg_min": [
+       1,
+       2
+      ],
+      "aging_duration_min": [
+       1,
+       20
+      ]
+     },
+     "quote": "The exact operating conditions will be varied based upon the results of prior tests; however the test matrix is anticipated to cover two weight loss rates, two air flow rates, and two aging durations."
+    },
+    {
+     "id": "SAMEEIRD.target",
+     "type": "definition",
+     "text": "The weight loss rates of the test matrix are target values, specified in order to vary the sample temperature.",
+     "where": "3.1.5 Sample heater, PDF page 34",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "Two target mass loss rates are specified in the test matrix (Table 3-6) to evaluate the effect of temperature on the particle size distribution."
+    },
+    {
+     "id": "SAMEEIRD.heater",
+     "type": "requirement",
+     "text": "The quantity to be controlled during heating is the wire temperature, through the wire resistance; the weight loss cannot be set through the heater power.",
+     "where": "3.1.5 Sample heater, PDF page 33",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "due to the loss of buoyant cooling of the heater wire, the weight loss in low-gravity cannot be predicted by controlling the heater power, instead, the wire temperature must be controlled; this can be accomplished by measuring the change in the wire resistance."
+    },
+    {
+     "id": "SAMEEIRD.massmeas",
+     "type": "requirement",
+     "text": "The actual mass loss of every sample is to be established by weighing the sample before and after the test.",
+     "where": "Table 3-1, item 6 d, PDF page 29; also 5 Post-flight data deliverables, item 1, PDF page 47",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "values": {
+      "accuracy_g": 0.0001
+     },
+     "quote": "Mass loss for all samples to be established by determining the mass change in the sample. Accuracy: 0.0001 g. This will require reasonably expeditious sample return."
+    },
+    {
+     "id": "SAMEEIRD.products",
+     "type": "definition",
+     "text": "Science data end products: for each material, as a function of mass loss per unit area, air flow rate and smoke aging - arithmetic mean diameter, diameter of average mass, geometric mean diameter, geometric standard deviation, spacecraft smoke detector signals normalized by number density, TEM images, signals from other smoke sensing devices.",
+     "where": "2.3 Science data end products, PDF page 26",
+     "variables": [
+      "flow_cms",
+      "aging_time_s",
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "For each material as a function of mass loss/unit area, air flow rate, and smoke aging determine:"
+    },
+    {
+     "id": "SAMEEIRD.csd",
+     "type": "limitation",
+     "text": "The sentences of the PSI-102 'approach' field about an igniter, thermophoretic soot samplers, weighing the remains of the samples and flight mass loss rates stand in this document in section 1.2.2, under the heading '1.2 Background: CSD experiment design and results'.",
+     "where": "1.2.2 Procedure and operational sequence and data reduction, PDF page 15 (heading 1.2 on PDF page 13)",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "The remains of the samples were weighed to determine their mass loss. The digital data was transcribed from the video record and analyzed to determine the response of the detectors. Once the flight mass loss rates were determined, 1-g operation conditions to produce the same loss were determined."
+    },
+    {
+     "id": "SAMEEIRD.ratio",
+     "type": "definition",
+     "text": "Ground tests were run at the resistance ratio RT/R0 that produced the desired 2 mg mass loss in 60 s; the sample mass before and after the test verified the operating condition.",
+     "where": "3.5.6 Gaseous Constituent Sensors, Test Matrix, PDF page 44",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "values": {
+      "mass_loss_mg": 2,
+      "heating_time_s": 60
+     },
+     "quote": "The initial test for each sample was conducted at the resistance ratio (RT/R0) that produced the desired 2 mg mass loss within 60 sec."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; PDF pages 45 and 46 were also viewed as page images. 'url' is the DOI given in the PSI-102 record; doi.org could not be reached from the session, so its resolution is not verified. 'pdf_url' is the PSI call that returns a temporary download link. Page numbers are PDF page numbers; the printed footer of the same page reads 'page N of 72' with the same N."
+  },
+  {
+   "id": "SAME-BCD-2005",
+   "kind": "nasa_report",
+   "title": "SAME Baseline Concept Description Document, SAME-DOC-001 Rev. A (ZIN Technologies for NASA GRC)",
+   "issuer": "NASA GRC / ZIN Technologies",
+   "version": "Rev. A, approvals dated June 2005 (PSI file PSI-102_Science Documents_SAME_Baseline Concept Description Doc.pdf, 15 pages)",
+   "url": "https://doi.org/10.60555/gd4k-8h62",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?file=PSI-102_Science%20Documents_SAME_Baseline%20Concept%20Description%20Doc.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMEBCD.matrix",
+     "type": "definition",
+     "text": "The 20-row test matrix (four conditions for each of Teflon, Kapton, silicone rubber, lamp wick and dibutyl phthalate; air flow 5 or 10 cm/s, weight loss rate 2 or 1 mg/min, aging duration 1 or 20 minutes) is stated to be taken from the EIRD.",
+     "where": "6.4 Test Matrix, Table 1, PDF page 13",
+     "variables": [
+      "flow_cms",
+      "mass_loss_rate_mg_min",
+      "aging_time_s",
+      "fuel_material"
+     ],
+     "quote": "This section includes the current test matrix as taken from the latest EIRD (Rev. 1.01)."
+    },
+    {
+     "id": "SAMEBCD.weigh",
+     "type": "definition",
+     "text": "The samples are weighed before launch and after return to quantify the actual mass loss.",
+     "where": "Hardware description, item 10 Sample Carousel Assembly, PDF page 11",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "These samples are removed from the tubes for weighing, both before and after the experiment (before launch and after being downmassed) to quantify the actual mass loss during pyrolysis."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; not viewed as page images."
+  },
+  {
+   "id": "SAME-FSR-2010",
+   "kind": "nasa_report",
+   "title": "Smoke Aerosol Measurement Experiment (SAME), Final Report, November 1, 2000 - April 14, 2009 (Urban, Ruff, Sheredy, Cleary, Yang, Mulholland, Yuan)",
+   "issuer": "NASA GRC",
+   "version": "March 15, 2010 (PSI file PSI-102_Reports_SAME_Final Science Report.pdf, 68 pages; appendices B to E reprint SAE 2009-01-2468, AIAA 2009 'Properties of Smoke from Overheated Materials in Low-Gravity', SAE 2008-01-2089 and AIAA 2008 'Spacecraft Fire Detection: Smoke Properties and Transport in Low-Gravity')",
+   "url": "https://doi.org/10.60555/gd4k-8h62",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?file=PSI-102_Reports_SAME_Final%20Science%20Report.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMEFSR.control",
+     "type": "definition",
+     "text": "In the SAME flight hardware the wire resistance was monitored to control the wire temperature; in laboratory tests this gave repeatable weight loss from sample to sample.",
+     "where": "3 (hardware description, text beside Figure 5), PDF page 21; the same sentences in Appendix D (SAE 2008-01-2089), PDF page 54",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "the wire resistance was monitored to control its temperature. This technique was found to produce repeatable weight loss from sample to sample in laboratory tests."
+    },
+    {
+     "id": "SAMEFSR.flown",
+     "type": "definition",
+     "text": "SAME flight tests (September to early October 2007): 30 samples, six each of five materials, at different airflow rates, pyrolysis temperatures and aging durations; the system was designed for 2 to 8 cm/s; Appendix A logs 47 flight tests (initial heatings and reheats).",
+     "where": "4 Flight Tests, PDF page 24; hardware description, PDF page 21; Appendix A, PDF page 33",
+     "variables": [
+      "flow_cms",
+      "aging_time_s",
+      "heating_ratio",
+      "fuel_material"
+     ],
+     "values": {
+      "samples": 30,
+      "flow_cms_design_range": [
+       2,
+       8
+      ]
+     },
+     "quote": "Overall 30 sample materials were tested. These were comprised of six samples each of 5 materials: Teflon™, Kapton™, silicone rubber, cellulose, and dibutyl-phthalate deposited on a porous wick. These samples were tested at different airflow rates, pyrolysis temperatures, and smoke aging durations."
+    },
+    {
+     "id": "SAMEFSR.results",
+     "type": "published_result",
+     "text": "Table 1 'Results of SAME flight tests' gives, for Kapton, lamp wick, silicone and Teflon, unaged and aged: geometric mean diameter, arithmetic mean diameter, diameter of average mass (nm) and geometric standard deviation.",
+     "where": "5 Test Results and Discussions, Table 1, PDF page 27 (announced on PDF page 25)",
+     "variables": [
+      "fuel_material",
+      "aging_time_s"
+     ],
+     "quote": "Results from the moment instruments for baseline runs (no aging) and 720 second aging runs are summarized in Table 1."
+    },
+    {
+     "id": "SAMEFSR.massloss",
+     "type": "limitation",
+     "text": "For the 2007 flight, the mass loss analysis of the returned samples is reported as started but not completed (2008 conference paper reprinted in the report). No table of measured SAME-1 mass losses was found in the report.",
+     "where": "Appendix D (SAE 2008-01-2089), PDF page 56",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "At this time the samples and TEM grids have been received back from the ISS; TEM and mass loss analyses have been initiated but not completed."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; not viewed as page images. In the first quote the page layout wraps the sentence around Figure 5; the words are continuous in the reading-order extraction."
+  },
+  {
+   "id": "SAMER-FR-2014",
+   "kind": "nasa_report",
+   "title": "Smoke Aerosol Measurement Experiment Re-flight (SAMER), Final Report, 01 November 2000 - June 2, 2014 (Urban, Ruff, Sheredy, Meyer, Cleary, Yang, Mulholland, Yuan)",
+   "issuer": "NASA GRC",
+   "version": "June 2, 2014 (PSI file PSI-101_Reports_SAME-R_Final Report.pdf, 89 pages)",
+   "url": "https://doi.org/10.60555/2np7-jv14",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-101/download?file=PSI-101_Reports_SAME-R_Final%20Report.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMER.rtr0",
+     "type": "definition",
+     "text": "Rt/R0 is the ratio of the resistance of the heated sample wire to its resistance at room temperature. It is the parameter by which test conditions are specified: the wire resistance measured before the run is multiplied by it to give the target resistance of the heater control.",
+     "where": "Sample heating temperature derivation, PDF page 26",
+     "variables": [
+      "heating_ratio"
+     ],
+     "quote": "Traditionally, test conditions are specified by Rt/R0, the ratio between the resistance of heated wire over the resistance of the wire at room temperature. Thus, before each run, the sample wire resistance is measured, then multiplied by this parameter to get the target resistance for the control circuitry."
+    },
+    {
+     "id": "SAMER.rtr0.limit",
+     "type": "limitation",
+     "text": "The same Rt/R0 does not mean the same sample temperature: the derived heating temperatures differed by up to 30 degrees Celsius at equal Rt/R0.",
+     "where": "Sample heating temperature derivation, PDF page 26",
+     "variables": [
+      "heating_ratio"
+     ],
+     "values": {
+      "max_temperature_difference_c": 30
+     },
+     "quote": "it is surprising that for the same Rt/R0, the actual heating temperature difference can be as large as 30 degrees Celsius."
+    },
+    {
+     "id": "SAMER.matrix",
+     "type": "definition",
+     "text": "Appendix A 'Test matrix' lists the test conditions of each run; secondary aging runs are separate entries, which gives 109 entries for 67 runs. Its rows include SAME Test #, Description, Date, Inlet Velocity, Rt/R0, Duration, Primary Aging time, Primary Mixing time and Net Aging time, the columns of the PSI-101 experimental table.",
+     "where": "Flight Operation, PDF page 3; Appendix A, PDF pages 31-49",
+     "variables": [
+      "flow_cms",
+      "heating_ratio",
+      "aging_time_s",
+      "fuel_material"
+     ],
+     "values": {
+      "runs": 67,
+      "entries": 109
+     },
+     "quote": "Totally 67 runs were conducted including two runs using reused samples. The test conditions of each run can be found in Appendix A, where the secondary aging runs are listed as separate entities, making the total run number to 109."
+    },
+    {
+     "id": "SAMER.massloss",
+     "type": "published_result",
+     "text": "The mass loss of each SAME-R sample was measured after the flight by weighing (Appendix C lists preflight average, postflight average and mass loss in mg by sample and test number). These values are not in the PSI-101 experimental table.",
+     "where": "Flight Operation, PDF page 4; Appendix C 'Sample mass loss of each test run', PDF pages 51-52",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "After entire SAMER tests were completed, the six carousels, all tested samples and the six thermal precipitators were shipped to the GRC for measuring sample weight losses and TEM grid analysis."
+    },
+    {
+     "id": "SAMER.baseline",
+     "type": "definition",
+     "text": "The baseline sample temperature of each material was chosen so that the sample loses 1 to 2 mg in 60 seconds.",
+     "where": "SAMER results (excerpt of AIAA 2012-3536), PDF page 4",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "values": {
+      "mass_loss_mg_range": [
+       1,
+       2
+      ],
+      "heating_time_s": 60
+     },
+     "quote": "The sample temperatures were based on the pyrolysis properties of the material and were thus material specific. The baseline temperature was selected to produce 1 to 2 mg of weight loss in 60 seconds and have reasonable signal on each of the moment instruments."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; PDF pages 26, 31 and 51 were also viewed as page images. A comparison of the text extraction of Appendix A with the PSI-101 table (by an AI session, not checked by a human) found test 112 (Kapton, 2 cm/s, Rt/R0 1.480) in Appendix A and not in the PSI table, and test 57 once in Appendix A (Lampwick) but twice in the PSI table (Lampwick and Teflon)."
+  },
+  {
+   "id": "SAME-OPS-2007",
+   "kind": "nasa_report",
+   "title": "Smoke Aerosol Measurement Experiment (SAME) Operations Manual, SAME-DOC-007 (ZIN Technologies for NASA GRC)",
+   "issuer": "NASA GRC / ZIN Technologies",
+   "version": "January 2007 (PSI file PSI-102_Science Documents_SAME_Operations Manual_007.pdf, 33 pages)",
+   "url": "https://doi.org/10.60555/gd4k-8h62",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?file=PSI-102_Science%20Documents_SAME_Operations%20Manual_007.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMEOPS.setpoint",
+     "type": "definition",
+     "text": "Rt/R0 is the heater control setpoint multiplier applied to the unheated sample resistance R0. Nominal values: Kapton 1.380, Lampwick 1.245, Silicone 1.327, Teflon 1.440.",
+     "where": "5.2 Setting parameters, PDF page 11",
+     "variables": [
+      "heating_ratio"
+     ],
+     "values": {
+      "Kapton": 1.38,
+      "Lampwick": 1.245,
+      "Silicone": 1.327,
+      "Teflon": 1.44
+     },
+     "quote": "Heater Control Setpoint should be set after knowing the unheated resistance of a sample, a.k.a. R0. Nominal setpoints are a multiple, Rt/R0, of R0 depending on sample type:"
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; not viewed as page images."
+  },
+  {
+   "id": "SAME-SRD-2005",
+   "kind": "nasa_report",
+   "title": "SAME Software Requirements Document, SAME-DOC-004 Rev. D (ZIN Technologies for NASA GRC)",
+   "issuer": "NASA GRC / ZIN Technologies",
+   "version": "Rev. D (PSI file PSI-102_Reference Data_SAME_Software Req Document.pdf, 29 pages)",
+   "url": "https://doi.org/10.60555/gd4k-8h62",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?file=PSI-102_Reference%20Data_SAME_Software%20Req%20Document.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMESRD.commands",
+     "type": "definition",
+     "text": "Inlet flow velocity, heater setpoint, heating duration, mixing duration and primary and secondary aging durations are test parameters set by command for each test.",
+     "where": "4.4.4 Test Configuration Command Group, Table 5, PDF page 18",
+     "variables": [
+      "flow_cms",
+      "heating_ratio",
+      "aging_time_s"
+     ],
+     "quote": "Sets the target flow velocity for the inlet duct during sample heating."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; not viewed as page images. Table 5 also reads: 'SetHeaterSetpoint Sets the resistance/temperature setpoint of the heater controller.' and 'SetPrimaryAgingDuration Sets the duration that smoke is kept in the smoke aging chamber.'"
+  },
+  {
+   "id": "ICES-2012-SAME2",
+   "kind": "paper",
+   "title": "Particle Morphology and Size Results from the Smoke Aerosol Measurement Experiment-2 (Urban, Ruff, Greenberg, Fischer, Meyer, Mulholland, Yuan, Bryg, Cleary, Yang)",
+   "issuer": "42nd International Conference on Environmental Systems, San Diego, 15-19 July 2012, AIAA 2012-3536",
+   "version": "2012 (NTRS 20130000422)",
+   "url": "https://ntrs.nasa.gov/citations/20130000422",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20130000422/downloads/20130000422.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "ICES12.baseline",
+     "type": "definition",
+     "text": "The baseline sample temperature of each material was selected to produce 1 to 2 mg of weight loss in 60 seconds.",
+     "where": "II.C Experimental Results, PDF page 7",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "values": {
+      "mass_loss_mg_range": [
+       1,
+       2
+      ],
+      "heating_time_s": 60
+     },
+     "quote": "The sample temperatures were based on the pyrolysis properties of the material and were thus material specific. The baseline temperature was selected to produce 1 to 2 mg of weight loss in 60 seconds and have reasonable signal on each of the moment instruments."
+    },
+    {
+     "id": "ICES12.measured",
+     "type": "definition",
+     "text": "Measured quantities: particle number concentration (zeroth moment), diameter concentration (first moment) and mass concentration (third moment); from them the diameter of average mass and the count mean diameter, and with a log-normal assumption the geometric mean diameter and geometric standard deviation.",
+     "where": "Abstract, PDF page 1",
+     "variables": [],
+     "quote": "These moment diagnostics were used to determine the particle number concentration (zeroth moment), the diameter concentration (first moment), and the mass concentration (third moment). These statistics were combined to determine the diameter of average mass and the count mean diameter and, by assuming a log-normal distribution, the geometric mean diameter and the geometric standard deviations can also be calculated."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the NTRS PDF; not viewed as page images."
+  },
+  {
+   "id": "AST-2015-PYROLYSIS",
+   "kind": "paper",
+   "title": "Pyrolysis Smoke Generated Under Low-Gravity Conditions (Mulholland, Meyer, Urban, Ruff, Yuan, Bryg, Cleary, Yang)",
+   "issuer": "Aerosol Science and Technology 49(5), 310-321",
+   "version": "2015",
+   "url": "https://doi.org/10.1080/02786826.2015.1025125",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "AST15P.measured",
+     "type": "definition",
+     "text": "In the study the wire temperature is fixed and the pyrolysis rate is measured.",
+     "where": "2.2 Materials Studied and Heating System",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "In the current study, the temperature is fixed for both flow and no-flow conditions and for normal gravity and low-gravity conditions, and the pyrolysis rate is measured."
+    },
+    {
+     "id": "AST15P.balance",
+     "type": "definition",
+     "text": "The total mass loss of each sample was determined by microbalance weighing on Earth before and after the experiment.",
+     "where": "3.1 Pyrolysis",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "For each material, the total mass loss, mL, was determined from microbalance measurements on earth before and after the experiment."
+    },
+    {
+     "id": "AST15P.resistance",
+     "type": "definition",
+     "text": "The heater held a constant wire resistance for 60 s; the temperature was obtained from the resistance by calibration.",
+     "where": "2.2 Materials Studied and Heating System",
+     "variables": [
+      "heating_ratio"
+     ],
+     "quote": "A constant resistance was maintained over the 60 s heating period by adjusting the duty cycle of the pulsating power. The temperature was obtained from the resistance measurement based on calibration data for resistance versus temperature."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction of the publisher's full-text page (https://www.tandfonline.com/doi/full/10.1080/02786826.2015.1025125) obtained through the Exa fetch tool; the PDF pages, figures, tables and supplement were not seen. Copyright 2015 American Association for Aerosol Research: cited and quoted in single sentences only."
   }
  ]
 }

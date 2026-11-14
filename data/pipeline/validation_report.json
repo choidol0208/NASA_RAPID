@@ -929,16 +929,16 @@
    "verifies": "need_tests.csv lists exactly the in-scope tests that record every required condition and at least one outcome of each need, with objective_link 'stated' only when the investigation is in 'stated_by'.",
    "status": "PASS",
    "numbers": {
-    "rows_recomputed": 847,
-    "rows_in_file": 847,
-    "stated": 449,
+    "rows_recomputed": 839,
+    "rows_in_file": 839,
+    "stated": 445,
     "per_need_stated": {
      "P1": 135,
      "P2": 0,
      "P3": 11,
      "S1": 299,
      "D1": 0,
-     "D2": 4
+     "D2": 0
     }
    },
    "failures": 0,
@@ -1113,9 +1113,9 @@
    "verifies": "Every reference item id used in needs.json, indicators.json and scenarios.json exists in references.json.",
    "status": "PASS",
    "numbers": {
-    "uses": 101,
-    "distinct_items_used": 56,
-    "items_defined": 84
+    "uses": 107,
+    "distinct_items_used": 61,
+    "items_defined": 112
    },
    "failures": 0,
    "failing_examples": []
@@ -1125,8 +1125,8 @@
    "verifies": "need_references.csv has exactly the reference items each need lists, with the text, place, document and URL of references.json.",
    "status": "PASS",
    "numbers": {
-    "links_in_spec": 48,
-    "rows_in_file": 48
+    "links_in_spec": 53,
+    "rows_in_file": 53
    },
    "failures": 0,
    "failing_examples": []
@@ -1222,8 +1222,8 @@
    "verifies": "Every number written in a statement of an evidence package is a field of the same need block (for an indicator sentence: of its indicator entry), or one of the two sums that statements.json declares.",
    "status": "PASS",
    "numbers": {
-    "numbers_in_statements": 4657,
-    "statements": 1828,
+    "numbers_in_statements": 4584,
+    "statements": 1725,
     "numbers_that_are_a_declared_sum_not_a_stored_field": 0,
     "numbers_found_only_in_matched_tests_indicators_or_references": 0
    },
@@ -1238,7 +1238,7 @@
    "verifies": "No statement of an evidence package contains the words safe, unsafe, flammable, sufficient, representative, proves or confirms (outside a need name or an indicator reading copied from the spec).",
    "status": "PASS",
    "numbers": {
-    "sentences": 2036
+    "sentences": 1907
    },
    "failures": 0,
    "failing_examples": []
@@ -1294,7 +1294,7 @@
    "verifies": "Every number written in a statement of investigation_facts.json is a field of the same entry (of the table or need the sentence is about), and no statement contains a word that judges safety or sufficiency.",
    "status": "PASS",
    "numbers": {
-    "numbers_in_statements": 1037,
+    "numbers_in_statements": 1039,
     "statements": 276,
     "numbers_found_only_elsewhere_in_the_entry": 0
    },

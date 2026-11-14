@@ -368,8 +368,7 @@
    "outcomes_any": [
     "co_produced_ppm",
     "co2_produced_pct_points",
-    "co_to_co2_molar_ratio",
-    "mass_loss_rate_mg_min"
+    "co_to_co2_molar_ratio"
    ],
    "why": "NASA-STD-3001 requires real-time monitoring of the toxic combustion products of its Table 6.2-3 (3001.V2-6024); carbon monoxide is one of them (3001.T6.2-3), and the rate of its buildup is named as an additional early warning (TB008.co).",
    "scope": {
@@ -389,8 +388,8 @@
    ],
    "stated_by": [],
    "stated_by_note": "No PSI record names carbon monoxide or another gas species as something the investigation set out to determine. The BASS-II investigators describe the CO/CO2 sensor as measuring the completeness of combustion and report a CO/CO2 ratio (ICES19.sensors, ICES19.coratio). The BASS-II gas readings are therefore reported as recorded outside the stated objective.",
-   "reading": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading, or a mass loss rate. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
-   "note": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The mass loss rate of the SAME samples is in the outcome list of this need as drafted; it is a rate of the heated sample, not a reading of a gas or of smoke. The material is the only required variable, so the status conditions_only says only that the sample is named."
+   "reading": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
+   "note": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The material is the only required variable, so the status conditions_only says only that the sample is named."
   },
   {
    "id": "D2",
@@ -403,12 +402,13 @@
     "aging_time_s"
    ],
    "conditions_useful": [
-    "heating_ratio"
-   ],
-   "outcomes_any": [
+    "heating_ratio",
     "mass_loss_rate_mg_min"
    ],
-   "why": "The SAME investigators report that particle size changes with air flow and aging (SAME.sizes) and that the ISS smoke detector showed reduced performance for Kapton and Teflon smoke (SAME.detector). Particle-size results are not in the experimental tables. Aging time is required because it is one of the three controlled parameters of the SAME smoke experiment (SAME.controls); this makes the need hold SAME and SAME-R tests only.",
+   "outcomes_any": [
+    "smoke_particle_size_um"
+   ],
+   "why": "The SAME investigators report that particle size changes with air flow and aging (SAME.sizes) and that the ISS smoke detector showed reduced performance for Kapton and Teflon smoke (SAME.detector). Air flow, aging time and the heating level are the controlled parameters of the SAME smoke experiment (SAME.controls, SAMEEIRD.matrix); aging time is required, which makes the need hold SAME and SAME-R rows only.",
    "scope": {
     "fuel_phase": [
      "solid"
@@ -420,7 +420,12 @@
     "SAME.detector",
     "TB008.signatures",
     "CP2003.detection",
-    "3001.V2-9059"
+    "3001.V2-9059",
+    "SAMEEIRD.matrix",
+    "SAMEEIRD.target",
+    "SAMEFSR.results",
+    "SAMER.rtr0",
+    "AST15P.balance"
    ],
    "stated_by": [
     {
@@ -434,8 +439,8 @@
      "quote": "relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment"
     }
    ],
-   "reading": "A counted test records the material, the flow speed, the aging time and the mass loss rate of the heated sample. No particle size or detector response is in the mapped tables.",
-   "note": "Aging time is required, so this need holds the SAME tests of smoke from overheated materials. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included. The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. By these words the table treats its columns, the weight loss rate among them, as conditions, while the pipeline lists the mass loss rate as the outcome of this need. The SAME-R rows (PSI-101) hold no mass loss rate and are not counted."
+   "reading": "A row of this need holds the conditions of a smoke test: material, air flow, aging time and the heating level (a target weight loss rate in the planned SAME matrix, SAMEEIRD.target; the heater resistance ratio Rt/R0 in SAME-R, SAMER.rtr0). No row holds a measured smoke property, so no test is counted for this need.",
+   "note": "The PSI experimental tables of SAME (PSI-102) and SAME-R (PSI-101) hold conditions of the smoke tests only. The measured smoke properties (moments of the particle size distribution, mean diameters, smoke detector signals) are reported in the investigators' final reports and papers (SAMEFSR.results, SAME.sizes, SAME.detector) and are not in the tables. The four value rows of the SAME table carry the same values as the planned test matrix of the 2005 requirements document (SAMEEIRD.matrix); the weight loss rate there is a target value (SAMEEIRD.target), and the sample mass actually lost was determined by weighing and is not in the table (AST15P.balance). Do not write that the SAME tests were run at 1 or 2 mg/min. The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included."
   }
  ]
 }
