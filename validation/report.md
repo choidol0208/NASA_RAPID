@@ -1,7 +1,7 @@
 # Catalog filter validation report
 
-- Run: 2026-11-14 14:35 · target `scoring.scorer:rank`
-- Result: **29/29 scenarios passed**
+- Run: 2026-11-14 14:59 · target `scoring.scorer:rank`
+- Result: **35/35 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
 |---|---|---|---|---|---|
@@ -28,8 +28,14 @@
 | F03 | fuel_phase | droplet | FLEX, CFI, FLEX-2 |  | PASS |
 | F04 | fuel_phase | liquid fuel lunar habitat | FLEX, FLEX-2, ACME-BRE | partial_gravity | PASS |
 | F05 | fuel_phase | inert gas suppression ISS | BASS, FLEX, BASS-II |  | PASS |
-| F06 | fuel_phase | combustion gas detection | SAME, SAME-R, DAFT |  | PASS |
-| F07 | rough_input | CO2 30% suppression ISS | FLEX, BASS, BASS-II |  | PASS |
+| F06 | fuel_phase | combustion gas detection | SAME, SAME-R, DAFT | not_understood | PASS |
+| F07 | rough_input | CO2 30% suppression ISS | FLEX, BASS, BASS-II | not_understood | PASS |
+| E01 | equipment | smoke detector for a lunar rover | SAME, SAME-R, FLEX-2 | partial_gravity | PASS |
+| E02 | equipment | fire extinguisher for a Mars habitat | BASS, FLEX, BASS-II | partial_gravity, mars_atmosphere | PASS |
+| E03 | equipment | crew garment for a Moon base | BASS-II, SAFFIRE-II, ACME-BRE | partial_gravity | PASS |
+| E04 | equipment | battery enclosure for the ISS | BASS-II, BASS, SAFFIRE-II | not_understood | PASS |
+| E05 | equipment | water mist suppression system for a lunar habitat | FLEX, ACME-BRE, BASS | not_understood, partial_gravity | PASS |
+| E06 | equipment | glove box |  | need_input, not_understood | PASS |
 | T01 | trap | spacesuit | ACME-BRE, ACME-CFI-G, FLEX | o2_above_all | PASS |
 | T02 | trap | Mars base | BASS-II, SAFFIRE-II, BASS | partial_gravity, mars_atmosphere | PASS |
 | T03 | trap | hybrid rocket combustion chamber fire |  | out_of_scope | PASS |

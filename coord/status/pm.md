@@ -1,38 +1,33 @@
 ---
 role: pm
-updated: 2026-11-14 14:30 KST
+updated: 2026-11-14 15:10 KST
 state: working
 blocked_on: none
 ---
-Now: (1) research and design of the AI layer, (2) a stronger differentiator for the project, after feedback from the Seoul organizers (see notes). Both report back within the hour; then P3.
+*AI-generated (Claude Code), pm role.*
+
+Now: repeating the build of the AI layer (`ai/`, `data/insights/`) from its start. The pm session was stopped by accident at 14:55 in the middle of a review, so nothing of that run is trusted: the code is checked for half-finished edits, rebuilt on the current counts, every model-written sentence is read again against its PSI record, and an independent check runs before anything is pushed. Target for `cards.json`, `scenarios.json`, `evidence_map.json` and `ai/review/review_sheet.csv` on `main`: about 16:30. Nothing under `ai/` or `data/insights/` is on `main` yet.
 
 Done since last sync:
-- Merged `data-pipeline` and `catalog-filter` into `main` at 11:31; pipeline run and scorer tests pass.
-- Opened the live site logged out from a normal browser: https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat returns the page and the ranking renders (HTTP 200, checked 11:33). ui could not check this from its side.
-- Answered data's request 1116 (accepted); closed the request to ui.
-- Local model: Ollama upgraded to 0.40.16; OpenAI gpt-oss:20b (Apache-2.0) is downloading.
+- 15:10 merged `data-pipeline`, `catalog-filter` and `catalog-scoring` into `main` and pushed. Checks on the merge: `pipeline/check.py` 46 of 46, scorer tests 38, parity 86 of 86.
+- Answered data 1503 (the four-rung proposal): **go, with changes**. Data files A and B yes; fixed sentences inside the Constraints block; no model wording, no new input box, no new card. See the answer and `coord/decisions.md` 15:10.
+- Answered data 1442 (new counts): accepted; pm's files are rebuilt on them before they go public.
+- New request 1505 to ui: Constraints gets a third part, "What NASA's recorded tests showed", from the indicators in the evidence packages.
+- `AGENTS.md` line 10 now has the official challenge title (ui's note).
 
-Next: `data/insights/cards.json`, then `scenarios.json` for `iss` and `lunar_habitat` from `scenario_needs.csv` (16:30).
+Decisions today that bind everyone are in `coord/decisions.md`. The latest (15:10): constraints are of three kinds, shown apart: what NASA's recorded tests showed, criteria in NASA documents, where the evidence stops.
+
+Next:
+- Push the checked `data/insights/` files; tell ui of any field name that differs from its list; hand data the review sheet (D5).
+- The video pilot (side track, not on the critical path): the reading of NASA's on-screen values from the BASS-II videos checked out (0 wrong in 80 random frames); the automatic flame-out time did not (right in 1 of 19 clips) and will not ship. A last review decides whether the on-screen readings ship as a labelled file with a re-runnable command under `video/`.
+- Seven-slide deck and the English submission text.
 
 Published for others:
 - `contracts/README.md`, `contracts/examples/*.example.json` (shape only, placeholders).
-
-Decision at 13:05 (`coord/decisions.md`): the project keeps the team's original topic; no new first screen. The differentiator is the fourth goal, shown as one section "Where the evidence stops". ui has the request (1310). The alternative framings explored this morning are dropped.
-- Checked by pm at 12:05 KST through the PSI public search: 133 public investigations; the term "Saffire" matches PSI-98, PSI-99 and PSI-100 only (Saffire IV to VI are not in PSI).
-- Local model ready: OpenAI gpt-oss:20b under Ollama 0.40.16; first test gave 12 of 12 supporting quotes found verbatim in the PSI record.
-
-AI layer, state at 12:30: the design is in `docs/ai_layer_design.json` (code-computed facts first; one local model writes only card summaries, each sentence citing a numbered PSI sentence, behind code gates and a review). Building now under `ai/` and `data/insights/`. Three requests are out: one ordered request to ui, two to data.
-- Science correction for everyone: microgravity and 1 g results do NOT bound lunar or Martian gravity (NASA drop-tower work, Olson and Ferkul 2012, as read by the design's science review; data is asked to add the item). The live page's partial-gravity warning says the opposite and is item 1 of the request to ui.
-
-State at 14:10: the AI layer is built (model guard, 556 numbered PSI sentences, code-written scenario text, gates and linter, model-written card summaries, catalog audit, evidence-map data) and is being rebuilt on data's audited outputs (1,824 tests, six needs), with a second reading of every model sentence. An independent verification found one model sentence that changed the meaning of its record (PSI-159); it is removed. Nothing under `ai/` or `data/insights/` is on `main` yet; the push is announced here, target 15:00. Until then pm does not merge (the working tree is in use), so `main` may lag your branches by up to an hour.
-- data: the review sheet `ai/review/review_sheet.csv` lands with that push. Model rows first; the code-built rows are for a second look if time allows.
-- ui: `data/insights/evidence_map.json`, `cards.json` and `scenarios.json` land with that push. Scenario entries will carry `text_origin` and `frame_text_origin` = `template`. Request 1410 is the catalog addendum (item 5 of 1224).
-
-Side track started at 14:25 on the human lead's decision, not on the critical path: a pilot that measures how long the flame lasts in NASA's own BASS-II videos (PSI-25 raw data, 19 of 296 clips, the tests whose table row records a flow event) and checks the measurement against the table. Results stay outside `data/pipeline/` and outside the product until they agree with the recorded events; if they do, pm proposes them to data as a separate, clearly labelled layer ("measured by the team from NASA video").
-- data: nothing needed now. If you already know from the BASS-II ReadMe how the clip names map to tests (for example `TESTB16`, `2ND_VIEW`, `Still_Sequence`), a line in your status would help.
-- catalog: your role is registered (`coord/roles.json`); both scorer decisions are yes (`coord/decisions.md`, 14:15).
+- `docs/ai_layer_design.json` (design of the AI layer).
 
 Notes for other roles:
-- Feedback from the Seoul organizers to the human lead: the topic is interesting, but the project lacks a differentiator that catches the eye at once; awards are judged across all challenges. pm is working out options and the human lead will choose. Expect a request about the landing view and the demo flow early this afternoon. Until then, please keep the current plan; nothing built so far is wasted.
-- ui: U5 screenshots and GIF should wait for that decision, since the first screen may change.
-- data: `cards.json` is not written yet; D5 can start when it lands on main.
+- ui: scenario entries will carry `text_origin` and `frame_text_origin` = `template`. Numbers for the retakes after data's 14:42 check: 878 tests with a recorded ambient oxygen (solid 139, liquid 353, gas 386); solid fuels at 19 to 23% oxygen: 61.
+- data: the review sheet lands with the push above. Model rows first.
+- catalog: nothing open from pm.
+- Everyone: Pages deploys from `main` and `catalog-filter`; `main` now holds all three role branches as of 15:10.

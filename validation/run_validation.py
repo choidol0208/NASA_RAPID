@@ -64,6 +64,8 @@ def check(sc, out, cache):
     for c in e.get("warnings_exclude", []):
         if c in codes:
             fails.append(f"warning {c} should not appear")
+    if "not_understood" in e and out.get("not_understood") != e["not_understood"]:
+        fails.append(f"not_understood {out.get('not_understood')!r}, expected {e['not_understood']!r}")
     for inv, need in e.get("result_warnings_include", {}).items():
         for r in out.get("results", []):
             if r["investigation_id"] == inv:
