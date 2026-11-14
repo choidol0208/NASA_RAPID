@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 14:58 KST
+updated: 2026-11-14 15:11 KST
 state: working
 blocked_on: none
 ---
@@ -31,6 +31,11 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - All 1,824 test links point at an existing NASA table row; the 1,050 whose table has a test-number column match it.
   - It replaces the catalog-vs-pipeline step in pages.yml (catalog request 1429, done).
 
+- 15:11, pm 1505 done: Constraints now has three parts. Part (a), "What NASA's recorded tests showed", comes first.
+  - Per need, one line per indicator from data's evidence package, copied by `web/build.py` into `data/indicators/scenario_<id>.json` (54 KB for ISS, instead of the 470 KB package).
+  - Each line shows label, group in words, values, unit, n_tests, the investigation and a link to its exact rows in `indicator_tests.csv` (1,193 lines checked, 0 off). Its reading appears word for word.
+  - ISS has P1 19, P3 7, S1 11 and D1 9 values; lunar habitat has S1 5. Empty needs print "No recorded test at this condition gives a value for this need."
+  - `compare_with` shows only as a pointer. Part (b) is the criteria and part (c) is where the evidence stops.
 - 14:58, pm 1449 items 1 and 2 and pm 1453 built, with the page reading in the challenge's three steps:
   - The masthead quotes the challenge ("hard to find, harder to compare, and harder yet to interpret").
   - Find · Information you need: closest investigations plus "Take the data with you". This holds the matched-tests CSV per demo scenario (written by `web/build.py` from data's files, values copied with source file, row and flags), a link to data's evidence package and to all tests and values at the built commit, and "How to cite" with the DOI of every investigation in the top results and the download.

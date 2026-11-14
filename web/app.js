@@ -629,7 +629,59 @@ function renderPoints(out, pipe) {
     ul);
 }
 
-// Interpret · Constraints, part 1: what NASA documents state per need (data's need_references.csv).
+// Interpret · Constraints, part 1 of 3 (pm request 1505): what NASA's recorded tests showed, from the
+// data role's indicators. Each line carries n_tests and its reading word for word; no criterion and
+// no judgement sit next to a value.
+const GROUP_WORDS = { material_id: "material", sample_geometry: "shape", fuel_phase: "fuel phase", fuel_material: "fuel", flow_direction: "flow",
+  o2_basis: "oxygen basis", source_id: "table" };
+function groupWords(g) {
+  return String(g || "").split(";").filter(Boolean).map((kv) => { const [k, v] = kv.split("="); return `${GROUP_WORDS[k] || k.replace(/_/g, " ")} ${v}`; }).join(", ");
+}
+function indicatorValues(ind) {
+  const vals = Array.isArray(ind.values) ? ind.values : [];
+  const by = (s) => vals.find((v) => v.stat === s && !v.category);
+  const cats = vals.filter((v) => v.category);
+  const unit = ind.unit ? ` ${ind.unit}` : "";
+  if (cats.length) return cats.map((v) => `${v.category} ${v.value}`).join(", ");
+  const lo = by("min"), hi = by("max"), med = by("median"), cnt = by("count");
+  if (lo && hi) return `${lo.value === hi.value ? lo.value : `${lo.value} to ${hi.value}`}${unit}${med ? `, median ${med.value}` : ""}`;
+  if (cnt) return `${cnt.value}${unit}`;
+  return vals.map((v) => `${v.stat} ${v.value}`).join(", ") + unit;
+}
+async function renderShown(out, pipe) {
+  const box = $("#shown-body");
+  box.replaceChildren();
+  const sid = scenarioId(out, pipe);
+  const file = sid ? `data/indicators/scenario_${sid}.json` : null;
+  if (!file || !OPTIONAL_HAS(file)) {
+    box.append(h("p", { class: "gap" }, sid ? "Values from the recorded tests: not available yet."
+      : "These values are computed for the two demo scenarios (ISS, lunar habitat). Ask about one of them to see what the recorded tests showed."));
+    return;
+  }
+  pipe.indicators = pipe.indicators || {};
+  if (!pipe.indicators[sid]) pipe.indicators[sid] = await loadJSON(file, null);
+  const data = pipe.indicators[sid];
+  if (!data || !data.needs) { box.append(h("p", { class: "gap" }, "Values from the recorded tests: not available yet.")); return; }
+  const spec = pipe.scenarioSpec.scenarios.find((x) => x.id === sid);
+  const order = PILLARS.flatMap(([pid]) => (pipe.needs || []).filter((n) => n.pillar === pid));
+  for (const n of order) {
+    const rows = data.needs[n.id] || [];
+    const block = h("div", { class: "shown-need" }, h("h3", {}, `${n.name} `, h("small", {}, `${spec ? spec.label : sid}: ${rows.length} value${rows.length === 1 ? "" : "s"}`)));
+    if (!rows.length) block.append(h("p", { class: "gap" }, "No recorded test at this condition gives a value for this need."));
+    else block.append(h("ul", { class: "shown-list" }, rows.map((ind) => h("li", {},
+      h("b", {}, ind.label || ind.indicator_id), ind.group ? ` (${groupWords(ind.group)})` : "", ": ", indicatorValues(ind),
+      " · ", h("b", {}, `${ind.n_tests} test${ind.n_tests === 1 ? "" : "s"}`), " · ",
+      ...(ind.investigation_ids || []).flatMap((acc, i) => [i ? ", " : "", link(`https://psi.nasa.gov/physci/repo/data/investigations/${acc}`, acc)]),
+      ind.tests_lines ? [" · ", link(`${REPO}data/pipeline/indicator_tests.csv?plain=1#L${ind.tests_lines[0]}-L${ind.tests_lines[1]}`, "tests behind it")] : null,
+      Array.isArray(ind.compare_with) && ind.compare_with.length ? h("span", { class: "gap" }, ` A published result exists: ${ind.compare_with.join(", ")}.`) : null,
+      ind.reading ? h("span", { class: "gap reading" }, ind.reading) : null))));
+    box.append(block);
+  }
+  box.append(h("p", { class: "gap" }, "Values: ", link(REPO + data.source, data.source), " (indicators, built by the team's data role) and ",
+    link(REPO + "data/pipeline/indicator_tests.csv", "data/pipeline/indicator_tests.csv"), " (the tests behind each value)."));
+}
+
+// Interpret · Constraints, part 2 of 3: what NASA documents state per need (data's need_references.csv).
 // Shown as the documents' statements, never as a verdict on a test or a requirement of this tool.
 const ITEM_TYPE = { acceptance_criterion: "acceptance criterion", requirement: "requirement", definition: "definition", published_result: "published result",
   knowledge_gap: "stated knowledge gap", limitation: "stated limitation", framework: "framework", recommendation: "recommendation",
@@ -1066,7 +1118,7 @@ async function main() {
     renderAssumptions(out, config);
     renderWarnings($("#scenario-warnings"), out.warnings);
     if (out.status !== "ok") {
-      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false); show("#criteria", false);
+      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false); show("#criteria", false); show("#shown", false);
       $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
@@ -1079,13 +1131,14 @@ async function main() {
     renderGlance(out, pipe);
     renderPoints(out, pipe);
     renderCriteria(pipe);
+    renderShown(out, pipe);
     renderExport(out, pipe, cat);
     renderCompare(out, pipe, (q2) => { run(q2); $("#needs").scrollIntoView({ behavior: "smooth", block: "start" }); });
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);
     renderTests(out, pipe, cat);
     renderEvidenceMap(out, pipe);
-    show("#top", true); show("#all", true); show("#needs", true); show("#stops", true); show("#criteria", true);
+    show("#top", true); show("#all", true); show("#needs", true); show("#stops", true); show("#criteria", true); show("#shown", true);
   }
 
   $("#ask-form").addEventListener("submit", (e) => { e.preventDefault(); run($("#q").value.trim()); });
