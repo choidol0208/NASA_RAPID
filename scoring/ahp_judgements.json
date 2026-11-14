@@ -1,0 +1,75 @@
+{
+  "_about": {
+    "what": "Pairwise comparison judgements for the analytic hierarchy process (AHP), one matrix per question type (profile). scoring/derive_weights.py turns them into the profile weights in scoring_config.json (principal eigenvector, consistency ratio).",
+    "scale": "Saaty 1-9: 1 equal, 3 moderately more important, 5 strongly, 7 very strongly, 9 extremely; 2, 4, 6, 8 in between. [a, b, v] means: for this question type, matching dimension a is v times as important as matching dimension b. v < 1 is written as a fraction, e.g. \"1/2\".",
+    "basis": "Each reason points to the evidence in scoring/WEIGHTING.md section 4: record = a sentence of a NASA PSI record (CC0-1.0), textbook = Turns 2012 as checked in scoring/MODEL_BASIS.md, team = the team's reasoning.",
+    "generated_by": "AI-generated (Claude Code, catalog role), 2026-11-14 19:21 KST. The judgements were written pair by pair from that evidence by an AI session that knew the earlier directly allocated weights (commit 8acc033), so they are not independent of them. The human lead approved them as they are at 19:26 KST.",
+    "status": "Applied: the profile weights of scoring_config.json 1.2.0 are derived from these judgements (check: python3 scoring/derive_weights.py --check)"
+  },
+  "prevention": {
+    "dimensions": ["o2", "flow", "fuel", "pressure", "geometry", "role"],
+    "pairs": [
+      ["o2", "flow", 2, "Both are the main variables of BASS-II (record). Oxygen has the stronger, nonlinear effect on flames (textbook) and is the gated dimension; the effect of flow speed is sub-linear (textbook)"],
+      ["o2", "fuel", 1, "Equal: a test of the same material at another O2 and a test of another material at the same O2 are both partial evidence (team)"],
+      ["o2", "pressure", 3, "The flammability limit depends only weakly on pressure, oxygen strongly (textbook)"],
+      ["o2", "geometry", 3, "BASS-II lists sample geometry after flow velocity and oxygen among its primary variables (record)"],
+      ["o2", "role", 3, "In a prevention question most candidates are flame-spread or flammability studies already; research purpose mainly separates fundamental studies (team)"],
+      ["flow", "fuel", "1/2", "Material-specific flammability limits are the basis of NASA material selection (Saffire record). Cabin flow varies with location and is often not known (team)"],
+      ["flow", "pressure", 2, "Flow is named a main variable for flame spread and extinction at low and high speed (BASS-II record); pressure is not named in the prevention records"],
+      ["flow", "geometry", 2, "BASS-II lists flow velocity first and geometry third among the primary variables (record)"],
+      ["flow", "role", 2, "Flow configuration (opposed, concurrent, quiescent) changes the spread mode (Saffire record: concurrent or opposed); research purpose only refines (team)"],
+      ["fuel", "pressure", 3, "Limits are determined for several spacecraft materials (Saffire record); pressure acts weakly on limits (textbook)"],
+      ["fuel", "geometry", 2, "The material comes first in material selection (Saffire record), but thin and thick samples of one material behave differently, so geometry is close (team)"],
+      ["fuel", "role", 3, "Same reasoning as O2 against research purpose (team)"],
+      ["pressure", "geometry", 1, "Both refine a match; neither is a main variable of the prevention records (team)"],
+      ["pressure", "role", 1, "Both refine a match (team)"],
+      ["geometry", "role", 2, "Geometry is a primary variable of BASS-II (record) and changes the thermal regime; research purpose only separates fundamental studies here (team)"]
+    ]
+  },
+  "detection": {
+    "dimensions": ["role", "fuel", "flow", "o2", "pressure", "geometry"],
+    "pairs": [
+      ["role", "fuel", 3, "Only a study that measured smoke or detector response can answer a detection question (SAME record: particle size affects detector response); a flame-spread test of the same material has no smoke data"],
+      ["role", "flow", 4, "As above; flow is a secondary factor of particle growth (SAME record)"],
+      ["role", "o2", 5, "As above; oxygen is not named in the detection records"],
+      ["role", "pressure", 7, "Pressure is not named in any detection record (team)"],
+      ["role", "geometry", 7, "Sample shape is not named in any detection record (team)"],
+      ["fuel", "flow", 2, "Smoke comes from the overheated material (SAME record); flow affects particle growth (SAME record)"],
+      ["fuel", "o2", 3, "SAME heats materials until they smoke rather than burning them, so oxygen matters less than the material (record, team)"],
+      ["fuel", "pressure", 5, "Pressure is not named in the detection records (team)"],
+      ["fuel", "geometry", 4, "Sample form changes heating somewhat, but the material decides the smoke (team)"],
+      ["flow", "o2", 2, "Reduced velocities and mixing favour larger particles (SAME record); oxygen is not named"],
+      ["flow", "pressure", 3, "Flow is named in the SAME hypotheses, pressure is not (record)"],
+      ["flow", "geometry", 3, "Flow is named in the SAME hypotheses, sample shape is not (record)"],
+      ["o2", "pressure", 2, "Oxygen still matters if the heated material ignites (team)"],
+      ["o2", "geometry", 2, "As above (team)"],
+      ["pressure", "geometry", 1, "Neither is named (team)"]
+    ]
+  },
+  "suppression": {
+    "dimensions": ["role", "fuel", "o2", "diluent", "flow", "pressure", "geometry"],
+    "pairs": [
+      ["role", "fuel", 2, "The first question is whether extinguishment was tested at all (BASS and FLEX records); the fuel is the next"],
+      ["role", "o2", 2, "As above; the limiting oxygen is measured only in a study that tested extinction (FLEX record)"],
+      ["role", "diluent", 2, "As above; a diluent is compared only where an agent was tested (BASS, FLEX records)"],
+      ["role", "flow", 3, "Flow is one condition among several in the BASS objective (record)"],
+      ["role", "pressure", 3, "Pressure is a variable of the limiting oxygen in FLEX (record), secondary to whether extinction was tested"],
+      ["role", "geometry", 4, "Geometry is one condition among several in the BASS objective (record)"],
+      ["fuel", "o2", 1, "The limiting oxygen is a property of the fuel, so both are needed together (FLEX record, team)"],
+      ["fuel", "diluent", 1, "The agent's effect is assessed over different materials (BASS record) and different agents (FLEX record)"],
+      ["fuel", "flow", 2, "BASS assesses the agent over materials and over flow; the material changes the fire more (team)"],
+      ["fuel", "pressure", 2, "As above, for pressure (team)"],
+      ["fuel", "geometry", 3, "BASS names materials and geometries; for liquids against solids the material decides first (team)"],
+      ["o2", "diluent", 1, "FLEX measures how the suppressant changes the limiting oxygen: the two act together (record)"],
+      ["o2", "flow", 2, "The oxygen left after dilution decides whether a flame survives (FLEX record); flow is one of several BASS conditions"],
+      ["o2", "pressure", 2, "FLEX gives the limiting oxygen as a function of pressure (record): pressure matters, through the limiting oxygen"],
+      ["o2", "geometry", 3, "Geometry is one of several BASS conditions (record)"],
+      ["diluent", "flow", 2, "Different gaseous agents differ in effect (FLEX record); inert diluents act mainly thermally (textbook)"],
+      ["diluent", "pressure", 2, "As above (record, textbook)"],
+      ["diluent", "geometry", 3, "As above (record)"],
+      ["flow", "pressure", 1, "Both are named as conditions, flow in BASS and pressure in FLEX (record)"],
+      ["flow", "geometry", 2, "Flow changes heat and mass transfer at the flame (textbook); geometry refines (team)"],
+      ["pressure", "geometry", 1, "Both are named as conditions, pressure in FLEX and geometry in BASS (record)"]
+    ]
+  }
+}

@@ -144,6 +144,8 @@ def main():
         import sensitivity
         lines += [""] + sensitivity.report_lines(sensitivity.run())
         lines += [""] + sensitivity.values_report_lines(sensitivity.run_values())
+        lines += [""] + sensitivity.profiles_report_lines(sensitivity.run_profiles())
+        lines += [""] + sensitivity.smaa_report_lines(sensitivity.run_smaa())
     report = "\n".join(lines) + "\n"
     with open(args.report, "w", encoding="utf-8") as fh:
         fh.write(report)

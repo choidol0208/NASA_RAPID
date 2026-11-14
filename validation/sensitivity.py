@@ -10,15 +10,21 @@ top 3 investigations are compared with the top 3 under the configured weights:
 - "same set": same investigations, order changed;
 - "rank 1 changed": a different investigation first.
 
-Run:  python3 validation/sensitivity.py        (prints the table)
-validation/run_validation.py adds the same table to validation/report.md.
+Further sections: the other scoring values (run_values), weighting by purpose for all three
+profiles with equal and rank-order-centroid weights (run_profiles), and SMAA, which keeps only the
+order of importance of each profile's weights (run_smaa).
+
+Run:  python3 validation/sensitivity.py        (prints the tables)
+validation/run_validation.py adds the same tables to validation/report.md.
 The weights themselves are the team's choice; this shows how much the ranking depends on them.
 Standard library only.
 """
+import math
 import os
+import random
 import sys
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT =os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
 from scoring import scorer  # noqa: E402
 
@@ -164,8 +170,162 @@ def values_report_lines(res):
     return lines
 
 
+# ------------------------------------------------------- weighting by purpose (all three profiles)
+# Each profile is tested on queries that the scorer reads as that purpose:
+# - one-at-a-time x0.5 and x1.5 on each of its weights;
+# - two other ways to derive weights from the same judgement: equal weights over its dimensions,
+#   and rank-order centroid weights (ROC), which keep only the order of importance (tied ranks share
+#   the mean of their centroid weights);
+# - the weights of the other two profiles, to see whether the purpose changes the answer.
+PROFILE_QUERIES = {
+    "prevention": DEMO,
+    "detection": ["smoke detector on ISS", "wire insulation overheating smoke", "smoke detector for a lunar rover", "kapton teflon smoke"],
+    "suppression": ["CO2 suppression of heptane fire", "nitrogen extinguish fabric fire ISS", "fire extinguisher for a Mars habitat",
+                    "inert gas suppression ISS"],
+}
+
+
+def roc_weights(w):
+    dims = sorted([d for d, v in w.items() if v > 0], key=lambda d: -w[d])
+    n = len(dims)
+    base = [sum(1 / j for j in range(i, n + 1)) / n for i in range(1, n + 1)]
+    out, i = {d: 0.0 for d in w}, 0
+    while i < n:
+        j = i
+        while j + 1 < n and w[dims[j + 1]] == w[dims[i]]:
+            j += 1
+        m = sum(base[i:j + 1]) / (j - i + 1)
+        for k in range(i, j + 1):
+            out[dims[k]] = m
+        i = j + 1
+    return out
+
+
+def run_profiles():
+    cfg = scorer.load_config()
+    catalog = scorer.load_catalog()
+
+    def top(q, w):
+        return [r["investigation_id"] for r in scorer.rank(q, config=cfg, catalog=catalog, weights_override=w)["results"]]
+
+    res = {}
+    for prof, qs in PROFILE_QUERIES.items():
+        w = cfg["profiles"][prof]["weights"]
+        read_as = {q: scorer.rank(q, config=cfg, catalog=catalog)["profile"] for q in qs}
+        base = {q: top(q, w) for q in qs}
+        oat = []
+        for d, v in w.items():
+            if v <= 0:
+                continue
+            for f in FACTORS:
+                ww = dict(w)
+                ww[d] = v * f
+                t = sum(ww.values())
+                ww = {k: x / t for k, x in ww.items()}
+                for q in qs:
+                    got = top(q, ww)
+                    oat.append(dict(dim=d, factor=f, query=q, same=got == base[q], rank1=got[:1] == base[q][:1]))
+        schemes = {"equal weights": {d: (1.0 if v > 0 else 0.0) for d, v in w.items()}, "rank-order centroid": roc_weights(w)}
+        schemes.update({f"{o} weights": cfg["profiles"][o]["weights"] for o in PROFILE_QUERIES if o != prof})
+        alt = {}
+        for name, ww in schemes.items():
+            alt[name] = [dict(query=q, got=top(q, ww), base=base[q]) for q in qs]
+        res[prof] = dict(weights=w, read_as=read_as, oat=oat, alt=alt)
+    return dict(version=cfg["version"], profiles=res)
+
+
+def profiles_report_lines(res):
+    lines = [f"## Weighting by purpose (config {res['version']})", "",
+             "| Profile | Queries read as this purpose | One-at-a-time x0.5/x1.5: same top 3 | rank 1 changes | Scheme | Same top 3 | Same rank 1 |",
+             "|---|---|---|---|---|---|---|"]
+    for prof, r in res["profiles"].items():
+        ok = sum(v == prof for v in r["read_as"].values())
+        first = True
+        for name, rows in r["alt"].items():
+            same = sum(x["got"] == x["base"] for x in rows)
+            r1 = sum(x["got"][:1] == x["base"][:1] for x in rows)
+            head = (f"| {prof} | {ok} of {len(r['read_as'])} | {sum(x['same'] for x in r['oat'])} of {len(r['oat'])} | "
+                    f"{sum(not x['rank1'] for x in r['oat'])} |") if first else "| | | | |"
+            lines.append(f"{head} {name} | {same} of {len(rows)} | {r1} of {len(rows)} |")
+            first = False
+    lines += ["", "Rows where another scheme changes the top 3:", ""]
+    for prof, r in res["profiles"].items():
+        for name, rows in r["alt"].items():
+            for x in rows:
+                if x["got"] != x["base"]:
+                    lines.append(f"- {prof}, {name}, \"{x['query']}\": {', '.join(x['got'])} (configured: {', '.join(x['base'])})")
+    return lines
+
+
+# ------------------------------------------------------- SMAA: uncertainty of the weights
+# Stochastic multicriteria acceptability analysis with ordinal weight information (SMAA-O style):
+# only the ORDER of importance of the profile's weights is trusted, not their values.
+# Weight vectors are drawn uniformly from the simplex, sorted, and given to the dimensions in that
+# order (dimensions with equal weights share their ranks in random order). For each query the
+# share of draws that keep each investigation at rank 1 or in the top 3 is its acceptability.
+SMAA_DRAWS = 300
+SMAA_SEED = 20261114
+
+
+def _ordinal_draw(w, rnd):
+    dims = sorted([d for d, v in w.items() if v > 0], key=lambda d: -w[d])
+    xs = sorted((-math.log(1.0 - rnd.random()) for _ in dims), reverse=True)
+    t = sum(xs)
+    xs = [x / t for x in xs]
+    out, i = {d: 0.0 for d in w}, 0
+    while i < len(dims):
+        j = i
+        while j + 1 < len(dims) and abs(w[dims[j + 1]] - w[dims[i]]) < 1e-12:
+            j += 1
+        vals = xs[i:j + 1]
+        rnd.shuffle(vals)
+        for k, d in enumerate(dims[i:j + 1]):
+            out[d] = vals[k]
+        i = j + 1
+    return out
+
+
+def run_smaa(draws=SMAA_DRAWS, seed=SMAA_SEED, weights_by_profile=None):
+    cfg = scorer.load_config()
+    catalog = scorer.load_catalog()
+    rnd = random.Random(seed)
+    res = {}
+    for prof, qs in PROFILE_QUERIES.items():
+        w = (weights_by_profile or {}).get(prof) or cfg["profiles"][prof]["weights"]
+        samples = [_ordinal_draw(w, rnd) for _ in range(draws)]
+        for q in qs:
+            ref = [r["investigation_id"] for r in scorer.rank(q, config=cfg, catalog=catalog, weights_override=w)["results"]]
+            first, top3, same1, same3 = {}, {}, 0, 0
+            for ww in samples:
+                got = [r["investigation_id"] for r in scorer.rank(q, config=cfg, catalog=catalog, weights_override=ww)["results"]]
+                if got:
+                    first[got[0]] = first.get(got[0], 0) + 1
+                for x in got:
+                    top3[x] = top3.get(x, 0) + 1
+                same1 += got[:1] == ref[:1]
+                same3 += set(got) == set(ref)
+            res[q] = dict(profile=prof, ref=ref, same1=same1 / draws, same3=same3 / draws,
+                          first={k: v / draws for k, v in first.items()}, top3={k: v / draws for k, v in top3.items()})
+    return dict(version=cfg["version"], draws=draws, seed=seed, queries=res)
+
+
+def smaa_report_lines(res):
+    lines = [f"## Weight uncertainty: SMAA with the order of importance only (config {res['version']}, "
+             f"{res['draws']} draws per profile, seed {res['seed']})", "",
+             "| Profile | Query | Top 3 with the profile's weights | Same rank 1 | Same top 3 (as a set) | Top-3 acceptability of each investigation (10% or more) |",
+             "|---|---|---|---|---|---|"]
+    for q, r in res["queries"].items():
+        acc = ", ".join(f"{k} {v:.0%}" for k, v in sorted(r["top3"].items(), key=lambda kv: -kv[1]) if v >= 0.10)
+        lines.append(f"| {r['profile']} | {q} | {', '.join(r['ref'])} | {r['same1']:.0%} | {r['same3']:.0%} | {acc} |")
+    return lines
+
+
 if __name__ == "__main__":
     res = run()
     print("\n".join(report_lines(res)))
     print()
     print("\n".join(values_report_lines(run_values())))
+    print()
+    print("\n".join(profiles_report_lines(run_profiles())))
+    print()
+    print("\n".join(smaa_report_lines(run_smaa())))

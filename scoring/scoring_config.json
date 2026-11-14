@@ -1,51 +1,51 @@
 {
   "_about": {
     "what": "Scoring rules for ranking PSI test configurations against a user scenario. Read by scoring/scorer.py; the dashboard can read the same file (e.g., to draw weight sliders).",
-    "status": "Team proposal (2026-11-14), not NASA guidance. All values of config 1.1.0 were reviewed and approved as they are by a team member (see generated_by): the profile weights, and the other values on the basis of the AI review in scoring/PARAMETER_REVIEW.md. Questions for combustion researchers, the next validation step, are listed in that file. Change values here only, never in code.",
-    "generated_by": "AI-assisted (Claude), reviewed: profile weights approved as-is by the human lead (team member), 2026-11-14 16:51 KST; all other values (similarity scales and tables, gate, evidence factor, selection, confidence, complementary slot, atmosphere fallback) approved as-is by the same reviewer, 2026-11-14 17:03 KST, after the AI review in scoring/PARAMETER_REVIEW.md; config 1.1.0",
+    "status": "Team proposal (2026-11-14), not NASA guidance. Config 1.2.0: the profile weights are derived by the analytic hierarchy process (AHP) from the pairwise judgements in scoring/ahp_judgements.json by scoring/derive_weights.py (principal eigenvector; consistency ratio 0.012, 0.014 and 0.006, below Saaty's 0.10). The judgements were written by an AI session from the NASA record sentences and textbook points in scoring/WEIGHTING.md; the human lead approved them as they are and decided to apply them. All other values are unchanged from 1.1.0 and were approved as they are on the basis of the AI review in scoring/PARAMETER_REVIEW.md. Questions for combustion researchers, the next validation step, are listed in that file. Change values here only, never in code; change the weights only through scoring/ahp_judgements.json.",
+    "generated_by": "AI-assisted (Claude), reviewed: profile weights of 1.0.0-1.1.0 (direct point allocation) approved as-is by the human lead (team member), 2026-11-14 16:51 KST; all other values approved as-is by the same reviewer, 2026-11-14 17:03 KST, after the AI review in scoring/PARAMETER_REVIEW.md; config 1.2.0 (2026-11-14 19:26 KST): profile weights replaced by the AHP derivation, pairwise judgements approved as-is and applied by decision of the same reviewer",
     "formula": "score = 100 * M * G * sum_i(w_i * S_i) over active dimensions; weights renormalized to sum 1 over active dimensions"
   },
-  "version": "1.1.0",
+  "version": "1.2.0",
   "default_profile": "prevention",
   "profiles": {
     "prevention": {
       "label_en": "Material flammability (prevention)",
       "weights": {
-        "o2": 0.25,
-        "pressure": 0.1,
-        "flow": 0.2,
-        "fuel": 0.25,
-        "geometry": 0.1,
-        "role": 0.1,
+        "o2": 0.285,
+        "pressure": 0.09,
+        "flow": 0.166,
+        "fuel": 0.267,
+        "geometry": 0.111,
+        "role": 0.081,
         "diluent": 0.0
       },
-      "rationale": "Microgravity solid flammability is mapped on an oxygen-concentration vs flow-speed plane (U-shaped boundary), so O2 and flow carry 0.45; fuel type next; pressure and geometry modify."
+      "rationale": "Microgravity solid flammability is mapped on an oxygen-concentration vs flow-speed plane (U-shaped boundary), so O2 and flow carry 0.45; fuel type next; pressure and geometry modify. Weights derived by AHP from scoring/ahp_judgements.json (scoring/derive_weights.py); evidence for each judgement in scoring/WEIGHTING.md."
     },
     "detection": {
       "label_en": "Smoke and fire detection",
       "weights": {
-        "o2": 0.1,
-        "pressure": 0.05,
-        "flow": 0.1,
-        "fuel": 0.3,
-        "geometry": 0.05,
-        "role": 0.4,
+        "o2": 0.085,
+        "pressure": 0.049,
+        "flow": 0.136,
+        "fuel": 0.221,
+        "geometry": 0.051,
+        "role": 0.458,
         "diluent": 0.0
       },
-      "rationale": "Smoke amount and particle size depend mostly on the material and on whether the study measured smoke; atmosphere is secondary."
+      "rationale": "Smoke amount and particle size depend mostly on the material and on whether the study measured smoke; atmosphere is secondary. Weights derived by AHP from scoring/ahp_judgements.json (scoring/derive_weights.py); evidence for each judgement in scoring/WEIGHTING.md."
     },
     "suppression": {
       "label_en": "Suppression and extinguishment",
       "weights": {
-        "o2": 0.15,
-        "pressure": 0.05,
-        "flow": 0.1,
-        "fuel": 0.2,
-        "geometry": 0.05,
-        "role": 0.3,
-        "diluent": 0.15
+        "o2": 0.162,
+        "pressure": 0.08,
+        "flow": 0.089,
+        "fuel": 0.162,
+        "geometry": 0.059,
+        "role": 0.286,
+        "diluent": 0.162
       },
-      "rationale": "Whether the study tested extinguishment and with which diluent matters most; post-dilution O2 still governs extinction."
+      "rationale": "Whether the study tested extinguishment and with which diluent matters most; post-dilution O2 still governs extinction. Weights derived by AHP from scoring/ahp_judgements.json (scoring/derive_weights.py); evidence for each judgement in scoring/WEIGHTING.md."
     }
   },
   "similarity": {
