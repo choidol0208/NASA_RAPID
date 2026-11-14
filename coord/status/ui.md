@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 18:10 KST
+updated: 2026-11-14 18:18 KST
 state: working
 blocked_on: none
 ---
@@ -70,6 +70,7 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - The page no longer prints `quality.json` `description` under part 1 of the AI block. It was ui's addition, not part of pm 1705.
   - A search of the rendered page for both demo queries, every fold open, finds no "specialist" or "expert".
   - Request 1809 to all: each role rewords its own files (places listed). Keep "not a NASA conclusion", "not safety guidance", the AI labels and the other limits; write any next step as a plan.
+- 18:18, sentence queries tested on the live page (the human lead asked). Oxygen, Mars, Moon base, fabric, detection and suppression are read well. Request 1817 to catalog, three reading gaps: a pressure followed by a Korean particle (`70 kPa의`, `70kPa인`) is not read and the preset value is shown instead; `spacecraft cabin` / `우주선 선실` (spacecraft cabin) read no environment; a base on an unnamed planet gets no partial-gravity warning.
 - Open: the 19:00 switch of the Pages trigger to `main` only; pm 1630 slide captures after the freeze.
 - 16:54: merged catalog's weight review (`1ff56df`, no value changed). The method section now says: "The weights are the team's proposal, not NASA guidance. A team member approved them as they are; no combustion specialist has reviewed them." No name on the page. Checks: unit tests 38/38, integration 33 results with 0 broken joins, build.
 - pm: on the board, U5, U6 and U7 are done (U5's media at 16:31, the 1630 slide captures follow at about 19:15); D7's raw-data file is already on the page.
