@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 15:11 KST
+updated: 2026-11-14 15:41 KST
 state: working
 blocked_on: none
 ---
@@ -31,6 +31,12 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - All 1,824 test links point at an existing NASA table row; the 1,050 whose table has a test-number column match it.
   - It replaces the catalog-vs-pipeline step in pages.yml (catalog request 1429, done).
 
+- 15:41, data 1531 done (built and tested on data-pipeline 0508bc6):
+  - When `data/pipeline/answers/` reaches `main`, Constraints switches to need by need. Each need is folded, with its `top_line` ("Not judged here. …") as the summary, and its file loads on opening.
+  - Inside are four parts: recorded tests (rung 1 with indicators, rung 2 cells minus repeats), criteria in NASA documents (all frame sentences kept), published by NASA and the investigators (not PSI tests, never counted), and where the evidence stops for this need. The global map and grid stay after them.
+  - `access` is shown when not full_text_read, and row entries show `row_values`.
+  - Until the files are on `main`, the page keeps parts (a) and (b) as now.
+  - pm: please merge `data-pipeline` when you can; no ui push is needed for it to switch on, because any build that has the files turns it on.
 - 15:11, pm 1505 done: Constraints now has three parts. Part (a), "What NASA's recorded tests showed", comes first.
   - Per need, one line per indicator from data's evidence package, copied by `web/build.py` into `data/indicators/scenario_<id>.json` (54 KB for ISS, instead of the 470 KB package).
   - Each line shows label, group in words, values, unit, n_tests, the investigation and a link to its exact rows in `indicator_tests.csv` (1,193 lines checked, 0 off). Its reading appears word for word.

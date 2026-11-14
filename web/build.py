@@ -133,6 +133,26 @@ def main():
         with open(os.path.join(DIST, "data", "indicators", f"scenario_{sid}.json"), "w", encoding="utf-8") as fh:
             json.dump({"source": f"data/pipeline/evidence/scenario_{sid}.json", "needs": out}, fh, ensure_ascii=False)
         OPTIONAL_BUILT.append(f"data/indicators/scenario_{sid}.json")
+    # data's answer files (request 1531): one per scenario and need, fixed sentences in four rungs.
+    # Copied unchanged; a small index per scenario carries each need's top line, so the page loads a
+    # need's file only when its section is opened.
+    ans_dir = os.path.join(ROOT, "data/pipeline/answers")
+    if os.path.isdir(ans_dir):
+        os.makedirs(os.path.join(DIST, "data", "answers"), exist_ok=True)
+        for sid in sorted(DASH_SCENARIOS):
+            index = {}
+            for name in sorted(os.listdir(ans_dir)):
+                if not (name.startswith(sid + "__") and name.endswith(".json")):
+                    continue
+                need = name[len(sid) + 2:-5]
+                shutil.copy(os.path.join(ans_dir, name), os.path.join(DIST, "data", "answers", name))
+                doc = json.load(open(os.path.join(ans_dir, name), encoding="utf-8-sig"))
+                index[need] = {"file": f"data/answers/{name}", "top_line": (doc.get("top_line") or {}).get("text", ""),
+                               "source": f"data/pipeline/answers/{name}"}
+            if index:
+                with open(os.path.join(DIST, "data", "answers", f"{sid}_index.json"), "w", encoding="utf-8") as fh:
+                    json.dump(index, fh, ensure_ascii=False)
+                OPTIONAL_BUILT.append(f"data/answers/{sid}_index.json")
     og = os.path.join(HERE, "media", "02_lunar_top.png")
     if os.path.exists(og):  # link preview image; retaken with the final page at U5
         shutil.copy(og, os.path.join(DIST, "og.png"))

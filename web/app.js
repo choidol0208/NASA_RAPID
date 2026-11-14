@@ -681,6 +681,88 @@ async function renderShown(out, pipe) {
     link(REPO + "data/pipeline/indicator_tests.csv", "data/pipeline/indicator_tests.csv"), " (the tests behind each value)."));
 }
 
+// Interpret · Constraints, need by need (data request 1531): the four rungs of data's answer files,
+// shown as written. Published entries are quoted, never counted and never drawn as PSI tests.
+const KIND = { result: "published result", criterion: "criterion", gap: "stated gap", caveat: "caveat" };
+function rowValues(v) {
+  if (v === null || v === undefined) return null;
+  if (typeof v === "string") return v;
+  if (Array.isArray(v)) return v.join("; ");
+  return Object.entries(v).map(([k, x]) => `${k.replace(/_/g, " ")} ${x}`).join(", ");
+}
+function findingItem(e) {
+  const rv = e.row ? rowValues(e.row_values) : null;
+  const access = e.access && e.access !== "full_text_read" ? ` [${e.access.replace(/_/g, " ")}]` : "";
+  return h("li", {}, h("span", { class: "tag" }, KIND[e.kind] || e.kind || "item"), " ",
+    e.row ? h("b", {}, `${e.row}: `) : null, rv || e.text || "",
+    e.quote && !e.row ? h("q", { class: "quote" }, e.quote) : null,
+    h("span", { class: "gap" }, " — ", e.url ? link(e.url, e.title || e.item_id) : (e.title || e.item_id || ""), e.where ? `, ${e.where}` : "", access),
+    e.item_note ? h("span", { class: "gap" }, ` Note: ${e.item_note}`) : null);
+}
+const sentenceList = (arr) => (Array.isArray(arr) && arr.length ? h("ul", { class: "ans-sentences" }, arr.map((s) => h("li", {}, s.text || String(s)))) : null);
+const foldList = (title, items, render, open = false) => (Array.isArray(items) && items.length
+  ? h("details", { class: "more", open: open ? "" : null }, h("summary", {}, `${title} (${items.length})`), h("ul", { class: "ans-list" }, items.map(render))) : null);
+function renderNeedAnswer(doc) {
+  const r1 = doc.rung1_recorded_at_the_condition || {}, r2 = doc.rung2_recorded_near_the_condition || {};
+  const fr = doc.frame || {}, r3 = doc.rung3_published || {}, r4 = doc.rung4_not_known || {};
+  const cells = (r2.cells || []).filter((c) => c.also_matched_at_the_condition === undefined || c.also_matched_at_the_condition !== c.matched);
+  const part = (title, ...kids) => h("div", { class: "ans-part" }, h("h4", {}, title), ...kids);
+  return h("div", { class: "ans-need" },
+    part("What NASA's recorded tests showed",
+      sentenceList(r1.sentences),
+      foldList("Values from the recorded tests", r1.indicators, (ind) => h("li", {}, h("b", {}, ind.label || ind.id), ind.group ? ` (${groupWords(ind.group)})` : "", ": ",
+        indicatorValues(ind), " · ", h("b", {}, `${ind.n_tests} test${ind.n_tests === 1 ? "" : "s"}`), ind.reading ? h("span", { class: "gap reading" }, ind.reading) : null), true),
+      sentenceList(r2.sentences),
+      cells.length ? h("ul", { class: "ans-list" }, cells.map((c) => h("li", {}, `${c.o2_bin_label} × ${c.pressure_bin_label}`,
+        c.differs_in || c.differs ? ` (differs in ${c.differs_in || c.differs})` : "", `: ${c.matched} matched test${c.matched === 1 ? "" : "s"}`))) : null),
+    part("Criteria in NASA documents",
+      sentenceList(fr.sentences),
+      foldList("Criteria, requirements and definitions", fr.criteria, findingItem),
+      foldList("Questions and research needs named in NASA documents", fr.nasa_questions, findingItem)),
+    part("Published by NASA and the investigators (not in PSI's experimental tables)",
+      sentenceList(r3.sentences),
+      foldList("At this environment", r3.at_the_environment, findingItem, true),
+      foldList("About a stated condition", r3.about_a_stated_condition, findingItem, true),
+      foldList("Stated without these conditions", r3.stated_without_these_conditions, findingItem)),
+    part("Where the evidence stops for this need",
+      sentenceList(r4.sentences),
+      Array.isArray(r4.gaps) && r4.gaps.length ? h("ul", { class: "ans-list" }, r4.gaps.map((g) => h("li", {}, g.text || g.code))) : null,
+      foldList("Stated as not known in a document", r4.stated_open_elsewhere, findingItem, true),
+      foldList("Searches with no result", r4.searches, (s) => h("li", {}, `${s.what}: ${s.result}`, h("span", { class: "gap" }, ` (${[s.where, s.when, s.by].filter(Boolean).join(", ")})`)), true),
+      foldList("Areas the PSI tables cannot address", r4.not_covered, (x) => h("li", {}, h("b", {}, x.area), x.why ? `: ${x.why}` : "", x.source_item ? h("span", { class: "gap" }, ` (${x.source_item})`) : null))));
+}
+async function renderAnswers(out, pipe) {
+  const box = $("#answers-body");
+  box.replaceChildren();
+  const sid = scenarioId(out, pipe);
+  const idxFile = sid ? `data/answers/${sid}_index.json` : null;
+  const on = Boolean(idxFile && OPTIONAL_HAS(idxFile));
+  show("#answers", on); show("#shown", !on); show("#criteria", !on);
+  if (!on) return;
+  pipe.answersIndex = pipe.answersIndex || {};
+  if (!pipe.answersIndex[sid]) pipe.answersIndex[sid] = await loadJSON(idxFile, null);
+  const idx = pipe.answersIndex[sid];
+  if (!idx) { show("#answers", false); show("#shown", true); show("#criteria", true); return; }
+  const spec = pipe.scenarioSpec.scenarios.find((x) => x.id === sid);
+  $("#answers-title").textContent = `What is known for ${spec ? spec.label : sid}, need by need`;
+  const order = PILLARS.flatMap(([pid]) => (pipe.needs || []).filter((n) => n.pillar === pid));
+  for (const n of order) {
+    const e = idx[n.id];
+    if (!e) continue;
+    const body = h("div", {}, h("p", { class: "gap" }, "Loading…"));
+    const d = h("details", { class: "more ans" }, h("summary", {}, h("b", {}, n.name), " ", h("span", { class: "ans-top" }, e.top_line)), body);
+    d.addEventListener("toggle", async () => {
+      if (!d.open || d.dataset.loaded) return;
+      d.dataset.loaded = "1";
+      try {
+        const doc = await loadJSON(e.file);
+        body.replaceChildren(renderNeedAnswer(doc), h("p", { class: "gap" }, "Source: ", link(REPO + e.source, e.source), ", written by the team's data role from the PSI tables and the reference list."));
+      } catch (err) { body.replaceChildren(h("p", { class: "gap" }, "This need's answer file could not be loaded.")); d.dataset.loaded = ""; }
+    });
+    box.append(d);
+  }
+}
+
 // Interpret · Constraints, part 2 of 3: what NASA documents state per need (data's need_references.csv).
 // Shown as the documents' statements, never as a verdict on a test or a requirement of this tool.
 const ITEM_TYPE = { acceptance_criterion: "acceptance criterion", requirement: "requirement", definition: "definition", published_result: "published result",
@@ -1118,7 +1200,7 @@ async function main() {
     renderAssumptions(out, config);
     renderWarnings($("#scenario-warnings"), out.warnings);
     if (out.status !== "ok") {
-      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false); show("#criteria", false); show("#shown", false);
+      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false); show("#criteria", false); show("#shown", false); show("#answers", false);
       $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
@@ -1133,12 +1215,13 @@ async function main() {
     renderCriteria(pipe);
     renderShown(out, pipe);
     renderExport(out, pipe, cat);
+    renderAnswers(out, pipe);
     renderCompare(out, pipe, (q2) => { run(q2); $("#needs").scrollIntoView({ behavior: "smooth", block: "start" }); });
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);
     renderTests(out, pipe, cat);
     renderEvidenceMap(out, pipe);
-    show("#top", true); show("#all", true); show("#needs", true); show("#stops", true); show("#criteria", true); show("#shown", true);
+    show("#top", true); show("#all", true); show("#needs", true); show("#stops", true); // #answers, #shown and #criteria are set by renderAnswers()
   }
 
   $("#ask-form").addEventListener("submit", (e) => { e.preventDefault(); run($("#q").value.trim()); });
