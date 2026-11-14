@@ -671,7 +671,7 @@ CONFIGS = [
      flow_config="concurrent", flow_min_cms=5, flow_max_cms=10,
      atmosphere_basis="table (air flow); O2 and pressure not reported", gravity_level="microgravity",
      measured_outputs="particle_size; detector_response; mass_loss", flammability_boundary_reported="N",
-     key_findings="Conditions: 5–10 cm/s, weight-loss rate 1–2 mg/min, aging 1–20 min (table).",
+     key_findings="Conditions in the table: air flow 5–10 cm/s and aging 1–20 min. Its weight-loss rate (1–2 mg/min) is a planned target of the test matrix, not a measured result (SAME requirements document; reference SAMEEIRD.target in pipeline/spec/references.json).",
      test_count_config=4, tests_table_ref="PSI-102_Experimental table_SAME.csv",
      source_notes="Test count: rows 2 to 5 (samples 1 to 4, Teflon) record air flow, weight-loss rate and aging time. Rows 6 to 9 (Kapton, silicone rubber, lampwick, dibutyl phthalate) say 'same conditions as 1-4' and record no values, "
                   "so they are not counted as separate tests (the table had been counted as 8). Classification columns are team judgement."),

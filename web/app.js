@@ -559,6 +559,101 @@ function renderCompare(out, pipe, runQuery) {
     caveats.length ? h("ul", { class: "gap compare-caveats" }, caveats) : null);
 }
 
+// The slim scenario_tests.csv, fetched once and shared by the tests list and the export box.
+function scenarioTestsOf(pipe) {
+  if (!pipe.scenarioTestsP) pipe.scenarioTestsP = loadText("data/scenario_tests.csv").then(parseRows).catch((e) => { pipe.scenarioTestsP = null; throw e; });
+  return pipe.scenarioTestsP;
+}
+
+// Find · "Take the data with you" (pm request 1449): downloads with their NASA sources, and the
+// dataset DOI of every investigation in them, because PSI asks to be cited by DOI.
+async function renderExport(out, pipe, cat) {
+  const box = $("#export");
+  box.replaceChildren();
+  if (out.status !== "ok") return;
+  const RAW = REPO.replace("https://github.com/", "https://raw.githubusercontent.com/").replace("/blob/", "/");
+  const sid = scenarioId(out, pipe);
+  const spec = sid && pipe.scenarioSpec ? pipe.scenarioSpec.scenarios.find((x) => x.id === sid) : null;
+  const exportFile = sid ? `data/export/scenario_${sid}_matched_tests.csv` : null;
+  let accs = out.results.map((r) => r.psi_accession);
+  const items = [];
+  if (exportFile && OPTIONAL_HAS(exportFile)) {
+    try {
+      const rows = (await scenarioTestsOf(pipe)).filter((r) => r.scenario_id === sid && r.tier !== "other");
+      accs = [...new Set([...accs, ...rows.map((r) => r.investigation_id)])]; // the top 3 and every investigation in the file
+      items.push(h("li", {}, h("a", { href: vurl(exportFile), download: `${sid}_matched_tests.csv` }, `Matched tests for ${spec ? spec.label : sid} (CSV, ${rows.length} tests)`),
+        h("span", { class: "gap" }, ": each test's tier, recorded oxygen, pressure and flow, flags, and its NASA source file and row.")));
+    } catch (e) { /* the list below still offers the full files */ }
+  }
+  if (sid && OPTIONAL_HAS(`repo:data/pipeline/evidence/scenario_${sid}.json`))
+    items.push(h("li", {}, link(`${RAW}data/pipeline/evidence/scenario_${sid}.json`, `Evidence package for ${spec ? spec.label : sid} (JSON)`),
+      h("span", { class: "gap" }, ": per need, the matched tests with values, units, source columns and rows, built by the team's data role.")));
+  items.push(h("li", {}, link(`${RAW}data/pipeline/tests.csv`, "All recorded tests (CSV, one row per test)"), h("span", { class: "gap" }, " and "),
+    link(`${RAW}data/pipeline/values_long.csv`, "every value with its source column (CSV)"), "."));
+  const invOf = (acc) => Object.values(cat.investigations).find((v) => v.psi_accession === acc);
+  const cites = accs.map(invOf).filter(Boolean).sort((a, b) => a.investigation_id.localeCompare(b.investigation_id));
+  box.append(h("h3", {}, "Take the data with you"), h("ul", { class: "export-list" }, items),
+    cites.length ? h("details", { class: "more cite" }, h("summary", {}, `How to cite: ${cites.length} NASA PSI dataset${cites.length === 1 ? "" : "s"} (the top results${exportFile && OPTIONAL_HAS(exportFile) ? " and the matched-tests download" : ""})`),
+      h("ul", { class: "cite-list" }, cites.map((v) => h("li", {}, `${v.investigation_name} (${v.investigation_id}, ${v.psi_accession}). NASA Physical Sciences Informatics. `,
+        v.dataset_doi ? link("https://doi.org/" + v.dataset_doi, "https://doi.org/" + v.dataset_doi) : "DOI not stated"))),
+      h("p", { class: "gap" }, "PSI asks users to cite each dataset by its DOI. The page's own computations (scores, counts, bins) are the team's, not NASA's.")) : null);
+}
+
+// Compare · Points to consider: one line per need, what the recorded tests say for this environment
+// (scenario_needs.csv for the demo scenarios) and what a count means (data's needs.json "reading").
+function renderPoints(out, pipe) {
+  const box = $("#points");
+  box.replaceChildren();
+  if (!pipe.needs) return;
+  const order = PILLARS.flatMap(([pid]) => pipe.needs.filter((n) => n.pillar === pid));
+  const sid = scenarioId(out, pipe);
+  const rows = sid && pipe.scenarioNeeds ? pipe.scenarioNeeds.filter((r) => r.scenario_id === sid) : [];
+  const spec = sid && pipe.scenarioSpec ? pipe.scenarioSpec.scenarios.find((x) => x.id === sid) : null;
+  const ul = h("ul", { class: "points-list" });
+  for (const n of order) {
+    const r = rows.find((x) => x.need_id === n.id);
+    let said = null;
+    if (r) {
+      const atm = +r.tests_atmosphere || 0, o2o = +r.tests_oxygen_only || 0, po = +r.tests_pressure_only || 0;
+      const codes = r.gaps ? r.gaps.split(";").filter(Boolean) : [];
+      const parts = [atm ? `${atm} counted tests in the scenario range` : "", o2o ? `${o2o} with oxygen in range and no pressure in the table` : "",
+        po ? `${po} with pressure in range and no oxygen in the table` : ""].filter(Boolean);
+      said = parts.length ? parts.join("; ") : `no counted test in the scenario range (${(r.status === "other_atmosphere" && otherAtmosphereLabel(codes)) || SN_SHORT[r.status] || r.status})`;
+    }
+    ul.append(h("li", {}, h("b", {}, n.name), " ",
+      said ? [h("span", {}, `— ${spec ? spec.label : "this environment"}: ${said}. `), rowLink("data/pipeline/scenario_needs.csv", r, "row")] : null,
+      typeof n.reading === "string" && n.reading ? h("span", { class: "gap reading" }, " What a count means: ", n.reading) : null));
+  }
+  box.append(h("h3", {}, sid ? `Points to consider for ${spec ? spec.label : sid}` : "Points to consider"),
+    sid ? null : h("p", { class: "gap" }, "Counts per environment are computed for the two demo scenarios (ISS, lunar habitat). For other inputs, the table below shows each ranked investigation."),
+    ul);
+}
+
+// Interpret · Constraints, part 1: what NASA documents state per need (data's need_references.csv).
+// Shown as the documents' statements, never as a verdict on a test or a requirement of this tool.
+const ITEM_TYPE = { acceptance_criterion: "acceptance criterion", requirement: "requirement", definition: "definition", published_result: "published result",
+  knowledge_gap: "stated knowledge gap", limitation: "stated limitation", framework: "framework", recommendation: "recommendation",
+  operational_practice: "operational practice", design_value: "design value", monitoring_range: "monitoring range", exposure_limit: "crew exposure limit" };
+function renderCriteria(pipe) {
+  const box = $("#criteria-body");
+  box.replaceChildren();
+  if (!pipe.refs || !pipe.needs) { box.append(h("p", { class: "gap" }, "Criteria: not available yet.")); return; }
+  const order = PILLARS.flatMap(([pid]) => pipe.needs.filter((n) => n.pillar === pid));
+  for (const n of order) {
+    const items = pipe.refs.filter((x) => x.need_id === n.id);
+    if (!items.length) continue;
+    const kinds = [...new Set(items.map((x) => ITEM_TYPE[x.item_type] || x.item_type))];
+    box.append(h("details", { class: "more criteria-need" },
+      h("summary", {}, `${n.name}: ${items.length} item${items.length === 1 ? "" : "s"} from NASA documents (${kinds.slice(0, 3).join(", ")}${kinds.length > 3 ? ", …" : ""})`),
+      h("ul", { class: "criteria-list" }, items.map((x) => h("li", {},
+        h("span", { class: "tag" }, ITEM_TYPE[x.item_type] || x.item_type), " ", x.text, " ",
+        h("span", { class: "gap" }, "— ", x.url ? link(x.url, x.title || x.reference_id) : (x.title || x.reference_id), x.where ? `, ${x.where}` : "", x.issuer ? ` (${x.issuer})` : ""),
+        x.item_type === "exposure_limit" ? h("span", { class: "gap" }, " A limit for crew breathing cabin air, not for a test duct; this page compares no test with it.") : null)))));
+  }
+  box.append(h("p", { class: "gap" }, "Wording is the team's transcription; open the document for the full text. Items: ",
+    link(REPO + "data/pipeline/need_references.csv", "data/pipeline/need_references.csv"), ", built by the team's data role."));
+}
+
 // The answer in two lines, right under the query box, so the first screen shows the result.
 function scenarioCoverage(pipe, id) {
   const rows = (pipe.scenarioNeeds || []).filter((r) => r.scenario_id === id);
@@ -623,7 +718,7 @@ async function renderTests(out, pipe, cat, phaseFilter) {
   box.replaceChildren(h("p", { class: "gap" }, "Loading the test list…"));
   let rows;
   try {
-    if (!pipe.scenarioTests) pipe.scenarioTests = parseRows(await loadText("data/scenario_tests.csv"));
+    pipe.scenarioTests = await scenarioTestsOf(pipe);
     await loadTestsIndex();
     rows = pipe.scenarioTests.filter((r) => r.scenario_id === sid);
   } catch (e) { box.replaceChildren(h("p", { class: "gap" }, "Test list: not available yet.")); return; }
@@ -971,7 +1066,7 @@ async function main() {
     renderAssumptions(out, config);
     renderWarnings($("#scenario-warnings"), out.warnings);
     if (out.status !== "ok") {
-      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false);
+      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false); show("#criteria", false);
       $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
@@ -982,12 +1077,15 @@ async function main() {
     renderScenarioText(out, sc, cat);
     renderRanking(out);
     renderGlance(out, pipe);
+    renderPoints(out, pipe);
+    renderCriteria(pipe);
+    renderExport(out, pipe, cat);
     renderCompare(out, pipe, (q2) => { run(q2); $("#needs").scrollIntoView({ behavior: "smooth", block: "start" }); });
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);
     renderTests(out, pipe, cat);
     renderEvidenceMap(out, pipe);
-    show("#top", true); show("#all", true); show("#needs", true); show("#stops", true);
+    show("#top", true); show("#all", true); show("#needs", true); show("#stops", true); show("#criteria", true);
   }
 
   $("#ask-form").addEventListener("submit", (e) => { e.preventDefault(); run($("#q").value.trim()); });
