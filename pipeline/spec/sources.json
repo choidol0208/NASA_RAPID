@@ -5,7 +5,8 @@
   "source": "NASA Physical Sciences Informatics (PSI), https://psi.nasa.gov, Combustion Science experimental tables",
   "row_rules": "'require': a row is read only if these columns are filled. 'exclude': rows named here are not tests and are left out, with the reason. 'fill_down': a blank cell in these columns continues the cell of the row above; every value read that way is flagged blank_in_source_value_of_row_above_used. A row that repeats an earlier row cell for cell is read once. A column with 'if_empty' gives a value only where an earlier column gave none; a different value is flagged, never substituted. run_report.json lists every row left out and why. 'row_note' says what a row of the table is where it is not simply one test.",
   "documented_elsewhere": "'documented_elsewhere' lists what a NASA record or a paper of the investigators says about a variable the experimental table does not hold. It is shown as a sentence next to the gap. It never becomes a value of a test: the table stays the only source of values. The engine checks record sentences against the record and paper sentences against references.json.",
-  "sample_keywords": "Rule 'sample_keywords' (BASS, BASS-II): 'entries' are tried in order and the first whose 'words' are all in the cell gives the material and the shape; entries with 'after_thickness' are tried only if the cell gives no thickness. 'shape_words' give the shape where the entry has none. 'rod_inches' maps the rod size written in the cell (inches) to a diameter. A cell with a thickness and no earlier entry follows 'thickness': the material named there, 'film' below limit_mm and 'slab' from it. 'not_in_cell' marks entries whose material is not written in the cell (BASS-II ReadMe: rods, spheres and unlabelled films are PMMA); the test is flagged. The shape words 'fabric sheet', 'film', 'slab', 'sphere' and the materials named here are the team's vocabulary, chosen by these keywords. A thickness is a number followed by 'micron' or 'mm'. Where 'thickness' gives the material and the cell does not name it, the test is flagged in the same way as for 'not_in_cell'. 'width_from_cell' takes the sample width from the number followed by 'cm' in the cell. If no entry applies and the cell gives no thickness, the cell is not read and the test is flagged fuel_material:not_parsed."
+  "sample_keywords": "Rule 'sample_keywords' (BASS, BASS-II): 'entries' are tried in order and the first whose 'words' are all in the cell gives the material and the shape; entries with 'after_thickness' are tried only if the cell gives no thickness. 'shape_words' give the shape where the entry has none. 'rod_inches' maps the rod size written in the cell (inches) to a diameter. A cell with a thickness and no earlier entry follows 'thickness': the material named there, 'film' below limit_mm and 'slab' from it. 'not_in_cell' marks entries whose material is not written in the cell (BASS-II ReadMe: rods, spheres and unlabelled films are PMMA); the test is flagged. The shape words 'fabric sheet', 'film', 'slab', 'sphere' and the materials named here are the team's vocabulary, chosen by these keywords. A thickness is a number followed by 'micron' or 'mm'. Where 'thickness' gives the material and the cell does not name it, the test is flagged in the same way as for 'not_in_cell'. 'width_from_cell' takes the sample width from the number followed by 'cm' in the cell. If no entry applies and the cell gives no thickness, the cell is not read and the test is flagged fuel_material:not_parsed.",
+  "documented_start": "Rule 'o2_text': a cell with two oxygen numbers gives a value only if 'documented_start' names, for that exact cell text, which of the two written numbers a publication gives as the initial oxygen ('reference_item' in references.json). The test is flagged o2_pct:range_in_source_start_value_named_in_publication. A two-number cell that is not listed gives no value (flag o2_pct:range_in_source_start_value_not_documented). No midpoint or average is computed. The cell text is kept in o2_range_as_written."
  },
  "sources": [
   {
@@ -562,8 +563,19 @@
     },
     {
      "from": "Percent O2",
-     "to": "o2_pct",
-     "rule": "o2_text"
+     "to": [
+      "o2_pct",
+      "o2_range_as_written"
+     ],
+     "rule": "o2_text",
+     "params": {
+      "documented_start": {
+       "21.5 - 21.7": {
+        "value": 21.7,
+        "reference_item": "SAF17.o2_initial_I"
+       }
+      }
+     }
     },
     {
      "from": "Sample Thickness (cm)",
@@ -612,7 +624,7 @@
      "rule": "lower"
     }
    ],
-   "basis": "Column names",
+   "basis": "Column names. Oxygen: the cell of sample S1 holds two numbers; the investigators give 21.7% as the initial oxygen reported by the ISS when the vehicle departed (SAF17.o2_initial_I), so 21.7 is read",
    "documented_elsewhere": [
     {
      "variable": "pressure_kpa",
@@ -649,8 +661,19 @@
     },
     {
      "from": "Percent O2 (Note 1)",
-     "to": "o2_pct",
-     "rule": "o2_text"
+     "to": [
+      "o2_pct",
+      "o2_range_as_written"
+     ],
+     "rule": "o2_text",
+     "params": {
+      "documented_start": {
+       "22.1 to 22.0": {
+        "value": 22.1,
+        "reference_item": "SAF17.o2_initial_II"
+       }
+      }
+     }
     },
     {
      "from": "Samle Thickness",
@@ -710,7 +733,7 @@
      "rule": "measure"
     }
    ],
-   "basis": "Column names. The first character of the two microgravity columns is unreadable in the PSI file. The 'Spread Length' column holds rates in mm/s. The 1-g columns are not mapped. The Material cell of samples 2-6 and 2-9 is blank and continues the row above (same thickness column pattern); the value is flagged",
+   "basis": "Column names. The first character of the two microgravity columns is unreadable in the PSI file. The 'Spread Length' column holds rates in mm/s. The 1-g columns are not mapped. The Material cell of samples 2-6 and 2-9 is blank and continues the row above (same thickness column pattern); the value is flagged. Oxygen: the cell of sample 2-8 holds two numbers; the investigators give 22.1% as the initial oxygen reported by the ISS when the vehicle departed (SAF17.o2_initial_II), so 22.1 is read. For sample 2-9 ('22.0 to 21.9') no sentence names the initial value, so no single value is read. Sample 2-1 reads '~ 21.5' in the PSI table where the investigators' Table I has '~ 22.1' (SAF17.table1_o2); the PSI cell is kept",
    "fill_down": [
     "Material"
    ],

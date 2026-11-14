@@ -87,7 +87,7 @@
     "title": "Spacecraft Fire Experiment-II",
     "fuel_phase": "solid",
     "atmosphere": 0,
-    "oxygen_only": 9,
+    "oxygen_only": 8,
     "pressure_only": 0,
     "counted_for": [
      "P1",
@@ -137,7 +137,7 @@
    },
    {
     "id": "recorded.counted",
-    "text": "PSI-99 (solid): 0 tests recorded with oxygen and pressure both inside the ranges, 9 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: P1, P3.",
+    "text": "PSI-99 (solid): 0 tests recorded with oxygen and pressure both inside the ranges, 8 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: P1, P3.",
     "investigation_id": "PSI-99",
     "fuel_phase": "solid"
    },
@@ -158,9 +158,9 @@
    "note": "The Saffire tables hold one oxygen level near cabin air per test (for Saffire-II derived by NASA from CO2 production, Note 1 of the table), and Saffire-III has no oxygen column. A limit cannot be located from one oxygen level. Pressure is not a required variable of this need, although the cited definition of a threshold holds at a given total pressure, flow and gravity level (ISO16697.threshold): the BASS-II and Saffire tables have no pressure column, so no counted test records a pressure. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions); counts of different needs must not be added.",
    "status": "oxygen_only",
    "counts": {
-    "usable_tests": 136,
+    "usable_tests": 135,
     "atmosphere": 0,
-    "oxygen_only": 58,
+    "oxygen_only": 57,
     "pressure_only": 0,
     "other": 78,
     "recorded_outside_objective": 0,
@@ -170,11 +170,11 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {
-    "solid": 58
+    "solid": 57
    },
    "matched_ranges": {
     "o2_pct": {
-     "recorded": 58,
+     "recorded": 57,
      "min": 19.0,
      "max": 22.2,
      "unit": "% by volume"
@@ -265,7 +265,7 @@
      "investigation_id": "PSI-99",
      "title": "Spacecraft Fire Experiment-II",
      "atmosphere": 0,
-     "oxygen_only": 9,
+     "oxygen_only": 8,
      "pressure_only": 0,
      "other": 0
     }
@@ -2735,7 +2735,7 @@
        "source_column": "Material"
       },
       "o2_pct": {
-       "value": 21.6,
+       "value": 21.7,
        "unit": "% by volume",
        "source_column": "Percent O2"
       },
@@ -2771,7 +2771,7 @@
       }
      },
      "flags": [
-      "o2_pct:range_in_source_midpoint_used"
+      "o2_pct:range_in_source_start_value_named_in_publication"
      ],
      "source_file": "PSI-98_Experimental table_SAFFIRE-1.csv",
      "source_row": 2
@@ -3273,7 +3273,7 @@
        "source_column": "Material"
       },
       "o2_pct": {
-       "value": 22.05,
+       "value": 22.1,
        "unit": "% by volume",
        "source_column": "Percent O2 (Note 1)"
       },
@@ -3309,7 +3309,7 @@
       }
      },
      "flags": [
-      "o2_pct:range_in_source_midpoint_used",
+      "o2_pct:range_in_source_start_value_named_in_publication",
       "sample_thickness_mm:see_note_in_source",
       "burn_length_cm:see_note_in_source",
       "burn_length_cm:approximate_in_source",
@@ -3317,74 +3317,6 @@
      ],
      "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
      "source_row": 9
-    },
-    {
-     "test_id": "SAFFIRE-2-2-9",
-     "investigation_id": "PSI-99",
-     "source_id": "saffire2",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "PMMA",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "o2_pct": {
-       "value": 21.95,
-       "unit": "% by volume",
-       "source_column": "Percent O2 (Note 1)"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "sample_geometry": {
-       "value": "sheet or slab",
-       "unit": "",
-       "source_column": "(constant in sources.json)"
-      },
-      "sample_thickness_mm": {
-       "value": 10.0,
-       "unit": "mm",
-       "source_column": "Samle Thickness"
-      },
-      "flow_direction": {
-       "value": "concurrent",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
-      },
-      "burn_time_s": {
-       "value": 900.0,
-       "unit": "s",
-       "source_column": "Burn Time (s)"
-      },
-      "burn_length_cm": {
-       "value": 10.0,
-       "unit": "cm",
-       "source_column": "?-g Burn Length"
-      }
-     },
-     "flags": [
-      "fuel_material:blank_in_source_value_of_row_above_used",
-      "o2_pct:range_in_source_midpoint_used",
-      "burn_length_cm:see_note_in_source",
-      "burn_length_cm:approximate_in_source",
-      "spread_rate_mm_s:see_note_in_source"
-     ],
-     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
-     "source_row": 10
     }
    ],
    "usable_elsewhere": {
@@ -3434,10 +3366,13 @@
      ],
      "definition_ref": [
       "ISO16697.threshold",
-      "6001B.T1.moc"
+      "6001B.T1.moc",
+      "SAF17.o2_initial_I",
+      "SAF17.o2_initial_II",
+      "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-II the oxygen value is a derived one (Note 1 of the table: \"Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.\"), and three Saffire values are the midpoint of a range written in the cell.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
      "test_ids": [
       "BASS2-F1",
       "BASS2-F2"
@@ -3470,10 +3405,13 @@
      ],
      "definition_ref": [
       "ISO16697.threshold",
-      "6001B.T1.moc"
+      "6001B.T1.moc",
+      "SAF17.o2_initial_I",
+      "SAF17.o2_initial_II",
+      "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-II the oxygen value is a derived one (Note 1 of the table: \"Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.\"), and three Saffire values are the midpoint of a range written in the cell.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
      "test_ids": [
       "BASS2-B1",
       "BASS2-B10",
@@ -3519,10 +3457,13 @@
      ],
      "definition_ref": [
       "ISO16697.threshold",
-      "6001B.T1.moc"
+      "6001B.T1.moc",
+      "SAF17.o2_initial_I",
+      "SAF17.o2_initial_II",
+      "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-II the oxygen value is a derived one (Note 1 of the table: \"Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.\"), and three Saffire values are the midpoint of a range written in the cell.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
      "test_ids": [
       "BASS2-O1",
       "BASS2-O2",
@@ -3546,7 +3487,7 @@
      "group": "material_id=pmma;sample_geometry=sheet or slab",
      "variable": "o2_pct",
      "unit": "% by volume",
-     "n_tests": 2,
+     "n_tests": 1,
      "investigation_ids": [
       "PSI-99"
      ],
@@ -3554,23 +3495,25 @@
       {
        "stat": "min",
        "category": "",
-       "value": 21.95
+       "value": 22.1
       },
       {
        "stat": "max",
        "category": "",
-       "value": 22.05
+       "value": 22.1
       }
      ],
      "definition_ref": [
       "ISO16697.threshold",
-      "6001B.T1.moc"
+      "6001B.T1.moc",
+      "SAF17.o2_initial_I",
+      "SAF17.o2_initial_II",
+      "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-II the oxygen value is a derived one (Note 1 of the table: \"Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.\"), and three Saffire values are the midpoint of a range written in the cell.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
      "test_ids": [
-      "SAFFIRE-2-2-8",
-      "SAFFIRE-2-2-9"
+      "SAFFIRE-2-2-8"
      ]
     },
     {
@@ -3600,10 +3543,13 @@
      ],
      "definition_ref": [
       "ISO16697.threshold",
-      "6001B.T1.moc"
+      "6001B.T1.moc",
+      "SAF17.o2_initial_I",
+      "SAF17.o2_initial_II",
+      "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-II the oxygen value is a derived one (Note 1 of the table: \"Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.\"), and three Saffire values are the midpoint of a range written in the cell.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
      "test_ids": [
       "BASS2-M1",
       "BASS2-M10",
@@ -3649,10 +3595,13 @@
      ],
      "definition_ref": [
       "ISO16697.threshold",
-      "6001B.T1.moc"
+      "6001B.T1.moc",
+      "SAF17.o2_initial_I",
+      "SAF17.o2_initial_II",
+      "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-II the oxygen value is a derived one (Note 1 of the table: \"Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.\"), and three Saffire values are the midpoint of a range written in the cell.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
      "test_ids": [
       "SAFFIRE-2-2-7"
      ]
@@ -3684,10 +3633,13 @@
      ],
      "definition_ref": [
       "ISO16697.threshold",
-      "6001B.T1.moc"
+      "6001B.T1.moc",
+      "SAF17.o2_initial_I",
+      "SAF17.o2_initial_II",
+      "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-II the oxygen value is a derived one (Note 1 of the table: \"Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.\"), and three Saffire values are the midpoint of a range written in the cell.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
      "test_ids": [
       "BASS2-T25",
       "BASS2-T26",
@@ -3723,10 +3675,13 @@
      ],
      "definition_ref": [
       "ISO16697.threshold",
-      "6001B.T1.moc"
+      "6001B.T1.moc",
+      "SAF17.o2_initial_I",
+      "SAF17.o2_initial_II",
+      "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-II the oxygen value is a derived one (Note 1 of the table: \"Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.\"), and three Saffire values are the midpoint of a range written in the cell.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
      "test_ids": [
       "SAFFIRE-1-S1",
       "SAFFIRE-1-S2",
@@ -3761,10 +3716,13 @@
      ],
      "definition_ref": [
       "ISO16697.threshold",
-      "6001B.T1.moc"
+      "6001B.T1.moc",
+      "SAF17.o2_initial_I",
+      "SAF17.o2_initial_II",
+      "SAF17.table1_note_i"
      ],
      "compare_with": [],
-     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-II the oxygen value is a derived one (Note 1 of the table: \"Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.\"), and three Saffire values are the midpoint of a range written in the cell.",
+     "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
      "test_ids": [
       "SAFFIRE-2-2-1",
       "SAFFIRE-2-2-2",
@@ -4174,13 +4132,13 @@
    "gaps": [
     {
      "code": "pressure:not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 136 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 135 tests counted for this need."
     }
    ],
    "statements": [
     {
      "id": "status.oxygen_only",
-     "text": "58 of the 136 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
+     "text": "57 of the 135 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
     },
     {
      "id": "need.reading",
@@ -4188,27 +4146,27 @@
     },
     {
      "id": "tiers.counts",
-     "text": "The 136 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 58 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 78 with none of these matches."
+     "text": "The 135 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 57 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 78 with none of these matches."
     },
     {
      "id": "cell.oxygen_only_repeats",
-     "text": "The 58 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
+     "text": "The 57 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
     },
     {
      "id": "matched.investigations",
-     "text": "The 58 matched tests come from PSI-25, PSI-98, PSI-99."
+     "text": "The 57 matched tests come from PSI-25, PSI-98, PSI-99."
     },
     {
      "id": "matched.fuel_phase",
-     "text": "The 58 matched tests by fuel phase: solid 58."
+     "text": "The 57 matched tests by fuel phase: solid 57."
     },
     {
      "id": "matched.oxygen",
-     "text": "Oxygen of the 58 matched tests: recorded in 58, from 19 to 22.2 % by volume."
+     "text": "Oxygen of the 57 matched tests: recorded in 57, from 19 to 22.2 % by volume."
     },
     {
      "id": "matched.pressure_not_in_table",
-     "text": "Pressure of the 58 matched tests: not in the experimental tables."
+     "text": "Pressure of the 57 matched tests: not in the experimental tables."
     },
     {
      "id": "flow.not_specified",
@@ -4232,7 +4190,7 @@
     },
     {
      "id": "gap.pressure.not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 136 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 135 tests counted for this need."
     },
     {
      "id": "documented.elsewhere",
@@ -4272,7 +4230,7 @@
     },
     {
      "id": "indicator.summary",
-     "text": "Initial oxygen of the tests run (material pmma, sample shape sheet or slab): min 21.95 % by volume, max 22.05 % by volume, over 2 tests with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
+     "text": "Initial oxygen of the tests run (material pmma, sample shape sheet or slab): min 22.1 % by volume, max 22.1 % by volume, over 1 test with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "P1.o2_tested",
      "group": "material_id=pmma;sample_geometry=sheet or slab"
     },
@@ -4678,9 +4636,9 @@
    "counts": {
     "usable_tests": 11,
     "atmosphere": 0,
-    "oxygen_only": 11,
+    "oxygen_only": 10,
     "pressure_only": 0,
-    "other": 0,
+    "other": 1,
     "recorded_outside_objective": 0,
     "matched_flow_in_range": 0,
     "matched_flow_not_recorded": 0,
@@ -4688,11 +4646,11 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {
-    "solid": 11
+    "solid": 10
    },
    "matched_ranges": {
     "o2_pct": {
-     "recorded": 11,
+     "recorded": 10,
      "min": 21.5,
      "max": 22.1,
      "unit": "% by volume"
@@ -4757,9 +4715,9 @@
      "investigation_id": "PSI-99",
      "title": "Spacecraft Fire Experiment-II",
      "atmosphere": 0,
-     "oxygen_only": 9,
+     "oxygen_only": 8,
      "pressure_only": 0,
-     "other": 0
+     "other": 1
     }
    ],
    "matched_tests": [
@@ -4791,7 +4749,7 @@
        "source_column": "Flow Direction"
       },
       "o2_pct": {
-       "value": 21.6,
+       "value": 21.7,
        "unit": "% by volume",
        "source_column": "Percent O2"
       },
@@ -4812,7 +4770,7 @@
       }
      },
      "flags": [
-      "o2_pct:range_in_source_midpoint_used"
+      "o2_pct:range_in_source_start_value_named_in_publication"
      ],
      "source_file": "PSI-98_Experimental table_SAFFIRE-1.csv",
      "source_row": 2
@@ -5294,7 +5252,7 @@
        "source_column": "Flow Direction"
       },
       "o2_pct": {
-       "value": 22.05,
+       "value": 22.1,
        "unit": "% by volume",
        "source_column": "Percent O2 (Note 1)"
       },
@@ -5315,7 +5273,7 @@
       }
      },
      "flags": [
-      "o2_pct:range_in_source_midpoint_used",
+      "o2_pct:range_in_source_start_value_named_in_publication",
       "sample_thickness_mm:see_note_in_source",
       "burn_length_cm:see_note_in_source",
       "burn_length_cm:approximate_in_source",
@@ -5323,73 +5281,10 @@
      ],
      "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
      "source_row": 9
-    },
-    {
-     "test_id": "SAFFIRE-2-2-9",
-     "investigation_id": "PSI-99",
-     "source_id": "saffire2",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "PMMA",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "flow_direction": {
-       "value": "concurrent",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "o2_pct": {
-       "value": 21.95,
-       "unit": "% by volume",
-       "source_column": "Percent O2 (Note 1)"
-      },
-      "sample_thickness_mm": {
-       "value": 10.0,
-       "unit": "mm",
-       "source_column": "Samle Thickness"
-      },
-      "sample_width_cm": {
-       "value": 5.0,
-       "unit": "cm",
-       "source_column": "Sample Width (cm)"
-      },
-      "burn_length_cm": {
-       "value": 10.0,
-       "unit": "cm",
-       "source_column": "?-g Burn Length"
-      },
-      "burn_time_s": {
-       "value": 900.0,
-       "unit": "s",
-       "source_column": "Burn Time (s)"
-      }
-     },
-     "flags": [
-      "fuel_material:blank_in_source_value_of_row_above_used",
-      "o2_pct:range_in_source_midpoint_used",
-      "burn_length_cm:see_note_in_source",
-      "burn_length_cm:approximate_in_source",
-      "spread_rate_mm_s:see_note_in_source"
-     ],
-     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
-     "source_row": 10
     }
    ],
    "usable_elsewhere": {
-    "tests": 0,
+    "tests": 1,
     "o2_pct": {
      "recorded": 0,
      "min": null,
@@ -5403,7 +5298,9 @@
      "max": null,
      "unit": "kPa"
     },
-    "investigation_ids": []
+    "investigation_ids": [
+     "PSI-99"
+    ]
    },
    "indicators": [
     {
@@ -5451,7 +5348,7 @@
      "group": "material_id=pmma;flow_direction=concurrent",
      "variable": "burn_length_cm",
      "unit": "cm",
-     "n_tests": 2,
+     "n_tests": 1,
      "investigation_ids": [
       "PSI-99"
      ],
@@ -5473,8 +5370,7 @@
      "compare_with": [],
      "reading": "Burn length as written in the column \"?-g Burn Length\" of the Saffire-II table (first character unreadable in the PSI file). Cells written \"~ 0\" are read as 0. Two PMMA cells, \"~ 10 cm (note 3)\" and \"~ 10 cm (note 4)\", are read as 10 and carry the flag burn_length_cm:see_note_in_source; Note 3 of the table says \"This is the length of fuel with significant visible damage.\" The cell \"5 cm & 0 (note 2)\" gives no value. The 15 cm criterion of NASA-STD-6001B Test 1 is defined for a 30 cm specimen in normal gravity without air flow; these tests were not run under that standard and are not judged against it.",
      "test_ids": [
-      "SAFFIRE-2-2-8",
-      "SAFFIRE-2-2-9"
+      "SAFFIRE-2-2-8"
      ]
     },
     {
@@ -5591,7 +5487,7 @@
      "group": "material_id=pmma;flow_direction=concurrent",
      "variable": "burn_time_s",
      "unit": "s",
-     "n_tests": 2,
+     "n_tests": 1,
      "investigation_ids": [
       "PSI-99"
      ],
@@ -5604,7 +5500,7 @@
       {
        "stat": "max",
        "category": "",
-       "value": 900.0
+       "value": 600.0
       }
      ],
      "definition_ref": [
@@ -5613,8 +5509,7 @@
      "compare_with": [],
      "reading": "Burn time as written in the table.",
      "test_ids": [
-      "SAFFIRE-2-2-8",
-      "SAFFIRE-2-2-9"
+      "SAFFIRE-2-2-8"
      ]
     },
     {
@@ -5732,7 +5627,7 @@
    "statements": [
     {
      "id": "status.oxygen_only",
-     "text": "11 of the 11 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
+     "text": "10 of the 11 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
     },
     {
      "id": "need.reading",
@@ -5740,27 +5635,27 @@
     },
     {
      "id": "tiers.counts",
-     "text": "The 11 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 11 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 0 with none of these matches."
+     "text": "The 11 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 10 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 1 with none of these matches."
     },
     {
      "id": "cell.oxygen_only_repeats",
-     "text": "The 11 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
+     "text": "The 10 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
     },
     {
      "id": "matched.investigations",
-     "text": "The 11 matched tests come from PSI-98, PSI-99."
+     "text": "The 10 matched tests come from PSI-98, PSI-99."
     },
     {
      "id": "matched.fuel_phase",
-     "text": "The 11 matched tests by fuel phase: solid 11."
+     "text": "The 10 matched tests by fuel phase: solid 10."
     },
     {
      "id": "matched.oxygen",
-     "text": "Oxygen of the 11 matched tests: recorded in 11, from 21.5 to 22.1 % by volume."
+     "text": "Oxygen of the 10 matched tests: recorded in 10, from 21.5 to 22.1 % by volume."
     },
     {
      "id": "matched.pressure_not_in_table",
-     "text": "Pressure of the 11 matched tests: not in the experimental tables."
+     "text": "Pressure of the 10 matched tests: not in the experimental tables."
     },
     {
      "id": "flow.not_specified",
@@ -5769,6 +5664,14 @@
     {
      "id": "gravity.not_specified",
      "text": "This environment sets no gravity level, so the gravity level of the tests was not compared with one."
+    },
+    {
+     "id": "elsewhere.oxygen_not_recorded",
+     "text": "Oxygen of the 1 counted test not matched to this environment: no oxygen concentration of the surrounding atmosphere is recorded."
+    },
+    {
+     "id": "elsewhere.pressure_not_recorded",
+     "text": "Pressure of the 1 counted test not matched to this environment: no pressure is recorded."
     },
     {
      "id": "need.note",
@@ -5798,7 +5701,7 @@
     },
     {
      "id": "indicator.summary",
-     "text": "Length burned in microgravity (material pmma, flow direction concurrent): min 10 cm, max 10 cm, over 2 tests with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
+     "text": "Length burned in microgravity (material pmma, flow direction concurrent): min 10 cm, max 10 cm, over 1 test with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "P3.burn_length",
      "group": "material_id=pmma;flow_direction=concurrent"
     },
@@ -5822,7 +5725,7 @@
     },
     {
      "id": "indicator.summary",
-     "text": "Burn time (material pmma, flow direction concurrent): min 600 s, max 900 s, over 2 tests with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
+     "text": "Burn time (material pmma, flow direction concurrent): min 600 s, max 600 s, over 1 test with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "P3.burn_time",
      "group": "material_id=pmma;flow_direction=concurrent"
     },

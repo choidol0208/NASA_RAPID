@@ -871,6 +871,33 @@
       "spread_rate_mm_s_opposed": 1.3,
       "flow_cms": 20
      }
+    },
+    {
+     "id": "SAF.starting_o2",
+     "type": "published_result",
+     "text": "The paper attributes the slightly faster spread of the 5-cm-wide sample to the slightly higher starting oxygen percentage, 22.1% (Saffire-II) against 21.7% (Saffire-I).",
+     "where": "Section 3 Results and Discussion",
+     "variables": [
+      "o2_pct",
+      "spread_rate_mm_s"
+     ],
+     "values": {
+      "o2_pct_start_saffire_I": 21.7,
+      "o2_pct_start_saffire_II": 22.1
+     },
+     "quote": "This may be due to the slightly higher starting oxygen percentage (22.1% vs. 21.7%)."
+    },
+    {
+     "id": "SAF.sensors",
+     "type": "published_result",
+     "text": "Oxygen concentration, carbon dioxide and pressure were recorded just upstream of the fuel in the flow duct.",
+     "where": "Section 2 Methods / Experimental",
+     "variables": [
+      "o2_pct",
+      "co2_initial_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Oxygen concentration, carbon dioxide, and pressure were also recorded just upstream of the fuel in the flow duct."
     }
    ],
    "note": "Published results for the same investigation as PSI-98. Listed for checking, not reproduced by the pipeline."
@@ -1136,6 +1163,454 @@
     }
    ],
    "note": "Saffire IV to VI are not in NASA PSI; published results listed for context, not reproduced by the pipeline. Table 1 was read on 2026-11-14 from the PDF linked on the NTRS citation page (Saffire-ICES-2024-ICES-365-accepted final.pdf), both from the text layer (pdftotext -layout) and from a 200 dpi rendering of page 3; the two readings agree in every cell. AI-read, not checked by a human."
+  },
+  {
+   "id": "ICES-2017-224",
+   "kind": "paper",
+   "title": "Results of Large-Scale Spacecraft Flammability Tests (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+   "issuer": "47th International Conference on Environmental Systems",
+   "version": "ICES-2017-224 (16-20 July 2017, Charleston, South Carolina)",
+   "url": "https://hdl.handle.net/2346/73020",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF17.o2_initial_I",
+     "type": "published_result",
+     "text": "Saffire-I: flow speed 20 cm/s; initial oxygen concentration as reported by the ISS at the time the vehicle departed 21.7% O2.",
+     "where": "Section II Experiment, p. 3",
+     "variables": [
+      "o2_pct",
+      "flow_cms"
+     ],
+     "values": {
+      "o2_pct_initial_iss_reported": 21.7,
+      "flow_cms": 20
+     },
+     "quote": "The initial flight experiment (Saffire-I) was performed at a flow speed of 20 cm/s and the initial oxygen concentration as reported by the ISS at the time the vehicle departed was 21.7% O2.",
+     "note": "The value is the ISS report at vehicle departure, not a reading at ignition. The paper does not state mole or volume basis."
+    },
+    {
+     "id": "SAF17.o2_initial_II",
+     "type": "published_result",
+     "text": "Saffire-II: initial oxygen concentration as reported by the ISS at the time the vehicle departed 22.1% O2.",
+     "where": "Section II Experiment, p. 3",
+     "variables": [
+      "o2_pct"
+     ],
+     "values": {
+      "o2_pct_initial_iss_reported": 22.1
+     },
+     "quote": "In the second flight experiment (Saffire-II), the initial oxygen concentration as reported by the ISS at the time the vehicle departed was 22.1% O2, slightly higher than the first flight (21.7%).",
+     "note": "Flight-level value; no per-sample sentence."
+    },
+    {
+     "id": "SAF17.table1_o2",
+     "type": "published_result",
+     "text": "Table I gives, per sample, a column headed 'Δ %O2' (change in oxygen percentage): 1-1 '21.7 to 21.5'; 1-2 '~ 21.5'; 2-1 to 2-7 '~ 22.1'; 2-8 '22.1 to 22.0'; 2-9 '22.0 to 21.9'.",
+     "where": "Table I, p. 4",
+     "variables": [
+      "o2_pct",
+      "o2_final_pct"
+     ],
+     "values": {
+      "rows": [
+       {
+        "sample": "1-1",
+        "delta_pct_o2": "21.7 to 21.5"
+       },
+       {
+        "sample": "1-2",
+        "delta_pct_o2": "~ 21.5"
+       },
+       {
+        "sample": "2-1",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-2",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-3",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-4",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-5",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-6",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-7",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-8",
+        "delta_pct_o2": "22.1 to 22.0"
+       },
+       {
+        "sample": "2-9",
+        "delta_pct_o2": "22.0 to 21.9"
+       }
+      ]
+     },
+     "quote": "Table I. Summary of Samples, Test Conditions, and Selected Results",
+     "note": "Cells kept as printed. Compared with NASA PSI: PSI-98 S1 has the same two numbers in the opposite order ('21.5 - 21.7'); PSI-99 sample 2-1 has '~ 21.5' where this table has '~ 22.1'. The table does not use the words start or end; reading 'A to B' under 'Δ' as before-to-after the burn is the reader's step. The same table was read on the PDF page of the authors' slides (NTRS 20170008805, slide 29)."
+    },
+    {
+     "id": "SAF17.table1_note_i",
+     "type": "definition",
+     "text": "The oxygen column of Table I is derived from measured CO2 production and referenced to the initial O2 concentration reported by ISS; it is not a direct oxygen reading.",
+     "where": "Table I, note i, p. 4",
+     "variables": [
+      "o2_pct",
+      "o2_final_pct"
+     ],
+     "quote": "Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.",
+     "note": "Same wording as Note 1 of the PSI-99 experimental table. Formula and stoichiometry are not given."
+    },
+    {
+     "id": "SAF17.pressure",
+     "type": "published_result",
+     "text": "All Saffire-I and Saffire-II tests were performed at normal pressure (1 atm); the pressure increase due to combustion was insignificant.",
+     "where": "Section II Experiment, p. 4",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant."
+    },
+    {
+     "id": "SAF17.sensors",
+     "type": "published_result",
+     "text": "Oxygen concentration, carbon dioxide and pressure were recorded just upstream of the fuel in the flow duct.",
+     "where": "Section II Experiment, p. 5",
+     "variables": [
+      "o2_pct",
+      "co2_initial_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Oxygen concentration, carbon dioxide, and pressure were also recorded just upstream of the fuel in the flow duct.",
+     "note": "The NASA PSI records and the pre-flight papers place the O2 sensor at the inlet to the avionics bay."
+    },
+    {
+     "id": "SAF17.starting",
+     "type": "published_result",
+     "text": "The investigators call 22.1% and 21.7% the starting oxygen percentages of Saffire-II and Saffire-I.",
+     "where": "Section III.B, p. 8",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "This may be due to the slightly higher starting oxygen percentage (22.1% vs. 21.7%).",
+     "note": "The sentence compares sample 2-5 with sample 1-1."
+    }
+   ],
+   "note": "Published results for the same investigations as PSI-98 and PSI-99. Read on 2026-11-14 as a text extraction of the repository PDF through a fetch tool (the host refused direct download); page numbers are taken from the page markers in that extraction. Table I and its notes were additionally read on the PDF page of the authors' slides for this paper (NTRS 20170008805). AI-read, not checked by a human."
+  },
+  {
+   "id": "NTRS-20170008805",
+   "kind": "paper",
+   "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+   "issuer": "NASA Technical Reports Server; 47th International Conference on Environmental Systems",
+   "version": "2017 (36 slides)",
+   "url": "https://ntrs.nasa.gov/citations/20170008805",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF17S.o2_I",
+     "type": "published_result",
+     "text": "Saffire-I: initial oxygen concentration 21.7%, an ISS reading.",
+     "where": "Slide 14 'Saffire-I Description'",
+     "variables": [
+      "o2_pct"
+     ],
+     "values": {
+      "o2_pct_initial_iss_reported": 21.7
+     },
+     "quote": "Initial oxygen concentration 21.7% (ISS reading)"
+    },
+    {
+     "id": "SAF17S.o2_II",
+     "type": "published_result",
+     "text": "Saffire-II: initial oxygen concentration 22.1%, an ISS reading.",
+     "where": "Slide 9 'Saffire-2 Description'",
+     "variables": [
+      "o2_pct"
+     ],
+     "values": {
+      "o2_pct_initial_iss_reported": 22.1
+     },
+     "quote": "Initial oxygen concentration 22.1% (ISS reading,"
+    },
+    {
+     "id": "SAF17S.table1",
+     "type": "published_result",
+     "text": "Slide 29 reproduces Table I of ICES-2017-224 with the column 'Δ %O2' and note i; cells identical to SAF17.table1_o2.",
+     "where": "Slide 29 (backup slides), Table I",
+     "variables": [
+      "o2_pct",
+      "o2_final_pct"
+     ],
+     "quote": "Table I. Summary of Samples, Test Conditions, and Selected Results"
+    }
+   ],
+   "note": "Read on 2026-11-14 from the PDF (text layer and renderings of slides 9, 14 and 29 at 90-110 dpi). The text layer drops the subscript 2 of note i; the rendering shows 'CO2' and 'O2'. AI-read, not checked by a human."
+  },
+  {
+   "id": "NTRS-20180005168",
+   "kind": "paper",
+   "title": "Saffire: A Novel Approach to Study of Spacecraft Fire Safety Using Un-Manned Spacecraft (Urban, Ferkul, Olson, Ruff, Easton, and the international topical team)",
+   "issuer": "NASA Technical Reports Server; 33rd Annual Meeting of the American Society for Gravitational and Space Research, October 25-28, 2017",
+   "version": "2017 (32 slides)",
+   "url": "https://ntrs.nasa.gov/citations/20180005168",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF123.table1",
+     "type": "published_result",
+     "text": "Table 1 repeats the 'Δ %O2' column for Saffire-I and -II (same cells as ICES-2017-224) and adds Saffire-III: III-1 '21.2 to 21.0' and III-2 '21.2 to 21.0'.",
+     "where": "Slide 30, Table 1",
+     "variables": [
+      "o2_pct",
+      "o2_final_pct"
+     ],
+     "values": {
+      "rows": [
+       {
+        "sample": "I-1",
+        "delta_pct_o2": "21.7 to 21.5"
+       },
+       {
+        "sample": "I-2",
+        "delta_pct_o2": "~ 21.5"
+       },
+       {
+        "sample": "II-8",
+        "delta_pct_o2": "22.1 to 22.0"
+       },
+       {
+        "sample": "II-9",
+        "delta_pct_o2": "22.0 to 21.9"
+       },
+       {
+        "sample": "III-1",
+        "delta_pct_o2": "21.2 to 21.0"
+       },
+       {
+        "sample": "III-2",
+        "delta_pct_o2": "21.2 to 21.0"
+       }
+      ]
+     },
+     "quote": "Table 1. Summary of Samples, Test Conditions, and Selected Results",
+     "note": "Rows II-1 to II-7 read '~ 22.1'. Both Saffire-III rows carry the same range, so the first number is not shown to be the start value of each sample in every row. The heading carries the mark 'i' but the slide has no note text."
+    }
+   ],
+   "note": "Read on 2026-11-14 from the PDF (text layer and a 110 dpi rendering of slide 30). AI-read, not checked by a human."
+  },
+  {
+   "id": "ICES-2018-SAFFIRE2-PMMA",
+   "kind": "paper",
+   "title": "Analysis of Saffire II two-sided concurrent flame spread over a thick PMMA slab (Olson, Urban, Ruff, Ferkul, Toth, Eigenbrod, Meyer)",
+   "issuer": "48th International Conference on Environmental Systems",
+   "version": "2018 (ICES paper number not verified)",
+   "url": "http://hdl.handle.net/2346/74099",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF2PMMA.hatch",
+     "type": "published_result",
+     "text": "Saffire-II atmosphere at hatch closure prior to undocking: 22.1% O2, 100.6 kPa, relative humidity 43%.",
+     "where": "Experiment Description",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "o2_pct_hatch_closure": 22.1,
+      "pressure_kpa_hatch_closure": 100.6
+     },
+     "quote": "At hatch closure prior to undocking, the atmosphere was 22.1% O2, 100.6 kPa, and RH 43%",
+     "note": "Flight-level value given in the paper on samples 8 and 9; no separate value for sample 9. Olson et al. 2023 (CNF-2023-SAFFIRE) lists 103 kPa for the same flight."
+    },
+    {
+     "id": "SAF2PMMA.order",
+     "type": "published_result",
+     "text": "Samples 8 (structured PMMA) and 9 (flat PMMA) were the last two of the nine samples; sample 8 burned first (600 s), then sample 9 (900 s).",
+     "where": "Abstract; Experiment Description",
+     "variables": [
+      "burn_time_s"
+     ],
+     "quote": "Samples 8 and 9 were the last two samples of the 9 run."
+    }
+   ],
+   "note": "Published results for the same investigation as PSI-99. Read on 2026-11-14 as a text extraction of the repository record through a fetch tool; the PDF pages were not seen. AI-read, not checked by a human."
+  },
+  {
+   "id": "CNF-2023-SAFFIRE",
+   "kind": "paper",
+   "title": "The effect of duct size, sample size, and fuel composition on concurrent flame spread over large cellulose samples in microgravity (Olson, Ruff, Ferkul, Owens, Easton, Liao, T'ien, Toth, Jomaas, Fernandez-Pello, Legros, Guibaud, Fujita, Smirnov, Urban)",
+   "issuer": "Combustion and Flame",
+   "version": "248 (2023) 112559; read in the accepted manuscript",
+   "url": "https://discovery.ucl.ac.uk/id/eprint/10164340/",
+   "access": "read_from_copy",
+   "items": [
+    {
+     "id": "CNF23.table1",
+     "type": "published_result",
+     "text": "Oxygen (% by volume) and pressure recorded at hatch closing: Saffire-I sample 1 21.7%, 102 kPa; Saffire-II samples 5 and 6 22.1%, 103 kPa; Saffire-III sample 1 21.2%, 99 kPa.",
+     "where": "Table 1 and its note '+'",
+     "variables": [
+      "o2_pct",
+      "o2_basis",
+      "pressure_kpa"
+     ],
+     "values": {
+      "rows": [
+       {
+        "flight": "I",
+        "sample": 1,
+        "o2_pct_by_vol": 21.7,
+        "pressure_kpa": 102
+       },
+       {
+        "flight": "II",
+        "sample": 5,
+        "o2_pct_by_vol": 22.1,
+        "pressure_kpa": 103
+       },
+       {
+        "flight": "II",
+        "sample": 6,
+        "o2_pct_by_vol": 22.1,
+        "pressure_kpa": 103
+       },
+       {
+        "flight": "III",
+        "sample": 1,
+        "o2_pct_by_vol": 21.2,
+        "pressure_kpa": 99
+       }
+      ]
+     },
+     "quote": "The Cygnus vehicle was originally filled with the ISS atmosphere, which at hatch closing was recorded as listed in Table 1 for Saffire I-IV.",
+     "note": "Hatch-closing values, not values at ignition. Only the cellulose samples are listed; Saffire-II samples 8 and 9 are not in the table. The column headings arrive scrambled in the text extraction; 'O2, % by vol' and 'P, kPa' are reconstructed and should be checked on the PDF page."
+    }
+   ],
+   "note": "Accepted manuscript in an institutional repository, read on 2026-11-14 as a text extraction through a fetch tool (the host refused direct download). Not compared with the published version. AI-read, not checked by a human."
+  },
+  {
+   "id": "ICES-2021-266",
+   "kind": "paper",
+   "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+   "issuer": "50th International Conference on Environmental Systems",
+   "version": "ICES-2021-266 (12-15 July 2021)",
+   "url": "https://ntrs.nasa.gov/citations/20210011521",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF45.table2",
+     "type": "published_result",
+     "text": "Summary table of thin samples lists oxygen concentration 21% and pressure 100 kPa for I-1, II-5, II-6 and III-1 (IV-1: 22%, 100 kPa; V-2: 26.2%, 70.7 kPa).",
+     "where": "Table 2, p. 8",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "o2_pct_I_1": 21,
+      "o2_pct_II_5": 21,
+      "o2_pct_II_6": 21,
+      "o2_pct_III_1": 21,
+      "pressure_kpa_I_to_III": 100
+     },
+     "quote": "Table 2 Test Conditions and flame size for thin samples",
+     "note": "Whole-number values; the paper does not say whether they are rounded or nominal. They are less precise than 21.7 / 22.1 / 21.2 given by the same group in ICES-2017-224 and Combustion and Flame 248 (2023)."
+    }
+   ],
+   "note": "Read on 2026-11-14 from the PDF linked on the NTRS citation page (text layer and a 100 dpi rendering of p. 8). AI-read, not checked by a human."
+  },
+  {
+   "id": "NTRS-20200000557",
+   "kind": "paper",
+   "title": "Buoyancy Effects on Concurrent Flame Spread Over Thick PMMA (Thomsen, Fernandez-Pello, Ruff, Urban)",
+   "issuer": "Combustion and Flame 199 (2019) 279-291; author manuscript on the NASA Technical Reports Server",
+   "version": "2018 manuscript (25 pages)",
+   "url": "https://ntrs.nasa.gov/citations/20200000557",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "THOMSEN19.conditions",
+     "type": "published_result",
+     "text": "Saffire-II sample 9 (10 mm PMMA slab) was burned in air at 200 mm/s flow and atmospheric pressure (100 kPa in the abstract). No oxygen percentage is given for the flight sample.",
+     "where": "Section 2 (microgravity experiments), p. 6; Abstract",
+     "variables": [
+      "pressure_kpa",
+      "flow_cms",
+      "o2_pct"
+     ],
+     "values": {
+      "pressure_kpa": 100,
+      "flow_cms": 20
+     },
+     "quote": "The PMMA sample was burned in air with a 200 mm/s flow and atmospheric pressure."
+    }
+   ],
+   "note": "Read on 2026-11-14 from the text layer of the NTRS PDF. AI-read, not checked by a human."
+  },
+  {
+   "id": "PSI-SAFFIRE-FILES",
+   "kind": "nasa_report",
+   "title": "NASA PSI, Saffire-I (PSI-98) and Saffire-II (PSI-99): telemetry graph documents, operations notes and Readme",
+   "issuer": "NASA Physical Sciences Informatics (PSI)",
+   "version": "PSI-98 version 4, PSI-99 version 5 (files version 1)",
+   "url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "PSISAF.delay",
+     "type": "operational_practice",
+     "text": "The experiment starts about one day after Cygnus undocks from the ISS.",
+     "where": "PSI-99_Raw Data_SAFFIRE-II Operations.pdf, single page (PSI-98_Engineering Documents_SAFFIRE-I Operations.pdf has 'about 1 day')",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "From Cygnus undock until experiment start takes about one day.",
+     "note": "Generic operations description, not a flight log. Relevant because the tabulated start oxygen is the ISS report at departure."
+    },
+    {
+     "id": "PSISAF.diagnostics",
+     "type": "definition",
+     "text": "Saffire I-III diagnostics: O2 mole fraction by solid-state sensor at the inlet to the avionics bay; CO2 mole fraction and pressure by solid-state sensors in the avionics bay.",
+     "where": "PSI-99_Science Documents_SAFFIRE-II Readme.docx, Table 3 'Saffire, I, II and III Diagnostics' (an image in the file)",
+     "variables": [
+      "o2_pct",
+      "co2_initial_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Table 3. Saffire, I, II and III Diagnostics"
+    },
+    {
+     "id": "PSISAF.o2_traces",
+     "type": "published_result",
+     "text": "The telemetry graph documents plot the on-board oxygen sensor against time for each sample. Read by eye from the curves (approximate, noise about 0.05): Saffire-I sample 1 about 22.65% before ignition falling to about 22.3%; Saffire-II sample 8 about 21.55% to about 21.5%; Saffire-II sample 9 about 21.55% to about 21.45%; Saffire-II sample 1 about 21.5%. CO2 over the same tests: about 0.43 to 0.63% (I-1), 0.36 to 0.43% (II-8), 0.43 to 0.51% (II-9).",
+     "where": "Figures 5 and 6 of PSI-98_Raw Data_Saffire I Sample 1 TM graphs.docx; PSI-99_Raw Data_Saffire-II Sample 8 TM Graphs.docx; PSI-99_Raw Data_Saffire-II Sample 9 TM Graphs.docx; PSI-99_Raw Data_Saffire-II Sample 1 TM Graphs.docx",
+     "variables": [
+      "o2_pct",
+      "o2_final_pct",
+      "co2_initial_pct",
+      "co2_final_pct"
+     ],
+     "quote": "Figure 6. Saffire-II Sample 8 Ambient Oxygen Concentration and Igniter.",
+     "note": "Graph readings by an AI from the embedded images, not values printed in the files; to be replaced by the numbers in the PSI telemetry spreadsheets before any use as data. The sensor levels differ from the ISS-referenced values of ICES-2017-224 Table I (21.7 to 21.5; 22.1 to 22.0; 22.0 to 21.9); the files do not comment on this."
+    }
+   ],
+   "note": "Files downloaded on 2026-11-14 through the PSI download service; licence of both investigations CC0-1.0 per the PSI records. AI-read, not checked by a human."
   }
  ]
 }
