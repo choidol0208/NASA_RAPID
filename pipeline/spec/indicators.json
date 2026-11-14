@@ -34,9 +34,12 @@
    ],
    "definition_ref": [
     "ISO16697.threshold",
-    "6001B.T1.moc"
+    "6001B.T1.moc",
+    "SAF17.o2_initial_I",
+    "SAF17.o2_initial_II",
+    "SAF17.table1_note_i"
    ],
-   "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-II the oxygen value is a derived one (Note 1 of the table: \"Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.\"), and three Saffire values are the midpoint of a range written in the cell."
+   "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here."
   },
   {
    "id": "P1.o2_with_oxygen_drop",
@@ -420,7 +423,7 @@
     "SAME.controls",
     "SAME.sizes"
    ],
-   "reading": "Range of air flow in the smoke tests. Particle sizes, which the flow affects, are not in the PSI tables."
+   "reading": "Range of air flow in the smoke tests. Particle sizes, which the flow affects, are not in the PSI tables. The rows hold test conditions; no measured smoke property is in the table."
   },
   {
    "id": "D2.aging",
@@ -441,14 +444,14 @@
     "SAME.controls",
     "SAME.sizes"
    ],
-   "reading": "Range of aging time in the smoke tests. Two source columns are read as this one variable: \"Aging Duration (minutes)\" of the SAME table (PSI-102), multiplied by 60, and \"Net aging time (sec)\" of the SAME-R table (PSI-101). The SAME-R columns \"Primary aging time (sec)\" and \"Primary mixing time (sec)\" are not read."
+   "reading": "Range of aging time in the smoke tests. Two source columns are read as this one variable: \"Aging Duration (minutes)\" of the SAME table (PSI-102), multiplied by 60, and \"Net aging time (sec)\" of the SAME-R table (PSI-101). The SAME-R columns \"Primary aging time (sec)\" and \"Primary mixing time (sec)\" are not read. The rows hold test conditions; no measured smoke property is in the table."
   },
   {
    "id": "D2.mass_loss",
    "need_id": "D2",
-   "label": "Sample mass loss rate",
+   "label": "Target weight loss rate of the planned test matrix",
    "template": "summary",
-   "population": "usable",
+   "population": "in_scope",
    "variable": "mass_loss_rate_mg_min",
    "stats": [
     "min",
@@ -459,9 +462,10 @@
     "material_id"
    ],
    "definition_ref": [
-    "SAME.controls"
+    "SAMEEIRD.target",
+    "SAMEEIRD.matrix"
    ],
-   "reading": "Mass loss rate as written in the column \"Weight loss rate (mg/min)\" of the SAME table (PSI-102). The table does not say whether it is a set value or a measured result. Four more rows name other materials with \"same conditions as 1-4\" and no values; they are not read."
+   "reading": "Value of the column \"Weight loss rate (mg/min)\" of the SAME table (PSI-102). The requirements document calls these target mass loss rates of the test matrix (SAMEEIRD.target); they are planned values, not measured results, and the mass actually lost is not in the table."
   }
  ]
 }

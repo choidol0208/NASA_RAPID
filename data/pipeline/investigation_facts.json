@@ -5141,6 +5141,9 @@
       "o2_pct": [
        "Percent O2"
       ],
+      "o2_range_as_written": [
+       "Percent O2"
+      ],
       "flow_cms": [
        "Air Flow (cm/s)"
       ],
@@ -5165,7 +5168,7 @@
      "flags_by_variable": {
       "o2_pct": {
        "approximate_in_source": 1,
-       "range_in_source_midpoint_used": 1
+       "range_in_source_start_value_named_in_publication": 1
       }
      },
      "variables": {
@@ -5264,13 +5267,13 @@
        "kind": "condition",
        "type": "number",
        "min": 21.5,
-       "max": 21.6,
+       "max": 21.7,
        "by": {
         "o2_basis": {
          "ambient": {
           "n": 2,
           "min": 21.5,
-          "max": 21.6
+          "max": 21.7
          }
         }
        },
@@ -5290,6 +5293,20 @@
        "values_truncated": false,
        "source_columns": [
         "(constant in sources.json)"
+       ]
+      },
+      "o2_range_as_written": {
+       "n": 1,
+       "unit": "text",
+       "kind": "condition",
+       "type": "category",
+       "distinct": 1,
+       "values": {
+        "21.5 - 21.7": 1
+       },
+       "values_truncated": false,
+       "source_columns": [
+        "Percent O2"
        ]
       },
       "flow_cms": {
@@ -5444,13 +5461,13 @@
      "kind": "condition",
      "type": "number",
      "min": 21.5,
-     "max": 21.6,
+     "max": 21.7,
      "by": {
       "o2_basis": {
        "ambient": {
         "n": 2,
         "min": 21.5,
-        "max": 21.6
+        "max": 21.7
        }
       }
      }
@@ -5463,6 +5480,17 @@
      "distinct": 1,
      "values": {
       "ambient": 2
+     },
+     "values_truncated": false
+    },
+    "o2_range_as_written": {
+     "n": 1,
+     "unit": "text",
+     "kind": "condition",
+     "type": "category",
+     "distinct": 1,
+     "values": {
+      "21.5 - 21.7": 1
      },
      "values_truncated": false
     },
@@ -5696,7 +5724,7 @@
    ],
    "flags": {
     "o2_pct:approximate_in_source": 1,
-    "o2_pct:range_in_source_midpoint_used": 1
+    "o2_pct:range_in_source_start_value_named_in_publication": 1
    },
    "source_columns_not_mapped": {
     "saffire1": [
@@ -5723,7 +5751,7 @@
     {
      "id": "inv.variables",
      "about": "PSI-98",
-     "text": "Variables with at least one value in the test rows of PSI-98, with the number of test rows that have a value: fuel_material (2); material_id (2); fuel_phase (2); sample_geometry (2); sample_thickness_mm (2); sample_width_cm (2); sample_length_cm (2); o2_pct (2); o2_basis (2); flow_cms (2); flow_direction (2); gravity_level (2); ignition_power_w (2); ignition_time_s (2); burn_time_s (2)."
+     "text": "Variables with at least one value in the test rows of PSI-98, with the number of test rows that have a value: fuel_material (2); material_id (2); fuel_phase (2); sample_geometry (2); sample_thickness_mm (2); sample_width_cm (2); sample_length_cm (2); o2_pct (2); o2_basis (2); o2_range_as_written (1); flow_cms (2); flow_direction (2); gravity_level (2); ignition_power_w (2); ignition_time_s (2); burn_time_s (2)."
     },
     {
      "id": "table.rows",
@@ -5748,12 +5776,12 @@
     {
      "id": "table.oxygen.ambient",
      "about": "saffire1",
-     "text": "In \"PSI-98_Experimental table_SAFFIRE-1.csv\", the oxygen concentration of the surrounding atmosphere at the start of the test is recorded for 2 of 2 test rows, from 21.5 to 21.6 % by volume (source column: Percent O2)."
+     "text": "In \"PSI-98_Experimental table_SAFFIRE-1.csv\", the oxygen concentration of the surrounding atmosphere at the start of the test is recorded for 2 of 2 test rows, from 21.5 to 21.7 % by volume (source column: Percent O2)."
     },
     {
      "id": "table.oxygen.flags",
      "about": "saffire1",
-     "text": "Flags on the oxygen cells of \"PSI-98_Experimental table_SAFFIRE-1.csv\" (reason, with the number of occurrences): approximate_in_source (1); range_in_source_midpoint_used (1). Where a flagged cell still gave a value, that value is part of the lowest and highest values above."
+     "text": "Flags on the oxygen cells of \"PSI-98_Experimental table_SAFFIRE-1.csv\" (reason, with the number of occurrences): approximate_in_source (1); range_in_source_start_value_named_in_publication (1). Where a flagged cell still gave a value, that value is part of the lowest and highest values above."
     },
     {
      "id": "table.pressure.not_mapped",
@@ -5793,7 +5821,7 @@
     {
      "id": "inv.flags",
      "about": "PSI-98",
-     "text": "Flags the pipeline set on the test rows of PSI-98 (variable:reason, with the number of occurrences): o2_pct:approximate_in_source (1); o2_pct:range_in_source_midpoint_used (1). A flag marks a problem in a source cell or in a computed value; the pipeline does not correct it."
+     "text": "Flags the pipeline set on the test rows of PSI-98 (variable:reason, with the number of occurrences): o2_pct:approximate_in_source (1); o2_pct:range_in_source_start_value_named_in_publication (1). A flag marks a problem in a source cell or in a computed value; the pipeline does not correct it."
     },
     {
      "id": "inv.team_computation",
@@ -5859,6 +5887,9 @@
       "o2_pct": [
        "Percent O2 (Note 1)"
       ],
+      "o2_range_as_written": [
+       "Percent O2 (Note 1)"
+      ],
       "flow_cms": [
        "Air Flow (cm/s)"
       ],
@@ -5902,7 +5933,8 @@
       },
       "o2_pct": {
        "approximate_in_source": 7,
-       "range_in_source_midpoint_used": 2
+       "range_in_source_start_value_named_in_publication": 1,
+       "range_in_source_start_value_not_documented": 1
       },
       "burn_time_s": {
        "text_in_source": 4
@@ -6014,7 +6046,7 @@
        ]
       },
       "o2_pct": {
-       "n": 9,
+       "n": 8,
        "unit": "% by volume",
        "kind": "condition",
        "type": "number",
@@ -6023,7 +6055,7 @@
        "by": {
         "o2_basis": {
          "ambient": {
-          "n": 9,
+          "n": 8,
           "min": 21.5,
           "max": 22.1
          }
@@ -6045,6 +6077,21 @@
        "values_truncated": false,
        "source_columns": [
         "(constant in sources.json)"
+       ]
+      },
+      "o2_range_as_written": {
+       "n": 2,
+       "unit": "text",
+       "kind": "condition",
+       "type": "category",
+       "distinct": 2,
+       "values": {
+        "22.0 to 21.9": 1,
+        "22.1 to 22.0": 1
+       },
+       "values_truncated": false,
+       "source_columns": [
+        "Percent O2 (Note 1)"
        ]
       },
       "flow_cms": {
@@ -6222,7 +6269,7 @@
      "max": 29.0
     },
     "o2_pct": {
-     "n": 9,
+     "n": 8,
      "unit": "% by volume",
      "kind": "condition",
      "type": "number",
@@ -6231,7 +6278,7 @@
      "by": {
       "o2_basis": {
        "ambient": {
-        "n": 9,
+        "n": 8,
         "min": 21.5,
         "max": 22.1
        }
@@ -6246,6 +6293,18 @@
      "distinct": 1,
      "values": {
       "ambient": 9
+     },
+     "values_truncated": false
+    },
+    "o2_range_as_written": {
+     "n": 2,
+     "unit": "text",
+     "kind": "condition",
+     "type": "category",
+     "distinct": 2,
+     "values": {
+      "22.0 to 21.9": 1,
+      "22.1 to 22.0": 1
      },
      "values_truncated": false
     },
@@ -6342,8 +6401,8 @@
      "pillar": "prevention",
      "objective_link": "stated",
      "tests_in_scope": 9,
-     "usable_tests": 9,
-     "counted_tests": 9,
+     "usable_tests": 8,
+     "counted_tests": 8,
      "recorded_outside_objective": 0,
      "statuses": {
       "saffire2": "measured"
@@ -6353,9 +6412,9 @@
        "source_id": "saffire2",
        "status": "measured",
        "tests_in_scope": 9,
-       "tests_with_required_conditions": 9,
+       "tests_with_required_conditions": 8,
        "tests_with_outcome": 9,
-       "usable_tests": 9,
+       "usable_tests": 8,
        "required_missing": [],
        "outcomes_present": [
         "burn_time_s",
@@ -6381,7 +6440,7 @@
        "source_id": "saffire2",
        "status": "conditions_only",
        "tests_in_scope": 9,
-       "tests_with_required_conditions": 9,
+       "tests_with_required_conditions": 8,
        "tests_with_outcome": 0,
        "usable_tests": 0,
        "required_missing": [],
@@ -6435,7 +6494,7 @@
        "source_id": "saffire2",
        "status": "conditions_only",
        "tests_in_scope": 9,
-       "tests_with_required_conditions": 9,
+       "tests_with_required_conditions": 8,
        "tests_with_outcome": 0,
        "usable_tests": 0,
        "required_missing": [],
@@ -6503,9 +6562,10 @@
     "burn_length_cm:see_note_in_source": 3,
     "sample_thickness_mm:decimal_point_unclear_in_source": 3,
     "fuel_material:blank_in_source_value_of_row_above_used": 2,
-    "o2_pct:range_in_source_midpoint_used": 2,
     "spread_rate_mm_s:see_note_in_source": 2,
     "burn_length_cm:several_values_in_source": 1,
+    "o2_pct:range_in_source_start_value_named_in_publication": 1,
+    "o2_pct:range_in_source_start_value_not_documented": 1,
     "sample_length_cm:several_values_in_source": 1,
     "sample_thickness_mm:see_note_in_source": 1,
     "sample_thickness_mm:several_values_in_source": 1,
@@ -6538,7 +6598,7 @@
     {
      "id": "inv.variables",
      "about": "PSI-99",
-     "text": "Variables with at least one value in the test rows of PSI-99, with the number of test rows that have a value: fuel_material (9); material_id (9); fuel_phase (9); sample_geometry (9); sample_thickness_mm (4); sample_width_cm (9); sample_length_cm (8); o2_pct (9); o2_basis (9); flow_cms (9); flow_direction (9); gravity_level (9); ignition_power_w (9); ignition_time_s (9); burn_time_s (5); burn_length_cm (8); spread_rate_mm_s (2)."
+     "text": "Variables with at least one value in the test rows of PSI-99, with the number of test rows that have a value: fuel_material (9); material_id (9); fuel_phase (9); sample_geometry (9); sample_thickness_mm (4); sample_width_cm (9); sample_length_cm (8); o2_pct (8); o2_basis (9); o2_range_as_written (2); flow_cms (9); flow_direction (9); gravity_level (9); ignition_power_w (9); ignition_time_s (9); burn_time_s (5); burn_length_cm (8); spread_rate_mm_s (2)."
     },
     {
      "id": "table.rows",
@@ -6563,12 +6623,12 @@
     {
      "id": "table.oxygen.ambient",
      "about": "saffire2",
-     "text": "In \"PSI-99_Experimental table_SAFFIRE-2.csv\", the oxygen concentration of the surrounding atmosphere at the start of the test is recorded for 9 of 9 test rows, from 21.5 to 22.1 % by volume (source column: Percent O2 (Note 1))."
+     "text": "In \"PSI-99_Experimental table_SAFFIRE-2.csv\", the oxygen concentration of the surrounding atmosphere at the start of the test is recorded for 8 of 9 test rows, from 21.5 to 22.1 % by volume (source column: Percent O2 (Note 1))."
     },
     {
      "id": "table.oxygen.flags",
      "about": "saffire2",
-     "text": "Flags on the oxygen cells of \"PSI-99_Experimental table_SAFFIRE-2.csv\" (reason, with the number of occurrences): approximate_in_source (7); range_in_source_midpoint_used (2). Where a flagged cell still gave a value, that value is part of the lowest and highest values above."
+     "text": "Flags on the oxygen cells of \"PSI-99_Experimental table_SAFFIRE-2.csv\" (reason, with the number of occurrences): approximate_in_source (7); range_in_source_start_value_named_in_publication (1); range_in_source_start_value_not_documented (1). Where a flagged cell still gave a value, that value is part of the lowest and highest values above."
     },
     {
      "id": "table.pressure.not_mapped",
@@ -6598,7 +6658,7 @@
     {
      "id": "need.stated.with_tests",
      "about": "P1",
-     "text": "Need P1 (Flammability limit) is stated as an objective in the PSI record. 9 of the 9 test rows within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "text": "Need P1 (Flammability limit) is stated as an objective in the PSI record. 8 of the 9 test rows within the scope of this need record every required condition variable and at least one outcome variable of the need."
     },
     {
      "id": "need.stated.with_tests",
@@ -6608,7 +6668,7 @@
     {
      "id": "inv.flags",
      "about": "PSI-99",
-     "text": "Flags the pipeline set on the test rows of PSI-99 (variable:reason, with the number of occurrences): o2_pct:approximate_in_source (7); burn_length_cm:approximate_in_source (6); burn_time_s:text_in_source (4); burn_length_cm:see_note_in_source (3); sample_thickness_mm:decimal_point_unclear_in_source (3); fuel_material:blank_in_source_value_of_row_above_used (2); o2_pct:range_in_source_midpoint_used (2); spread_rate_mm_s:see_note_in_source (2); burn_length_cm:several_values_in_source (1); sample_length_cm:several_values_in_source (1); sample_thickness_mm:see_note_in_source (1); sample_thickness_mm:several_values_in_source (1); spread_rate_mm_s:text_in_source (1). A flag marks a problem in a source cell or in a computed value; the pipeline does not correct it."
+     "text": "Flags the pipeline set on the test rows of PSI-99 (variable:reason, with the number of occurrences): o2_pct:approximate_in_source (7); burn_length_cm:approximate_in_source (6); burn_time_s:text_in_source (4); burn_length_cm:see_note_in_source (3); sample_thickness_mm:decimal_point_unclear_in_source (3); fuel_material:blank_in_source_value_of_row_above_used (2); spread_rate_mm_s:see_note_in_source (2); burn_length_cm:several_values_in_source (1); o2_pct:range_in_source_start_value_named_in_publication (1); o2_pct:range_in_source_start_value_not_documented (1); sample_length_cm:several_values_in_source (1); sample_thickness_mm:see_note_in_source (1); sample_thickness_mm:several_values_in_source (1); spread_rate_mm_s:text_in_source (1). A flag marks a problem in a source cell or in a computed value; the pipeline does not correct it."
     },
     {
      "id": "inv.team_computation",
@@ -7748,7 +7808,7 @@
      "tests": 4,
      "rows_excluded": 0,
      "rows_repeated": 0,
-     "row_note": "Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read.",
+     "row_note": "The four value rows carry the same values as Table 3-6 of the SAME requirements document of 2005, the planned test matrix (SAMEEIRD.matrix); the weight loss rate is a target value (SAMEEIRD.target). Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read.",
      "documented_elsewhere": [],
      "require": [
       "Air Flow (cm/s)"
@@ -7858,7 +7918,7 @@
       "mass_loss_rate_mg_min": {
        "n": 4,
        "unit": "mg/min",
-       "kind": "outcome",
+       "kind": "condition",
        "type": "number",
        "min": 1.0,
        "max": 2.0,
@@ -7934,7 +7994,7 @@
     "mass_loss_rate_mg_min": {
      "n": 4,
      "unit": "mg/min",
-     "kind": "outcome",
+     "kind": "condition",
      "type": "number",
      "min": 1.0,
      "max": 2.0
@@ -8063,24 +8123,22 @@
      "pillar": "detection",
      "objective_link": "not_stated",
      "tests_in_scope": 4,
-     "usable_tests": 4,
+     "usable_tests": 0,
      "counted_tests": 0,
-     "recorded_outside_objective": 4,
+     "recorded_outside_objective": 0,
      "statuses": {
-      "same": "measured"
+      "same": "conditions_only"
      },
      "by_table": [
       {
        "source_id": "same",
-       "status": "measured",
+       "status": "conditions_only",
        "tests_in_scope": 4,
        "tests_with_required_conditions": 4,
-       "tests_with_outcome": 4,
-       "usable_tests": 4,
+       "tests_with_outcome": 0,
+       "usable_tests": 0,
        "required_missing": [],
-       "outcomes_present": [
-        "mass_loss_rate_mg_min"
-       ]
+       "outcomes_present": []
       }
      ]
     },
@@ -8090,24 +8148,22 @@
      "pillar": "detection",
      "objective_link": "stated",
      "tests_in_scope": 4,
-     "usable_tests": 4,
-     "counted_tests": 4,
+     "usable_tests": 0,
+     "counted_tests": 0,
      "recorded_outside_objective": 0,
      "statuses": {
-      "same": "measured"
+      "same": "conditions_only"
      },
      "by_table": [
       {
        "source_id": "same",
-       "status": "measured",
+       "status": "conditions_only",
        "tests_in_scope": 4,
        "tests_with_required_conditions": 4,
-       "tests_with_outcome": 4,
-       "usable_tests": 4,
+       "tests_with_outcome": 0,
+       "usable_tests": 0,
        "required_missing": [],
-       "outcomes_present": [
-        "mass_loss_rate_mg_min"
-       ]
+       "outcomes_present": []
       }
      ]
     }
@@ -8145,7 +8201,7 @@
     {
      "id": "table.row_note",
      "about": "same",
-     "text": "What a row of \"PSI-102_Experimental table_SAME.csv\" is: Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read."
+     "text": "What a row of \"PSI-102_Experimental table_SAME.csv\" is: The four value rows carry the same values as Table 3-6 of the SAME requirements document of 2005, the planned test matrix (SAMEEIRD.matrix); the weight loss rate is a target value (SAMEEIRD.target). Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read."
     },
     {
      "id": "table.rows_left_out",
@@ -8188,14 +8244,14 @@
      "text": "The team's needs list links need D2 (Smoke generation conditions) to this sentence in the objective field of the PSI record of PSI-102: \"relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment\""
     },
     {
-     "id": "need.not_stated.recorded",
-     "about": "D1",
-     "text": "4 test rows of PSI-102 record every required condition variable and at least one outcome variable of need D1 (Combustion products), but the team's needs list has no sentence of the PSI record that states this need as an objective. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
+     "id": "need.stated.no_tests",
+     "about": "D2",
+     "text": "Need D2 (Smoke generation conditions) is stated as an objective in the PSI record. No test row of PSI-102 records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: same: conditions_only)."
     },
     {
-     "id": "need.stated.with_tests",
-     "about": "D2",
-     "text": "Need D2 (Smoke generation conditions) is stated as an objective in the PSI record. 4 of the 4 test rows within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "id": "need_table.conditions_only",
+     "about": "D2/same",
+     "text": "In \"PSI-102_Experimental table_SAME.csv\", 4 test rows record every required condition variable of need D2 (Smoke generation conditions), and no outcome variable of this need has a value in the table."
     },
     {
      "id": "inv.team_computation",
