@@ -1,0 +1,191 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "purpose": "Rules that sort the files of a NASA PSI file listing into kinds, for data/pipeline/raw_inventory.json (written by pipeline/raw_inventory.py). A listing gives a name, a size and a PSI category per file. The kind is decided from the file name and the PSI category only. No file is opened or downloaded, so a kind says what the name says, not what the file holds.",
+  "name_rule": "The name of a file is the last part of its storage key. Before a name pattern is tried, the prefix PSI adds to most names ('PSI-25_Raw Data_', 'PSI-25_metadata_') and the last extension are removed, so that the word 'Data' of the prefix is never read as a mark of the file. The extension is the text after the last dot, in lower case and without surrounding spaces; a name without a dot has the extension '(none)'.",
+  "kind_rule": "The rules are tried in the order listed and the first rule that holds decides the kind. A rule holds when every condition it carries holds: 'categories' (the PSI category of the file is one of these), 'extensions' (the extension is one of these), 'name_pattern' (the pattern is found in the name). A file that no rule holds for is 'other'.",
+  "kinds_in_words": {
+   "experimental_table": "Every file of the PSI category 'Experimental table'.",
+   "video": "Extension mp4, m4v, mov, avi, mpg, mpeg, mkv, wmv or ts (ts is read as an MPEG transport stream).",
+   "still_image": "Extension jpg, jpeg, png, tif, tiff, bmp, gif or nef (Nikon raw). Screenshots, logos and the 'Representative Image(s)' of a record are image files too and are counted here.",
+   "archive": "Extension zip, tar, gz, tgz, 7z, rar, bz2 or xz. What an archive holds is not known from a listing; 'archive_content' records what its name or its PSI category states.",
+   "document": "Extension pdf, doc, docx, ppt, pptx, rtf or odt; and a txt file whose name says comments, readme, notes or test sheet.",
+   "document_table": "A spreadsheet or csv (xlsx, xls, csv, tsv) that sits in a document category of PSI (Science Documents, Engineering Documents, Reports, Presentations), or whose name says matrix, summary, calculator or readme.",
+   "sensor_or_telemetry_table": "A table file (xlsx, xls, csv, tsv, txt) in a data category of PSI (Raw Data, Analyzed Data, Calibration, Reference Data) whose name carries one of the marks sensor, telemetry, readings or data ('data' as a word of its own or as the capitalised end of a compound such as 'DropletData'). The mark is the only evidence: the kind says that the name calls the file sensor, telemetry or data, not that it holds a sensor record. A table file without such a mark is 'other'.",
+   "other": "Everything else: extensions that are not listed above (for example dat, asc, log, mdipsug, metadata, pxp, eps) and table or text files whose name carries no mark. 'extensions' under the kind says how many files of each extension there are."
+  },
+  "archive_content_rule": "For an archive the content rules are tried in order and the first that holds gives 'archive_content'. Only a word of the name counts (video, mp4, a part 'ts'; jpeg, png, tiff, NEF, image, photo, frame grab, stills, picture; drawing; 'vlc-record', the name a VLC media player gives to a recording), and for the metadata package the PSI category. A camera or instrument name is not read as a statement of content. If no rule holds the content is 'not stated in the name'.",
+  "test_id_rule": "Each pattern is searched in the names of the files of the listed categories. A pattern is reported for an investigation when at least 'min_files' names and at least 'min_share' of the names carry it. 'what_the_names_show' says what is literally in the name; where the name does not say what the id identifies, that is stated. No name is mapped to a row of an experimental table.",
+  "sentence_rule": "One sentence per investigation, filled only with numbers of the same entry. Kinds are listed in the order of 'kinds'; a kind with no file is left out. For archives the sentence adds what the names state, for 'other' the extension with the most files (ties: the first in alphabetical order). Sizes are written with one decimal in decimal units (1 MB = 10^6 bytes, 1 GB = 10^9 bytes): GB from 10^9 bytes, MB below; a size that rounds to 0.0 MB is written with the 'tiny' wording.",
+  "authorship": "The rules and the wording are the team's (AI draft). The category names are PSI's."
+ },
+ "strip_prefix": [
+  "^PSI-\\d+_{category}_",
+  "^PSI-\\d+_metadata_"
+ ],
+ "default_kind": "other",
+ "kinds": [
+  {"id": "video", "one": "video", "many": "videos"},
+  {"id": "still_image", "one": "still image", "many": "still images"},
+  {"id": "archive", "one": "archive", "many": "archives"},
+  {"id": "sensor_or_telemetry_table", "one": "table named as sensor, telemetry or data", "many": "tables named as sensor, telemetry or data"},
+  {"id": "experimental_table", "one": "experimental table", "many": "experimental tables"},
+  {"id": "document", "one": "document", "many": "documents"},
+  {"id": "document_table", "one": "document table", "many": "document tables"},
+  {"id": "other", "one": "other file", "many": "other files"}
+ ],
+ "rules": [
+  {
+   "id": "experimental_table_by_category",
+   "kind": "experimental_table",
+   "categories": ["Experimental table"]
+  },
+  {
+   "id": "video_by_extension",
+   "kind": "video",
+   "extensions": ["mp4", "m4v", "mov", "avi", "mpg", "mpeg", "mkv", "wmv", "ts"]
+  },
+  {
+   "id": "still_image_by_extension",
+   "kind": "still_image",
+   "extensions": ["jpg", "jpeg", "png", "tif", "tiff", "bmp", "gif", "nef"]
+  },
+  {
+   "id": "archive_by_extension",
+   "kind": "archive",
+   "extensions": ["zip", "tar", "gz", "tgz", "7z", "rar", "bz2", "xz"]
+  },
+  {
+   "id": "document_by_extension",
+   "kind": "document",
+   "extensions": ["pdf", "doc", "docx", "ppt", "pptx", "rtf", "odt"]
+  },
+  {
+   "id": "text_document_by_name",
+   "kind": "document",
+   "extensions": ["txt"],
+   "name_pattern": "(?i:(?<![a-z])(?:comments?|read[ _]?me|notes?|test[ _]?sheet)(?![a-z]))"
+  },
+  {
+   "id": "document_table_by_category",
+   "kind": "document_table",
+   "extensions": ["xlsx", "xls", "csv", "tsv"],
+   "categories": ["Science Documents", "Engineering Documents", "Reports", "Presentations"]
+  },
+  {
+   "id": "document_table_by_name",
+   "kind": "document_table",
+   "extensions": ["xlsx", "xls", "csv", "tsv"],
+   "name_pattern": "(?i:(?<![a-z])(?:matri(?:x|ces)|summary|calculator|read[ _]?me)(?![a-z]))"
+  },
+  {
+   "id": "sensor_table_by_name_in_data_category",
+   "kind": "sensor_or_telemetry_table",
+   "extensions": ["xlsx", "xls", "csv", "tsv", "txt"],
+   "categories": ["Raw Data", "Analyzed Data", "Calibration", "Reference Data"],
+   "name_pattern": "(?i:sensor|telemetry|readings)|(?i:(?<![a-z])data(?![a-z]))|(?<=[A-Za-z])Data(?![a-z])"
+  }
+ ],
+ "archive_content": {
+  "default": "not stated in the name",
+  "rules": [
+   {
+    "id": "metadata_by_category",
+    "content": "investigation metadata",
+    "categories": ["Investigation Metadata Files"]
+   },
+   {
+    "id": "video_and_stills_by_name",
+    "content": "video and still images",
+    "name_pattern": "(?i:(?=.*(?:video|movie|mp4))(?=.*(?:jpe?g|png|(?<![a-z])tiff?(?![a-z])|(?<![a-z])nef(?![a-z])|image|photo|frame[ _]?grab|(?<![a-z])stills?(?![a-z])|picture)))"
+   },
+   {
+    "id": "video_by_name",
+    "content": "video",
+    "name_pattern": "(?i:video|movie|mp4|(?<![a-z0-9])ts(?![a-z0-9]))"
+   },
+   {
+    "id": "vlc_recording_by_name",
+    "content": "VLC recording",
+    "name_pattern": "(?i:vlc-record)"
+   },
+   {
+    "id": "still_images_by_name",
+    "content": "still images",
+    "name_pattern": "(?i:jpe?g|png|(?<![a-z])tiff?(?![a-z])|(?<![a-z])nef(?![a-z])|image|photo|frame[ _]?grab|(?<![a-z])stills?(?![a-z])|picture)"
+   },
+   {
+    "id": "drawings_by_name",
+    "content": "drawings",
+    "name_pattern": "(?i:drawing)"
+   }
+  ]
+ },
+ "test_id_patterns": {
+  "categories": ["Raw Data"],
+  "min_files": 5,
+  "min_share": 0.05,
+  "patterns": [
+   {
+    "id": "sample_and_test",
+    "regex": "(?i:SAMPLE[ _]\\d+_TEST[ _]?[A-Z]+\\d+)",
+    "what_the_names_show": "The words SAMPLE and TEST (in capitals or not), each followed by an id (for example SAMPLE_147_TEST_B1).",
+    "sentence_label": "the words SAMPLE and TEST with an id"
+   },
+   {
+    "id": "five_digits_letter_number",
+    "regex": "(?<!\\d)\\d{5}[A-Z]\\d{1,2}(?!\\d)",
+    "what_the_names_show": "An id of five digits, a capital letter and a number (for example 21301A9). The names do not say what the id identifies.",
+    "sentence_label": "an id of five digits, a letter and a number"
+   },
+   {
+    "id": "letter_digits_letter_digits",
+    "regex": "(?<![0-9A-Za-z])[A-Z]?\\d{2,3}[A-Z]\\d{2,3}[A-Z]?(?![0-9a-z])",
+    "what_the_names_show": "An id of two or three digits, a capital letter and two or three digits, with or without a capital letter before and after (for example F130A01D). The names do not say what the id identifies.",
+    "sentence_label": "an id of digits, a letter and digits"
+   },
+   {
+    "id": "flex_number",
+    "regex": "FLEX[-_]\\d{3,4}",
+    "what_the_names_show": "The word FLEX followed by a number of three or four digits (for example FLEX-007). The names do not say what the number identifies.",
+    "sentence_label": "the word FLEX with a number"
+   },
+   {
+    "id": "s_or_f_digit_c_digit",
+    "regex": "(?<![A-Za-z0-9])[SF]\\dC\\d(?![A-Za-z0-9])",
+    "what_the_names_show": "A code of the letter S or F with a digit and the letter C with a digit (for example S1C1). The names do not say what the code identifies.",
+    "sentence_label": "a code such as S1C1"
+   },
+   {
+    "id": "tp_number",
+    "regex": "(?<![A-Za-z])TP ?\\d+",
+    "what_the_names_show": "The letters TP followed by a number (for example TP 37). The names do not say what TP stands for.",
+    "sentence_label": "the letters TP with a number"
+   },
+   {
+    "id": "number_sign",
+    "regex": "#\\d+",
+    "what_the_names_show": "A number sign followed by a number (for example #63). The names do not say what the number identifies.",
+    "sentence_label": "a number sign with a number"
+   }
+  ]
+ },
+ "sentence": {
+  "template": "PSI lists {files} ({size}) for {investigation_id}: {kinds}{no_sensor}{test_id}.",
+  "files_one": "{n} file",
+  "files_many": "{n} files",
+  "kind_item": "{n} {label} ({size})",
+  "other_item": "{n} {label} ({size}; most frequent extension: {extension}, {extension_n})",
+  "archive_item": "{n} {label} ({size}; by name or PSI category: {contents})",
+  "archive_content_item": "{n} {content}",
+  "archive_content_default_label": "not stated",
+  "separator": ", ",
+  "no_sensor": "; no file is named as a sensor, telemetry or data table",
+  "test_id": "; {n} of the {m} file names under {categories} carry {label}",
+  "empty": "PSI lists no file for {investigation_id}.",
+  "not_available": "The PSI file listing of {investigation_id} was not available when the inventory was built.",
+  "size_gb": "{value} GB",
+  "size_mb": "{value} MB",
+  "size_tiny": "under 0.1 MB"
+ }
+}
