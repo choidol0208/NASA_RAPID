@@ -1,12 +1,12 @@
 ---
 role: catalog
-updated: 2026-11-15 00:10 KST
+updated: 2026-11-15 08:33 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **`main` and the live site run config 1.4.0** since pm's 23:35 integration (`5e08241`): the literature stream, the FLEX pooling, the requirements layer, and the JANAF tables removed. The live `scorer.js` is byte-identical to mine. `catalog-filter` is still at 1.2.0 (19:41); request 0007 asks ui to merge `main` before its next push, since Pages deploys from both branches. Request 2008 is answered by pm (`accepted`, merged) and closed; pm updates the scores and method text in `docs/submission/` once the human lead says go. Request 2001 to ui is still open. Waiting for pm's plan at about 01:00 on the human lead's new direction (23:49): help a user find which unprocessed raw data their question needs. Sync 00:10: inbox empty; 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean. **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. `main`, `catalog-filter` and the live site all run config 1.4.0. ui shows the requirements table (2001 done) and merged before pushing (0007 done); both are closed. **Working on pm 0035 (accepted 08:33; the human lead widened the catalog's scope for this work):** step 6 `data/catalog/reading_order.csv` by about 10:15, step 7 `validation/raw_chain_recount.py` with the video block by about 12:00. Sync 08:33: inbox answered; 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean. **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
