@@ -33,6 +33,7 @@
 | 11/14 11:40– | Claude Code | 로컬 모델(gpt-oss:20b)로 근거 인용 방식 시험. 제품 문구는 아직 생성하지 않음 | 저장소 밖 시험 스크립트 | 미검토 |
 | 11/14 11:58 | Claude Code (data 역할) | 필요 정보의 근거를 점검: PSI 기록의 실험 목적 문장을 원문 그대로 필요 정보에 연결하고(엔진이 원문 일치 검사), 목적문에 없는 용도의 시험은 근거에서 제외. NASA 문서의 요구사항 문장 12개를 인용으로 추가. pm 요청으로 시나리오 3개 추가. 팀 페이지 갱신 | `pipeline/spec/needs.json`(`stated_by`, `not_covered`), `pipeline/spec/references.json`(`quote`), `pipeline/spec/scenarios.json`, `pipeline/run.py`, `data/pipeline/objective_links.csv`, `data/pipeline/*`, `reports/indicators*`, `coord/requests/*data-to-*` | 미검토. 어느 목적문을 어느 필요 정보에 묶을지는 AI의 판단이며 연소 전공 팀원 확인 필요. 표준 인용문은 PDF 원문 대조 필요 |
 | 11/14 12:39 | Claude Code (Anthropic), 서브 에이전트 6개 병렬 | data 역할: 환경별 근거 묶음(`pipeline/evidence.py`, `data/pipeline/evidence/`), 실험별 사실표(`pipeline/facts.py`), 독립 검증기(`pipeline/check.py`) 작성. 별도 에이전트 3개가 원자료 재계산, 과잉 일반화, 인용문 대조를 감사했고, 그 결과로 칸 해석 규칙(주석 번호를 값으로 읽던 오류, BASS-II 팬 눈금을 유속으로 읽던 오류), 재료 이름, 중복 행, 질문 정의, 참고문헌 13건을 고침 | `pipeline/`, `data/pipeline/`, `reports/indicators*` | 없음(사람 검토 전) |
+| 11/14 13:20– | Claude Code (Opus 5.5, catalog 역할) | ui에게서 카탈로그·순위 계산기·검증을 넘겨받는 새 세션. 인수인계 목록의 남은 수정(버너 산화제 흐름 산소, `o2_above_all` 기준, 기체·액적 키워드, 카탈로그와 파이프라인의 일치 검사, 사람 확인표, 열린 범위 문구)을 원 표와 대조해 수행 | `coord/status/catalog.md`, `coord/requests/*catalog-to-*`. 넘겨받은 뒤 `data/catalog/`, `scoring/`, `validation/`, `web/scorer.js` | 미검토. 시험·검증·parity 자동 통과만 확인 |
 
 ## 제품 안에서 동작하는 AI
 
