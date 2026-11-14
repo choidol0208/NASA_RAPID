@@ -136,6 +136,10 @@ def main():
         lines += ["", "## Weight stability (each weight ±0.05)", "", "| Scenario | Rank 1 | Changes rank 1 |", "|---|---|---|"]
         for sid, top, flips in stab:
             lines.append(f"| {sid} | {top} | {'; '.join(flips) if flips else 'stable'} |")
+    if args.target == "scoring.scorer:rank":  # the sensitivity table uses the reference scorer
+        sys.path.insert(0, HERE)
+        import sensitivity
+        lines += [""] + sensitivity.report_lines(sensitivity.run())
     report = "\n".join(lines) + "\n"
     with open(args.report, "w", encoding="utf-8") as fh:
         fh.write(report)

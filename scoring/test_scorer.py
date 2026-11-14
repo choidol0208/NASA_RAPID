@@ -27,8 +27,33 @@ class SimilarityFormulas(unittest.TestCase):
         p = CFG["similarity"]["o2"]
         c = {"o2_min_pct": "17", "o2_max_pct": "21"}
         self.assertEqual(scorer.s_o2(19, c, p), 1.0)
-        self.assertAlmostEqual(scorer.s_o2(30, c, p), math.exp(-9 / 5), places=6)   # 0.165, above: steep
-        self.assertAlmostEqual(scorer.s_o2(12, c, p), math.exp(-5 / 10), places=6)  # 0.607, below: gentle
+        # log of the O2 ratio (config 1.1.0): above steep, below gentle
+        self.assertAlmostEqual(scorer.s_o2(30, c, p), math.exp(-math.log(30 / 21) / p["above_scale_ln"]), places=6)
+        self.assertAlmostEqual(scorer.s_o2(12, c, p), math.exp(-math.log(17 / 12) / p["below_scale_ln"]), places=6)
+        self.assertLess(scorer.s_o2(30, c, p), scorer.s_o2(12, c, p))
+        # near air the scales equal the earlier 5 and 10 percentage points
+        air = {"o2_min_pct": "21", "o2_max_pct": "21"}
+        self.assertAlmostEqual(scorer.s_o2(26, air, p), math.exp(-1), places=4)
+        self.assertAlmostEqual(scorer.s_o2(11, air, p), math.exp(-1), places=4)
+
+    def test_o2_ratio_not_points(self):
+        # the same 6-point gap is larger at low oxygen than at high oxygen
+        p = CFG["similarity"]["o2"]
+        low = scorer.s_o2(15, {"o2_min_pct": "21", "o2_max_pct": "21"}, p)
+        high = scorer.s_o2(30, {"o2_min_pct": "36", "o2_max_pct": "36"}, p)
+        self.assertLess(low, high)
+        self.assertEqual(scorer.s_o2(0, {"o2_min_pct": "12", "o2_max_pct": "21"}, p), 0.0)
+
+    def test_diluent_by_heat_capacity(self):
+        p = CFG["similarity"]["diluent"]
+        s = lambda u, cd: scorer.s_diluent(u, {"diluent": cd}, p)
+        self.assertEqual(s("CO2", "N2; CO2; He"), 1.0)
+        self.assertEqual(s("CO2", ""), p["none"])
+        self.assertGreater(s("CO2", "N2"), s("CO2", "He"))   # N2 is closer to CO2 in heat capacity than He
+        self.assertGreater(s("N2", "He"), s("CO2", "He"))
+        self.assertAlmostEqual(s("CO2", "N2"), (29.071 / 37.198) ** 2, places=6)
+        self.assertEqual(s("CO2", "N2; He"), s("CO2", "N2"))  # best match over the configuration's diluents
+        self.assertEqual(s("Ar", "N2"), p["other_inert"])      # no heat capacity listed: flat value
 
     def test_pressure_factor_two(self):
         c = {"pressure_min_kpa": "101.3", "pressure_max_kpa": "101.3"}
