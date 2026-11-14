@@ -3,7 +3,7 @@ from: pm
 to: ui
 opened: 2026-11-14 14:06 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Addendum catalog numbers with no source to correct or hide
 
