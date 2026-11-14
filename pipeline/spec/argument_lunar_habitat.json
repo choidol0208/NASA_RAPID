@@ -1,0 +1,492 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "branch": "data-lab (experiment, not for merge)",
+  "what_this_is": "A structured argument (claim, inference, evidence, defeater, undeveloped claim) for one question about the lunar habitat: can a flammability ranking of materials obtained in normal-gravity ground tests be carried to the lunar-habitat atmosphere and gravity? It shows how the argument is built and where it rests on documents, on team reasoning, or on nothing held. It gives no verdict and sets no criterion.",
+  "header": "Team computation and team reasoning (AI-drafted), not a NASA conclusion, not safety guidance; a research exploration tool.",
+  "authorship": "team reasoning (AI-drafted), not a NASA statement",
+  "not_stated": "not stated in the item",
+  "not_stated_count": "not stated in the file",
+  "no_item": "no item held",
+  "covers_keys": ["materials", "gravity", "facility", "oxygen", "pressure", "flow"],
+  "covers_fields": ["text", "quote", "where"],
+  "identifier_tokens": ["NASA-STD-6001", "Test 1", "1g"],
+  "forbidden_words": ["safe", "unsafe", "safely", "acceptable", "acceptably", "sufficient", "sufficiently", "adequate", "adequately", "representative", "proves", "proven", "confirms", "validated", "guarantees", "certified"],
+  "method_sources": [
+   {
+    "title": "Safety Case Notations: Alternatives for the Non-Graphically Inclined?",
+    "author": "C. M. Holloway (NASA Langley Research Center)",
+    "year": "2008",
+    "url": "https://ntrs.nasa.gov/citations/20080042416",
+    "terms_as_found": "NTRS record: distribution PUBLIC; copyright determination GOV_PUBLIC_USE_PERMITTED",
+    "taken": "The element types of the Goal Structuring Notation as the paper lists them: goal (a claim to be established by an argument), strategy (how a goal is decomposed into sub-goals), solution (the evidence that a goal has been met), context, assumption, justification. Only the form is taken."
+   },
+   {
+    "title": "Assurance Arguments for the Non-graphically-inclined: Two Approaches (NASA/TM-2017-219650)",
+    "author": "E. Heavner, C. M. Holloway (NASA Langley Research Center)",
+    "year": "2017",
+    "url": "https://ntrs.nasa.gov/citations/20170007188",
+    "terms_as_found": "NTRS record: distribution PUBLIC; copyright determination PUBLIC_USE_PERMITTED",
+    "taken": "The five elements of an argument as the memorandum defines them: conclusions, premises (some called evidence), warrants (why the truth of the premises should lead the reader to hold the conclusion true), contextual information, and assumptions (statements relied on but not elaborated or shown to be true). The 'inference' node here plays the role of the warrant or strategy. Only the form is taken."
+   },
+   {
+    "title": "Making the Implicit Explicit: Towards an Assurance Case for DO-178C",
+    "author": "C. M. Holloway (NASA Langley Research Center)",
+    "year": "2013",
+    "url": "https://ntrs.nasa.gov/citations/20140002745",
+    "terms_as_found": "NTRS record: copyright determination GOV_PUBLIC_USE_PERMITTED; conference paper, International System Safety Society, publication date 2013-08-12",
+    "taken": "The undeveloped entity of GSN: a mark on a goal or strategy indicating that the line of argument requires further development. Only the form is taken."
+   }
+  ],
+  "method_not_sourced": "The 'defeater' node kind (a way an inference or an assumption could fail) is not defined in the three sources above. Public sources on defeaters in assurance arguments (Software Engineering Institute reports on eliminative argumentation; an SRI report on defeaters) could not be opened from this session, so the kind is described here in the team's own words and is not attributed to any source.",
+  "method_sources_read": "All three were downloaded from NTRS and read (text layer) on 2026-11-14; titles, years (NTRS publication date) and terms are as shown in their NTRS records."
+ },
+ "top": "C0",
+ "nodes": [
+  {
+   "id": "C0",
+   "kind": "claim",
+   "text": "A ranking of materials by flammability obtained in normal-gravity ground tests can be carried over, in the same order, to the lunar-habitat atmosphere and to lunar gravity.",
+   "inference": "I0",
+   "children": ["E0a", "E0b", "C1", "C2", "C3", "C4", "C5"]
+  },
+  {
+   "id": "I0",
+   "kind": "inference",
+   "supports": "C0",
+   "text": "The top claim is split by the conditions under which a ranking is obtained. A ranking can be carried over only if the ground test yields an order at all (C1), the target atmosphere is fixed (C2), the order holds across the change of total pressure (C3), the order holds across the change of gravity and of the flow that gravity sets (C4), and the two changes taken together do not alter it (C5). E0a names total pressure, temperature, convective flow and gravity level as the conditions at which an oxygen threshold is determined; E0b states that fire-limit results do not necessarily apply to conditions that do not reproduce the test. Neither item states this split; it is the team's.",
+   "assumptions": [
+    "The conditions through which the order could change are the oxygen concentration and total pressure of the atmosphere, the gravity level, and the flow that gravity sets.",
+    "Temperature, material thickness and sample size are held as in the ground test.",
+    "Pressure and gravity can be examined one at a time before their combination is examined.",
+    "An order of oxygen thresholds is what the top claim means by a flammability ranking."
+   ],
+   "authorship": "team reasoning (AI-drafted), not a NASA statement",
+   "basis": "team",
+   "defeaters": ["D0a", "D0b", "D0c", "D0d"]
+  },
+  {
+   "id": "D0a",
+   "kind": "defeater",
+   "attacks": {"inference": "I0", "assumption": 2},
+   "text": "6001B.def.worstcase names temperature and material thickness among the most hazardous conditions. This argument develops neither, so the order could change through them.",
+   "basis": "documented",
+   "item": "6001B.def.worstcase"
+  },
+  {
+   "id": "D0b",
+   "kind": "defeater",
+   "attacks": {"inference": "I0", "assumption": 4},
+   "text": "CP2004.flam.fist names time to ignition, fire spread rate, material properties and critical heat flux for ranking the hazards of materials. An order of oxygen thresholds need not agree with an order by these quantities.",
+   "basis": "documented",
+   "item": "CP2004.flam.fist"
+  },
+  {
+   "id": "D0c",
+   "kind": "defeater",
+   "attacks": {"inference": "I0", "assumption": 2},
+   "text": "SAF16b.saffire2 states that quantifying the difference in flammability limits for large samples is an objective. A ranking from small ground specimens may not carry over to large samples.",
+   "basis": "documented",
+   "item": "SAF16b.saffire2"
+  },
+  {
+   "id": "D0d",
+   "kind": "defeater",
+   "attacks": {"inference": "I0", "assumption": 1},
+   "text": "The split treats the named conditions as the only paths by which the order could change. A path not named here, such as the strength of the ignition source or the diluent gas, is not examined.",
+   "basis": "logical"
+  },
+  {"id": "E0a", "kind": "evidence", "item": "ISO16697.scope",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+  {"id": "E0b", "kind": "evidence", "item": "G125.conditions",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+
+  {
+   "id": "C1",
+   "kind": "claim",
+   "text": "The normal-gravity ground test of the held standard yields a quantity by which materials can be put in order, not only a pass or a fail.",
+   "inference": "I1",
+   "children": ["E1a", "E1b", "E1c", "E1d", "E1e"]
+  },
+  {
+   "id": "I1",
+   "kind": "inference",
+   "supports": "C1",
+   "text": "Test 1 as written gives a pass or a fail at one atmosphere (E1a, E1b). The same standard defines the maximum oxygen concentration at which specimens pass (E1c), and researchers define an upward limiting oxygen index from the same burn-length criterion and a modified Test 1 that measures it (E1d, E1e). Such a threshold can put materials in order. CP2003.prev.margin states this step: augment the go/no-go criteria with a quantitative test method that provides a ranking or an indication of flammability margin.",
+   "assumptions": [
+    "The maximum oxygen concentration and the upward limiting oxygen index put the same materials in the same order.",
+    "The pressure at which a threshold was measured is recorded with it, so that thresholds measured at the same pressure can be compared."
+   ],
+   "authorship": "team reasoning (AI-drafted), not a NASA statement",
+   "basis": "documented",
+   "item": "CP2003.prev.margin",
+   "defeaters": ["D1a", "D1b"]
+  },
+  {
+   "id": "D1a",
+   "kind": "defeater",
+   "attacks": {"inference": "I1", "assumption": 1},
+   "text": "ISO16697.moc defines MOC as the highest oxygen concentration where all samples pass and ULOI as the concentration where about half of the samples fail. The two definitions need not give the same order.",
+   "basis": "documented",
+   "item": "ISO16697.moc"
+  },
+  {
+   "id": "D1b",
+   "kind": "defeater",
+   "attacks": {"inference": "I1", "assumption": null},
+   "text": "D2863.caveat states that correlation of the oxygen index with burning characteristics under actual use conditions is not implied.",
+   "basis": "documented",
+   "item": "D2863.caveat"
+  },
+  {"id": "E1a", "kind": "evidence", "item": "6001B.T1.pass",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+  {"id": "E1b", "kind": "evidence", "item": "ICES14.onlyvalid",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+  {"id": "E1c", "kind": "evidence", "item": "6001B.T1.moc",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+  {"id": "E1d", "kind": "evidence", "item": "OF2012.uloi",
+   "covers": {"materials": "not stated in the item", "gravity": [{"field": "text", "words": "1g ULOI"}], "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+  {"id": "E1e", "kind": "evidence", "item": "TB14639.modified",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+
+  {
+   "id": "C2",
+   "kind": "claim",
+   "text": "The held documents fix one atmosphere, an oxygen concentration and a total pressure, for a lunar habitat at which the order would have to hold.",
+   "inference": "I2",
+   "children": ["E2a", "E2b", "E2c", "E2d", "E2e"]
+  },
+  {
+   "id": "I2",
+   "kind": "inference",
+   "supports": "C2",
+   "text": "The items name atmospheres for a Moon base, for landers and surface habitats, or for the most severe spacecraft environment (E2a to E2d). E2e states that design requirements need to specify the pressure and oxygen combinations permitted in the habitable volume. If one combination were fixed for the lunar habitat, the target of the carry-over would be defined. The items do not all name the same combination.",
+   "assumptions": [
+    "The atmosphere named on the challenge page for a Moon base is the one a lunar-habitat ranking would be carried to.",
+    "The atmosphere stays within its stated control band during use."
+   ],
+   "authorship": "team reasoning (AI-drafted), not a NASA statement",
+   "basis": "team",
+   "defeaters": ["D2a", "D2b", "D2c", "D2d"]
+  },
+  {
+   "id": "D2a",
+   "kind": "defeater",
+   "attacks": {"inference": "I2", "assumption": null},
+   "text": "EAWG.atmospheres calls its atmospheres recommendations, not requirements, and lists more than one pair for surface habitats.",
+   "basis": "documented",
+   "item": "EAWG.atmospheres"
+  },
+  {
+   "id": "D2b",
+   "kind": "defeater",
+   "attacks": {"inference": "I2", "assumption": null},
+   "text": "EA.8.2-34 states that one recommended exploration atmosphere was altered after a re-evaluation; the target can move.",
+   "basis": "documented",
+   "item": "EA.8.2-34"
+  },
+  {
+   "id": "D2c",
+   "kind": "defeater",
+   "attacks": {"inference": "I2", "assumption": 1},
+   "text": "EAWG.testing asks for materials ignition and flammability testing and certification to an oxygen concentration above the lower bound that CH.moonbase names.",
+   "basis": "documented",
+   "item": "EAWG.testing"
+  },
+  {
+   "id": "D2d",
+   "kind": "defeater",
+   "attacks": {"inference": "I2", "assumption": 1},
+   "text": "CH.moonbase words the Moon-base atmosphere as expected and likely; it is an expectation, not a specification, and the item was read by another session of the team.",
+   "basis": "documented",
+   "item": "CH.moonbase"
+  },
+  {"id": "E2a", "kind": "evidence", "item": "CH.moonbase",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": [{"field": "text", "words": "oxygen likely 30% or more"}], "pressure": [{"field": "text", "words": "pressure 10.2 psi or less"}], "flow": "not stated in the item"}},
+  {"id": "E2b", "kind": "evidence", "item": "TB14639.worstcase",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": [{"field": "text", "words": "30% oxygen"}], "pressure": [{"field": "text", "words": "10.2 psia"}], "flow": "not stated in the item"}},
+  {"id": "E2c", "kind": "evidence", "item": "EAWG.atmospheres",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": [{"field": "text", "words": "14.7 psia / 21% O2; 10.2 psia / 26.5% O2; 8.0 psia / 32% O2 (landers, surface habitats); 7.6 psia / 32% O2 (surface habitats)"}], "pressure": [{"field": "text", "words": "14.7 psia / 21% O2; 10.2 psia / 26.5% O2; 8.0 psia / 32% O2 (landers, surface habitats); 7.6 psia / 32% O2 (surface habitats)"}], "flow": "not stated in the item"}},
+  {"id": "E2d", "kind": "evidence", "item": "EA.8.2-34",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": [{"field": "text", "words": "8.2 psia / 34% O2"}], "pressure": [{"field": "text", "words": "8.2 psia / 34% O2"}], "flow": "not stated in the item"}},
+  {"id": "E2e", "kind": "evidence", "item": "TB008.o2",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+
+  {
+   "id": "C3",
+   "kind": "claim",
+   "text": "An order of oxygen thresholds measured at one total pressure in normal gravity is kept at the total pressure of the lunar habitat.",
+   "inference": "I3",
+   "children": ["E3a", "E3b", "E3c", "E3d", "E3e", "E3f", "E3g", "C3.1"]
+  },
+  {
+   "id": "I3",
+   "kind": "inference",
+   "supports": "C3",
+   "text": "The held ground studies measured oxygen thresholds of the same materials at more than one total pressure in normal gravity (E3a, E3c) and report that the threshold depends on total pressure (E3b, E3f, E3g), primarily on oxygen concentration and to a lesser extent on total pressure (E3d, E3e). If the change with pressure had the same direction and a similar size for every material ranked, the order at one pressure would be kept at another. C3.1 asks whether the NASA PSI tables could check this.",
+   "assumptions": [
+    "The change of threshold with total pressure has the same direction and a similar size for the materials being ranked.",
+    "The lunar-habitat pressure lies inside the pressure range of the held studies, so no extrapolation is needed.",
+    "Results on pressure obtained in normal gravity apply in the same way at lunar gravity."
+   ],
+   "authorship": "team reasoning (AI-drafted), not a NASA statement",
+   "basis": "team",
+   "defeaters": ["D3a", "D3b", "D3c", "D3d", "D3e"]
+  },
+  {
+   "id": "D3a",
+   "kind": "defeater",
+   "attacks": {"inference": "I3", "assumption": 1},
+   "text": "H2006.range states that the effect of total pressure on oxygen concentration thresholds is greater for materials with higher thresholds. An effect that differs between materials can change their order.",
+   "basis": "documented",
+   "item": "H2006.range"
+  },
+  {
+   "id": "D3b",
+   "kind": "defeater",
+   "attacks": {"inference": "I3", "assumption": 1},
+   "text": "SAE2008.mocpressure names a few fuels, which appear to have halogen species in common, with a stronger dependence on pressure.",
+   "basis": "documented",
+   "item": "SAE2008.mocpressure"
+  },
+  {
+   "id": "D3c",
+   "kind": "defeater",
+   "attacks": {"inference": "I3", "assumption": 1},
+   "text": "URBAN14.loc reports a strong dependence on pressure for one material, against the lesser extent stated in LANGE.lesser.",
+   "basis": "documented",
+   "item": "URBAN14.loc"
+  },
+  {
+   "id": "D3d",
+   "kind": "defeater",
+   "attacks": {"inference": "I3", "assumption": null},
+   "text": "H2011.cannot states that, for at least one material tested, a material that meets its threshold at one atmosphere would fail Test 1 at another atmosphere with less oxygen and a higher total pressure.",
+   "basis": "documented",
+   "item": "H2011.cannot"
+  },
+  {
+   "id": "D3e",
+   "kind": "defeater",
+   "attacks": {"inference": "I3", "assumption": 3},
+   "text": "No held item measures the pressure dependence of a threshold at lunar gravity; the assumption that it is the same as in normal gravity rests on no document.",
+   "basis": "logical"
+  },
+  {"id": "E3a", "kind": "evidence", "item": "H2006.table2",
+   "covers": {"materials": [{"field": "text", "words": "eleven materials"}], "gravity": [{"field": "text", "words": "normal gravity"}], "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": [{"field": "text", "words": "at 48.2, 85.3 and 101.3 kPa total pressure"}], "flow": [{"field": "text", "words": "quiescent"}]}},
+  {"id": "E3b", "kind": "evidence", "item": "H2006.depends",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": [{"field": "text", "words": "For the range of total pressures tested"}], "flow": "not stated in the item"}},
+  {"id": "E3c", "kind": "evidence", "item": "H2007.fixedpressure",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": [{"field": "text", "words": "a fixed total pressure of 70.1 kPa"}], "flow": "not stated in the item"}},
+  {"id": "E3d", "kind": "evidence", "item": "SAE2008.mocpressure",
+   "covers": {"materials": [{"field": "text", "words": "a few fuels, which appear to have halogen species in common"}], "gravity": [{"field": "text", "words": "1g MOCs"}], "facility": [{"field": "text", "words": "The Test 1 flammability data published by White Sands"}], "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+  {"id": "E3e", "kind": "evidence", "item": "LANGE.lesser",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+  {"id": "E3f", "kind": "evidence", "item": "H2011.linear",
+   "covers": {"materials": [{"field": "text", "words": "For materials with MOC in the range 25-35% oxygen"}], "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+  {"id": "E3g", "kind": "evidence", "item": "ICES14.both",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+
+  {
+   "id": "C3.1",
+   "kind": "claim",
+   "text": "The NASA PSI tests that the team counts for the flammability-limit need record the total pressure of each test.",
+   "inference": "I3.1",
+   "children": ["E3.1a", "E3.1b"]
+  },
+  {
+   "id": "I3.1",
+   "kind": "inference",
+   "supports": "C3.1",
+   "text": "The claim is checked by setting the number of tests counted for the need beside the number of those tests whose total pressure is recorded in the experimental tables (E3.1a, E3.1b). Both are team counts of the evidence package for the lunar habitat.",
+   "assumptions": [
+    "The tests that the team counts for the flammability-limit need (rules in pipeline/README.md) are the PSI tests that bear on oxygen thresholds."
+   ],
+   "authorship": "team reasoning (AI-drafted), not a NASA statement",
+   "basis": "team",
+   "defeaters": ["D3.1a"]
+  },
+  {
+   "id": "D3.1a",
+   "kind": "defeater",
+   "attacks": {"inference": "I3.1", "assumption": null},
+   "text": "A pressure absent from the experimental tables may be stated in an investigator's paper or a PSI record; the count reads the tables only.",
+   "basis": "logical"
+  },
+  {"id": "E3.1a", "kind": "evidence",
+   "count": {"file": "data/pipeline/evidence/scenario_lunar_habitat.json", "path": ["needs", {"need_id": "P1"}, "counts", "usable_tests"]},
+   "covers": {"materials": "not stated in the file", "gravity": {"path": ["environment", "gravity_level"]}, "facility": "not stated in the file", "oxygen": {"path": ["environment", "ranges", "o2_pct"]}, "pressure": {"path": ["environment", "ranges", "pressure_kpa"]}, "flow": {"path": ["environment", "ranges", "flow_cms"]}}},
+  {"id": "E3.1b", "kind": "evidence",
+   "count": {"file": "data/pipeline/evidence/scenario_lunar_habitat.json", "path": ["needs", {"need_id": "P1"}, "usable_elsewhere", "pressure_kpa", "recorded"]},
+   "covers": {"materials": "not stated in the file", "gravity": {"path": ["environment", "gravity_level"]}, "facility": "not stated in the file", "oxygen": {"path": ["environment", "ranges", "o2_pct"]}, "pressure": {"path": ["environment", "ranges", "pressure_kpa"]}, "flow": {"path": ["environment", "ranges", "flow_cms"]}}},
+
+  {
+   "id": "C4",
+   "kind": "claim",
+   "text": "An order of oxygen thresholds measured in normal gravity is kept at lunar gravity.",
+   "inference": "I4",
+   "children": ["E4a", "E4b", "E4c", "E4d", "E4e", "E4f", "C4.1", "U4.2", "U4.3"]
+  },
+  {
+   "id": "I4",
+   "kind": "inference",
+   "supports": "C4",
+   "text": "E4a prints, for the same materials, thresholds in normal gravity and at lunar gravity; the OF2012 items (E4a, E4b) are the only held items with values at lunar gravity (team search of references.json). Comparing the order of the materials in the normal-gravity rows and in the lunar rows of E4a bears directly on the claim. E4c and E4d compare normal gravity with microgravity, not with lunar gravity. E4e and E4f state that normal-gravity tests do not match flammability in reduced gravity. A shift of every threshold by the same amount would keep the order; the claim needs the shift to be similar across materials, not absent.",
+   "assumptions": [
+    "Thresholds from short drop-tower tests stand for thresholds in lasting lunar gravity.",
+    "The extinction criteria used in low gravity and in normal gravity measure the same property.",
+    "The flow in the low-gravity tests stands for the flow in a lunar habitat.",
+    "The materials in E4a stand for the materials to be ranked."
+   ],
+   "authorship": "team reasoning (AI-drafted), not a NASA statement",
+   "basis": "team",
+   "defeaters": ["D4a", "D4b", "D4c", "D4d", "D4e"]
+  },
+  {
+   "id": "D4a",
+   "kind": "defeater",
+   "attacks": {"inference": "I4", "assumption": null},
+   "text": "OF2012.table1 states a different oxygen margin for each material at lunar gravity. Margins that differ between materials can change their order.",
+   "basis": "documented",
+   "item": "OF2012.table1"
+  },
+  {
+   "id": "D4b",
+   "kind": "defeater",
+   "attacks": {"inference": "I4", "assumption": 2},
+   "text": "OF2012.margin states that the low-gravity limits come from drop tests and that their extinction criteria are not the same as in normal gravity.",
+   "basis": "documented",
+   "item": "OF2012.margin"
+  },
+  {
+   "id": "D4c",
+   "kind": "defeater",
+   "attacks": {"inference": "I4", "assumption": null},
+   "text": "TB14639.gap states that normal-gravity flammability tests do not correlate with flammability in ventilated, micro- or reduced-gravity conditions.",
+   "basis": "documented",
+   "item": "TB14639.gap"
+  },
+  {
+   "id": "D4d",
+   "kind": "defeater",
+   "attacks": {"inference": "I4", "assumption": 3},
+   "text": "TM217036.threshold states that the oxygen threshold in reduced gravity is a function of the local convective velocity. An order given without its flow is not defined.",
+   "basis": "documented",
+   "item": "TM217036.threshold"
+  },
+  {
+   "id": "D4e",
+   "kind": "defeater",
+   "attacks": {"inference": "I4", "assumption": 4},
+   "text": "OF2012.table1 prints one of its materials at a different pressure from the other two, so a comparison across all of its materials mixes pressure with material.",
+   "basis": "documented",
+   "item": "OF2012.table1"
+  },
+  {"id": "E4a", "kind": "evidence", "item": "OF2012.table1",
+   "covers": {"materials": [{"field": "text", "words": "Mylar G"}, {"field": "text", "words": "Ultem 1000"}, {"field": "text", "words": "Nomex HT90-40"}], "gravity": [{"field": "text", "words": "1g"}, {"field": "text", "words": "Martian"}, {"field": "text", "words": "Lunar"}, {"field": "text", "words": "0g"}], "facility": [{"field": "text", "words": "5.18 s drop tower tests"}], "oxygen": "not stated in the item", "pressure": [{"field": "text", "words": "Mylar G at 10.2 psia"}, {"field": "text", "words": "Ultem 1000 at 10.2 psia"}, {"field": "text", "words": "Nomex HT90-40 at 14.7 psia"}], "flow": "not stated in the item"}},
+  {"id": "E4b", "kind": "evidence", "item": "OF2012.margin",
+   "covers": {"materials": [{"field": "text", "words": "Mylar G"}, {"field": "text", "words": "Nomex HT90-40"}], "gravity": [{"field": "text", "words": "lunar gravity"}, {"field": "text", "words": "Martian gravity"}, {"field": "text", "words": "0g"}], "facility": [{"field": "text", "words": "5 s drop tests"}], "oxygen": "not stated in the item", "pressure": [{"field": "text", "words": "Mylar G at 10.2 psia"}], "flow": "not stated in the item"}},
+  {"id": "E4c", "kind": "evidence", "item": "SAE2008.uloi",
+   "covers": {"materials": "not stated in the item", "gravity": [{"field": "text", "words": "1g"}, {"field": "text", "words": "0g"}], "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+  {"id": "E4d", "kind": "evidence", "item": "ICES19.limits",
+   "covers": {"materials": [{"field": "text", "words": "BASS-II PMMA"}], "gravity": [{"field": "text", "words": "normal-gravity"}], "facility": [{"field": "text", "words": "BASS-II"}], "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": [{"field": "text", "words": "concurrent (stagnation-flow) rod tests"}, {"field": "text", "words": "opposed-flow rods"}]}},
+  {"id": "E4e", "kind": "evidence", "item": "TB14639.gap",
+   "covers": {"materials": "not stated in the item", "gravity": [{"field": "text", "words": "micro- or reduced-gravity conditions"}], "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": [{"field": "text", "words": "ventilated"}]}},
+  {"id": "E4f", "kind": "evidence", "item": "RG.test1",
+   "covers": {"materials": "not stated in the item", "gravity": [{"field": "text", "words": "microgravity"}], "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+
+  {
+   "id": "C4.1",
+   "kind": "claim",
+   "text": "The NASA PSI data hold flammability-limit tests recorded at lunar gravity.",
+   "inference": "I4.1",
+   "children": ["E4.1a", "E4.1b", "E4.1c"]
+  },
+  {
+   "id": "I4.1",
+   "kind": "inference",
+   "supports": "C4.1",
+   "text": "E4.1c, the challenge page, states that PSI holds no partial-gravity combustion data yet. E4.1a is the team's count of PSI tests for the flammability-limit need in the lunar-habitat package, and E4.1b the count of those tests that match the package's oxygen or pressure and are recorded at the package's gravity level. The claim is true only if the challenge page is out of date or the counts show tests at lunar gravity.",
+   "assumptions": [
+    "The gravity level recorded for each PSI test (from the investigation's constants in sources.json) is correct."
+   ],
+   "authorship": "team reasoning (AI-drafted), not a NASA statement",
+   "basis": "team",
+   "defeaters": ["D4.1a"]
+  },
+  {
+   "id": "D4.1a",
+   "kind": "defeater",
+   "attacks": {"inference": "I4.1", "assumption": null},
+   "text": "E4.1b counts only the tests matched to the package's oxygen or pressure; a lunar-gravity test outside those ranges would not appear in it.",
+   "basis": "logical"
+  },
+  {"id": "E4.1a", "kind": "evidence",
+   "count": {"file": "data/pipeline/evidence/scenario_lunar_habitat.json", "path": ["needs", {"need_id": "P1"}, "counts", "usable_tests"]},
+   "covers": {"materials": "not stated in the file", "gravity": {"path": ["environment", "gravity_level"]}, "facility": "not stated in the file", "oxygen": {"path": ["environment", "ranges", "o2_pct"]}, "pressure": {"path": ["environment", "ranges", "pressure_kpa"]}, "flow": {"path": ["environment", "ranges", "flow_cms"]}}},
+  {"id": "E4.1b", "kind": "evidence",
+   "count": {"file": "data/pipeline/evidence/scenario_lunar_habitat.json", "path": ["needs", {"need_id": "P1"}, "counts", "matched_same_gravity"]},
+   "covers": {"materials": "not stated in the file", "gravity": {"path": ["environment", "gravity_level"]}, "facility": "not stated in the file", "oxygen": {"path": ["environment", "ranges", "o2_pct"]}, "pressure": {"path": ["environment", "ranges", "pressure_kpa"]}, "flow": {"path": ["environment", "ranges", "flow_cms"]}}},
+  {"id": "E4.1c", "kind": "evidence", "item": "CH.partial_gravity",
+   "covers": {"materials": "not stated in the item", "gravity": [{"field": "text", "words": "partial-gravity"}], "facility": "not stated in the item", "oxygen": "not stated in the item", "pressure": "not stated in the item", "flow": "not stated in the item"}},
+
+  {
+   "id": "U4.2",
+   "kind": "undeveloped",
+   "text": "Oxygen thresholds of materials have been measured in lasting lunar gravity, longer than a drop-tower test.",
+   "study_asked": ["CP2003.roadmap.limit", "CH.partial_gravity", "SAF16.saffire2", "SMT.gap.flammability", "TB008.gaps"]
+  },
+  {
+   "id": "U4.3",
+   "kind": "undeveloped",
+   "text": "The ventilation flow speed and direction of a lunar habitat, at which an order of thresholds would be compared, are stated in the held documents.",
+   "study_asked": ["CP2004.flam.velocity", "CP2003.prev.o2flow"]
+  },
+
+  {
+   "id": "C5",
+   "kind": "claim",
+   "text": "The combined change to high oxygen, low total pressure and lunar gravity leaves the order of materials unchanged.",
+   "inference": "I5",
+   "children": ["E5a", "E5b", "U5.1"]
+  },
+  {
+   "id": "I5",
+   "kind": "inference",
+   "supports": "C5",
+   "text": "E5a prints lunar-gravity thresholds for materials whose column heading names the same total pressure as the upper bound in E5b; these are the only held values that combine reduced pressure and lunar gravity. Whether their order is the same as at normal gravity at that pressure bears on the claim for those materials only. No held item measures the three conditions acting together on an order of materials (U5.1).",
+   "assumptions": [
+    "The order of the materials of E5a under reduced pressure and lunar gravity says something about other materials.",
+    "Effects that are small one at a time stay small when they act together."
+   ],
+   "authorship": "team reasoning (AI-drafted), not a NASA statement",
+   "basis": "team",
+   "defeaters": ["D5a", "D5b"]
+  },
+  {
+   "id": "D5a",
+   "kind": "defeater",
+   "attacks": {"inference": "I5", "assumption": 1},
+   "text": "A comparison of few materials can show that an order changes, but it cannot show that the order is kept for other materials.",
+   "basis": "logical"
+  },
+  {
+   "id": "D5b",
+   "kind": "defeater",
+   "attacks": {"inference": "I5", "assumption": 2},
+   "text": "WP21X.atmosphere states that at the planned exploration conditions materials that are non-flammable become flammable. A change of category under the combined conditions bears on the order.",
+   "basis": "documented",
+   "item": "WP21X.atmosphere"
+  },
+  {"id": "E5a", "kind": "evidence", "item": "OF2012.table1",
+   "covers": {"materials": [{"field": "text", "words": "Mylar G"}, {"field": "text", "words": "Ultem 1000"}, {"field": "text", "words": "Nomex HT90-40"}], "gravity": [{"field": "text", "words": "1g"}, {"field": "text", "words": "Martian"}, {"field": "text", "words": "Lunar"}, {"field": "text", "words": "0g"}], "facility": [{"field": "text", "words": "5.18 s drop tower tests"}], "oxygen": "not stated in the item", "pressure": [{"field": "text", "words": "Mylar G at 10.2 psia"}, {"field": "text", "words": "Ultem 1000 at 10.2 psia"}, {"field": "text", "words": "Nomex HT90-40 at 14.7 psia"}], "flow": "not stated in the item"}},
+  {"id": "E5b", "kind": "evidence", "item": "CH.moonbase",
+   "covers": {"materials": "not stated in the item", "gravity": "not stated in the item", "facility": "not stated in the item", "oxygen": [{"field": "text", "words": "oxygen likely 30% or more"}], "pressure": [{"field": "text", "words": "pressure 10.2 psi or less"}], "flow": "not stated in the item"}},
+  {
+   "id": "U5.1",
+   "kind": "undeveloped",
+   "text": "The effect of high oxygen, low total pressure and lunar gravity acting together on the order of materials has been measured.",
+   "study_asked": ["CP2004.flam.q6", "WP21X.research", "EAWG.needs.flammability", "EAWG.testing"]
+  }
+ ]
+}

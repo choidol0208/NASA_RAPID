@@ -101,3 +101,48 @@ Run: `python3 pipeline/lab/inference_map.py` (reads `data/pipeline/findings.csv`
 - The state of a link is the team's reading of the items by a mechanical rule. It counts presence, not strength: one 5 s drop-tower paper on three materials (`OF2012.table1`) is enough to make L2 `established`, and its caveat is shown beside it under verification. `established` does not mean that NASA considers the question closed.
 - Quotes marked "team wording" are the `text` field of an item (the team's wording of the document in `references.json`), not the sentence as printed. Items read as abstract only or by another session keep that access mark.
 - The documents are from 2003 to 2024 (plus the 2026 challenge page). They do not say what NASA considers open today, and documents not in `references.json` were not read.
+
+# Structured argument (experiment, branch `data-lab`)
+
+*AI-generated (Claude Code) on 2026-11-14. Not reviewed by a person or by a combustion specialist.*
+
+The inference map shows what the documents ask and what is held. It cannot show reasoning. This step writes the lunar-habitat material-flammability case as a structured argument in the claim–argument–evidence form of assurance cases (the Goal Structuring Notation elements goal, strategy, solution, assumption and undeveloped entity; warrants and assumptions in the text form of NASA/TM-2017-219650; sources in `_meta.method_sources` of the spec). The team's reasoning is written out and labelled so that it can be attacked. The top claim is about evidence, not about any material or atmosphere: *a ranking of materials by flammability obtained in normal-gravity ground tests can be carried over, in the same order, to the lunar-habitat atmosphere and to lunar gravity.*
+
+| File | What |
+|---|---|
+| `pipeline/spec/argument_lunar_habitat.json` | The nodes |
+| `pipeline/lab/argument.py` | Checks the spec, copies the evidence, writes the outputs |
+| `data/pipeline/lab/argument_lunar_habitat.json` / `.md` | The argument with every item and count filled in, and a summary of counts |
+
+Run: `python3 pipeline/lab/argument.py` (reads `references.json` and `data/pipeline/evidence/scenario_lunar_habitat.json`). Standard library only; same input, same bytes.
+
+## Node kinds
+
+| Kind | What it holds |
+|---|---|
+| `claim` | A sentence that can be true or false, with `children` (claims, evidence, undeveloped claims) and one `inference`. No numbers |
+| `inference` | Why the children would support the claim: `text`, `assumptions`, `authorship` ("team reasoning (AI-drafted), not a NASA statement"), `basis` (`documented` with the item that states the step, or `team`), `defeaters` |
+| `evidence` | Only a reference item id (text, quote, where, url and access are copied) or a count pointer (file + path; the number is copied). `covers` records materials, gravity, facility, oxygen, pressure and flow as verbatim words of the item, or "not stated in the item" |
+| `defeater` | A way an inference, or one of its numbered assumptions, could fail: `basis` `documented` (item id) or `logical` |
+| `undeveloped` | A claim with no evidence held, with the items that ask for the study, or "no item held" |
+
+## The script stops if
+
+- a node kind is unknown, an id is duplicated or missing, a node has two parents or cannot be reached from the top claim;
+- an evidence node names an unknown item, carries any field of its own besides `covers`, or a count pointer does not resolve to a number;
+- a `covers` entry is not verbatim in the item field it names;
+- an inference (text or assumptions) contains a numeric token that is not in an evidence child of its claim; a documented defeater contains a number that is not in its item; a logical defeater, a claim or an undeveloped claim contains any number (item ids, node ids and the listed identifiers such as "Test 1" are removed first);
+- a `documented` basis has no item id or an unknown one;
+- a claim has no children (it must be written as `undeveloped`), or has children but no inference;
+- a word of `_meta.forbidden_words` (safe, acceptable, sufficient, representative, ...) appears in a team-written string.
+
+The summary counts claims, undeveloped claims, evidence leaves, inferences by basis, assumptions, defeaters by basis and the access levels of the evidence. It computes no verdict, and none should be read into the counts.
+
+## Limits
+
+- Seven of the eight inferences have basis `team`: no held document states the step. These are the weakest joints, and their assumptions are listed so that they can be attacked.
+- The split of the top claim (atmosphere, pressure, gravity with flow, combination) is the team's. Temperature, thickness, sample size and the ignition source are not developed; defeaters D0a to D0d say so.
+- A defeater with basis `documented` cites an item that supports the doubt; its sentence is still the team's wording. The defeater list is open: a later review is expected to add more.
+- `covers` copies only what the item states. "not stated in the item" may mean that the paper states it elsewhere; the item was not re-read for this step.
+- The defeater kind is not defined in the three method sources that could be read; it is described in the team's own words.
+- The argument shows where the case rests on documents, on team reasoning, or on nothing held. It does not say whether the top claim is true, and it is not a criterion or a judgement on any material.
