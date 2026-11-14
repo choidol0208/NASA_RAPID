@@ -1,7 +1,7 @@
 // AI-generated code: written with an AI assistant (Claude) during the NASA Space Apps
 // Challenge 2026 hackathon (2026-11-14). Dashboard: runs the team's ranking in the
 // browser (web/scorer.js, checked against scoring/scorer.py) and renders the result.
-import { createScorer } from "./scorer.js";
+import { createScorer, parseCSV } from "./scorer.js";
 
 const REPO = "https://github.com/choidol0208/NASA_RAPID/blob/main/";
 const DIMS = { o2: "Oxygen", pressure: "Pressure", flow: "Flow", fuel: "Fuel", geometry: "Shape", role: "Purpose", diluent: "Diluent" };
@@ -66,6 +66,32 @@ function renderConditions(out, cfg) {
   }
 }
 
+function renderAssumptions(out, cfg) {
+  const box = $("#assumptions");
+  box.replaceChildren();
+  const groups = new Map();
+  for (const a of out.assumptions || []) {
+    const key = a.source || "default";
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(a);
+  }
+  if (!groups.size) return;
+  box.append(h("p", { class: "assume-head" }, h("b", {}, "Filled in for you, not typed: "), "type a value to replace any of these."));
+  const ul = h("ul", { class: "assume" });
+  for (const [src, items] of groups) {
+    const vals = items.map((a) => { const [l, v] = condText(a.field, a.value, cfg); return `${l} ${v}`; }).join("; ");
+    if (src.startsWith("preset:")) {
+      const p = cfg.presets[src.slice(7)];
+      ul.append(h("li", {}, vals, ". From the ", h("b", {}, p ? p.label_en : src.slice(7)), " preset. Preset source: ",
+        p && p.source ? p.source : "not stated", " ", link(REPO + "scoring/scoring_config.json", "(preset file)")));
+    } else {
+      ul.append(h("li", {}, vals, ". ", src === "default" ? "Team default when nothing is said." : `Source: ${sourceText(src)}.`, " ",
+        link(REPO + "scoring/scoring_config.json", "(config file)")));
+    }
+  }
+  box.append(ul);
+}
+
 function renderWarnings(box, warnings) {
   box.replaceChildren();
   for (const w of warnings) box.append(h("p", { class: "warn" + (STOP.has(w.code) ? " is-stop" : "") }, w.message));
@@ -122,7 +148,8 @@ function renderResults(out, cat, insights) {
       link(r.psi_url, `PSI page (${r.psi_accession})`),
       link("https://doi.org/" + r.dataset_doi, `Dataset DOI ${r.dataset_doi}`),
       conf ? sourceFileLink(conf.tests_table_ref) : null,
-      link(REPO + "data/catalog/configurations.csv", "Catalog row"));
+      conf ? link(`${REPO}data/catalog/configurations.csv?plain=1#L${conf._line}`, `Catalog row (${r.config_id})`) : null,
+      inv ? link(`${REPO}data/catalog/investigations.csv?plain=1#L${inv._line}`, "Investigation row") : null);
     const more = h("details", { class: "more" }, h("summary", {}, "What the record says"),
       h("p", {}, h("b", {}, "Objective (catalog summary): "), inv ? inv.objectives : "—"),
       h("p", {}, h("b", {}, "Findings stated in the record or table: "), r.key_findings || "Not stated in the PSI record."),
@@ -150,7 +177,8 @@ function renderRanking(out) {
       h("td", {}, r.config_label),
       h("td", { class: "num" }, String(r.score)),
       h("td", {}, mini),
-      h("td", { class: "psi" }, link(r.psi_url, r.psi_accession))));
+      h("td", { class: "psi" }, link(r.psi_url, r.psi_accession)),
+      h("td", { class: "psi" }, r.dataset_doi ? link("https://doi.org/" + r.dataset_doi, "DOI") : "not stated")));
   });
 }
 
@@ -169,13 +197,14 @@ async function loadText(path) { const r = await fetch(path); if (!r.ok) throw ne
 
 async function main() {
   setStatus("Loading the catalog…");
-  let config, scorer, insights = { cards: {} };
+  let config, scorer, invOrder = [], insights = { cards: {} };
   try {
     const [cfg, invCsv, cfgCsv, cards] = await Promise.all([
       loadJSON("data/scoring_config.json"), loadText("data/investigations.csv"), loadText("data/configurations.csv"),
       loadJSON("data/insights/cards.json", null)]);
     config = cfg;
     scorer = createScorer({ config, investigationsCsv: invCsv, configurationsCsv: cfgCsv });
+    invOrder = parseCSV(invCsv).map((row) => row.investigation_id);
     if (Array.isArray(cards)) for (const c of cards) insights.cards[c.investigation_id] = c;
   } catch (e) {
     setStatus("The catalog could not be loaded. Reload the page; if it persists, the site files are incomplete.", "error");
@@ -183,6 +212,9 @@ async function main() {
   }
   setStatus("");
   const cat = scorer.catalog;
+  // line numbers in the CSV files (header is line 1), for links to the exact source row
+  cat.configurations.forEach((c, i) => { c._line = i + 2; });
+  Object.values(cat.investigations).forEach((v) => { v._line = invOrder.indexOf(v.investigation_id) + 2; });
 
   function run(q, push = true) {
     $("#q").value = q;
@@ -195,9 +227,11 @@ async function main() {
     }
     show("#read", true);
     renderConditions(out, config);
+    renderAssumptions(out, config);
     renderWarnings($("#scenario-warnings"), out.warnings);
     if (out.status !== "ok") {
       show("#top", false); show("#all", false);
+      $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
     }
