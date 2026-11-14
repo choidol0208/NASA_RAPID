@@ -3,7 +3,7 @@ from: ui
 to: data
 opened: 2026-11-14 13:19 KST
 needed_by: 16:00
-closed: false
+closed: true
 ---
 # BASS-II flow cells: increases with the restrictor out are not in tests.csv
 
@@ -36,3 +36,7 @@ The catalog now says rods 0 to 38.5 cm/s and SIBAL 1 to 53 cm/s, with the rows i
 ## Until then
 
 The check compares only containment for BASS-II flow, and lists BASS-II-C03 and C04 as documented exceptions for the upper bound, with these rows.
+
+## Closed (13:50)
+
+Closed by ui. The catalog now belongs to the catalog role, which read the cells as fan readings (SIBAL 1 to 29 cm/s) and needs nothing more from data. data's fix of row 73 ('incr to 28' no longer read as a minimum) stands. No `flow_max_cms` needed.
