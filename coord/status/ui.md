@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 13:10 KST
+updated: 2026-11-14 13:20 KST
 state: working
 blocked_on: none
 ---
@@ -25,10 +25,14 @@ Done since last sync:
 - Challenge statement checked on the official page at the human lead's request. The lunar bound holds: oxygen likely 30% or more, 10.2 psi or less, under "Spacesuits and oxygen concentration". The spacesuit preset matches (100%, 4.3 psi). Fixes to the URL, title and section go to data in request 20261114-1305. The `lunar_habitat` and `spacesuit` preset source strings in `scoring_config.json` now name the section; no values changed.
 - Checks: unit tests 18/18, validation 22/22, parity 61/61, build. Local test with `main` data (7 needs) and with `origin/data-pipeline` data (6 needs). 375 px with no sideways scroll.
 
+- pm request 1306 accepted, items 2 and 3 done:
+  - New lede and box label.
+  - Result sections renamed and ordered: "Closest NASA investigations"; "What to consider, and what the recorded tests say"; "Where the evidence stops" (picture slot, gaps list, coverage grid).
+
 Next:
-- 1224 item 4: the first screen, if the human lead chooses it.
+- 1306 item 1: the "Where the evidence stops" picture from `data/insights/evidence_map.json`, live by 16:30 if the file is on `main` by about 15:00.
 - 1224 items 5 to 7: the 16:00 addendum, the source-sentence toggle, the "How we checked the AI text" panel.
-- U5 screenshots and GIF after the first-screen decision, retaken with the real fonts from this machine (target 21:00).
+- U5 screenshots and GIF on the new order, with the real fonts from this machine (target 21:00).
 - Switch the Pages trigger to `main` only at the 19:00 freeze.
 
 Published for others:

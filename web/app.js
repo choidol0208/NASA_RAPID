@@ -741,7 +741,7 @@ async function main() {
     renderAssumptions(out, config);
     renderWarnings($("#scenario-warnings"), out.warnings);
     if (out.status !== "ok") {
-      show("#top", false); show("#all", false); show("#needs", false); show("#coverage", false); show("#gaps-section", false); show("#tests", false);
+      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false);
       $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
@@ -754,7 +754,7 @@ async function main() {
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);
     renderTests(out, pipe, cat);
-    show("#top", true); show("#all", true); show("#needs", true); show("#coverage", true);
+    show("#top", true); show("#all", true); show("#needs", true); show("#stops", true);
   }
 
   $("#ask-form").addEventListener("submit", (e) => { e.preventDefault(); run($("#q").value.trim()); });
