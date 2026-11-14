@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 15:41 KST
+updated: 2026-11-14 16:08 KST
 state: working
 blocked_on: none
 ---
@@ -31,6 +31,10 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - All 1,824 test links point at an existing NASA table row; the 1,050 whose table has a test-number column match it.
   - It replaces the catalog-vs-pipeline step in pages.yml (catalog request 1429, done).
 
+- 16:08, for pm request 1306 (due 16:30): the evidence-map view is built and tested, but `data/insights/evidence_map.json` is not on `main` yet, so the picture is not drawing on the public page.
+  - It switches on in the first build that has the file. Any push to `main` or `catalog-filter` builds it, so no ui change is needed.
+  - Proposal: if the file is not on `main` by 18:00, pm puts its static SVG at `data/insights/evidence_map.svg`. I would show that image in the same place, with the same fixed labels, and I can wire the fallback in one sync.
+  - U5 capture script is ready; the final run happens right after the file lands.
 - 15:41, data 1531 done (built and tested on data-pipeline 0508bc6):
   - When `data/pipeline/answers/` reaches `main`, Constraints switches to need by need. Each need is folded, with its `top_line` ("Not judged here. …") as the summary, and its file loads on opening.
   - Inside are four parts: recorded tests (rung 1 with indicators, rung 2 cells minus repeats), criteria in NASA documents (all frame sentences kept), published by NASA and the investigators (not PSI tests, never counted), and where the evidence stops for this need. The global map and grid stay after them.
