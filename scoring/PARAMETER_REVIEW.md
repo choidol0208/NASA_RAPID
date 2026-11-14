@@ -3,8 +3,8 @@
 *AI-generated (Claude Code, catalog role), 2026-11-14 17:01 KST, config 1.1.0.*
 
 **This is an AI review, not a human review and not a combustion specialist's review.** It explains each value, says what it rests on, and measures how much the demo rankings depend on it.
-- A team member may approve the values after reading it. The approval is then recorded in `scoring/scoring_config.json` `_about`, as for the weights (approved 16:51).
-- A combustion specialist's review needs a person; the questions for one are at the end.
+- **Approved 2026-11-14 17:03 KST:** a team member read this review and approved all values as they are, findings 1 and 2 included, with no change. The approval is recorded in `scoring/scoring_config.json` `_about`; the weights were approved at 16:51.
+- No combustion specialist review is planned during the hackathon: the human lead decided at 17:04 KST that the team has no specialist to ask. The questions at the end stay open, as limitations and as the next validation step.
 
 Sensitivity is measured by `python3 validation/sensitivity.py` and reported in `validation/report.md`:
 - Each value or table is scaled by 0.5 and by 1.5. Similarities are capped at 1, and full matches (1.0) are left alone.
@@ -50,9 +50,9 @@ Sensitivity is measured by `python3 validation/sensitivity.py` and reported in `
    - A possible change: cap the similarity of an assumed value at the best recorded match, as for unknown values. That would move BASS-II-C04 up in this query.
    - It changes a demo query, so it needs the human lead's decision. Without it, it stays as is and the confidence labels carry the difference.
 
-## Questions for a combustion specialist
+## Open questions (limitations; for a combustion specialist after the hackathon)
 
-These can be sent as they are. A person on the team has to find the specialist and ask.
+No specialist review is planned now (human lead, 17:04). These are the points the rules rest on without a specialist's answer. They can be sent to one as they are.
 
 1. If a material was tested at 22% oxygen and a crew uses 30%, is it right to rank a test of that material above a test of another fuel at 30%? How steeply should evidence lose value above the tested oxygen?
 2. In microgravity, how close is opposed-flow spread over a thin fabric to concurrent-flow spread, and how close is quiescent burning to either? The team uses 0.6 between opposed and concurrent, and 0.3 to 0.5 with quiescent.

@@ -57,6 +57,7 @@
 | 11/14 16:40– | Claude Code (Anthropic; 에이전트 Sonnet·Opus 계열 17개), data 역할 워크플로 | 보드 과제 D5: 모델이 쓴 카드 문장 61개를 독립 독자 둘이 PSI 기록과 대조, 인용·틀 문장은 독자 하나가 확인. 결과는 `reviewer_kind = ai_session`으로 기록(사람이 읽은 것으로 적지 않음) | `ai/review/review_sheet.csv`의 판정 칸 | 미검토 |
 | 11/14 16:51 | Claude Code (Opus 5.5, catalog 역할) | 사람 검토 기록: 팀원 조려진이 순위 가중치(질문 유형별 profiles)를 config 1.1.0 그대로 승인. `scoring/scoring_config.json`의 `_about` reviewed 칸에 검토자와 시각을 적음 | `scoring/scoring_config.json` (`_about`만, 점수 불변) | 가중치: 팀원 검토 완료(연소 전문가 검토 아님). 유사도 척도·관문·증거 계수 등 나머지 값은 따로 검토되지 않음 |
 | 11/14 17:01 | Claude Code (Opus 5.5, catalog 역할) | 가중치 외 값(유사도 척도·관문·증거 계수·동점 간격·유사도 표)의 AI 검토: 역할·근거 정리, 각 값을 0.5·1.5배로 바꿔 데모 4개 질의의 상위 3개 변화 계산(136번 중 129번 불변, 프리셋 2개는 항상 불변), 판단이 필요한 점 2개와 연소 전문가에게 물을 질문 8개 작성 | `scoring/PARAMETER_REVIEW.md`, `validation/sensitivity.py`, `validation/run_validation.py`, `validation/report.md`, `scoring/README.md` | AI 검토이며 사람 검토·전문가 검토가 아님. 값은 바꾸지 않음. 팀원 승인 전까지 reviewed 칸에 기록하지 않음 |
+| 11/14 17:04 | Claude Code (Opus 5.5, catalog 역할) | 사람 검토 기록: 팀원 조려진이 `scoring/PARAMETER_REVIEW.md`(AI 검토)를 읽고 가중치 외 모든 값을 config 1.1.0 그대로 승인. 연소 전문가 검토는 하지 않기로 결정(요청할 전문가 없음); 남은 질문 8개는 한계로 문서에 남김 | `scoring/scoring_config.json` (`_about`만, 점수 불변), `scoring/PARAMETER_REVIEW.md` | 모든 값: 팀원 검토 완료(연소 전문가 아님). 전문가 검토 없음 |
 
 ## 제품 안에서 동작하는 AI
 
