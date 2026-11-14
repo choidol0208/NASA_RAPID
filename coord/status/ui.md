@@ -1,26 +1,28 @@
 ---
 role: ui
-updated: 2026-11-14 11:16 KST
+updated: 2026-11-14 11:24 KST
 state: working
 blocked_on: none
 ---
-Now: U2, the query box and results. Most of it is already in the skeleton; next is the evidence links in the full table, the assumptions list and checking every warning code on screen.
+Now: the "show the tests" step for the ISS and lunar-habitat presets (data request 1116), built against `scenario_tests.csv` and `scenario_needs.csv`; it goes live once those files are on `main`.
 
 Done since last sync:
-- U1 done. Dashboard skeleton live at **https://choidol0208.github.io/NASA_RAPID/**, deployed by `.github/workflows/pages.yml` from `catalog-filter` (run 43545276180 green).
-- Stack: static site in `web/` (HTML, CSS, JavaScript; no framework, no server, no paid call, GitHub Pages does not sleep). Ranking runs in the browser as `web/scorer.js`, a port of `scoring/scorer.py`; `web/parity_check.py` compares both on 61 queries and blocks the deploy on any difference.
-- The page already has: free-text box and six example buttons (ISS, lunar habitat, lunar habitat with cotton fabric, smoke detection on the ISS, spacesuit, Mars base), "how your input was read" with the source of each condition, scenario warnings, top 3 with a match strip per dimension, warnings including `fallback`, PSI page, DOI and source-table links, the full 24-row ranking, the team-computation and not-safety-guidance notes, and `?q=` links.
-- Answered and closed my side of 20261114-1056 (done).
-- Merged `origin/main` (Pages decision, coverage wording, insight shapes).
+- U2 done: assumptions listed with the preset and its stated source, catalog and investigation links to the exact CSV row, DOI column in the full ranking.
+- U3 done: needs view from `capability_matrix.csv` (top 3 or all 24, status per need, usable tests, missing conditions, link to the exact row; need definitions and basis documents) and coverage view from `coverage_grid.csv` (oxygen x pressure per fuel phase, ambient basis only, the input's cell marked, every count linked to its row).
+- U4 done: labels (team computation, not safety guidance, AI-generated with review status) and narrow screens (checked at 375 px, no page-level sideways scroll).
+- The page reads `data/insights/cards.json` and `scenarios.json` in the agreed shape. Tested with a throwaway fixture that was never committed.
+- `web/README.md` (how it works, AI-generated note).
+- Accepted data request 1116.
 
-Next: U2 polish (target 14:30), then U3 needs view and Coverage view from `capability_matrix.csv`, `needs.json` and `coverage_grid.csv` (target 17:00).
+Next: scenario tests and scenario needs (by 14:30 after they reach `main`), then U5 screenshots and GIF once pm's insight files are in (target 21:00, earlier if possible).
 
 Published for others:
-- Public URL: https://choidol0208.github.io/NASA_RAPID/ . A link to a query: `?q=lunar%20habitat`.
-- `data/catalog/investigations.csv` (24 rows), `configurations.csv` (41 rows), `data_dictionary.csv` — stable shape.
-- `scoring.scorer.rank` output — stable shape (fields listed in `contracts/README.md`).
+- Public URL: https://choidol0208.github.io/NASA_RAPID/ . Demo links: `?q=ISS` and `?q=lunar%20habitat`.
+- For the slides and the project text, what the page shows for solid fuels, from `coverage_grid.csv`: at 19 to 23% oxygen, 62 recorded tests, all with no pressure recorded; at 30 to 36% oxygen, 0 recorded tests at any pressure.
+- `data/catalog/*.csv` and the `scoring.scorer.rank` output — stable shape.
 
 Notes for other roles:
-- pm: this session's proxy blocks github.io, so nobody has opened the live URL logged out yet. Please open it once in a private window.
-- pm: `data/insights/cards.json` and `scenarios.json` are read when present on `catalog-filter` (merged from `main`); until then the page says "Written summary: not available yet."
+- pm: scenario text appears only when the query equals the entry's `query` exactly (case and spaces ignored) and the preset matches, so write `"ISS"` and `"lunar habitat"` as agreed. `result_notes[].investigation_id` may be the PSI accession or the catalog id.
+- pm: links to repository files use the commit the site was built from, so they keep working after later changes.
+- pm: nobody has opened the live URL logged out yet; this session's proxy blocks github.io.
 - Any change to `scoring/scorer.py` or `scoring_config.json` must keep `python3 web/parity_check.py` green, or the deploy stops.
