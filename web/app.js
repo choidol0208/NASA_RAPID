@@ -119,7 +119,42 @@ function sourceFileLink(ref) {
   return link(REPO + "data/psi/experimental_tables/" + encodeURIComponent(file), "Source table");
 }
 
-function renderResults(out, cat, insights) {
+
+// ------------------------------------------------------------------ model-written text (pm role)
+// A source is "PSI-25.objective", "doi:10.x/y" or "data/pipeline/tests.csv#FLEX-12", or an array of them.
+function sourceLinks(src, cat) {
+  const list = Array.isArray(src) ? src : src ? [src] : [];
+  const out = [];
+  for (const s0 of list) {
+    const s = typeof s0 === "string" ? s0 : s0 && s0.doi ? "doi:" + s0.doi : s0 && s0.investigation_id ? s0.investigation_id + ".record" : "";
+    if (!s) continue;
+    let a;
+    if (s.startsWith("doi:")) a = link("https://doi.org/" + s.slice(4), s.slice(4));
+    else if (/^PSI-\d+\./.test(s)) {
+      const [acc, field] = [s.slice(0, s.indexOf(".")), s.slice(s.indexOf(".") + 1)];
+      a = link(`${REPO}data/psi/catalog/${acc}.json`, `${acc} record, ${field.replace(/_/g, " ")}`);
+    } else if (/^PSI-\d+$/.test(s)) a = link(`https://psi.nasa.gov/physci/repo/data/investigations/${s}`, `${s} PSI page`);
+    else if (s.includes("#")) { const [f, id] = s.split("#"); a = link(REPO + f, `${f.split("/").pop()}, ${id}`); }
+    else a = link(REPO + s, s);
+    out.push(a);
+  }
+  if (!out.length) return h("span", { class: "src-list missing" }, "source not given");
+  return h("span", { class: "src-list" }, "(", ...out.flatMap((a, i) => (i ? ["; ", a] : [a])), ")");
+}
+function aiLabel(x) {
+  return h("span", { class: "tag is-ai" }, x && x.reviewed_by ? `AI-generated, reviewed by ${x.reviewed_by}` : "AI-generated, not reviewed yet",
+    x && x.model ? `, model ${x.model}` : "");
+}
+function scenarioNotes(query, out, insights) {
+  const q = query.trim().toLowerCase();
+  return (insights.scenarios || []).find((e) => typeof e.query === "string" && e.query.trim().toLowerCase() === q && e.id === out.scenario.preset) || null;
+}
+function noteFor(sc, r) {
+  if (!sc || !Array.isArray(sc.result_notes)) return null;
+  return sc.result_notes.find((n) => n.investigation_id === r.psi_accession || n.investigation_id === r.investigation_id) || null;
+}
+
+function renderResults(out, cat, insights, sc) {
   const ol = $("#results");
   ol.replaceChildren();
   for (const r of out.results) {
@@ -154,10 +189,13 @@ function renderResults(out, cat, insights) {
     const more = h("details", { class: "more" }, h("summary", {}, "What the record says"),
       h("p", {}, h("b", {}, "Objective (catalog summary): "), inv ? inv.objectives : "—"),
       h("p", {}, h("b", {}, "Findings stated in the record or table: "), r.key_findings || "Not stated in the PSI record."),
-      card ? h("p", {}, h("b", {}, "Summary: "), card.summary, " ", h("span", { class: "tag is-ai" }, card.reviewed_by ? `AI-generated, reviewed by ${card.reviewed_by}` : "AI-generated, not reviewed yet"))
+      card ? h("div", { class: "ai-text" }, h("p", {}, h("b", {}, "Summary: "), card.summary, " ", aiLabel(card)),
+        Array.isArray(card.key_points) && card.key_points.length ? h("ul", {}, card.key_points.map((k) => h("li", {}, k.text, " ", sourceLinks(k.source, cat)))) : null)
         : h("p", { class: "gap" }, "Written summary: not available yet."),
       r.other_configs.length ? h("p", { class: "gap" }, "Other configurations in this investigation: ", r.other_configs.join(", ")) : null);
-    ol.append(h("li", { class: "result" }, head, ...body, warns, tags, links, more));
+    const note = noteFor(sc, r);
+    const noteEl = note ? h("div", { class: "ai-note" }, h("p", {}, h("b", {}, "Team note: "), note.text, " ", sourceLinks(note.sources, cat)), aiLabel(sc)) : null;
+    ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, links, more));
   }
 }
 
@@ -279,7 +317,8 @@ function renderNeeds(out, pipe, expanded) {
       tb.append(tr);
     }
   }
-  box.append(h("div", { class: "table-wrap" }, h("table", { class: "needs-table" }, h("thead", {}, head1, head2), tb)));
+  box.append(h("p", { class: "scroll-hint" }, "Swipe the table sideways to see all seven needs."),
+    h("div", { class: "table-wrap" }, h("table", { class: "needs-table" }, h("thead", {}, head1, head2), tb)));
   const btn = h("button", { type: "button", class: "more-btn" }, expanded ? "Show the top 3 only" : `Show all ${out.ranking.length} ranked investigations`);
   btn.addEventListener("click", () => renderNeeds(out, pipe, !expanded));
   const legend = h("dl", { class: "legend needs-legend" });
@@ -303,6 +342,28 @@ function renderNeeds(out, pipe, expanded) {
   box.append(h("details", { class: "more" }, h("summary", {}, "What each need asks, and the documents behind it"),
     defs, h("p", { class: "gap" }, "Definitions: ", link(REPO + "pipeline/spec/needs.json", "pipeline/spec/needs.json"), "; document items: ",
       link(REPO + "data/pipeline/need_references.csv", "data/pipeline/need_references.csv"), ". Written with AI assistance by the team's data role; not yet reviewed by a person.")));
+}
+
+
+function renderScenarioText(out, sc, cat) {
+  const other = $("#other-notes");
+  other.replaceChildren();
+  const needsBox = $("#needs-notes");
+  needsBox.replaceChildren();
+  const gapsBox = $("#gaps");
+  gapsBox.replaceChildren();
+  $("#gaps-section").hidden = true;
+  if (!sc) return;
+  const top = new Set(out.results.flatMap((r) => [r.psi_accession, r.investigation_id]));
+  const rest = (sc.result_notes || []).filter((n) => !top.has(n.investigation_id));
+  if (rest.length) other.append(h("h3", {}, "Other investigations"), h("ul", { class: "ai-list" },
+    rest.map((n) => h("li", {}, h("b", {}, n.investigation_id), ": ", n.text, " ", sourceLinks(n.sources, cat)))), aiLabel(sc));
+  if (Array.isArray(sc.needs) && sc.needs.length) needsBox.append(h("h3", {}, "For this scenario"),
+    h("ul", { class: "ai-list" }, sc.needs.map((n) => h("li", {}, h("b", {}, n.need_id), ": ", n.statement, " ", sourceLinks(n.sources, cat)))), aiLabel(sc));
+  if (Array.isArray(sc.gaps) && sc.gaps.length) {
+    gapsBox.append(h("ul", { class: "ai-list" }, sc.gaps.map((g) => h("li", {}, g.text, g.needed_data ? h("span", { class: "gap" }, " Data that would close it: ", g.needed_data) : null))), aiLabel(sc));
+    $("#gaps-section").hidden = false;
+  }
 }
 
 function binOf(bins, v) {
@@ -375,7 +436,8 @@ function renderCoverage(out, pipe) {
       }
       tb.append(tr);
     }
-    block.append(h("div", { class: "table-wrap" }, h("table", { class: "cov-table" }, h("thead", {}, thead), tb)));
+    block.append(h("p", { class: "scroll-hint" }, "Swipe the grid sideways to see every pressure."),
+      h("div", { class: "table-wrap" }, h("table", { class: "cov-table" }, h("thead", {}, thead), tb)));
     const others = pipe.grid.filter((r) => r.fuel_phase === ph && r.o2_basis !== "ambient" && +r.tests > 0);
     const byBasis = new Map();
     for (const r of others) { if (!byBasis.has(r.o2_basis)) byBasis.set(r.o2_basis, []); byBasis.get(r.o2_basis).push(r); }
@@ -413,6 +475,8 @@ async function main() {
     const [cfg, invCsv, cfgCsv, cards, build] = await Promise.all([
       loadJSON("data/scoring_config.json"), loadText("data/investigations.csv"), loadText("data/configurations.csv"),
       loadJSON("data/insights/cards.json", null), loadJSON("data/build.json", null)]);
+    insights.scenarios = await loadJSON("data/insights/scenarios.json", []);
+    if (!Array.isArray(insights.scenarios)) insights.scenarios = [];
     if (build && /^[0-9a-f]{7,40}$/.test(build.commit)) REPO = REPO_BASE + build.commit + "/";
     config = cfg;
     scorer = createScorer({ config, investigationsCsv: invCsv, configurationsCsv: cfgCsv });
@@ -453,13 +517,15 @@ async function main() {
     renderAssumptions(out, config);
     renderWarnings($("#scenario-warnings"), out.warnings);
     if (out.status !== "ok") {
-      show("#top", false); show("#all", false); show("#needs", false); show("#coverage", false);
+      show("#top", false); show("#all", false); show("#needs", false); show("#coverage", false); show("#gaps-section", false);
       $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
     }
     setStatus("");
-    renderResults(out, cat, insights);
+    const sc = scenarioNotes(q, out, insights);
+    renderResults(out, cat, insights, sc);
+    renderScenarioText(out, sc, cat);
     renderRanking(out);
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);
