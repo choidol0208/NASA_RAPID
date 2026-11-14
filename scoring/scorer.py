@@ -84,6 +84,55 @@ def _any(text, keys):
     return any(_has(text, k) for k in keys)
 
 
+def _spans(text, key):
+    """Character spans where key matches text, by the same rules as _has."""
+    key = key.lower()
+    k = key.strip()
+    if re.fullmatch(r"[a-z0-9 \-/+.]+", k):
+        return [m.span() for m in re.finditer(r"(?<![a-z0-9])" + re.escape(k) + r"(?![a-z0-9])", text)]
+    if len(k) == 1:
+        return [m.span() for m in re.finditer(r"\S+", text) if m.group(0).startswith(k) and len(m.group(0)) <= 3]
+    out, i = [], text.find(key)
+    while i >= 0:
+        out.append((i, i + len(key)))
+        i = text.find(key, i + 1)
+    return out
+
+
+NUMBER_PATTERNS = [r"(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])",
+                   r"(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?",
+                   r"(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)\b", r"(\d+(?:\.\d+)?)\s*(cm/s|mm/s|m/s)"]
+
+
+def not_understood(query, cfg):
+    """Words of the query that no keyword, preset alias or number pattern reads, joined into phrases
+    ("battery enclosure"). Words in keywords.generic ("for", "fire", "system") are left out. The
+    ranking ignores these words; the page says so (warning not_understood). Scores do not change."""
+    text = str((query.get("text") if isinstance(query, dict) else query) or "")
+    t = " " + text.lower().strip() + " "
+    kw = cfg["keywords"]
+    keys = [a for p in cfg["presets"].values() for a in p["aliases"]]
+    for group in ("gravity", "flow_state", "concern", "diluent"):
+        keys += [k for v in kw[group].values() for k in v]
+    keys += [k for m in kw["materials"] for k in m["keys"]]
+    for group in ("thin", "thick", "rod", "out_of_scope", "generic"):
+        keys += kw.get(group, [])
+    covered = [s for k in keys for s in _spans(t, k)]
+    covered += [m.span() for p in NUMBER_PATTERNS for m in re.finditer(p, t)]
+    phrases, cur = [], []
+    for m in re.finditer(r"\S+", t):
+        word = m.group(0).strip(",.;:!?()\"'")
+        if not word or any(a < m.end() and m.start() < b for a, b in covered):
+            if cur:
+                phrases.append(" ".join(cur))
+                cur = []
+            continue
+        cur.append(word)
+    if cur:
+        phrases.append(" ".join(cur))
+    return phrases
+
+
 def interpret(query, cfg):
     """Turn a rough or structured query into a scenario dict plus assumptions."""
     if isinstance(query, dict):
@@ -520,17 +569,19 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
     inv, cfgs = catalog or load_catalog(catalog_dir)
     sc, src, assumptions, out_of_scope, informative = interpret(query, cfg)
     W = cfg["warnings"]
+    unread = not_understood(query, cfg)
     base = {"scenario": {k: v for k, v in sc.items()}, "sources": src, "assumptions": assumptions,
-            "config_version": cfg["version"]}
+            "config_version": cfg["version"], "not_understood": unread}
+    unread_w = [{"code": "not_understood", "message": W["not_understood"].format(words=", ".join(f"'{p}'" for p in unread))}] if unread else []
     if out_of_scope:
         return dict(base, status="out_of_scope", warnings=[{"code": "out_of_scope", "message": W["out_of_scope"]}], results=[], ranking=[])
     if not informative:
-        return dict(base, status="need_input", warnings=[{"code": "need_input", "message": W["need_input"]}], results=[], ranking=[])
+        return dict(base, status="need_input", warnings=[{"code": "need_input", "message": W["need_input"]}] + unread_w, results=[], ranking=[])
     profile = sc["concern"] if sc["concern"] in cfg["profiles"] else cfg["default_profile"]
     weights = dict(cfg["profiles"][profile]["weights"])
     if weights_override:
         weights.update(weights_override)
-    warnings = []
+    warnings = list(unread_w)
     g = sc.get("gravity")
     if g in ("lunar", "martian"):
         warnings.append({"code": "partial_gravity", "message": W["partial_gravity"]})

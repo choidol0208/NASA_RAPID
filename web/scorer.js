@@ -67,6 +67,50 @@ function has(text, key) {
   return text.includes(key);
 }
 function any(text, keys) { return keys.some((k) => has(text, k)); }
+function spans(text, key) { // mirrors _spans: where key matches, by the same rules as has()
+  key = key.toLowerCase();
+  const k = key.trim();
+  const out = [];
+  if (/^[a-z0-9 \-/+.]+$/.test(k)) {
+    const re = new RegExp("(?<![a-z0-9])" + escapeRe(k) + "(?![a-z0-9])", "g");
+    for (const m of text.matchAll(re)) out.push([m.index, m.index + m[0].length]);
+    return out;
+  }
+  if ([...k].length === 1) {
+    for (const m of text.matchAll(/\S+/g)) if (m[0].startsWith(k) && [...m[0]].length <= 3) out.push([m.index, m.index + m[0].length]);
+    return out;
+  }
+  let i = text.indexOf(key);
+  while (i >= 0) { out.push([i, i + key.length]); i = text.indexOf(key, i + 1); }
+  return out;
+}
+const NUMBER_PATTERNS = [/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])/g,
+  /(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/g,
+  /(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![\p{L}\p{N}_])/gu, /(\d+(?:\.\d+)?)\s*(cm\/s|mm\/s|m\/s)/g];
+export function notUnderstood(query, cfg) { // mirrors not_understood in scorer.py
+  const text = String((query && typeof query === "object" ? query.text : query) || "");
+  const t = " " + text.toLowerCase().trim() + " ";
+  const kw = cfg.keywords;
+  let keys = Object.values(cfg.presets).flatMap((p) => p.aliases);
+  for (const g of ["gravity", "flow_state", "concern", "diluent"]) keys = keys.concat(Object.values(kw[g]).flat());
+  keys = keys.concat(kw.materials.flatMap((m) => m.keys));
+  for (const g of ["thin", "thick", "rod", "out_of_scope", "generic"]) keys = keys.concat(kw[g] || []);
+  const covered = keys.flatMap((k) => spans(t, k));
+  for (const p of NUMBER_PATTERNS) for (const m of t.matchAll(p)) covered.push([m.index, m.index + m[0].length]);
+  const phrases = [];
+  let cur = [];
+  for (const m of t.matchAll(/\S+/g)) {
+    const word = m[0].replace(/^[,.;:!?()"']+|[,.;:!?()"']+$/g, "");
+    const end = m.index + m[0].length;
+    if (!word || covered.some(([a, b]) => a < end && m.index < b)) {
+      if (cur.length) { phrases.push(cur.join(" ")); cur = []; }
+      continue;
+    }
+    cur.push(word);
+  }
+  if (cur.length) phrases.push(cur.join(" "));
+  return phrases;
+}
 function matchMaterial(t, materials) {
   for (const m of materials) if (any(t, m.keys)) return m;
   return null;
@@ -406,12 +450,14 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
     const cfg = config;
     const { sc, src, assumptions, outOfScope, informative } = interpret(query, cfg);
     const W = cfg.warnings;
-    const base = { scenario: { ...sc }, sources: src, assumptions, config_version: cfg.version };
+    const unread = notUnderstood(query, cfg);
+    const base = { scenario: { ...sc }, sources: src, assumptions, config_version: cfg.version, not_understood: unread };
+    const unreadW = unread.length ? [{ code: "not_understood", message: fill(W.not_understood, { words: unread.map((p) => `'${p}'`).join(", ") }) }] : [];
     if (outOfScope) return { ...base, status: "out_of_scope", warnings: [{ code: "out_of_scope", message: W.out_of_scope }], results: [], ranking: [] };
-    if (!informative.length) return { ...base, status: "need_input", warnings: [{ code: "need_input", message: W.need_input }], results: [], ranking: [] };
+    if (!informative.length) return { ...base, status: "need_input", warnings: [{ code: "need_input", message: W.need_input }, ...unreadW], results: [], ranking: [] };
     const profile = sc.concern in cfg.profiles ? sc.concern : cfg.default_profile;
     const weights = { ...cfg.profiles[profile].weights, ...(weightsOverride || {}) };
-    const warnings = [];
+    const warnings = [...unreadW];
     const g = sc.gravity;
     if (g === "lunar" || g === "martian") warnings.push({ code: "partial_gravity", message: W.partial_gravity });
     else if (g === "earth") warnings.push({ code: "earth_gravity", message: W.earth_gravity });
