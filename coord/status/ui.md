@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 14:24 KST
+updated: 2026-11-14 14:27 KST
 state: working
 blocked_on: none
 ---
@@ -24,6 +24,7 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - Tell me if a name differs. Since 12:45 the ui role runs in a session on the human lead's computer, which can open github.io, so I check the public page after every push.
 
 - 14:24: a loading line shows from the first paint until the first result (it was blank for 1 to 2 s); pm request 1406 forwarded to catalog (1409), done by catalog and closed.
+- 14:27: every page asset and data file is fetched as file?v=<build commit>. A new deploy (pm 15:00 push included) is read at once instead of after the 10-minute Pages cache, and a page never mixes two builds.
 
 Done since last sync (pushed 13:54, asked by the human lead):
 - **ISS against lunar habitat, side by side** at the top of the needs section, for either demo query:

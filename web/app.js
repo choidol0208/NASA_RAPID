@@ -874,11 +874,15 @@ function setStatus(text, kind) {
   s.textContent = text || "";
 }
 
+// web/build.py writes the build commit here, so every data file is fetched as file?v=<commit>:
+// a new deploy is read at once, and a page never mixes files from two builds (Pages caches 10 min).
+const DATA_V = "__BUILD__";
+const vurl = (p) => (DATA_V.startsWith("__") ? p : `${p}${p.includes("?") ? "&" : "?"}v=${DATA_V}`);
 async function loadJSON(path, fallback) {
-  try { const r = await fetch(path); if (!r.ok) throw new Error(r.status); return await r.json(); }
+  try { const r = await fetch(vurl(path)); if (!r.ok) throw new Error(r.status); return await r.json(); }
   catch (e) { if (fallback !== undefined) return fallback; throw e; }
 }
-async function loadText(path) { const r = await fetch(path); if (!r.ok) throw new Error(`${path}: ${r.status}`); return r.text(); }
+async function loadText(path) { const r = await fetch(vurl(path)); if (!r.ok) throw new Error(`${path}: ${r.status}`); return r.text(); }
 
 async function main() {
   setStatus("Loading the catalog and the NASA test tables…");
@@ -912,7 +916,7 @@ async function main() {
     refs: rf ? parseRows(rf) : null,
   };
   const [sn, ss, stHead] = await Promise.all([optText("data/scenario_needs.csv"), loadJSON("data/scenario_spec.json", null),
-    fetch("data/scenario_tests.csv", { method: "HEAD" }).then((r) => r.ok).catch(() => false)]);
+    fetch(vurl("data/scenario_tests.csv"), { method: "HEAD" }).then((r) => r.ok).catch(() => false)]);
   pipe.scenarioNeeds = sn ? parseRows(sn) : null;
   pipe.evidenceMap = await loadJSON("data/insights/evidence_map.json", null);
   pipe.scenarioSpec = ss && Array.isArray(ss.scenarios) ? ss : null;

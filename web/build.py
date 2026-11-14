@@ -90,6 +90,21 @@ def main():
             sha = "main"
     with open(os.path.join(DIST, "data", "build.json"), "w", encoding="utf-8") as fh:
         json.dump({"commit": sha, "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}, fh)
+    # Stamp the build into every asset URL (Pages lets browsers cache files for 10 minutes): a new
+    # deploy is read at once, and a page never mixes files from two builds.
+    v = sha[:12] if sha != "main" else datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+    stamp = {
+        "index.html": [('href="style.css"', f'href="style.css?v={v}"'), ('src="app.js"', f'src="app.js?v={v}"')],
+        "app.js": [('from "./scorer.js"', f'from "./scorer.js?v={v}"'), ('const DATA_V = "__BUILD__";', f'const DATA_V = "{v}";')],
+    }
+    for name, pairs in stamp.items():
+        p = os.path.join(DIST, name)
+        text = open(p, encoding="utf-8").read()
+        for old, new in pairs:
+            if old not in text:
+                raise SystemExit(f"build: cannot stamp {name}: {old!r} not found")
+            text = text.replace(old, new, 1)
+        open(p, "w", encoding="utf-8", newline="\n").write(text)
     open(os.path.join(DIST, ".nojekyll"), "w").close()
     n = sum(len(fs) for _, _, fs in os.walk(DIST))
     print(f"built {n} files into {DIST}")
