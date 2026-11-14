@@ -8,9 +8,9 @@
    "count": "number of tests that pass the filter"
   },
   "population": {
-   "usable": "tests counted for the need: they record its variables and the PSI record of their investigation states the need as an objective (needs.json 'stated_by')",
-   "recorded": "tests that record the needed variables, whether or not their investigation states the need",
-   "in_scope": "tests within the need's scope that record every required condition, with or without an outcome, from investigations that state the need"
+   "usable": "tests counted for the need: they meet its required conditions, hold an outcome, and their investigation is linked to the need by a 'stated_by' entry with verdict 'supported'",
+   "recorded": "tests that meet the required conditions and hold an outcome, whatever the link; used where the tests behind an indicator are outside the stated objective, and the reading says so",
+   "in_scope": "tests within the need's scope that hold every required condition, with or without an outcome, from the investigations linked to the need with verdict 'supported'"
   },
   "where": "filters as [variable, operator, value]; operators: ==, !=, >, >=, <, <=, notnull, contains",
   "removed": "P1.lowest_flow_listed_at_extinction was removed on 2026-11-14: 12 of its 14 values came from cells that say the flow went lower than the number written, so the value was not the flow at extinction."
@@ -163,7 +163,7 @@
    "need_id": "P3",
    "label": "Flame spread rate in microgravity",
    "template": "summary",
-   "population": "usable",
+   "population": "recorded",
    "variable": "spread_rate_mm_s",
    "stats": [
     "min",
@@ -178,14 +178,14 @@
     "SAE2008.spread",
     "CP2003.response"
    ],
-   "reading": "Spread rate as written in the table. Cells with text instead of a number are not counted. Among the mapped tables only the Saffire-II table (PSI-99) has a spread-rate column, and the Saffire-II tests are not counted for this need (link verdict 'differs', SAF16b.saffire2), so this indicator has no row in the current outputs. The published rates of SAF.result are for Saffire-I, whose table has no spread-rate column."
+   "reading": "Spread rate as written in the table. Cells with text instead of a number are not counted. Among the mapped tables only the Saffire-II table (PSI-99) has a spread-rate column, and the Saffire-II tests are not counted for this need (link verdict 'differs', SAF16b.saffire2); the values shown here come from those tests, which are recorded outside the stated objective and are not counted for this need. The published rates of SAF.result are for Saffire-I, whose table has no spread-rate column."
   },
   {
    "id": "P3.burn_length",
    "need_id": "P3",
    "label": "Length burned in microgravity",
    "template": "summary",
-   "population": "usable",
+   "population": "recorded",
    "variable": "burn_length_cm",
    "stats": [
     "min",
@@ -199,7 +199,7 @@
    "definition_ref": [
     "6001B.T1.pass"
    ],
-   "reading": "Burn length as written in the column \"?-g Burn Length\" of the Saffire-II table (first character unreadable in the PSI file). Cells written \"~ 0\" are read as 0. Two PMMA cells, \"~ 10 cm (note 3)\" and \"~ 10 cm (note 4)\", are read as 10 and carry the flag burn_length_cm:see_note_in_source; Note 3 of the table says \"This is the length of fuel with significant visible damage.\" The cell \"5 cm & 0 (note 2)\" gives no value. The 15 cm criterion of NASA-STD-6001B Test 1 is defined for a 30 cm specimen in normal gravity without air flow; these tests were not run under that standard and are not judged against it. The Saffire-II tests are not counted for this need (link verdict 'differs', SAF16b.saffire2), so this indicator has no row in the current outputs."
+   "reading": "Burn length as written in the column \"?-g Burn Length\" of the Saffire-II table (first character unreadable in the PSI file). Cells written \"~ 0\" are read as 0. Two PMMA cells, \"~ 10 cm (note 3)\" and \"~ 10 cm (note 4)\", are read as 10 and carry the flag burn_length_cm:see_note_in_source; Note 3 of the table says \"This is the length of fuel with significant visible damage.\" The cell \"5 cm & 0 (note 2)\" gives no value. The 15 cm criterion of NASA-STD-6001B Test 1 is defined for a 30 cm specimen in normal gravity without air flow; these tests were not run under that standard and are not judged against it. The Saffire-II tests are not counted for this need (link verdict 'differs', SAF16b.saffire2); the values shown here come from those tests, which are recorded outside the stated objective and are not counted for this need."
   },
   {
    "id": "P3.burn_time",

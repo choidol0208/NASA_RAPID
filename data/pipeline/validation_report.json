@@ -1124,9 +1124,9 @@
    "verifies": "Every row of indicators.csv (value, n_tests, investigations, texts) equals the recomputation of its template over its population, filter and grouping (indicators.json), and no row is missing.",
    "status": "PASS",
    "numbers": {
-    "rows_recomputed": 151,
-    "rows_in_file": 151,
-    "indicators_with_rows": 16,
+    "rows_recomputed": 161,
+    "rows_in_file": 161,
+    "indicators_with_rows": 18,
     "indicators_in_spec": 18
    },
    "failures": 0,
@@ -1137,8 +1137,8 @@
    "verifies": "indicator_tests.csv lists exactly the tests behind each indicator row, with the value each test contributes.",
    "status": "PASS",
    "numbers": {
-    "rows_recomputed": 1437,
-    "rows_in_file": 1437
+    "rows_recomputed": 1447,
+    "rows_in_file": 1447
    },
    "failures": 0,
    "failing_examples": []
@@ -1148,8 +1148,8 @@
    "verifies": "Every reference item id used in needs.json, indicators.json and scenarios.json exists in references.json.",
    "status": "PASS",
    "numbers": {
-    "uses": 124,
-    "distinct_items_used": 69,
+    "uses": 193,
+    "distinct_items_used": 128,
     "items_defined": 309
    },
    "failures": 0,
@@ -1160,8 +1160,8 @@
    "verifies": "need_references.csv has exactly the reference items each need lists, with the text, place, document and URL of references.json.",
    "status": "PASS",
    "numbers": {
-    "links_in_spec": 59,
-    "rows_in_file": 59
+    "links_in_spec": 128,
+    "rows_in_file": 128
    },
    "failures": 0,
    "failing_examples": []
@@ -1248,7 +1248,7 @@
    "verifies": "The indicators of every need block equal the need's indicators recomputed over the tests of their population whose tier in this environment is atmosphere, oxygen_only or pressure_only.",
    "status": "PASS",
    "numbers": {
-    "indicator_groups": 394
+    "indicator_groups": 419
    },
    "failures": 0,
    "failing_examples": []
@@ -1258,8 +1258,8 @@
    "verifies": "Every number written in a statement of an evidence package is a field of the same need block (for an indicator sentence: of its indicator entry; for an environment sentence: of its recorded_tests row), or one of the two sums that statements.json declares.",
    "status": "PASS",
    "numbers": {
-    "numbers_in_statements": 7421,
-    "statements": 1903,
+    "numbers_in_statements": 7521,
+    "statements": 1928,
     "numbers_that_are_a_declared_sum_not_a_stored_field": 0,
     "numbers_found_only_in_matched_tests_indicators_or_references": 0
    },
@@ -1274,7 +1274,7 @@
    "verifies": "No statement of an evidence package contains the words safe, unsafe, flammable, sufficient, representative, proves or confirms (outside a need name or an indicator reading copied from the spec, and outside a sentence quoted word for word from a NASA record or a publication).",
    "status": "PASS",
    "numbers": {
-    "sentences": 2102,
+    "sentences": 2127,
     "sentences_with_such_a_word_only_inside_a_verbatim_quote": 0
    },
    "failures": 0,

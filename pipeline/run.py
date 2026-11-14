@@ -487,7 +487,8 @@ def indicators(tests, links, needs, ind_spec, variables, derived, ref_items, onl
         if row.objective_link == "stated":
             usable.setdefault(row.need_id, set()).add(row.test_id)
     for n in needs:
-        stated_inv[n["id"]] = {l["investigation_id"] for l in n.get("stated_by", [])}
+        stated_inv[n["id"]] = {l["investigation_id"] for l in n.get("stated_by", [])
+                               if l["verdict"] == "supported"}
     rows, members = [], []
     for ind in ind_spec["indicators"]:
         need = need_by_id[ind["need_id"]]
