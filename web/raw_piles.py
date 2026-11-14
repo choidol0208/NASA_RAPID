@@ -186,9 +186,45 @@ def build(root):
 
     # o2 values per test as NASA's table writes them, with source column and file (for pile 3, ground 2)
     o2_src = {}
+    col_count = collections.defaultdict(collections.Counter)
     for r in _csv(P("data", "pipeline", "values_long.csv")):
         if r["variable"] == "o2_pct" and r["test_id"] not in o2_src:
             o2_src[r["test_id"]] = (r.get("source_column", ""), r.get("source_file", ""))
+        col_count[(r["investigation_id"], r["variable"])][r.get("source_column", "")] += 1
+    # the table column of each outcome per investigation, as values_long.csv names it
+    col_of = {k: c.most_common(1)[0][0] for k, c in col_count.items() if c and c.most_common(1)[0][0] and "constant" not in c.most_common(1)[0][0]}
+    raw_cache = {}
+
+    def table_cell(source_file, source_row, column):
+        """The cell text as NASA's table file writes it, by the line the row starts on (header = line 1)."""
+        if source_file not in raw_cache:
+            path = P("data", "psi", "experimental_tables", source_file)
+            if not os.path.exists(path):
+                raw_cache[source_file] = None
+            else:
+                text = open(path, "rb").read()
+                for enc in ("utf-8-sig", "cp1252", "latin-1"):
+                    try:
+                        text = text.decode(enc)
+                        break
+                    except UnicodeDecodeError:
+                        continue
+                import io
+                rd = csv.reader(io.StringIO(text))
+                hdr = next(rd)
+                rows, start = {}, rd.line_num + 1
+                for row in rd:
+                    rows[start] = row
+                    start = rd.line_num + 1
+                raw_cache[source_file] = (hdr, rows)
+        got = raw_cache[source_file]
+        if not got or column not in got[0] or not str(source_row).isdigit():
+            return None
+        row = got[1].get(int(source_row))
+        if row is None:
+            return None
+        i = got[0].index(column)
+        return row[i] if i < len(row) else ""
 
     chain_path = P("data", "pipeline", "question_chain.csv")
     chain_src = "data/pipeline/question_chain.csv"
@@ -334,6 +370,32 @@ def build(root):
                     frs.append(fr)
                 if frs:
                     p1.append("Recorded for them in NASA's table: " + "; ".join(frs) + ".")
+                # 4.3 pile1.codes: the cell text of NASA's table file itself (tests.csv turns blank and dash both into empty)
+                for v in nd.get("outcomes_any", []):
+                    col = col_of.get((acc, v))
+                    if not col:
+                        continue
+                    codes = collections.Counter()
+                    for t in ts:
+                        cell = table_cell(tests[t]["source_file"], tests[t]["source_row"], col)
+                        if cell is None:
+                            raise PileError(f"{sid} {nid}: {t} has no row {tests[t]['source_row']} or column {col!r} in {tests[t]['source_file']}")
+                        c = cell.strip()
+                        if c == "":
+                            codes["blank"] += 1
+                        elif c in ("-", "–", "—"):
+                            codes["dash"] += 1
+                        else:
+                            try:
+                                codes["zero" if float(c) == 0 else "number"] += 1
+                            except ValueError:
+                                codes["other"] += 1
+                    # fixture F5 (design.md section 7): the 17 lunar FLEX tests write 4 numbers, 2 zeros, 8 blanks, 3 dashes
+                    if (sid, nid, acc, v) == ("lunar_habitat", "S1", "PSI-69", "extinction_diameter_mm") and \
+                            (codes["number"], codes["zero"], codes["blank"], codes["dash"]) != (4, 2, 8, 3):
+                        raise PileError(f"lunar S1 extinction diameter codes {dict(codes)} differ from fixture F5 (4, 2, 8, 3)")
+                    if (codes["blank"] or codes["dash"]) and not codes["other"]:
+                        p1.append(f"{cap(VAR_WORDS.get(v, v))} as the table writes it: a number above zero for {codes['number']}, a zero for {codes['zero']}, blank for {codes['blank']}, a dash for {codes['dash']}.")
             not_counted = [t for t in inside if t not in stated]
             for acc in sorted({tests[t]["investigation_id"] for t in not_counted}):
                 ts = [t for t in not_counted if tests[t]["investigation_id"] == acc]
