@@ -78,17 +78,27 @@ def length(cell, flags, var, default_unit="mm", out="mm", **_):
     return round(value * LENGTH_TO_MM[unit] / LENGTH_TO_MM[out], 4)
 
 
-def o2_text(cell, flags, var, **_):
-    """'21.5', '~ 21.5', '21.5 - 21.7', '22.1 to 22.0' -> percent."""
+def o2_text(cell, flags, var, documented_start=None, **_):
+    """Oxygen cell of the Saffire tables: '21.5', '~ 21.5', or two numbers
+    ('21.5 - 21.7', '22.1 to 22.0'). No value is computed from two numbers.
+    Where sources.json names, for that exact cell, which of the two written
+    numbers a publication of the investigators gives as the initial oxygen
+    ('documented_start'), that number is the value and the test is flagged.
+    Otherwise the value stays empty. The cell text is kept in
+    o2_range_as_written either way."""
     values = [float(v) for v in FIRST_NUM.findall(cell)]
     if not values:
         return None
     if len(values) >= 2:
-        flags.append(f"{var}:range_in_source_midpoint_used")
-        return round(sum(values[:2]) / 2, 3)
+        named = (documented_start or {}).get(cell)
+        if named and named["value"] in values[:2]:
+            flags.append(f"{var}:range_in_source_start_value_named_in_publication")
+            return {var: named["value"], "o2_range_as_written": cell}
+        flags.append(f"{var}:range_in_source_start_value_not_documented")
+        return {"o2_range_as_written": cell}
     if "~" in cell:
         flags.append(f"{var}:approximate_in_source")
-    return values[0]
+    return {var: values[0]}
 
 
 def gas_reading(cell, flags, var, **_):

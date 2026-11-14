@@ -63,7 +63,7 @@ Values that are not literally in a NASA cell. The first three kinds are flagged 
 
 | What | Where | Flag |
 |---|---|---|
-| Midpoint of an oxygen range written in the cell ("21.5 - 21.7") | 3 Saffire tests | `o2_pct:range_in_source_midpoint_used` |
+| One of the two oxygen numbers written in a cell ("21.5 - 21.7"), namely the one a publication of the investigators gives as the initial oxygen (`documented_start` in `sources.json`) | 2 Saffire tests | `o2_pct:range_in_source_start_value_named_in_publication` |
 | Material name PMMA where the cell gives only a shape or a thickness (BASS-II ReadMe) | 87 BASS and BASS-II tests | `fuel_material:not_written_in_cell_named_in_readme` |
 | Material of the row above where the cell is blank | 2 Saffire-II tests | `fuel_material:blank_in_source_value_of_row_above_used` |
 | Shape words ("film", "slab", "rod", "fabric sheet") chosen by keyword from the sample cell | BASS and BASS-II | none; the keywords are in `sources.json` (`sample_keywords`) |
