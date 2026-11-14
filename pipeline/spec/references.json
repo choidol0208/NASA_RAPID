@@ -1,6 +1,6 @@
 {
  "_meta": {
-  "generated_by": "AI-generated (Claude Code), 2026-11-14. Each item was taken from the cited document as read on 2026-11-14; not yet checked by a human.",
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Each item was taken on 2026-11-14 from the cited document, or from its abstract, a citation or a copy where 'access' says so; not yet checked by a human.",
   "purpose": "The standards, requirements, guidelines and published results that the needs in needs.json rest on. Needs point to item ids. The pipeline does not compute with these values; it carries them next to the data so that a reader can see the criterion and its source.",
   "access_values": {
    "full_text_read": "the cited passage was read in the document",
@@ -22,7 +22,8 @@
    "limitation",
    "published_result"
   ],
-  "quote_note": "'quote' is the sentence as it appears in the document text returned by the search tool on 2026-11-14 (PDF text extraction). Check it against the PDF before publishing it."
+  "quote_note": "'quote' is the sentence as it appears in the document. All 12 quotes were checked a second time against the documents on 2026-11-14 by a separate AI pass and found verbatim; for NASA-STD-6001B, TASKBOOK-14639, ICES-2019-BASS2, SAFFIRE-2017, FSJ-2018-SAME and FLEX-EIRD the check used a text extraction of the PDF, not the PDF pages. Not checked by a human.",
+  "unverified": "CHALLENGE-2026: the official page could not be opened from the work environment; its items were read from a copy. ISO 14624-1, ISO/TS 16697, ASTM D2863 and SAE 2008-01-2055 were not read in full (see 'access')."
  },
  "references": [
   {
@@ -30,7 +31,7 @@
    "kind": "standard",
    "title": "Flammability, Offgassing, and Compatibility Requirements and Test Procedures",
    "issuer": "NASA",
-   "version": "NASA-STD-6001B w/Change 3 (administrative change dated 2025-06-25)",
+   "version": "NASA-STD-6001B w/Change 3 (Revision B approved 2011-08-26; Change 3 revalidated 2025-06-09, administrative change)",
    "url": "https://standards.nasa.gov/sites/default/files/standards/NASA/B-w/CHANGE-3/3/2025_06_25_NASA-STD-6001B_w_Change_3_FINAL_Admin-Change-FINAL.pdf",
    "access": "full_text_read",
    "items": [
@@ -101,10 +102,8 @@
      "variables": [
       "flow_cms"
      ],
-     "values": {
-      "flow_cms": 0
-     },
-     "quote": "Air shall not be allowed to flow during tests."
+     "quote": "Air shall not be allowed to flow during tests.",
+     "note": "The standard states no velocity; buoyant flow is present in normal gravity."
     },
     {
      "id": "6001B.T1.ambient",
@@ -168,7 +167,7 @@
    "kind": "standard",
    "title": "Standard Test Method for Measuring the Minimum Oxygen Concentration to Support Candle-Like Combustion of Plastics (Oxygen Index)",
    "issuer": "ASTM International",
-   "version": "ASTM D2863-23 (technically equivalent to ISO 4589-2 per its Note 2)",
+   "version": "ASTM D2863-23e1 (per Note 2, technically equivalent to ISO 4589-2 when the gas measurement and control device of 6.3.1 is used with direct oxygen concentration measurement)",
    "url": "https://www.astm.org/d2863.html",
    "access": "abstract_only",
    "items": [
@@ -176,7 +175,7 @@
      "id": "D2863.oi",
      "type": "definition",
      "text": "Oxygen index: the minimum concentration of oxygen, in percent volume, in a flowing mixture of oxygen and nitrogen that will just support flaming combustion.",
-     "where": "Scope 1.1",
+     "where": "Abstract (public page); the standard itself was not read",
      "variables": [
       "o2_pct"
      ]
@@ -185,7 +184,7 @@
      "id": "D2863.caveat",
      "type": "limitation",
      "text": "Correlation with burning characteristics under actual use conditions is not implied.",
-     "where": "Significance and Use 5.1"
+     "where": "Abstract (public page); the standard itself was not read"
     }
    ]
   },
@@ -246,7 +245,8 @@
       ]
      }
     }
-   ]
+   ],
+   "pdf_url": "https://www.nasa.gov/wp-content/uploads/2025/05/nasa-std-3001-vol-2.pdf"
   },
   {
    "id": "OCHMO-TB-008",
@@ -282,7 +282,7 @@
     },
     {
      "id": "TB008.o2",
-     "type": "requirement",
+     "type": "recommendation",
      "text": "Design requirements need to specify the pressure and percent O2 combinations permitted in the habitable volume.",
      "where": "Fire Prevention and Material Flammability",
      "variables": [
@@ -308,7 +308,7 @@
     },
     {
      "id": "TB008.agent",
-     "type": "requirement",
+     "type": "recommendation",
      "text": "The extinguishing agent must not support combustion in an O2-enriched environment, contain toxic agents, emit toxic products, interfere with visual observation, or be slow to initiate.",
      "where": "Fire Suppression"
     },
@@ -324,7 +324,8 @@
      ],
      "quote": "Material flammability in partial gravity remains a major gap for exploration missions."
     }
-   ]
+   ],
+   "note": "The technical brief states on every page that it is for reference only; its items are not requirements."
   },
   {
    "id": "JSC-20584",
@@ -357,8 +358,8 @@
     {
      "id": "SMAC.scope",
      "type": "limitation",
-     "text": "SMACs are set for and applicable to ambient conditions (14.7 psi, 25 degC) and to spacecraft cabin air; 1- and 24-hour values apply to off-nominal situations. They are crew exposure guidelines, not limits for a test chamber.",
-     "where": "Background; revision log"
+     "text": "SMACs are based on experiments at standard pressure and oxygen. Rev D applies the published ppm values across all atmospheric scenarios, including reduced-pressure exploration atmospheres, for vapor-phase compounds. 1- and 24-hour values apply to off-nominal situations such as accidental releases. The values were established for human spaceflight and are not intended to apply to other situations such as ground operations.",
+     "where": "Background, pp. 6-8; Change History, p. 4"
     },
     {
      "id": "SMAC.atmospheres",
@@ -424,8 +425,8 @@
     {
      "id": "EAWG.testing",
      "type": "recommendation",
-     "text": "The recommendations require materials ignition and flammability testing and certification up to 34% oxygen, and a modified standard flammability test to generate ignition threshold data.",
-     "where": "Executive Summary; Conclusion",
+     "text": "A white paper appended to the report (Appendix E-2) states that the lander and habitat recommendations require materials ignition and flammability testing and certification to 34% oxygen. The Executive Summary recommends a modified standard NASA flammability test to generate ignition threshold data, and says lander materials need flammability testing at a maximum oxygen concentration outside the existing shuttle/ISS database.",
+     "where": "34%: Appendix E-2 (Scheuring et al. white paper), Conclusion - Recommendations, p. 119. Modified flammability test: Executive Summary, p. 2",
      "variables": [
       "o2_pct"
      ],
@@ -540,9 +541,9 @@
   {
    "id": "ICES-2019-BASS2",
    "kind": "paper",
-   "title": "Flammability Limits from BASS-II Testing in Microgravity Compared to Normal Gravity Limits (Olson, Ferkul, Fernandez-Pello, Miller, Wichman, T'ien)",
+   "title": "Flammability Limits from BASS-II Testing in Microgravity Compared to Normal Gravity Limits (Olson, Ferkul, Fernandez-Pello, Miller, Wichman, Bhattacharjee, T'ien)",
    "issuer": "49th International Conference on Environmental Systems",
-   "version": "ICES-2019",
+   "version": "ICES-2019-101 (7-11 July 2019, Boston)",
    "url": "https://hdl.handle.net/2346/84505",
    "access": "full_text_read",
    "items": [
@@ -576,7 +577,7 @@
     {
      "id": "ICES19.limits",
      "type": "published_result",
-     "text": "BASS-II PMMA: minimum oxygen of the flammability boundary 13.6% for concurrent rods and 16.3% for opposed-flow rods; normal-gravity PMMA limits 17% (downward) and 15.4% (upward).",
+     "text": "BASS-II PMMA: minimum oxygen concentration in the flammability boundary from the concurrent (stagnation-flow) rod tests 13.6% O2; minimum flammable value for the opposed-flow rods 16.3% O2 (no comparable boundary was obtained for opposed flow); normal-gravity PMMA extinction limits 17% O2 (downward spread) and 15.4% O2 (upward spread).",
      "where": "Sections D, F",
      "variables": [
       "o2_pct",
@@ -593,12 +594,52 @@
     {
      "id": "ICES19.fanoff",
      "type": "published_result",
-     "text": "In BASS-II the flames always quenched when the fan was turned off.",
+     "text": "In BASS-II the flames always quenched when the fan was turned off. The authors call turning off ventilation an excellent mitigation strategy for the ISS, and add that earlier quiescent tests at elevated oxygen suggest ventilation may not be necessary for a flame to survive in high-oxygen low-pressure atmospheres or in partial gravity, so the strategy may not be applicable in future exploration missions.",
      "where": "Abstract",
      "variables": [
       "flow_cms",
       "flow_event"
-     ]
+     ],
+     "quote": "so this mitigation strategy may not be applicable in future exploration missions"
+    },
+    {
+     "id": "ICES19.pressure",
+     "type": "published_result",
+     "text": "BASS-II varied oxygen from 13% to 22% by nitrogen dilution of the ISS atmosphere in the glovebox working volume; pressure was not varied from 1 atmosphere.",
+     "where": "Section II",
+     "variables": [
+      "pressure_kpa",
+      "o2_pct"
+     ],
+     "quote": "Pressure was not varied from 1 atmosphere."
+    },
+    {
+     "id": "ICES19.sensors",
+     "type": "published_result",
+     "text": "On-board sensors measured the initial and final oxygen concentrations, to determine oxygen depletion and extinction oxygen concentrations, and the completeness of combustion (CO, CO2 sensor).",
+     "where": "Section II",
+     "variables": [
+      "o2_final_pct",
+      "co_final_ppm",
+      "co2_final_pct"
+     ],
+     "quote": "to determine oxygen depletion, extinction oxygen concentrations, and the completeness of combustion (CO, CO2 sensor)"
+    },
+    {
+     "id": "ICES19.coratio",
+     "type": "published_result",
+     "text": "The range of the CO/CO2 molar ratio produced in the microgravity flames is 0.01 to 0.1.",
+     "where": "Section III",
+     "variables": [
+      "co_to_co2_molar_ratio"
+     ],
+     "values": {
+      "co_to_co2_molar_ratio_range": [
+       0.01,
+       0.1
+      ]
+     },
+     "quote": "The range of the CO/CO2 molar ratio produced in microgravity flames is 0.01-0.1"
     }
    ],
    "note": "Results published by the BASS-II investigators for the same investigation as PSI-25. Listed as a reference for checking, not reproduced by the pipeline."
@@ -615,17 +656,83 @@
     {
      "id": "OF2012.margin",
      "type": "published_result",
-     "text": "Limiting oxygen levels at Martian gravity were up to 5.75% O2 lower than in normal gravity; normal-gravity screening tests may not be conservative.",
-     "where": "Conclusions",
+     "text": "Oxygen margins of safety (low-gravity limit minus 1g limit, % O2 by mole) were negative by as much as -5.75 (lunar gravity, Mylar G at 10.2 psia); the largest at Martian gravity was -3.35 (Nomex HT90-40) and at 0g -4.1 (Mylar G). Normal-gravity screening tests may not be conservative. The low-g limits come from 5 s drop tests and their extinction criteria are not the same as in 1g.",
+     "where": "Table I (p. 6); p. 7; Conclusions (p. 8)",
      "variables": [
       "o2_pct",
       "gravity_level"
      ],
      "values": {
-      "delta_o2_pct_max": -5.75
-     }
+      "delta_o2_pct_lunar_min": -5.75,
+      "delta_o2_pct_martian_min": -3.35,
+      "delta_o2_pct_0g_min": -4.1
+     },
+     "note": "The Conclusions sentence of the paper gives 5.75 for Martian gravity; Table I of the same paper gives that value for lunar gravity. The table values are used here."
+    },
+    {
+     "id": "OF2012.table1",
+     "type": "published_result",
+     "text": "Limiting oxygen molar concentrations (% O2) from Table I. Mylar G at 10.2 psia: 1g ULOI 21.2 and MOC 20.0; Martian ULOI* 18.0 and MOC* 17.0; Lunar ULOI* 15.6 and MOC* 14.1; 0g ULOI* 17.0 and MOC* 16.0; oxygen margin of safety (delta O2 %) -3.1 Martian, -5.75 Lunar, -4.1 0g. Ultem 1000 at 10.2 psia: 1g ULOI 23.5 and MOC 23.0; Martian ULOI* 22.0 and MOC* 21.1; Lunar ULOI* 21.0 and MOC* 19.9; 0g ULOI* 24.0 and MOC* 23.0; delta O2 % -1.7 Martian, -2.8 Lunar, 0.25 0g. Nomex HT90-40 at 14.7 psia: 1g ULOI 23.5 and MOC 22.1; Martian ULOI* 19.9 and MOC* 19.0; Lunar ULOI* 21.0 and MOC* 19.9; 0g ULOI* 23.0 and MOC* 22.0; delta O2 % -3.35 Martian, -2.35 Lunar, -0.3 0g. Delta O2 % is the mean of the low-gravity ULOI* and MOC* minus the mean of the 1g ULOI and MOC (Eq. 1). The low-gravity limits come from 5.18 s drop tower tests: MOC* is the maximum oxygen concentration at which the flame self-extinguished during the drop, ULOI* the minimum at which it survived the full drop; these criteria are not the same as in 1g.",
+     "where": "Table I, p. 6",
+     "variables": [
+      "o2_pct",
+      "gravity_level",
+      "pressure_kpa"
+     ],
+     "values": {
+      "rows": [
+       {
+        "material": "Mylar G",
+        "pressure_psia": 10.2,
+        "uloi_o2_pct_1g": 21.2,
+        "moc_o2_pct_1g": 20.0,
+        "uloi_star_o2_pct_martian": 18.0,
+        "moc_star_o2_pct_martian": 17.0,
+        "uloi_star_o2_pct_lunar": 15.6,
+        "moc_star_o2_pct_lunar": 14.1,
+        "uloi_star_o2_pct_0g": 17.0,
+        "moc_star_o2_pct_0g": 16.0,
+        "delta_o2_pct_martian": -3.1,
+        "delta_o2_pct_lunar": -5.75,
+        "delta_o2_pct_0g": -4.1
+       },
+       {
+        "material": "Ultem 1000",
+        "pressure_psia": 10.2,
+        "uloi_o2_pct_1g": 23.5,
+        "moc_o2_pct_1g": 23.0,
+        "uloi_star_o2_pct_martian": 22.0,
+        "moc_star_o2_pct_martian": 21.1,
+        "uloi_star_o2_pct_lunar": 21.0,
+        "moc_star_o2_pct_lunar": 19.9,
+        "uloi_star_o2_pct_0g": 24.0,
+        "moc_star_o2_pct_0g": 23.0,
+        "delta_o2_pct_martian": -1.7,
+        "delta_o2_pct_lunar": -2.8,
+        "delta_o2_pct_0g": 0.25
+       },
+       {
+        "material": "Nomex HT90-40",
+        "pressure_psia": 14.7,
+        "uloi_o2_pct_1g": 23.5,
+        "moc_o2_pct_1g": 22.1,
+        "uloi_star_o2_pct_martian": 19.9,
+        "moc_star_o2_pct_martian": 19.0,
+        "uloi_star_o2_pct_lunar": 21.0,
+        "moc_star_o2_pct_lunar": 19.9,
+        "uloi_star_o2_pct_0g": 23.0,
+        "moc_star_o2_pct_0g": 22.0,
+        "delta_o2_pct_martian": -3.35,
+        "delta_o2_pct_lunar": -2.35,
+        "delta_o2_pct_0g": -0.3
+       }
+      ]
+     },
+     "quote": "Table I: Limiting Oxygen Molar Concentrations and Oxygen Margin of Safety for Different Gravity Levels",
+     "note": "The table is printed with one column per fuel and one row per quantity. Column headings as printed: Fuel; Mylar(R) G 10.2 psia; Ultem(R) 1000 10.2 psia; Nomex(R) HT90-40 14.7 psia. Row labels as printed: 1g ULOI, 1g MOC, Martian ULOI*, Martian MOC*, Lunar ULOI*, Lunar MOC*, 0g* ULOI*, 0g* MOC*, Martian delta-O2 %, Lunar delta-O2 %, 0g delta-O2 %. The limit rows carry no unit in the table; the title calls them oxygen molar concentrations. Pressure is printed in psia only (no kPa value in the table). The table has no footnotes: the asterisk on ULOI*/MOC* is defined in the body (p. 4, p. 6), the asterisk on '0g*' is not defined anywhere in the paper; the body says the 0g values were obtained with a concurrent flow of 30 cm/s (p. 4) and that the Lunar and 0g data are from ref. 8 (Ferkul and Olson 2011). The Conclusions (p. 8) attribute 'up to 5.75% O2 lower' to Martian gravity, but in Table I -5.75 is the Lunar value (Mylar G); the largest Martian value in the table is -3.35 (Nomex HT90-40). Read on 2026-11-14 from the NTRS PDF, both from the text layer (pdftotext -layout) and from a 200 dpi rendering of page 6; the two readings agree in every cell. AI-read, not checked by a human."
     }
-   ]
+   ],
+   "note": "The NTRS copy lists the meeting as the 42nd International Conference on Environmental Systems, San Diego, 15-19 July 2012; the number AIAA 2012-3492 is not printed in that copy and is not verified."
   },
   {
    "id": "SAE-2008-01-2055",
@@ -638,7 +745,7 @@
    "items": [
     {
      "id": "SAE2008.uloi",
-     "type": "definition",
+     "type": "published_result",
      "text": "1g Upward Limiting Oxygen Index (ULOI) and 1g Maximum Oxygen Concentration (MOC) were greater than those in 0g by up to 4% oxygen mole fraction.",
      "where": "Abstract",
      "variables": [
@@ -648,7 +755,7 @@
     },
     {
      "id": "SAE2008.spread",
-     "type": "definition",
+     "type": "published_result",
      "text": "Flame spread rate is correlated with flow velocity, oxygen concentration and pressure.",
      "where": "Abstract",
      "variables": [
@@ -709,21 +816,11 @@
    "id": "SAFFIRE-2017",
    "kind": "paper",
    "title": "The Saffire Experiment: Large-Scale Combustion aboard Spacecraft (Ferkul, Urban, Olson, Ruff, et al.)",
-   "issuer": "Conference paper",
+   "issuer": "10th U.S. National Combustion Meeting, College Park, Maryland, April 23-26, 2017",
    "version": "2017",
    "url": "http://hdl.handle.net/20.500.11820/9397b059-72ed-41aa-8b7a-3ea8ba1bc795",
    "access": "full_text_read",
    "items": [
-    {
-     "id": "SAF.objectives",
-     "type": "framework",
-     "text": "Saffire objectives (PSI-98 record): determine how rapidly a large-scale fire grows in low gravity, and investigate low-g flammability limits compared with NASA's normal-gravity screening test.",
-     "where": "PSI-98 investigation record",
-     "variables": [
-      "spread_rate_mm_s",
-      "burn_length_cm"
-     ]
-    },
     {
      "id": "SAF.result",
      "type": "published_result",
@@ -796,9 +893,9 @@
   {
    "id": "FLEX-EIRD",
    "kind": "nasa_report",
-   "title": "Droplet Flame Extinguishment in Microgravity (FLEX), science requirements document",
+   "title": "Research Requirements Document: Droplet Flame Extinguishment in Microgravity (FLEX)",
    "issuer": "NASA GRC",
-   "version": "v4",
+   "version": "November 4, 2005 (file name FLEX_EIRD_v4.pdf)",
    "url": "https://www1.grc.nasa.gov/wp-content/uploads/FLEX_EIRD_v4.pdf",
    "access": "full_text_read",
    "items": [
@@ -806,7 +903,7 @@
      "id": "FLEX.loi",
      "type": "definition",
      "text": "Limiting Oxygen Index (LOI): the oxygen mole fraction below which a steady flame cannot exist for a given material and ambient condition. In total flooding, the goal of the agent is to reduce the oxygen concentration below the LOI.",
-     "where": "Section on extinction and LOI",
+     "where": "2.2 Agent Efficacy",
      "variables": [
       "o2_pct",
       "test_end"
@@ -870,9 +967,9 @@
   {
    "id": "NASA-TP-2015-216046",
    "kind": "nasa_report",
-   "title": "Detailed Results from the Flame Extinguishment Experiment (FLEX)",
+   "title": "Detailed Results From the Flame Extinguishment Experiment (FLEX) March 2009 to December 2011",
    "issuer": "NASA GRC",
-   "version": "NASA/TP-2015-216046",
+   "version": "NASA/TP-2015-216046, November 2015",
    "url": "https://ntrs.nasa.gov/citations/20150023456",
    "access": "full_text_read",
    "items": [
@@ -905,13 +1002,105 @@
      "id": "RG.test1",
      "type": "published_result",
      "text": "Test 1 is not conservative: materials can burn at lower oxygen levels in microgravity than on Earth.",
-     "where": "Solid-Fuel Combustion / Material Flammability",
+     "where": "Highlights and Lessons Learned: Low-Stretch (Low-Velocity) Flames, p. 31",
      "variables": [
       "o2_pct",
       "gravity_level"
      ]
     }
    ]
+  },
+  {
+   "id": "ICES-2024-365",
+   "kind": "paper",
+   "title": "Preliminary Results from the Saffire VI Experiment (Urban, Ruff, Ferkul, Easton, Johnston, Owens, Olson, Fortenberry, Graf, George, Toth, Meyer, Eigenbrod, T'ien, Liao, Fernandez-Pello, Legros, Guibaud, Smirnov, Fujita, Rojas Alva, Jomaas)",
+   "issuer": "53rd International Conference on Environmental Systems",
+   "version": "ICES-2024-365 (21-25 July 2024, Louisville, Kentucky)",
+   "url": "https://ntrs.nasa.gov/citations/20240002981",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF456.conditions",
+     "type": "published_result",
+     "text": "Saffire IV sample 1 (SIBAL cloth, 50 cm long): ambient pressure 100.0 kPa, oxygen 22.0 mol %, concurrent air flow 20 cm/s, free volume 17.9 m3. Saffire V sample 2 (cotton jersey, 50 cm long): 70.7 kPa, 26.2 mol % oxygen, concurrent flow 20 cm/s, free volume 19.0 m3. Saffire VI sample 2 (SIBAL cloth, 50 cm long): 54.1 kPa, 31.0 mol % oxygen, concurrent flow 20 cm/s, free volume 16.7 m3. Saffire VI sample 3 (two-sided PMMA, 18 cm long): 54.6 kPa, 30.3 mol % oxygen, concurrent flow 20 cm/s, free volume 16.7 m3. Saffire VI sample 4 (one-sided PMMA, 18 cm long): 55.2 kPa, 28.8 mol % oxygen, concurrent flow 20 cm/s, free volume 16.7 m3.",
+     "where": "Table 1, p. 3",
+     "variables": [
+      "pressure_kpa",
+      "o2_pct",
+      "flow_cms",
+      "flow_direction",
+      "fuel_material",
+      "sample_length_cm"
+     ],
+     "values": {
+      "rows": [
+       {
+        "flight_sample": "IV-1",
+        "flight": "IV",
+        "sample": 1,
+        "material": "SIBAL Cloth",
+        "length_cm": 50,
+        "flow_cms": 20,
+        "flow_direction": "Concurrent",
+        "pressure_kpa": 100.0,
+        "o2_pct": 22.0,
+        "free_volume_m3": 17.9
+       },
+       {
+        "flight_sample": "V-2",
+        "flight": "V",
+        "sample": 2,
+        "material": "Cotton Jersey",
+        "length_cm": 50,
+        "flow_cms": 20,
+        "flow_direction": "Concurrent",
+        "pressure_kpa": 70.7,
+        "o2_pct": 26.2,
+        "free_volume_m3": 19.0
+       },
+       {
+        "flight_sample": "VI-2",
+        "flight": "VI",
+        "sample": 2,
+        "material": "SIBAL Cloth",
+        "length_cm": 50,
+        "flow_cms": 20,
+        "flow_direction": "Concurrent",
+        "pressure_kpa": 54.1,
+        "o2_pct": 31.0,
+        "free_volume_m3": 16.7
+       },
+       {
+        "flight_sample": "VI-3",
+        "flight": "VI",
+        "sample": 3,
+        "material": "Two-Sided PMMA",
+        "length_cm": 18,
+        "flow_cms": 20,
+        "flow_direction": "Concurrent",
+        "pressure_kpa": 54.6,
+        "o2_pct": 30.3,
+        "free_volume_m3": 16.7
+       },
+       {
+        "flight_sample": "VI-4",
+        "flight": "VI",
+        "sample": 4,
+        "material": "One-Sided PMMA",
+        "length_cm": 18,
+        "flow_cms": 20,
+        "flow_direction": "Concurrent",
+        "pressure_kpa": 55.2,
+        "o2_pct": 28.8,
+        "free_volume_m3": 16.7
+       }
+      ]
+     },
+     "quote": "Table 1. Saffire IV-VI Sample Test Conditions considered in this paper.",
+     "note": "The table is printed with one column per flight/sample and one row per quantity; row labels as printed: Flight/Sample, Material, Length (cm), Air Flow Rate (cm/s), Flow Direction, Ambient Pressure (kPa), Oxygen Concentration (mol %), Free volume (m3). 'flight' and 'sample' are the two halves of the printed 'Flight/Sample' label. The paper does not say whether the pressure and oxygen values are set points, values measured at ignition or averages; the body says only that the spacecraft was vented to the requested pressure and oxygen was released 'to bring the spacecraft to the desired condition (Table 1)' (p. 3). The table lists only the samples considered in this paper, not every Saffire IV-VI sample; the Saffire VI Nomex sample (test 1) did not ignite and is not in the table."
+    }
+   ],
+   "note": "Saffire IV to VI are not in NASA PSI; published results listed for context, not reproduced by the pipeline. Table 1 was read on 2026-11-14 from the PDF linked on the NTRS citation page (Saffire-ICES-2024-ICES-365-accepted final.pdf), both from the text layer (pdftotext -layout) and from a 200 dpi rendering of page 3; the two readings agree in every cell. AI-read, not checked by a human."
   }
  ]
 }

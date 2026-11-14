@@ -1,0 +1,784 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "note": "List of the evidence packages: the scenarios of scenarios.json, then every oxygen bin x pressure bin of coverage.json. Status per need is the same value as in scenario_needs.csv and atmosphere_cells.csv. Team computation, not a NASA conclusion and not safety guidance.",
+  "rules": "pipeline/README.md"
+ },
+ "packages": [
+  {
+   "id": "iss",
+   "kind": "scenario",
+   "label": "ISS cabin",
+   "file": "scenario_iss.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 19,
+     "max": 23,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": 85.8,
+     "max": 116.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": {
+     "min": 5,
+     "max": 30,
+     "min_inclusive": true,
+     "max_inclusive": true
+    }
+   },
+   "gravity_level": "microgravity",
+   "status_by_need": {
+    "P1": "oxygen_only",
+    "P2": "not_measured",
+    "P3": "oxygen_only",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "lunar_habitat",
+   "kind": "scenario",
+   "label": "Lunar base or pressurized rover",
+   "file": "scenario_lunar_habitat.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 30,
+     "max": 36,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": null,
+     "max": 85.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": "lunar",
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "mars_habitat",
+   "kind": "scenario",
+   "label": "Mars habitat",
+   "file": "scenario_mars_habitat.json",
+   "ranges": {
+    "o2_pct": null,
+    "pressure_kpa": null,
+    "flow_cms": null
+   },
+   "gravity_level": "martian",
+   "status_by_need": {
+    "P1": "atmosphere_not_specified",
+    "P2": "not_measured",
+    "P3": "atmosphere_not_specified",
+    "S1": "atmosphere_not_specified",
+    "D1": "not_measured",
+    "D2": "atmosphere_not_specified"
+   }
+  },
+  {
+   "id": "spacesuit",
+   "kind": "scenario",
+   "label": "Spacesuit",
+   "file": "scenario_spacesuit.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 95,
+     "max": 100,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": null,
+     "max": 62.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "other_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "exploration_8_2_34",
+   "kind": "scenario",
+   "label": "Exploration atmosphere 8.2 psia / 34% O2",
+   "file": "scenario_exploration_8_2_34.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 32,
+     "max": 36,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": null,
+     "max": 62.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "other_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "exploration_10_2_26_5",
+   "kind": "scenario",
+   "label": "Exploration atmosphere 10.2 psia / 26.5% O2",
+   "file": "scenario_exploration_10_2_26_5.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 24.5,
+     "max": 28.5,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": 62.8,
+     "max": 85.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_lt19__p_lt62_8",
+   "kind": "cell",
+   "label": "Oxygen below 19%; pressure below 62.8 kPa",
+   "file": "cell_o2_lt19__p_lt62_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": null,
+     "max": 19,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": null,
+     "max": 62.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "oxygen_only",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "oxygen_only",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_lt19__p_62_8_85_8",
+   "kind": "cell",
+   "label": "Oxygen below 19%; pressure 62.8 to below 85.8 kPa (around 70.3 kPa = 10.2 psia)",
+   "file": "cell_o2_lt19__p_62_8_85_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": null,
+     "max": 19,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": 62.8,
+     "max": 85.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "oxygen_only",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_lt19__p_85_8_116_8",
+   "kind": "cell",
+   "label": "Oxygen below 19%; pressure 85.8 to below 116.8 kPa (around 101.3 kPa = 14.7 psia)",
+   "file": "cell_o2_lt19__p_85_8_116_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": null,
+     "max": 19,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": 85.8,
+     "max": 116.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "oxygen_only",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_lt19__p_ge116_8",
+   "kind": "cell",
+   "label": "Oxygen below 19%; pressure 116.8 kPa and above",
+   "file": "cell_o2_lt19__p_ge116_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": null,
+     "max": 19,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": 116.8,
+     "max": null,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "oxygen_only",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "oxygen_only",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_19_23__p_lt62_8",
+   "kind": "cell",
+   "label": "Oxygen 19 to 23% (air, 21 +/- 2); pressure below 62.8 kPa",
+   "file": "cell_o2_19_23__p_lt62_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 19,
+     "max": 23,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": null,
+     "max": 62.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "oxygen_only",
+    "P2": "not_measured",
+    "P3": "oxygen_only",
+    "S1": "oxygen_only",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_19_23__p_62_8_85_8",
+   "kind": "cell",
+   "label": "Oxygen 19 to 23% (air, 21 +/- 2); pressure 62.8 to below 85.8 kPa (around 70.3 kPa = 10.2 psia)",
+   "file": "cell_o2_19_23__p_62_8_85_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 19,
+     "max": 23,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": 62.8,
+     "max": 85.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "oxygen_only",
+    "P2": "not_measured",
+    "P3": "oxygen_only",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_19_23__p_85_8_116_8",
+   "kind": "cell",
+   "label": "Oxygen 19 to 23% (air, 21 +/- 2); pressure 85.8 to below 116.8 kPa (around 101.3 kPa = 14.7 psia)",
+   "file": "cell_o2_19_23__p_85_8_116_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 19,
+     "max": 23,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": 85.8,
+     "max": 116.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "oxygen_only",
+    "P2": "not_measured",
+    "P3": "oxygen_only",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_19_23__p_ge116_8",
+   "kind": "cell",
+   "label": "Oxygen 19 to 23% (air, 21 +/- 2); pressure 116.8 kPa and above",
+   "file": "cell_o2_19_23__p_ge116_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 19,
+     "max": 23,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": 116.8,
+     "max": null,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "oxygen_only",
+    "P2": "not_measured",
+    "P3": "oxygen_only",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_23_30__p_lt62_8",
+   "kind": "cell",
+   "label": "Oxygen above 23% and below 30%; pressure below 62.8 kPa",
+   "file": "cell_o2_23_30__p_lt62_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 23,
+     "max": 30,
+     "min_inclusive": false,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": null,
+     "max": 62.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "other_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_23_30__p_62_8_85_8",
+   "kind": "cell",
+   "label": "Oxygen above 23% and below 30%; pressure 62.8 to below 85.8 kPa (around 70.3 kPa = 10.2 psia)",
+   "file": "cell_o2_23_30__p_62_8_85_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 23,
+     "max": 30,
+     "min_inclusive": false,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": 62.8,
+     "max": 85.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_23_30__p_85_8_116_8",
+   "kind": "cell",
+   "label": "Oxygen above 23% and below 30%; pressure 85.8 to below 116.8 kPa (around 101.3 kPa = 14.7 psia)",
+   "file": "cell_o2_23_30__p_85_8_116_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 23,
+     "max": 30,
+     "min_inclusive": false,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": 85.8,
+     "max": 116.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_23_30__p_ge116_8",
+   "kind": "cell",
+   "label": "Oxygen above 23% and below 30%; pressure 116.8 kPa and above",
+   "file": "cell_o2_23_30__p_ge116_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 23,
+     "max": 30,
+     "min_inclusive": false,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": 116.8,
+     "max": null,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "other_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_30_36__p_lt62_8",
+   "kind": "cell",
+   "label": "Oxygen 30 to 36%; pressure below 62.8 kPa",
+   "file": "cell_o2_30_36__p_lt62_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 30,
+     "max": 36,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": null,
+     "max": 62.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "other_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_30_36__p_62_8_85_8",
+   "kind": "cell",
+   "label": "Oxygen 30 to 36%; pressure 62.8 to below 85.8 kPa (around 70.3 kPa = 10.2 psia)",
+   "file": "cell_o2_30_36__p_62_8_85_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 30,
+     "max": 36,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": 62.8,
+     "max": 85.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_30_36__p_85_8_116_8",
+   "kind": "cell",
+   "label": "Oxygen 30 to 36%; pressure 85.8 to below 116.8 kPa (around 101.3 kPa = 14.7 psia)",
+   "file": "cell_o2_30_36__p_85_8_116_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 30,
+     "max": 36,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": 85.8,
+     "max": 116.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "in_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_30_36__p_ge116_8",
+   "kind": "cell",
+   "label": "Oxygen 30 to 36%; pressure 116.8 kPa and above",
+   "file": "cell_o2_30_36__p_ge116_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 30,
+     "max": 36,
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "pressure_kpa": {
+     "min": 116.8,
+     "max": null,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "other_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_gt36__p_lt62_8",
+   "kind": "cell",
+   "label": "Oxygen above 36%; pressure below 62.8 kPa",
+   "file": "cell_o2_gt36__p_lt62_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 36,
+     "max": null,
+     "min_inclusive": false,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": null,
+     "max": 62.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "other_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_gt36__p_62_8_85_8",
+   "kind": "cell",
+   "label": "Oxygen above 36%; pressure 62.8 to below 85.8 kPa (around 70.3 kPa = 10.2 psia)",
+   "file": "cell_o2_gt36__p_62_8_85_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 36,
+     "max": null,
+     "min_inclusive": false,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": 62.8,
+     "max": 85.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "other_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_gt36__p_85_8_116_8",
+   "kind": "cell",
+   "label": "Oxygen above 36%; pressure 85.8 to below 116.8 kPa (around 101.3 kPa = 14.7 psia)",
+   "file": "cell_o2_gt36__p_85_8_116_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 36,
+     "max": null,
+     "min_inclusive": false,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": 85.8,
+     "max": 116.8,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "other_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  },
+  {
+   "id": "cell_o2_gt36__p_ge116_8",
+   "kind": "cell",
+   "label": "Oxygen above 36%; pressure 116.8 kPa and above",
+   "file": "cell_o2_gt36__p_ge116_8.json",
+   "ranges": {
+    "o2_pct": {
+     "min": 36,
+     "max": null,
+     "min_inclusive": false,
+     "max_inclusive": false
+    },
+    "pressure_kpa": {
+     "min": 116.8,
+     "max": null,
+     "min_inclusive": true,
+     "max_inclusive": false
+    },
+    "flow_cms": null
+   },
+   "gravity_level": null,
+   "status_by_need": {
+    "P1": "other_atmosphere",
+    "P2": "not_measured",
+    "P3": "other_atmosphere",
+    "S1": "other_atmosphere",
+    "D1": "not_measured",
+    "D2": "other_atmosphere"
+   }
+  }
+ ]
+}

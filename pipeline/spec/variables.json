@@ -78,12 +78,12 @@
   "flow_cms": {
    "kind": "condition",
    "unit": "cm/s",
-   "meaning": "Imposed flow speed at the start of the test"
+   "meaning": "Imposed flow speed at the start of the test (the number the flow cell starts with)"
   },
   "flow_min_cms": {
    "kind": "condition",
    "unit": "cm/s",
-   "meaning": "Lowest flow speed set during the test"
+   "meaning": "Lowest flow speed written in the cell that lists the settings of the test. Not read where the cell also holds fan potentiometer settings or anything in brackets"
   },
   "flow_direction": {
    "kind": "condition",
@@ -103,15 +103,15 @@
   "aging_time_s": {
    "kind": "condition",
    "unit": "s",
-   "meaning": "Time the smoke was aged before measurement"
+   "meaning": "Time the smoke was aged before measurement: 'Aging Duration (minutes)' of the SAME table converted to seconds, and 'Net aging time (sec)' of the SAME-R table, read as one variable"
   },
   "ignition_power_w": {
-   "kind": "outcome",
+   "kind": "condition",
    "unit": "W",
    "meaning": "Igniter power"
   },
   "ignition_time_s": {
-   "kind": "outcome",
+   "kind": "condition",
    "unit": "s",
    "meaning": "Igniter on-time"
   },
@@ -143,7 +143,7 @@
   "flow_event": {
    "kind": "outcome",
    "unit": "extinction | blowoff | no_ignition | not_sustained",
-   "meaning": "Event noted next to the flow settings (BASS-II): \"ext\", \"blowoff\", \"no ign\", \"would not stay lit\""
+   "meaning": "Event word written next to the flow or fan settings (BASS-II): \"ext\" / \"extinguished\", \"blowoff\", \"no ign\", \"would not stay lit\""
   },
   "burn_length_cm": {
    "kind": "outcome",
@@ -183,7 +183,7 @@
   "mass_loss_rate_mg_min": {
    "kind": "outcome",
    "unit": "mg/min",
-   "meaning": "Sample mass loss rate"
+   "meaning": "Sample mass loss rate as written in the 'Weight loss rate (mg/min)' column of the SAME table; the table does not say whether it is a set value or a measured result"
   }
  },
  "derived": {
@@ -199,7 +199,8 @@
      "expr": "o2_final_pct < 5",
      "flag": "final_o2_implausibly_low_in_source"
     }
-   ]
+   ],
+   "meaning": "Initial minus final oxygen reading. The name says 'consumed'; the value is a difference of two sensor readings, not an amount consumed by the sample"
   },
   "co2_produced_pct_points": {
    "unit": "percentage points",
@@ -209,7 +210,8 @@
      "expr": "value < 0",
      "flag": "final_below_initial"
     }
-   ]
+   ],
+   "meaning": "Final minus initial CO2 reading. The name says 'produced'; the value is a difference of two sensor readings, not an amount produced by one test"
   },
   "co_produced_ppm": {
    "unit": "ppm",
@@ -219,7 +221,8 @@
      "expr": "value < 0",
      "flag": "final_below_initial"
     }
-   ]
+   ],
+   "meaning": "Final minus initial CO reading. The name says 'produced'; the value is a difference of two sensor readings, not an amount produced by one test: many BASS-II tests start with a CO reading above zero"
   },
   "co_to_co2_molar_ratio": {
    "unit": "mol/mol",
@@ -233,7 +236,8 @@
      "expr": "co2_produced_pct_points < 0.05",
      "flag": null
     }
-   ]
+   ],
+   "meaning": "Ratio of the CO difference to the CO2 difference, both as mole fractions. A team computation"
   },
   "extinction_to_initial_diameter_ratio": {
    "unit": "ratio",
@@ -242,6 +246,10 @@
     {
      "expr": "value > 1",
      "flag": "extinction_diameter_larger_than_initial"
+    },
+    {
+     "expr": "value == 0",
+     "flag": "extinction_diameter_is_zero_in_source"
     }
    ]
   }

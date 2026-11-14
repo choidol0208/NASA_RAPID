@@ -10,6 +10,7 @@ declared in pipeline/spec/:
     sources.json    how each PSI table maps onto the standard variables
     references.json the standards, requirements and published results behind each need
     coverage.json   bin edges for the coverage grid
+    statements.json fixed sentences of the evidence packages (evidence.py)
     scenarios.json  crewed environments to compare the recorded tests with
     indicators.json what is computed per need, by fixed templates
     materials.json  one id per material, with the names used in the tables
@@ -42,6 +43,7 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from rules import RULES  # noqa: E402
+import evidence  # noqa: E402
 
 ROOT = os.path.dirname(HERE)
 SRC = os.path.join(ROOT, "data", "psi", "experimental_tables")
@@ -78,6 +80,7 @@ def ingest(file_name):
 def standardize(source, variables, report):
     header, rows = ingest(source["file"])
     used = [c["from"] for c in source["columns"]] + source.get("require", [])
+    used += source.get("fill_down", []) + [e["column"] for e in source.get("exclude", [])]
     used += re.findall(r"\{(.+?)\}", source["test_id"])
     missing = [c for c in used if c != "row" and c not in header]
     if missing:
@@ -89,11 +92,32 @@ def standardize(source, variables, report):
             raise SystemExit(f"{source['id']}: unknown variable or rule in {c}")
 
     tests, cells, skipped, seen = [], [], 0, Counter()
+    excluded, copies, earlier, above = [], [], {}, {}
     for source_row, r in rows:
         if any(not r[c] for c in source.get("require", [])):
             skipped += 1
             continue
+        # a row declared in sources.json as not being a test
+        why = next((e["reason"] for e in source.get("exclude", [])
+                    if r[e["column"]].lower() == e["equals"].lower()), None)
+        if why:
+            excluded.append({"source_row": source_row, "reason": why})
+            continue
+        # a row that repeats an earlier row cell for cell is read once
+        key = tuple(r[c] for c in header)
+        if key in earlier:
+            copies.append({"source_row": source_row, "same_as_row": earlier[key]})
+            continue
+        earlier[key] = source_row
         flags = []
+        # a blank cell in a column declared 'fill_down' continues the row above
+        filled = set()
+        for c in source.get("fill_down", []):
+            if r[c]:
+                above[c] = r[c]
+            elif above.get(c):
+                r = {**r, c: above[c]}
+                filled.add(c)
         test_id = source["test_id"].format(row=source_row, **r).replace(" ", "")
         seen[test_id] += 1
         if seen[test_id] > 1:
@@ -108,8 +132,16 @@ def standardize(source, variables, report):
             var = c["to"] if isinstance(c["to"], str) else c["to"][0]
             result = RULES[c["rule"]](r[c["from"]], flags, var, **c.get("params", {}))
             for k, v in (result if isinstance(result, dict) else {var: result}).items():
-                if not empty(v):
-                    rec[k], origin[k] = v, c["from"]
+                if empty(v):
+                    continue
+                if c.get("if_empty") and not empty(rec.get(k)):
+                    # a second column for the same variable never replaces the first
+                    if rec[k] != v:
+                        flags.append(f"{k}:differs_between_source_columns")
+                    continue
+                rec[k], origin[k] = v, c["from"]
+                if c["from"] in filled:
+                    flags.append(f"{k}:blank_in_source_value_of_row_above_used")
         name = rec.get("fuel_material")
         if not empty(name):
             mid = MATERIAL_IDS.get(str(name).strip().lower())
@@ -123,6 +155,7 @@ def standardize(source, variables, report):
     report["sources"][source["id"]] = {
         "file": source["file"], "rows_read": len(rows), "rows_skipped": skipped,
         "tests": len(tests),
+        "rows_excluded": excluded, "rows_repeating_an_earlier_row": copies,
         "source_columns_not_mapped": [c for c in header if c and c not in used],
     }
     return tests
@@ -170,12 +203,14 @@ def record_text(investigation_id, field):
     return re.sub(r"<[^>]+>|\s+", " ", record.get(field) or "").strip()
 
 
-def objective_links(needs):
+def objective_links(needs, fields=None):
     """Check that every 'stated_by' quote is in the PSI record. Returns
     {need_id: {investigation_id: quote}} and the table of links."""
     stated, rows = {}, []
     for need in needs:
         for link in need.get("stated_by", []):
+            if fields and link["field"] not in fields:
+                raise SystemExit(f"need {need['id']}: field '{link['field']}' is not one of {fields}")
             text = record_text(link["investigation_id"], link["field"])
             if link["quote"] not in text:
                 raise SystemExit(f"need {need['id']}: quote not found in {link['investigation_id']}."
@@ -279,22 +314,29 @@ def coverage_grid(tests, cov):
     return pd.DataFrame(rows)
 
 
+RANGE_DEFAULTS = {"min": None, "max": None, "min_inclusive": True, "max_inclusive": False}
+
+
 def in_range(value, r):
-    low = r.get("min") is None or value > r["min"] or (value == r["min"] and r.get("min_inclusive", True))
-    high = r.get("max") is None or value < r["max"] or (value == r["max"] and r.get("max_inclusive", False))
+    r = {**RANGE_DEFAULTS, **r}
+    low = r["min"] is None or value > r["min"] or (value == r["min"] and r["min_inclusive"])
+    high = r["max"] is None or value < r["max"] or (value == r["max"] and r["max_inclusive"])
     return low and high
 
 
-def match_scenarios(tests, links, needs, scen_spec, report):
-    """Per scenario: mark every test against the scenario ranges, then count
-    the tests usable for each need by match tier (scenarios.json)."""
+def match_environments(tests, links, needs, environments):
+    """Per environment: mark every test against the environment's ranges, then
+    count the tests usable for each need by match tier (scenarios.json). An
+    environment is a scenario of scenarios.json or a cell of the coverage grid
+    (evidence.py). Returns the test rows, the need rows and the marks of every
+    test as {environment id: {test id: marks}}."""
     usable, outside = {}, {}
     for row in links.itertuples():
         (usable if row.objective_link == "stated" else outside).setdefault(row.need_id, set()).add(row.test_id)
-    test_rows, need_rows = [], []
+    test_rows, need_rows, marks_by_env = [], [], {}
     tiers = ["atmosphere", "oxygen_only", "pressure_only", "other"]
-    for sc in scen_spec["scenarios"]:
-        marks = {}
+    for sc in environments:
+        marks = marks_by_env[sc["id"]] = {}
         for t in tests:
             m = {}
             for var in ("o2_pct", "pressure_kpa", "flow_cms"):
@@ -311,11 +353,14 @@ def match_scenarios(tests, links, needs, scen_spec, report):
                          else "oxygen_only" if o == "in" and p == "not_recorded"
                          else "pressure_only" if p == "in" and o == "not_recorded" else "other")
             marks[t["test_id"]] = m
+            gases = [t.get(g) for g in ("co2_pct", "he_pct") if not empty(t.get(g))]
+            m["added_gas"] = ("co2_or_helium" if any(g > 0 for g in gases)
+                              else "none" if len(gases) == 2 else "not_recorded")
             test_rows.append({"scenario_id": sc["id"], "test_id": t["test_id"],
                               "investigation_id": t["investigation_id"], "source_id": t["source_id"],
                               "fuel_phase": t.get("fuel_phase"), "o2_match": o, "pressure_match": p,
                               "flow_match": m["flow_cms"], "gravity_match": m["gravity"],
-                              "tier": m["tier"]})
+                              "tier": m["tier"], "added_gas": m["added_gas"]})
         by_id = {t["test_id"]: t for t in tests}
         for need in needs:
             ids = usable.get(need["id"], set())
@@ -338,6 +383,7 @@ def match_scenarios(tests, links, needs, scen_spec, report):
             row["matched_tests_flow_in_range"] = sum(marks[i]["flow_cms"] == "in" for i in best)
             row["matched_tests_flow_not_recorded"] = sum(marks[i]["flow_cms"] == "not_recorded" for i in best)
             row["matched_tests_same_gravity"] = sum(marks[i]["gravity"] == "same" for i in best)
+            row["matched_tests_co2_or_helium_added"] = sum(marks[i]["added_gas"] == "co2_or_helium" for i in best)
             gaps = []
             if ids and sc["ranges"].get("o2_pct") and not any(marks[i]["o2_pct"] == "in" for i in ids):
                 gaps.append("oxygen:not_recorded" if all(marks[i]["o2_pct"] == "not_recorded" for i in ids)
@@ -345,6 +391,9 @@ def match_scenarios(tests, links, needs, scen_spec, report):
             if ids and sc["ranges"].get("pressure_kpa") and not any(marks[i]["pressure_kpa"] == "in" for i in ids):
                 gaps.append("pressure:not_recorded" if all(marks[i]["pressure_kpa"] == "not_recorded" for i in ids)
                             else "pressure:no_usable_test_in_range")
+            if ids and sc["ranges"].get("flow_cms") and not any(marks[i]["flow_cms"] == "in" for i in ids):
+                gaps.append("flow:not_recorded" if all(marks[i]["flow_cms"] == "not_recorded" for i in ids)
+                            else "flow:no_usable_test_in_range")
             if ids and sc["gravity_level"] and not any(marks[i]["gravity"] == "same" for i in ids):
                 gaps.append(f"gravity:no_usable_test_at_{sc['gravity_level']}")
             if not ids:
@@ -352,6 +401,13 @@ def match_scenarios(tests, links, needs, scen_spec, report):
             row["gaps"] = ";".join(gaps)
             row["scenario_gravity_level"] = sc["gravity_level"]
             need_rows.append(row)
+    return test_rows, need_rows, marks_by_env
+
+
+def match_scenarios(tests, links, needs, scen_spec, report):
+    """The scenarios of scenarios.json as environments, and their check
+    against the ui presets."""
+    test_rows, need_rows, marks = match_environments(tests, links, needs, scen_spec["scenarios"])
     # consistency with the ui presets
     path = os.path.join(ROOT, "scoring", "scoring_config.json")
     mismatch = []
@@ -367,7 +423,7 @@ def match_scenarios(tests, links, needs, scen_spec, report):
                 mismatch += [f"{sc['id']}.{k}: {v} here, {values.get(k)} in preset"
                              for k, v in sc["nominal"].items() if values.get(k) != v]
     report["scenario_preset_mismatch"] = mismatch
-    return pd.DataFrame(test_rows), pd.DataFrame(need_rows)
+    return pd.DataFrame(test_rows), pd.DataFrame(need_rows), marks
 
 
 OPS = {"==": lambda a, b: a == b, "!=": lambda a, b: a != b, ">": lambda a, b: a > b,
@@ -384,9 +440,10 @@ def passes(t, cond):
     return not empty(v) and OPS[op](v, cond[2])
 
 
-def indicators(tests, links, needs, ind_spec, variables, derived, ref_items):
+def indicators(tests, links, needs, ind_spec, variables, derived, ref_items, only=None):
     """Apply the fixed templates of indicators.json. Returns the indicator
-    table and the list of tests behind every row."""
+    table and the list of tests behind every row. 'only' restricts every
+    population to a set of test ids (the tests matched to an environment)."""
     units = {k: v["unit"] for k, v in {**variables, **derived}.items()}
     need_by_id = {n["id"]: n for n in needs}
     usable, recorded, stated_inv = {}, {}, {}
@@ -413,6 +470,8 @@ def indicators(tests, links, needs, ind_spec, variables, derived, ref_items):
                    if t["investigation_id"] in stated_inv[need["id"]] and all(t.get(k) in allowed for k, allowed in need.get("scope", {}).items())
                    and all(not empty(t.get(v)) for v in need["conditions_required"])]
         pop = [t for t in pop if all(passes(t, c) for c in ind["where"])]
+        if only is not None:
+            pop = [t for t in pop if t["test_id"] in only]
         if ind["template"] != "count":
             pop = [t for t in pop if not empty(t.get(var))]
         groups = {}
@@ -507,7 +566,7 @@ def main():
         tests += standardize(s, variables, report)
     validate(tests, ranges)
     derive(tests, derived)
-    stated, obj_links = objective_links(needs["needs"])
+    stated, obj_links = objective_links(needs["needs"], needs["_meta"].get("stated_by_fields"))
     obj_links.to_csv(os.path.join(OUT, "objective_links.csv"), index=False)
     matrix, links = assess(tests, needs["needs"], src_spec["sources"], stated)
     linked = set(obj_links.investigation_id)
@@ -517,7 +576,7 @@ def main():
     grid = coverage_grid(tests, spec("coverage.json"))
     assert grid.tests.sum() == len(tests)
     grid.to_csv(os.path.join(OUT, "coverage_grid.csv"), index=False)
-    sc_tests, sc_needs = match_scenarios(tests, links, needs["needs"], spec("scenarios.json"), report)
+    sc_tests, sc_needs, sc_marks = match_scenarios(tests, links, needs["needs"], spec("scenarios.json"), report)
     sc_tests.to_csv(os.path.join(OUT, "scenario_tests.csv"), index=False)
     sc_needs.to_csv(os.path.join(OUT, "scenario_needs.csv"), index=False)
     with open(os.path.join(OUT, "run_report.json"), "w", encoding="utf-8") as f:
@@ -530,9 +589,13 @@ def main():
     ind_tests.to_csv(os.path.join(OUT, "indicator_tests.csv"), index=False)
     refs = need_references(needs["needs"], spec("references.json")["references"])
     refs.to_csv(os.path.join(OUT, "need_references.csv"), index=False)
+    import facts  # post-processing: reads the files written above
+    facts.build()
+    packages = evidence.write(sys.modules[__name__], tests, links, obj_links, needs["needs"], var_spec,
+                              sc_needs, sc_marks)
 
     print(f"{len(tests)} tests, {report['values']} values, {len(links)} need-test links, "
-          f"{len(refs)} need-reference links\n")
+          f"{len(refs)} need-reference links, {packages} evidence packages\n")
     shown = matrix[matrix.status != "not_test_level"]
     print(shown.pivot(index="source_id", columns="need_id", values="usable_tests").to_string())
     print()

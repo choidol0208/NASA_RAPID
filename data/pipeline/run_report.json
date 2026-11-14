@@ -6,6 +6,8 @@
    "rows_read": 274,
    "rows_skipped": 0,
    "tests": 274,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "FLEX Identifier",
     "Test Date",
@@ -18,13 +20,14 @@
    "rows_read": 129,
    "rows_skipped": 0,
    "tests": 129,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "PI",
     "Date",
     "GMT",
     "Sample #",
     "Flow restrictor",
-    "Fan display",
     "Radiometer gain   (1000   250   50   10)",
     "Total Frames Shot"
    ]
@@ -33,7 +36,14 @@
    "file": "PSI-26_Experimental table_BASS.csv",
    "rows_read": 122,
    "rows_skipped": 0,
-   "tests": 122,
+   "tests": 121,
+   "rows_excluded": [
+    {
+     "source_row": 67,
+     "reason": "maintenance entry in the sample column, not a test"
+    }
+   ],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "Date",
     "GMT",
@@ -45,7 +55,42 @@
    "file": "PSI-39_Experimental table_CFI.csv",
    "rows_read": 87,
    "rows_skipped": 0,
-   "tests": 87,
+   "tests": 79,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [
+    {
+     "source_row": 81,
+     "same_as_row": 24
+    },
+    {
+     "source_row": 82,
+     "same_as_row": 25
+    },
+    {
+     "source_row": 83,
+     "same_as_row": 26
+    },
+    {
+     "source_row": 84,
+     "same_as_row": 27
+    },
+    {
+     "source_row": 85,
+     "same_as_row": 28
+    },
+    {
+     "source_row": 86,
+     "same_as_row": 29
+    },
+    {
+     "source_row": 87,
+     "same_as_row": 30
+    },
+    {
+     "source_row": 88,
+     "same_as_row": 31
+    }
+   ],
    "source_columns_not_mapped": [
     "Test Date",
     "Local Time",
@@ -59,6 +104,8 @@
    "rows_read": 4,
    "rows_skipped": 2,
    "tests": 2,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "Camera 1",
     "Camera 2"
@@ -69,6 +116,8 @@
    "rows_read": 15,
    "rows_skipped": 6,
    "tests": 9,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "1-g Burn Length",
     "1-g Spread Rate",
@@ -81,6 +130,8 @@
    "rows_read": 2,
    "rows_skipped": 0,
    "tests": 2,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "Camera 1",
     "Camera 2"
@@ -91,6 +142,8 @@
    "rows_read": 179,
    "rows_skipped": 0,
    "tests": 179,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "Flame Type",
     "Day",
@@ -109,6 +162,8 @@
    "rows_read": 154,
    "rows_skipped": 0,
    "tests": 154,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "Flame Type",
     "Day",
@@ -130,6 +185,8 @@
    "rows_read": 207,
    "rows_skipped": 0,
    "tests": 207,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "Flame Type",
     "Day",
@@ -148,6 +205,8 @@
    "rows_read": 120,
    "rows_skipped": 0,
    "tests": 120,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "Flame Type",
     "Day",
@@ -167,6 +226,8 @@
    "rows_read": 8,
    "rows_skipped": 4,
    "tests": 4,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": []
   },
   "same_r": {
@@ -174,6 +235,8 @@
    "rows_read": 109,
    "rows_skipped": 0,
    "tests": 109,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [],
    "source_columns_not_mapped": [
     "Description",
     "Date",
@@ -186,7 +249,146 @@
    "file": "PSI-107_Experimental table_Spice.csv",
    "rows_read": 469,
    "rows_skipped": 0,
-   "tests": 469,
+   "tests": 435,
+   "rows_excluded": [],
+   "rows_repeating_an_earlier_row": [
+    {
+     "source_row": 3,
+     "same_as_row": 2
+    },
+    {
+     "source_row": 7,
+     "same_as_row": 6
+    },
+    {
+     "source_row": 10,
+     "same_as_row": 9
+    },
+    {
+     "source_row": 12,
+     "same_as_row": 11
+    },
+    {
+     "source_row": 14,
+     "same_as_row": 13
+    },
+    {
+     "source_row": 103,
+     "same_as_row": 102
+    },
+    {
+     "source_row": 125,
+     "same_as_row": 123
+    },
+    {
+     "source_row": 131,
+     "same_as_row": 129
+    },
+    {
+     "source_row": 132,
+     "same_as_row": 129
+    },
+    {
+     "source_row": 146,
+     "same_as_row": 142
+    },
+    {
+     "source_row": 148,
+     "same_as_row": 144
+    },
+    {
+     "source_row": 153,
+     "same_as_row": 150
+    },
+    {
+     "source_row": 155,
+     "same_as_row": 151
+    },
+    {
+     "source_row": 159,
+     "same_as_row": 156
+    },
+    {
+     "source_row": 160,
+     "same_as_row": 157
+    },
+    {
+     "source_row": 165,
+     "same_as_row": 162
+    },
+    {
+     "source_row": 167,
+     "same_as_row": 164
+    },
+    {
+     "source_row": 172,
+     "same_as_row": 169
+    },
+    {
+     "source_row": 173,
+     "same_as_row": 170
+    },
+    {
+     "source_row": 174,
+     "same_as_row": 171
+    },
+    {
+     "source_row": 184,
+     "same_as_row": 182
+    },
+    {
+     "source_row": 185,
+     "same_as_row": 183
+    },
+    {
+     "source_row": 192,
+     "same_as_row": 191
+    },
+    {
+     "source_row": 216,
+     "same_as_row": 215
+    },
+    {
+     "source_row": 222,
+     "same_as_row": 220
+    },
+    {
+     "source_row": 231,
+     "same_as_row": 229
+    },
+    {
+     "source_row": 232,
+     "same_as_row": 230
+    },
+    {
+     "source_row": 235,
+     "same_as_row": 234
+    },
+    {
+     "source_row": 236,
+     "same_as_row": 234
+    },
+    {
+     "source_row": 241,
+     "same_as_row": 240
+    },
+    {
+     "source_row": 242,
+     "same_as_row": 240
+    },
+    {
+     "source_row": 253,
+     "same_as_row": 251
+    },
+    {
+     "source_row": 267,
+     "same_as_row": 266
+    },
+    {
+     "source_row": 336,
+     "same_as_row": 330
+    }
+   ],
    "source_columns_not_mapped": [
     "GMT date",
     "GMT ignition",
@@ -231,64 +433,72 @@
   }
  },
  "investigations_with_tests_and_no_stated_need": [
-  "PSI-10",
   "PSI-107",
   "PSI-159"
  ],
- "tests": 1867,
- "values": 18743,
+ "tests": 1824,
+ "values": 18450,
  "flags": {
+  "fuel_material:not_written_in_cell_named_in_readme": 87,
   "extinction_diameter_mm:not_a_number_in_source": 28,
-  "test_id:duplicate_in_source": 14,
+  "flow_min_cms:cell_says_flow_went_lower_than_written": 25,
+  "flow_min_cms:potentiometer_or_bracketed_values_in_cell_not_read": 17,
   "o2_pct:not_a_number_in_source": 11,
+  "extinction_to_initial_diameter_ratio:extinction_diameter_is_zero_in_source": 8,
   "o2_pct:approximate_in_source": 8,
   "flow_cms:out_of_range": 8,
   "initial_diameter_mm:not_a_number_in_source": 6,
-  "flow_cms:fan_reading_in_flow_cell_ignored": 6,
+  "test_id:duplicate_in_source": 6,
   "burn_length_cm:approximate_in_source": 6,
   "co2_final_pct:not_a_number_in_source": 5,
+  "flow_cms:not_parsed": 5,
   "flow_min_cms:below_1_cms_in_source": 4,
   "co_final_ppm:not_a_number_in_source": 4,
   "burn_time_s:text_in_source": 4,
   "o2_consumed_pct_points:final_o2_implausibly_low_in_source": 3,
   "co_final_ppm:over_range_in_source": 3,
+  "flow_cms:fan_reading_in_flow_cell_ignored": 3,
   "o2_pct:range_in_source_midpoint_used": 3,
+  "sample_thickness_mm:decimal_point_unclear_in_source": 3,
   "burn_length_cm:see_note_in_source": 3,
   "burn_time_s:approximate_in_source": 2,
   "o2_final_pct:not_a_number_in_source": 2,
   "co2_produced_pct_points:final_below_initial": 2,
-  "flow_cms:not_parsed": 2,
   "co2_initial_pct:not_a_number_in_source": 2,
   "co_initial_ppm:not_a_number_in_source": 2,
   "o2_consumed_pct_points:final_o2_above_initial_in_source": 2,
+  "fuel_material:blank_in_source_value_of_row_above_used": 2,
   "spread_rate_mm_s:see_note_in_source": 2,
   "pressure_kpa:out_of_range": 1,
   "extinction_to_initial_diameter_ratio:extinction_diameter_larger_than_initial": 1,
   "co_produced_ppm:final_below_initial": 1,
   "co_final_ppm:lower_bound_in_source": 1,
   "co_initial_ppm:over_range_in_source": 1,
-  "fuel_material:not_parsed": 1,
-  "spread_rate_mm_s:text_in_source": 1
+  "sample_thickness_mm:several_values_in_source": 1,
+  "sample_length_cm:several_values_in_source": 1,
+  "burn_length_cm:several_values_in_source": 1,
+  "spread_rate_mm_s:text_in_source": 1,
+  "sample_thickness_mm:see_note_in_source": 1
  },
  "variable_fill": {
-  "fuel_material": 1864,
-  "material_id": 1864,
-  "fuel_phase": 1867,
-  "sample_geometry": 1733,
-  "sample_thickness_mm": 55,
+  "fuel_material": 1824,
+  "material_id": 1824,
+  "fuel_phase": 1824,
+  "sample_geometry": 1691,
+  "sample_thickness_mm": 50,
   "sample_width_cm": 163,
-  "sample_length_cm": 13,
+  "sample_length_cm": 12,
   "rod_diameter_mm": 54,
   "initial_diameter_mm": 262,
-  "o2_pct": 1150,
-  "o2_basis": 1163,
+  "o2_pct": 1142,
+  "o2_basis": 1155,
   "co2_pct": 274,
-  "he_pct": 361,
-  "pressure_kpa": 1020,
-  "flow_cms": 684,
-  "flow_min_cms": 122,
+  "he_pct": 353,
+  "pressure_kpa": 1012,
+  "flow_cms": 652,
+  "flow_min_cms": 105,
   "flow_direction": 13,
-  "gravity_level": 1867,
+  "gravity_level": 1824,
   "heating_ratio": 109,
   "aging_time_s": 108,
   "ignition_power_w": 11,
@@ -298,9 +508,9 @@
   "test_end": 546,
   "extinction_diameter_mm": 197,
   "burning_rate_mm2_s": 258,
-  "flow_event": 20,
-  "burn_length_cm": 9,
-  "spread_rate_mm_s": 4,
+  "flow_event": 25,
+  "burn_length_cm": 8,
+  "spread_rate_mm_s": 2,
   "o2_final_pct": 493,
   "co2_initial_pct": 127,
   "co2_final_pct": 123,

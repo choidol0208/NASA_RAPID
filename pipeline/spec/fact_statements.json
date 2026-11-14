@@ -1,0 +1,682 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "purpose": "Fixed English sentences and settings for data/pipeline/investigation_facts.json, written by pipeline/facts.py. The sentences are filled only with fields of the investigation entry, so every number in a sentence is also a field of the same entry. They describe what the pipeline holds for an investigation and what it does not hold. They draw no conclusion.",
+  "scope_rule": "Each section names a scope. 'investigation' is evaluated once per entry; 'table' once per entry of its 'tables'; 'objective_link' once per entry of 'stated_needs'; 'need' once per entry of 'capability'; 'need_table' once per entry of 'by_table' inside each capability entry. Sections are written in the order listed; within a section the items come first, then the statements.",
+  "when_rule": "'when' is a list of conditions that must all hold; an empty list always holds. A condition is {\"field\": dotted path, \"op\": one of the operators below, \"value\": literal}. Paths start with the scope name (investigation, table, link, need, row). Operators: exists (the path is present and not null), missing, empty and nonempty (list, object or text), eq, ne, gt, ge, lt, le, in (value is a list). A comparison on a path that is missing is false. No expression is evaluated.",
+  "placeholder_rule": "{path} inserts a text or number as it is in the entry. {path as list} joins a list with '; '. {path as counts} writes an object of counts as 'name (count); ...' (for 'variables' it uses each variable's n). {path as pairs} writes an object as 'name: value; ...'. {path with singular|plural} writes the number followed by the singular or plural noun. A placeholder that does not resolve stops the run.",
+  "group_rule": "Statements that share a 'group' are alternatives. For every item that meets the group's 'exactly_one_when' conditions exactly one of them must apply, and never more than one; otherwise the run stops.",
+  "wording_rule": "No fixed sentence may contain a word listed in 'forbidden_words'; the engine checks the templates (not the inserted record quotes or names) and stops if it finds one.",
+  "authorship": "The wording is the team's (AI draft). 'Stated as an objective' always refers to a sentence of the NASA PSI record that the team's needs list (needs.json) links to the need."
+ },
+ "max_category_values": 12,
+ "split_by": {
+  "o2_pct": "o2_basis"
+ },
+ "forbidden_words": [
+  "safe",
+  "unsafe",
+  "flammable",
+  "nonflammable",
+  "sufficient",
+  "insufficient",
+  "representative",
+  "confirm",
+  "confirms",
+  "confirmed",
+  "prove",
+  "proves",
+  "proved",
+  "proven"
+ ],
+ "output_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "note": "One entry per NASA PSI combustion investigation. The entries are counts and the lowest and highest recorded values, computed by the team from the NASA PSI experimental tables. They are not NASA conclusions and not safety guidance.",
+  "rules": "pipeline/README.md",
+  "written_by": "pipeline/facts.py from data/pipeline/tests.csv, values_long.csv, capability_matrix.csv, objective_links.csv, run_report.json, pipeline/spec/*.json and the PSI records in data/psi/catalog/",
+  "fields": {
+   "table_status": "test_level: every experimental table is read as one row per test. not_test_level: the rows of the table(s) are not individual tests (reason per table). no_experimental_table: the PSI record lists no experimental table. mixed: some tables are test-level and some are not.",
+   "tests": "Rows of tests.csv for the investigation. An empty value there means not recorded; nothing is filled in.",
+   "variables": "For each standard or derived variable with at least one value: n = test rows with a value; min and max are the lowest and highest recorded value, written as in tests.csv; for text variables 'values' counts the test rows per value, most frequent first. If there are more distinct values than max_category_values, only the most frequent are listed and values_truncated is true. 'by' splits a variable by the category that says what it refers to (oxygen by o2_basis): 'ambient' is the surrounding atmosphere, 'oxidizer_stream' is the gas issuing from the burner. The two are different quantities and must not be merged.",
+   "tables.column_map": "Per table, the source column(s) mapped to each standard variable in pipeline/spec/sources.json; unit_factors lists the variables whose value is the source cell multiplied by a fixed factor; constants are values the source mapping sets for the whole table.",
+   "tables.flags_by_variable": "Per table, the flags grouped by the variable they are about (reason and number of occurrences). A flagged cell is either left empty or read as the reason says; it is never corrected.",
+   "tables.variables": "The same facts per table, with the source columns each variable was taken from (values_long.csv). A source column in parentheses is not a column of the NASA table: a constant of the team's source mapping, the material vocabulary, or a derived formula.",
+   "stated_needs": "Sentences of the PSI record that the team's needs list links to an information need (objective_links.csv).",
+   "capability": "Per information need, summed over the investigation's tables (capability_matrix.csv). usable_tests = test rows that record every required condition variable and at least one outcome variable of the need. They count for the need only when objective_link is 'stated': counted_tests repeats usable_tests in that case and is 0 otherwise; recorded_outside_objective is the reverse.",
+   "flags": "Occurrences of each flag (variable:reason) in the investigation's test rows.",
+   "source_columns_not_mapped": "Per table, the source columns that are not mapped to a standard variable (run_report.json).",
+   "statements": "Fixed sentences of pipeline/spec/fact_statements.json filled with the fields of the same entry. 'about' names the table (source id) or need the sentence is about."
+  }
+ },
+ "groups": {
+  "table.oxygen": {
+   "exactly_one_when": [
+    {
+     "field": "table.table_status",
+     "op": "eq",
+     "value": "test_level"
+    }
+   ]
+  },
+  "table.pressure": {
+   "exactly_one_when": [
+    {
+     "field": "table.table_status",
+     "op": "eq",
+     "value": "test_level"
+    }
+   ]
+  },
+  "table.flow": {
+   "exactly_one_when": [
+    {
+     "field": "table.table_status",
+     "op": "eq",
+     "value": "test_level"
+    }
+   ]
+  }
+ },
+ "sections": [
+  {
+   "scope": "investigation",
+   "statements": [
+    {
+     "id": "inv.no_table",
+     "when": [
+      {
+       "field": "investigation.table_status",
+       "op": "eq",
+       "value": "no_experimental_table"
+      }
+     ],
+     "text": "The PSI record of {investigation.investigation_id} lists no experimental table. The pipeline holds no test rows, recorded values or need counts for it."
+    },
+    {
+     "id": "inv.not_test_level",
+     "when": [
+      {
+       "field": "investigation.table_status",
+       "op": "eq",
+       "value": "not_test_level"
+      }
+     ],
+     "text": "{investigation.investigation_id} has {investigation.n_tables with experimental table|experimental tables}, and none is read as one row per test. The pipeline holds no test rows, recorded values or need counts for it."
+    },
+    {
+     "id": "inv.tests",
+     "when": [
+      {
+       "field": "investigation.table_status",
+       "op": "in",
+       "value": [
+        "test_level",
+        "mixed"
+       ]
+      }
+     ],
+     "text": "The pipeline holds {investigation.tests with test row|test rows} for {investigation.investigation_id}, read from {investigation.n_tables_test_level with experimental table|experimental tables}."
+    },
+    {
+     "id": "inv.license.given",
+     "when": [
+      {
+       "field": "investigation.license.identifier",
+       "op": "exists"
+      }
+     ],
+     "text": "The PSI record of {investigation.investigation_id} gives the license identifier {investigation.license.identifier}."
+    },
+    {
+     "id": "inv.license.empty",
+     "when": [
+      {
+       "field": "investigation.license.identifier",
+       "op": "missing"
+      }
+     ],
+     "text": "The license field of the PSI record of {investigation.investigation_id} is empty."
+    },
+    {
+     "id": "inv.fuels",
+     "when": [
+      {
+       "field": "investigation.variables.fuel_material",
+       "op": "exists"
+      },
+      {
+       "field": "investigation.variables.fuel_material.values_truncated",
+       "op": "eq",
+       "value": false
+      }
+     ],
+     "text": "Fuel or material names as written in the pipeline, with the number of test rows: {investigation.variables.fuel_material.values as counts}."
+    },
+    {
+     "id": "inv.fuels.truncated",
+     "when": [
+      {
+       "field": "investigation.variables.fuel_material",
+       "op": "exists"
+      },
+      {
+       "field": "investigation.variables.fuel_material.values_truncated",
+       "op": "eq",
+       "value": true
+      }
+     ],
+     "text": "{investigation.variables.fuel_material.distinct} different fuel or material names are recorded. The {investigation.variables.fuel_material.values_shown} most frequent, with the number of test rows: {investigation.variables.fuel_material.values as counts}."
+    },
+    {
+     "id": "inv.variables",
+     "when": [
+      {
+       "field": "investigation.variables",
+       "op": "nonempty"
+      }
+     ],
+     "text": "Variables with at least one value in the test rows of {investigation.investigation_id}, with the number of test rows that have a value: {investigation.variables as counts}."
+    }
+   ]
+  },
+  {
+   "scope": "table",
+   "statements": [
+    {
+     "id": "table.not_test_level",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "not_test_level"
+      }
+     ],
+     "text": "The experimental table \"{table.file}\" is not read as one row per test and is not standardized. Reason given in the team's source mapping: \"{table.not_test_level_reason}\"."
+    },
+    {
+     "id": "table.rows",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      }
+     ],
+     "text": "Table \"{table.file}\" (source id {table.source_id}): {table.rows_read} non-empty data rows read, {table.tests} kept as test rows. Left out: {table.rows_skipped} with a required cell empty, {table.rows_excluded} named in the source mapping as not a test, {table.rows_repeated} repeating an earlier row cell for cell."
+    },
+    {
+     "id": "table.row_note",
+     "when": [
+      {
+       "field": "table.row_note",
+       "op": "nonempty"
+      }
+     ],
+     "text": "What a row of \"{table.file}\" is: {table.row_note}"
+    },
+    {
+     "id": "table.rows_left_out",
+     "when": [
+      {
+       "field": "table.rows_skipped",
+       "op": "gt",
+       "value": 0
+      },
+      {
+       "field": "table.require",
+       "op": "nonempty"
+      }
+     ],
+     "text": "A row of \"{table.file}\" is left out when one of these columns is empty: {table.require as list}."
+    },
+    {
+     "id": "table.phase.constant",
+     "when": [
+      {
+       "field": "table.constants.fuel_phase",
+       "op": "exists"
+      }
+     ],
+     "text": "The team's source mapping sets the fuel phase of all {table.tests with test row|test rows} of \"{table.file}\" to {table.constants.fuel_phase}; the phase is not read from a table column."
+    },
+    {
+     "id": "table.phase.recorded",
+     "when": [
+      {
+       "field": "table.constants.fuel_phase",
+       "op": "missing"
+      },
+      {
+       "field": "table.variables.fuel_phase",
+       "op": "exists"
+      }
+     ],
+     "text": "Fuel phase recorded in \"{table.file}\", with the number of test rows: {table.variables.fuel_phase.values as counts}."
+    },
+    {
+     "id": "table.gravity.constant",
+     "when": [
+      {
+       "field": "table.constants.gravity_level",
+       "op": "exists"
+      }
+     ],
+     "text": "The team's source mapping sets the gravity level of all {table.tests with test row|test rows} of \"{table.file}\" to {table.constants.gravity_level}; the gravity level is not read from a table column."
+    },
+    {
+     "id": "table.oxygen.ambient",
+     "group": "table.oxygen",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.variables.o2_pct",
+       "op": "exists"
+      },
+      {
+       "field": "table.constants.o2_basis",
+       "op": "eq",
+       "value": "ambient"
+      }
+     ],
+     "text": "In \"{table.file}\", the oxygen concentration of the surrounding atmosphere at the start of the test is recorded for {table.variables.o2_pct.n} of {table.tests with test row|test rows}, from {table.variables.o2_pct.min} to {table.variables.o2_pct.max} {table.variables.o2_pct.unit} (source column: {table.column_map.o2_pct as list})."
+    },
+    {
+     "id": "table.oxygen.oxidizer_stream",
+     "group": "table.oxygen",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.variables.o2_pct",
+       "op": "exists"
+      },
+      {
+       "field": "table.constants.o2_basis",
+       "op": "eq",
+       "value": "oxidizer_stream"
+      }
+     ],
+     "text": "In \"{table.file}\", the oxygen value is the concentration in the gas issuing from the burner (oxidizer stream), not in the surrounding atmosphere. It is recorded for {table.variables.o2_pct.n} of {table.tests with test row|test rows}, from {table.variables.o2_pct.min} to {table.variables.o2_pct.max} {table.variables.o2_pct.unit} (source column: {table.column_map.o2_pct as list}). The pipeline holds no oxygen concentration of the surrounding atmosphere for these test rows."
+    },
+    {
+     "id": "table.oxygen.basis_not_set",
+     "group": "table.oxygen",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.variables.o2_pct",
+       "op": "exists"
+      },
+      {
+       "field": "table.constants.o2_basis",
+       "op": "missing"
+      }
+     ],
+     "text": "In \"{table.file}\", an oxygen concentration is recorded for {table.variables.o2_pct.n} of {table.tests with test row|test rows}, from {table.variables.o2_pct.min} to {table.variables.o2_pct.max} {table.variables.o2_pct.unit} (source column: {table.column_map.o2_pct as list}). The team's source mapping does not say whether it is the surrounding atmosphere or the gas issuing from the burner."
+    },
+    {
+     "id": "table.oxygen.not_mapped",
+     "group": "table.oxygen",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.o2_pct",
+       "op": "missing"
+      }
+     ],
+     "text": "No column of \"{table.file}\" is mapped to an oxygen concentration. The pipeline does not record oxygen for its {table.tests with test row|test rows}."
+    },
+    {
+     "id": "table.oxygen.no_value",
+     "group": "table.oxygen",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.o2_pct",
+       "op": "exists"
+      },
+      {
+       "field": "table.variables.o2_pct",
+       "op": "missing"
+      }
+     ],
+     "text": "A column of \"{table.file}\" is mapped to the oxygen concentration ({table.column_map.o2_pct as list}), but no test row has a value the pipeline could read."
+    },
+    {
+     "id": "table.oxygen.flags",
+     "when": [
+      {
+       "field": "table.flags_by_variable.o2_pct",
+       "op": "exists"
+      }
+     ],
+     "text": "Flags on the oxygen cells of \"{table.file}\" (reason, with the number of occurrences): {table.flags_by_variable.o2_pct as counts}. Where a flagged cell still gave a value, that value is part of the lowest and highest values above."
+    },
+    {
+     "id": "table.pressure.recorded",
+     "group": "table.pressure",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.variables.pressure_kpa",
+       "op": "exists"
+      }
+     ],
+     "text": "In \"{table.file}\", the ambient pressure is recorded for {table.variables.pressure_kpa.n} of {table.tests with test row|test rows}, from {table.variables.pressure_kpa.min} to {table.variables.pressure_kpa.max} {table.variables.pressure_kpa.unit} (source column: {table.column_map.pressure_kpa as list})."
+    },
+    {
+     "id": "table.pressure.not_mapped",
+     "group": "table.pressure",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.pressure_kpa",
+       "op": "missing"
+      }
+     ],
+     "text": "No column of \"{table.file}\" is mapped to the ambient pressure. The pipeline does not record pressure for its {table.tests with test row|test rows}."
+    },
+    {
+     "id": "table.pressure.no_value",
+     "group": "table.pressure",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.pressure_kpa",
+       "op": "exists"
+      },
+      {
+       "field": "table.variables.pressure_kpa",
+       "op": "missing"
+      }
+     ],
+     "text": "A column of \"{table.file}\" is mapped to the ambient pressure ({table.column_map.pressure_kpa as list}), but no test row has a value the pipeline could read."
+    },
+    {
+     "id": "table.pressure.flags",
+     "when": [
+      {
+       "field": "table.flags_by_variable.pressure_kpa",
+       "op": "exists"
+      }
+     ],
+     "text": "Flags on the pressure cells of \"{table.file}\" (reason, with the number of occurrences): {table.flags_by_variable.pressure_kpa as counts}. Where a flagged cell still gave a value, that value is part of the lowest and highest values above."
+    },
+    {
+     "id": "table.flow.recorded",
+     "group": "table.flow",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.variables.flow_cms",
+       "op": "exists"
+      }
+     ],
+     "text": "In \"{table.file}\", the imposed flow speed at the start of the test is recorded for {table.variables.flow_cms.n} of {table.tests with test row|test rows}, from {table.variables.flow_cms.min} to {table.variables.flow_cms.max} {table.variables.flow_cms.unit} (source column: {table.column_map.flow_cms as list})."
+    },
+    {
+     "id": "table.flow.not_mapped",
+     "group": "table.flow",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.flow_cms",
+       "op": "missing"
+      }
+     ],
+     "text": "No column of \"{table.file}\" is mapped to an imposed flow speed in cm/s. The pipeline does not record a flow speed for its {table.tests with test row|test rows}."
+    },
+    {
+     "id": "table.flow.no_value",
+     "group": "table.flow",
+     "when": [
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.flow_cms",
+       "op": "exists"
+      },
+      {
+       "field": "table.variables.flow_cms",
+       "op": "missing"
+      }
+     ],
+     "text": "A column of \"{table.file}\" is mapped to the imposed flow speed ({table.column_map.flow_cms as list}), but no test row has a value the pipeline could read."
+    },
+    {
+     "id": "table.flow.flags",
+     "when": [
+      {
+       "field": "table.flags_by_variable.flow_cms",
+       "op": "exists"
+      }
+     ],
+     "text": "Flags on the flow speed cells of \"{table.file}\" (reason, with the number of occurrences): {table.flags_by_variable.flow_cms as counts}. Where a flagged cell still gave a value, that value is part of the lowest and highest values above."
+    },
+    {
+     "id": "table.unit_factors",
+     "when": [
+      {
+       "field": "table.unit_factors",
+       "op": "nonempty"
+      }
+     ],
+     "text": "In \"{table.file}\", the values of these variables are the source cell multiplied by a fixed unit factor set in the team's source mapping: {table.unit_factors as pairs}."
+    },
+    {
+     "id": "table.columns_not_mapped",
+     "when": [
+      {
+       "field": "table.source_columns_not_mapped",
+       "op": "nonempty"
+      }
+     ],
+     "text": "Columns of \"{table.file}\" that are not mapped to a standard variable: {table.source_columns_not_mapped as list}."
+    }
+   ]
+  },
+  {
+   "scope": "objective_link",
+   "statements": [
+    {
+     "id": "objective.link",
+     "when": [],
+     "text": "The team's needs list links need {link.need_id} ({link.need}) to this sentence in the {link.record_field} field of the PSI record of {investigation.investigation_id}: \"{link.quote}\""
+    }
+   ]
+  },
+  {
+   "scope": "investigation",
+   "statements": [
+    {
+     "id": "inv.no_stated_need",
+     "when": [
+      {
+       "field": "investigation.tests",
+       "op": "gt",
+       "value": 0
+      },
+      {
+       "field": "investigation.stated_needs",
+       "op": "empty"
+      }
+     ],
+     "text": "The team's needs list links no sentence of the PSI record of {investigation.investigation_id} to an information need, so none of its test rows is counted for a need."
+    }
+   ]
+  },
+  {
+   "scope": "need",
+   "statements": [
+    {
+     "id": "need.stated.with_tests",
+     "when": [
+      {
+       "field": "need.objective_link",
+       "op": "eq",
+       "value": "stated"
+      },
+      {
+       "field": "need.usable_tests",
+       "op": "gt",
+       "value": 0
+      }
+     ],
+     "text": "Need {need.need_id} ({need.need}) is stated as an objective in the PSI record. {need.usable_tests} of the {need.tests_in_scope with test row|test rows} within the scope of this need record every required condition variable and at least one outcome variable of the need."
+    },
+    {
+     "id": "need.stated.no_tests",
+     "when": [
+      {
+       "field": "need.objective_link",
+       "op": "eq",
+       "value": "stated"
+      },
+      {
+       "field": "need.usable_tests",
+       "op": "eq",
+       "value": 0
+      }
+     ],
+     "text": "Need {need.need_id} ({need.need}) is stated as an objective in the PSI record. No test row of {investigation.investigation_id} records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: {need.statuses as pairs})."
+    },
+    {
+     "id": "need.not_stated.recorded",
+     "when": [
+      {
+       "field": "need.objective_link",
+       "op": "eq",
+       "value": "not_stated"
+      },
+      {
+       "field": "need.usable_tests",
+       "op": "gt",
+       "value": 0
+      }
+     ],
+     "text": "{need.usable_tests with test row|test rows} of {investigation.investigation_id} record every required condition variable and at least one outcome variable of need {need.need_id} ({need.need}), but the team's needs list has no sentence of the PSI record that states this need as an objective. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
+    }
+   ]
+  },
+  {
+   "scope": "need_table",
+   "statements": [
+    {
+     "id": "need_table.oxidizer_stream",
+     "when": [
+      {
+       "field": "table.constants.o2_basis",
+       "op": "eq",
+       "value": "oxidizer_stream"
+      },
+      {
+       "field": "row.usable_tests",
+       "op": "gt",
+       "value": 0
+      }
+     ],
+     "text": "{row.usable_tests} of the test rows that record the variables of need {need.need_id} ({need.need}) come from \"{table.file}\", where the oxygen value is the concentration in the gas issuing from the burner (oxidizer stream), not in the surrounding atmosphere."
+    },
+    {
+     "id": "need_table.required_missing",
+     "when": [
+      {
+       "field": "need.objective_link",
+       "op": "eq",
+       "value": "stated"
+      },
+      {
+       "field": "row.required_missing",
+       "op": "nonempty"
+      }
+     ],
+     "text": "In \"{table.file}\", these required condition variables of need {need.need_id} ({need.need}) have no value in any test row: {row.required_missing as list}."
+    },
+    {
+     "id": "need_table.conditions_only",
+     "when": [
+      {
+       "field": "need.objective_link",
+       "op": "eq",
+       "value": "stated"
+      },
+      {
+       "field": "row.status",
+       "op": "eq",
+       "value": "conditions_only"
+      }
+     ],
+     "text": "In \"{table.file}\", {row.tests_with_required_conditions with test row records|test rows record} every required condition variable of need {need.need_id} ({need.need}), and no outcome variable of this need has a value in the table."
+    }
+   ]
+  },
+  {
+   "scope": "investigation",
+   "statements": [
+    {
+     "id": "inv.flags",
+     "when": [
+      {
+       "field": "investigation.flags",
+       "op": "nonempty"
+      }
+     ],
+     "text": "Flags the pipeline set on the test rows of {investigation.investigation_id} (variable:reason, with the number of occurrences): {investigation.flags as counts}. A flag marks a problem in a source cell or in a computed value; the pipeline does not correct it."
+    },
+    {
+     "id": "inv.team_computation",
+     "when": [
+      {
+       "field": "investigation.tests",
+       "op": "gt",
+       "value": 0
+      }
+     ],
+     "text": "The counts and the lowest and highest values above are computed by the team from NASA PSI experimental table data. They are not NASA conclusions."
+    }
+   ]
+  }
+ ]
+}
