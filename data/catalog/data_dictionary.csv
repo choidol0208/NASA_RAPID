@@ -1,70 +1,70 @@
-table,column,group,meaning_ko,allowed_values_or_unit,used_by
-investigations,investigation_id,식별,조사 ID (팀 지정 짧은 코드),BASS-II 형식,연결 키
-investigations,psi_accession,식별,PSI 등록 번호,PSI-25 형식,"연결 키, 원본"
-investigations,investigation_name,식별,PSI 정식 이름,영어,표시
-investigations,project_group,식별,상위 묶음,"ACME, BASS, Saffire, SAME …",묶어 보기
-investigations,tier,분류,팀 우선순위 군,"1 = 과제문이 화재 안전에 직접 연결, 2 = 이름만 언급, 3 = 나머지",작업 순서
-investigations,platform,근거 품질,실험 장소,"ISS, free_flyer (Cygnus), ground",표시
-investigations,hardware,식별,실험 장비 (PSI 기록 그대로),자유 텍스트,"표시, 필터"
-investigations,operation_period,식별,"수행 기간 (PSI 기록 그대로, MM-DD-YYYY)",,표시
-investigations,objectives,분류,목적 1~2문장 (PSI 기록 요약),영어,"요약, AI 근거"
-investigations,research_focus,분류,연구 초점 (여러 개는 ;),"ignition, flame_spread, burning_rate, extinction_limit, flammability_boundary, smoke_soot, detection, suppression, flame_structure",S_role
-investigations,fire_safety_role,분류,"화재 안전 축 (팀 판단, 여러 개는 ;)","prevention, detection, suppression, fundamental",S_role
-investigations,fire_scenario_tags,분류,연결되는 화재 상황 (팀 판단),"cabin_material, wire_overheat, liquid_leak, gas_leak, smoldering, dust, high_oxygen, quiescent_ambient","설명, 필터"
-investigations,mu_g_duration_class,근거 품질,미세중력 유지 시간,"long, short, none (ground)",근거 품질 M
-investigations,has_1g_comparison,근거 품질,같은 조건 지상(1g) 비교가 기록에 있나,"Y, (빈칸 = 기록에서 확인 안 됨)","부분중력 범위 제시, 동점 처리"
-investigations,data_availability,근거 품질,데이터 형태,"raw_table, summary_table, images_video, derived_analysis, papers_only",근거 품질 M
-investigations,test_count,근거 품질,시험 수 (표 행 수 또는 점화된 화염 수),숫자,표시
-investigations,key_findings,결과,핵심 결과 (PSI 기록·표에 있는 것만),"영어, 숫자는 단위와 함께","요약, AI 근거"
-investigations,psi_url,출처,PSI 조사 페이지,URL,원본 연결
-investigations,psi_dataset_id,출처,PSI 데이터셋 번호,PSI-25 형식,원본 연결
-investigations,dataset_doi,출처,데이터셋 DOI (PSI 인용 요구),10.60555/…,"원본 연결, 인용"
-investigations,doi_list,출처,"관련 논문 DOI (최대 6개, ;로 구분)",,AI 근거
-investigations,license,출처,PSI 기록의 라이선스,CC0-1.0 등,규정 준수
-investigations,source_notes,검증,"출처 메모, 원문과 다른 점",자유 텍스트,검증
-investigations,verification_status,검증,확인 상태,"ai_extracted, human_verified","근거 품질 M, 배지"
-investigations,verified_by,검증,확인한 사람 (이니셜),,검증
-investigations,collected_on,검증,수집한 날짜,YYYY-MM-DD,검증
-configurations,config_id,식별,구성 ID (점수를 매기는 단위),BASS-II-C01 형식,연결 키
-configurations,investigation_id,식별,조사표 연결,,연결 키
-configurations,psi_accession,식별,PSI 등록 번호,,연결 키
-configurations,config_label,식별,구성 설명,영어,표시
-configurations,fuel_phase,연료,연료 상,"solid, liquid, gas, aerosol",S_fuel
-configurations,fuel_material,연료,구체 물질,"PMMA, SIBAL, n-heptane …",S_fuel
-configurations,fuel_class,연료,연료 분류 (팀 판단),"fabric, charring_solid, thermoplastic_solid, pyrolyzing_solid, liquid_hydrocarbon, liquid_alcohol, gaseous_hydrocarbon, hydrogen, particulate",S_fuel
-configurations,melt_behavior,연료,녹음·탄화 거동 (고체),"melts, chars, neither",S_fuel
-configurations,surrogate_for,연료,이 기체 버너가 흉내 내는 대상,solid,S_fuel
-configurations,sooting_tendency,연료,그을음 경향 (팀 판단),"low, medium, high",감지 프로파일
-configurations,sample_geometry,형상,시료·버너 형상,"flat_sheet, rod, sphere, droplet, jet_burner, porous_burner, spherical_burner, counterflow_burner, heated_sample",S_geom
-configurations,thickness_mm,형상,두께 또는 지름 (mm),숫자 또는 범위,thermal_regime 판정
-configurations,length_mm,형상,길이 (mm),,표시
-configurations,width_mm,형상,폭 (mm),,표시
-configurations,thermal_regime,형상,"열적 두께 (고체, 팀 판단)","thin, intermediate, thick",S_geom
-configurations,flame_type,형상,화염 종류,"diffusion, premixed, cool_flame, none",설명
-configurations,flow_config,유동,유동 방식 (여러 개는 ;),"quiescent, opposed, concurrent, coflow, counterflow, radial",S_cfg
-configurations,flow_min_cms,유동,시험한 기류 속도 최소 (cm/s),숫자,S_v
-configurations,flow_max_cms,유동,시험한 기류 속도 최대 (cm/s),숫자,S_v
-configurations,o2_min_pct,분위기,산소 몰분율 최소 (%),숫자,S_O2
-configurations,o2_max_pct,분위기,산소 몰분율 최대 (%),숫자,S_O2
-configurations,o2_reference,분위기,산소 값의 기준 (추가 열),"ambient = 주변 분위기, oxidizer_stream = 버너에서 나오는 산화제","설명, 경고"
-configurations,pressure_min_kpa,분위기,전체 압력 최소 (kPa),숫자,S_P
-configurations,pressure_max_kpa,분위기,전체 압력 최대 (kPa),숫자,S_P
-configurations,ppo2_min_kpa,분위기,산소 분압 최소 (자동 계산),kPa,표시
-configurations,ppo2_max_kpa,분위기,산소 분압 최대 (자동 계산),kPa,표시
-configurations,diluent,분위기,희석·불활성 기체,"N2, CO2, He, Ar",S_dil
-configurations,diluent_max_pct,분위기,희석제 최대 농도 (%),숫자,S_dil
-configurations,ambient_temp_k,분위기,주변 온도 (K),숫자,표시
-configurations,atmosphere_basis,분위기,숫자의 출처 (추가 열),"table, record, not_reported",신뢰도 표시
-configurations,o2_source,분위기,산소 범위의 출처 (추가 열),"table, record, test_matrix, team, 빈칸",이유 문장 (tested 표기)
-configurations,pressure_source,분위기,압력 범위의 출처 (추가 열),"table, record, test_matrix, team, 빈칸",이유 문장 (tested 표기)
-configurations,flow_source,분위기,유속 범위의 출처 (추가 열),"table, record, test_matrix, team, 빈칸",이유 문장
-configurations,gravity_level,분위기,중력 조건,"microgravity, 1g",경고
-configurations,ignition_method,점화,점화 방식,hot_wire 등,표시
-configurations,measured_outputs,결과,측정 항목,"flame_spread_rate, burning_rate, extinction_condition, particle_size …","감지 프로파일, 데이터 연결"
-configurations,flammability_boundary_reported,결과,소화·가연 한계 데이터가 있나,"Y, N",근거 설명
-configurations,extinction_mechanism,결과,소염 메커니즘,"radiative_loss, blowoff, dilution, quenching, burnout",결론 설명
-configurations,key_findings,결과,이 구성의 결과 (기록·표에 있는 것만),영어,AI 근거
-configurations,test_count_config,결과,이 구성의 시험 수,숫자,표시
-configurations,tests_table_ref,결과,시험 단위 표 파일과 필터,파일명 (조건),로우데이터 연결
-configurations,source_notes,검증,출처 메모,,검증
-configurations,verification_status,검증,확인 상태,"ai_extracted, human_verified","근거 품질 M, 배지"
+table,column,group,meaning,allowed_values_or_unit,used_by
+investigations,investigation_id,identification,Investigation id (short code chosen by the team),like BASS-II,join key
+investigations,psi_accession,identification,PSI accession number,like PSI-25,"join key, source"
+investigations,investigation_name,identification,Full PSI title,English,display
+investigations,project_group,identification,Parent group,"ACME, BASS, Saffire, SAME …",grouping
+investigations,tier,classification,Team priority group,"1 = the challenge text links it to fire safety directly, 2 = named only, 3 = the rest",work order
+investigations,platform,evidence quality,Where the experiment ran,"ISS, free_flyer (Cygnus), ground",display
+investigations,hardware,identification,Experiment hardware (as in the PSI record),free text,"display, filter"
+investigations,operation_period,identification,"Period of operation (as in the PSI record, MM-DD-YYYY)",,display
+investigations,objectives,classification,Objective in one or two sentences (summary of the PSI record),English,"summary, AI evidence"
+investigations,research_focus,classification,Research focus (several separated by ;),"ignition, flame_spread, burning_rate, extinction_limit, flammability_boundary, smoke_soot, detection, suppression, flame_structure",S_role
+investigations,fire_safety_role,classification,Fire-safety axis (team judgement; several separated by ;),"prevention, detection, suppression, fundamental",S_role
+investigations,fire_scenario_tags,classification,Fire situations it relates to (team judgement),"cabin_material, wire_overheat, liquid_leak, gas_leak, smoldering, dust, high_oxygen, quiescent_ambient","explanation, filter"
+investigations,mu_g_duration_class,evidence quality,How long microgravity lasted,"long, short, none (ground)",evidence factor M
+investigations,has_1g_comparison,evidence quality,Whether the record holds a normal-gravity (1 g) comparison under the same conditions,"Y, (empty = not found in the record)","partial-gravity note, tie-break"
+investigations,data_availability,evidence quality,Form of the data,"raw_table, summary_table, images_video, derived_analysis, papers_only",evidence factor M
+investigations,test_count,evidence quality,"Number of tests (table rows, or flames ignited)",number,display
+investigations,key_findings,results,Key findings (only what the PSI record or table states),"English, numbers with units","summary, AI evidence"
+investigations,psi_url,source,PSI investigation page,URL,link to source
+investigations,psi_dataset_id,source,PSI dataset number,like PSI-25,link to source
+investigations,dataset_doi,source,Dataset DOI (PSI asks to be cited by it),10.60555/…,"link to source, citation"
+investigations,doi_list,source,"DOIs of related papers (up to 6, separated by ;)",,AI evidence
+investigations,license,source,License in the PSI record,CC0-1.0 and others,compliance
+investigations,source_notes,verification,Source notes and differences from the original,free text,verification
+investigations,verification_status,verification,Verification state,"ai_extracted, human_verified",badge (no effect on the score)
+investigations,verified_by,verification,Who checked it (initials),,verification
+investigations,collected_on,verification,Date collected,YYYY-MM-DD,verification
+configurations,config_id,identification,Configuration id (the unit the ranking scores),like BASS-II-C01,join key
+configurations,investigation_id,identification,Link to the investigation table,,join key
+configurations,psi_accession,identification,PSI accession number,,join key
+configurations,config_label,identification,Description of the configuration,English,display
+configurations,fuel_phase,fuel,Fuel phase,"solid, liquid, gas, aerosol",S_fuel
+configurations,fuel_material,fuel,Specific material,"PMMA, SIBAL, n-heptane …",S_fuel
+configurations,fuel_class,fuel,Fuel class (team judgement),"fabric, charring_solid, thermoplastic_solid, pyrolyzing_solid, liquid_hydrocarbon, liquid_alcohol, gaseous_hydrocarbon, hydrogen, particulate",S_fuel
+configurations,melt_behavior,fuel,Melting or charring behaviour (solids),"melts, chars, neither",S_fuel
+configurations,surrogate_for,fuel,What this gas burner emulates,solid,S_fuel
+configurations,sooting_tendency,fuel,Sooting tendency (team judgement),"low, medium, high",detection profile
+configurations,sample_geometry,geometry,Sample or burner shape,"flat_sheet, rod, sphere, droplet, jet_burner, porous_burner, spherical_burner, counterflow_burner, heated_sample",S_geom
+configurations,thickness_mm,geometry,Thickness or diameter (mm),number or range,sets thermal_regime
+configurations,length_mm,geometry,Length (mm),,display
+configurations,width_mm,geometry,Width (mm),,display
+configurations,thermal_regime,geometry,"Thermal thickness (solids, team judgement)","thin, intermediate, thick",S_geom
+configurations,flame_type,geometry,Flame type,"diffusion, premixed, cool_flame, none",explanation
+configurations,flow_config,flow,Flow configuration (several separated by ;),"quiescent, opposed, concurrent, coflow, counterflow, radial",S_cfg
+configurations,flow_min_cms,flow,Lowest air speed tested (cm/s),number,S_v
+configurations,flow_max_cms,flow,Highest air speed tested (cm/s),number,S_v
+configurations,o2_min_pct,atmosphere,Lowest oxygen mole fraction (%),number,S_O2
+configurations,o2_max_pct,atmosphere,Highest oxygen mole fraction (%),number,S_O2
+configurations,o2_reference,atmosphere,What the oxygen value refers to (added column),"ambient = surrounding atmosphere, oxidizer_stream = oxidizer issuing from a burner","explanation, warning"
+configurations,pressure_min_kpa,atmosphere,Lowest total pressure (kPa),number,S_P
+configurations,pressure_max_kpa,atmosphere,Highest total pressure (kPa),number,S_P
+configurations,ppo2_min_kpa,atmosphere,Lowest oxygen partial pressure (computed),kPa,display
+configurations,ppo2_max_kpa,atmosphere,Highest oxygen partial pressure (computed),kPa,display
+configurations,diluent,atmosphere,Diluent or inert gas,"N2, CO2, He, Ar",S_dil
+configurations,diluent_max_pct,atmosphere,Highest diluent concentration (%),number,S_dil
+configurations,ambient_temp_k,atmosphere,Ambient temperature (K),number,display
+configurations,atmosphere_basis,atmosphere,Where the numbers come from (added column),"table, record, not_reported",confidence display
+configurations,o2_source,atmosphere,Source of the oxygen range (added column),"table, record, test_matrix, team, empty",reasons (the word 'tested')
+configurations,pressure_source,atmosphere,Source of the pressure range (added column),"table, record, test_matrix, team, empty",reasons (the word 'tested')
+configurations,flow_source,atmosphere,Source of the flow-speed range (added column),"table, record, test_matrix, team, empty",reasons
+configurations,gravity_level,atmosphere,Gravity condition,"microgravity, 1g",warning
+configurations,ignition_method,ignition,Ignition method,hot_wire and others,display
+configurations,measured_outputs,results,Quantities measured,"flame_spread_rate, burning_rate, extinction_condition, particle_size …","detection profile, link to data"
+configurations,flammability_boundary_reported,results,Whether extinction or flammability-limit data exist,"Y, N",explanation of evidence
+configurations,extinction_mechanism,results,Extinction mechanism,"radiative_loss, blowoff, dilution, quenching, burnout",explanation
+configurations,key_findings,results,Results of this configuration (only what the record or table states),English,AI evidence
+configurations,test_count_config,results,Number of tests in this configuration,number,display
+configurations,tests_table_ref,results,Test table file and filter,file name (condition),link to raw data
+configurations,source_notes,verification,Source notes,,verification
+configurations,verification_status,verification,Verification state,"ai_extracted, human_verified",badge (no effect on the score)

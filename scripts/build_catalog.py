@@ -11,7 +11,7 @@ Reads   data/psi/manifest.json, data/psi/catalog/PSI-*.json,
         data/psi/experimental_tables/*.csv
 Writes  data/catalog/investigations.csv   (one row per PSI investigation, 24 rows)
         data/catalog/configurations.csv   (one row per test configuration, the scoring unit)
-        data/catalog/data_dictionary.csv  (column meanings in Korean, allowed values)
+        data/catalog/data_dictionary.csv  (column meanings, allowed values)
 
 Rules followed (see AGENTS.md section 5):
 - Numbers come from the PSI experimental tables or the PSI record text. The column
