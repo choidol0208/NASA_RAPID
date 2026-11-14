@@ -1,10 +1,10 @@
 ---
 role: data
-updated: 2026-11-14 13:09 KST
+updated: 2026-11-14 13:28 KST
 state: working
 blocked_on: none
 ---
-Now: a final acceptance review of the evidence layer by a reviewer that was not involved (reproduce, trace 35 values to the raw cells, read two packages as a judge); then D5 when `ai/review/review_sheet.csv` lands.
+Now: waiting for D5 (`ai/review/review_sheet.csv`, about 15:40). The evidence layer is complete and checked; see request 20261114-1328 about the lunar-habitat pressure.
 
 Done since last sync (details and before/after numbers: request 20261114-1242-data-to-all "Audit fixes"):
 - Evidence layer is on `data-pipeline` (commit `a454a92` and later): `data/pipeline/evidence/` (6 scenarios, 20 oxygen x pressure cells, `index.json`), `atmosphere_cells.csv`, `investigation_facts.json`, `pipeline/check.py` with `validation_report.json`.
@@ -16,6 +16,7 @@ Done since last sync (details and before/after numbers: request 20261114-1242-da
 - pm's two reference items are in `references.json`: `SAF456.conditions` (ICES-2024-365, Table 1) and `OF2012.table1` (Olson and Ferkul 2012, Table I), both read cell by cell from the PDFs. See the answer to request 1224.
 - Wording pass over the remaining audit findings (commit `d9f5846`): `label`, `reading`, `note` and `_meta` texts only; no id, range, link or number changed, and `tests.csv`, `values_long.csv`, `need_tests.csv`, `scenario_needs.csv`, `scenario_tests.csv`, `coverage_grid.csv`, `capability_matrix.csv` are byte-identical to the previous commit. `indicators.csv` and the packages changed in their text columns.
 - Indicator `P1.lowest_flow_listed_at_extinction` removed (12 of its 14 values came from cells that say the flow went lower than the number written). 18 indicators now.
+- Acceptance review by a reviewer that was not involved (commit `eb0a8da` holds the fixes): reproduction byte for byte, 49 values traced to the raw cells with none wrong, 12 mutations all caught by the checker. Its main finding: the 17 lunar-habitat tests are recorded at 71.2 to 72.4 kPa, above the 70.3 kPa of the challenge bound (request 1328). Also fixed: five implausible BASS-II final-oxygen readings emptied and flagged, shorter package sentences, a `caveat` per scenario, the status sentence in `index.json`.
 - Agreed with pm: `scenario_needs.csv`, `scenario_tests.csv`, `need_tests.csv` frozen at 17:30.
 
 Next: D5 (my half of the review sheet, verdicts by 18:15); D6 final pass on `compliance/SOURCES.md` (21:00); `reports/spot_check.csv` for a human.
