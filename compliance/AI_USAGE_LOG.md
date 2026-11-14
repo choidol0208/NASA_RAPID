@@ -56,6 +56,8 @@
 | 11/14 16:26 | Claude Code (Anthropic, Fable 5.2), data 역할 | pm 요청 1622의 문구 3건 수정(README의 시험 수, 달 기지 주의문, not_covered 문구), 재빌드와 검사 | `pipeline/README.md`, `pipeline/spec/needs.json`, `pipeline/spec/scenarios.json`, `data/pipeline/*` | 미검토 |
 | 11/14 16:40– | Claude Code (Anthropic; 에이전트 Sonnet·Opus 계열 17개), data 역할 워크플로 | 보드 과제 D5: 모델이 쓴 카드 문장 61개를 독립 독자 둘이 PSI 기록과 대조, 인용·틀 문장은 독자 하나가 확인. 결과는 `reviewer_kind = ai_session`으로 기록(사람이 읽은 것으로 적지 않음) | `ai/review/review_sheet.csv`의 판정 칸 | 미검토 |
 | 11/14 16:51 | Claude Code (Opus 5.5, catalog 역할) | 사람 검토 기록: 팀원 조려진이 순위 가중치(질문 유형별 profiles)를 config 1.1.0 그대로 승인. `scoring/scoring_config.json`의 `_about` reviewed 칸에 검토자와 시각을 적음 | `scoring/scoring_config.json` (`_about`만, 점수 불변) | 가중치: 팀원 검토 완료(연소 전문가 검토 아님). 유사도 척도·관문·증거 계수 등 나머지 값은 따로 검토되지 않음 |
+| 11/14 16:55–17:20 | Claude Code (Anthropic; Fable 5.2 translators, Opus-family checkers), pm role workflow | Translated `AGENTS.md`, `compliance/SOURCES.md` and `compliance/AI_USAGE_LOG.md` from Korean into English (the human lead's decision). A second agent compared every line and table row of each translation with the Korean and its findings were applied | `AGENTS.md` (replaced at 17:20). The two logs are translated and replace the Korean files after the 19:00 freeze | Not reviewed by a person |
+| 11/14 15:15–16:30 | Claude Code (Anthropic; Opus-family and Fable 5.2 agents), pm role workflow | Drafts of the submission text and of the seven-slide outline, with a fact check, a rules check and a reading as a sceptical judge; 54 findings applied | `docs/submission/submission_text.md`, `docs/submission/slides_outline.md` (AI-written drafts) | The team rewrites them before submitting |
 
 ## 제품 안에서 동작하는 AI
 
