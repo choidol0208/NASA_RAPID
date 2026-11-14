@@ -1,6 +1,6 @@
 # Catalog filter validation report
 
-- Run: 2026-11-14 19:34 · target `scoring.scorer:rank`
+- Run: 2026-11-14 20:06 · target `scoring.scorer:rank`
 - Result: **38/38 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
@@ -54,7 +54,7 @@
 | S01 | FLEX | stable |
 | L01 | FLEX | stable |
 
-## Weight sensitivity (each prevention weight x0.5 and x1.5, rescaled to sum 1; config 1.2.0)
+## Weight sensitivity (each prevention weight x0.5 and x1.5, rescaled to sum 1; config 1.3.0)
 
 - 45 of 48 variants keep the same top 3 in the same order; 2 keep the same three in another order; rank 1 changes in 1.
 
@@ -64,7 +64,7 @@
 | lunar habitat cotton fabric | fuel | x0.5 | SAFFIRE-II, ACME-BRE, BASS-II (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | changed |
 | lunar habitat cotton fabric | geometry | x0.5 | SAFFIRE-II, ACME-BRE, SAFFIRE-I (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | same set |
 
-## Sensitivity to the other values (each x0.5 and x1.5 on the four demo queries; config 1.2.0)
+## Sensitivity to the other values (each x0.5 and x1.5 on the four demo queries; config 1.3.0)
 
 - 127 of 136 runs keep the same top 3 in the same order; 3 keep the same three in another order; rank 1 changes in 4.
 
@@ -88,7 +88,7 @@
 | research-purpose table (`similarity.role`) | 8 | — |
 | data-availability table (`evidence.data_availability`) | 8 | — |
 
-## Weighting by purpose (config 1.2.0)
+## Weighting by purpose (config 1.3.0)
 
 | Profile | Queries read as this purpose | One-at-a-time x0.5/x1.5: same top 3 | rank 1 changes | Scheme | Same top 3 | Same rank 1 |
 |---|---|---|---|---|---|---|
@@ -100,7 +100,7 @@
 | | | | | rank-order centroid | 4 of 4 | 4 of 4 |
 | | | | | prevention weights | 2 of 4 | 3 of 4 |
 | | | | | suppression weights | 3 of 4 | 3 of 4 |
-| suppression | 4 of 4 | 53 of 56 | 0 | equal weights | 1 of 4 | 4 of 4 |
+| suppression | 4 of 4 | 54 of 56 | 0 | equal weights | 1 of 4 | 4 of 4 |
 | | | | | rank-order centroid | 4 of 4 | 4 of 4 |
 | | | | | prevention weights | 1 of 4 | 3 of 4 |
 | | | | | detection weights | 4 of 4 | 4 of 4 |
@@ -113,7 +113,7 @@ Rows where another scheme changes the top 3:
 - detection, equal weights, "smoke detector for a lunar rover": ACME-FLAME-DESIGN, FLEX-2, SAME (configured: SAME, SAME-R, FLEX-2)
 - detection, prevention weights, "smoke detector on ISS": SAME, SAME-R, BASS-II (configured: SAME, SAME-R, DAFT)
 - detection, prevention weights, "smoke detector for a lunar rover": ACME-FLAME-DESIGN, FLEX-2, ACME-BRE (configured: SAME, SAME-R, FLEX-2)
-- detection, suppression weights, "smoke detector for a lunar rover": ACME-FLAME-DESIGN, SAME, SAME-R (configured: SAME, SAME-R, FLEX-2)
+- detection, suppression weights, "smoke detector for a lunar rover": ACME-FLAME-DESIGN, FLEX-2, SAME (configured: SAME, SAME-R, FLEX-2)
 - suppression, equal weights, "nitrogen extinguish fabric fire ISS": BASS, BASS-II, SAFFIRE-III (configured: BASS, BASS-II, ACME-BRE)
 - suppression, equal weights, "fire extinguisher for a Mars habitat": BASS, BASS-II, FLEX (configured: BASS, FLEX, BASS-II)
 - suppression, equal weights, "inert gas suppression ISS": BASS, BASS-II, FLEX (configured: BASS, FLEX, BASS-II)
@@ -121,7 +121,7 @@ Rows where another scheme changes the top 3:
 - suppression, prevention weights, "fire extinguisher for a Mars habitat": BASS, BASS-II, SAFFIRE-II (configured: BASS, FLEX, BASS-II)
 - suppression, prevention weights, "inert gas suppression ISS": BASS, BASS-II, SAME (configured: BASS, FLEX, BASS-II)
 
-## Weight uncertainty: SMAA with the order of importance only (config 1.2.0, 300 draws per profile, seed 20261114)
+## Weight uncertainty: SMAA with the order of importance only (config 1.3.0, 300 draws per profile, seed 20261114)
 
 | Profile | Query | Top 3 with the profile's weights | Same rank 1 | Same top 3 (as a set) | Top-3 acceptability of each investigation (10% or more) |
 |---|---|---|---|---|---|
@@ -135,5 +135,5 @@ Rows where another scheme changes the top 3:
 | detection | kapton teflon smoke | SAME, SAME-R, SAME-SIM | 100% | 100% | SAME 100%, SAME-R 100%, SAME-SIM 100% |
 | suppression | CO2 suppression of heptane fire | FLEX, FLEX-2, CFI | 100% | 99% | FLEX 100%, CFI 100%, FLEX-2 99% |
 | suppression | nitrogen extinguish fabric fire ISS | BASS, BASS-II, ACME-BRE | 100% | 100% | BASS 100%, BASS-II 100%, ACME-BRE 100% |
-| suppression | fire extinguisher for a Mars habitat | BASS, FLEX, BASS-II | 90% | 100% | BASS 100%, FLEX 100%, BASS-II 100% |
-| suppression | inert gas suppression ISS | BASS, FLEX, BASS-II | 80% | 100% | BASS 100%, FLEX 100%, BASS-II 100% |
+| suppression | fire extinguisher for a Mars habitat | BASS, FLEX, BASS-II | 91% | 100% | BASS 100%, FLEX 100%, BASS-II 100% |
+| suppression | inert gas suppression ISS | BASS, FLEX, BASS-II | 79% | 100% | BASS 100%, FLEX 100%, BASS-II 100% |

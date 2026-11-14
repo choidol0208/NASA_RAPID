@@ -1,0 +1,28 @@
+{
+  "_about": {
+    "what": "Which evidence streams make the weights the scorer uses (read by scoring/derive_weights.py).",
+    "streams": {
+      "judgement": "AHP pairwise judgements: the team members' group judgements (scoring/expert_weights.json) where they exist and are consistent, otherwise the AI session's judgements (scoring/ahp_judgements.json).",
+      "data": "Relative importance of conditions in NASA measurements (scoring/data_weights.json), pooled into the judgement weights of the dimensions it covers."
+    },
+    "generated_by": "AI-generated (Claude Code, catalog role), 2026-11-14.",
+    "status": "apply true since config 1.3.0 (2026-11-14 20:06 KST, the human lead's decision): the suppression weights pool the AI session's AHP judgements with the NASA FLEX data stream; prevention and detection keep the AHP weights, because no NASA table records a response for them. When team members' judgements arrive (scoring/expert_weights.json), rerun derive_weights.py --write; that also needs the human lead's decision."
+  },
+  "apply": true,
+  "judgement": {
+    "prefer": "expert"
+  },
+  "data": {
+    "suppression": {
+      "response": "dext_over_d0",
+      "dimensions": [
+        "o2",
+        "pressure",
+        "diluent",
+        "fuel"
+      ],
+      "lambda": 0.5,
+      "why": "FLEX (Flame Extinguishment Experiment) is the NASA suppression data set with a measured extinction response. It covers oxygen, pressure, diluent and fuel; it says nothing about flow (quiescent droplets), shape or the purpose of a study, so those keep their judgement weights. lambda 0.5 gives judgement and data equal say."
+    }
+  }
+}
