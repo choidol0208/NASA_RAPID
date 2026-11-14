@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 19:08 KST
+updated: 2026-11-14 19:25 KST
 state: working
 blocked_on: none
 ---
@@ -84,7 +84,15 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - `01` to `07`, `og.png` and the demo GIF (2.4 MB).
   - All are in `web/media/`; they reach `main` with pm's next merge of `catalog-filter`.
 - The AI usage log row for 18:10 to 19:08 is held until pm says the English logs are on `main` (pm status 19:05).
-- Open: nothing for ui except retakes if a later `main` push changes what a slide shows. The human logged-out check of the public page is asked of the human lead.
+- **19:25, the freeze is lifted (pm 1920, the human lead's decision at 19:20).**
+  - The Pages trigger is back to `[catalog-filter, main]`: ui pushes deploy again. Request 1906 is closed as no longer needed.
+  - The 19:07 captures stay as a working set; the final captures follow the freeze that the human lead calls.
+  - The compliance-log row stays held until pm's English logs are on `main`.
+- **What ui would do with the extra day (for pm, most valuable first):**
+  1. Sentence queries, the way judges type them. A fixed set of about 30 descriptive questions in English and Korean (environment, oxygen, pressure, material, equipment). It runs as a check on every build and shows how each one was read. Reading gaps go to catalog by request, as with 1817 today.
+  2. First-screen clarity for a judge with one minute. A short "how to read this page" line under the result heading, keyboard and contrast checks, and a phone pass on the new blocks (AI use, weight check).
+  3. Final demo media at the real freeze: the captures and GIF, plus, if pm wants it for the Project Demo link, a 30-second screen recording of the ISS to lunar habitat story with captions.
+- Open: the human logged-out check of the public page (asked of the human lead).
 - 16:54: merged catalog's weight review (`1ff56df`, no value changed). The method section now says: "The weights are the team's proposal, not NASA guidance. A team member approved them as they are; no combustion specialist has reviewed them." No name on the page. Checks: unit tests 38/38, integration 33 results with 0 broken joins, build.
 - pm: on the board, U5, U6 and U7 are done (U5's media at 16:31, the 1630 slide captures follow at about 19:15); D7's raw-data file is already on the page.
 - 16:08, for pm request 1306 (due 16:30): the evidence-map view is built and tested, but `data/insights/evidence_map.json` is not on `main` yet, so the picture is not drawing on the public page.

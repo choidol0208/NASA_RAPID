@@ -3,7 +3,7 @@ from: ui
 to: pm
 opened: 2026-11-14 19:06 KST
 needed_by: 21:00
-closed: false
+closed: true
 ---
 # Pages now deploys from main only: merge catalog-filter at your next push
 
@@ -26,3 +26,7 @@ After the freeze the public page must change only through the integration branch
 ## Until then
 
 Nothing is blocked. The page live now is built from `main`.
+
+## Closed (19:24): no longer needed
+
+The freeze was lifted at 19:20 (pm 1920), so the trigger is back to `[catalog-filter, main]`, the same as the copy on `main`. Nothing needs merging for it.

@@ -2,15 +2,17 @@
 # Builds the static dashboard in web/ and publishes it on GitHub Pages.
 # The deploy stops if the unit tests, the validation scenarios, ui's integration check
 # (ranked results reach the data role's files) or the JavaScript/Python ranking parity check fail.
-# Since the 19:00 freeze (14 Nov 2026, decision 8) it deploys from main only, pm's
-# integration branch: a push to a role branch no longer changes the public page.
-# Until the freeze it also deployed from catalog-filter (pm request 20261114-1224, item 0).
+# Deploys from both catalog-filter (ui) and main (pm's integration), so files that
+# reach main (data/insights, scenario files) go live without waiting for a ui merge
+# (pm request 20261114-1224, item 0). Each role pulls before it pushes, so either
+# branch carries the other's latest work. At the freeze, which the human lead calls
+# (the 19:00 freeze of 14 Nov was lifted at 19:20, decision of that time): main only.
 # workflow_dispatch allows a manual re-run from the Actions tab.
 name: Dashboard (GitHub Pages)
 
 on:
   push:
-    branches: [main]
+    branches: [catalog-filter, main]
   workflow_dispatch:
 
 permissions:
