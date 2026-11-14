@@ -301,9 +301,19 @@ function scoreConfig(sc, c, cfg, weights, rawS, caps) {
   return { score, raw, gate, evidence: M, similarity: S, weights: w, unknown, coverage, contributions };
 }
 function fmtRange(c, lo, hi, unit) {
-  const r = range(c, lo, hi);
-  if (!r) return "not reported";
-  return r[0] === r[1] ? `${fmtG(r[0])}${unit}` : `${fmtG(r[0])}–${fmtG(r[1])}${unit}`;
+  // Text only (mirrors _fmt_range). When one end is not recorded, say so ("up to 40 cm/s" in the
+  // PSI-26 record is not "at 40 cm/s"). Similarity still uses range(), which treats the recorded end as both ends.
+  const a = f(c[lo]), b = f(c[hi]);
+  if (a === null && b === null) return "not reported";
+  if (a === null) return `up to ${fmtG(b)}${unit}`;
+  if (b === null) return `at least ${fmtG(a)}${unit}`;
+  return a === b ? `${fmtG(a)}${unit}` : `${fmtG(a)}–${fmtG(b)}${unit}`;
+}
+function fmtFlow(c) { // mirrors _fmt_flow
+  const r = fmtRange(c, "flow_min_cms", "flow_max_cms", " cm/s");
+  const head = `flow ${c.flow_config || "n/a"}`;
+  if (r === "not reported") return `${head}, speed not reported`;
+  return r.startsWith("up to") || r.startsWith("at least") ? `${head}, ${r}` : `${head} at ${r}`;
 }
 function fill(tpl, vars) { return tpl.replace(/\{(\w+)\}/g, (_, k) => vars[k]); }
 function explain(sc, c, s, cfg, fallback, speed) {
@@ -321,7 +331,7 @@ function explain(sc, c, s, cfg, fallback, speed) {
       : `O2 tested ${fmtRange(c, "o2_min_pct", "o2_max_pct", "%")}`,
     pressure: (fallback || []).includes("pressure") ? `pressure not recorded, assumed ${fmtRange(c, "pressure_min_kpa", "pressure_max_kpa", " kPa")}`
       : `pressure tested ${fmtRange(c, "pressure_min_kpa", "pressure_max_kpa", " kPa")}`,
-    flow: `flow ${c.flow_config || "n/a"} at ${fmtRange(c, "flow_min_cms", "flow_max_cms", " cm/s")}`,
+    flow: fmtFlow(c),
     fuel: `fuel ${c.fuel_material}`,
     geometry: `${c.sample_geometry} (${c.thermal_regime || "regime n/a"})`,
     role: `role ${c._inv.fire_safety_role}`,

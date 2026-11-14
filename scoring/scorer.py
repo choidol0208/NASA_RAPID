@@ -396,10 +396,24 @@ def score_config(sc, c, cfg, weights, raw_S, caps):
 
 
 def _fmt_range(c, lo, hi, unit):
-    r = _range(c, lo, hi)
-    if r is None:
+    # Text only. When one end is not recorded, say so ("up to 40 cm/s" in the PSI-26 record is
+    # not "at 40 cm/s"). Similarity still uses _range, which treats the recorded end as both ends.
+    a, b = _f(c.get(lo)), _f(c.get(hi))
+    if a is None and b is None:
         return "not reported"
-    return f"{r[0]:g}{unit}" if r[0] == r[1] else f"{r[0]:g}–{r[1]:g}{unit}"
+    if a is None:
+        return f"up to {b:g}{unit}"
+    if b is None:
+        return f"at least {a:g}{unit}"
+    return f"{a:g}{unit}" if a == b else f"{a:g}–{b:g}{unit}"
+
+
+def _fmt_flow(c):
+    r = _fmt_range(c, "flow_min_cms", "flow_max_cms", " cm/s")
+    head = f"flow {c.get('flow_config') or 'n/a'}"
+    if r == "not reported":
+        return f"{head}, speed not reported"
+    return f"{head}, {r}" if r.startswith(("up to", "at least")) else f"{head} at {r}"
 
 
 def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
@@ -420,7 +434,7 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
                else f"O2 tested {_fmt_range(c, 'o2_min_pct', 'o2_max_pct', '%')}"),
         "pressure": (f"pressure not recorded, assumed {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}" if "pressure" in fallback
                      else f"pressure tested {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}"),
-        "flow": f"flow {c.get('flow_config') or 'n/a'} at {_fmt_range(c, 'flow_min_cms', 'flow_max_cms', ' cm/s')}",
+        "flow": _fmt_flow(c),
         "fuel": f"fuel {c.get('fuel_material')}",
         "geometry": f"{c.get('sample_geometry')} ({c.get('thermal_regime') or 'regime n/a'})",
         "role": f"role {c['_inv'].get('fire_safety_role')}",
