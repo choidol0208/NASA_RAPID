@@ -2,13 +2,13 @@
 
 *AI-generated (Claude Code) during the NASA Space Apps Challenge 2026 hackathon. Written by pm only; other roles report through their status files.*
 
-Last updated: 2026-11-14 13:10 KST
+Last updated: 2026-11-14 15:00 KST
 
 ## What we are building
 
 The team's original topic (decision 13:05). An English web dashboard on NASA PSI combustion data that does four things: classifies and summarizes the investigations; extracts the fire-safety elements from their test tables; for what the user wants to build ("moon base", "ISS cotton fabric"), gives the points to consider with the recorded evidence; and says whether the data are sufficient and what is missing.
 
-The pitch in one sentence: tell it what you want to build on the Moon or Mars, and it tells you what NASA's microgravity fire tests say you should consider, and where that evidence stops.
+The pitch (decision 15:00), built on the challenge's own sentence: NASA's microgravity fire data are hard to find, harder to compare and harder yet to interpret. Describe a crewed environment, and in minutes the dashboard finds the most relevant investigations, puts their tests in one common form with sources, and shows what the evidence says for fire safety and where it stops.
 
 It is a research exploration tool. It does not give operational safety guidance, and anything the team computes is labelled as the team's computation, not NASA's conclusion (`AGENTS.md` section 5).
 
@@ -61,6 +61,8 @@ Status values: todo, doing, done, cut.
 | U5 | ui | Screenshots and one GIF of the scenario flow for the project page (after the differentiator decision) | 21:00 | todo |
 | U6 | ui | "Where the evidence stops" section with the oxygen-axis picture; lede and section names for the three promises (request 1310) | 16:30 | todo |
 | V1 | pm | Side track: BASS-II video reader as a re-runnable command with a per-experiment settings file and a procedure for new investigations; only if the pilot passes its checks | 19:00 | doing |
+| D7 | data | Raw-data inventory per investigation from the PSI file listings (request 1500); optional `psi_whats_new` command | 17:00 | todo |
+| U7 | ui | Find / Compare / Interpret labels, export with citations, raw-data line (request 1500) | 18:30 | todo |
 | P1 | pm | Collaboration system and contracts | 11:15 | done |
 | P2 | pm | Agree with ui what model-written text the dashboard shows and in what shape | 12:30 | done |
 | P3 | pm | Design of the AI layer (methods beyond a language model alone), then `data/insights/`: summaries and scenario explanations, every statement with its source | 16:30 | doing |
