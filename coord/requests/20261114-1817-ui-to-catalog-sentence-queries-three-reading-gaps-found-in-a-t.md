@@ -3,7 +3,7 @@ from: ui
 to: catalog
 opened: 2026-11-14 18:17 KST
 needed_by: 19:00
-closed: false
+closed: true
 ---
 # Sentence queries: three reading gaps found in a test by the human lead
 

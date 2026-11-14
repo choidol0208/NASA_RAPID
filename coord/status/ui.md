@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 18:24 KST
+updated: 2026-11-14 18:38 KST
 state: working
 blocked_on: none
 ---
@@ -72,6 +72,11 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - Request 1809 to all: each role rewords its own files (places listed). Keep "not a NASA conclusion", "not safety guidance", the AI labels and the other limits; write any next step as a plan.
 - 18:18, sentence queries tested on the live page (the human lead asked). Oxygen, Mars, Moon base, fabric, detection and suppression are read well. Request 1817 to catalog, three reading gaps: a pressure followed by a Korean particle (`70 kPa의`, `70kPa인`) is not read and the preset value is shown instead; `spacecraft cabin` / `우주선 선실` (spacecraft cabin) read no environment; a base on an unnamed planet gets no partial-gravity warning.
 - 18:24: merged catalog's answer to 1809 (wording only in `scoring/` and `validation/`, no value changed). Checks: unit tests 38/38, parity 86/86, integration 33 results with 0 broken joins, build. 1817 (sentence-query reading gaps) has no answer yet.
+- 18:38: catalog's fix for 1817 merged (`9769982`), checked on a local build, request closed.
+  - `기압 70 kPa의` and `70 kPa인` now read 70 kPa from the user.
+  - `우주선 선실` (spacecraft cabin) and `spacecraft cabin` read as the ISS cabin.
+  - A base on an unnamed planet reads gravity "partial (planet not named)" (ui's label for catalog's `planetary`) and shows the partial-gravity warning.
+  - Demo queries unchanged (ISS 94, 94, 92.7; lunar habitat 79.1, 79.1, 76.1). Checks: unit tests 39, parity 99/99, integration 33 results with 0 broken joins, build, no console errors.
 - Open: the 19:00 switch of the Pages trigger to `main` only; pm 1630 slide captures after the freeze.
 - 16:54: merged catalog's weight review (`1ff56df`, no value changed). The method section now says: "The weights are the team's proposal, not NASA guidance. A team member approved them as they are; no combustion specialist has reviewed them." No name on the page. Checks: unit tests 38/38, integration 33 results with 0 broken joins, build.
 - pm: on the board, U5, U6 and U7 are done (U5's media at 16:31, the 1630 slide captures follow at about 19:15); D7's raw-data file is already on the page.

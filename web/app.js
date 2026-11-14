@@ -44,7 +44,7 @@ function condText(field, value, cfg) {
     case "thermal_regime": return ["Thickness", `thermally ${value}`];
     case "sample_geometry": return ["Shape", String(value).replace(/_/g, " ")];
     case "concern": return ["Question", cfg.profiles[value] ? cfg.profiles[value].label_en : value];
-    case "gravity": return ["Gravity", value];
+    case "gravity": return ["Gravity", value === "planetary" ? "partial (planet not named)" : value]; // catalog 1817: an unnamed planet or base
     case "diluent": return ["Diluent", value];
     case "preset": return ["Environment", cfg.presets[value] ? cfg.presets[value].label_en : value];
     default: return [field, String(value)];
