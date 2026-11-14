@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 19:06 KST
+updated: 2026-11-14 19:08 KST
 state: working
 blocked_on: none
 ---
@@ -78,7 +78,13 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - A base on an unnamed planet reads gravity "partial (planet not named)" (ui's label for catalog's `planetary`) and shows the partial-gravity warning.
   - Demo queries unchanged (ISS 94, 94, 92.7; lunar habitat 79.1, 79.1, 76.1). Checks: unit tests 39, parity 99/99, integration 33 results with 0 broken joins, build, no console errors.
 - **19:06, freeze (decision 8): Pages deploys from `main` only.** `pages.yml` push branches are `[main]`, and `workflow_dispatch` is kept. A push to `catalog-filter` no longer changes the public page. pm's freeze integration (`abff173`) holds all of ui's work. Request 1906 to pm: merge `catalog-filter` at the next push, so `main` carries the same `pages.yml`.
-- Open: pm 1630 slide captures from the live `main` build (next).
+- **19:07, pm 1630 done.** The four slide captures and all U5 media were retaken from the public page, build `7239a2e` (`main`, after the freeze integration):
+  - `slide1_top.png`, `slide2_iss_result.png`, `slide3_iss_needs.png`, `slide7_iss_tests.png` (2216 to 2560 px wide);
+  - `04_lunar_evidence_map.png` (axis to 45%);
+  - `01` to `07`, `og.png` and the demo GIF (2.4 MB).
+  - All are in `web/media/`; they reach `main` with pm's next merge of `catalog-filter`.
+- The AI usage log row for 18:10 to 19:08 is held until pm says the English logs are on `main` (pm status 19:05).
+- Open: nothing for ui except retakes if a later `main` push changes what a slide shows. The human logged-out check of the public page is asked of the human lead.
 - 16:54: merged catalog's weight review (`1ff56df`, no value changed). The method section now says: "The weights are the team's proposal, not NASA guidance. A team member approved them as they are; no combustion specialist has reviewed them." No name on the page. Checks: unit tests 38/38, integration 33 results with 0 broken joins, build.
 - pm: on the board, U5, U6 and U7 are done (U5's media at 16:31, the 1630 slide captures follow at about 19:15); D7's raw-data file is already on the page.
 - 16:08, for pm request 1306 (due 16:30): the evidence-map view is built and tested, but `data/insights/evidence_map.json` is not on `main` yet, so the picture is not drawing on the public page.
