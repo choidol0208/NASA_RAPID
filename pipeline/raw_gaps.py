@@ -27,6 +27,10 @@ Run after run.py (python3 pipeline/raw_gaps.py). Writes, in data/pipeline/:
                          is adopted; no pipeline output is changed)
 
 evidence.py imports this module for the 'raw_state' fields of the packages.
+The videos and archives tied by name to the tests of a state come from
+data/pipeline/test_files.csv (raw_names.py) and their sentences from
+spec/raw_names.json ('raw_state_sentences'); they are added columns and
+fields only.
 No value of a raw file ever becomes a value of tests.csv. Every sentence is in
 spec/statements.json ('raw_state') or spec/raw_columns.json (_meta). Same
 inputs give the same bytes: fixed order, no timestamps.
@@ -45,6 +49,10 @@ OUT = os.path.join(ROOT, "data", "pipeline")
 STATES = ["in_table", "column_in_sampled_raw_file", "documented_only", "not_in_sampled_files", "no_test_table"]
 COL = "column_in_sampled_raw_file"
 READABLE = ("sensor_reading_series", "value_per_test_in_a_results_file")
+TIED_KINDS = ("video", "archive")
+TIED_COLS = ["videos_tied_to_those_tests_files", "videos_tied_to_those_tests_bytes", "videos_tied_to_those_tests_tests",
+             "archives_tied_to_those_tests_files", "archives_tied_to_those_tests_bytes", "archives_tied_to_those_tests_tests",
+             "video_on_screen_text"]
 FORBIDDEN = re.compile(r"\b(safe|safely|acceptable|sufficient|sufficiently|representative|proven|proves)\b", re.I)
 
 
@@ -82,7 +90,9 @@ def load(spec_dir=SPEC, out_dir=OUT):
             "needs": read_json(os.path.join(spec_dir, "needs.json"))["needs"],
             "sources": read_json(os.path.join(spec_dir, "sources.json"))["sources"],
             "texts": read_json(os.path.join(spec_dir, "statements.json"))["raw_state"],
-            "inventory": read_json(os.path.join(out_dir, "raw_inventory.json"))["investigations"]}
+            "inventory": read_json(os.path.join(out_dir, "raw_inventory.json"))["investigations"],
+            "names": read_json(os.path.join(spec_dir, "raw_names.json")),
+            "test_files": read_csv(os.path.join(out_dir, "test_files.csv"))}
 
 
 class States:
@@ -109,6 +119,50 @@ class States:
                     d.get("reference_item") or ("record field " + d.get("record_field", "")))
         self.check_spec()
         self.cells = {(i, v): self._cell(i, v) for i in self.investigations for v in self.variables}
+        # files tied by name to one test (raw_names.py, data/pipeline/test_files.csv)
+        self.tied = {}
+        for r in inputs["test_files"]:
+            if r["link_level"] == "test" and r["test_id"] and r["kind"] in TIED_KINDS:
+                a = self.tied.setdefault((r["test_id"], r["kind"]), [0, 0])
+                a[0] += int(r["files"])
+                a[1] += int(r["bytes"])
+        self.videos = {inv: x.get("videos") for inv, x in inputs["names"]["investigations"].items()}
+        self.name_texts = inputs["names"]["raw_state_sentences"]
+
+    # ------------------------------------------------- files tied by name
+    def tied_to(self, test_ids):
+        """{kind: (files, bytes, tests)} of the videos and archives tied by
+        name to these tests (test level of test_files.csv); a file tied to two
+        tests counts once per test."""
+        out = {}
+        for kind in TIED_KINDS:
+            hits = [self.tied[(t, kind)] for t in test_ids if (t, kind) in self.tied]
+            out[kind] = (sum(h[0] for h in hits), sum(h[1] for h in hits), len(hits))
+        return out
+
+    def video_class(self, inv):
+        v = self.videos.get(inv)
+        return v["on_screen_text"] if v else "no video in the listing"
+
+    def video_sentences(self, inv, test_ids):
+        """Fixed sentences where videos are tied by name to tests that lack a
+        value; they never say that the quantity can be read from a video."""
+        files, _, tests = self.tied_to(test_ids)["video"]
+        if not files:
+            return []
+        T = self.name_texts
+        out = [T["videos_tied"].format(n=files, m=tests)]
+        v = self.videos.get(inv)
+        if v and v["labels_seen"]:
+            out.append(T["videos_on_screen"].format(labels=", ".join(v["labels_seen"]), seen=v["seen_in"]))
+        return out
+
+    def tied_columns(self, inv, test_ids):
+        t = self.tied_to(test_ids)
+        return {"videos_tied_to_those_tests_files": t["video"][0], "videos_tied_to_those_tests_bytes": t["video"][1],
+                "videos_tied_to_those_tests_tests": t["video"][2],
+                "archives_tied_to_those_tests_files": t["archive"][0], "archives_tied_to_those_tests_bytes": t["archive"][1],
+                "archives_tied_to_those_tests_tests": t["archive"][2], "video_on_screen_text": self.video_class(inv)}
 
     # ------------------------------------------------------------ spec rules
     def check_spec(self):
@@ -218,9 +272,21 @@ class States:
                         item["differs_from_definition"] = rem["differs"]
                         item["link_kind"] = rem["link_kinds"]
                 item["sentence"] = self.sentence(inv, st, rem)
+                item["_ids"] = []
                 items[key] = item
             items[key]["tests"] += 1
-        return [items[k] for k in sorted(items)]
+            items[key]["_ids"].append(t["test_id"])
+        out = []
+        for k in sorted(items):
+            item = items.pop(k)
+            ids = item.pop("_ids")
+            if item["state"] not in ("in_table", "no_test_table"):
+                t = self.tied_to(ids)
+                item["files_tied_by_name"] = {kind: {"files": t[kind][0], "bytes": t[kind][1], "tests": t[kind][2]}
+                                              for kind in TIED_KINDS}
+                item["video_sentences"] = self.video_sentences(item["investigation_id"], ids)
+            out.append(item)
+        return out
 
 
 def unmatched_for_lack(var, o2_match, pressure_match, tier):
@@ -251,7 +317,7 @@ def gap_state_rows(S):
             base = {"investigation_id": inv, "variable": var, "tests_in_table": c["n"], "tests_mapped": c["N"],
                     "column_is": "", "entries": 0, "file_groups": "", "files": "", "bytes": "",
                     "headers_as_written": "", "link_to_table_row": "", "link_kind": "", "differs_from_definition": "",
-                    "sampling": "", "documented_by": ""}
+                    "sampling": "", "documented_by": "", **{k: "" for k in TIED_COLS}}
             if c["no_test_table"]:
                 rows.append({**base, "state": "no_test_table", "tests_in_state": 0})
                 continue
@@ -260,7 +326,8 @@ def gap_state_rows(S):
             rem = c["remainder"]
             if rem is None:
                 continue
-            r = {**base, "state": rem["state"], "tests_in_state": c["N"] - c["n"]}
+            r = {**base, "state": rem["state"], "tests_in_state": c["N"] - c["n"],
+                 **S.tied_columns(inv, [t["test_id"] for t in S.by_inv[inv] if S.empty(t.get(var))])}
             if rem["groups"]:
                 r["file_groups"] = " | ".join(g["group"] for g in rem["groups"])
                 r["files"] = sum(g["files"] for g in rem["groups"])
@@ -292,10 +359,11 @@ def need_gap_rows(S, scenarios, need_tests, scen_tests):
             ids = counted.get(nd["id"], set())
             for role, var in [("required", v) for v in nd["conditions_required"]] + \
                     [("outcome", v) for v in nd["outcomes_any"]]:
-                groups = {}
+                groups, ids_in = {}, {}
                 for t in scope:
                     key = S.test_state(t, var)
                     g = groups.setdefault(key, [0, 0, 0])
+                    ids_in.setdefault(key, []).append(t)
                     g[0] += 1
                     if t["test_id"] in ids:
                         g[1] += 1
@@ -304,10 +372,22 @@ def need_gap_rows(S, scenarios, need_tests, scen_tests):
                             g[2] += 1
                 for (st, kind) in sorted(groups, key=lambda k: (STATES.index(k[0]), k[1])):
                     a, b, u = groups[(st, kind)]
-                    rows.append({"scenario_id": sc["id"], "need_id": nd["id"], "role": role, "variable": var, "state": st,
-                                 "column_is": kind, "in_scope_tests": len(scope), "counted_tests": len(ids),
-                                 "in_scope_tests_in_state": a, "counted_tests_in_state": b,
-                                 "counted_unmatched_for_lack_of_this_variable": u})
+                    row = {"scenario_id": sc["id"], "need_id": nd["id"], "role": role, "variable": var, "state": st,
+                           "column_is": kind, "in_scope_tests": len(scope), "counted_tests": len(ids),
+                           "in_scope_tests_in_state": a, "counted_tests_in_state": b,
+                           "counted_unmatched_for_lack_of_this_variable": u,
+                           "videos_tied_to_in_scope_tests_in_state": "", "video_tests_in_state": "",
+                           "archives_tied_to_in_scope_tests_in_state": "", "raw_state_video_sentences": ""}
+                    if st not in ("in_table", "no_test_table"):
+                        members = ids_in[(st, kind)]
+                        t = S.tied_to([x["test_id"] for x in members])
+                        sent = []
+                        for inv in sorted({x["investigation_id"] for x in members}, key=inv_number):
+                            sent += S.video_sentences(inv, [x["test_id"] for x in members if x["investigation_id"] == inv])
+                        row.update({"videos_tied_to_in_scope_tests_in_state": t["video"][0], "video_tests_in_state": t["video"][2],
+                                    "archives_tied_to_in_scope_tests_in_state": t["archive"][0],
+                                    "raw_state_video_sentences": " ".join(sent)})
+                    rows.append(row)
     return rows
 
 
@@ -340,7 +420,7 @@ def queue_rows(S, need_tests):
             base = {"investigation_id": inv, "variable": var, "state": rem["state"],
                     "tests_without_value": len(empty),
                     "tests_lacking_value": len(lacking), "counted_tests_lacking_value": len(cnt),
-                    "needs_counting_them": ";".join(needs)}
+                    "needs_counting_them": ";".join(needs), **S.tied_columns(inv, [t["test_id"] for t in lacking])}
             if rem["state"] == COL:
                 for g in rem["groups"]:
                     es = [e for e in rem["entries"] if e["group"] == g["group"]]
@@ -488,7 +568,8 @@ def effect(S, raw_values, tests_by_id, scenarios, coverage, factor, need_tests):
                       "written_by": "pipeline/raw_gaps.py", "rule": E["rule"],
                       "not_adopted": E["not_adopted"]},
             "saffire_pressure": {"factor_kpa_per_psi": factor, "factor_source": E["factor_source"],
-                                 "arithmetic": E["arithmetic"], "bins": [b["id"] for b in bins],
+                                 "arithmetic": E["arithmetic"], "what_min_kpa_and_max_kpa_are": E["kpa_note"],
+                                 "bins": [b["id"] for b in bins],
                                  "tests": saffire,
                                  "tests_with_both_in_one_bin": sum(1 for x in saffire if x["same_bin"]),
                                  "sentence_choice": E["choice"]},
@@ -515,14 +596,16 @@ def main():
 
     gcols = ["investigation_id", "variable", "state", "tests_in_state", "tests_in_table", "tests_mapped", "column_is",
              "entries", "file_groups", "files", "bytes", "headers_as_written", "link_to_table_row", "link_kind",
-             "differs_from_definition", "sampling", "documented_by"]
+             "differs_from_definition", "sampling", "documented_by"] + TIED_COLS
     write_csv(os.path.join(OUT, "gap_states.csv"), gcols, gap_state_rows(S))
     ncols = ["scenario_id", "need_id", "role", "variable", "state", "column_is", "in_scope_tests", "counted_tests",
-             "in_scope_tests_in_state", "counted_tests_in_state", "counted_unmatched_for_lack_of_this_variable"]
+             "in_scope_tests_in_state", "counted_tests_in_state", "counted_unmatched_for_lack_of_this_variable",
+             "videos_tied_to_in_scope_tests_in_state", "video_tests_in_state", "archives_tied_to_in_scope_tests_in_state",
+             "raw_state_video_sentences"]
     write_csv(os.path.join(OUT, "need_gap_states.csv"), ncols, need_gap_rows(S, scenarios, need_tests, scen_tests))
     qcols = ["rank", "investigation_id", "variable", "state", "file_group", "name_pattern", "kind", "retrievable_by_reading",
              "differs_from_definition", "link_kind", "headers_as_written", "tests_without_value", "tests_lacking_value", "counted_tests_lacking_value", "needs_counting_them",
-             "files", "bytes", "link_to_table_row", "sampling"]
+             "files", "bytes", "link_to_table_row", "sampling"] + TIED_COLS
     write_csv(os.path.join(OUT, "retrieval_queue.csv"), qcols, queue_rows(S, need_tests))
 
     raw_values = read_csv(os.path.join(OUT, "raw_values.csv"))

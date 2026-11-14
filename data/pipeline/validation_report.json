@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 67,
+  "PASS": 73,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 67
+  "checks": 73
  },
  "checks": [
   {
@@ -1664,6 +1664,85 @@
    "numbers": {
     "need_blocks": 156,
     "gaps": 199
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "P1_raw_file_groups_totals",
+   "verifies": "raw_file_groups.csv: the files and bytes of the groups add up, per investigation and kind, to the files and bytes of raw_inventory.json; in every group the files and bytes by link level add up to the group.",
+   "status": "PASS",
+   "numbers": {
+    "groups": 1759,
+    "investigation_kind_pairs": 134,
+    "files": 60866,
+    "bytes": 13471850126356
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "P2_test_files_ids",
+   "verifies": "test_files.csv: every test_id is a test of tests.csv of the same investigation and is the test of its table row (source_file, source_row); every table_row_key names a row of an experimental table of the investigation; levels are test or day_or_session.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 17354,
+    "with_test_id": 15701
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "P3_name_ties_recount",
+   "verifies": "Every listed file is tied again by the ordered rules of spec/raw_names.json with this check's own code; the files and bytes by link level per investigation, per group of raw_file_groups.csv and per row of test_files.csv equal the outputs; the suffix codes too. SKIP without the git-ignored listings.",
+   "status": "PASS",
+   "numbers": {
+    "files": 60866,
+    "by_level": {
+     "test": 12934,
+     "day_or_session": 30634,
+     "none": 17298
+    },
+    "test_files_rows": 17354,
+    "name_patterns": 1759,
+    "alternative_ties": 20
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "P4_layers_summary",
+   "verifies": "raw_layers_summary.json: per investigation and overall, the names layer equals the sums of raw_file_groups.csv, the structure layer the sample files of spec/raw_columns.json, the values layer the files of raw_values.csv, the archive layer archive_members_sample.csv; the overall numbers are the sums; the fixed sentences carry these numbers.",
+   "status": "PASS",
+   "numbers": {
+    "investigations": 24,
+    "names_test_files": 12934,
+    "opened_files": 219,
+    "values_files": 15,
+    "archives_listed": 23
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "P5_raw_state_tied_files",
+   "verifies": "The columns that the name layer added to gap_states.csv, retrieval_queue.csv and need_gap_states.csv (videos and archives tied by name to the tests that lack the value, the class of on-screen text) and the fields added to the raw_state items of the evidence packages are recounted from test_files.csv, tests.csv and spec/raw_names.json; no sentence says that the quantity of an item can be read from a video.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 1283,
+    "evidence_items_with_name_fields": 1300
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "P6_raw_names_spec",
+   "verifies": "spec/raw_names.json: every investigation of the listings is present; every meaning is a quote of 25 words or fewer with document, PSI file id and place, and the file id is a file of a listing of the same investigation (SKIP for the ids without listings); every rule names columns of its tables and known transforms.",
+   "status": "PASS",
+   "numbers": {
+    "quotes": 139,
+    "listings_present": true,
+    "rules": 54
    },
    "failures": 0,
    "failing_examples": []

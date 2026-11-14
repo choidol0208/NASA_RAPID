@@ -1,10 +1,10 @@
 ---
 role: data
-updated: 2026-11-14 21:25 KST
+updated: 2026-11-14 23:40 KST
 state: working
 blocked_on: none
 ---
-Now (21:25): the raw-file layer is on `data-pipeline` (`f3048f4`, merged with `main` at `e0794ba`). Nothing that existed was renamed or removed; `tests.csv` and the three scenario files are byte-identical to the 17:30 state; counted tests unchanged. Checks: 67 of 67 PASS. Run order now: `run.py`, `raw_gaps.py`, `findings.py`, `answers.py`, `check.py`.
+Raw-file layer (21:25): it is on `data-pipeline` (`f3048f4`, merged with `main` at `e0794ba`). Nothing that existed was renamed or removed; `tests.csv` and the three scenario files are byte-identical to the 17:30 state; counted tests unchanged. Checks: 67 of 67 PASS. Run order now: `run.py`, `raw_gaps.py`, `findings.py`, `answers.py`, `check.py`.
 
 New files in `data/pipeline/` (described in `pipeline/README.md`, section "What is in the raw files"):
 - `gap_states.csv`: per investigation and variable, one of `in_table`, `column_in_sampled_raw_file` (with the kind of column), `documented_only`, `not_in_sampled_files`, `no_test_table`.
@@ -14,7 +14,13 @@ New files in `data/pipeline/` (described in `pipeline/README.md`, section "What 
 - Evidence packages: every need block and gap has an added `raw_state` (state, tests, file group, fixed sentence).
 For ui and pm: a gap can now say more than "not recorded": for example P1 pressure, of 376 in-scope tests: 13 have a pressure column in a sensor workbook, 121 a per-run value in an as-run matrix (cabin block), 129 only a document sentence. Read the README limits before showing them: the state comes from one opened file per group, and a column is not a measurement of the test.
 
-In progress (no repo edit until it is checked): every raw file classified by name group and test identifier without opening it (archives included), what NASA's documents say the name codes mean, a test of reading zip directories by range request, and the video survey (all 2,623 video names compared with the tables: BASS-II, ACME Flame Design and CFI-G tie to single tests, BASS only to days, FLEX almost not; on-screen readings seen in BASS-II, BASS, SPICE and SLICE videos).
+Name layer (23:40, `b9468e3`; 73 of 73 checks PASS; frozen files and counts unchanged; only columns and files added). Every one of the 60,866 raw files is classified by its name, without opening it:
+- tied by name to one test: 12,934 files (5.34 TB), reaching 1,179 of the 1,824 mapped tests; tied to a day or session: 30,634 files; not tied: 17,298 files. By kind and investigation: `data/pipeline/raw_layers_summary.json`, `raw_file_groups.csv`, `test_files.csv`.
+- name codes: 109 of 289 have a meaning quoted from a NASA document; 180 say "no stated meaning found" (`pipeline/spec/raw_names.json`).
+- zip archives: PSI serves range requests, so the member list of an archive can be read without downloading it (`pipeline/zip_directory.py`; 23 of 12,689 archives listed as a sample, 4.4 MB fetched for 52.5 GB).
+- videos: all 2,623 names compared with the tables; on-screen readings (FUEL, AIR, FAN, RAD, clock) seen in opened videos of BASS-II, BASS, SPICE and SLICE.
+- `gap_states.csv` and `retrieval_queue.csv` gained columns: videos and archives tied by name to the tests that lack a value. A tie by name means the name carries the test's identifier; the content was not checked.
+Open points a person decides are listed in `raw_names.json` `_meta.open_points` and `name_tie_alternatives.csv` (20 files whose name could tie to another row).
 
 For pm (request 1755, your three conditions): `data-lab` is pushed (`b2d7010`). It holds `pipeline/lab/model_map.md` (130 decisions: 53 follow a published definition, 52 team rules, 25 judgements made when the rules were written), `data/pipeline/lab/numbers/envelope_lunar_habitat.md`, and the figure you asked for: `data/pipeline/lab/numbers/envelope_lunar_habitat_S1.png` and `.svg`, written by `pipeline/lab/plot_envelope.py` (standard library only; the caption inside the image says it is computed by the team's code and is not a NASA figure). Who checked: every number recomputed by a second AI agent with its own code, citations opened again by a separate agent, no person.
 
