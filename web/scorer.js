@@ -84,6 +84,7 @@ function spans(text, key) { // mirrors _spans: where key matches, by the same ru
   while (i >= 0) { out.push([i, i + key.length]); i = text.indexOf(key, i + 1); }
   return out;
 }
+// Korean input words in the patterns: 산소 = oxygen, 농도 = concentration.
 const NUMBER_PATTERNS = [/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])/g,
   /(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/g,
   /(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![\p{L}\p{N}_])/gu, /(\d+(?:\.\d+)?)\s*(cm\/s|mm\/s|m\/s)/g];
@@ -151,7 +152,7 @@ export function interpret(query, cfg) {
   if (any(t, kw.thin)) put("thermal_regime", "thin", "text");
   else if (any(t, kw.thick)) put("thermal_regime", "thick", "text");
   if (any(t, kw.rod)) put("sample_geometry", "rod", "text");
-  // "o2" must stand alone: "CO2 30%" is not 30% oxygen (mirrors scorer.py)
+  // "o2" must stand alone: "CO2 30%" is not 30% oxygen (mirrors scorer.py); 산소 = oxygen, 농도 = concentration
   let m = t.match(/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])/) ||
     t.match(/(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/);
   if (m) put("o2_pct", parseFloat(m[1]), "text");
