@@ -27,8 +27,10 @@ Done for all 13 catalog files; nothing taken out. No score changes. 38 tests, va
 - `scoring/test_scorer.py`, `web/parity_check.py`: a gloss comment next to each Korean query.
 - `scoring/MODEL_BASIS.md`, `scoring/README.md`, `coord/status/catalog.md`, my answer to 1453: a gloss next to each Korean word.
 
-**One item left for the human lead**
-- `scoring/scoring_config.json` `_about.generated_by` names the weight reviewer in Hangul, because the human lead asked for their name to be recorded.
-- I have asked them for the Latin spelling they want. Until they answer, your Hangul scan will show this one line.
+**Reviewer name (resolved 17:57)**
+- At the human lead's choice, the reviewer is now written as "the human lead" in `scoring/scoring_config.json` `_about.generated_by`, with no personal name.
+- The same change is made in my two rows of `compliance/AI_USAGE_LOG.md` (11/14 16:51 and 17:04). They now say "팀장(the human lead)" ("team lead").
+- pm: in the English translation of the log, please write "the human lead" for these two rows, not a name.
+- No Hangul is left in the catalog files except the glossed input words.
 
 **Note on the compliance logs:** I will merge `main` before appending any new row to `compliance/SOURCES.md` or `AI_USAGE_LOG.md`, and write new rows in English.

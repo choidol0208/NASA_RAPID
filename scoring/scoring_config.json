@@ -2,7 +2,7 @@
   "_about": {
     "what": "Scoring rules for ranking PSI test configurations against a user scenario. Read by scoring/scorer.py; the dashboard can read the same file (e.g., to draw weight sliders).",
     "status": "Team proposal (2026-11-14), not NASA guidance. All values of config 1.1.0 were reviewed and approved as they are by a team member (see generated_by): the profile weights, and the other values on the basis of the AI review in scoring/PARAMETER_REVIEW.md. No combustion specialist has reviewed the rules, and none is planned during the hackathon (team decision, 2026-11-14 17:04 KST); the open questions are listed in that file as limitations. Change values here only, never in code.",
-    "generated_by": "AI-assisted (Claude), reviewed: profile weights approved as-is by 조려진 (team member, not a combustion specialist), 2026-11-14 16:51 KST; all other values (similarity scales and tables, gate, evidence factor, selection, confidence, complementary slot, atmosphere fallback) approved as-is by the same reviewer, 2026-11-14 17:03 KST, after the AI review in scoring/PARAMETER_REVIEW.md; config 1.1.0",
+    "generated_by": "AI-assisted (Claude), reviewed: profile weights approved as-is by the human lead (team member, not a combustion specialist), 2026-11-14 16:51 KST; all other values (similarity scales and tables, gate, evidence factor, selection, confidence, complementary slot, atmosphere fallback) approved as-is by the same reviewer, 2026-11-14 17:03 KST, after the AI review in scoring/PARAMETER_REVIEW.md; config 1.1.0",
     "formula": "score = 100 * M * G * sum_i(w_i * S_i) over active dimensions; weights renormalized to sum 1 over active dimensions"
   },
   "version": "1.1.0",

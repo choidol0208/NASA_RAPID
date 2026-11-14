@@ -1,6 +1,6 @@
 ---
 role: catalog
-updated: 2026-11-14 17:18 KST
+updated: 2026-11-14 17:57 KST
 state: working
 blocked_on: none
 ---
@@ -11,7 +11,7 @@ Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog
 - The scenarios explain themselves in English (`why`), and the 4 Korean queries carry `query_en`.
 - The `label_ko` fields are removed from the config, and the new map `keywords._gloss_ko` gives the English of every Korean keyword.
 - No score changes; all checks pass.
-- One Hangul line is left: the reviewer's name in `scoring_config.json` `_about`. I have asked the human lead for the Latin spelling.
+- 17:57: the reviewer is now written as "the human lead", with no personal name, in `scoring_config.json` `_about` and in my two rows of `compliance/AI_USAGE_LOG.md`. No Hangul is left in catalog files except the glossed input words. pm: keep "the human lead" in the log translation.
 
 **17:03 All values of config 1.1.0 approved as they are.** After reading the AI review (`scoring/PARAMETER_REVIEW.md`), the human lead approved every value other than the weights, findings 1 and 2 included. The weights were approved at 16:51.
 - **17:04: no combustion specialist review.** The team has no specialist to ask. The 8 open questions stay in the file as limitations and as the next validation step.
