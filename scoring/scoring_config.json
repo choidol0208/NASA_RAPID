@@ -1,0 +1,826 @@
+{
+  "_about": {
+    "what": "Scoring rules for ranking PSI test configurations against a user scenario. Read by scoring/scorer.py; the dashboard can read the same file (e.g., to draw weight sliders).",
+    "status": "Team proposal (2026-11-14), not NASA guidance. Weights and scales are to be reviewed by the team; change them here only, never in code.",
+    "generated_by": "AI-assisted (Claude), reviewed: no",
+    "formula": "score = 100 * M * G * sum_i(w_i * S_i) over active dimensions; weights renormalized to sum 1 over active dimensions"
+  },
+  "version": "1.0.0",
+  "default_profile": "prevention",
+  "profiles": {
+    "prevention": {
+      "label_en": "Material flammability (prevention)",
+      "label_ko": "재료 가연성 (예방)",
+      "weights": {
+        "o2": 0.25,
+        "pressure": 0.1,
+        "flow": 0.2,
+        "fuel": 0.25,
+        "geometry": 0.1,
+        "role": 0.1,
+        "diluent": 0.0
+      },
+      "rationale": "Microgravity solid flammability is mapped on an oxygen-concentration vs flow-speed plane (U-shaped boundary), so O2 and flow carry 0.45; fuel type next; pressure and geometry modify."
+    },
+    "detection": {
+      "label_en": "Smoke and fire detection",
+      "label_ko": "감지",
+      "weights": {
+        "o2": 0.1,
+        "pressure": 0.05,
+        "flow": 0.1,
+        "fuel": 0.3,
+        "geometry": 0.05,
+        "role": 0.4,
+        "diluent": 0.0
+      },
+      "rationale": "Smoke amount and particle size depend mostly on the material and on whether the study measured smoke; atmosphere is secondary."
+    },
+    "suppression": {
+      "label_en": "Suppression and extinguishment",
+      "label_ko": "진압",
+      "weights": {
+        "o2": 0.15,
+        "pressure": 0.05,
+        "flow": 0.1,
+        "fuel": 0.2,
+        "geometry": 0.05,
+        "role": 0.3,
+        "diluent": 0.15
+      },
+      "rationale": "Whether the study tested extinguishment and with which diluent matters most; post-dilution O2 still governs extinction."
+    }
+  },
+  "similarity": {
+    "unknown_value": 0.5,
+    "o2": {
+      "above_scale_pct": 5.0,
+      "below_scale_pct": 10.0,
+      "why": "Asymmetric: a user O2 above the tested max means the real fire may be worse than tested (non-conservative), so it decays faster."
+    },
+    "pressure": {
+      "sigma_ln": 0.693147,
+      "why": "Log distance: kinetics and diffusivity scale with pressure ratios. A factor of 2 gives 0.61."
+    },
+    "flow_speed": {
+      "sigma_ln": 0.693147,
+      "offset_cms": 1.0,
+      "why": "Log distance on (v + 1 cm/s) so quiescent (0) is handled; quiescent vs forced flow are different extinction regimes."
+    },
+    "flow_config_matrix": {
+      "_rows_are_user_state": true,
+      "quiescent": {
+        "quiescent": 1.0,
+        "opposed": 0.5,
+        "concurrent": 0.5,
+        "coflow": 0.3,
+        "counterflow": 0.3,
+        "radial": 0.6
+      },
+      "ventilated": {
+        "quiescent": 0.4,
+        "opposed": 0.9,
+        "concurrent": 0.9,
+        "coflow": 0.5,
+        "counterflow": 0.5,
+        "radial": 0.3
+      },
+      "opposed": {
+        "quiescent": 0.3,
+        "opposed": 1.0,
+        "concurrent": 0.6,
+        "coflow": 0.4,
+        "counterflow": 0.5,
+        "radial": 0.3
+      },
+      "concurrent": {
+        "quiescent": 0.3,
+        "opposed": 0.6,
+        "concurrent": 1.0,
+        "coflow": 0.5,
+        "counterflow": 0.4,
+        "radial": 0.3
+      }
+    },
+    "fuel": {
+      "same_material": 1.0,
+      "same_class_same_melt": 0.8,
+      "same_class": 0.7,
+      "same_phase": 0.5,
+      "solid_surrogate": 0.5,
+      "liquid_gas": 0.3,
+      "other": 0.1
+    },
+    "geometry": {
+      "same_geometry": 1.0,
+      "same_geometry_other_regime": 0.6,
+      "other_geometry_same_regime": 0.7,
+      "solid_other": 0.4,
+      "phase_family_mismatch": 0.2,
+      "solid_geometries": [
+        "flat_sheet",
+        "rod",
+        "sphere",
+        "heated_sample"
+      ]
+    },
+    "role": {
+      "same_axis": 1.0,
+      "related_focus": 0.7,
+      "fundamental": 0.4,
+      "other": 0.2,
+      "related_focus_by_axis": {
+        "prevention": [
+          "flammability_boundary",
+          "flame_spread",
+          "ignition",
+          "burning_rate",
+          "extinction_limit"
+        ],
+        "detection": [
+          "smoke_soot",
+          "detection"
+        ],
+        "suppression": [
+          "suppression",
+          "extinction_limit"
+        ]
+      }
+    },
+    "diluent": {
+      "same": 1.0,
+      "other_inert": 0.5,
+      "none": 0.0
+    },
+    "unknown_cap_dims": [
+      "o2",
+      "fuel"
+    ],
+    "_unknown_cap_why": "For gate dimensions an unknown catalog value never scores above the best known match in the catalog for the same query, so missing data cannot outrank measured evidence."
+  },
+  "gate": {
+    "dimensions": [
+      "fuel",
+      "o2"
+    ],
+    "min_similarity": 0.2,
+    "factor": 0.5,
+    "mode": "ramp",
+    "why": "Combustion is not compensatory: a wrong fuel phase or a far-off O2 cannot be offset by other matches. The gate ramps linearly from 0.5 (similarity 0) to 1.0 (similarity >= 0.2) to avoid a cliff; it also applies to unknown values after capping."
+  },
+  "evidence": {
+    "base": 0.7,
+    "span": 0.3,
+    "data_availability": {
+      "raw_table": 1.0,
+      "summary_table": 0.8,
+      "images_video": 0.5,
+      "derived_analysis": 0.6,
+      "papers_only": 0.3
+    },
+    "mu_g_duration_class": {
+      "long": 1.0,
+      "short": 0.6,
+      "none (ground)": 0.5
+    },
+    "verification_status": {
+      "human_verified": 1.0,
+      "ai_extracted": 0.7
+    }
+  },
+  "selection": {
+    "top_k": 3,
+    "tie_points": 3.0,
+    "one_config_per_investigation": true
+  },
+  "confidence": {
+    "high": 0.75,
+    "medium": 0.45
+  },
+  "presets": {
+    "iss": {
+      "label_en": "ISS cabin",
+      "label_ko": "ISS 선실",
+      "aliases": [
+        "iss",
+        "international space station",
+        "space station",
+        "국제우주정거장",
+        "우주정거장",
+        "정거장"
+      ],
+      "values": {
+        "o2_pct": 21.0,
+        "pressure_kpa": 101.3,
+        "flow_state": "ventilated",
+        "gravity": "microgravity"
+      },
+      "source": "Nominal sea-level-like cabin air; forced ventilation assumed (team assumption, shown to the user)."
+    },
+    "lunar_habitat": {
+      "label_en": "Lunar base or pressurized rover",
+      "label_ko": "달 기지·여압 로버",
+      "aliases": [
+        "lunar",
+        "moon",
+        "moon base",
+        "lunar base",
+        "lunar habitat",
+        "rover",
+        "artemis",
+        "달",
+        "달 기지",
+        "월면",
+        "로버"
+      ],
+      "values": {
+        "o2_pct": 30.0,
+        "pressure_kpa": 70.3,
+        "flow_state": "ventilated",
+        "gravity": "lunar"
+      },
+      "source": "Challenge text: lunar bases and pressurized rovers at >=30% O2 and <=10.2 psi (70.3 kPa). Ventilation assumed."
+    },
+    "mars_habitat": {
+      "label_en": "Mars habitat",
+      "label_ko": "화성 기지",
+      "aliases": [
+        "mars",
+        "martian",
+        "화성"
+      ],
+      "values": {
+        "flow_state": "ventilated",
+        "gravity": "martian"
+      },
+      "source": "The challenge text gives no Mars atmosphere; ask the user for O2 and pressure."
+    },
+    "spacesuit": {
+      "label_en": "Spacesuit",
+      "label_ko": "우주복",
+      "aliases": [
+        "spacesuit",
+        "space suit",
+        "eva",
+        "suit",
+        "우주복",
+        "선외활동"
+      ],
+      "values": {
+        "o2_pct": 100.0,
+        "pressure_kpa": 29.6
+      },
+      "source": "Challenge text: spacesuits at 4.3 psi (29.6 kPa), 100% O2."
+    },
+    "earth": {
+      "label_en": "Earth sea level",
+      "label_ko": "지구 해수면",
+      "aliases": [
+        "earth",
+        "sea level",
+        "ground",
+        "지구",
+        "지상",
+        "해수면"
+      ],
+      "values": {
+        "o2_pct": 21.0,
+        "pressure_kpa": 101.3,
+        "gravity": "earth"
+      },
+      "source": "Standard sea-level air."
+    }
+  },
+  "keywords": {
+    "out_of_scope": [
+      "rocket",
+      "propellant",
+      "thruster",
+      "rocket engine",
+      "combustion chamber",
+      "solid rocket",
+      "hybrid rocket",
+      "로켓",
+      "추진제",
+      "추력기",
+      "연소실",
+      "엔진"
+    ],
+    "gravity": {
+      "lunar": [
+        "lunar",
+        "moon",
+        "달",
+        "월면"
+      ],
+      "martian": [
+        "mars",
+        "martian",
+        "화성"
+      ],
+      "earth": [
+        "earth",
+        "1g",
+        "sea level",
+        "지구",
+        "지상"
+      ],
+      "microgravity": [
+        "microgravity",
+        "μg",
+        "zero-g",
+        "zero g",
+        "orbit",
+        "미세중력",
+        "무중력",
+        "궤도"
+      ]
+    },
+    "concern": {
+      "detection": [
+        "smoke",
+        "detector",
+        "detection",
+        "detect",
+        "alarm",
+        "aerosol",
+        "particle",
+        "연기",
+        "감지",
+        "탐지",
+        "경보"
+      ],
+      "suppression": [
+        "suppress",
+        "suppression",
+        "extinguish",
+        "extinguisher",
+        "extinguishment",
+        "put out",
+        "co2 flood",
+        "소화",
+        "진압",
+        "소화기",
+        "끄"
+      ],
+      "prevention": [
+        "flammability",
+        "flammable",
+        "material selection",
+        "fire spread",
+        "flame spread",
+        "가연성",
+        "재료 선정",
+        "확산",
+        "예방"
+      ]
+    },
+    "flow_state": {
+      "quiescent": [
+        "stagnant",
+        "still air",
+        "quiescent",
+        "no ventilation",
+        "ventilation off",
+        "fan off",
+        "no airflow",
+        "dead zone",
+        "정체",
+        "환기 꺼짐",
+        "환기 없음",
+        "무풍",
+        "정지 공기",
+        "바람 없"
+      ],
+      "opposed": [
+        "opposed",
+        "against the flow",
+        "upstream",
+        "역풍",
+        "대향",
+        "바람을 거슬러",
+        "바람 거슬러"
+      ],
+      "concurrent": [
+        "concurrent",
+        "with the flow",
+        "downstream",
+        "순풍",
+        "동방향",
+        "바람을 타고",
+        "바람 타"
+      ],
+      "ventilated": [
+        "ventilation",
+        "ventilated",
+        "fan",
+        "airflow",
+        "air flow",
+        "forced flow",
+        "환기",
+        "송풍",
+        "팬",
+        "기류"
+      ]
+    },
+    "diluent": {
+      "CO2": [
+        "co2",
+        "carbon dioxide",
+        "이산화탄소"
+      ],
+      "N2": [
+        "nitrogen",
+        "n2",
+        "질소"
+      ],
+      "He": [
+        "helium",
+        "헬륨"
+      ]
+    },
+    "materials": [
+      {
+        "keys": [
+          "sibal",
+          "cotton-fiberglass"
+        ],
+        "fuel_material": "sibal",
+        "fuel_class": "fabric",
+        "fuel_phase": "solid",
+        "melt_behavior": "chars",
+        "thermal_regime": "thin",
+        "sample_geometry": "flat_sheet"
+      },
+      {
+        "keys": [
+          "cotton",
+          "면직물",
+          "면 "
+        ],
+        "fuel_material": "cotton",
+        "fuel_class": "fabric",
+        "fuel_phase": "solid",
+        "melt_behavior": "chars",
+        "thermal_regime": "thin",
+        "sample_geometry": "flat_sheet"
+      },
+      {
+        "keys": [
+          "nomex",
+          "노멕스"
+        ],
+        "fuel_material": "nomex",
+        "fuel_class": "fabric",
+        "fuel_phase": "solid",
+        "melt_behavior": "chars",
+        "thermal_regime": "thin",
+        "sample_geometry": "flat_sheet"
+      },
+      {
+        "keys": [
+          "fabric",
+          "textile",
+          "cloth",
+          "clothing",
+          "직물",
+          "천",
+          "옷",
+          "섬유"
+        ],
+        "fuel_class": "fabric",
+        "fuel_phase": "solid",
+        "melt_behavior": "chars",
+        "thermal_regime": "thin",
+        "sample_geometry": "flat_sheet"
+      },
+      {
+        "keys": [
+          "pmma",
+          "acrylic",
+          "plexiglass",
+          "아크릴"
+        ],
+        "fuel_material": "pmma",
+        "fuel_class": "thermoplastic_solid",
+        "fuel_phase": "solid",
+        "melt_behavior": "melts"
+      },
+      {
+        "keys": [
+          "wax",
+          "candle",
+          "paraffin",
+          "양초",
+          "왁스",
+          "파라핀"
+        ],
+        "fuel_material": "wax",
+        "fuel_class": "thermoplastic_solid",
+        "fuel_phase": "solid",
+        "melt_behavior": "melts"
+      },
+      {
+        "keys": [
+          "plastic",
+          "polymer",
+          "플라스틱",
+          "고분자"
+        ],
+        "fuel_class": "thermoplastic_solid",
+        "fuel_phase": "solid",
+        "melt_behavior": "melts"
+      },
+      {
+        "keys": [
+          "silicone",
+          "실리콘"
+        ],
+        "fuel_material": "silicone",
+        "fuel_class": "charring_solid",
+        "fuel_phase": "solid",
+        "melt_behavior": "neither"
+      },
+      {
+        "keys": [
+          "kapton",
+          "캡톤"
+        ],
+        "fuel_material": "kapton",
+        "fuel_class": "pyrolyzing_solid",
+        "fuel_phase": "solid"
+      },
+      {
+        "keys": [
+          "teflon",
+          "ptfe",
+          "테플론"
+        ],
+        "fuel_material": "teflon",
+        "fuel_class": "pyrolyzing_solid",
+        "fuel_phase": "solid"
+      },
+      {
+        "keys": [
+          "wire",
+          "cable",
+          "insulation",
+          "overheat",
+          "전선",
+          "케이블",
+          "피복",
+          "과열"
+        ],
+        "fuel_class": "pyrolyzing_solid",
+        "fuel_phase": "solid"
+      },
+      {
+        "keys": [
+          "paper",
+          "cellulose",
+          "lampwick",
+          "종이",
+          "셀룰로스"
+        ],
+        "fuel_material": "lampwick",
+        "fuel_class": "charring_solid",
+        "fuel_phase": "solid",
+        "melt_behavior": "chars",
+        "thermal_regime": "thin",
+        "sample_geometry": "flat_sheet"
+      },
+      {
+        "keys": [
+          "foam",
+          "pyrell",
+          "폼",
+          "스펀지"
+        ],
+        "fuel_material": "pyrell",
+        "fuel_class": "pyrolyzing_solid",
+        "fuel_phase": "solid"
+      },
+      {
+        "keys": [
+          "heptane",
+          "헵탄"
+        ],
+        "fuel_material": "heptane",
+        "fuel_class": "liquid_hydrocarbon",
+        "fuel_phase": "liquid",
+        "sample_geometry": "droplet"
+      },
+      {
+        "keys": [
+          "decane",
+          "데칸"
+        ],
+        "fuel_material": "decane",
+        "fuel_class": "liquid_hydrocarbon",
+        "fuel_phase": "liquid",
+        "sample_geometry": "droplet"
+      },
+      {
+        "keys": [
+          "dodecane",
+          "도데칸"
+        ],
+        "fuel_material": "dodecane",
+        "fuel_class": "liquid_hydrocarbon",
+        "fuel_phase": "liquid",
+        "sample_geometry": "droplet"
+      },
+      {
+        "keys": [
+          "octane",
+          "옥탄"
+        ],
+        "fuel_material": "octane",
+        "fuel_class": "liquid_hydrocarbon",
+        "fuel_phase": "liquid",
+        "sample_geometry": "droplet"
+      },
+      {
+        "keys": [
+          "methanol",
+          "메탄올"
+        ],
+        "fuel_material": "methanol",
+        "fuel_class": "liquid_alcohol",
+        "fuel_phase": "liquid",
+        "sample_geometry": "droplet"
+      },
+      {
+        "keys": [
+          "ethanol",
+          "에탄올"
+        ],
+        "fuel_material": "ethanol",
+        "fuel_class": "liquid_alcohol",
+        "fuel_phase": "liquid",
+        "sample_geometry": "droplet"
+      },
+      {
+        "keys": [
+          "alcohol",
+          "알코올"
+        ],
+        "fuel_class": "liquid_alcohol",
+        "fuel_phase": "liquid",
+        "sample_geometry": "droplet"
+      },
+      {
+        "keys": [
+          "fuel leak",
+          "liquid fuel",
+          "oil",
+          "spill",
+          "연료 누출",
+          "액체 연료",
+          "오일",
+          "기름"
+        ],
+        "fuel_class": "liquid_hydrocarbon",
+        "fuel_phase": "liquid",
+        "sample_geometry": "droplet"
+      },
+      {
+        "keys": [
+          "methane",
+          "메탄"
+        ],
+        "fuel_material": "methane",
+        "fuel_class": "gaseous_hydrocarbon",
+        "fuel_phase": "gas"
+      },
+      {
+        "keys": [
+          "ethylene",
+          "에틸렌"
+        ],
+        "fuel_material": "ethylene",
+        "fuel_class": "gaseous_hydrocarbon",
+        "fuel_phase": "gas"
+      },
+      {
+        "keys": [
+          "propane",
+          "프로판"
+        ],
+        "fuel_material": "propane",
+        "fuel_class": "gaseous_hydrocarbon",
+        "fuel_phase": "gas"
+      },
+      {
+        "keys": [
+          "butane",
+          "부탄"
+        ],
+        "fuel_material": "butane",
+        "fuel_class": "gaseous_hydrocarbon",
+        "fuel_phase": "gas"
+      },
+      {
+        "keys": [
+          "ethane",
+          "에탄 "
+        ],
+        "fuel_material": "ethane",
+        "fuel_class": "gaseous_hydrocarbon",
+        "fuel_phase": "gas"
+      },
+      {
+        "keys": [
+          "hydrogen",
+          "수소"
+        ],
+        "fuel_material": "hydrogen",
+        "fuel_class": "hydrogen",
+        "fuel_phase": "gas"
+      },
+      {
+        "keys": [
+          "gas leak",
+          "가스 누출",
+          "가스"
+        ],
+        "fuel_class": "gaseous_hydrocarbon",
+        "fuel_phase": "gas"
+      },
+      {
+        "keys": [
+          "dust",
+          "먼지"
+        ],
+        "fuel_material": "dust",
+        "fuel_class": "particulate",
+        "fuel_phase": "aerosol"
+      }
+    ],
+    "thin": [
+      "thin",
+      "film",
+      "sheet",
+      "얇은",
+      "필름",
+      "시트"
+    ],
+    "thick": [
+      "thick",
+      "slab",
+      "block",
+      "두꺼운",
+      "판",
+      "블록"
+    ],
+    "rod": [
+      "rod",
+      "cylinder",
+      "막대",
+      "원통"
+    ]
+  },
+  "warnings": {
+    "out_of_scope": "Rocket and propellant fire safety is outside the scope of PSI combustion research.",
+    "partial_gravity": "PSI has no partial-gravity (lunar or Martian) combustion data. Results are microgravity tests; treat microgravity and 1g behaviour as bounds.",
+    "earth_gravity": "PSI results are microgravity tests. Only some investigations report 1g comparisons.",
+    "o2_above_all": "O2 is above the highest O2 tested in microgravity in PSI ({max_o2}% in {max_cfg}, {ref}). Any conclusion is an extrapolation.",
+    "o2_above_result": "User O2 {user}% is above this configuration's tested maximum ({max}%): the real fire may be more severe than tested.",
+    "outside_range": "Outside the tested range for: {dims}.",
+    "gas_for_solid": "Evidence comes from gaseous-fuel tests; apply to solid materials with caution.",
+    "oxidizer_stream": "O2 range here is the oxidizer stream of an inverse flame, not the surrounding atmosphere.",
+    "not_reported": "Catalog does not report: {dims} (scored as unknown).",
+    "ground_analysis": "Ground analysis or modelling that reuses flight data, not a flight experiment.",
+    "need_input": "Tell me at least an environment (ISS, lunar habitat, spacesuit) or a material (cotton fabric, PMMA, heptane).",
+    "fallback": "{dims} not reported in the catalog; scored as ordinary cabin air (team assumption: 21% O2, 101.3 kPa).",
+    "complementary": "Included because it was tested at your O2; the closer matches above were tested at a different O2."
+  },
+  "atmosphere_fallback": {
+    "o2_pct": 21.0,
+    "o2_applies_to": "all",
+    "pressure_kpa": 101.3,
+    "pressure_applies_to_investigations": [
+      "BASS",
+      "BASS-II",
+      "SAFFIRE-I",
+      "SAFFIRE-II",
+      "SAFFIRE-III",
+      "SAME",
+      "SAME-R",
+      "DAFT",
+      "SPICE",
+      "SLICE"
+    ],
+    "why": "Unusual atmospheres are always stated in PSI records, so a configuration with no reported O2 is scored as ordinary air (21%). Pressure is filled (101.3 kPa) only for experiments that ran in the ISS cabin, the MSG work volume, or a Cygnus cabin. Scoring only: the catalog stays blank and each use is flagged on screen."
+  },
+  "complementary_slot": {
+    "enabled": true,
+    "dimension": "o2",
+    "min_similarity": 0.99,
+    "min_score_ratio": 0.4,
+    "why": "If the user's O2 is not ordinary air and none of the top results was tested at that O2, the last slot shows the best result that was, so the answer always includes atmosphere-matched evidence.",
+    "only_if_o2_differs_from_pct": 21.0,
+    "tolerance_pct": 2.0
+  },
+  "outside_range_threshold": 0.9
+}

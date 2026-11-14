@@ -19,6 +19,10 @@
 | 11/14 10:30– | Claude Code | 공식 제출·심사 가이드 원문 확인, PSI 시험 표의 예비 집계, 팀 일정과 역할 계획 정리 | 저장소 밖의 팀 내부 계획 문서. 제출물에 들어간 것 없음 | 사용자가 대화로 확인 |
 | 11/14 10:50– | Claude Code | 세션 간 협업 체계 작성: 역할·브랜치 규칙, 조정 파일과 도우미 스크립트, 역할별 브리프, AI 산출물 형식 초안, 저장소 README | `coord/`, `contracts/`, `scripts/coord.py`, `.claude/commands/sync.md`, `.gitattributes`, `README.md`, `AGENTS.md` 8·9절 | 미검토 |
 | 11/14 오후 | Claude Code (웹 검색 도구 Exa 사용) | 필요 정보 7개의 근거가 되는 공식 기준·요구사항·문헌 21건을 검색해 읽고, 항목(기준 문장, 수치, 문서 내 위치, 확인 방식)을 명세로 정리. 필요 정보마다 근거 항목을 연결 | `pipeline/spec/references.json`, `pipeline/spec/needs.json`의 `references`, `data/pipeline/need_references.csv` | 미검토. 수치와 조항 번호는 원문 대조 필요. 초록만 확인한 문서 5건, 인용으로만 확인한 문서 1건은 명세에 표시함 |
+| 11/14 10:30– | Claude (Opus, claude.ai 세션) | 카탈로그 2단 구조(조사표·구성표) 설계, PSI 기록·시험 표에서 값 추출, 분류 열 작성 | `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `data/catalog/*` | 미검토. 모든 행 ai_extracted |
+| 11/14 10:30– | Claude (Opus, claude.ai 세션) | 순위 점수 규칙(가중치 프로파일·유사도 식) 설정 파일과 계산 코드, 러프 입력 해석, 단위 시험 | `scoring/scoring_config.json`, `scoring/scorer.py`, `scoring/test_scorer.py`, `scoring/README.md` | 미검토. 가중치는 팀 검토 필요 |
+| 11/14 10:30– | Claude (Opus, claude.ai 세션) | 검증 시나리오 22개와 실행기, 안정성 검사 | `validation/scenarios.json`, `validation/run_validation.py`, `validation/report.md` | 미검토. 기대 답은 전문가 검토 필요 |
+| 11/14 10:30– | Claude (Opus, claude.ai 세션) | 카탈로그 필터 설명 슬라이드 1장(영어)과 생성 스크립트 | `presentation/catalog_filter_slide.pptx`, `presentation/build_catalog_filter_slide.js` | 미검토 |
 
 ## 제품 안에서 동작하는 AI
 
