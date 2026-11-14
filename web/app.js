@@ -171,6 +171,7 @@ function noteFor(sc, r) {
   return sc.result_notes.find((n) => n.investigation_id === r.psi_accession || n.investigation_id === r.investigation_id) || null;
 }
 
+const VIDEO_PILOT = "Side pilot (AI-written code; frames checked by an AI assistant, not by a person): for 19 BASS-II clips (PSI-25) we copied the numbers NASA's video shows on screen (FUEL, AIR, FAN, RAD, clock) into one row per second. This is a transcription of NASA's display, not a NASA data file and not a team measurement. About 750 values were compared with the picture and none was wrong. It gives no flame-out time and no flow speed at blowoff or extinction.";
 function renderResults(out, cat, insights, sc) {
   const ol = $("#results");
   ol.replaceChildren();
@@ -214,12 +215,16 @@ function renderResults(out, cat, insights, sc) {
     const rawSentence = insights.raw && insights.raw.sentences ? insights.raw.sentences[r.psi_accession] : null;
     const rawLine = rawSentence ? h("p", { class: "raw-line" }, h("b", {}, "Raw data in PSI: "), rawSentence, " ",
       link(REPO + insights.raw.source, "(team count from the PSI file listing)")) : null;
+    // pm request 1709: the video side pilot, one sentence word for word, next to PSI-25's raw-data line.
+    // No number from the pilot's files is read by the page.
+    const videoEl = rawLine && r.psi_accession === "PSI-25" && OPTIONAL_HAS("repo:video/README.md")
+      ? h("p", { class: "raw-line" }, VIDEO_PILOT, " ", link(REPO + "video/README.md", "(video/README.md)")) : null;
     const robust = robustLine(insights.robustRun, r);
     const robustEl = robust ? h("p", { class: "raw-line rob-line" }, h("b", {}, "Weight check: "), robust, " ",
       h("a", { href: "#ai-use" }, "(team computation)")) : null;
     const note = noteFor(sc, r);
     const noteEl = note ? h("div", { class: "ai-note" }, h("p", {}, h("b", {}, "Team note: "), note.text, " ", sourceLinks(note.sources, cat)), itemTag(note, sc)) : null;
-    ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, links, rawLine, robustEl, more));
+    ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, links, rawLine, videoEl, robustEl, more));
   }
 }
 

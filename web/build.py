@@ -145,6 +145,9 @@ def main():
         with open(os.path.join(DIST, "data", "raw_inventory_sentences.json"), "w", encoding="utf-8") as fh:
             json.dump({"source": "data/pipeline/raw_inventory.json", "sentences": sentences}, fh, ensure_ascii=False)
         OPTIONAL_BUILT.append("data/raw_inventory_sentences.json")
+    # pm's video side pilot (request 1709): one sentence on the page, linked to the README at the built commit.
+    if os.path.exists(os.path.join(ROOT, "video", "README.md")):
+        OPTIONAL_BUILT.append("repo:video/README.md")
     # data's answer files (request 1531): one per scenario and need, fixed sentences in four rungs.
     # Copied unchanged; a small index per scenario carries each need's top line, so the page loads a
     # need's file only when its section is opened.
