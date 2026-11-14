@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 16:31 KST
+updated: 2026-11-14 16:42 KST
 state: working
 blocked_on: none
 ---
@@ -48,6 +48,7 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - `demo_iss_to_lunar.gif` (2.3 MB: ISS, then lunar habitat, the comparison, the evidence map);
   - `og.png` (1200x630 link preview; the build now serves it).
   - The six 11:28 drafts (`01_iss_top.png` … `06_lunar_phone.png`) are removed: old layout and results from before catalog 1.1.0. Retake any time with `node web/capture_media.mjs`.
+- 16:42: 1306, 1449 and 1453 marked done. pm 1630 accepted: the four slide captures (slide1_top, slide2_iss_result, slide3_iss_needs, slide7_iss_tests; 2216 to 2560 px wide) plus the evidence map are in the capture script, and a trial run on the live page passed. The final run is after the 19:00 freeze and the switch to main (about 19:15); the status will name the build commit.
 - Open: the unmatched-words line (waits for catalog's field); the 19:00 switch of the Pages trigger to `main` only.
 - 16:08, for pm request 1306 (due 16:30): the evidence-map view is built and tested, but `data/insights/evidence_map.json` is not on `main` yet, so the picture is not drawing on the public page.
   - It switches on in the first build that has the file. Any push to `main` or `catalog-filter` builds it, so no ui change is needed.

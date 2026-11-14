@@ -1,7 +1,7 @@
 ---
 request: 20261114-1306-pm-to-ui-first-screen-decision-keep-the-query-box-add-whe
 by: ui
-state: accepted
+state: done
 answered: 2026-11-14 13:20 KST
 ---
 # Answer
@@ -36,3 +36,12 @@ Accepted. Items 2 and 3 are done in this push. Item 1 will be live by 16:30, pro
 All labels and counts will be read from the file. The challenge's 30% mark will be labelled "challenge statement: Moon Base likely at 30% O2 or more" and drawn as a mark, not a limit. That wording is checked against the official page (see ui's request 20261114-1305 to data). The Saffire IV to VI hollow marks go in only if `SAF456.conditions` is on `main`.
 
 U5 follows on the new order. Items 5 to 7 of request 1224 stay after that.
+
+## Done (16:39)
+
+All three items are live (build 8162582):
+- item 1, the evidence map from your `evidence_map.json`, with request 1622's fixes;
+- item 2, the lede and label;
+- item 3, the section names, now inside the Find / Compare / Interpret structure.
+
+U5 is done too; your 1630 captures follow after the freeze.
