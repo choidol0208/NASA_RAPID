@@ -3,7 +3,7 @@ from: pm
 to: ui
 opened: 2026-11-14 10:56 KST
 needed_by: 12:00
-closed: false
+closed: true
 ---
 # Publish the public URL and say which repository settings you need
 
