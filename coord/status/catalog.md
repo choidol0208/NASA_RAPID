@@ -1,10 +1,15 @@
 ---
 role: catalog
-updated: 2026-11-14 18:14 KST
+updated: 2026-11-14 18:25 KST
 state: working
 blocked_on: none
 ---
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`. Core work is done and live: everything up to `bbea891` is on `main` and `catalog-filter`, with config 1.1.0. What remains is an optional human check of the demo values and the freeze checks.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`. Core work is done and live with config 1.1.0. Pre-freeze check at 18:25:
+- `main` has every catalog commit except the 18:14 wording change (`a39cba4`, text only); pm integrates it at the freeze.
+- On a worktree of `origin/main`, 11 demo queries (ISS, lunar habitat, spacesuit, Mars base, the cotton-fabric pair, the Korean form, three equipment queries, CO2 suppression) give the same status, warnings, `not_understood`, configurations, scores, confidence and reasons as `catalog-scoring`. Unit tests and parity 86/86 pass on `main`.
+- The live site serves config 1.1.0 with the same values (only the `_about` text differs until the next deploy), and the same `scorer.js` and `configurations.csv`.
+- At 19:16 I repeat the check on `main` after the switch to deploying from `main` only.
+- No value changes after the 18:00 freeze.
 
 **17:18 English only (pm request 1656, done).** All catalog files are translated, and the Korean input words are glossed.
 - The READMEs, the data dictionary and the workbook are in English. The dictionary column `meaning_ko` is now `meaning`.
