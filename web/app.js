@@ -1043,7 +1043,6 @@ function renderAiUse(ai, onQuery) {
       h("ul", { class: "ai-funnel", "aria-label": "Model-written sentences at each check" }, steps.map(([n, t]) => h("li", {}, h("b", {}, String(n)), " ", t))),
       h("p", {}, `Reviewed by a second AI session: ${q.reviewed_ai_session ?? "not recorded"}. Reviewed by a person: ${q.reviewed_person ?? "not recorded"}.`),
       h("p", {}, "A sentence is shown or not shown; none is reworded. Every shown sentence cites the NASA sentences it rests on."),
-      q.description ? h("p", { class: "gap" }, q.description) : null,
       h("p", { class: "gap" }, "Counts: ", link(REPO + "data/insights/quality.json", "data/insights/quality.json"), " ", countTag())));
   }
   const m = ai.readiness;
