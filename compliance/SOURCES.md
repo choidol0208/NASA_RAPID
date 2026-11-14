@@ -58,6 +58,7 @@
 | 11/14 14:40 | 라이브러리 | pandas 2.2.3 — 위 11:20 행과 같은 라이브러리의 추가 사용처 | https://github.com/pandas-dev/pandas | BSD-3-Clause | pandas 개발팀 | `ai/model_readiness.py` (표 읽기와 집계) |
 | 11/14 14:40 | 라이브러리 | NumPy 2.1.3 | https://github.com/numpy/numpy | BSD-3-Clause | NumPy 개발팀 | `ai/model_readiness.py`, `ai/robustness.py` (수치 계산, 고정 시드 난수 표본) |
 | 11/14 14:40 | 라이브러리 | scikit-learn 1.6.1 | https://github.com/scikit-learn/scikit-learn | BSD-3-Clause | scikit-learn 개발팀 | `ai/model_readiness.py` (실험 단위 교차검증으로 '예측 모델을 만들 만큼 데이터가 되는지'를 진단하는 데만 사용. 학습된 예측기는 제품에 싣지 않음) |
+| 11/14 15:19 | 데이터 | PSI 연소 조사 24건의 파일 목록(이름·크기·분류만; 원자료 파일은 내려받지 않음) | https://psi.nasa.gov/ | 실험별 CC0-1.0 (PSI-10은 기록에 라이선스 없음) | NASA Biological and Physical Sciences, PSI | `pipeline/raw_inventory.py`, `data/pipeline/raw_inventory.json`, `scripts/psi_whats_new.py` |
 
 실험별 DOI는 `data/psi/manifest.json`에 있다. PSI는 데이터를 쓸 때 실험의 DOI로 인용하라고 요구한다.
 

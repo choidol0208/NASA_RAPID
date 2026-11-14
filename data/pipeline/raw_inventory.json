@@ -1,0 +1,4948 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "note": "One entry per NASA PSI combustion investigation: what the PSI file listing names, by PSI category and by kind of file. Counts and sizes are computed by the team from the listings; they are not NASA statements about the data.",
+  "listings_fetched_at": "2026-11-14T05:57:17Z",
+  "listings_source": "POST https://psi.nasa.gov/geode-py/ws/files/v2 (public file listing of https://psi.nasa.gov/), saved unchanged in data/psi/file_listings/",
+  "classification_rule": "Kinds are decided from file names and PSI categories only, by the ordered rules of pipeline/spec/raw_kinds.json. No file was opened or downloaded. A kind says what the name says, not what the file holds; a listing says nothing about the content or the quality of a file.",
+  "counting_rule": "A file is one record of the listing. PSI listings repeat some rows (same file id in the same folder); a repeated row is counted once ('listing_rows' minus 'repeated_rows' = 'files'; 'listing_rows_bytes' is the sum over all rows, repeats included, for comparison). Where PSI lists several records under one storage key (other versions of a name) each record is counted; 'records_beyond_one_per_key' says how many.",
+  "units": "'bytes' are integers as PSI reports them (bytes_size). In 'sentence' sizes use decimal units with one decimal: 1 MB = 10^6 bytes, 1 GB = 10^9 bytes; GB from 10^9 bytes, MB below.",
+  "fields": {
+   "listing": "'ok', or 'not available: <reason>' when the listing call failed; such an entry has no counts.",
+   "by_category": "The PSI category names exactly as the listing gives them, each with files, bytes and the kinds inside it.",
+   "by_kind": "Files and bytes per kind over the whole listing, the extensions inside the kind, and the name of the largest file as 'example'. For archives, 'archive_content' counts what the names state.",
+   "test_id_in_file_names": "Name patterns carried by the files of 'searched_categories', with the number of names that match and three example names. Only what the names show; no name is mapped to a row of an experimental table. Empty when no pattern of the spec is carried.",
+   "sentence": "One fixed sentence (template in the spec file) filled only with numbers of the same entry."
+  },
+  "totals": {
+   "investigations": 24,
+   "listings_available": 24,
+   "files": 60866,
+   "bytes": 13471850126356,
+   "listing_rows": 66567,
+   "repeated_rows": 5701,
+   "listing_rows_bytes": 13496753397871,
+   "files_without_size": 0,
+   "by_kind": {
+    "video": {
+     "files": 2623,
+     "bytes": 426053691302
+    },
+    "still_image": {
+     "files": 26,
+     "bytes": 17808818
+    },
+    "archive": {
+     "files": 12689,
+     "bytes": 12999389379194
+    },
+    "sensor_or_telemetry_table": {
+     "files": 4982,
+     "bytes": 8489945314
+    },
+    "experimental_table": {
+     "files": 22,
+     "bytes": 211116
+    },
+    "document": {
+     "files": 4760,
+     "bytes": 3305369522
+    },
+    "document_table": {
+     "files": 26,
+     "bytes": 57986300
+    },
+    "other": {
+     "files": 35738,
+     "bytes": 34535734790
+    }
+   },
+   "by_rule": {
+    "experimental_table_by_category": {
+     "files": 22,
+     "bytes": 211116
+    },
+    "video_by_extension": {
+     "files": 2623,
+     "bytes": 426053691302
+    },
+    "still_image_by_extension": {
+     "files": 26,
+     "bytes": 17808818
+    },
+    "archive_by_extension": {
+     "files": 12689,
+     "bytes": 12999389379194
+    },
+    "document_by_extension": {
+     "files": 1926,
+     "bytes": 3300867698
+    },
+    "text_document_by_name": {
+     "files": 2834,
+     "bytes": 4501824
+    },
+    "document_table_by_category": {
+     "files": 13,
+     "bytes": 50779378
+    },
+    "document_table_by_name": {
+     "files": 13,
+     "bytes": 7206922
+    },
+    "sensor_table_by_name_in_data_category": {
+     "files": 4982,
+     "bytes": 8489945314
+    },
+    "(no rule: default)": {
+     "files": 35738,
+     "bytes": 34535734790
+    }
+   }
+  },
+  "written_by": "pipeline/raw_inventory.py from data/psi/file_listings/, data/psi/manifest.json and pipeline/spec/raw_kinds.json"
+ },
+ "investigations": [
+  {
+   "investigation_id": "PSI-10",
+   "title": "Advanced Combustion via Microgravity Experiments / Flame Design",
+   "acronym": "ACME/Flame Design",
+   "listing": "ok",
+   "files": 3807,
+   "bytes": 2180435304347,
+   "listing_rows": 3807,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 2180435304347,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Engineering Documents": {
+     "files": 1,
+     "bytes": 7496324,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 7496324
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 2,
+     "bytes": 44247,
+     "by_kind": {
+      "experimental_table": {
+       "files": 2,
+       "bytes": 44247
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 17047,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 17047
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 3792,
+     "bytes": 2180419708029,
+     "by_kind": {
+      "video": {
+       "files": 317,
+       "bytes": 75056452412
+      },
+      "still_image": {
+       "files": 2,
+       "bytes": 1803272
+      },
+      "archive": {
+       "files": 1183,
+       "bytes": 2103847975200
+      },
+      "sensor_or_telemetry_table": {
+       "files": 317,
+       "bytes": 1246704214
+      },
+      "document": {
+       "files": 382,
+       "bytes": 110274794
+      },
+      "document_table": {
+       "files": 2,
+       "bytes": 1006459
+      },
+      "other": {
+       "files": 1589,
+       "bytes": 155491678
+      }
+     }
+    },
+    "Reports": {
+     "files": 3,
+     "bytes": 4534713,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 4534713
+      }
+     }
+    },
+    "Representative Image(s)": {
+     "files": 5,
+     "bytes": 871708,
+     "by_kind": {
+      "still_image": {
+       "files": 5,
+       "bytes": 871708
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 3,
+     "bytes": 2632279,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 2632279
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 317,
+     "bytes": 75056452412,
+     "extensions": {
+      "ts": {
+       "files": 317,
+       "bytes": 75056452412
+      }
+     },
+     "example": "PSI-10_Raw Data_vlc-record-2021-11-24-17h08m41s-udp____21328D1.ts",
+     "example_bytes": 1741879596
+    },
+    "still_image": {
+     "files": 7,
+     "bytes": 2674980,
+     "extensions": {
+      "jpg": {
+       "files": 5,
+       "bytes": 1046350
+      },
+      "png": {
+       "files": 2,
+       "bytes": 1628630
+      }
+     },
+     "example": "PSI-10_Raw Data_19150A4 bracking exposure histogram screenshot.PNG",
+     "example_bytes": 1500662
+    },
+    "archive": {
+     "files": 1184,
+     "bytes": 2103847992247,
+     "extensions": {
+      "zip": {
+       "files": 1184,
+       "bytes": 2103847992247
+      }
+     },
+     "example": "PSI-10_Raw Data_21301J4_ACME_Converted.zip",
+     "example_bytes": 32911249730,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 17047
+      },
+      "still images": {
+       "files": 3,
+       "bytes": 3526717522
+      },
+      "not stated in the name": {
+       "files": 1180,
+       "bytes": 2100321257678
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 317,
+     "bytes": 1246704214,
+     "extensions": {
+      "csv": {
+       "files": 317,
+       "bytes": 1246704214
+      }
+     },
+     "example": "PSI-10_Raw Data_21328D1_data.csv",
+     "example_bytes": 41197441
+    },
+    "experimental_table": {
+     "files": 2,
+     "bytes": 44247,
+     "extensions": {
+      "csv": {
+       "files": 2,
+       "bytes": 44247
+      }
+     },
+     "example": "PSI-10_Experimental table_Flame Design_Normal Flame.csv",
+     "example_bytes": 26933
+    },
+    "document": {
+     "files": 389,
+     "bytes": 124938110,
+     "extensions": {
+      "pdf": {
+       "files": 76,
+       "bytes": 124837273
+      },
+      "txt": {
+       "files": 313,
+       "bytes": 100837
+      }
+     },
+     "example": "PSI-10_Raw Data_19123 test sheets.pdf",
+     "example_bytes": 13396860
+    },
+    "document_table": {
+     "files": 2,
+     "bytes": 1006459,
+     "extensions": {
+      "xlsx": {
+       "files": 2,
+       "bytes": 1006459
+      }
+     },
+     "example": "PSI-10_Raw Data_Final ACME Chamber Calculator - 2019-04-09 to 2019-08-13.xlsx",
+     "example_bytes": 534510
+    },
+    "other": {
+     "files": 1589,
+     "bytes": 155491678,
+     "extensions": {
+      "asc": {
+       "files": 66,
+       "bytes": 31017544
+      },
+      "csv": {
+       "files": 317,
+       "bytes": 2224200
+      },
+      "errors": {
+       "files": 1,
+       "bytes": 183733
+      },
+      "log": {
+       "files": 35,
+       "bytes": 11668688
+      },
+      "mdipsug": {
+       "files": 490,
+       "bytes": 109327181
+      },
+      "txt": {
+       "files": 680,
+       "bytes": 1070332
+      }
+     },
+     "example": "PSI-10_Raw Data_INTNS_21328D1.mdipsug",
+     "example_bytes": 4115281
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "five_digits_letter_number",
+     "regex": "(?<!\\d)\\d{5}[A-Z]\\d{1,2}(?!\\d)",
+     "what_the_names_show": "An id of five digits, a capital letter and a number (for example 21301A9). The names do not say what the id identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 3792,
+     "files_matching": 3577,
+     "distinct_ids": 320,
+     "examples": [
+      "PSI-10_Raw Data_19115A1.txt",
+      "PSI-10_Raw Data_19115B1.txt",
+      "PSI-10_Raw Data_19115B2.txt"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 3,807 files (2,180.4 GB) for PSI-10: 317 videos (75.1 GB), 7 still images (2.7 MB), 1,184 archives (2,103.8 GB; by name or PSI category: 1 investigation metadata, 3 still images, 1,180 not stated), 317 tables named as sensor, telemetry or data (1.2 GB), 2 experimental tables (under 0.1 MB), 389 documents (124.9 MB), 2 document tables (1.0 MB), 1,589 other files (155.5 MB; most frequent extension: txt, 680); 3,577 of the 3,792 file names under Raw Data carry an id of five digits, a letter and a number."
+  },
+  {
+   "investigation_id": "PSI-20",
+   "title": "Advanced Combustion via Microgravity Experiments - Burning Rate Emulator",
+   "acronym": "ACME BRE",
+   "listing": "ok",
+   "files": 2361,
+   "bytes": 2035568427496,
+   "listing_rows": 2361,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 2035568427496,
+   "records_beyond_one_per_key": 69,
+   "files_without_size": 0,
+   "by_category": {
+    "Engineering Documents": {
+     "files": 25,
+     "bytes": 161416828,
+     "by_kind": {
+      "archive": {
+       "files": 17,
+       "bytes": 134139675
+      },
+      "document": {
+       "files": 8,
+       "bytes": 27277153
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 1113,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 1113
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 15061,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 15061
+      }
+     }
+    },
+    "Presentations": {
+     "files": 13,
+     "bytes": 184287964,
+     "by_kind": {
+      "video": {
+       "files": 3,
+       "bytes": 157943086
+      },
+      "document": {
+       "files": 10,
+       "bytes": 26344878
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 2297,
+     "bytes": 2035132220077,
+     "by_kind": {
+      "video": {
+       "files": 196,
+       "bytes": 15847262674
+      },
+      "archive": {
+       "files": 1030,
+       "bytes": 2016153827637
+      },
+      "sensor_or_telemetry_table": {
+       "files": 191,
+       "bytes": 1108439705
+      },
+      "document": {
+       "files": 218,
+       "bytes": 43508121
+      },
+      "document_table": {
+       "files": 5,
+       "bytes": 2453395
+      },
+      "other": {
+       "files": 657,
+       "bytes": 1976728545
+      }
+     }
+    },
+    "Reports": {
+     "files": 2,
+     "bytes": 18391525,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 18391525
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 22,
+     "bytes": 72094928,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 1981506
+      },
+      "document": {
+       "files": 21,
+       "bytes": 70113422
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 199,
+     "bytes": 16005205760,
+     "extensions": {
+      "mp4": {
+       "files": 199,
+       "bytes": 16005205760
+      }
+     },
+     "example": "PSI-20_Raw Data_vlc-record-2020-12-11-15h00m04s-udp____20346A4.mp4",
+     "example_bytes": 594236426
+    },
+    "archive": {
+     "files": 1049,
+     "bytes": 2016289963879,
+     "extensions": {
+      "zip": {
+       "files": 1049,
+       "bytes": 2016289963879
+      }
+     },
+     "example": "PSI-20_Raw Data_20352A6_ACME_Converted.zip",
+     "example_bytes": 18352841261,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 15061
+      },
+      "VLC recording": {
+       "files": 185,
+       "bytes": 36029437799
+      },
+      "drawings": {
+       "files": 14,
+       "bytes": 120224117
+      },
+      "not stated in the name": {
+       "files": 849,
+       "bytes": 1980140286902
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 191,
+     "bytes": 1108439705,
+     "extensions": {
+      "csv": {
+       "files": 191,
+       "bytes": 1108439705
+      }
+     },
+     "example": "PSI-20_Raw Data_19094G1_data.csv",
+     "example_bytes": 12494663
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 1113,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 1113
+      }
+     },
+     "example": "PSI-20_Experimental table_ACME BRE.csv",
+     "example_bytes": 1113
+    },
+    "document": {
+     "files": 259,
+     "bytes": 185635099,
+     "extensions": {
+      "docx": {
+       "files": 2,
+       "bytes": 261630
+      },
+      "pdf": {
+       "files": 59,
+       "bytes": 185317048
+      },
+      "txt": {
+       "files": 198,
+       "bytes": 56421
+      }
+     },
+     "example": "PSI-20_Engineering Documents_s1101mfa0100_C.pdf",
+     "example_bytes": 16100676
+    },
+    "document_table": {
+     "files": 5,
+     "bytes": 2453395,
+     "extensions": {
+      "xlsx": {
+       "files": 5,
+       "bytes": 2453395
+      }
+     },
+     "example": "PSI-20_Raw Data_Final ACME Chamber Calculator - 2020-07-22 to 2021-02-03.xlsx",
+     "example_bytes": 525509
+    },
+    "other": {
+     "files": 657,
+     "bytes": 1976728545,
+     "extensions": {
+      "csv": {
+       "files": 191,
+       "bytes": 984972
+      },
+      "mdipsug": {
+       "files": 10,
+       "bytes": 2164645
+      },
+      "next": {
+       "files": 1,
+       "bytes": 3
+      },
+      "txt": {
+       "files": 454,
+       "bytes": 627622
+      },
+      "ziip": {
+       "files": 1,
+       "bytes": 1972951303
+      }
+     },
+     "example": "PSI-20_Raw Data_20279D5_ACME.ziip",
+     "example_bytes": 1972951303
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "five_digits_letter_number",
+     "regex": "(?<!\\d)\\d{5}[A-Z]\\d{1,2}(?!\\d)",
+     "what_the_names_show": "An id of five digits, a capital letter and a number (for example 21301A9). The names do not say what the id identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 2297,
+     "files_matching": 2138,
+     "distinct_ids": 212,
+     "examples": [
+      "PSI-20_Raw Data_19039A1_ACME.zip",
+      "PSI-20_Raw Data_19039B3A_HiBMS.zip",
+      "PSI-20_Raw Data_19039C1A_HiBMS.zip"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 2,361 files (2,035.6 GB) for PSI-20: 199 videos (16.0 GB), 1,049 archives (2,016.3 GB; by name or PSI category: 1 investigation metadata, 185 VLC recording, 14 drawings, 849 not stated), 191 tables named as sensor, telemetry or data (1.1 GB), 1 experimental table (under 0.1 MB), 259 documents (185.6 MB), 5 document tables (2.5 MB), 657 other files (2.0 GB; most frequent extension: txt, 454); 2,138 of the 2,297 file names under Raw Data carry an id of five digits, a letter and a number."
+  },
+  {
+   "investigation_id": "PSI-21",
+   "title": "Advanced Combustion via Microgravity Experiments / Coflow Laminar Diffusion Flame",
+   "acronym": "ACME CLD Flame",
+   "listing": "ok",
+   "files": 4134,
+   "bytes": 1998308530994,
+   "listing_rows": 4883,
+   "repeated_rows": 749,
+   "listing_rows_bytes": 2005536295241,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Experimental table": {
+     "files": 1,
+     "bytes": 2454,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 2454
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 15476,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 15476
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 4132,
+     "bytes": 1998308513064,
+     "by_kind": {
+      "video": {
+       "files": 363,
+       "bytes": 16288001313
+      },
+      "archive": {
+       "files": 1754,
+       "bytes": 1980402421864
+      },
+      "sensor_or_telemetry_table": {
+       "files": 420,
+       "bytes": 1376712820
+      },
+      "document": {
+       "files": 335,
+       "bytes": 201192076
+      },
+      "document_table": {
+       "files": 2,
+       "bytes": 1067081
+      },
+      "other": {
+       "files": 1258,
+       "bytes": 39117910
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 363,
+     "bytes": 16288001313,
+     "extensions": {
+      "mp4": {
+       "files": 363,
+       "bytes": 16288001313
+      }
+     },
+     "example": "vlc-record-2018-01-22-23h50m17s-udp____18022D1.mp4",
+     "example_bytes": 202284102
+    },
+    "archive": {
+     "files": 1755,
+     "bytes": 1980402437340,
+     "extensions": {
+      "zip": {
+       "files": 1755,
+       "bytes": 1980402437340
+      }
+     },
+     "example": "18003E1_ACME_Converted.zip",
+     "example_bytes": 12596535316,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 15476
+      },
+      "VLC recording": {
+       "files": 361,
+       "bytes": 19896666016
+      },
+      "still images": {
+       "files": 3,
+       "bytes": 4528599
+      },
+      "drawings": {
+       "files": 15,
+       "bytes": 133008110
+      },
+      "not stated in the name": {
+       "files": 1375,
+       "bytes": 1960368219139
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 420,
+     "bytes": 1376712820,
+     "extensions": {
+      "csv": {
+       "files": 404,
+       "bytes": 1375074361
+      },
+      "txt": {
+       "files": 16,
+       "bytes": 1638459
+      }
+     },
+     "example": "17324RAD2_data.csv",
+     "example_bytes": 125544945
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 2454,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 2454
+      }
+     },
+     "example": "PSI-21_Experimental table_CLD Flame.csv",
+     "example_bytes": 2454
+    },
+    "document": {
+     "files": 335,
+     "bytes": 201192076,
+     "extensions": {
+      "pdf": {
+       "files": 50,
+       "bytes": 200774887
+      },
+      "txt": {
+       "files": 285,
+       "bytes": 417189
+      }
+     },
+     "example": "2021 Tinajero & Long Dilution Limits of Coflow Laminar Methane and Ethylene Flames in Microgravity ....pdf",
+     "example_bytes": 18484661
+    },
+    "document_table": {
+     "files": 2,
+     "bytes": 1067081,
+     "extensions": {
+      "xlsx": {
+       "files": 2,
+       "bytes": 1067081
+      }
+     },
+     "example": "Final ACME Chamber Calculator - 2018-05-22 to 2018-09-19.xlsx",
+     "example_bytes": 641069
+    },
+    "other": {
+     "files": 1258,
+     "bytes": 39117910,
+     "extensions": {
+      "csv": {
+       "files": 387,
+       "bytes": 2827965
+      },
+      "log": {
+       "files": 34,
+       "bytes": 11912802
+      },
+      "mdipsug": {
+       "files": 79,
+       "bytes": 13481632
+      },
+      "next": {
+       "files": 7,
+       "bytes": 21
+      },
+      "txt": {
+       "files": 750,
+       "bytes": 10867299
+      },
+      "xlsx": {
+       "files": 1,
+       "bytes": 28191
+      }
+     },
+     "example": "2021-02-15_13-04_ACMECommands.log",
+     "example_bytes": 1890224
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "five_digits_letter_number",
+     "regex": "(?<!\\d)\\d{5}[A-Z]\\d{1,2}(?!\\d)",
+     "what_the_names_show": "An id of five digits, a capital letter and a number (for example 21301A9). The names do not say what the id identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 4132,
+     "files_matching": 3805,
+     "distinct_ids": 361,
+     "examples": [
+      "17319A3.txt",
+      "17319C1.txt",
+      "17319C2.txt"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 4,134 files (1,998.3 GB) for PSI-21: 363 videos (16.3 GB), 1,755 archives (1,980.4 GB; by name or PSI category: 1 investigation metadata, 361 VLC recording, 3 still images, 15 drawings, 1,375 not stated), 420 tables named as sensor, telemetry or data (1.4 GB), 1 experimental table (under 0.1 MB), 335 documents (201.2 MB), 2 document tables (1.1 MB), 1,258 other files (39.1 MB; most frequent extension: txt, 750); 3,805 of the 4,132 file names under Raw Data carry an id of five digits, a letter and a number."
+  },
+  {
+   "investigation_id": "PSI-22",
+   "title": "Advanced Combustion via Microgravity Experiments Electric-Field Effects on Laminar Diffusion Flames",
+   "acronym": "ACME E-FIELD Flames",
+   "listing": "ok",
+   "files": 2578,
+   "bytes": 950067362373,
+   "listing_rows": 2590,
+   "repeated_rows": 12,
+   "listing_rows_bytes": 950212491107,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Engineering Documents": {
+     "files": 26,
+     "bytes": 183892385,
+     "by_kind": {
+      "archive": {
+       "files": 17,
+       "bytes": 141358674
+      },
+      "document": {
+       "files": 9,
+       "bytes": 42533711
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 2475,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 2475
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 15166,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 15166
+      }
+     }
+    },
+    "Presentations": {
+     "files": 32,
+     "bytes": 808342989,
+     "by_kind": {
+      "video": {
+       "files": 6,
+       "bytes": 717056402
+      },
+      "document": {
+       "files": 26,
+       "bytes": 91286587
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 2490,
+     "bytes": 949025758868,
+     "by_kind": {
+      "video": {
+       "files": 215,
+       "bytes": 11797255589
+      },
+      "still_image": {
+       "files": 1,
+       "bytes": 58490
+      },
+      "archive": {
+       "files": 886,
+       "bytes": 935604204482
+      },
+      "sensor_or_telemetry_table": {
+       "files": 204,
+       "bytes": 1516951861
+      },
+      "document": {
+       "files": 200,
+       "bytes": 196675
+      },
+      "other": {
+       "files": 984,
+       "bytes": 107091771
+      }
+     }
+    },
+    "Reference Data": {
+     "files": 2,
+     "bytes": 3851588,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 3851588
+      }
+     }
+    },
+    "Reports": {
+     "files": 9,
+     "bytes": 18707698,
+     "by_kind": {
+      "document": {
+       "files": 9,
+       "bytes": 18707698
+      }
+     }
+    },
+    "Representative Image(s)": {
+     "files": 4,
+     "bytes": 351087,
+     "by_kind": {
+      "still_image": {
+       "files": 4,
+       "bytes": 351087
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 13,
+     "bytes": 26440117,
+     "by_kind": {
+      "archive": {
+       "files": 2,
+       "bytes": 4400772
+      },
+      "document": {
+       "files": 11,
+       "bytes": 22039345
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 221,
+     "bytes": 12514311991,
+     "extensions": {
+      "mp4": {
+       "files": 221,
+       "bytes": 12514311991
+      }
+     },
+     "example": "PSI-22_Raw Data_vlc-record-2018-10-01-16h11m39s-udp_18274A1.mp4",
+     "example_bytes": 265223568
+    },
+    "still_image": {
+     "files": 5,
+     "bytes": 409577,
+     "extensions": {
+      "jpg": {
+       "files": 4,
+       "bytes": 281609
+      },
+      "png": {
+       "files": 1,
+       "bytes": 127968
+      }
+     },
+     "example": "PSI-22_Representative Image(s)_E-Field flames blue 2.jpg",
+     "example_bytes": 162135
+    },
+    "archive": {
+     "files": 906,
+     "bytes": 935749979094,
+     "extensions": {
+      "zip": {
+       "files": 906,
+       "bytes": 935749979094
+      }
+     },
+     "example": "PSI-22_Raw Data_18285G1_ACME.zip",
+     "example_bytes": 4486008062,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 15166
+      },
+      "video": {
+       "files": 127,
+       "bytes": 8438885033
+      },
+      "VLC recording": {
+       "files": 86,
+       "bytes": 4336778469
+      },
+      "drawings": {
+       "files": 15,
+       "bytes": 129862382
+      },
+      "not stated in the name": {
+       "files": 677,
+       "bytes": 922844438044
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 204,
+     "bytes": 1516951861,
+     "extensions": {
+      "csv": {
+       "files": 203,
+       "bytes": 1512457136
+      },
+      "xlsx": {
+       "files": 1,
+       "bytes": 4494725
+      }
+     },
+     "example": "PSI-22_Raw Data_18290H1_data.csv",
+     "example_bytes": 19701709
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 2475,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 2475
+      }
+     },
+     "example": "PSI-22_Experimental table_ACME E-FIELD Flames.csv",
+     "example_bytes": 2475
+    },
+    "document": {
+     "files": 257,
+     "bytes": 178615604,
+     "extensions": {
+      "pdf": {
+       "files": 57,
+       "bytes": 178418929
+      },
+      "txt": {
+       "files": 200,
+       "bytes": 196675
+      }
+     },
+     "example": "PSI-22_Engineering Documents_s1101mfa0100_C - ACME Chamber Insert Assembly.pdf",
+     "example_bytes": 16100676
+    },
+    "other": {
+     "files": 984,
+     "bytes": 107091771,
+     "extensions": {
+      "csv": {
+       "files": 204,
+       "bytes": 390704
+      },
+      "errors": {
+       "files": 2,
+       "bytes": 11150085
+      },
+      "log": {
+       "files": 49,
+       "bytes": 12577574
+      },
+      "mdipsug": {
+       "files": 198,
+       "bytes": 52619719
+      },
+      "metadata": {
+       "files": 85,
+       "bytes": 21815331
+      },
+      "txt": {
+       "files": 445,
+       "bytes": 8520449
+      },
+      "xlsx": {
+       "files": 1,
+       "bytes": 17909
+      }
+     },
+     "example": "PSI-22_Raw Data_18285K1_data.csv.ERRORS",
+     "example_bytes": 7582416
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "five_digits_letter_number",
+     "regex": "(?<!\\d)\\d{5}[A-Z]\\d{1,2}(?!\\d)",
+     "what_the_names_show": "An id of five digits, a capital letter and a number (for example 21301A9). The names do not say what the id identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 2490,
+     "files_matching": 2416,
+     "distinct_ids": 229,
+     "examples": [
+      "PSI-22_Raw Data_18073A3_ACME.zip",
+      "PSI-22_Raw Data_18073A4A_HiBMS.zip",
+      "PSI-22_Raw Data_18073B1A_HiBMS.zip"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 2,578 files (950.1 GB) for PSI-22: 221 videos (12.5 GB), 5 still images (0.4 MB), 906 archives (935.7 GB; by name or PSI category: 1 investigation metadata, 127 video, 86 VLC recording, 15 drawings, 677 not stated), 204 tables named as sensor, telemetry or data (1.5 GB), 1 experimental table (under 0.1 MB), 257 documents (178.6 MB), 984 other files (107.1 MB; most frequent extension: txt, 445); 2,416 of the 2,490 file names under Raw Data carry an id of five digits, a letter and a number."
+  },
+  {
+   "investigation_id": "PSI-23",
+   "title": "Advanced Combustion via Microgravity Experiments-Structure and Response of Spherical Diffusion Flames",
+   "acronym": "ACME s-Flame",
+   "listing": "ok",
+   "files": 4165,
+   "bytes": 782172126062,
+   "listing_rows": 4165,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 782172126062,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Engineering Documents": {
+     "files": 29,
+     "bytes": 190421311,
+     "by_kind": {
+      "archive": {
+       "files": 19,
+       "bytes": 148905174
+      },
+      "document": {
+       "files": 10,
+       "bytes": 41516137
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 2456,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 2456
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 20061,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 20061
+      }
+     }
+    },
+    "Presentations": {
+     "files": 17,
+     "bytes": 50663477,
+     "by_kind": {
+      "document": {
+       "files": 17,
+       "bytes": 50663477
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 4058,
+     "bytes": 780797309850,
+     "by_kind": {
+      "video": {
+       "files": 286,
+       "bytes": 9322533015
+      },
+      "archive": {
+       "files": 1974,
+       "bytes": 770597933905
+      },
+      "sensor_or_telemetry_table": {
+       "files": 288,
+       "bytes": 771292152
+      },
+      "document": {
+       "files": 276,
+       "bytes": 59580
+      },
+      "other": {
+       "files": 1234,
+       "bytes": 105491198
+      }
+     }
+    },
+    "Reference Data": {
+     "files": 50,
+     "bytes": 1120419099,
+     "by_kind": {
+      "video": {
+       "files": 4,
+       "bytes": 282544653
+      },
+      "archive": {
+       "files": 44,
+       "bytes": 833571878
+      },
+      "document": {
+       "files": 2,
+       "bytes": 4302568
+      }
+     }
+    },
+    "Reports": {
+     "files": 2,
+     "bytes": 3483328,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 3483328
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 7,
+     "bytes": 9806480,
+     "by_kind": {
+      "document": {
+       "files": 7,
+       "bytes": 9806480
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 290,
+     "bytes": 9605077668,
+     "extensions": {
+      "mp4": {
+       "files": 290,
+       "bytes": 9605077668
+      }
+     },
+     "example": "PSI-23_Reference Data_WO662486_ACME_Stocker_WF.mp4",
+     "example_bytes": 124601567
+    },
+    "archive": {
+     "files": 2038,
+     "bytes": 771580431018,
+     "extensions": {
+      "zip": {
+       "files": 2038,
+       "bytes": 771580431018
+      }
+     },
+     "example": "PSI-23_Raw Data_20024D1_INTNS_ALL.zip",
+     "example_bytes": 2241126547,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 20061
+      },
+      "VLC recording": {
+       "files": 285,
+       "bytes": 23909484242
+      },
+      "still images": {
+       "files": 4,
+       "bytes": 44681121
+      },
+      "drawings": {
+       "files": 15,
+       "bytes": 133008110
+      },
+      "not stated in the name": {
+       "files": 1733,
+       "bytes": 747493237484
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 288,
+     "bytes": 771292152,
+     "extensions": {
+      "csv": {
+       "files": 288,
+       "bytes": 771292152
+      }
+     },
+     "example": "PSI-23_Raw Data_20013D1_data.csv",
+     "example_bytes": 4767987
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 2456,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 2456
+      }
+     },
+     "example": "PSI-23_Experimental table_ACME s-Flame.csv",
+     "example_bytes": 2456
+    },
+    "document": {
+     "files": 314,
+     "bytes": 109831570,
+     "extensions": {
+      "pdf": {
+       "files": 38,
+       "bytes": 109771990
+      },
+      "txt": {
+       "files": 276,
+       "bytes": 59580
+      }
+     },
+     "example": "PSI-23_Engineering Documents_s1101mfa0100_C.pdf",
+     "example_bytes": 16100676
+    },
+    "other": {
+     "files": 1234,
+     "bytes": 105491198,
+     "extensions": {
+      "asc": {
+       "files": 170,
+       "bytes": 79092374
+      },
+      "csv": {
+       "files": 288,
+       "bytes": 2182629
+      },
+      "log": {
+       "files": 68,
+       "bytes": 21271932
+      },
+      "mdipsug": {
+       "files": 16,
+       "bytes": 1380381
+      },
+      "next": {
+       "files": 2,
+       "bytes": 9
+      },
+      "sfk": {
+       "files": 1,
+       "bytes": 242592
+      },
+      "txt": {
+       "files": 687,
+       "bytes": 1068866
+      },
+      "xlsx": {
+       "files": 2,
+       "bytes": 252415
+      }
+     },
+     "example": "PSI-23_Raw Data_2020-01-13_from_2007-01-01_00-00_ACME.log",
+     "example_bytes": 896006
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "five_digits_letter_number",
+     "regex": "(?<!\\d)\\d{5}[A-Z]\\d{1,2}(?!\\d)",
+     "what_the_names_show": "An id of five digits, a capital letter and a number (for example 21301A9). The names do not say what the id identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 4058,
+     "files_matching": 3905,
+     "distinct_ids": 294,
+     "examples": [
+      "PSI-23_Raw Data_19245K1_2019-09-11_13-07_IPSUG.log",
+      "PSI-23_Raw Data_19254A1.txt",
+      "PSI-23_Raw Data_19254B1.txt"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 4,165 files (782.2 GB) for PSI-23: 290 videos (9.6 GB), 2,038 archives (771.6 GB; by name or PSI category: 1 investigation metadata, 285 VLC recording, 4 still images, 15 drawings, 1,733 not stated), 288 tables named as sensor, telemetry or data (771.3 MB), 1 experimental table (under 0.1 MB), 314 documents (109.8 MB), 1,234 other files (105.5 MB; most frequent extension: txt, 687); 3,905 of the 4,058 file names under Raw Data carry an id of five digits, a letter and a number."
+  },
+  {
+   "investigation_id": "PSI-25",
+   "title": "Burning and Suppression of Solids - II",
+   "acronym": "BASS-II",
+   "listing": "ok",
+   "files": 695,
+   "bytes": 274631106141,
+   "listing_rows": 695,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 274631106141,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Engineering Documents": {
+     "files": 2,
+     "bytes": 2235212,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 2235212
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 16590,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 16590
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 13439,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 13439
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 685,
+     "bytes": 274578648152,
+     "by_kind": {
+      "video": {
+       "files": 296,
+       "bytes": 17707763150
+      },
+      "archive": {
+       "files": 264,
+       "bytes": 256747769044
+      },
+      "document": {
+       "files": 125,
+       "bytes": 123115958
+      }
+     }
+    },
+    "Reference Data": {
+     "files": 1,
+     "bytes": 23973,
+     "by_kind": {
+      "sensor_or_telemetry_table": {
+       "files": 1,
+       "bytes": 23973
+      }
+     }
+    },
+    "Reports": {
+     "files": 1,
+     "bytes": 48972416,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 48972416
+      }
+     }
+    },
+    "Representative Image(s)": {
+     "files": 1,
+     "bytes": 37525,
+     "by_kind": {
+      "still_image": {
+       "files": 1,
+       "bytes": 37525
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 3,
+     "bytes": 1158834,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 1129878
+      },
+      "document_table": {
+       "files": 1,
+       "bytes": 28956
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 296,
+     "bytes": 17707763150,
+     "extensions": {
+      "mp4": {
+       "files": 296,
+       "bytes": 17707763150
+      }
+     },
+     "example": "PSI-25_Raw Data_BASS_GMT196_SAMPLE_166_TEST_M17_2ND_VIEW.mp4",
+     "example_bytes": 311887260
+    },
+    "still_image": {
+     "files": 1,
+     "bytes": 37525,
+     "extensions": {
+      "jpg": {
+       "files": 1,
+       "bytes": 37525
+      }
+     },
+     "example": "PSI-25_Representative Image(s)_BASS-II_flame testing.jpg",
+     "example_bytes": 37525
+    },
+    "archive": {
+     "files": 265,
+     "bytes": 256747782483,
+     "extensions": {
+      "zip": {
+       "files": 265,
+       "bytes": 256747782483
+      }
+     },
+     "example": "PSI-25_Raw Data_iss040e064265.zip",
+     "example_bytes": 3768112520,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 13439
+      },
+      "video": {
+       "files": 113,
+       "bytes": 25483091638
+      },
+      "still images": {
+       "files": 1,
+       "bytes": 2831196328
+      },
+      "not stated in the name": {
+       "files": 150,
+       "bytes": 228433481078
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 1,
+     "bytes": 23973,
+     "extensions": {
+      "xlsx": {
+       "files": 1,
+       "bytes": 23973
+      }
+     },
+     "example": "PSI-25_Reference Data_Fan calibration data.xlsx",
+     "example_bytes": 23973
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 16590,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 16590
+      }
+     },
+     "example": "PSI-25_Experimental table_BASS-II.csv",
+     "example_bytes": 16590
+    },
+    "document": {
+     "files": 130,
+     "bytes": 175453464,
+     "extensions": {
+      "docx": {
+       "files": 2,
+       "bytes": 1133394
+      },
+      "pdf": {
+       "files": 127,
+       "bytes": 173196714
+      },
+      "pptx": {
+       "files": 1,
+       "bytes": 1123356
+      }
+     },
+     "example": "PSI-25_Reports_BASS-II Summary Report.pdf",
+     "example_bytes": 48972416
+    },
+    "document_table": {
+     "files": 1,
+     "bytes": 28956,
+     "extensions": {
+      "xlsx": {
+       "files": 1,
+       "bytes": 28956
+      }
+     },
+     "example": "PSI-25_Science Documents_BASS-II_Test.Matrices.xlsx",
+     "example_bytes": 28956
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "sample_and_test",
+     "regex": "(?i:SAMPLE[ _]\\d+_TEST[ _]?[A-Z]+\\d+)",
+     "what_the_names_show": "The words SAMPLE and TEST (in capitals or not), each followed by an id (for example SAMPLE_147_TEST_B1).",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 685,
+     "files_matching": 392,
+     "distinct_ids": 114,
+     "examples": [
+      "PSI-25_Raw Data_BASS_GMT100_SAMPLE_131_TEST_T5.mp4",
+      "PSI-25_Raw Data_BASS_GMT100_SAMPLE_132_TEST_T6.mp4",
+      "PSI-25_Raw Data_BASS_GMT100_SAMPLE_137_TEST_T13 original videos.zip"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 695 files (274.6 GB) for PSI-25: 296 videos (17.7 GB), 1 still image (under 0.1 MB), 265 archives (256.7 GB; by name or PSI category: 1 investigation metadata, 113 video, 1 still images, 150 not stated), 1 table named as sensor, telemetry or data (under 0.1 MB), 1 experimental table (under 0.1 MB), 130 documents (175.5 MB), 1 document table (under 0.1 MB); 392 of the 685 file names under Raw Data carry the words SAMPLE and TEST with an id."
+  },
+  {
+   "investigation_id": "PSI-26",
+   "title": "Burning and Suppression of Solids",
+   "acronym": "BASS",
+   "listing": "ok",
+   "files": 210,
+   "bytes": 163550265026,
+   "listing_rows": 210,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 163550265026,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Engineering Documents": {
+     "files": 24,
+     "bytes": 13805316,
+     "by_kind": {
+      "document": {
+       "files": 24,
+       "bytes": 13805316
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 4726,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 4726
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 11647,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 11647
+      }
+     }
+    },
+    "Presentations": {
+     "files": 6,
+     "bytes": 14968330,
+     "by_kind": {
+      "document": {
+       "files": 6,
+       "bytes": 14968330
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 173,
+     "bytes": 163511551209,
+     "by_kind": {
+      "video": {
+       "files": 114,
+       "bytes": 22789478092
+      },
+      "archive": {
+       "files": 59,
+       "bytes": 140722073117
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 5,
+     "bytes": 9923798,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 9790936
+      },
+      "document_table": {
+       "files": 2,
+       "bytes": 132862
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 114,
+     "bytes": 22789478092,
+     "extensions": {
+      "mp4": {
+       "files": 114,
+       "bytes": 22789478092
+      }
+     },
+     "example": "PSI-26_Raw Data_20130503 16.24.12 iss035m051221618.mp4",
+     "example_bytes": 394502728
+    },
+    "archive": {
+     "files": 60,
+     "bytes": 140722084764,
+     "extensions": {
+      "zip": {
+       "files": 60,
+       "bytes": 140722084764
+      }
+     },
+     "example": "PSI-26_Raw Data_2012_05_12_orig.zip",
+     "example_bytes": 8997566948,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 11647
+      },
+      "not stated in the name": {
+       "files": 59,
+       "bytes": 140722073117
+      }
+     }
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 4726,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 4726
+      }
+     },
+     "example": "PSI-26_Experimental table_BASS.csv",
+     "example_bytes": 4726
+    },
+    "document": {
+     "files": 33,
+     "bytes": 38564582,
+     "extensions": {
+      "docx": {
+       "files": 1,
+       "bytes": 8837026
+      },
+      "pdf": {
+       "files": 30,
+       "bytes": 25247332
+      },
+      "pptx": {
+       "files": 2,
+       "bytes": 4480224
+      }
+     },
+     "example": "PSI-26_Science Documents_FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+     "example_bytes": 8837026
+    },
+    "document_table": {
+     "files": 2,
+     "bytes": 132862,
+     "extensions": {
+      "xlsx": {
+       "files": 2,
+       "bytes": 132862
+      }
+     },
+     "example": "PSI-26_Science Documents_As Run_Test Matrix.xlsx",
+     "example_bytes": 111886
+    }
+   },
+   "test_id_in_file_names": [],
+   "sentence": "PSI lists 210 files (163.6 GB) for PSI-26: 114 videos (22.8 GB), 60 archives (140.7 GB; by name or PSI category: 1 investigation metadata, 59 not stated), 1 experimental table (under 0.1 MB), 33 documents (38.6 MB), 2 document tables (0.1 MB); no file is named as a sensor, telemetry or data table."
+  },
+  {
+   "investigation_id": "PSI-39",
+   "title": "Cool Flames Investigation",
+   "acronym": "CFI",
+   "listing": "ok",
+   "files": 2812,
+   "bytes": 718887023417,
+   "listing_rows": 2812,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 718887023417,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Analyzed Data": {
+     "files": 32,
+     "bytes": 13614684,
+     "by_kind": {
+      "document": {
+       "files": 31,
+       "bytes": 13537273
+      },
+      "other": {
+       "files": 1,
+       "bytes": 77411
+      }
+     }
+    },
+    "Engineering Documents": {
+     "files": 1,
+     "bytes": 115496,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 115496
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 7792,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 7792
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 10237,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 10237
+      }
+     }
+    },
+    "Presentations": {
+     "files": 2,
+     "bytes": 5945283,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 5945283
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 2771,
+     "bytes": 718850418928,
+     "by_kind": {
+      "video": {
+       "files": 246,
+       "bytes": 128712180638
+      },
+      "archive": {
+       "files": 337,
+       "bytes": 588914116084
+      },
+      "sensor_or_telemetry_table": {
+       "files": 335,
+       "bytes": 95689470
+      },
+      "document": {
+       "files": 179,
+       "bytes": 42709512
+      },
+      "other": {
+       "files": 1674,
+       "bytes": 1085723224
+      }
+     }
+    },
+    "Reports": {
+     "files": 1,
+     "bytes": 811459,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 811459
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 3,
+     "bytes": 16099538,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 15890795
+      },
+      "document_table": {
+       "files": 1,
+       "bytes": 208743
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 246,
+     "bytes": 128712180638,
+     "extensions": {
+      "mp4": {
+       "files": 126,
+       "bytes": 18877889342
+      },
+      "ts": {
+       "files": 120,
+       "bytes": 109834291296
+      }
+     },
+     "example": "PSI-39_Raw Data_vlc-record-2017-07-19-12h57m44s-udp_F200D01.ts",
+     "example_bytes": 4149648424
+    },
+    "archive": {
+     "files": 338,
+     "bytes": 588914126321,
+     "extensions": {
+      "zip": {
+       "files": 338,
+       "bytes": 588914126321
+      }
+     },
+     "example": "PSI-39_Raw Data_F228D02E_IPSUG.zip",
+     "example_bytes": 4534976854,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 10237
+      },
+      "video": {
+       "files": 27,
+       "bytes": 13563526464
+      },
+      "still images": {
+       "files": 7,
+       "bytes": 14046284528
+      },
+      "not stated in the name": {
+       "files": 303,
+       "bytes": 561304305092
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 335,
+     "bytes": 95689470,
+     "extensions": {
+      "txt": {
+       "files": 335,
+       "bytes": 95689470
+      }
+     },
+     "example": "PSI-39_Raw Data_FLEX-1208_RadiometerData.txt",
+     "example_bytes": 1079135
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 7792,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 7792
+      }
+     },
+     "example": "PSI-39_Experimental table_CFI.csv",
+     "example_bytes": 7792
+    },
+    "document": {
+     "files": 216,
+     "bytes": 79009818,
+     "extensions": {
+      "pdf": {
+       "files": 48,
+       "bytes": 39745600
+      },
+      "pptx": {
+       "files": 1,
+       "bytes": 6872099
+      },
+      "rtf": {
+       "files": 22,
+       "bytes": 31745261
+      },
+      "txt": {
+       "files": 145,
+       "bytes": 646858
+      }
+     },
+     "example": "PSI-39_Science Documents_SRD_CFI.pdf",
+     "example_bytes": 12260561
+    },
+    "document_table": {
+     "files": 1,
+     "bytes": 208743,
+     "extensions": {
+      "xlsx": {
+       "files": 1,
+       "bytes": 208743
+      }
+     },
+     "example": "PSI-39_Science Documents_CFI_DataSummary_Spreadsheet_Jan2021.xlsx",
+     "example_bytes": 208743
+    },
+    "other": {
+     "files": 1675,
+     "bytes": 1085800635,
+     "extensions": {
+      "meta": {
+       "files": 234,
+       "bytes": 22392
+      },
+      "metadata": {
+       "files": 116,
+       "bytes": 31583344
+      },
+      "pxp": {
+       "files": 29,
+       "bytes": 974905126
+      },
+      "txt": {
+       "files": 1296,
+       "bytes": 79289773
+      }
+     },
+     "example": "PSI-39_Raw Data_FLEX_1253_05May2017_Dod_v1test.pxp",
+     "example_bytes": 89415029
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "letter_digits_letter_digits",
+     "regex": "(?<![0-9A-Za-z])[A-Z]?\\d{2,3}[A-Z]\\d{2,3}[A-Z]?(?![0-9a-z])",
+     "what_the_names_show": "An id of two or three digits, a capital letter and two or three digits, with or without a capital letter before and after (for example F130A01D). The names do not say what the id identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 2771,
+     "files_matching": 2545,
+     "distinct_ids": 571,
+     "examples": [
+      "PSI-39_Raw Data_20170309_180332.595_INTNS_068A03E_.metadata",
+      "PSI-39_Raw Data_20170309_202549.044_INTNS_068A08E_.metadata",
+      "PSI-39_Raw Data_20170309_205008.459_INTNS_068A09E_.metadata"
+     ]
+    },
+    {
+     "pattern_id": "flex_number",
+     "regex": "FLEX[-_]\\d{3,4}",
+     "what_the_names_show": "The word FLEX followed by a number of three or four digits (for example FLEX-007). The names do not say what the number identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 2771,
+     "files_matching": 267,
+     "distinct_ids": 89,
+     "examples": [
+      "PSI-39_Raw Data_FLEX-1206_ColorCamData.txt",
+      "PSI-39_Raw Data_FLEX-1207_ColorCamData.txt",
+      "PSI-39_Raw Data_FLEX-1208_ColorCamData.txt"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 2,812 files (718.9 GB) for PSI-39: 246 videos (128.7 GB), 338 archives (588.9 GB; by name or PSI category: 1 investigation metadata, 27 video, 7 still images, 303 not stated), 335 tables named as sensor, telemetry or data (95.7 MB), 1 experimental table (under 0.1 MB), 216 documents (79.0 MB), 1 document table (0.2 MB), 1,675 other files (1.1 GB; most frequent extension: txt, 1,296); 2,545 of the 2,771 file names under Raw Data carry an id of digits, a letter and digits."
+  },
+  {
+   "investigation_id": "PSI-47",
+   "title": "Dust and Aerosol Measurement Feasibility Test / Dust and Aerosol Measurement Feasibility Test-2",
+   "acronym": "DAFT / DAFT-2",
+   "listing": "ok",
+   "files": 33,
+   "bytes": 41765333,
+   "listing_rows": 33,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 41765333,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Analyzed Data": {
+     "files": 12,
+     "bytes": 3454976,
+     "by_kind": {
+      "sensor_or_telemetry_table": {
+       "files": 9,
+       "bytes": 2382848
+      },
+      "document_table": {
+       "files": 1,
+       "bytes": 1004032
+      },
+      "other": {
+       "files": 2,
+       "bytes": 68096
+      }
+     }
+    },
+    "Engineering Documents": {
+     "files": 6,
+     "bytes": 7955514,
+     "by_kind": {
+      "document": {
+       "files": 6,
+       "bytes": 7955514
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 518,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 518
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 8454,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 8454
+      }
+     }
+    },
+    "Presentations": {
+     "files": 3,
+     "bytes": 15065420,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 15065420
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 6,
+     "bytes": 18573,
+     "by_kind": {
+      "other": {
+       "files": 6,
+       "bytes": 18573
+      }
+     }
+    },
+    "Reports": {
+     "files": 3,
+     "bytes": 13949744,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 13949744
+      }
+     }
+    },
+    "Representative Image(s)": {
+     "files": 1,
+     "bytes": 1312134,
+     "by_kind": {
+      "still_image": {
+       "files": 1,
+       "bytes": 1312134
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "still_image": {
+     "files": 1,
+     "bytes": 1312134,
+     "extensions": {
+      "jpg": {
+       "files": 1,
+       "bytes": 1312134
+      }
+     },
+     "example": "PSI-47_Representative Image(s)_DAFT on ISS.jpg",
+     "example_bytes": 1312134
+    },
+    "archive": {
+     "files": 1,
+     "bytes": 8454,
+     "extensions": {
+      "zip": {
+       "files": 1,
+       "bytes": 8454
+      }
+     },
+     "example": "PSI-47_metadata_PSI-126_DAFT_DAFT-2.zip",
+     "example_bytes": 8454,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 8454
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 9,
+     "bytes": 2382848,
+     "extensions": {
+      "xls": {
+       "files": 9,
+       "bytes": 2382848
+      }
+     },
+     "example": "PSI-47_Analyzed Data_flight data 063_DTrk0002.xls",
+     "example_bytes": 283648
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 518,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 518
+      }
+     },
+     "example": "PSI-47_Experimental table_DAFT.csv",
+     "example_bytes": 518
+    },
+    "document": {
+     "files": 12,
+     "bytes": 36970678,
+     "extensions": {
+      "doc": {
+       "files": 2,
+       "bytes": 13764096
+      },
+      "pdf": {
+       "files": 7,
+       "bytes": 1271478
+      },
+      "ppt": {
+       "files": 3,
+       "bytes": 21935104
+      }
+     },
+     "example": "PSI-47_Reports_DAFT_FinalReport.doc",
+     "example_bytes": 8844800
+    },
+    "document_table": {
+     "files": 1,
+     "bytes": 1004032,
+     "extensions": {
+      "xls": {
+       "files": 1,
+       "bytes": 1004032
+      }
+     },
+     "example": "PSI-47_Analyzed Data_DAFT Retrieved Data Summary.xls",
+     "example_bytes": 1004032
+    },
+    "other": {
+     "files": 8,
+     "bytes": 86669,
+     "extensions": {
+      "txt": {
+       "files": 6,
+       "bytes": 18573
+      },
+      "xls": {
+       "files": 2,
+       "bytes": 68096
+      }
+     },
+     "example": "PSI-47_Analyzed Data_ISS_Daft_Aug21_0611zgy time hist.xls",
+     "example_bytes": 38400
+    }
+   },
+   "test_id_in_file_names": [],
+   "sentence": "PSI lists 33 files (41.8 MB) for PSI-47: 1 still image (1.3 MB), 1 archive (under 0.1 MB; by name or PSI category: 1 investigation metadata), 9 tables named as sensor, telemetry or data (2.4 MB), 1 experimental table (under 0.1 MB), 12 documents (37.0 MB), 1 document table (1.0 MB), 8 other files (0.1 MB; most frequent extension: txt, 6)."
+  },
+  {
+   "investigation_id": "PSI-60",
+   "title": "Computational and Experimental Analysis of SPICE Data Sets",
+   "acronym": "",
+   "listing": "ok",
+   "files": 1,
+   "bytes": 7743,
+   "listing_rows": 1,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 7743,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 7743,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 7743
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "archive": {
+     "files": 1,
+     "bytes": 7743,
+     "extensions": {
+      "zip": {
+       "files": 1,
+       "bytes": 7743
+      }
+     },
+     "example": "PSI-60_metadata_NEWID-5_Computational and Ex.zip",
+     "example_bytes": 7743,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 7743
+      }
+     }
+    }
+   },
+   "test_id_in_file_names": [],
+   "sentence": "PSI lists 1 file (under 0.1 MB) for PSI-60: 1 archive (under 0.1 MB; by name or PSI category: 1 investigation metadata); no file is named as a sensor, telemetry or data table."
+  },
+  {
+   "investigation_id": "PSI-62",
+   "title": "Concurrent Flame Spread Modeling using Flamelet Generated Manifolds in Microgravity with Comparison to BASS Experiments using Two-Color Tomography",
+   "acronym": "",
+   "listing": "ok",
+   "files": 1,
+   "bytes": 9694,
+   "listing_rows": 1,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 9694,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 9694,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 9694
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "archive": {
+     "files": 1,
+     "bytes": 9694,
+     "extensions": {
+      "zip": {
+       "files": 1,
+       "bytes": 9694
+      }
+     },
+     "example": "PSI-62_metadata_NEWID-7_Concurrent Flame Spr.zip",
+     "example_bytes": 9694,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 9694
+      }
+     }
+    }
+   },
+   "test_id_in_file_names": [],
+   "sentence": "PSI lists 1 file (under 0.1 MB) for PSI-62: 1 archive (under 0.1 MB; by name or PSI category: 1 investigation metadata); no file is named as a sensor, telemetry or data table."
+  },
+  {
+   "investigation_id": "PSI-68",
+   "title": "Flame Extinguishment Experiment - 2",
+   "acronym": "FLEX-2",
+   "listing": "ok",
+   "files": 10077,
+   "bytes": 1221864090306,
+   "listing_rows": 10156,
+   "repeated_rows": 79,
+   "listing_rows_bytes": 1224752113090,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Calibration": {
+     "files": 63,
+     "bytes": 4365667173,
+     "by_kind": {
+      "archive": {
+       "files": 62,
+       "bytes": 4363356717
+      },
+      "document": {
+       "files": 1,
+       "bytes": 2310456
+      }
+     }
+    },
+    "Engineering Documents": {
+     "files": 7,
+     "bytes": 8596147,
+     "by_kind": {
+      "document": {
+       "files": 7,
+       "bytes": 8596147
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 1029,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 1029
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 24115,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 24115
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 10002,
+     "bytes": 1217488107038,
+     "by_kind": {
+      "still_image": {
+       "files": 6,
+       "bytes": 222315
+      },
+      "archive": {
+       "files": 2049,
+       "bytes": 1216964109865
+      },
+      "sensor_or_telemetry_table": {
+       "files": 1438,
+       "bytes": 354278363
+      },
+      "document": {
+       "files": 686,
+       "bytes": 5890197
+      },
+      "other": {
+       "files": 5823,
+       "bytes": 163606298
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 3,
+     "bytes": 1694804,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 1694804
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "still_image": {
+     "files": 6,
+     "bytes": 222315,
+     "extensions": {
+      "jpg": {
+       "files": 6,
+       "bytes": 222315
+      }
+     },
+     "example": "C060R01_Event_Log_entry.JPG",
+     "example_bytes": 40890
+    },
+    "archive": {
+     "files": 2112,
+     "bytes": 1221327490697,
+     "extensions": {
+      "zip": {
+       "files": 2112,
+       "bytes": 1221327490697
+      }
+     },
+     "example": "PSI-68_Raw Data_D098D14A.zip",
+     "example_bytes": 4353932992,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 24115
+      },
+      "not stated in the name": {
+       "files": 2111,
+       "bytes": 1221327466582
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 1438,
+     "bytes": 354278363,
+     "extensions": {
+      "txt": {
+       "files": 1437,
+       "bytes": 354170474
+      },
+      "xlsx": {
+       "files": 1,
+       "bytes": 107889
+      }
+     },
+     "example": "E066R02_Radiometer_Readings.txt",
+     "example_bytes": 788410
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 1029,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 1029
+      }
+     },
+     "example": "PSI-68_Experimental table_Flex2.csv",
+     "example_bytes": 1029
+    },
+    "document": {
+     "files": 697,
+     "bytes": 18491604,
+     "extensions": {
+      "docx": {
+       "files": 89,
+       "bytes": 3361649
+      },
+      "pdf": {
+       "files": 9,
+       "bytes": 6856869
+      },
+      "ppt": {
+       "files": 1,
+       "bytes": 5725184
+      },
+      "txt": {
+       "files": 598,
+       "bytes": 2547902
+      }
+     },
+     "example": "PSI-68_Engineering Documents_FLEX-2 Hardware Presentation.ppt",
+     "example_bytes": 5725184
+    },
+    "other": {
+     "files": 5823,
+     "bytes": 163606298,
+     "extensions": {
+      "log": {
+       "files": 4,
+       "bytes": 6484
+      },
+      "txt": {
+       "files": 5819,
+       "bytes": 163599814
+      }
+     },
+     "example": "PSI-68_Raw Data_E260G03C.txt",
+     "example_bytes": 760753
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "letter_digits_letter_digits",
+     "regex": "(?<![0-9A-Za-z])[A-Z]?\\d{2,3}[A-Z]\\d{2,3}[A-Z]?(?![0-9a-z])",
+     "what_the_names_show": "An id of two or three digits, a capital letter and two or three digits, with or without a capital letter before and after (for example F130A01D). The names do not say what the id identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 10002,
+     "files_matching": 9744,
+     "distinct_ids": 2761,
+     "examples": [
+      "A109D03.txt",
+      "A109D04.txt",
+      "A109D05.txt"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 10,077 files (1,221.9 GB) for PSI-68: 6 still images (0.2 MB), 2,112 archives (1,221.3 GB; by name or PSI category: 1 investigation metadata, 2,111 not stated), 1,438 tables named as sensor, telemetry or data (354.3 MB), 1 experimental table (under 0.1 MB), 697 documents (18.5 MB), 5,823 other files (163.6 MB; most frequent extension: txt, 5,819); 9,744 of the 10,002 file names under Raw Data carry an id of digits, a letter and digits."
+  },
+  {
+   "investigation_id": "PSI-69",
+   "title": "Flame Extinguishment Experiment",
+   "acronym": "FLEX",
+   "listing": "ok",
+   "files": 6453,
+   "bytes": 921400312924,
+   "listing_rows": 6555,
+   "repeated_rows": 102,
+   "listing_rows_bytes": 923832535657,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Calibration": {
+     "files": 120,
+     "bytes": 5492705004,
+     "by_kind": {
+      "archive": {
+       "files": 23,
+       "bytes": 5484888093
+      },
+      "sensor_or_telemetry_table": {
+       "files": 16,
+       "bytes": 3570219
+      },
+      "document": {
+       "files": 1,
+       "bytes": 526
+      },
+      "other": {
+       "files": 80,
+       "bytes": 4246166
+      }
+     }
+    },
+    "Engineering Documents": {
+     "files": 3,
+     "bytes": 5745120,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 5745120
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 24776,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 24776
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 24780,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 24780
+      }
+     }
+    },
+    "Presentations": {
+     "files": 4,
+     "bytes": 7072984,
+     "by_kind": {
+      "document": {
+       "files": 4,
+       "bytes": 7072984
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 6322,
+     "bytes": 915894535703,
+     "by_kind": {
+      "video": {
+       "files": 183,
+       "bytes": 35883054431
+      },
+      "archive": {
+       "files": 1396,
+       "bytes": 879411051051
+      },
+      "sensor_or_telemetry_table": {
+       "files": 1359,
+       "bytes": 189748187
+      },
+      "document": {
+       "files": 1185,
+       "bytes": 362210665
+      },
+      "other": {
+       "files": 2199,
+       "bytes": 48471369
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 2,
+     "bytes": 204557,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 204557
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 183,
+     "bytes": 35883054431,
+     "extensions": {
+      "mp4": {
+       "files": 182,
+       "bytes": 35693931871
+      },
+      "mpg": {
+       "files": 1,
+       "bytes": 189122560
+      }
+     },
+     "example": "PSI-69_Raw Data_vlc-record-2013-01-21-20h17m31s-udp__C021H04A.mp4",
+     "example_bytes": 1208091730
+    },
+    "archive": {
+     "files": 1420,
+     "bytes": 884895963924,
+     "extensions": {
+      "zip": {
+       "files": 1420,
+       "bytes": 884895963924
+      }
+     },
+     "example": "PSI-69_Raw Data_C049H05A.zip",
+     "example_bytes": 3473003352,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 24780
+      },
+      "not stated in the name": {
+       "files": 1419,
+       "bytes": 884895939144
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 1375,
+     "bytes": 193318406,
+     "extensions": {
+      "txt": {
+       "files": 1375,
+       "bytes": 193318406
+      }
+     },
+     "example": "PSI-69_Raw Data_204F001_Chamber_Readings.txt",
+     "example_bytes": 618513
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 24776,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 24776
+      }
+     },
+     "example": "PSI-69_Experimental table_FLEX.csv",
+     "example_bytes": 24776
+    },
+    "document": {
+     "files": 1195,
+     "bytes": 375233852,
+     "extensions": {
+      "docx": {
+       "files": 1,
+       "bytes": 18758
+      },
+      "pdf": {
+       "files": 422,
+       "bytes": 127131943
+      },
+      "rtf": {
+       "files": 271,
+       "bytes": 247638978
+      },
+      "txt": {
+       "files": 501,
+       "bytes": 444173
+      }
+     },
+     "example": "PSI-69_Presentations_Cool Flames in Space, a Hot Prospect on Earth!.pdf",
+     "example_bytes": 4524480
+    },
+    "other": {
+     "files": 2279,
+     "bytes": 52717535,
+     "extensions": {
+      "eps": {
+       "files": 1,
+       "bytes": 127599
+      },
+      "txt": {
+       "files": 2276,
+       "bytes": 50690416
+      },
+      "xls": {
+       "files": 2,
+       "bytes": 1899520
+      }
+     },
+     "example": "PSI-69_Raw Data_30CAL07-Test009 Results.xls",
+     "example_bytes": 1399808
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "letter_digits_letter_digits",
+     "regex": "(?<![0-9A-Za-z])[A-Z]?\\d{2,3}[A-Z]\\d{2,3}[A-Z]?(?![0-9a-z])",
+     "what_the_names_show": "An id of two or three digits, a capital letter and two or three digits, with or without a capital letter before and after (for example F130A01D). The names do not say what the id identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 6322,
+     "files_matching": 4527,
+     "distinct_ids": 1793,
+     "examples": [
+      "PSI-69_Raw Data_053F001.txt",
+      "PSI-69_Raw Data_053F001A.txt",
+      "PSI-69_Raw Data_053F001B.txt"
+     ]
+    },
+    {
+     "pattern_id": "flex_number",
+     "regex": "FLEX[-_]\\d{3,4}",
+     "what_the_names_show": "The word FLEX followed by a number of three or four digits (for example FLEX-007). The names do not say what the number identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 6322,
+     "files_matching": 1698,
+     "distinct_ids": 383,
+     "examples": [
+      "PSI-69_Raw Data_FLEX-001_ColorCamData.txt",
+      "PSI-69_Raw Data_FLEX-002_ColorCamData.txt",
+      "PSI-69_Raw Data_FLEX-003_ColorCamData.txt"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 6,453 files (921.4 GB) for PSI-69: 183 videos (35.9 GB), 1,420 archives (884.9 GB; by name or PSI category: 1 investigation metadata, 1,419 not stated), 1,375 tables named as sensor, telemetry or data (193.3 MB), 1 experimental table (under 0.1 MB), 1,195 documents (375.2 MB), 2,279 other files (52.7 MB; most frequent extension: txt, 2,276); 4,527 of the 6,322 file names under Raw Data carry an id of digits, a letter and digits."
+  },
+  {
+   "investigation_id": "PSI-98",
+   "title": "Spacecraft Fire Safety Experiment-I",
+   "acronym": "SAFFIRE-I",
+   "listing": "ok",
+   "files": 76,
+   "bytes": 12250600201,
+   "listing_rows": 76,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 12250600201,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Engineering Documents": {
+     "files": 2,
+     "bytes": 1710886,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 1710886
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 469,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 469
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 10031,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 10031
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 68,
+     "bytes": 12236039093,
+     "by_kind": {
+      "archive": {
+       "files": 61,
+       "bytes": 12179024497
+      },
+      "sensor_or_telemetry_table": {
+       "files": 3,
+       "bytes": 52735233
+      },
+      "document": {
+       "files": 4,
+       "bytes": 4279363
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 4,
+     "bytes": 12839722,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 514545
+      },
+      "document_table": {
+       "files": 1,
+       "bytes": 12325177
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "archive": {
+     "files": 62,
+     "bytes": 12179034528,
+     "extensions": {
+      "zip": {
+       "files": 62,
+       "bytes": 12179034528
+      }
+     },
+     "example": "PSI-98_Raw Data_SAFFIRE_I_S1C1_jpeg2png_icmad_part1.zip",
+     "example_bytes": 1496417130,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 10031
+      },
+      "still images": {
+       "files": 48,
+       "bytes": 11622341810
+      },
+      "not stated in the name": {
+       "files": 13,
+       "bytes": 556682687
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 3,
+     "bytes": 52735233,
+     "extensions": {
+      "xlsx": {
+       "files": 3,
+       "bytes": 52735233
+      }
+     },
+     "example": "PSI-98_Raw Data_Saffire-I Sample 1 Sensor Data Complete TM graphs.xlsx",
+     "example_bytes": 25066841
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 469,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 469
+      }
+     },
+     "example": "PSI-98_Experimental table_SAFFIRE-1.csv",
+     "example_bytes": 469
+    },
+    "document": {
+     "files": 9,
+     "bytes": 6504794,
+     "extensions": {
+      "docx": {
+       "files": 3,
+       "bytes": 2494757
+      },
+      "pdf": {
+       "files": 6,
+       "bytes": 4010037
+      }
+     },
+     "example": "PSI-98_Engineering Documents_SAFFIRE Offgassing Testing Strategy.pdf",
+     "example_bytes": 1696929
+    },
+    "document_table": {
+     "files": 1,
+     "bytes": 12325177,
+     "extensions": {
+      "xlsx": {
+       "files": 1,
+       "bytes": 12325177
+      }
+     },
+     "example": "PSI-98_Science Documents_SAFFIRE-1_MergeResult-jpeg_Update_Final_v2.xlsx",
+     "example_bytes": 12325177
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "s_or_f_digit_c_digit",
+     "regex": "(?<![A-Za-z0-9])[SF]\\dC\\d(?![A-Za-z0-9])",
+     "what_the_names_show": "A code of the letter S or F with a digit and the letter C with a digit (for example S1C1). The names do not say what the code identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 68,
+     "files_matching": 59,
+     "distinct_ids": 8,
+     "examples": [
+      "PSI-98_Raw Data_F1C1-Raw_DistroMaster_originals.zip",
+      "PSI-98_Raw Data_Mapped_SAFFIRE-1_F1C2_DistortionGrid_1280x920.zip",
+      "PSI-98_Raw Data_S2C1-1465938171811_icmad.zip"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 76 files (12.3 GB) for PSI-98: 62 archives (12.2 GB; by name or PSI category: 1 investigation metadata, 48 still images, 13 not stated), 3 tables named as sensor, telemetry or data (52.7 MB), 1 experimental table (under 0.1 MB), 9 documents (6.5 MB), 1 document table (12.3 MB); 59 of the 68 file names under Raw Data carry a code such as S1C1."
+  },
+  {
+   "investigation_id": "PSI-99",
+   "title": "Spacecraft Fire Experiment-II",
+   "acronym": "SAFFIRE-II",
+   "listing": "ok",
+   "files": 214,
+   "bytes": 16830959610,
+   "listing_rows": 217,
+   "repeated_rows": 3,
+   "listing_rows_bytes": 16917376045,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Experimental table": {
+     "files": 1,
+     "bytes": 1973,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 1973
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 10539,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 10539
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 208,
+     "bytes": 16809050753,
+     "by_kind": {
+      "archive": {
+       "files": 186,
+       "bytes": 16591271476
+      },
+      "sensor_or_telemetry_table": {
+       "files": 10,
+       "bytes": 210140289
+      },
+      "document": {
+       "files": 12,
+       "bytes": 7638988
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 4,
+     "bytes": 21896345,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 1075920
+      },
+      "document_table": {
+       "files": 1,
+       "bytes": 20820425
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "archive": {
+     "files": 187,
+     "bytes": 16591282015,
+     "extensions": {
+      "zip": {
+       "files": 187,
+       "bytes": 16591282015
+      }
+     },
+     "example": "PSI-99_Raw Data_SAFFIRE_II_F1C1_Raw2TIFF.zip",
+     "example_bytes": 1063497390,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 10539
+      },
+      "still images": {
+       "files": 168,
+       "bytes": 16571185156
+      },
+      "not stated in the name": {
+       "files": 18,
+       "bytes": 20086320
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 10,
+     "bytes": 210140289,
+     "extensions": {
+      "xlsx": {
+       "files": 10,
+       "bytes": 210140289
+      }
+     },
+     "example": "PSI-99_Raw Data_Saffire-II Telemetry Data.xlsx",
+     "example_bytes": 41472762
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 1973,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 1973
+      }
+     },
+     "example": "PSI-99_Experimental table_SAFFIRE-2.csv",
+     "example_bytes": 1973
+    },
+    "document": {
+     "files": 15,
+     "bytes": 8714908,
+     "extensions": {
+      "docx": {
+       "files": 10,
+       "bytes": 7713448
+      },
+      "pdf": {
+       "files": 5,
+       "bytes": 1001460
+      }
+     },
+     "example": "PSI-99_Raw Data_Saffire-II Sample 7 TM Graphs.docx",
+     "example_bytes": 929310
+    },
+    "document_table": {
+     "files": 1,
+     "bytes": 20820425,
+     "extensions": {
+      "xlsx": {
+       "files": 1,
+       "bytes": 20820425
+      }
+     },
+     "example": "PSI-99_Science Documents_SAFFIRE-II_MergeResult-jpeg_v5_Final.xlsx",
+     "example_bytes": 20820425
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "s_or_f_digit_c_digit",
+     "regex": "(?<![A-Za-z0-9])[SF]\\dC\\d(?![A-Za-z0-9])",
+     "what_the_names_show": "A code of the letter S or F with a digit and the letter C with a digit (for example S1C1). The names do not say what the code identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 208,
+     "files_matching": 185,
+     "distinct_ids": 17,
+     "examples": [
+      "PSI-99_Raw Data_20161207_-_Overlap_verification_S8C1.zip",
+      "PSI-99_Raw Data_SAFFIRE-II-S6C1_Image_Data_All_JPEGs_Mapped_part2.zip",
+      "PSI-99_Raw Data_SAFFIRE-II_F1C1_DistortionGrid-30mmBlock_1280x916_color.zip"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 214 files (16.8 GB) for PSI-99: 187 archives (16.6 GB; by name or PSI category: 1 investigation metadata, 168 still images, 18 not stated), 10 tables named as sensor, telemetry or data (210.1 MB), 1 experimental table (under 0.1 MB), 15 documents (8.7 MB), 1 document table (20.8 MB); 185 of the 208 file names under Raw Data carry a code such as S1C1."
+  },
+  {
+   "investigation_id": "PSI-100",
+   "title": "Spacecraft Fire Experiment-III",
+   "acronym": "SAFFIRE-III",
+   "listing": "ok",
+   "files": 87,
+   "bytes": 35210765052,
+   "listing_rows": 87,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 35210765052,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Engineering Documents": {
+     "files": 2,
+     "bytes": 1737185,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 1737185
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 239,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 239
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 8384,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 8384
+      }
+     }
+    },
+    "Presentations": {
+     "files": 3,
+     "bytes": 10246234,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 10246234
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 75,
+     "bytes": 35182666847,
+     "by_kind": {
+      "archive": {
+       "files": 67,
+       "bytes": 35115457821
+      },
+      "sensor_or_telemetry_table": {
+       "files": 6,
+       "bytes": 64765365
+      },
+      "document": {
+       "files": 2,
+       "bytes": 2443661
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 5,
+     "bytes": 16106163,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 525170
+      },
+      "document_table": {
+       "files": 2,
+       "bytes": 15580993
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "archive": {
+     "files": 68,
+     "bytes": 35115466205,
+     "extensions": {
+      "zip": {
+       "files": 68,
+       "bytes": 35115466205
+      }
+     },
+     "example": "PSI-100_Raw Data_SAFFIRE-III_S1C2_Raw2TIFF_Map_icmad.zip",
+     "example_bytes": 2671930707,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 8384
+      },
+      "still images": {
+       "files": 63,
+       "bytes": 35114828223
+      },
+      "not stated in the name": {
+       "files": 4,
+       "bytes": 629598
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 6,
+     "bytes": 64765365,
+     "extensions": {
+      "csv": {
+       "files": 2,
+       "bytes": 6887865
+      },
+      "xlsx": {
+       "files": 4,
+       "bytes": 57877500
+      }
+     },
+     "example": "PSI-100_Raw Data_Saffire III Sample 1 Sensors.xlsx",
+     "example_bytes": 22548166
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 239,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 239
+      }
+     },
+     "example": "PSI-100_Experimental table_SAFFIRE-3.csv",
+     "example_bytes": 239
+    },
+    "document": {
+     "files": 10,
+     "bytes": 14952250,
+     "extensions": {
+      "docx": {
+       "files": 3,
+       "bytes": 2509087
+      },
+      "pdf": {
+       "files": 7,
+       "bytes": 12443163
+      }
+     },
+     "example": "PSI-100_Presentations_SAFFIRE_47th I Con of Env Sys presentation.pdf",
+     "example_bytes": 5224988
+    },
+    "document_table": {
+     "files": 2,
+     "bytes": 15580993,
+     "extensions": {
+      "xlsx": {
+       "files": 2,
+       "bytes": 15580993
+      }
+     },
+     "example": "PSI-100_Science Documents_SAFFIRE-III_MergeResult-jpeg_Final.xlsx",
+     "example_bytes": 7879404
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "s_or_f_digit_c_digit",
+     "regex": "(?<![A-Za-z0-9])[SF]\\dC\\d(?![A-Za-z0-9])",
+     "what_the_names_show": "A code of the letter S or F with a digit and the letter C with a digit (for example S1C1). The names do not say what the code identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 75,
+     "files_matching": 67,
+     "distinct_ids": 8,
+     "examples": [
+      "PSI-100_Raw Data_SAFFIRE-III_F1C1_BIT_jpeg.zip",
+      "PSI-100_Raw Data_SAFFIRE-III_F1C2_BIT_jpeg.zip",
+      "PSI-100_Raw Data_SAFFIRE-III_F2C1_F2_Jpeg.zip"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 87 files (35.2 GB) for PSI-100: 68 archives (35.1 GB; by name or PSI category: 1 investigation metadata, 63 still images, 4 not stated), 6 tables named as sensor, telemetry or data (64.8 MB), 1 experimental table (under 0.1 MB), 10 documents (15.0 MB), 2 document tables (15.6 MB); 67 of the 75 file names under Raw Data carry a code such as S1C1."
+  },
+  {
+   "investigation_id": "PSI-101",
+   "title": "Smoke Aerosol Measurement Experiment-Reflight",
+   "acronym": "SAME-R",
+   "listing": "ok",
+   "files": 344,
+   "bytes": 6308124750,
+   "listing_rows": 344,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 6308124750,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Analyzed Data": {
+     "files": 86,
+     "bytes": 495127960,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 28571083
+      },
+      "other": {
+       "files": 85,
+       "bytes": 466556877
+      }
+     }
+    },
+    "Engineering Documents": {
+     "files": 24,
+     "bytes": 55122338,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 41201731
+      },
+      "document": {
+       "files": 20,
+       "bytes": 13073969
+      },
+      "document_table": {
+       "files": 3,
+       "bytes": 846638
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 5674,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 5674
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 11037,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 11037
+      }
+     }
+    },
+    "Presentations": {
+     "files": 4,
+     "bytes": 33297074,
+     "by_kind": {
+      "document": {
+       "files": 4,
+       "bytes": 33297074
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 223,
+     "bytes": 5718363731,
+     "by_kind": {
+      "video": {
+       "files": 8,
+       "bytes": 3686907389
+      },
+      "still_image": {
+       "files": 3,
+       "bytes": 1788025
+      },
+      "archive": {
+       "files": 78,
+       "bytes": 1712486262
+      },
+      "sensor_or_telemetry_table": {
+       "files": 44,
+       "bytes": 27682319
+      },
+      "document": {
+       "files": 86,
+       "bytes": 271756292
+      },
+      "other": {
+       "files": 4,
+       "bytes": 17743444
+      }
+     }
+    },
+    "Reference Data": {
+     "files": 2,
+     "bytes": 671373,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 671373
+      }
+     }
+    },
+    "Reports": {
+     "files": 1,
+     "bytes": 4578437,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 4578437
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 2,
+     "bytes": 947126,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 947126
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 8,
+     "bytes": 3686907389,
+     "extensions": {
+      "mp4": {
+       "files": 8,
+       "bytes": 3686907389
+      }
+     },
+     "example": "PSI-101_Raw Data_vlc-record-2010-07-30-13h25m07s-udp___233.1.14.7 _50100-.mp4",
+     "example_bytes": 970563377
+    },
+    "still_image": {
+     "files": 3,
+     "bytes": 1788025,
+     "extensions": {
+      "tif": {
+       "files": 3,
+       "bytes": 1788025
+      }
+     },
+     "example": "PSI-101_Raw Data_4K-K01-15 -1x-1y 10k.tif",
+     "example_bytes": 634338
+    },
+    "archive": {
+     "files": 80,
+     "bytes": 1753699030,
+     "extensions": {
+      "zip": {
+       "files": 80,
+       "bytes": 1753699030
+      }
+     },
+     "example": "PSI-101_Raw Data_vlc-record-2010-07-30-13h25m07s-udp___233.1.14.7 _50100-.zip",
+     "example_bytes": 164070472,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 11037
+      },
+      "VLC recording": {
+       "files": 8,
+       "bytes": 480916656
+      },
+      "still images": {
+       "files": 1,
+       "bytes": 41201731
+      },
+      "not stated in the name": {
+       "files": 70,
+       "bytes": 1231569606
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 44,
+     "bytes": 27682319,
+     "extensions": {
+      "csv": {
+       "files": 44,
+       "bytes": 27682319
+      }
+     },
+     "example": "PSI-101_Raw Data_HKPData_gmt252_3.csv",
+     "example_bytes": 1533648
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 5674,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 5674
+      }
+     },
+     "example": "PSI-101_Experimental table_SAME-R.csv",
+     "example_bytes": 5674
+    },
+    "document": {
+     "files": 116,
+     "bytes": 352895354,
+     "extensions": {
+      "doc": {
+       "files": 1,
+       "bytes": 141312
+      },
+      "docx": {
+       "files": 1,
+       "bytes": 28571083
+      },
+      "pdf": {
+       "files": 36,
+       "bytes": 53062148
+      },
+      "ppt": {
+       "files": 2,
+       "bytes": 16178176
+      },
+      "pptx": {
+       "files": 76,
+       "bytes": 254942635
+      }
+     },
+     "example": "PSI-101_Raw Data_L13 images.pptx",
+     "example_bytes": 31178308
+    },
+    "document_table": {
+     "files": 3,
+     "bytes": 846638,
+     "extensions": {
+      "xls": {
+       "files": 2,
+       "bytes": 835584
+      },
+      "xlsx": {
+       "files": 1,
+       "bytes": 11054
+      }
+     },
+     "example": "PSI-101_Engineering Documents_SAME VPRED Matrix PLN-005 Baseline.xls",
+     "example_bytes": 537600
+    },
+    "other": {
+     "files": 89,
+     "bytes": 484300321,
+     "extensions": {
+      "xls": {
+       "files": 75,
+       "bytes": 474456064
+      },
+      "xlsx": {
+       "files": 14,
+       "bytes": 9844257
+      }
+     },
+     "example": "PSI-101_Analyzed Data_2010_252_13_pyrell_run107.xls",
+     "example_bytes": 8727552
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "number_sign",
+     "regex": "#\\d+",
+     "what_the_names_show": "A number sign followed by a number (for example #63). The names do not say what the number identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 223,
+     "files_matching": 53,
+     "distinct_ids": 36,
+     "examples": [
+      "PSI-101_Raw Data_#100 - 53T Teflon.zip",
+      "PSI-101_Raw Data_#101 Postage 54K Kapton.zip",
+      "PSI-101_Raw Data_#105 postage 58T Teflon.zip"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 344 files (6.3 GB) for PSI-101: 8 videos (3.7 GB), 3 still images (1.8 MB), 80 archives (1.8 GB; by name or PSI category: 1 investigation metadata, 8 VLC recording, 1 still images, 70 not stated), 44 tables named as sensor, telemetry or data (27.7 MB), 1 experimental table (under 0.1 MB), 116 documents (352.9 MB), 3 document tables (0.8 MB), 89 other files (484.3 MB; most frequent extension: xls, 75); 53 of the 223 file names under Raw Data carry a number sign with a number."
+  },
+  {
+   "investigation_id": "PSI-102",
+   "title": "Smoke and Aerosol Measurement Experiment",
+   "acronym": "SAME",
+   "listing": "ok",
+   "files": 101,
+   "bytes": 657608178,
+   "listing_rows": 101,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 657608178,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Analyzed Data": {
+     "files": 59,
+     "bytes": 228109998,
+     "by_kind": {
+      "other": {
+       "files": 59,
+       "bytes": 228109998
+      }
+     }
+    },
+    "Engineering Documents": {
+     "files": 28,
+     "bytes": 362007454,
+     "by_kind": {
+      "video": {
+       "files": 2,
+       "bytes": 14205881
+      },
+      "archive": {
+       "files": 3,
+       "bytes": 333377681
+      },
+      "document": {
+       "files": 21,
+       "bytes": 13588308
+      },
+      "document_table": {
+       "files": 2,
+       "bytes": 835584
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 331,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 331
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 13127,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 13127
+      }
+     }
+    },
+    "Presentations": {
+     "files": 6,
+     "bytes": 61451442,
+     "by_kind": {
+      "document": {
+       "files": 6,
+       "bytes": 61451442
+      }
+     }
+    },
+    "Reference Data": {
+     "files": 3,
+     "bytes": 1365855,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 1365855
+      }
+     }
+    },
+    "Reports": {
+     "files": 1,
+     "bytes": 3712845,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 3712845
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 2,
+     "bytes": 947126,
+     "by_kind": {
+      "document": {
+       "files": 2,
+       "bytes": 947126
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 2,
+     "bytes": 14205881,
+     "extensions": {
+      "mp4": {
+       "files": 2,
+       "bytes": 14205881
+      }
+     },
+     "example": "PSI-102_Engineering Documents_Resistive Heater Coil-TN001.mp4",
+     "example_bytes": 7339333
+    },
+    "archive": {
+     "files": 4,
+     "bytes": 333390808,
+     "extensions": {
+      "zip": {
+       "files": 4,
+       "bytes": 333390808
+      }
+     },
+     "example": "PSI-102_Engineering Documents_Resistive Heater Coil-TN001.zip",
+     "example_bytes": 168520317,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 13127
+      },
+      "still images": {
+       "files": 1,
+       "bytes": 25024013
+      },
+      "not stated in the name": {
+       "files": 2,
+       "bytes": 308353668
+      }
+     }
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 331,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 331
+      }
+     },
+     "example": "PSI-102_Experimental table_SAME.csv",
+     "example_bytes": 331
+    },
+    "document": {
+     "files": 33,
+     "bytes": 81065576,
+     "extensions": {
+      "doc": {
+       "files": 1,
+       "bytes": 1608192
+      },
+      "pdf": {
+       "files": 27,
+       "bytes": 19614134
+      },
+      "ppt": {
+       "files": 3,
+       "bytes": 42724352
+      },
+      "pptx": {
+       "files": 2,
+       "bytes": 17118898
+      }
+     },
+     "example": "PSI-102_Presentations_SAME_EarlyResults.ppt",
+     "example_bytes": 26546176
+    },
+    "document_table": {
+     "files": 2,
+     "bytes": 835584,
+     "extensions": {
+      "xls": {
+       "files": 2,
+       "bytes": 835584
+      }
+     },
+     "example": "PSI-102_Engineering Documents_SAME VPRED Matrix PLN-005 Baseline.xls",
+     "example_bytes": 537600
+    },
+    "other": {
+     "files": 59,
+     "bytes": 228109998,
+     "extensions": {
+      "xls": {
+       "files": 53,
+       "bytes": 226424320
+      },
+      "xlsx": {
+       "files": 6,
+       "bytes": 1685678
+      }
+     },
+     "example": "PSI-102_Analyzed Data_Silicone GMT255hkp run 5s zgy average.xls",
+     "example_bytes": 12931072
+    }
+   },
+   "test_id_in_file_names": [],
+   "sentence": "PSI lists 101 files (657.6 MB) for PSI-102: 2 videos (14.2 MB), 4 archives (333.4 MB; by name or PSI category: 1 investigation metadata, 1 still images, 2 not stated), 1 experimental table (under 0.1 MB), 33 documents (81.1 MB), 2 document tables (0.8 MB), 59 other files (228.1 MB; most frequent extension: xls, 53); no file is named as a sensor, telemetry or data table."
+  },
+  {
+   "investigation_id": "PSI-106",
+   "title": "Structure and Liftoff In Combustion Experiment",
+   "acronym": "SLICE",
+   "listing": "ok",
+   "files": 18707,
+   "bytes": 60790468989,
+   "listing_rows": 23463,
+   "repeated_rows": 4756,
+   "listing_rows_bytes": 72914185571,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Experimental table": {
+     "files": 1,
+     "bytes": 734,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 734
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 8743,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 8743
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 18705,
+     "bytes": 60790459512,
+     "by_kind": {
+      "video": {
+       "files": 28,
+       "bytes": 3679267615
+      },
+      "archive": {
+       "files": 66,
+       "bytes": 27287028457
+      },
+      "document": {
+       "files": 291,
+       "bytes": 121542531
+      },
+      "other": {
+       "files": 18320,
+       "bytes": 29702620909
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 28,
+     "bytes": 3679267615,
+     "extensions": {
+      "mp4": {
+       "files": 27,
+       "bytes": 3194534055
+      },
+      "mpg": {
+       "files": 1,
+       "bytes": 484733560
+      }
+     },
+     "example": "000000001661bcf0.mpg",
+     "example_bytes": 484733560
+    },
+    "archive": {
+     "files": 67,
+     "bytes": 27287037200,
+     "extensions": {
+      "zip": {
+       "files": 67,
+       "bytes": 27287037200
+      }
+     },
+     "example": "UT_061_069.zip",
+     "example_bytes": 1999015809,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 8743
+      },
+      "still images": {
+       "files": 33,
+       "bytes": 14114615449
+      },
+      "not stated in the name": {
+       "files": 33,
+       "bytes": 13172413008
+      }
+     }
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 734,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 734
+      }
+     },
+     "example": "PSI-106_Experimental table_Slice.csv",
+     "example_bytes": 734
+    },
+    "document": {
+     "files": 291,
+     "bytes": 121542531,
+     "extensions": {
+      "doc": {
+       "files": 1,
+       "bytes": 244736
+      },
+      "docx": {
+       "files": 46,
+       "bytes": 2045973
+      },
+      "pdf": {
+       "files": 243,
+       "bytes": 118363050
+      },
+      "pptx": {
+       "files": 1,
+       "bytes": 888772
+      }
+     },
+     "example": "SLICE EP-04 2013 US Combustion.pdf",
+     "example_bytes": 5191006
+    },
+    "other": {
+     "files": 18320,
+     "bytes": 29702620909,
+     "extensions": {
+      "csv": {
+       "files": 14,
+       "bytes": 139098
+      },
+      "dat": {
+       "files": 18248,
+       "bytes": 29686972457
+      },
+      "eps": {
+       "files": 6,
+       "bytes": 7990836
+      },
+      "mat": {
+       "files": 2,
+       "bytes": 5178
+      },
+      "txt": {
+       "files": 11,
+       "bytes": 95802
+      },
+      "xls": {
+       "files": 22,
+       "bytes": 4323693
+      },
+      "xlsx": {
+       "files": 17,
+       "bytes": 3093845
+      }
+     },
+     "example": "1074.dat",
+     "example_bytes": 6596032
+    }
+   },
+   "test_id_in_file_names": [],
+   "sentence": "PSI lists 18,707 files (60.8 GB) for PSI-106: 28 videos (3.7 GB), 67 archives (27.3 GB; by name or PSI category: 1 investigation metadata, 33 still images, 33 not stated), 1 experimental table (under 0.1 MB), 291 documents (121.5 MB), 18,320 other files (29.7 GB; most frequent extension: dat, 18,248); no file is named as a sensor, telemetry or data table."
+  },
+  {
+   "investigation_id": "PSI-107",
+   "title": "Smoke Point In Co-flow Experiment",
+   "acronym": "SPICE",
+   "listing": "ok",
+   "files": 188,
+   "bytes": 6946864573,
+   "listing_rows": 188,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 6946864573,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Engineering Documents": {
+     "files": 4,
+     "bytes": 5431916,
+     "by_kind": {
+      "document": {
+       "files": 4,
+       "bytes": 5431916
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 31205,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 31205
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 9313,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 9313
+      }
+     }
+    },
+    "Presentations": {
+     "files": 5,
+     "bytes": 36912183,
+     "by_kind": {
+      "document": {
+       "files": 5,
+       "bytes": 36912183
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 172,
+     "bytes": 6899317356,
+     "by_kind": {
+      "video": {
+       "files": 19,
+       "bytes": 2393690532
+      },
+      "still_image": {
+       "files": 1,
+       "bytes": 11226428
+      },
+      "archive": {
+       "files": 100,
+       "bytes": 3549694248
+      },
+      "sensor_or_telemetry_table": {
+       "files": 2,
+       "bytes": 687955
+      },
+      "document": {
+       "files": 17,
+       "bytes": 919438492
+      },
+      "other": {
+       "files": 33,
+       "bytes": 24579701
+      }
+     }
+    },
+    "Reference Data": {
+     "files": 1,
+     "bytes": 1060135,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 1060135
+      }
+     }
+    },
+    "Reports": {
+     "files": 3,
+     "bytes": 2990401,
+     "by_kind": {
+      "document": {
+       "files": 3,
+       "bytes": 2990401
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 1,
+     "bytes": 1112064,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 1112064
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 19,
+     "bytes": 2393690532,
+     "extensions": {
+      "avi": {
+       "files": 1,
+       "bytes": 1228746628
+      },
+      "mp4": {
+       "files": 18,
+       "bytes": 1164943904
+      }
+     },
+     "example": "PSI-107_Raw Data_SPICE_GMT2009_119_video.avi",
+     "example_bytes": 1228746628
+    },
+    "still_image": {
+     "files": 1,
+     "bytes": 11226428,
+     "extensions": {
+      "nef": {
+       "files": 1,
+       "bytes": 11226428
+      }
+     },
+     "example": "PSI-107_Raw Data_Focus Check - Flight Hdwr.nef",
+     "example_bytes": 11226428
+    },
+    "archive": {
+     "files": 101,
+     "bytes": 3549703561,
+     "extensions": {
+      "zip": {
+       "files": 101,
+       "bytes": 3549703561
+      }
+     },
+     "example": "PSI-107_Raw Data_SPICE_GMT052_2009_NEF.zip",
+     "example_bytes": 660834359,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 9313
+      },
+      "video": {
+       "files": 1,
+       "bytes": 71809994
+      },
+      "still images": {
+       "files": 94,
+       "bytes": 2973061787
+      },
+      "not stated in the name": {
+       "files": 5,
+       "bytes": 504822467
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 2,
+     "bytes": 687955,
+     "extensions": {
+      "xls": {
+       "files": 1,
+       "bytes": 429568
+      },
+      "xlsx": {
+       "files": 1,
+       "bytes": 258387
+      }
+     },
+     "example": "PSI-107_Raw Data_Spice Flight Test Data II modified.xls",
+     "example_bytes": 429568
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 31205,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 31205
+      }
+     },
+     "example": "PSI-107_Experimental table_Spice.csv",
+     "example_bytes": 31205
+    },
+    "document": {
+     "files": 31,
+     "bytes": 966945191,
+     "extensions": {
+      "doc": {
+       "files": 1,
+       "bytes": 1112064
+      },
+      "docx": {
+       "files": 1,
+       "bytes": 139512
+      },
+      "pdf": {
+       "files": 18,
+       "bytes": 15655882
+      },
+      "ppt": {
+       "files": 9,
+       "bytes": 947701760
+      },
+      "pptx": {
+       "files": 2,
+       "bytes": 2335973
+      }
+     },
+     "example": "PSI-107_Raw Data_SPICE_GMT052_2009_NikonD100_PictureBook.ppt",
+     "example_bytes": 229785600
+    },
+    "other": {
+     "files": 33,
+     "bytes": 24579701,
+     "extensions": {
+      "txt": {
+       "files": 2,
+       "bytes": 3052
+      },
+      "xls": {
+       "files": 26,
+       "bytes": 23435264
+      },
+      "xlsx": {
+       "files": 5,
+       "bytes": 1141385
+      }
+     },
+     "example": "PSI-107_Raw Data_GMT058nikon.xls",
+     "example_bytes": 11449344
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "tp_number",
+     "regex": "(?<![A-Za-z])TP ?\\d+",
+     "what_the_names_show": "The letters TP followed by a number (for example TP 37). The names do not say what TP stands for.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 172,
+     "files_matching": 78,
+     "distinct_ids": 56,
+     "examples": [
+      "PSI-107_Raw Data_062 TP 103 vlcsnap-4272441.zip",
+      "PSI-107_Raw Data_Downlink Frame Grab TP 33a.zip",
+      "PSI-107_Raw Data_Downlink Frame Grabs - TP 13.zip"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 188 files (6.9 GB) for PSI-107: 19 videos (2.4 GB), 1 still image (11.2 MB), 101 archives (3.5 GB; by name or PSI category: 1 investigation metadata, 1 video, 94 still images, 5 not stated), 2 tables named as sensor, telemetry or data (0.7 MB), 1 experimental table (under 0.1 MB), 31 documents (966.9 MB), 33 other files (24.6 MB; most frequent extension: xls, 26); 78 of the 172 file names under Raw Data carry the letters TP with a number."
+  },
+  {
+   "investigation_id": "PSI-115",
+   "title": "Utilization of the Smoke Aerosol Measurement Experiment Data for Advanced Modeling and Simulation of Smoke Generation in Micro-Gravity",
+   "acronym": "",
+   "listing": "ok",
+   "files": 47,
+   "bytes": 264404901,
+   "listing_rows": 47,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 264404901,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Analyzed Data": {
+     "files": 44,
+     "bytes": 253683467,
+     "by_kind": {
+      "other": {
+       "files": 44,
+       "bytes": 253683467
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 7021,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 7021
+      }
+     }
+    },
+    "Reports": {
+     "files": 1,
+     "bytes": 10617514,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 10617514
+      }
+     }
+    },
+    "Science Documents": {
+     "files": 1,
+     "bytes": 96899,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 96899
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "archive": {
+     "files": 1,
+     "bytes": 7021,
+     "extensions": {
+      "zip": {
+       "files": 1,
+       "bytes": 7021
+      }
+     },
+     "example": "PSI-115_metadata_PSI-185_Utilization of the S.zip",
+     "example_bytes": 7021,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 7021
+      }
+     }
+    },
+    "document": {
+     "files": 2,
+     "bytes": 10714413,
+     "extensions": {
+      "pdf": {
+       "files": 2,
+       "bytes": 10714413
+      }
+     },
+     "example": "PSI-115_Reports_NNX17AF08A_FinalReport.pdf",
+     "example_bytes": 10617514
+    },
+    "other": {
+     "files": 44,
+     "bytes": 253683467,
+     "extensions": {
+      "dat": {
+       "files": 44,
+       "bytes": 253683467
+      }
+     },
+     "example": "PSI-115_Analyzed Data_10cm_sGrid_grid3d.dat",
+     "example_bytes": 17971238
+    }
+   },
+   "test_id_in_file_names": [],
+   "sentence": "PSI lists 47 files (264.4 MB) for PSI-115: 1 archive (under 0.1 MB; by name or PSI category: 1 investigation metadata), 2 documents (10.7 MB), 44 other files (253.7 MB; most frequent extension: dat, 44); no file is named as a sensor, telemetry or data table."
+  },
+  {
+   "investigation_id": "PSI-117",
+   "title": "Effect of External Thermo-Convective Perturbation on Cool Flame Dynamics: A Multidimensional Multi-Physics CFD Analysis",
+   "acronym": "",
+   "listing": "ok",
+   "files": 16,
+   "bytes": 70820870,
+   "listing_rows": 16,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 70820870,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Analyzed Data": {
+     "files": 10,
+     "bytes": 281272,
+     "by_kind": {
+      "document_table": {
+       "files": 1,
+       "bytes": 11059
+      },
+      "other": {
+       "files": 9,
+       "bytes": 270213
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 10382,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 10382
+      }
+     }
+    },
+    "Presentations": {
+     "files": 4,
+     "bytes": 62456587,
+     "by_kind": {
+      "document": {
+       "files": 4,
+       "bytes": 62456587
+      }
+     }
+    },
+    "Reports": {
+     "files": 1,
+     "bytes": 8072629,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 8072629
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "archive": {
+     "files": 1,
+     "bytes": 10382,
+     "extensions": {
+      "zip": {
+       "files": 1,
+       "bytes": 10382
+      }
+     },
+     "example": "PSI-117_metadata_NEWID-13_Effect of External T.zip",
+     "example_bytes": 10382,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 10382
+      }
+     }
+    },
+    "document": {
+     "files": 5,
+     "bytes": 70529216,
+     "extensions": {
+      "pdf": {
+       "files": 5,
+       "bytes": 70529216
+      }
+     },
+     "example": "PSI-117_Presentations_Three_Stage_Cool_Flame_TFarouk.pdf",
+     "example_bytes": 30873451
+    },
+    "document_table": {
+     "files": 1,
+     "bytes": 11059,
+     "extensions": {
+      "xlsx": {
+       "files": 1,
+       "bytes": 11059
+      }
+     },
+     "example": "PSI-117_Analyzed Data_ReadMe_List_of_Data.xlsx",
+     "example_bytes": 11059
+    },
+    "other": {
+     "files": 9,
+     "bytes": 270213,
+     "extensions": {
+      "csv": {
+       "files": 9,
+       "bytes": 270213
+      }
+     },
+     "example": "PSI-117_Analyzed Data_PROCI_C12_2019_Three_Stage.csv",
+     "example_bytes": 89130
+    }
+   },
+   "test_id_in_file_names": [],
+   "sentence": "PSI lists 16 files (70.8 MB) for PSI-117: 1 archive (under 0.1 MB; by name or PSI category: 1 investigation metadata), 5 documents (70.5 MB), 1 document table (under 0.1 MB), 9 other files (0.3 MB; most frequent extension: csv, 9); no file is named as a sensor, telemetry or data table."
+  },
+  {
+   "investigation_id": "PSI-142",
+   "title": "Quantitative Studies of Cool Flame Transitions at Radiation / Stretch Extinction Using Counterflow Flames",
+   "acronym": "",
+   "listing": "ok",
+   "files": 3,
+   "bytes": 748117,
+   "listing_rows": 3,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 748117,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Analyzed Data": {
+     "files": 1,
+     "bytes": 735232,
+     "by_kind": {
+      "document_table": {
+       "files": 1,
+       "bytes": 735232
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 1,
+     "bytes": 727,
+     "by_kind": {
+      "experimental_table": {
+       "files": 1,
+       "bytes": 727
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 12158,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 12158
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "archive": {
+     "files": 1,
+     "bytes": 12158,
+     "extensions": {
+      "zip": {
+       "files": 1,
+       "bytes": 12158
+      }
+     },
+     "example": "PSI-142_metadata_PSI-164_Quantitative Studies.zip",
+     "example_bytes": 12158,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 12158
+      }
+     }
+    },
+    "experimental_table": {
+     "files": 1,
+     "bytes": 727,
+     "extensions": {
+      "csv": {
+       "files": 1,
+       "bytes": 727
+      }
+     },
+     "example": "PSI-142_Experimental table_Data Summary Table.csv",
+     "example_bytes": 727
+    },
+    "document_table": {
+     "files": 1,
+     "bytes": 735232,
+     "extensions": {
+      "xlsx": {
+       "files": 1,
+       "bytes": 735232
+      }
+     },
+     "example": "PSI-142_Analyzed Data_PSI data summary Princeton with links.xlsx",
+     "example_bytes": 735232
+    }
+   },
+   "test_id_in_file_names": [],
+   "sentence": "PSI lists 3 files (0.7 MB) for PSI-142: 1 archive (under 0.1 MB; by name or PSI category: 1 investigation metadata), 1 experimental table (under 0.1 MB), 1 document table (0.7 MB); no file is named as a sensor, telemetry or data table."
+  },
+  {
+   "investigation_id": "PSI-159",
+   "title": "Advanced Combustion via Microgravity Experiments / Cool Flames Investigation with Gases",
+   "acronym": "ACME CFI-G",
+   "listing": "ok",
+   "files": 3756,
+   "bytes": 2085592429259,
+   "listing_rows": 3756,
+   "repeated_rows": 0,
+   "listing_rows_bytes": 2085592429259,
+   "records_beyond_one_per_key": 0,
+   "files_without_size": 0,
+   "by_category": {
+    "Engineering Documents": {
+     "files": 1,
+     "bytes": 7496324,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 7496324
+      }
+     }
+    },
+    "Experimental table": {
+     "files": 2,
+     "bytes": 61588,
+     "by_kind": {
+      "experimental_table": {
+       "files": 2,
+       "bytes": 61588
+      }
+     }
+    },
+    "Investigation Metadata Files": {
+     "files": 1,
+     "bytes": 8404,
+     "by_kind": {
+      "archive": {
+       "files": 1,
+       "bytes": 8404
+      }
+     }
+    },
+    "Raw Data": {
+     "files": 3749,
+     "bytes": 2085580830202,
+     "by_kind": {
+      "video": {
+       "files": 337,
+       "bytes": 81718094430
+      },
+      "archive": {
+       "files": 986,
+       "bytes": 2002101450224
+      },
+      "sensor_or_telemetry_table": {
+       "files": 339,
+       "bytes": 1468140341
+      },
+      "document": {
+       "files": 409,
+       "bytes": 136177601
+      },
+      "document_table": {
+       "files": 1,
+       "bytes": 929664
+      },
+      "other": {
+       "files": 1677,
+       "bytes": 156037942
+      }
+     }
+    },
+    "Reports": {
+     "files": 1,
+     "bytes": 3894907,
+     "by_kind": {
+      "document": {
+       "files": 1,
+       "bytes": 3894907
+      }
+     }
+    },
+    "Representative Image(s)": {
+     "files": 2,
+     "bytes": 137834,
+     "by_kind": {
+      "still_image": {
+       "files": 2,
+       "bytes": 137834
+      }
+     }
+    }
+   },
+   "by_kind": {
+    "video": {
+     "files": 337,
+     "bytes": 81718094430,
+     "extensions": {
+      "mp4": {
+       "files": 1,
+       "bytes": 21479386
+      },
+      "ts": {
+       "files": 336,
+       "bytes": 81696615044
+      }
+     },
+     "example": "PSI-159_Raw Data_vlc-record-2021-07-15-21h29m57s-udp____21196M1.ts",
+     "example_bytes": 995765500
+    },
+    "still_image": {
+     "files": 2,
+     "bytes": 137834,
+     "extensions": {
+      "jpg": {
+       "files": 1,
+       "bytes": 9866
+      },
+      "png": {
+       "files": 1,
+       "bytes": 127968
+      }
+     },
+     "example": "PSI-159_Representative Image(s)_ACME logo.png",
+     "example_bytes": 127968
+    },
+    "archive": {
+     "files": 987,
+     "bytes": 2002101458628,
+     "extensions": {
+      "zip": {
+       "files": 987,
+       "bytes": 2002101458628
+      }
+     },
+     "example": "PSI-159_Raw Data_21162A4_Images_Converted.zip",
+     "example_bytes": 18133709765,
+     "archive_content": {
+      "investigation metadata": {
+       "files": 1,
+       "bytes": 8404
+      },
+      "still images": {
+       "files": 486,
+       "bytes": 934429914150
+      },
+      "not stated in the name": {
+       "files": 500,
+       "bytes": 1067671536074
+      }
+     }
+    },
+    "sensor_or_telemetry_table": {
+     "files": 339,
+     "bytes": 1468140341,
+     "extensions": {
+      "csv": {
+       "files": 339,
+       "bytes": 1468140341
+      }
+     },
+     "example": "PSI-159_Raw Data_21162A4_data.csv",
+     "example_bytes": 16446033
+    },
+    "experimental_table": {
+     "files": 2,
+     "bytes": 61588,
+     "extensions": {
+      "csv": {
+       "files": 2,
+       "bytes": 61588
+      }
+     },
+     "example": "PSI-159_Experimental table_CFI-G_Inverse Flames.csv",
+     "example_bytes": 39422
+    },
+    "document": {
+     "files": 411,
+     "bytes": 147568832,
+     "extensions": {
+      "pdf": {
+       "files": 93,
+       "bytes": 147536643
+      },
+      "txt": {
+       "files": 318,
+       "bytes": 32189
+      }
+     },
+     "example": "PSI-159_Engineering Documents_ACME Engineering Implementation Rpt..pdf",
+     "example_bytes": 7496324
+    },
+    "document_table": {
+     "files": 1,
+     "bytes": 929664,
+     "extensions": {
+      "xlsx": {
+       "files": 1,
+       "bytes": 929664
+      }
+     },
+     "example": "PSI-159_Raw Data_Final ACME Chamber Calculator - 2021-03-09 to 2021-10-21.xlsx",
+     "example_bytes": 929664
+    },
+    "other": {
+     "files": 1677,
+     "bytes": 156037942,
+     "extensions": {
+      "csv": {
+       "files": 339,
+       "bytes": 631906
+      },
+      "errors": {
+       "files": 1,
+       "bytes": 220341
+      },
+      "log": {
+       "files": 22,
+       "bytes": 8285567
+      },
+      "mdipsug": {
+       "files": 610,
+       "bytes": 145808361
+      },
+      "next": {
+       "files": 1,
+       "bytes": 4
+      },
+      "txt": {
+       "files": 704,
+       "bytes": 1091763
+      }
+     },
+     "example": "PSI-159_Raw Data_INTNS_21162A4.mdipsug",
+     "example_bytes": 1593548
+    }
+   },
+   "test_id_in_file_names": [
+    {
+     "pattern_id": "five_digits_letter_number",
+     "regex": "(?<!\\d)\\d{5}[A-Z]\\d{1,2}(?!\\d)",
+     "what_the_names_show": "An id of five digits, a capital letter and a number (for example 21301A9). The names do not say what the id identifies.",
+     "searched_categories": [
+      "Raw Data"
+     ],
+     "files_searched": 3749,
+     "files_matching": 3585,
+     "distinct_ids": 341,
+     "examples": [
+      "PSI-159_Raw Data_21088A1A_HiBMS.zip",
+      "PSI-159_Raw Data_21088B1A_HiBMS.zip",
+      "PSI-159_Raw Data_21088C1A_HiBMS.zip"
+     ]
+    }
+   ],
+   "sentence": "PSI lists 3,756 files (2,085.6 GB) for PSI-159: 337 videos (81.7 GB), 2 still images (0.1 MB), 987 archives (2,002.1 GB; by name or PSI category: 1 investigation metadata, 486 still images, 500 not stated), 339 tables named as sensor, telemetry or data (1.5 GB), 2 experimental tables (0.1 MB), 411 documents (147.6 MB), 1 document table (0.9 MB), 1,677 other files (156.0 MB; most frequent extension: txt, 704); 3,585 of the 3,749 file names under Raw Data carry an id of five digits, a letter and a number."
+  }
+ ]
+}

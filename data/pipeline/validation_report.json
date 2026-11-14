@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 46,
+  "PASS": 59,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 46
+  "checks": 59
  },
  "checks": [
   {
@@ -1362,6 +1362,197 @@
    "details": {
     "note": "The manifest carries sizes only; contents are compared by size, not by hash."
    }
+  },
+  {
+   "id": "L1_findings_entries",
+   "verifies": "Every entry of spec/findings.json points to an item of references.json; findings.csv has one row per entry, and its text, quote, where, title, version, access, url and reference id are those of the item and its document, its kind, needs and condition columns those of the entry; the 'findings' of findings_by_environment.json carry the same text, quote, place and document.",
+   "status": "PASS",
+   "numbers": {
+    "spec_entries": 211,
+    "items": 180,
+    "csv_rows": 211,
+    "json_findings": 211,
+    "fields_compared": 6963
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "L2_findings_condition_basis",
+   "verifies": "Every normalized number of an entry (oxygen, pressure, flow; each end of a range) follows from its condition_basis: literally present in the basis words or values, or, for a pressure, a number of the basis times the factor of its unit (1 psi = 6.894757 kPa, 1 atm = 101.325 kPa), rounded to 3 decimals. The basis words are in the item's text or quote, a values key exists, and a gravity level or fuel phase has a word of its vocabulary behind it.",
+   "status": "PASS",
+   "numbers": {
+    "normalized_numbers": 177,
+    "by_unit_factor": 22,
+    "literally_in_basis": 155,
+    "levels_or_phases_whose_vocabulary_word_starts_a_longer_word": 1
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "note": "A vocabulary word is accepted where it starts a word of the basis ('solid' in 'thick solids'); the rule text does not say whole word. Such cases: BASS13.nitrogen:solid"
+   }
+  },
+  {
+   "id": "L3_findings_lists",
+   "verifies": "For each scenario and each need (and 'general'), the three lists of findings_by_environment.json, the entries counted under other_conditions and moved_for_gravity, the counts, and for each listed entry the relations of matched_on, not_stated and flow are recomputed from findings.csv and scenarios.json by the rule of spec/findings.json _meta.lists.",
+   "status": "PASS",
+   "numbers": {
+    "blocks": 42,
+    "listed": {
+     "at_environment": 16,
+     "about_a_stated_condition_of_the_environment": 92,
+     "general": 918
+    },
+    "other_conditions": 402
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "L4_findings_sentences",
+   "verifies": "Every number in a fixed sentence of findings_by_environment.json is one of the counts of its block (n_at, n_about, n_general, n_listed, n_not_full_text), and no sentence or sentence template holds a word of spec/findings.json forbidden_words.",
+   "status": "PASS",
+   "numbers": {
+    "sentences": 84,
+    "numbers_in_sentences": 203
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "M1_answers_files_and_index",
+   "verifies": "answers/ holds one file per scenario of scenarios.json and need of needs.json (36) and index.json, and nothing else; index.json lists them in spec order with the file's top line and the number of entries of every list it names.",
+   "status": "PASS",
+   "numbers": {
+    "answer_files": 36,
+    "index_rows": 36,
+    "files_on_disk": 37,
+    "fields_compared": 648
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "M2_answers_rung1",
+   "verifies": "Rung 1 of every answer file: status, counts and the gap codes of rung 4 equal the scenario's row of scenario_needs.csv; matched is the number of matched tests of the evidence package block; matched ranges, fuel phases, investigations, documented sentences and indicator values are those of the block; the copied sentences are the block's statements selected by answers.json rung1.copied_statements, in order and unchanged, and the gap sentences are the block's gap texts.",
+   "status": "PASS",
+   "numbers": {
+    "answer_files": 36
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "M3_answers_rung2_near",
+   "verifies": "Rung 2 of every answer file: the scenario's cells, the candidate cells and the listed cells are recomputed from coverage.json, scenarios.json and atmosphere_cells.csv by answers.json 'near'; every listed cell carries the counts and status of its row, matched and also_matched_at_the_condition recomputed from the evidence packages, the environment's range words, and the counts of the rung.",
+   "status": "PASS",
+   "numbers": {
+    "answer_files": 36,
+    "cells_listed": 21,
+    "files_where_n_cells_with_repeating_tier_equals_cells_with_oxygen_only_or_pressure_only": 36
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "note": "answers.json defines no rule for n_cells_with_repeating_tier; it is compared with the number of listed cells whose row has a test of tier oxygen_only or pressure_only and is reported, not failed."
+   }
+  },
+  {
+   "id": "M4_answers_findings_placement",
+   "verifies": "Every finding that findings_by_environment.json lists for the scenario under the need or under 'general' is in the answer file exactly once, placed by its kind (answers.json placement: criterion -> frame.criteria; gap -> frame.nasa_questions or rung4.stated_open_elsewhere; result, caveat -> the rung 3 list of its list), with applies, the name of its list, text and quote equal to references.json, the place and document of findings.csv, the order of placement.order, and the counts of frame, rung 3 and rung 4 recomputed from the lists.",
+   "status": "PASS",
+   "numbers": {
+    "answer_files": 36,
+    "entries_placed": 1766,
+    "entries_whose_list_field_is_not_the_list_name": 0
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "M5_answers_top_line",
+   "verifies": "The top line of every answer file starts with the fixed start of answers.json and is the one its rule selects: the first 'tests' sentence and the first 'published' sentence whose conditions hold for the fields recomputed from rungs 1 to 3, filled with those fields; id and fields as the rule says.",
+   "status": "PASS",
+   "numbers": {
+    "answer_files": 36,
+    "by_top_line": {
+     "tests.atmosphere_not_specified+published.first_three_rungs_empty": 3,
+     "tests.atmosphere_not_specified+published.here": 1,
+     "tests.in_atmosphere+published.here": 3,
+     "tests.not_measured+published.first_three_rungs_empty": 6,
+     "tests.not_measured+published.here": 6,
+     "tests.other_atmosphere+published.first_three_rungs_empty": 5,
+     "tests.other_atmosphere+published.here": 8,
+     "tests.other_atmosphere+published.none_here": 1,
+     "tests.oxygen_only+published.here": 3
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "M6_answers_sentence_numbers",
+   "verifies": "Every number in every sentence of an answer file is found in the block the sentence belongs to (top line: its fields; frame, rung 2, 3 and 4 sentences: the counts of the rung; a cell sentence: its cell; a copied package sentence: the copied package block of rung 1; a search sentence: the search entry), and the file's 'sentences' are exactly the sentences of its blocks.",
+   "status": "PASS",
+   "numbers": {
+    "sentences": 714,
+    "numbers_in_sentences": 1526
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "M7_answers_words",
+   "verifies": "No template of spec/answers.json holds a digit or a word of its forbidden_words, and no sentence of an answer file holds such a word (whole words; outside the need name, a reading copied from the spec and a sentence quoted word for word from a NASA record or a publication, which are counted apart).",
+   "status": "PASS",
+   "numbers": {
+    "templates": 40,
+    "sentences": 714,
+    "sentences_with_such_a_word_only_inside_a_quote_or_copied_reading": 0
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "N1_raw_inventory_counts",
+   "verifies": "raw_inventory.json has one entry per PSI record (numeric order); files and bytes per investigation, per PSI category and per kind (with extensions and archive content), the listing rows and repeats, the largest file of each kind, the totals, and the id patterns of the file names are recounted from the saved listings by the rules of raw_kinds.json, each file id counted once.",
+   "status": "PASS",
+   "numbers": {
+    "investigations": 24,
+    "files": 60866,
+    "listing_rows": 66567,
+    "repeated_rows": 5701,
+    "files_by_kind": {
+     "archive": 12689,
+     "document": 4760,
+     "experimental_table": 22,
+     "document_table": 26,
+     "other": 35738,
+     "video": 2623,
+     "sensor_or_telemetry_table": 4982,
+     "still_image": 26
+    },
+    "id_patterns_reported": 17,
+    "distinct_ids_equal_to_distinct_matched_strings": 17
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "note": "raw_kinds.json does not define 'distinct_ids'; it is compared with the number of distinct strings the pattern matches in the searched names and reported, not failed. Kinds are read from the name without prefix and extension (name_rule); id patterns from the whole name."
+   }
+  },
+  {
+   "id": "N2_raw_inventory_sentences",
+   "verifies": "Every number in the sentence of a raw_inventory.json entry is a field of the same entry, and every size written in it (GB from 10^9 bytes, MB below, one decimal) is a byte count of the entry in that unit.",
+   "status": "PASS",
+   "numbers": {
+    "sentences": 24,
+    "numbers_in_sentences": 429,
+    "sizes": 127
+   },
+   "failures": 0,
+   "failing_examples": []
   }
  ]
 }
