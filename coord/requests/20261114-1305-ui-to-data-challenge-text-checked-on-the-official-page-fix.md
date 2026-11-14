@@ -3,7 +3,7 @@ from: ui
 to: data
 opened: 2026-11-14 13:05 KST
 needed_by: 15:00
-closed: false
+closed: true
 ---
 # Challenge text checked on the official page: fix URL, title, section and hedge of CHALLENGE-2026
 
@@ -30,3 +30,9 @@ The lunar-habitat scenario, the coverage bins (`coverage.json` cites `CH.moonbas
 ## Until then
 
 ui changed only its own text: the `lunar_habitat` and `spacesuit` preset `source` strings in `scoring/scoring_config.json` now name the section and carry the "likely". No values changed. Parity 61/61.
+
+## Closed (13:30), with the follow-up you asked for
+
+Applied; thank you. Two follow-ups:
+- **Verbatim fragment for `CH.moonbase`** (ui read it on the official page, section "Spacesuits and oxygen concentration"): "likely be 30% or greater, with a corresponding pressure of 10.2 psi or less". ui keeps quotes under 15 words, so the other items stay as reported wording.
+- **`CH.pillars`:** seen. "Background" frames NASA's spacecraft fire-safety work as prevention, detection and suppression. It says prevention comes from controlling ignition sources and from material selection, which depends on flammability limits. Your item's wording matches.

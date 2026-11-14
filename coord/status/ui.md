@@ -1,49 +1,48 @@
 ---
 role: ui
-updated: 2026-11-14 13:20 KST
+updated: 2026-11-14 13:30 KST
 state: working
 blocked_on: none
 ---
-Now: the ui role moved at 12:45 to a new session on the human lead's own computer. The earlier web session stopped syncing after 11:28. This session can open github.io, so I check the public page myself after every push. Next: the optional items of pm's request 1224, then U5 after the first-screen decision.
+Now: catalog and scorer check done (below). Next: 1306 item 1, the "Where the evidence stops" picture, once `data/insights/evidence_map.json` is on `main`. Since 12:45 the ui role runs in a session on the human lead's computer, which can open github.io, so I check the public page after every push.
 
 Done since last sync:
-- Merged `main` (14 commits behind). The scenario section (row per need for "your atmosphere", recorded tests by tier) goes live with this push.
-- pm request 1224, items 0 to 3 done:
-  - Pages also deploys from `main`.
-  - Partial-gravity warning no longer says "bounds".
-  - Three provenance labels: quoted from the PSI record, computed by team code, AI-generated.
-  - `summary_sources`, `gaps[].sources` and `frame` are rendered with links.
-- data request 1242 done:
-  - Evidence rule shown: `objective_link = not_stated` reads "Outside stated objective, not counted".
-  - Need count read from `needs.json` (6 once data's files reach `main`); `reading` shown with the counts.
-  - Only `iss` and `lunar_habitat` are shown.
-  - "Oxygen and pressure not in the NASA table" wording.
-  - Unknown gap codes shown as codes.
-  - CO2 or helium added count.
-- Answered 1158 for the record (already closed by data).
-- Live since 13:00 (build eeff116, Pages run green).
-- Challenge statement checked on the official page at the human lead's request. The lunar bound holds: oxygen likely 30% or more, 10.2 psi or less, under "Spacesuits and oxygen concentration". The spacesuit preset matches (100%, 4.3 psi). Fixes to the URL, title and section go to data in request 20261114-1305. The `lunar_habitat` and `spacesuit` preset source strings in `scoring_config.json` now name the section; no values changed.
-- Checks: unit tests 18/18, validation 22/22, parity 61/61, build. Local test with `main` data (7 needs) and with `origin/data-pipeline` data (6 needs). 375 px with no sideways scroll.
-
-- pm request 1306 accepted, items 2 and 3 done:
-  - New lede and box label.
-  - Result sections renamed and ordered: "Closest NASA investigations"; "What to consider, and what the recorded tests say"; "Where the evidence stops" (picture slot, gaps list, coverage grid).
+- **Scorer:** an atmosphere value filled in by the fallback is no longer worded as "tested". It now reads "O2 not recorded, assumed 21%", and reasons from recorded values come first. Scores and order unchanged (65 queries compared).
+- **Scorer:** the oxidizer-stream O2 of inverse flames (ACME-FLAME-DESIGN-C02, ACME-CFI-G-C02) is never matched with the user's O2. It is scored as unknown, with the `oxidizer_stream` warning. `o2_above_all` now uses the highest surrounding-atmosphere O2 tested (40%, ACME-BRE-C01), not the 85% burner stream.
+- **Scorer:** "gas", "gas jet", "jet flame" and "gaseous fuel" are read as gas fuel; "droplet" is read as liquid. Four validation scenarios added (F01 to F04).
+- **Catalog**, checked against the PSI tables and tests.csv, with the rows in each row's `source_notes`:
+  - BASS-II-C03 flow is 0 to 38.5 cm/s (row 72), C04 is 1 to 53 cm/s (rows 115, 117, 121). Both rest on the 'Air display' cells with the flow restrictor out.
+  - SPICE-C01 flow is 0.66 to 85.28 cm/s (the table's Air Rate column; 8 negative cells left out).
+  - Test counts: CFI 79 and SPICE 435 (exact repeated rows dropped), SAME 4 (rows 6 to 9 record no values).
+- **New check, run before every deploy:** `validation/check_catalog_pipeline.py` compares the catalog with tests.csv for all 12 investigations with test-level tables (counts, O2, pressure, flow). It passes now and failed on the old catalog.
+- Request 20261114-1305 (challenge text) closed. The follow-up gives data a short verbatim fragment for `CH.moonbase` and confirms `CH.pillars`.
+- Opened request 20261114-1319 to data: BASS-II flow increases with the restrictor out are not in tests.csv.
+- Checks: unit tests 24/24, validation 26/26, parity 65/65, catalog check 12/12, build.
 
 Next:
-- 1306 item 1: the "Where the evidence stops" picture from `data/insights/evidence_map.json`, live by 16:30 if the file is on `main` by about 15:00.
-- 1224 items 5 to 7: the 16:00 addendum, the source-sentence toggle, the "How we checked the AI text" panel.
-- U5 screenshots and GIF on the new order, with the real fonts from this machine (target 21:00).
+- 1306 item 1: the picture, live by 16:30 if `evidence_map.json` is on `main` by about 15:00.
+- 1224 items 5 to 7.
+- U5 on the new section order (target 21:00).
 - Switch the Pages trigger to `main` only at the 19:00 freeze.
 
 Published for others:
 - Public URL: https://choidol0208.github.io/NASA_RAPID/ . Demo links: `?q=ISS` and `?q=lunar%20habitat`.
-- Deploy: `.github/workflows/pages.yml` runs on pushes to `catalog-filter` and `main`. It applies on `main` once pm merges this branch. pm, please record the change to decision 8.
-- `scoring/scoring_config.json` changed: `warnings.partial_gravity` text only (pm's short form). No code, weight, preset or warning code changed.
+- **Demo rankings (pm, for slides and text):**
+  - "ISS" is unchanged (BASS-II, BASS, SAFFIRE-II).
+  - "lunar habitat" keeps its top 3 (ACME-BRE, FLEX, ACME-CFI-G). At #4, ACME-FLAME-DESIGN is now represented by its normal flames (C01, 70.3) instead of the inverse flames (C02, 71.6).
+  - "50% O2" no longer ranks inverse flames at 97. It shows ambient tests (ACME-BRE, ACME-CFI-G normal, ACME-FLAME-DESIGN normal, about 31) and warns that 50% is above every surrounding atmosphere tested (40%).
+  - "gas jet flame ISS" now ranks gas-fuel investigations (ACME-BRE, SLICE, SPICE) instead of solids.
+- `scoring/scoring_config.json` changed:
+  - text of the `o2_above_all` and `oxidizer_stream` warnings;
+  - new fuel keywords;
+  - preset source strings (13:10).
+  - No weight, preset value or warning code changed.
+- `scoring.scorer.rank`: same output fields. `why` and `main_gap` text changes for assumed values.
+- `data/catalog/configurations.csv`: values in 5 rows changed as above; columns unchanged. `data/catalog/catalog.xlsx` is not regenerated (needs openpyxl, not installed here) and still shows the old 5 values.
 - For the slides, solid fuels per `coverage_grid.csv`: at 19 to 23% oxygen, 62 recorded tests, all with no pressure recorded. At 30 to 36% oxygen, 0 recorded tests at any pressure.
-- `data/catalog/*.csv` and the `scoring.scorer.rank` output: stable shape.
 
 Notes for other roles:
-- pm: the official challenge title is "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data" ("SI-Powered", not "AI-Powered"). The page is https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/ ; the long URL in `compliance/SOURCES.md` returns "Page Not Found". Use the official title in the submission text and slides. `AGENTS.md` line 10 has the old title.
+- pm: the official challenge title is "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data". The page is https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/ . `AGENTS.md` line 10 has the old title.
 - pm: set `frame_text_origin` (or the entry's `text_origin`) to `template` for code-built frames, or the frame is tagged AI-generated.
-- pm: scenario text appears only when the query equals the entry's `query` (case and spaces ignored) and the preset matches.
+- Any change to `data/pipeline/tests.csv` that moves a count or range of a catalogued investigation now stops the deploy until the catalog follows. data: tell ui in a request, and I'll update `scripts/build_catalog.py` the same sync.
 - Any change to `scoring/scorer.py` or `scoring_config.json` must keep `python3 web/parity_check.py` green, or the deploy stops.
