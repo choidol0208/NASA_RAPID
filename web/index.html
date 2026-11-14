@@ -24,6 +24,7 @@
   <div class="wrap">
     <h1>Fire Evidence Explorer</h1>
     <p class="lede">Tell us what you want to build: a spacecraft cabin, a Moon base, a rover. See which NASA microgravity fire investigations come closest, what to consider and what their recorded tests say, and where the evidence stops.</p>
+    <p class="challenge">The challenge calls NASA's combustion results "hard to find, harder to compare, and harder yet to interpret". This page takes them in that order: <b>Find</b>, <b>Compare</b>, <b>Interpret</b>.</p>
     <p class="notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data. It is not operational fire-safety guidance, and it is not endorsed by NASA.</p>
   </div>
 </header>
@@ -61,20 +62,24 @@
   </section>
 
   <section id="top" class="top" hidden aria-labelledby="top-title">
+    <p class="kicker"><b>Find</b> · Information you need</p>
     <div class="section-head">
       <h2 id="top-title">Closest NASA investigations</h2>
       <p class="team-note">Scores (0–100) and order are the team's similarity computation, not a NASA result, and not operational safety guidance. <a href="#method">How the score works</a></p>
     </div>
     <ol id="results" class="results"></ol>
     <div id="other-notes" class="ai-block"></div>
+    <div id="export" class="export ai-block"></div>
   </section>
 
   <section id="needs" class="needs" hidden aria-labelledby="needs-title">
+    <p class="kicker"><b>Compare</b> · Points to consider</p>
     <div class="section-head">
       <h2 id="needs-title">What to consider, and what the recorded tests say</h2>
       <p class="team-note">Status is the team's pipeline reading of each PSI experimental table, not a NASA assessment.</p>
     </div>
     <p class="intro">Fire-safety information needs, each defined from published NASA standards and studies. For each ranked investigation, the cell says whether its PSI table records the conditions and the outcome that need asks for. A test counts as evidence for a need only when the investigation's PSI record states that need as an objective. Click a cell to see the pipeline row behind it.</p>
+    <div id="points" class="points ai-block"></div>
     <div id="compare" class="compare ai-block"></div>
     <div id="scenario-frame" class="ai-block"></div>
     <div id="needs-body"></div>
@@ -89,7 +94,17 @@
     <div id="tests-body"></div>
   </section>
 
+  <section id="criteria" class="criteria" hidden aria-labelledby="criteria-title">
+    <p class="kicker"><b>Interpret</b> · Constraints, part 1 of 2</p>
+    <div class="section-head">
+      <h2 id="criteria-title">Criteria in NASA documents</h2>
+      <p class="team-note">What NASA standards and studies state for each need, with the document and section. This page does not judge any test against these criteria and sets no requirements of its own.</p>
+    </div>
+    <div id="criteria-body"></div>
+  </section>
+
   <section id="stops" class="stops" hidden aria-labelledby="stops-title">
+    <p class="kicker"><b>Interpret</b> · Constraints, part 2 of 2: limits of the evidence</p>
     <div class="section-head">
       <h2 id="stops-title">Where the evidence stops</h2>
       <p class="team-note">Recorded tests in NASA's open PSI experimental tables. Counts and lanes are the team's computation. All tests were run in microgravity.</p>

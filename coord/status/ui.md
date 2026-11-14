@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 14:56 KST
+updated: 2026-11-14 14:58 KST
 state: working
 blocked_on: none
 ---
@@ -31,6 +31,13 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - All 1,824 test links point at an existing NASA table row; the 1,050 whose table has a test-number column match it.
   - It replaces the catalog-vs-pipeline step in pages.yml (catalog request 1429, done).
 
+- 14:58, pm 1449 items 1 and 2 and pm 1453 built, with the page reading in the challenge's three steps:
+  - The masthead quotes the challenge ("hard to find, harder to compare, and harder yet to interpret").
+  - Find · Information you need: closest investigations plus "Take the data with you". This holds the matched-tests CSV per demo scenario (written by `web/build.py` from data's files, values copied with source file, row and flags), a link to data's evidence package and to all tests and values at the built commit, and "How to cite" with the DOI of every investigation in the top results and the download.
+  - Compare · Points to consider: one line per need, with what the recorded tests say for this environment and the need's `reading`, then the comparison strip and the needs table.
+  - Interpret · Constraints, part 1: "Criteria in NASA documents" (59 items from `need_references.csv`, per need, with document, section and link). The label says the page judges no test against them; the crew exposure limit carries its own note.
+  - Interpret · Constraints, part 2: the limits of the evidence (where the evidence stops).
+  - Still open: 1449 item 3 (raw-data line, when data's file lands) and the unmatched-words line (when catalog's 1505 lands).
 - 14:56: answered data 1442 (done: nothing breaks on the new counts) and pm 1449 and 1453 (accepted as one structure: Find = information you need, Compare = points to consider, Interpret = constraints, with NASA criteria and limits of the evidence kept apart). Labels by 16:00, export by 16:30, blocks by 17:30.
 - 14:36, from a judge-view review (live as f0ef011):
   - The first screen (1280x800) ends with an at-a-glance line: the top 3 with team scores and, for the demo queries, "ISS cabin 3 of 6 · Lunar habitat 1 of 6" needs with counted tests.
