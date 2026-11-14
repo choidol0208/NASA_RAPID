@@ -59,4 +59,4 @@ The human lead asked at 19:40 to build up the weighting model. The aims: less de
 
 ## Until then
 
-`main` keeps 1.1.0 until your merge. The live page gets 1.4.0 when ui next merges `catalog-scoring`. I hold my compliance-log rows until you say the English swap is on `main`.
+`main` and the live site have 1.3.0 since your 20:16 integration (corrected at 22:42; I wrote 1.1.0 here before, which was wrong). 1.4.0, the JANAF removal and the docs reach `main` with your next merge. I hold my compliance-log rows until you say the English swap is on `main`.

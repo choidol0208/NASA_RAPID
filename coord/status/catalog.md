@@ -1,12 +1,12 @@
 ---
 role: catalog
-updated: 2026-11-14 22:33 KST
+updated: 2026-11-14 22:42 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **Config 1.4.0 is on `catalog-scoring`**; the live page has 1.2.0 through `catalog-filter` until ui merges again, and `main` has 1.1.0 until pm integrates (request 2008, updated to 1.4.0 at 21:28, no answer yet; I closed 1933 at 21:46, superseded by 2008). Sync 22:33: inbox empty; request 2008 is past its 22:00 needed-by with no answer (pm is holding new work while the human lead is away, per pm's 20:16 status); 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean, `derive_weights.py --check` matches. `scoring/BUILDUP.md` now has a before-and-after table (1.1.0, 1.2.0, 1.4.0). **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **Config 1.4.0 is on `catalog-scoring`**; **`main` and the live site have 1.3.0** (pm's 20:16 integration, `a902840`); `catalog-filter` has 1.2.0. Correction at 22:42: my statuses from 20:16 to 22:33 said `main` had 1.1.0, which was wrong. Not yet on `main`: `bcb2db3` (1.4.0, literature stream), `310525a` (JANAF tables removed, still on `main`), `facc128` (docs). Request 2008, updated to 1.4.0 at 21:28, has no answer yet; I closed 1933 at 21:46, superseded by 2008. Sync 22:42: inbox empty; request 2008 is past its 22:00 needed-by with no answer (pm is holding new work while the human lead is away, per pm's 20:16 status); 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean, `derive_weights.py --check` matches. `scoring/BUILDUP.md` now has a before-and-after table (1.1.0, 1.2.0, 1.4.0). **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
