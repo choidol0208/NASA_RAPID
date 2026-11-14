@@ -1,10 +1,17 @@
 ---
 role: catalog
-updated: 2026-11-14 17:05 KST
+updated: 2026-11-14 17:19 KST
 state: working
 blocked_on: none
 ---
 Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`. Core work is done and live: everything up to `bbea891` is on `main` and `catalog-filter`, with config 1.1.0. What remains is an optional human check of the demo values and the freeze checks.
+
+**17:18 English only (pm request 1656, done).** All catalog files are translated, and the Korean input words are glossed.
+- The READMEs, the data dictionary and the workbook are in English. The dictionary column `meaning_ko` is now `meaning`.
+- The scenarios explain themselves in English (`why`), and the 4 Korean queries carry `query_en`.
+- The `label_ko` fields are removed from the config, and the new map `keywords._gloss_ko` gives the English of every Korean keyword.
+- No score changes; all checks pass.
+- One Hangul line is left: the reviewer's name in `scoring_config.json` `_about`. I have asked the human lead for the Latin spelling.
 
 **17:03 All values of config 1.1.0 approved as they are.** After reading the AI review (`scoring/PARAMETER_REVIEW.md`), the human lead approved every value other than the weights, findings 1 and 2 included. The weights were approved at 16:51.
 - **17:04: no combustion specialist review.** The team has no specialist to ask. The 8 open questions stay in the file as limitations and as the next validation step.
@@ -63,7 +70,7 @@ Done since last sync (branch `catalog-scoring`):
   - `config_version` in `rank()` output is now `1.1.0`.
   - ui, pm:
     - `ISS` and `lunar habitat` keep their top 3; scores move by less than 2 points.
-    - Typed demo queries changed: `ISS cotton fabric` swaps ranks 2 and 3 (SAFFIRE-III, then BASS-II-C04). `lunar habitat cotton fabric` and `달 기지 면직물` rank SAFFIRE-I-C01 second, where BASS-II-C05 was.
+    - Typed demo queries changed: `ISS cotton fabric` swaps ranks 2 and 3 (SAFFIRE-III, then BASS-II-C04). `lunar habitat cotton fabric` and `달 기지 면직물` (Korean: lunar base cotton fabric) rank SAFFIRE-I-C01 second, where BASS-II-C05 was.
     - If a slide or a screenshot shows those two queries, retake it.
   - `validation/verification_sheet.csv` rebuilt: 12 configurations; BASS-II-C05 is no longer in a demo result.
 - 14:19 `scoring/MODEL_BASIS.md` (new, English). It checks each scoring rule against a combustion textbook the human lead supplied: Turns, *An Introduction to Combustion*, 3rd ed., McGraw-Hill 2012. The book is copyrighted, so it was read as background only; nothing from it is reproduced, and it is listed in `compliance/SOURCES.md`.
@@ -72,7 +79,7 @@ Done since last sync (branch `catalog-scoring`):
   - Two candidate changes, A and B, applied at 14:24 (above).
   - pm: it may help the Validity part of the write-up. No code changed.
 - Review fixes asked by the human lead (14:00):
-  - `74b206e` "CO2 30%" is no longer read as 30% oxygen; "천장" (ceiling) is no longer read as cloth.
+  - `74b206e` "CO2 30%" is no longer read as 30% oxygen; Korean "천장" (ceiling) is no longer read as "천" (cloth).
   - `5f1627e` Confidence counts only values compared with a recorded value. Assumed (fallback) O2 and pressure no longer count.
     - ISS #2 BASS-C01 now shows low confidence (0.3).
     - ISS cotton fabric #1 BASS-C01 now shows medium (0.65).
