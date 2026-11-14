@@ -1,0 +1,3650 @@
+{
+ "_meta": {
+  "generated_by": "pipeline/lab/run_cards.py (AI-generated code, branch data-lab, experiment, not reviewed). Deterministic: no timestamps.",
+  "inputs": [
+   "pipeline/spec/relation_cards.json",
+   "pipeline/spec/references.json",
+   "pipeline/spec/variables.json",
+   "data/pipeline/tests.csv"
+  ],
+  "status_values": {
+   "columns_consistent_with_form": "the recorded columns of tests.csv agree with each other in the way the card's form or range says, by the card's criterion; this is not an independent test of a physical law",
+   "inconsistent": "the recorded columns do not meet the card's criterion",
+   "not_testable_here": "tests.csv or the item's values hold nothing the check could compare; recorded facts may be listed beside it",
+   "matches_published_table": "team arithmetic on values of the items agrees with the values or the statement the same document prints, by the card's criterion",
+   "differs_from_published_table": "team arithmetic on values of the items does not agree with what the same document prints",
+   "not_in_our_references": "no document of references.json states the relation; the card is shown with this badge whatever its check gives"
+  },
+  "numbers": "Every number is a NASA cell of tests.csv, a value of a reference item, or arithmetic named by the card and labelled under computation_label. Criterion parameters are team choices.",
+  "criteria_timing": "The criteria below were written on 2026-11-14 after the scouts of the decision brief had computed the d-squared, CO/CO2, OF2012 and H2011 numbers and after a first run of the d-squared placebo. They are fixed in this file before the outputs were written; this is not a pre-registration."
+ },
+ "summary": [
+  {
+   "card_id": "bass2_co_co2_ratio",
+   "status": "columns_consistent_with_form"
+  },
+  {
+   "card_id": "of2012_gravity_margin",
+   "status": "matches_published_table"
+  },
+  {
+   "card_id": "h2006_moc_vs_pressure",
+   "status": "matches_published_table"
+  },
+  {
+   "card_id": "h2007_fixed_pressure",
+   "status": "not_testable_here"
+  },
+  {
+   "card_id": "h2011_linear_moc",
+   "status": "matches_published_table"
+  },
+  {
+   "card_id": "bass2_flammability_boundary",
+   "status": "not_testable_here"
+  },
+  {
+   "card_id": "flex_loi",
+   "status": "not_testable_here"
+  },
+  {
+   "card_id": "droplet_d_squared",
+   "status": "not_in_our_references",
+   "check_outcome": "columns_consistent_with_form"
+  },
+  {
+   "card_id": "cfi_droplet",
+   "status": "not_testable_here"
+  }
+ ],
+ "cards": [
+  {
+   "card_id": "bass2_co_co2_ratio",
+   "title": "CO/CO2 molar ratio range of BASS-II microgravity flames",
+   "source_items": [
+    "ICES19.coratio"
+   ],
+   "in_our_references": true,
+   "status": "columns_consistent_with_form",
+   "check": {
+    "kind": "share_in_published_range",
+    "description": "Count the BASS-II rows of tests.csv whose co_to_co2_molar_ratio lies inside the published range, with both ends included. The ratio is the team's derived column; its formula and skip rules are copied from variables.json.",
+    "criterion": {
+     "text": "columns_consistent_with_form if the median of the rows lies inside the range and more than this share of the rows lies inside; otherwise inconsistent. The share is a team parameter.",
+     "min_share_inside_exclusive": 0.5,
+     "status_if_met": "columns_consistent_with_form",
+     "status_if_not_met": "inconsistent"
+    }
+   },
+   "result": {
+    "computation_label": "team computation over NASA cells (the ratio column is itself a team derived column)",
+    "derived_rule_from_variables": {
+     "unit": "mol/mol",
+     "formula": "co_produced_ppm * 1e-4 / co2_produced_pct_points",
+     "skip_if": [
+      {
+       "expr": "co_produced_ppm <= 0",
+       "flag": null
+      },
+      {
+       "expr": "co2_produced_pct_points < 0.05",
+       "flag": null
+      }
+     ],
+     "meaning": "Ratio of the CO difference to the CO2 difference, both as mole fractions. A team computation"
+    },
+    "published_range": {
+     "item": "ICES19.coratio",
+     "key": "co_to_co2_molar_ratio_range",
+     "values": [
+      0.01,
+      0.1
+     ],
+     "min_inclusive": true,
+     "max_inclusive": true
+    },
+    "rows": 87,
+    "inside": 74,
+    "below": 12,
+    "above": 1,
+    "share_inside": 0.8506,
+    "median": 0.03384,
+    "lowest": {
+     "test_id": "BASS2-B6",
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 7,
+     "value": 0.00038
+    },
+    "highest": {
+     "test_id": "BASS2-O5b",
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 54,
+     "value": 0.10444
+    },
+    "by_group": [
+     {
+      "material_id": "japan_wax",
+      "rows": 1,
+      "inside": 1,
+      "median": 0.034
+     },
+     {
+      "material_id": "pmma",
+      "rows": 82,
+      "inside": 69,
+      "median": 0.03349
+     },
+     {
+      "material_id": "sibal",
+      "rows": 4,
+      "inside": 4,
+      "median": 0.058335
+     }
+    ],
+    "rows_outside": [
+     {
+      "test_id": "BASS2-B6",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 7,
+      "material_id": "pmma",
+      "value": 0.00038
+     },
+     {
+      "test_id": "BASS2-O5b",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 54,
+      "material_id": "pmma",
+      "value": 0.10444
+     },
+     {
+      "test_id": "BASS2-P1",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 75,
+      "material_id": "pmma",
+      "value": 0.00765
+     },
+     {
+      "test_id": "BASS2-P2",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 76,
+      "material_id": "pmma",
+      "value": 0.00545
+     },
+     {
+      "test_id": "BASS2-P9",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 83,
+      "material_id": "pmma",
+      "value": 0.00233
+     },
+     {
+      "test_id": "BASS2-P10",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 84,
+      "material_id": "pmma",
+      "value": 0.00977
+     },
+     {
+      "test_id": "BASS2-P12",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 85,
+      "material_id": "pmma",
+      "value": 0.00833
+     },
+     {
+      "test_id": "BASS2-P15",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 89,
+      "material_id": "pmma",
+      "value": 0.00367
+     },
+     {
+      "test_id": "BASS2-P16",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 90,
+      "material_id": "pmma",
+      "value": 0.00903
+     },
+     {
+      "test_id": "BASS2-P17",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 91,
+      "material_id": "pmma",
+      "value": 0.00282
+     },
+     {
+      "test_id": "BASS2-P18",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 92,
+      "material_id": "pmma",
+      "value": 0.00291
+     },
+     {
+      "test_id": "BASS2-P19",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 93,
+      "material_id": "pmma",
+      "value": 0.00563
+     },
+     {
+      "test_id": "BASS2-P23",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 99,
+      "material_id": "pmma",
+      "value": 0.00786
+     }
+    ]
+   },
+   "caption": {
+    "means": "The team's ratio of two glovebox sensor differences (CO and CO2, final minus initial) lies inside the range the investigators report for the stated count of BASS-II rows. Team computation, not a NASA conclusion.",
+    "does_not_mean": "It is not an emission ratio of one burn, not a yield and not a statement on crew exposure. The rows are a filtered subset: rows with a CO difference of zero or less, or a CO2 difference below 0.05 points, have no ratio by the rule of variables.json. How the investigators derived their range was not read."
+   }
+  },
+  {
+   "card_id": "of2012_gravity_margin",
+   "title": "Olson and Ferkul 2012, Eq. 1 oxygen margin by gravity level, recomputed from their Table I",
+   "source_items": [
+    "OF2012.table1",
+    "OF2012.margin",
+    "OF2012.uloi"
+   ],
+   "in_our_references": true,
+   "status": "matches_published_table",
+   "check": {
+    "kind": "recompute_published",
+    "description": "For every material row of OF2012.table1, recompute Eq. 1 for the three low-gravity levels from the four limits of that row and compare with the printed margin. Then compare the smallest printed margin per level over the three materials with the values of OF2012.margin.",
+    "criterion": {
+     "text": "matches_published_table if every recomputed value differs from the printed value by at most half a unit of the printed value's last decimal, and every smallest printed margin equals the value of OF2012.margin; otherwise differs_from_published_table.",
+     "status_if_met": "matches_published_table",
+     "status_if_not_met": "differs_from_published_table"
+    }
+   },
+   "result": {
+    "computation_label": "team arithmetic on values of the reference items",
+    "rows": [
+     {
+      "material": "Mylar G",
+      "recompute": [
+       {
+        "label": "martian",
+        "recomputed": -3.1,
+        "printed": -3.1,
+        "difference": 0.0,
+        "tolerance": 0.05,
+        "agrees": true
+       },
+       {
+        "label": "lunar",
+        "recomputed": -5.75,
+        "printed": -5.75,
+        "difference": 0.0,
+        "tolerance": 0.005,
+        "agrees": true
+       },
+       {
+        "label": "0g",
+        "recomputed": -4.1,
+        "printed": -4.1,
+        "difference": 0.0,
+        "tolerance": 0.05,
+        "agrees": true
+       }
+      ]
+     },
+     {
+      "material": "Ultem 1000",
+      "recompute": [
+       {
+        "label": "martian",
+        "recomputed": -1.7,
+        "printed": -1.7,
+        "difference": 0.0,
+        "tolerance": 0.05,
+        "agrees": true
+       },
+       {
+        "label": "lunar",
+        "recomputed": -2.8,
+        "printed": -2.8,
+        "difference": 0.0,
+        "tolerance": 0.05,
+        "agrees": true
+       },
+       {
+        "label": "0g",
+        "recomputed": 0.25,
+        "printed": 0.25,
+        "difference": 0.0,
+        "tolerance": 0.005,
+        "agrees": true
+       }
+      ]
+     },
+     {
+      "material": "Nomex HT90-40",
+      "recompute": [
+       {
+        "label": "martian",
+        "recomputed": -3.35,
+        "printed": -3.35,
+        "difference": 0.0,
+        "tolerance": 0.005,
+        "agrees": true
+       },
+       {
+        "label": "lunar",
+        "recomputed": -2.35,
+        "printed": -2.35,
+        "difference": 0.0,
+        "tolerance": 0.005,
+        "agrees": true
+       },
+       {
+        "label": "0g",
+        "recomputed": -0.3,
+        "printed": -0.3,
+        "difference": 0.0,
+        "tolerance": 0.05,
+        "agrees": true
+       }
+      ]
+     }
+    ],
+    "aggregates": [
+     {
+      "label": "martian smallest",
+      "table_value": -3.35,
+      "at": [
+       "Nomex HT90-40"
+      ],
+      "printed": -3.35,
+      "printed_in": "OF2012.margin",
+      "agrees": true
+     },
+     {
+      "label": "lunar smallest",
+      "table_value": -5.75,
+      "at": [
+       "Mylar G"
+      ],
+      "printed": -5.75,
+      "printed_in": "OF2012.margin",
+      "agrees": true
+     },
+     {
+      "label": "0g smallest",
+      "table_value": -4.1,
+      "at": [
+       "Mylar G"
+      ],
+      "printed": -4.1,
+      "printed_in": "OF2012.margin",
+      "agrees": true
+     }
+    ],
+    "recomputed_values": 9,
+    "agreeing_values": 9
+   },
+   "caption": {
+    "means": "The printed margins of Table I follow from the printed limits by Eq. 1 as the paper states it. Team arithmetic on published values.",
+    "does_not_mean": "It does not check the limits themselves. Each material was tested at one pressure, so the margins say nothing about another pressure. The low-gravity limits come from 5.18 s drop-tower tests whose criteria differ from the 1g criteria. The paper's Conclusions give 5.75 for Martian gravity while Table I gives it for Lunar; the card uses the table."
+   }
+  },
+  {
+   "card_id": "h2006_moc_vs_pressure",
+   "title": "Hirsch et al. 2006, MOC versus total pressure in normal gravity (Table 2)",
+   "source_items": [
+    "H2006.table2",
+    "H2006.depends",
+    "H2006.pressures",
+    "H2006.range"
+   ],
+   "in_our_references": true,
+   "status": "matches_published_table",
+   "check": {
+    "kind": "pair_order_agreement",
+    "description": "Test the sentence of H2006.range on the paper's own Table 2: over all pairs of materials, compare the order of the MOC at 101.3 kPa with the order of the drop from 48.2 kPa to 101.3 kPa (team computation). A pair is concordant if the material with the higher MOC at 101.3 kPa also has the larger drop.",
+    "criterion": {
+     "text": "matches_published_table if concordant pairs outnumber discordant pairs; pairs tied on either order are counted apart and in neither. Otherwise differs_from_published_table.",
+     "status_if_met": "matches_published_table",
+     "status_if_not_met": "differs_from_published_table"
+    }
+   },
+   "result": {
+    "computation_label": "team arithmetic on values of the reference item",
+    "columns_kpa": [
+     48.2,
+     85.3,
+     101.3
+    ],
+    "x_label": "MOC at 101.3 kPa (the team's choice of the column that stands for 'higher thresholds')",
+    "y_label": "MOC at 48.2 kPa minus MOC at 101.3 kPa (team computation)",
+    "materials": [
+     {
+      "material": "PTFE",
+      "x": 42.0,
+      "y": 11.0
+     },
+     {
+      "material": "Kel-F 81",
+      "x": 53.0,
+      "y": 23.0
+     },
+     {
+      "material": "Silicone",
+      "x": 21.0,
+      "y": 7.0
+     },
+     {
+      "material": "Zytel 42",
+      "x": 23.0,
+      "y": 2.0
+     },
+     {
+      "material": "Viton A",
+      "x": 21.0,
+      "y": 8.0
+     },
+     {
+      "material": "Buna S",
+      "x": 16.0,
+      "y": 2.0
+     },
+     {
+      "material": "Neoprene",
+      "x": 16.0,
+      "y": 2.0
+     },
+     {
+      "material": "Buna N",
+      "x": 15.0,
+      "y": 3.0
+     },
+     {
+      "material": "EPDM Rubber",
+      "x": 16.0,
+      "y": 2.0
+     },
+     {
+      "material": "Polyethylene",
+      "x": 17.0,
+      "y": 1.0
+     },
+     {
+      "material": "Delrin",
+      "x": 11.0,
+      "y": 2.0
+     }
+    ],
+    "pairs": 55,
+    "concordant": 33,
+    "discordant": 11,
+    "tied": 11,
+    "discordant_pairs": [
+     [
+      "Silicone",
+      "Zytel 42"
+     ],
+     [
+      "Zytel 42",
+      "Viton A"
+     ],
+     [
+      "Zytel 42",
+      "Buna N"
+     ],
+     [
+      "Buna S",
+      "Buna N"
+     ],
+     [
+      "Buna S",
+      "Polyethylene"
+     ],
+     [
+      "Neoprene",
+      "Buna N"
+     ],
+     [
+      "Neoprene",
+      "Polyethylene"
+     ],
+     [
+      "Buna N",
+      "EPDM Rubber"
+     ],
+     [
+      "Buna N",
+      "Polyethylene"
+     ],
+     [
+      "EPDM Rubber",
+      "Polyethylene"
+     ],
+     [
+      "Polyethylene",
+      "Delrin"
+     ]
+    ],
+    "tests_csv": {
+     "label": "solid-fuel rows of tests.csv with a recorded pressure",
+     "filter": "fuel_phase == 'solid' and pressure_kpa.notna()",
+     "rows": 0
+    }
+   },
+   "caption": {
+    "means": "Whether the paper's own Table 2 orders the materials as its sentence says. Team arithmetic on published values.",
+    "does_not_mean": "It is not a slope, not a fit and not a pressure law: three pressures per material, normal gravity, quiescent. PMMA and the cotton-fiberglass fabric are not in the table. Nothing in tests.csv can be compared with it: no solid-fuel row has a recorded pressure and every row is microgravity."
+   }
+  },
+  {
+   "card_id": "h2007_fixed_pressure",
+   "title": "Hirsch et al. 2007, oxygen thresholds at one fixed total pressure",
+   "source_items": [
+    "H2007.fixedpressure"
+   ],
+   "in_our_references": true,
+   "status": "not_testable_here",
+   "check": {
+    "kind": "none",
+    "description": "The item holds a pressure and no threshold value; there is nothing to recompute or to compare. The script lists the value keys the item holds."
+   },
+   "result": {
+    "item": "H2007.fixedpressure",
+    "value_keys_held": [
+     "pressure_kpa"
+    ]
+   },
+   "caption": {
+    "means": "The paper's thresholds stand at one pressure, 70.1 kPa.",
+    "does_not_mean": "The table of values of the paper is not transcribed in references.json, so no threshold of it is shown. One pressure gives no pressure dependence."
+   }
+  },
+  {
+   "card_id": "h2011_linear_moc",
+   "title": "Hirsch et al. 2011, approximately linear MOC versus total pressure (slope range)",
+   "source_items": [
+    "H2011.linear",
+    "H2011.cannot"
+   ],
+   "in_our_references": true,
+   "status": "matches_published_table",
+   "check": {
+    "kind": "value_in_published_range",
+    "description": "Compute the slope between the two points of the published example pair (team computation) and check whether it lies inside the published slope range, ends included; also check that the published average lies inside.",
+    "criterion": {
+     "text": "matches_published_table if the computed slope and the published average both lie inside the range spanned by the two published slope bounds, ends included; otherwise differs_from_published_table.",
+     "status_if_met": "matches_published_table",
+     "status_if_not_met": "differs_from_published_table"
+    }
+   },
+   "result": {
+    "computation_label": "team arithmetic on values of the reference items",
+    "inputs": {
+     "o2_a": {
+      "value_of": "H2011.cannot:moc_o2_pct",
+      "value": 30
+     },
+     "p_a": {
+      "value_of": "H2011.cannot:moc_pressure_psia",
+      "value": 10.2
+     },
+     "o2_b": {
+      "value_of": "H2011.cannot:fail_o2_pct",
+      "value": 25.9
+     },
+     "p_b": {
+      "value_of": "H2011.cannot:fail_pressure_psia",
+      "value": 14.7
+     }
+    },
+    "expression": "(o2_b - o2_a) / (p_b - p_a)",
+    "computed": -0.9111,
+    "unit": "% oxygen per psia",
+    "published_range": {
+     "bounds_of": [
+      "H2011.linear:moc_slope_pct_o2_per_psia_max",
+      "H2011.linear:moc_slope_pct_o2_per_psia_min"
+     ],
+     "min": -0.975,
+     "max": -0.251
+    },
+    "computed_inside": true,
+    "also_inside": [
+     {
+      "value_of": "H2011.linear:moc_slope_pct_o2_per_psia_avg",
+      "value": -0.607,
+      "inside": true
+     }
+    ]
+   },
+   "caption": {
+    "means": "The example pair of the paper is consistent with the slope range the same paper prints. Team arithmetic on published values.",
+    "does_not_mean": "25.9% at 14.7 psia is where the material would fail Test 1, not a second MOC, so the pair is not two MOCs of one material. The material is not named. The intercept b and the pressure range of the form are not held; no MOC is computed for any other pressure. The slopes are a summary of an earlier paper that was not reached. The decision brief wrote 0.911 %/psia as a magnitude; the signed value is negative."
+   }
+  },
+  {
+   "card_id": "bass2_flammability_boundary",
+   "title": "BASS-II flammability boundary in oxygen and flow, and its published minimum oxygen values",
+   "source_items": [
+    "ICES19.boundary",
+    "ICES19.limits",
+    "ICES19.pressure",
+    "ICES19.issflow",
+    "ICES19.goal"
+   ],
+   "in_our_references": true,
+   "status": "not_testable_here",
+   "check": {
+    "kind": "recorded_facts",
+    "description": "List what the BASS-II rows of tests.csv record on the two axes of the boundary, and which rows carry the published minimum values, without drawing a boundary."
+   },
+   "result": {
+    "computation_label": "team counts over NASA cells",
+    "status_reason": "The items give no curve values and no equation for either branch; tests.csv has no flow_direction for any BASS-II row, so concurrent and opposed rods cannot be told apart; no BASS-II row has a recorded pressure.",
+    "facts": [
+     {
+      "id": "bass2_rows",
+      "op": "count",
+      "filter": "source_id == 'bass2'",
+      "value": 129
+     },
+     {
+      "id": "rows_with_o2_and_flow",
+      "op": "count",
+      "filter": "source_id == 'bass2' and o2_pct.notna() and flow_cms.notna()",
+      "value": 119
+     },
+     {
+      "id": "rows_with_pressure",
+      "op": "count",
+      "filter": "source_id == 'bass2' and pressure_kpa.notna()",
+      "value": 0
+     },
+     {
+      "id": "rows_with_flow_direction",
+      "op": "count",
+      "filter": "source_id == 'bass2' and flow_direction.notna()",
+      "value": 0
+     },
+     {
+      "id": "flow_event_counts",
+      "op": "value_counts",
+      "filter": "source_id == 'bass2' and flow_event.notna()",
+      "value": {
+       "blowoff": 7,
+       "extinction": 16,
+       "no_ignition": 1,
+       "not_sustained": 1
+      }
+     },
+     {
+      "id": "pmma_rod_rows",
+      "op": "count",
+      "filter": "source_id == 'bass2' and material_id == 'pmma' and sample_geometry == 'rod'",
+      "value": 54
+     },
+     {
+      "id": "pmma_rod_lowest_o2",
+      "op": "min",
+      "filter": "source_id == 'bass2' and material_id == 'pmma' and sample_geometry == 'rod'",
+      "value": 13.6,
+      "rows_at_value": [
+       {
+        "test_id": "BASS2-O12",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 62,
+        "o2_final_pct": 13.5,
+        "flow_cms": null,
+        "flow_event": "no_ignition"
+       }
+      ]
+     },
+     {
+      "id": "rows_at_published_concurrent_minimum",
+      "op": "rows",
+      "filter": "source_id == 'bass2' and (o2_pct == @v or o2_final_pct == @v)",
+      "bound_values": {
+       "v": {
+        "value_of": "ICES19.limits:o2_pct_min_concurrent_rod",
+        "value": 13.6
+       }
+      },
+      "value": 2,
+      "rows": [
+       {
+        "test_id": "BASS2-O4",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 52,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 14.8,
+        "o2_final_pct": 13.6,
+        "flow_cms": 5.0,
+        "flow_event": "extinction"
+       },
+       {
+        "test_id": "BASS2-O12",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 62,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 13.6,
+        "o2_final_pct": 13.5,
+        "flow_cms": null,
+        "flow_event": "no_ignition"
+       }
+      ]
+     },
+     {
+      "id": "rows_at_published_opposed_minimum",
+      "op": "rows",
+      "filter": "source_id == 'bass2' and (o2_pct == @v or o2_final_pct == @v)",
+      "bound_values": {
+       "v": {
+        "value_of": "ICES19.limits:o2_pct_min_opposed_rod",
+        "value": 16.3
+       }
+      },
+      "value": 4,
+      "rows": [
+       {
+        "test_id": "BASS2-O14",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 65,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 16.3,
+        "o2_final_pct": 15.3,
+        "flow_cms": 5.0,
+        "flow_event": "extinction"
+       },
+       {
+        "test_id": "BASS2-P8",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 82,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 16.4,
+        "o2_final_pct": 16.3,
+        "flow_cms": 5.0,
+        "flow_event": "not_sustained"
+       },
+       {
+        "test_id": "BASS2-P21a",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 95,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 16.3,
+        "o2_final_pct": 16.3,
+        "flow_cms": 5.0,
+        "flow_event": null
+       },
+       {
+        "test_id": "BASS2-P21b",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 96,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 16.3,
+        "o2_final_pct": 16.3,
+        "flow_cms": 5.0,
+        "flow_event": null
+       }
+      ]
+     },
+     {
+      "id": "pmma_rod_flow_inside_iss_range",
+      "op": "count",
+      "filter": "source_id == 'bass2' and material_id == 'pmma' and sample_geometry == 'rod' and flow_cms >= @lo and flow_cms <= @hi",
+      "bound_values": {
+       "lo": {
+        "value_of": "ICES19.issflow:flow_cms_range.0",
+        "value": 5
+       },
+       "hi": {
+        "value_of": "ICES19.issflow:flow_cms_range.1",
+        "value": 30
+       }
+      },
+      "value": 38
+     },
+     {
+      "id": "pmma_rod_flow_at_lower_end_of_iss_range",
+      "op": "count",
+      "filter": "source_id == 'bass2' and material_id == 'pmma' and sample_geometry == 'rod' and flow_cms == @lo",
+      "bound_values": {
+       "lo": {
+        "value_of": "ICES19.issflow:flow_cms_range.0",
+        "value": 5
+       }
+      },
+      "value": 36
+     },
+     {
+      "id": "pmma_rod_flow_below_iss_range",
+      "op": "count",
+      "filter": "source_id == 'bass2' and material_id == 'pmma' and sample_geometry == 'rod' and flow_cms < @lo",
+      "bound_values": {
+       "lo": {
+        "value_of": "ICES19.issflow:flow_cms_range.0",
+        "value": 5
+       }
+      },
+      "value": 7
+     },
+     {
+      "id": "blowoff_rows",
+      "op": "rows",
+      "filter": "source_id == 'bass2' and flow_event == 'blowoff'",
+      "value": 7,
+      "rows": [
+       {
+        "test_id": "BASS2-B18",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 19,
+        "material_id": "pmma",
+        "sample_geometry": "film",
+        "o2_pct": 17.4,
+        "flow_cms": 10.0
+       },
+       {
+        "test_id": "BASS2-B19",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 20,
+        "material_id": "pmma",
+        "sample_geometry": "film",
+        "o2_pct": 17.3,
+        "flow_cms": 10.0
+       },
+       {
+        "test_id": "BASS2-O7",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 56,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 16.0,
+        "flow_cms": null
+       },
+       {
+        "test_id": "BASS2-O8b",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 58,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 15.5,
+        "flow_cms": null
+       },
+       {
+        "test_id": "BASS2-O9",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 59,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 15.0,
+        "flow_cms": null
+       },
+       {
+        "test_id": "BASS2-O11",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 61,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 15.4,
+        "flow_cms": 5.0
+       },
+       {
+        "test_id": "BASS2-O22",
+        "source_file": "PSI-25_Experimental table_BASS-II.csv",
+        "source_row": 74,
+        "material_id": "pmma",
+        "sample_geometry": "rod",
+        "o2_pct": 15.4,
+        "flow_cms": 4.0
+       }
+      ]
+     }
+    ]
+   },
+   "caption": {
+    "means": "What the recorded BASS-II rows hold on the oxygen and flow axes of the published boundary, and which rows share the published minimum values. Team counts over NASA cells.",
+    "does_not_mean": "No boundary is drawn or fitted and no row is assigned to the concurrent or the opposed value: that mapping is the paper's, not the team's. A row without an event word is not a row that burned steadily. The published values stand at 1 atm, in microgravity, for PMMA rods; the 1g values of ICES19.limits (17 and 15.4) are normal-gravity statements of the same item and are outside this card's gravity axis."
+   }
+  },
+  {
+   "card_id": "flex_loi",
+   "title": "FLEX limiting oxygen index of methanol and heptane droplets (published values), beside the lowest oxygen recorded",
+   "source_items": [
+    "MST14.loi",
+    "FLEX.loi",
+    "FLEX.mec",
+    "TP216046.loi"
+   ],
+   "in_our_references": true,
+   "status": "not_testable_here",
+   "check": {
+    "kind": "recorded_facts",
+    "description": "Show the published LOI values beside the lowest oxygen recorded in the FLEX rows per fuel, with nitrogen only and with carbon dioxide added, and the test end recorded at that oxygen."
+   },
+   "result": {
+    "computation_label": "team counts over NASA cells",
+    "status_reason": "The lowest oxygen tested is not an LOI: no lower oxygen was run in the table, the criterion behind the published values was not read (abstract only), and 'extinction' in test_end is how a droplet burn ended, which happens over the whole oxygen range. FLEX.mec is not applied: no item states that MEC equals the co2_pct column.",
+    "facts": [
+     {
+      "id": "flex_rows",
+      "op": "count",
+      "filter": "source_id == 'flex'",
+      "value": 274
+     },
+     {
+      "id": "test_end_counts",
+      "op": "value_counts",
+      "filter": "source_id == 'flex'",
+      "value": {
+       "completion": 27,
+       "disruption": 61,
+       "extinction": 186
+      }
+     },
+     {
+      "id": "lowest_o2_nitrogen_only_by_fuel",
+      "op": "min_by_group",
+      "filter": "source_id == 'flex' and co2_pct == 0 and he_pct == 0",
+      "value": [
+       {
+        "fuel_material": "heptane",
+        "rows_in_group": 47,
+        "lowest_o2_pct": 13.0,
+        "rows_at_lowest": [
+         {
+          "test_id": "FLEX-79",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 80,
+          "pressure_kpa": 102.4049,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-80",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 81,
+          "pressure_kpa": 102.6582,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-81",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 82,
+          "pressure_kpa": 102.6849,
+          "test_end": "extinction"
+         }
+        ]
+       },
+       {
+        "fuel_material": "methanol",
+        "rows_in_group": 54,
+        "lowest_o2_pct": 12.0,
+        "rows_at_lowest": [
+         {
+          "test_id": "FLEX-83",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 84,
+          "pressure_kpa": 102.9249,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-84",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 85,
+          "pressure_kpa": 102.2849,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-85",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 86,
+          "pressure_kpa": 102.8182,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-86",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 87,
+          "pressure_kpa": 102.6582,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-87",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 88,
+          "pressure_kpa": 102.8182,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-219",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 220,
+          "pressure_kpa": 101.5383,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-220",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 221,
+          "pressure_kpa": 101.5783,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-221",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 222,
+          "pressure_kpa": 101.8183,
+          "test_end": "extinction"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "id": "lowest_o2_with_co2_by_fuel",
+      "op": "min_by_group",
+      "filter": "source_id == 'flex' and co2_pct > 0 and he_pct == 0",
+      "value": [
+       {
+        "fuel_material": "heptane",
+        "rows_in_group": 48,
+        "lowest_o2_pct": 17.0,
+        "rows_at_lowest": [
+         {
+          "test_id": "FLEX-129",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 130,
+          "co2_pct": 45.0,
+          "pressure_kpa": 71.4875,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-130",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 131,
+          "co2_pct": 45.0,
+          "pressure_kpa": 71.6208,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-194",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 195,
+          "co2_pct": 20.0,
+          "pressure_kpa": 100.2584,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-195",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 196,
+          "co2_pct": 20.0,
+          "pressure_kpa": 100.3251,
+          "test_end": "extinction"
+         }
+        ]
+       },
+       {
+        "fuel_material": "methanol",
+        "rows_in_group": 75,
+        "lowest_o2_pct": 14.0,
+        "rows_at_lowest": [
+         {
+          "test_id": "FLEX-166",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 167,
+          "co2_pct": 36.0,
+          "pressure_kpa": 101.4317,
+          "test_end": "extinction"
+         },
+         {
+          "test_id": "FLEX-167",
+          "source_file": "PSI-69_Experimental table_FLEX.csv",
+          "source_row": 168,
+          "co2_pct": 36.0,
+          "pressure_kpa": 101.5383,
+          "test_end": "extinction"
+         }
+        ]
+       }
+      ]
+     }
+    ],
+    "published": [
+     {
+      "item": "MST14.loi",
+      "key": "loi_methanol_n2",
+      "value": 0.12,
+      "scaled": 12.0,
+      "scaled_unit": "%",
+      "scaled_label": "team arithmetic: value times 100"
+     },
+     {
+      "item": "MST14.loi",
+      "key": "loi_heptane_n2",
+      "value": 0.15,
+      "scaled": 15.0,
+      "scaled_unit": "%",
+      "scaled_label": "team arithmetic: value times 100"
+     },
+     {
+      "item": "MST14.loi",
+      "key": "loi_methanol_co2",
+      "value": 0.14,
+      "scaled": 14.0,
+      "scaled_unit": "%",
+      "scaled_label": "team arithmetic: value times 100"
+     },
+     {
+      "item": "MST14.loi",
+      "key": "loi_heptane_co2",
+      "value": 0.17,
+      "scaled": 17.0,
+      "scaled_unit": "%",
+      "scaled_label": "team arithmetic: value times 100"
+     }
+    ]
+   },
+   "caption": {
+    "means": "The published LOI values and the lowest oxygen in the FLEX table, side by side, each with its source. Scaling a mole fraction by 100 to a percentage is team arithmetic.",
+    "does_not_mean": "The lowest oxygen tested is not an LOI. No lower oxygen was run. The criterion behind the published values was not read (abstract only). No LOI is estimated from the table and no boundary is fitted."
+   }
+  },
+  {
+   "card_id": "droplet_d_squared",
+   "title": "d-squared form of droplet burning, checked as a relation between recorded FLEX columns",
+   "source_items": [
+    "TP216046.columns"
+   ],
+   "in_our_references": false,
+   "status": "not_in_our_references",
+   "check_outcome": "columns_consistent_with_form",
+   "not_in_our_references_note": "No item of references.json states the d-squared form (d^2 = d0^2 - K t). The team wrote it from general knowledge of combustion. TP216046.columns is held only as the pointer to the column definitions of the FLEX table and does not state the form. The script searches every item for the words listed under 'absence_search' and stops if one is found.",
+   "check": {
+    "kind": "expression_ratio",
+    "description": "For every FLEX row with an initial diameter, an extinction diameter above zero and below the initial one, a burning rate above zero and a burn time above zero, compute burn_time_s / ((d0^2 - d_ext^2) / K) (team computation; K read as mm2/s, as the team reads the column). Under the d-squared form with a constant K the ratio is 1.",
+    "criterion": {
+     "text": "columns_consistent_with_form if the median ratio lies within the median band of 1 and at least the given share of rows lies within the share band of 1; otherwise inconsistent. Both are team parameters, written after the scouts' numbers were seen.",
+     "median_band": 0.1,
+     "share_band": 0.2,
+     "min_share": 0.75,
+     "status_if_met": "columns_consistent_with_form",
+     "status_if_not_met": "inconsistent"
+    }
+   },
+   "result": {
+    "computation_label": "team computation over NASA cells",
+    "expression": "burn_time_s / ((initial_diameter_mm^2 - extinction_diameter_mm^2) / burning_rate_mm2_s)",
+    "filter": "source_id == 'flex' and initial_diameter_mm > 0 and extinction_diameter_mm > 0 and extinction_diameter_mm < initial_diameter_mm and burning_rate_mm2_s > 0 and burn_time_s > 0",
+    "result": {
+     "rows": 187,
+     "median": 1.0529,
+     "quartile_1": 1.0298,
+     "quartile_3": 1.0929,
+     "min": 0.2586,
+     "max": 4.6209,
+     "bands": [
+      {
+       "within": 0.1,
+       "rows": 139,
+       "share": 0.7433
+      },
+      {
+       "within": 0.2,
+       "rows": 172,
+       "share": 0.9198
+      },
+      {
+       "within": 0.5,
+       "rows": 179,
+       "share": 0.9572
+      }
+     ],
+     "meets_criterion": true
+    },
+    "by_group": [
+     {
+      "fuel_material": "heptane",
+      "test_end": "completion",
+      "rows": 5,
+      "median": 1.0128
+     },
+     {
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "rows": 11,
+      "median": 1.112
+     },
+     {
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "rows": 55,
+      "median": 1.055
+     },
+     {
+      "fuel_material": "methanol",
+      "test_end": "completion",
+      "rows": 5,
+      "median": 1.0442
+     },
+     {
+      "fuel_material": "methanol",
+      "test_end": "disruption",
+      "rows": 9,
+      "median": 1.078
+     },
+     {
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "rows": 102,
+      "median": 1.0513
+     }
+    ],
+    "lowest": [
+     {
+      "test_id": "FLEX-130",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 131,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "initial_diameter_mm": 2.91,
+      "extinction_diameter_mm": 2.89,
+      "burning_rate_mm2_s": 0.05,
+      "burn_time_s": 0.6,
+      "ratio": 0.2586
+     },
+     {
+      "test_id": "FLEX-261",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 262,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "initial_diameter_mm": 3.08,
+      "extinction_diameter_mm": 1.69,
+      "burning_rate_mm2_s": 0.67,
+      "burn_time_s": 5.4,
+      "ratio": 0.5457
+     },
+     {
+      "test_id": "FLEX-119",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 120,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "initial_diameter_mm": 2.6,
+      "extinction_diameter_mm": 2.48,
+      "burning_rate_mm2_s": 0.37,
+      "burn_time_s": 1.3,
+      "ratio": 0.789
+     }
+    ],
+    "highest": [
+     {
+      "test_id": "FLEX-213",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 214,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "initial_diameter_mm": 4.16,
+      "extinction_diameter_mm": 4.15,
+      "burning_rate_mm2_s": 0.24,
+      "burn_time_s": 1.6,
+      "ratio": 4.6209
+     },
+     {
+      "test_id": "FLEX-171",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 172,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "initial_diameter_mm": 3.74,
+      "extinction_diameter_mm": 3.68,
+      "burning_rate_mm2_s": 0.35,
+      "burn_time_s": 2.8,
+      "ratio": 2.2013
+     },
+     {
+      "test_id": "FLEX-120",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 121,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "initial_diameter_mm": 2.45,
+      "extinction_diameter_mm": 2.39,
+      "burning_rate_mm2_s": 0.38,
+      "burn_time_s": 1.43,
+      "ratio": 1.8712
+     }
+    ],
+    "placebo": {
+     "description": "The same computation on the same rows, with the burning-rate values reversed in order within each fuel (rows ordered by source_row). Every row keeps its own diameters and burn time and gets the burning rate of another test of the same fuel. If the check discriminates, the placebo should fall short of the criterion.",
+     "permutation": {
+      "column": "burning_rate_mm2_s",
+      "kind": "reverse_within_group",
+      "group": "fuel_material",
+      "order_by": [
+       "source_row"
+      ]
+     },
+     "result": {
+      "rows": 187,
+      "median": 1.0532,
+      "quartile_1": 0.8917,
+      "quartile_3": 1.2399,
+      "min": 0.163,
+      "max": 7.3165,
+      "bands": [
+       {
+        "within": 0.1,
+        "rows": 55,
+        "share": 0.2941
+       },
+       {
+        "within": 0.2,
+        "rows": 99,
+        "share": 0.5294
+       },
+       {
+        "within": 0.5,
+        "rows": 159,
+        "share": 0.8503
+       }
+      ],
+      "meets_criterion": false
+     },
+     "pairs": [
+      {
+       "test_id": "FLEX-1",
+       "burning_rate_from": "FLEX-272"
+      },
+      {
+       "test_id": "FLEX-2",
+       "burning_rate_from": "FLEX-271"
+      },
+      {
+       "test_id": "FLEX-3",
+       "burning_rate_from": "FLEX-266"
+      },
+      {
+       "test_id": "FLEX-5",
+       "burning_rate_from": "FLEX-265"
+      },
+      {
+       "test_id": "FLEX-6",
+       "burning_rate_from": "FLEX-264"
+      },
+      {
+       "test_id": "FLEX-16",
+       "burning_rate_from": "FLEX-263"
+      },
+      {
+       "test_id": "FLEX-18",
+       "burning_rate_from": "FLEX-274"
+      },
+      {
+       "test_id": "FLEX-20",
+       "burning_rate_from": "FLEX-262"
+      },
+      {
+       "test_id": "FLEX-21",
+       "burning_rate_from": "FLEX-257"
+      },
+      {
+       "test_id": "FLEX-25",
+       "burning_rate_from": "FLEX-256"
+      },
+      {
+       "test_id": "FLEX-26",
+       "burning_rate_from": "FLEX-253"
+      },
+      {
+       "test_id": "FLEX-30",
+       "burning_rate_from": "FLEX-252"
+      },
+      {
+       "test_id": "FLEX-33",
+       "burning_rate_from": "FLEX-251"
+      },
+      {
+       "test_id": "FLEX-34",
+       "burning_rate_from": "FLEX-248"
+      },
+      {
+       "test_id": "FLEX-35",
+       "burning_rate_from": "FLEX-273"
+      },
+      {
+       "test_id": "FLEX-36",
+       "burning_rate_from": "FLEX-247"
+      },
+      {
+       "test_id": "FLEX-45",
+       "burning_rate_from": "FLEX-246"
+      },
+      {
+       "test_id": "FLEX-46",
+       "burning_rate_from": "FLEX-245"
+      },
+      {
+       "test_id": "FLEX-49",
+       "burning_rate_from": "FLEX-270"
+      },
+      {
+       "test_id": "FLEX-50",
+       "burning_rate_from": "FLEX-269"
+      },
+      {
+       "test_id": "FLEX-55",
+       "burning_rate_from": "FLEX-244"
+      },
+      {
+       "test_id": "FLEX-56",
+       "burning_rate_from": "FLEX-268"
+      },
+      {
+       "test_id": "FLEX-57",
+       "burning_rate_from": "FLEX-267"
+      },
+      {
+       "test_id": "FLEX-59",
+       "burning_rate_from": "FLEX-241"
+      },
+      {
+       "test_id": "FLEX-61",
+       "burning_rate_from": "FLEX-240"
+      },
+      {
+       "test_id": "FLEX-62",
+       "burning_rate_from": "FLEX-261"
+      },
+      {
+       "test_id": "FLEX-64",
+       "burning_rate_from": "FLEX-260"
+      },
+      {
+       "test_id": "FLEX-66",
+       "burning_rate_from": "FLEX-227"
+      },
+      {
+       "test_id": "FLEX-67",
+       "burning_rate_from": "FLEX-226"
+      },
+      {
+       "test_id": "FLEX-68",
+       "burning_rate_from": "FLEX-222"
+      },
+      {
+       "test_id": "FLEX-70",
+       "burning_rate_from": "FLEX-259"
+      },
+      {
+       "test_id": "FLEX-73",
+       "burning_rate_from": "FLEX-258"
+      },
+      {
+       "test_id": "FLEX-75",
+       "burning_rate_from": "FLEX-221"
+      },
+      {
+       "test_id": "FLEX-76",
+       "burning_rate_from": "FLEX-220"
+      },
+      {
+       "test_id": "FLEX-77",
+       "burning_rate_from": "FLEX-219"
+      },
+      {
+       "test_id": "FLEX-78",
+       "burning_rate_from": "FLEX-218"
+      },
+      {
+       "test_id": "FLEX-79",
+       "burning_rate_from": "FLEX-250"
+      },
+      {
+       "test_id": "FLEX-82",
+       "burning_rate_from": "FLEX-217"
+      },
+      {
+       "test_id": "FLEX-84",
+       "burning_rate_from": "FLEX-216"
+      },
+      {
+       "test_id": "FLEX-85",
+       "burning_rate_from": "FLEX-203"
+      },
+      {
+       "test_id": "FLEX-86",
+       "burning_rate_from": "FLEX-202"
+      },
+      {
+       "test_id": "FLEX-87",
+       "burning_rate_from": "FLEX-201"
+      },
+      {
+       "test_id": "FLEX-94",
+       "burning_rate_from": "FLEX-249"
+      },
+      {
+       "test_id": "FLEX-95",
+       "burning_rate_from": "FLEX-243"
+      },
+      {
+       "test_id": "FLEX-97",
+       "burning_rate_from": "FLEX-200"
+      },
+      {
+       "test_id": "FLEX-98",
+       "burning_rate_from": "FLEX-199"
+      },
+      {
+       "test_id": "FLEX-99",
+       "burning_rate_from": "FLEX-193"
+      },
+      {
+       "test_id": "FLEX-100",
+       "burning_rate_from": "FLEX-236"
+      },
+      {
+       "test_id": "FLEX-101",
+       "burning_rate_from": "FLEX-235"
+      },
+      {
+       "test_id": "FLEX-102",
+       "burning_rate_from": "FLEX-232"
+      },
+      {
+       "test_id": "FLEX-103",
+       "burning_rate_from": "FLEX-230"
+      },
+      {
+       "test_id": "FLEX-104",
+       "burning_rate_from": "FLEX-191"
+      },
+      {
+       "test_id": "FLEX-105",
+       "burning_rate_from": "FLEX-190"
+      },
+      {
+       "test_id": "FLEX-106",
+       "burning_rate_from": "FLEX-189"
+      },
+      {
+       "test_id": "FLEX-110",
+       "burning_rate_from": "FLEX-188"
+      },
+      {
+       "test_id": "FLEX-111",
+       "burning_rate_from": "FLEX-187"
+      },
+      {
+       "test_id": "FLEX-112",
+       "burning_rate_from": "FLEX-186"
+      },
+      {
+       "test_id": "FLEX-113",
+       "burning_rate_from": "FLEX-185"
+      },
+      {
+       "test_id": "FLEX-114",
+       "burning_rate_from": "FLEX-177"
+      },
+      {
+       "test_id": "FLEX-115",
+       "burning_rate_from": "FLEX-170"
+      },
+      {
+       "test_id": "FLEX-116",
+       "burning_rate_from": "FLEX-169"
+      },
+      {
+       "test_id": "FLEX-117",
+       "burning_rate_from": "FLEX-228"
+      },
+      {
+       "test_id": "FLEX-118",
+       "burning_rate_from": "FLEX-213"
+      },
+      {
+       "test_id": "FLEX-119",
+       "burning_rate_from": "FLEX-212"
+      },
+      {
+       "test_id": "FLEX-120",
+       "burning_rate_from": "FLEX-211"
+      },
+      {
+       "test_id": "FLEX-121",
+       "burning_rate_from": "FLEX-168"
+      },
+      {
+       "test_id": "FLEX-122",
+       "burning_rate_from": "FLEX-167"
+      },
+      {
+       "test_id": "FLEX-123",
+       "burning_rate_from": "FLEX-166"
+      },
+      {
+       "test_id": "FLEX-124",
+       "burning_rate_from": "FLEX-164"
+      },
+      {
+       "test_id": "FLEX-125",
+       "burning_rate_from": "FLEX-163"
+      },
+      {
+       "test_id": "FLEX-126",
+       "burning_rate_from": "FLEX-162"
+      },
+      {
+       "test_id": "FLEX-127",
+       "burning_rate_from": "FLEX-161"
+      },
+      {
+       "test_id": "FLEX-130",
+       "burning_rate_from": "FLEX-209"
+      },
+      {
+       "test_id": "FLEX-131",
+       "burning_rate_from": "FLEX-207"
+      },
+      {
+       "test_id": "FLEX-132",
+       "burning_rate_from": "FLEX-206"
+      },
+      {
+       "test_id": "FLEX-133",
+       "burning_rate_from": "FLEX-198"
+      },
+      {
+       "test_id": "FLEX-134",
+       "burning_rate_from": "FLEX-197"
+      },
+      {
+       "test_id": "FLEX-140",
+       "burning_rate_from": "FLEX-160"
+      },
+      {
+       "test_id": "FLEX-141",
+       "burning_rate_from": "FLEX-159"
+      },
+      {
+       "test_id": "FLEX-142",
+       "burning_rate_from": "FLEX-158"
+      },
+      {
+       "test_id": "FLEX-143",
+       "burning_rate_from": "FLEX-157"
+      },
+      {
+       "test_id": "FLEX-144",
+       "burning_rate_from": "FLEX-153"
+      },
+      {
+       "test_id": "FLEX-145",
+       "burning_rate_from": "FLEX-152"
+      },
+      {
+       "test_id": "FLEX-146",
+       "burning_rate_from": "FLEX-147"
+      },
+      {
+       "test_id": "FLEX-147",
+       "burning_rate_from": "FLEX-146"
+      },
+      {
+       "test_id": "FLEX-148",
+       "burning_rate_from": "FLEX-196"
+      },
+      {
+       "test_id": "FLEX-149",
+       "burning_rate_from": "FLEX-195"
+      },
+      {
+       "test_id": "FLEX-150",
+       "burning_rate_from": "FLEX-194"
+      },
+      {
+       "test_id": "FLEX-152",
+       "burning_rate_from": "FLEX-145"
+      },
+      {
+       "test_id": "FLEX-153",
+       "burning_rate_from": "FLEX-144"
+      },
+      {
+       "test_id": "FLEX-154",
+       "burning_rate_from": "FLEX-182"
+      },
+      {
+       "test_id": "FLEX-155",
+       "burning_rate_from": "FLEX-181"
+      },
+      {
+       "test_id": "FLEX-156",
+       "burning_rate_from": "FLEX-180"
+      },
+      {
+       "test_id": "FLEX-157",
+       "burning_rate_from": "FLEX-143"
+      },
+      {
+       "test_id": "FLEX-158",
+       "burning_rate_from": "FLEX-142"
+      },
+      {
+       "test_id": "FLEX-159",
+       "burning_rate_from": "FLEX-141"
+      },
+      {
+       "test_id": "FLEX-160",
+       "burning_rate_from": "FLEX-140"
+      },
+      {
+       "test_id": "FLEX-161",
+       "burning_rate_from": "FLEX-127"
+      },
+      {
+       "test_id": "FLEX-162",
+       "burning_rate_from": "FLEX-126"
+      },
+      {
+       "test_id": "FLEX-163",
+       "burning_rate_from": "FLEX-125"
+      },
+      {
+       "test_id": "FLEX-164",
+       "burning_rate_from": "FLEX-124"
+      },
+      {
+       "test_id": "FLEX-165",
+       "burning_rate_from": "FLEX-179"
+      },
+      {
+       "test_id": "FLEX-166",
+       "burning_rate_from": "FLEX-123"
+      },
+      {
+       "test_id": "FLEX-167",
+       "burning_rate_from": "FLEX-122"
+      },
+      {
+       "test_id": "FLEX-168",
+       "burning_rate_from": "FLEX-121"
+      },
+      {
+       "test_id": "FLEX-169",
+       "burning_rate_from": "FLEX-116"
+      },
+      {
+       "test_id": "FLEX-170",
+       "burning_rate_from": "FLEX-115"
+      },
+      {
+       "test_id": "FLEX-171",
+       "burning_rate_from": "FLEX-178"
+      },
+      {
+       "test_id": "FLEX-172",
+       "burning_rate_from": "FLEX-174"
+      },
+      {
+       "test_id": "FLEX-173",
+       "burning_rate_from": "FLEX-173"
+      },
+      {
+       "test_id": "FLEX-174",
+       "burning_rate_from": "FLEX-172"
+      },
+      {
+       "test_id": "FLEX-177",
+       "burning_rate_from": "FLEX-114"
+      },
+      {
+       "test_id": "FLEX-178",
+       "burning_rate_from": "FLEX-171"
+      },
+      {
+       "test_id": "FLEX-179",
+       "burning_rate_from": "FLEX-165"
+      },
+      {
+       "test_id": "FLEX-180",
+       "burning_rate_from": "FLEX-156"
+      },
+      {
+       "test_id": "FLEX-181",
+       "burning_rate_from": "FLEX-155"
+      },
+      {
+       "test_id": "FLEX-182",
+       "burning_rate_from": "FLEX-154"
+      },
+      {
+       "test_id": "FLEX-185",
+       "burning_rate_from": "FLEX-113"
+      },
+      {
+       "test_id": "FLEX-186",
+       "burning_rate_from": "FLEX-112"
+      },
+      {
+       "test_id": "FLEX-187",
+       "burning_rate_from": "FLEX-111"
+      },
+      {
+       "test_id": "FLEX-188",
+       "burning_rate_from": "FLEX-110"
+      },
+      {
+       "test_id": "FLEX-189",
+       "burning_rate_from": "FLEX-106"
+      },
+      {
+       "test_id": "FLEX-190",
+       "burning_rate_from": "FLEX-105"
+      },
+      {
+       "test_id": "FLEX-191",
+       "burning_rate_from": "FLEX-104"
+      },
+      {
+       "test_id": "FLEX-193",
+       "burning_rate_from": "FLEX-99"
+      },
+      {
+       "test_id": "FLEX-194",
+       "burning_rate_from": "FLEX-150"
+      },
+      {
+       "test_id": "FLEX-195",
+       "burning_rate_from": "FLEX-149"
+      },
+      {
+       "test_id": "FLEX-196",
+       "burning_rate_from": "FLEX-148"
+      },
+      {
+       "test_id": "FLEX-197",
+       "burning_rate_from": "FLEX-134"
+      },
+      {
+       "test_id": "FLEX-198",
+       "burning_rate_from": "FLEX-133"
+      },
+      {
+       "test_id": "FLEX-199",
+       "burning_rate_from": "FLEX-98"
+      },
+      {
+       "test_id": "FLEX-200",
+       "burning_rate_from": "FLEX-97"
+      },
+      {
+       "test_id": "FLEX-201",
+       "burning_rate_from": "FLEX-87"
+      },
+      {
+       "test_id": "FLEX-202",
+       "burning_rate_from": "FLEX-86"
+      },
+      {
+       "test_id": "FLEX-203",
+       "burning_rate_from": "FLEX-85"
+      },
+      {
+       "test_id": "FLEX-206",
+       "burning_rate_from": "FLEX-132"
+      },
+      {
+       "test_id": "FLEX-207",
+       "burning_rate_from": "FLEX-131"
+      },
+      {
+       "test_id": "FLEX-209",
+       "burning_rate_from": "FLEX-130"
+      },
+      {
+       "test_id": "FLEX-211",
+       "burning_rate_from": "FLEX-120"
+      },
+      {
+       "test_id": "FLEX-212",
+       "burning_rate_from": "FLEX-119"
+      },
+      {
+       "test_id": "FLEX-213",
+       "burning_rate_from": "FLEX-118"
+      },
+      {
+       "test_id": "FLEX-216",
+       "burning_rate_from": "FLEX-84"
+      },
+      {
+       "test_id": "FLEX-217",
+       "burning_rate_from": "FLEX-82"
+      },
+      {
+       "test_id": "FLEX-218",
+       "burning_rate_from": "FLEX-78"
+      },
+      {
+       "test_id": "FLEX-219",
+       "burning_rate_from": "FLEX-77"
+      },
+      {
+       "test_id": "FLEX-220",
+       "burning_rate_from": "FLEX-76"
+      },
+      {
+       "test_id": "FLEX-221",
+       "burning_rate_from": "FLEX-75"
+      },
+      {
+       "test_id": "FLEX-222",
+       "burning_rate_from": "FLEX-68"
+      },
+      {
+       "test_id": "FLEX-226",
+       "burning_rate_from": "FLEX-67"
+      },
+      {
+       "test_id": "FLEX-227",
+       "burning_rate_from": "FLEX-66"
+      },
+      {
+       "test_id": "FLEX-228",
+       "burning_rate_from": "FLEX-117"
+      },
+      {
+       "test_id": "FLEX-230",
+       "burning_rate_from": "FLEX-103"
+      },
+      {
+       "test_id": "FLEX-232",
+       "burning_rate_from": "FLEX-102"
+      },
+      {
+       "test_id": "FLEX-235",
+       "burning_rate_from": "FLEX-101"
+      },
+      {
+       "test_id": "FLEX-236",
+       "burning_rate_from": "FLEX-100"
+      },
+      {
+       "test_id": "FLEX-240",
+       "burning_rate_from": "FLEX-61"
+      },
+      {
+       "test_id": "FLEX-241",
+       "burning_rate_from": "FLEX-59"
+      },
+      {
+       "test_id": "FLEX-243",
+       "burning_rate_from": "FLEX-95"
+      },
+      {
+       "test_id": "FLEX-244",
+       "burning_rate_from": "FLEX-55"
+      },
+      {
+       "test_id": "FLEX-245",
+       "burning_rate_from": "FLEX-46"
+      },
+      {
+       "test_id": "FLEX-246",
+       "burning_rate_from": "FLEX-45"
+      },
+      {
+       "test_id": "FLEX-247",
+       "burning_rate_from": "FLEX-36"
+      },
+      {
+       "test_id": "FLEX-248",
+       "burning_rate_from": "FLEX-34"
+      },
+      {
+       "test_id": "FLEX-249",
+       "burning_rate_from": "FLEX-94"
+      },
+      {
+       "test_id": "FLEX-250",
+       "burning_rate_from": "FLEX-79"
+      },
+      {
+       "test_id": "FLEX-251",
+       "burning_rate_from": "FLEX-33"
+      },
+      {
+       "test_id": "FLEX-252",
+       "burning_rate_from": "FLEX-30"
+      },
+      {
+       "test_id": "FLEX-253",
+       "burning_rate_from": "FLEX-26"
+      },
+      {
+       "test_id": "FLEX-256",
+       "burning_rate_from": "FLEX-25"
+      },
+      {
+       "test_id": "FLEX-257",
+       "burning_rate_from": "FLEX-21"
+      },
+      {
+       "test_id": "FLEX-258",
+       "burning_rate_from": "FLEX-73"
+      },
+      {
+       "test_id": "FLEX-259",
+       "burning_rate_from": "FLEX-70"
+      },
+      {
+       "test_id": "FLEX-260",
+       "burning_rate_from": "FLEX-64"
+      },
+      {
+       "test_id": "FLEX-261",
+       "burning_rate_from": "FLEX-62"
+      },
+      {
+       "test_id": "FLEX-262",
+       "burning_rate_from": "FLEX-20"
+      },
+      {
+       "test_id": "FLEX-263",
+       "burning_rate_from": "FLEX-16"
+      },
+      {
+       "test_id": "FLEX-264",
+       "burning_rate_from": "FLEX-6"
+      },
+      {
+       "test_id": "FLEX-265",
+       "burning_rate_from": "FLEX-5"
+      },
+      {
+       "test_id": "FLEX-266",
+       "burning_rate_from": "FLEX-3"
+      },
+      {
+       "test_id": "FLEX-267",
+       "burning_rate_from": "FLEX-57"
+      },
+      {
+       "test_id": "FLEX-268",
+       "burning_rate_from": "FLEX-56"
+      },
+      {
+       "test_id": "FLEX-269",
+       "burning_rate_from": "FLEX-50"
+      },
+      {
+       "test_id": "FLEX-270",
+       "burning_rate_from": "FLEX-49"
+      },
+      {
+       "test_id": "FLEX-271",
+       "burning_rate_from": "FLEX-2"
+      },
+      {
+       "test_id": "FLEX-272",
+       "burning_rate_from": "FLEX-1"
+      },
+      {
+       "test_id": "FLEX-273",
+       "burning_rate_from": "FLEX-35"
+      },
+      {
+       "test_id": "FLEX-274",
+       "burning_rate_from": "FLEX-18"
+      }
+     ]
+    },
+    "rows": [
+     {
+      "test_id": "FLEX-1",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 2,
+      "fuel_material": "methanol",
+      "test_end": "disruption",
+      "ratio": 1.0833
+     },
+     {
+      "test_id": "FLEX-2",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 3,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.1646
+     },
+     {
+      "test_id": "FLEX-3",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 4,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0632
+     },
+     {
+      "test_id": "FLEX-5",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 6,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0043
+     },
+     {
+      "test_id": "FLEX-6",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 7,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.191
+     },
+     {
+      "test_id": "FLEX-16",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 17,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0264
+     },
+     {
+      "test_id": "FLEX-18",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 19,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.1294
+     },
+     {
+      "test_id": "FLEX-20",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 21,
+      "fuel_material": "methanol",
+      "test_end": "completion",
+      "ratio": 1.0105
+     },
+     {
+      "test_id": "FLEX-21",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 22,
+      "fuel_material": "methanol",
+      "test_end": "disruption",
+      "ratio": 1.0417
+     },
+     {
+      "test_id": "FLEX-25",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 26,
+      "fuel_material": "methanol",
+      "test_end": "completion",
+      "ratio": 1.0442
+     },
+     {
+      "test_id": "FLEX-26",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 27,
+      "fuel_material": "methanol",
+      "test_end": "disruption",
+      "ratio": 1.0574
+     },
+     {
+      "test_id": "FLEX-30",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 31,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0359
+     },
+     {
+      "test_id": "FLEX-33",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 34,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0321
+     },
+     {
+      "test_id": "FLEX-34",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 35,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.079
+     },
+     {
+      "test_id": "FLEX-35",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 36,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0437
+     },
+     {
+      "test_id": "FLEX-36",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 37,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0754
+     },
+     {
+      "test_id": "FLEX-45",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 46,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.9962
+     },
+     {
+      "test_id": "FLEX-46",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 47,
+      "fuel_material": "methanol",
+      "test_end": "disruption",
+      "ratio": 1.078
+     },
+     {
+      "test_id": "FLEX-49",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 50,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.1958
+     },
+     {
+      "test_id": "FLEX-50",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 51,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.1303
+     },
+     {
+      "test_id": "FLEX-55",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 56,
+      "fuel_material": "methanol",
+      "test_end": "disruption",
+      "ratio": 1.6706
+     },
+     {
+      "test_id": "FLEX-56",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 57,
+      "fuel_material": "heptane",
+      "test_end": "completion",
+      "ratio": 1.0128
+     },
+     {
+      "test_id": "FLEX-57",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 58,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0769
+     },
+     {
+      "test_id": "FLEX-59",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 60,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.144
+     },
+     {
+      "test_id": "FLEX-61",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 62,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.1042
+     },
+     {
+      "test_id": "FLEX-62",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 63,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0909
+     },
+     {
+      "test_id": "FLEX-64",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 65,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.1182
+     },
+     {
+      "test_id": "FLEX-66",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 67,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0638
+     },
+     {
+      "test_id": "FLEX-67",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 68,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0643
+     },
+     {
+      "test_id": "FLEX-68",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 69,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0432
+     },
+     {
+      "test_id": "FLEX-70",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 71,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0109
+     },
+     {
+      "test_id": "FLEX-73",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 74,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.5184
+     },
+     {
+      "test_id": "FLEX-75",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 76,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0255
+     },
+     {
+      "test_id": "FLEX-76",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 77,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.2785
+     },
+     {
+      "test_id": "FLEX-77",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 78,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.1027
+     },
+     {
+      "test_id": "FLEX-78",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 79,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0451
+     },
+     {
+      "test_id": "FLEX-79",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 80,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0813
+     },
+     {
+      "test_id": "FLEX-82",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 83,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.1154
+     },
+     {
+      "test_id": "FLEX-84",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 85,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0781
+     },
+     {
+      "test_id": "FLEX-85",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 86,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.239
+     },
+     {
+      "test_id": "FLEX-86",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 87,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0971
+     },
+     {
+      "test_id": "FLEX-87",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 88,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0764
+     },
+     {
+      "test_id": "FLEX-94",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 95,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0635
+     },
+     {
+      "test_id": "FLEX-95",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 96,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.2478
+     },
+     {
+      "test_id": "FLEX-97",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 98,
+      "fuel_material": "methanol",
+      "test_end": "completion",
+      "ratio": 1.0551
+     },
+     {
+      "test_id": "FLEX-98",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 99,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0529
+     },
+     {
+      "test_id": "FLEX-99",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 100,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0714
+     },
+     {
+      "test_id": "FLEX-100",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 101,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.5964
+     },
+     {
+      "test_id": "FLEX-101",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 102,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0311
+     },
+     {
+      "test_id": "FLEX-102",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 103,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.4143
+     },
+     {
+      "test_id": "FLEX-103",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 104,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.1844
+     },
+     {
+      "test_id": "FLEX-104",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 105,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0864
+     },
+     {
+      "test_id": "FLEX-105",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 106,
+      "fuel_material": "methanol",
+      "test_end": "disruption",
+      "ratio": 1.0777
+     },
+     {
+      "test_id": "FLEX-106",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 107,
+      "fuel_material": "methanol",
+      "test_end": "disruption",
+      "ratio": 1.1194
+     },
+     {
+      "test_id": "FLEX-110",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 111,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0552
+     },
+     {
+      "test_id": "FLEX-111",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 112,
+      "fuel_material": "methanol",
+      "test_end": "completion",
+      "ratio": 1.0623
+     },
+     {
+      "test_id": "FLEX-112",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 113,
+      "fuel_material": "methanol",
+      "test_end": "completion",
+      "ratio": 1.0422
+     },
+     {
+      "test_id": "FLEX-113",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 114,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.937
+     },
+     {
+      "test_id": "FLEX-114",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 115,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.043
+     },
+     {
+      "test_id": "FLEX-115",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 116,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0492
+     },
+     {
+      "test_id": "FLEX-116",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 117,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0337
+     },
+     {
+      "test_id": "FLEX-117",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 118,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.1263
+     },
+     {
+      "test_id": "FLEX-118",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 119,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.594
+     },
+     {
+      "test_id": "FLEX-119",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 120,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 0.789
+     },
+     {
+      "test_id": "FLEX-120",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 121,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.8712
+     },
+     {
+      "test_id": "FLEX-121",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 122,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0089
+     },
+     {
+      "test_id": "FLEX-122",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 123,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0722
+     },
+     {
+      "test_id": "FLEX-123",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 124,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.1308
+     },
+     {
+      "test_id": "FLEX-124",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 125,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.9872
+     },
+     {
+      "test_id": "FLEX-125",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 126,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0962
+     },
+     {
+      "test_id": "FLEX-126",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 127,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0506
+     },
+     {
+      "test_id": "FLEX-127",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 128,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0536
+     },
+     {
+      "test_id": "FLEX-130",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 131,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 0.2586
+     },
+     {
+      "test_id": "FLEX-131",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 132,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.112
+     },
+     {
+      "test_id": "FLEX-132",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 133,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.1212
+     },
+     {
+      "test_id": "FLEX-133",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 134,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.037
+     },
+     {
+      "test_id": "FLEX-134",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 135,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.01
+     },
+     {
+      "test_id": "FLEX-140",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 141,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0929
+     },
+     {
+      "test_id": "FLEX-141",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 142,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.9495
+     },
+     {
+      "test_id": "FLEX-142",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 143,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0448
+     },
+     {
+      "test_id": "FLEX-143",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 144,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.187
+     },
+     {
+      "test_id": "FLEX-144",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 145,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0583
+     },
+     {
+      "test_id": "FLEX-145",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 146,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0592
+     },
+     {
+      "test_id": "FLEX-146",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 147,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.063
+     },
+     {
+      "test_id": "FLEX-147",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 148,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0684
+     },
+     {
+      "test_id": "FLEX-148",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 149,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.1946
+     },
+     {
+      "test_id": "FLEX-149",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 150,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.12
+     },
+     {
+      "test_id": "FLEX-150",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 151,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0052
+     },
+     {
+      "test_id": "FLEX-152",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 153,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0418
+     },
+     {
+      "test_id": "FLEX-153",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 154,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0446
+     },
+     {
+      "test_id": "FLEX-154",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 155,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0247
+     },
+     {
+      "test_id": "FLEX-155",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 156,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 0.9551
+     },
+     {
+      "test_id": "FLEX-156",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 157,
+      "fuel_material": "heptane",
+      "test_end": "completion",
+      "ratio": 0.9642
+     },
+     {
+      "test_id": "FLEX-157",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 158,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.993
+     },
+     {
+      "test_id": "FLEX-158",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 159,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.1251
+     },
+     {
+      "test_id": "FLEX-159",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 160,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0205
+     },
+     {
+      "test_id": "FLEX-160",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 161,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0488
+     },
+     {
+      "test_id": "FLEX-161",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 162,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0577
+     },
+     {
+      "test_id": "FLEX-162",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 163,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.1032
+     },
+     {
+      "test_id": "FLEX-163",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 164,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0594
+     },
+     {
+      "test_id": "FLEX-164",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 165,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0668
+     },
+     {
+      "test_id": "FLEX-165",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 166,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.1029
+     },
+     {
+      "test_id": "FLEX-166",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 167,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0794
+     },
+     {
+      "test_id": "FLEX-167",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 168,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0932
+     },
+     {
+      "test_id": "FLEX-168",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 169,
+      "fuel_material": "methanol",
+      "test_end": "disruption",
+      "ratio": 1.1149
+     },
+     {
+      "test_id": "FLEX-169",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 170,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.1113
+     },
+     {
+      "test_id": "FLEX-170",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 171,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0929
+     },
+     {
+      "test_id": "FLEX-171",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 172,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 2.2013
+     },
+     {
+      "test_id": "FLEX-172",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 173,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.055
+     },
+     {
+      "test_id": "FLEX-173",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 174,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.1239
+     },
+     {
+      "test_id": "FLEX-174",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 175,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.0107
+     },
+     {
+      "test_id": "FLEX-177",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 178,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0332
+     },
+     {
+      "test_id": "FLEX-178",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 179,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0569
+     },
+     {
+      "test_id": "FLEX-179",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 180,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.0544
+     },
+     {
+      "test_id": "FLEX-180",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 181,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0465
+     },
+     {
+      "test_id": "FLEX-181",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 182,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0306
+     },
+     {
+      "test_id": "FLEX-182",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 183,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.1243
+     },
+     {
+      "test_id": "FLEX-185",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 186,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0669
+     },
+     {
+      "test_id": "FLEX-186",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 187,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0317
+     },
+     {
+      "test_id": "FLEX-187",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 188,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0498
+     },
+     {
+      "test_id": "FLEX-188",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 189,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0254
+     },
+     {
+      "test_id": "FLEX-189",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 190,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.1599
+     },
+     {
+      "test_id": "FLEX-190",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 191,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0598
+     },
+     {
+      "test_id": "FLEX-191",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 192,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0362
+     },
+     {
+      "test_id": "FLEX-193",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 194,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0297
+     },
+     {
+      "test_id": "FLEX-194",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 195,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.2423
+     },
+     {
+      "test_id": "FLEX-195",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 196,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0928
+     },
+     {
+      "test_id": "FLEX-196",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 197,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.1111
+     },
+     {
+      "test_id": "FLEX-197",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 198,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.041
+     },
+     {
+      "test_id": "FLEX-198",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 199,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.0298
+     },
+     {
+      "test_id": "FLEX-199",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 200,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.9898
+     },
+     {
+      "test_id": "FLEX-200",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 201,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0321
+     },
+     {
+      "test_id": "FLEX-201",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 202,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0512
+     },
+     {
+      "test_id": "FLEX-202",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 203,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0328
+     },
+     {
+      "test_id": "FLEX-203",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 204,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0514
+     },
+     {
+      "test_id": "FLEX-206",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 207,
+      "fuel_material": "heptane",
+      "test_end": "disruption",
+      "ratio": 1.0011
+     },
+     {
+      "test_id": "FLEX-207",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 208,
+      "fuel_material": "heptane",
+      "test_end": "completion",
+      "ratio": 1.0145
+     },
+     {
+      "test_id": "FLEX-209",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 210,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.1081
+     },
+     {
+      "test_id": "FLEX-211",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 212,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0422
+     },
+     {
+      "test_id": "FLEX-212",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 213,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0785
+     },
+     {
+      "test_id": "FLEX-213",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 214,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 4.6209
+     },
+     {
+      "test_id": "FLEX-216",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 217,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0747
+     },
+     {
+      "test_id": "FLEX-217",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 218,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0654
+     },
+     {
+      "test_id": "FLEX-218",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 219,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0505
+     },
+     {
+      "test_id": "FLEX-219",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 220,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0385
+     },
+     {
+      "test_id": "FLEX-220",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 221,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0259
+     },
+     {
+      "test_id": "FLEX-221",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 222,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.9896
+     },
+     {
+      "test_id": "FLEX-222",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 223,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0181
+     },
+     {
+      "test_id": "FLEX-226",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 227,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0461
+     },
+     {
+      "test_id": "FLEX-227",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 228,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0486
+     },
+     {
+      "test_id": "FLEX-228",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 229,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 0.995
+     },
+     {
+      "test_id": "FLEX-230",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 231,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0523
+     },
+     {
+      "test_id": "FLEX-232",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 233,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.03
+     },
+     {
+      "test_id": "FLEX-235",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 236,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0804
+     },
+     {
+      "test_id": "FLEX-236",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 237,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0362
+     },
+     {
+      "test_id": "FLEX-240",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 241,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.045
+     },
+     {
+      "test_id": "FLEX-241",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 242,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.067
+     },
+     {
+      "test_id": "FLEX-243",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 244,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 0.9977
+     },
+     {
+      "test_id": "FLEX-244",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 245,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.084
+     },
+     {
+      "test_id": "FLEX-245",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 246,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0632
+     },
+     {
+      "test_id": "FLEX-246",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 247,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.9929
+     },
+     {
+      "test_id": "FLEX-247",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 248,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0711
+     },
+     {
+      "test_id": "FLEX-248",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 249,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0775
+     },
+     {
+      "test_id": "FLEX-249",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 250,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.1066
+     },
+     {
+      "test_id": "FLEX-250",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 251,
+      "fuel_material": "heptane",
+      "test_end": "completion",
+      "ratio": 1.0343
+     },
+     {
+      "test_id": "FLEX-251",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 252,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0076
+     },
+     {
+      "test_id": "FLEX-252",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 253,
+      "fuel_material": "methanol",
+      "test_end": "disruption",
+      "ratio": 1.0417
+     },
+     {
+      "test_id": "FLEX-253",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 254,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.9462
+     },
+     {
+      "test_id": "FLEX-256",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 257,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0637
+     },
+     {
+      "test_id": "FLEX-257",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 258,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0406
+     },
+     {
+      "test_id": "FLEX-258",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 259,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0042
+     },
+     {
+      "test_id": "FLEX-259",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 260,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0032
+     },
+     {
+      "test_id": "FLEX-260",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 261,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0113
+     },
+     {
+      "test_id": "FLEX-261",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 262,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 0.5457
+     },
+     {
+      "test_id": "FLEX-262",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 263,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0483
+     },
+     {
+      "test_id": "FLEX-263",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 264,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0349
+     },
+     {
+      "test_id": "FLEX-264",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 265,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.8986
+     },
+     {
+      "test_id": "FLEX-265",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 266,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0315
+     },
+     {
+      "test_id": "FLEX-266",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 267,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 0.841
+     },
+     {
+      "test_id": "FLEX-267",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 268,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0088
+     },
+     {
+      "test_id": "FLEX-268",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 269,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 0.9786
+     },
+     {
+      "test_id": "FLEX-269",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 270,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 0.9831
+     },
+     {
+      "test_id": "FLEX-270",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 271,
+      "fuel_material": "heptane",
+      "test_end": "completion",
+      "ratio": 0.8413
+     },
+     {
+      "test_id": "FLEX-271",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 272,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0104
+     },
+     {
+      "test_id": "FLEX-272",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 273,
+      "fuel_material": "methanol",
+      "test_end": "extinction",
+      "ratio": 1.0367
+     },
+     {
+      "test_id": "FLEX-273",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 274,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.0287
+     },
+     {
+      "test_id": "FLEX-274",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 275,
+      "fuel_material": "heptane",
+      "test_end": "extinction",
+      "ratio": 1.025
+     }
+    ]
+   },
+   "caption": {
+    "means": "Consistent with the table means the recorded columns agree with each other under the d-squared form. Team computation, not a NASA conclusion.",
+    "does_not_mean": "This is not a test of a physical law: K is itself a reported value of the same experiment, and the form is not stated by any document we hold. The placebo shows how much of the agreement disappears when K is taken from another test of the same fuel."
+   }
+  },
+  {
+   "card_id": "cfi_droplet",
+   "title": "Cool-flame droplet extinction (CFI): extinction diameter as a measure of kinetic times",
+   "source_items": [
+    "CFI14.extinction",
+    "CFI14.motivation"
+   ],
+   "in_our_references": true,
+   "status": "not_testable_here",
+   "check": {
+    "kind": "columns_present",
+    "description": "Count the CFI rows of tests.csv that hold any of the outcome columns the statement is about.",
+    "criterion": {
+     "text": "not_testable_here if no row of the filter holds any of the columns.",
+     "status_if_none": "not_testable_here"
+    }
+   },
+   "result": {
+    "computation_label": "team counts over NASA cells",
+    "rows": 79,
+    "rows_with_any_column": 0,
+    "per_column": {
+     "initial_diameter_mm": 0,
+     "extinction_diameter_mm": 0,
+     "burning_rate_mm2_s": 0,
+     "burn_time_s": 0,
+     "test_end": 0
+    }
+   },
+   "caption": {
+    "means": "The CFI table in tests.csv holds conditions only (fuel, pressure, oxygen, helium).",
+    "does_not_mean": "It says nothing about the experiment's raw data, which PSI lists by file name and which was not read. The stated motivation of the paper is liquid-fuel combustion, not fire safety."
+   }
+  }
+ ]
+}

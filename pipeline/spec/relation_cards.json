@@ -1,0 +1,437 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14, on the experimental branch data-lab. Not merged, not reviewed by a person or a combustion specialist.",
+  "purpose": "One card per published relation or published value set held in references.json. A card names its items, copies its statement and its validity words from the items, says which columns of tests.csv it would need, and states its check and the criterion of that check before any result. pipeline/lab/run_cards.py runs the checks; pipeline/lab/range_gate.py compares each scenario of scenarios.json with each card's validity, axis by axis. Neither script holds a text or a rule of an experiment: everything is in this file.",
+  "rules": {
+   "verbatim": "Every 'words' string is a substring of the named field of the named item (text, quote or values key). The scripts stop if one is not. 'field: text' is the item's own text in references.json, written by the team from the document; 'field: quote' is the sentence as printed in the document.",
+   "unstated": "A validity field that the card's items do not state in their text, quote or values is the string 'unstated'. The item's note and where are not used for validity; where a note names a condition, it is shown under 'not_used' with the reason.",
+   "results_are_not_conditions": "An oxygen number that is a reported limit (LOI, ULOI, MOC, a minimum in a boundary) is not the oxygen of an atmosphere and is not normalized as oxygen validity.",
+   "words_only": "Words without a comparable value ('quiescent', 'reduced gravity') are kept as words and are not normalized.",
+   "criteria_timing": "The criteria below were written on 2026-11-14 after the scouts of the decision brief had computed the d-squared, CO/CO2, OF2012 and H2011 numbers and after a first run of the d-squared placebo. They are fixed in this file before the outputs were written; this is not a pre-registration."
+  },
+  "status_values": {
+   "columns_consistent_with_form": "the recorded columns of tests.csv agree with each other in the way the card's form or range says, by the card's criterion; this is not an independent test of a physical law",
+   "inconsistent": "the recorded columns do not meet the card's criterion",
+   "not_testable_here": "tests.csv or the item's values hold nothing the check could compare; recorded facts may be listed beside it",
+   "matches_published_table": "team arithmetic on values of the items agrees with the values or the statement the same document prints, by the card's criterion",
+   "differs_from_published_table": "team arithmetic on values of the items does not agree with what the same document prints",
+   "not_in_our_references": "no document of references.json states the relation; the card is shown with this badge whatever its check gives"
+  },
+  "units": {
+   "pressure_to_kpa": {"kPa": 1, "psia": 6.894757, "psi": 6.894757, "atm": 101.325},
+   "rounding_kpa_decimals": 3
+  },
+  "axes": {
+   "compared_by_gate": ["oxygen", "pressure", "gravity", "flow"],
+   "shown_not_compared": ["material", "criterion", "geometry"],
+   "shown_not_compared_reason": "No scenario of scenarios.json states a material, a criterion or a geometry; these axes are shown with the card so that a reader matches them by exact name.",
+   "units": {"oxygen": "%", "pressure": "kPa", "flow": "cm/s"}
+  },
+  "gravity_vocabulary_from": "pipeline/spec/findings.json _meta.gravity_vocabulary",
+  "forbidden_words": ["safe", "unsafe", "safely", "acceptable", "unacceptable", "validated", "validate", "validation", "admitted", "predicted", "prediction", "predicts", "prove", "proves", "proven", "confirm", "confirms", "confirmed", "sufficient", "insufficient"],
+  "forbidden_words_note": "Both scripts stop if a title, check description, criterion, caption, template or filled sentence of this file holds one of these words as a whole word (case ignored). Verbatim words copied from the items are carried as fields and are scanned only where they are put into a sentence.",
+  "gate": {
+   "axis_values": {
+    "inside": "the scenario sets a range (or a gravity level) and every value of it lies inside what the card states",
+    "outside": "the scenario's range is not contained in what the card states (overlap 'partial' or 'none' is given); the card's verbatim words are shown",
+    "card_unstated": "the card's items state nothing on this axis",
+    "scenario_unstated": "the card states the axis and the scenario sets no range or level for it"
+   },
+   "containment_rule": "A range of the scenario is inside a range of the card only if both of its ends lie inside, with the inclusive flags (scenario ranges: a minimum is included and a maximum is not unless the scenario says otherwise; an open end lies inside only an open end). A card that states single values (points) contains no scenario range, because no scenario range is a single value. Gravity is inside if the scenario's level is one of the card's levels.",
+   "overall": [
+    ["not_applicable", "the card is not in our references"],
+    ["outside_stated_range", "at least one compared axis is outside"],
+    ["not_applicable", "gravity is card_unstated or scenario_unstated"],
+    ["may_be_quoted_here", "no compared axis is outside and gravity is inside"]
+   ],
+   "overall_note": "may_be_quoted_here says only that no range stated by the card excludes the scenario. Axes that the card does not state do not block it and are named in the sentence. It is not a judgement of the condition.",
+   "cells_rule": "The scenario's cells are the cells of coverage.json (oxygen bin x pressure bin) that its oxygen and pressure ranges both intersect, with the inclusive flags. Counts are copied from coverage_grid.csv, rows with o2_basis 'ambient'. A scenario without both ranges has no cells. Counts of cells are listed one by one and not summed; the two phase totals are team sums over coverage_grid.csv rows of that phase.",
+   "sentences": {
+    "may_be_quoted_here": "{title} ({card_id}) may be quoted for the {scenario_label} scenario: the scenario's gravity level is among the levels the card states{inside_clause}. Not stated by the card: {card_unstated_axes}. Not set by the scenario: {scenario_unstated_axes}. This means only that no range stated by the card excludes the scenario; it is not a judgement of the condition.",
+    "inside_clause": ", and so are its {inside_axes}",
+    "outside_stated_range": "{title} ({card_id}) is outside its stated range for the {scenario_label} scenario. {outside_details} The card's values are not carried to this condition.",
+    "outside_axis": "{axis}: the scenario sets {scenario_range}; the card states \"{words}\" ({items}), read as {card_range}, overlap {overlap}.",
+    "not_applicable__not_in_our_references": "{title} ({card_id}) is not compared with the {scenario_label} scenario: no document of our reference list states this relation.",
+    "not_applicable__gravity_card_unstated": "{title} ({card_id}) is not placed for the {scenario_label} scenario: the card's items state no gravity level, so the gate does not let it be quoted. Axes: {axes_summary}.",
+    "not_applicable__gravity_scenario_unstated": "{title} ({card_id}) is not placed for the {scenario_label} scenario: the scenario sets no gravity level, so the gate does not let the card be quoted. Axes: {axes_summary}.",
+    "headline_none": "No held relation covers this condition. Of the {n_cards} cards, none may be quoted for the {scenario_label} scenario: {n_outside} outside a stated range, {n_not_applicable} not comparable.",
+    "headline_some": "Of the {n_cards} cards, {n_quotable} may be quoted for the {scenario_label} scenario ({quotable_ids}); {n_outside} are outside a stated range and {n_not_applicable} are not comparable. May be quoted means only that no range stated by the card excludes the scenario.",
+    "coverage_phase": "{fuel_phase} fuel, ambient oxygen, in the scenario's cells: {cells_text}. Tests in the scenario's oxygen bins with no recorded pressure: {n_oxygen_no_pressure}. Rows of this phase with a recorded pressure: {n_with_pressure} of {n_phase} (team sums over coverage_grid.csv).",
+    "coverage_cell": "{oxygen_label} x {pressure_label}, recorded tests: {tests}",
+    "coverage_no_cells": "The scenario does not set both an oxygen and a pressure range, so it has no cell of the coverage grid. Rows of the {fuel_phase} phase with a recorded pressure: {n_with_pressure} of {n_phase} (team sums over coverage_grid.csv).",
+    "none_word": "none"
+   }
+  }
+ },
+ "cards": [
+  {
+   "id": "bass2_co_co2_ratio",
+   "title": "CO/CO2 molar ratio range of BASS-II microgravity flames",
+   "source_items": ["ICES19.coratio"],
+   "in_our_references": true,
+   "statement": [
+    {"item": "ICES19.coratio", "field": "quote", "words": "The range of the CO/CO2 molar ratio produced in microgravity flames is 0.01-0.1"}
+   ],
+   "validity": {
+    "gravity": {"words": [{"item": "ICES19.coratio", "field": "quote", "words": "microgravity flames"}], "normalized": ["microgravity"]},
+    "pressure": {"words": "unstated", "normalized": "unstated", "not_used": [{"item": "ICES19.pressure", "field": "quote", "words": "Pressure was not varied from 1 atmosphere.", "why": "a sentence of another item of the same paper about the BASS-II tests; ICES19.coratio itself states no pressure"}]},
+    "oxygen": {"words": "unstated", "normalized": "unstated"},
+    "flow": {"words": "unstated", "normalized": "unstated"},
+    "material": {"words": "unstated", "normalized": "unstated"},
+    "criterion": {"words": "unstated", "normalized": "unstated"},
+    "geometry": {"words": "unstated", "normalized": "unstated"}
+   },
+   "needs": ["source_id", "material_id", "co_to_co2_molar_ratio", "co_produced_ppm", "co2_produced_pct_points"],
+   "check": {
+    "kind": "share_in_published_range",
+    "description": "Count the BASS-II rows of tests.csv whose co_to_co2_molar_ratio lies inside the published range, with both ends included. The ratio is the team's derived column; its formula and skip rules are copied from variables.json.",
+    "filter": "source_id == 'bass2' and co_to_co2_molar_ratio.notna()",
+    "column": "co_to_co2_molar_ratio",
+    "range": {"item": "ICES19.coratio", "key": "co_to_co2_molar_ratio_range", "min_inclusive": true, "max_inclusive": true},
+    "derived_rule_from_variables": "co_to_co2_molar_ratio",
+    "group_by": "material_id",
+    "criterion": {
+     "text": "columns_consistent_with_form if the median of the rows lies inside the range and more than this share of the rows lies inside; otherwise inconsistent. The share is a team parameter.",
+     "min_share_inside_exclusive": 0.5,
+     "status_if_met": "columns_consistent_with_form",
+     "status_if_not_met": "inconsistent"
+    }
+   },
+   "caption": {
+    "means": "The team's ratio of two glovebox sensor differences (CO and CO2, final minus initial) lies inside the range the investigators report for the stated count of BASS-II rows. Team computation, not a NASA conclusion.",
+    "does_not_mean": "It is not an emission ratio of one burn, not a yield and not a statement on crew exposure. The rows are a filtered subset: rows with a CO difference of zero or less, or a CO2 difference below 0.05 points, have no ratio by the rule of variables.json. How the investigators derived their range was not read."
+   }
+  },
+  {
+   "id": "of2012_gravity_margin",
+   "title": "Olson and Ferkul 2012, Eq. 1 oxygen margin by gravity level, recomputed from their Table I",
+   "source_items": ["OF2012.table1", "OF2012.margin", "OF2012.uloi"],
+   "in_our_references": true,
+   "statement": [
+    {"item": "OF2012.table1", "field": "text", "words": "Delta O2 % is the mean of the low-gravity ULOI* and MOC* minus the mean of the 1g ULOI and MOC (Eq. 1)."},
+    {"item": "OF2012.table1", "field": "quote", "words": "Table I: Limiting Oxygen Molar Concentrations and Oxygen Margin of Safety for Different Gravity Levels"}
+   ],
+   "validity": {
+    "gravity": {"words": [{"item": "OF2012.table1", "field": "text", "words": "1g ULOI 21.2"}, {"item": "OF2012.table1", "field": "text", "words": "Martian ULOI* 18.0"}, {"item": "OF2012.table1", "field": "text", "words": "Lunar ULOI* 15.6"}, {"item": "OF2012.table1", "field": "text", "words": "0g ULOI* 17.0"}], "normalized": ["normal", "martian", "lunar", "microgravity"]},
+    "pressure": {"words": [{"item": "OF2012.table1", "field": "text", "words": "Mylar G at 10.2 psia"}, {"item": "OF2012.table1", "field": "text", "words": "Ultem 1000 at 10.2 psia"}, {"item": "OF2012.table1", "field": "text", "words": "Nomex HT90-40 at 14.7 psia"}], "normalized": {"kind": "points", "unit": "kPa", "as_written": [{"value": 10.2, "unit": "psia"}, {"value": 14.7, "unit": "psia"}], "values": [70.327, 101.353]}, "per_material": {"Mylar G": 70.327, "Ultem 1000": 70.327, "Nomex HT90-40": 101.353}},
+    "oxygen": {"words": "unstated", "normalized": "unstated"},
+    "flow": {"words": "unstated", "normalized": "unstated", "not_used": [{"item": "OF2012.table1", "field": "note", "words": "the body says the 0g values were obtained with a concurrent flow of 30 cm/s (p. 4)", "why": "in the item's note only"}]},
+    "material": {"words": [{"item": "OF2012.table1", "field": "text", "words": "Mylar G at 10.2 psia"}, {"item": "OF2012.table1", "field": "text", "words": "Ultem 1000 at 10.2 psia"}, {"item": "OF2012.table1", "field": "text", "words": "Nomex HT90-40 at 14.7 psia"}], "normalized": ["Mylar G", "Ultem 1000", "Nomex HT90-40"]},
+    "criterion": {"words": [{"item": "OF2012.table1", "field": "text", "words": "MOC* is the maximum oxygen concentration at which the flame self-extinguished during the drop, ULOI* the minimum at which it survived the full drop; these criteria are not the same as in 1g."}, {"item": "OF2012.uloi", "field": "quote", "words": "The 1g ULOI is defined as the oxygen concentration at which a material passes the NASA STD 6001 Test 1 burn length criterion approximately half the time."}], "normalized": "as_written"},
+    "geometry": {"words": "unstated", "normalized": "unstated"}
+   },
+   "needs": [],
+   "check": {
+    "kind": "recompute_published",
+    "description": "For every material row of OF2012.table1, recompute Eq. 1 for the three low-gravity levels from the four limits of that row and compare with the printed margin. Then compare the smallest printed margin per level over the three materials with the values of OF2012.margin.",
+    "item": "OF2012.table1",
+    "rows_key": "rows",
+    "label_key": "material",
+    "recompute": [
+     {"label": "martian", "expression": "(uloi_star_o2_pct_martian + moc_star_o2_pct_martian) / 2 - (uloi_o2_pct_1g + moc_o2_pct_1g) / 2", "printed": "delta_o2_pct_martian"},
+     {"label": "lunar", "expression": "(uloi_star_o2_pct_lunar + moc_star_o2_pct_lunar) / 2 - (uloi_o2_pct_1g + moc_o2_pct_1g) / 2", "printed": "delta_o2_pct_lunar"},
+     {"label": "0g", "expression": "(uloi_star_o2_pct_0g + moc_star_o2_pct_0g) / 2 - (uloi_o2_pct_1g + moc_o2_pct_1g) / 2", "printed": "delta_o2_pct_0g"}
+    ],
+    "aggregates": [
+     {"label": "martian smallest", "op": "min", "of": "delta_o2_pct_martian", "printed": {"item": "OF2012.margin", "key": "delta_o2_pct_martian_min"}},
+     {"label": "lunar smallest", "op": "min", "of": "delta_o2_pct_lunar", "printed": {"item": "OF2012.margin", "key": "delta_o2_pct_lunar_min"}},
+     {"label": "0g smallest", "op": "min", "of": "delta_o2_pct_0g", "printed": {"item": "OF2012.margin", "key": "delta_o2_pct_0g_min"}}
+    ],
+    "criterion": {
+     "text": "matches_published_table if every recomputed value differs from the printed value by at most half a unit of the printed value's last decimal, and every smallest printed margin equals the value of OF2012.margin; otherwise differs_from_published_table.",
+     "status_if_met": "matches_published_table",
+     "status_if_not_met": "differs_from_published_table"
+    }
+   },
+   "caption": {
+    "means": "The printed margins of Table I follow from the printed limits by Eq. 1 as the paper states it. Team arithmetic on published values.",
+    "does_not_mean": "It does not check the limits themselves. Each material was tested at one pressure, so the margins say nothing about another pressure. The low-gravity limits come from 5.18 s drop-tower tests whose criteria differ from the 1g criteria. The paper's Conclusions give 5.75 for Martian gravity while Table I gives it for Lunar; the card uses the table."
+   }
+  },
+  {
+   "id": "h2006_moc_vs_pressure",
+   "title": "Hirsch et al. 2006, MOC versus total pressure in normal gravity (Table 2)",
+   "source_items": ["H2006.table2", "H2006.depends", "H2006.pressures", "H2006.range"],
+   "in_our_references": true,
+   "statement": [
+    {"item": "H2006.depends", "field": "text", "words": "For the range of total pressures tested, the oxygen concentration and oxygen partial pressure flammability thresholds are a near linear function of total pressure; the thresholds depend on the total pressure."},
+    {"item": "H2006.range", "field": "text", "words": "The effect of total pressure on oxygen concentration flammability thresholds is greater for materials with higher thresholds"}
+   ],
+   "validity": {
+    "gravity": {"words": [{"item": "H2006.table2", "field": "text", "words": "normal gravity"}], "normalized": ["normal"]},
+    "pressure": {"words": [{"item": "H2006.range", "field": "quote", "words": "outside the 48.2 to 101.3 kPa (7 to 14.7 psia) range further testing is recommended"}], "normalized": {"kind": "range", "unit": "kPa", "as_written": [{"value": 48.2, "unit": "kPa"}, {"value": 101.3, "unit": "kPa"}], "min": 48.2, "max": 101.3, "min_inclusive": true, "max_inclusive": true}},
+    "oxygen": {"words": "unstated", "normalized": "unstated"},
+    "flow": {"words": [{"item": "H2006.table2", "field": "text", "words": "quiescent"}], "normalized": "unstated", "words_only": true},
+    "material": {"words": [{"item": "H2006.table2", "field": "values", "key": "moc_vol_pct_by_total_pressure_kpa"}], "normalized": ["PTFE", "Kel-F 81", "Silicone", "Zytel 42", "Viton A", "Buna S", "Neoprene", "Buna N", "EPDM Rubber", "Polyethylene", "Delrin"]},
+    "criterion": {"words": [{"item": "H2006.table2", "field": "text", "words": "Maximum oxygen concentration (MOC, vol %) which consistently results in self-extinguishment"}], "normalized": "as_written"},
+    "geometry": {"words": "unstated", "normalized": "unstated"}
+   },
+   "needs": ["fuel_phase", "material_id", "pressure_kpa", "gravity_level", "o2_pct", "test_end"],
+   "check": {
+    "kind": "pair_order_agreement",
+    "description": "Test the sentence of H2006.range on the paper's own Table 2: over all pairs of materials, compare the order of the MOC at 101.3 kPa with the order of the drop from 48.2 kPa to 101.3 kPa (team computation). A pair is concordant if the material with the higher MOC at 101.3 kPa also has the larger drop.",
+    "item": "H2006.table2",
+    "key": "moc_vol_pct_by_total_pressure_kpa",
+    "columns_key": "columns_kpa",
+    "x": {"expression": "c2", "label": "MOC at 101.3 kPa (the team's choice of the column that stands for 'higher thresholds')"},
+    "y": {"expression": "c0 - c2", "label": "MOC at 48.2 kPa minus MOC at 101.3 kPa (team computation)"},
+    "criterion": {
+     "text": "matches_published_table if concordant pairs outnumber discordant pairs; pairs tied on either order are counted apart and in neither. Otherwise differs_from_published_table.",
+     "status_if_met": "matches_published_table",
+     "status_if_not_met": "differs_from_published_table"
+    },
+    "tests_csv_note": {"filter": "fuel_phase == 'solid' and pressure_kpa.notna()", "label": "solid-fuel rows of tests.csv with a recorded pressure"}
+   },
+   "caption": {
+    "means": "Whether the paper's own Table 2 orders the materials as its sentence says. Team arithmetic on published values.",
+    "does_not_mean": "It is not a slope, not a fit and not a pressure law: three pressures per material, normal gravity, quiescent. PMMA and the cotton-fiberglass fabric are not in the table. Nothing in tests.csv can be compared with it: no solid-fuel row has a recorded pressure and every row is microgravity."
+   }
+  },
+  {
+   "id": "h2007_fixed_pressure",
+   "title": "Hirsch et al. 2007, oxygen thresholds at one fixed total pressure",
+   "source_items": ["H2007.fixedpressure"],
+   "in_our_references": true,
+   "statement": [
+    {"item": "H2007.fixedpressure", "field": "quote", "words": "The oxygen concentration flammability thresholds were determined at a fixed total pressure of 70.1 kPa."}
+   ],
+   "validity": {
+    "gravity": {"words": "unstated", "normalized": "unstated", "not_used": [{"item": "H2007.fixedpressure", "field": "note", "words": "Normal-gravity tests of materials that are not the BASS-II or Saffire materials, except Nomex HT90-40.", "why": "in the item's note only"}]},
+    "pressure": {"words": [{"item": "H2007.fixedpressure", "field": "quote", "words": "a fixed total pressure of 70.1 kPa"}], "normalized": {"kind": "points", "unit": "kPa", "as_written": [{"value": 70.1, "unit": "kPa"}], "values": [70.1]}},
+    "oxygen": {"words": "unstated", "normalized": "unstated"},
+    "flow": {"words": "unstated", "normalized": "unstated"},
+    "material": {"words": "unstated", "normalized": "unstated"},
+    "criterion": {"words": "unstated", "normalized": "unstated"},
+    "geometry": {"words": "unstated", "normalized": "unstated"}
+   },
+   "needs": [],
+   "check": {
+    "kind": "none",
+    "description": "The item holds a pressure and no threshold value; there is nothing to recompute or to compare. The script lists the value keys the item holds.",
+    "item": "H2007.fixedpressure",
+    "status": "not_testable_here"
+   },
+   "caption": {
+    "means": "The paper's thresholds stand at one pressure, 70.1 kPa.",
+    "does_not_mean": "The table of values of the paper is not transcribed in references.json, so no threshold of it is shown. One pressure gives no pressure dependence."
+   }
+  },
+  {
+   "id": "h2011_linear_moc",
+   "title": "Hirsch et al. 2011, approximately linear MOC versus total pressure (slope range)",
+   "source_items": ["H2011.linear", "H2011.cannot"],
+   "in_our_references": true,
+   "statement": [
+    {"item": "H2011.linear", "field": "where", "words": "the data indicate there is an approximately linear dependence of MOCs on total pressure Pt having the form: MOC = m Pt + b (1)"},
+    {"item": "H2011.linear", "field": "quote", "words": "The maximum slope was -0.975% oxygen/psia and the minimum was -0.251% oxygen/psia, with an average of -0.607% oxygen/psia."},
+    {"item": "H2011.cannot", "field": "quote", "words": "For at least one of the materials tested, the data indicate that a material with an MOC of 30% oxygen at 10.2 psia would fail NASA-STD-(I)-6001B Test 1 at 25.9% oxygen and 14.7 psia."}
+   ],
+   "validity": {
+    "gravity": {"words": "unstated", "normalized": "unstated", "not_used": [{"item": "H2011.linear", "field": "note", "words": "Materials with MOC in the range 25-35% oxygen, normal gravity.", "why": "in the item's note only"}]},
+    "pressure": {"words": "unstated", "normalized": "unstated", "not_used": [{"item": "H2011.cannot", "field": "quote", "words": "an MOC of 30% oxygen at 10.2 psia would fail NASA-STD-(I)-6001B Test 1 at 25.9% oxygen and 14.7 psia", "why": "the two pressures of one example pair, not the pressure range of the fitted form, which no item states"}]},
+    "oxygen": {"words": "unstated", "normalized": "unstated"},
+    "flow": {"words": "unstated", "normalized": "unstated"},
+    "material": {"words": [{"item": "H2011.linear", "field": "text", "words": "For materials with MOC in the range 25-35% oxygen"}], "normalized": "unstated", "words_only": true},
+    "criterion": {"words": "unstated", "normalized": "unstated"},
+    "geometry": {"words": "unstated", "normalized": "unstated"}
+   },
+   "needs": [],
+   "check": {
+    "kind": "value_in_published_range",
+    "description": "Compute the slope between the two points of the published example pair (team computation) and check whether it lies inside the published slope range, ends included; also check that the published average lies inside.",
+    "bind": {
+     "o2_a": "H2011.cannot:moc_o2_pct",
+     "p_a": "H2011.cannot:moc_pressure_psia",
+     "o2_b": "H2011.cannot:fail_o2_pct",
+     "p_b": "H2011.cannot:fail_pressure_psia"
+    },
+    "expression": "(o2_b - o2_a) / (p_b - p_a)",
+    "unit": "% oxygen per psia",
+    "range_bounds": ["H2011.linear:moc_slope_pct_o2_per_psia_max", "H2011.linear:moc_slope_pct_o2_per_psia_min"],
+    "also_inside": ["H2011.linear:moc_slope_pct_o2_per_psia_avg"],
+    "criterion": {
+     "text": "matches_published_table if the computed slope and the published average both lie inside the range spanned by the two published slope bounds, ends included; otherwise differs_from_published_table.",
+     "status_if_met": "matches_published_table",
+     "status_if_not_met": "differs_from_published_table"
+    }
+   },
+   "caption": {
+    "means": "The example pair of the paper is consistent with the slope range the same paper prints. Team arithmetic on published values.",
+    "does_not_mean": "25.9% at 14.7 psia is where the material would fail Test 1, not a second MOC, so the pair is not two MOCs of one material. The material is not named. The intercept b and the pressure range of the form are not held; no MOC is computed for any other pressure. The slopes are a summary of an earlier paper that was not reached. The decision brief wrote 0.911 %/psia as a magnitude; the signed value is negative."
+   }
+  },
+  {
+   "id": "bass2_flammability_boundary",
+   "title": "BASS-II flammability boundary in oxygen and flow, and its published minimum oxygen values",
+   "source_items": ["ICES19.boundary", "ICES19.limits", "ICES19.pressure", "ICES19.issflow", "ICES19.goal"],
+   "in_our_references": true,
+   "statement": [
+    {"item": "ICES19.boundary", "field": "text", "words": "The flammability boundary is expressed in oxygen concentration and flow velocity, with a quenching branch at low flow and a blowoff branch at high flow."},
+    {"item": "ICES19.limits", "field": "text", "words": "BASS-II PMMA: minimum oxygen concentration in the flammability boundary from the concurrent (stagnation-flow) rod tests 13.6% O2; minimum flammable value for the opposed-flow rods 16.3% O2 (no comparable boundary was obtained for opposed flow)"}
+   ],
+   "validity": {
+    "gravity": {"words": [{"item": "ICES19.goal", "field": "quote", "words": "forced convective flows in microgravity"}], "normalized": ["microgravity"]},
+    "pressure": {"words": [{"item": "ICES19.pressure", "field": "quote", "words": "Pressure was not varied from 1 atmosphere."}], "normalized": {"kind": "points", "unit": "kPa", "as_written": [{"value": 1, "unit": "atm"}], "values": [101.325]}},
+    "oxygen": {"words": [{"item": "ICES19.pressure", "field": "text", "words": "BASS-II varied oxygen from 13% to 22% by nitrogen dilution"}], "normalized": {"kind": "range", "unit": "%", "as_written": [{"value": 13, "unit": "%"}, {"value": 22, "unit": "%"}], "min": 13, "max": 22, "min_inclusive": true, "max_inclusive": true}},
+    "flow": {"words": "unstated", "normalized": "unstated", "not_used": [{"item": "ICES19.issflow", "field": "quote", "words": "the normal ISS ventilation flow velocity range is 5-30 cm/s", "why": "a design value of the ISS, not the flow range of the tests behind the boundary, which no item states"}]},
+    "material": {"words": [{"item": "ICES19.limits", "field": "text", "words": "BASS-II PMMA"}], "normalized": ["PMMA"]},
+    "criterion": {"words": [{"item": "ICES19.limits", "field": "text", "words": "minimum oxygen concentration in the flammability boundary"}], "normalized": "unstated", "words_only": true},
+    "geometry": {"words": [{"item": "ICES19.limits", "field": "text", "words": "concurrent (stagnation-flow) rod tests"}, {"item": "ICES19.limits", "field": "text", "words": "opposed-flow rods"}], "normalized": "as_written"}
+   },
+   "needs": ["source_id", "material_id", "sample_geometry", "o2_pct", "o2_final_pct", "flow_cms", "flow_event", "flow_direction", "pressure_kpa"],
+   "check": {
+    "kind": "recorded_facts",
+    "description": "List what the BASS-II rows of tests.csv record on the two axes of the boundary, and which rows carry the published minimum values, without drawing a boundary.",
+    "status": "not_testable_here",
+    "status_reason": "The items give no curve values and no equation for either branch; tests.csv has no flow_direction for any BASS-II row, so concurrent and opposed rods cannot be told apart; no BASS-II row has a recorded pressure.",
+    "facts": [
+     {"id": "bass2_rows", "op": "count", "filter": "source_id == 'bass2'"},
+     {"id": "rows_with_o2_and_flow", "op": "count", "filter": "source_id == 'bass2' and o2_pct.notna() and flow_cms.notna()"},
+     {"id": "rows_with_pressure", "op": "count", "filter": "source_id == 'bass2' and pressure_kpa.notna()"},
+     {"id": "rows_with_flow_direction", "op": "count", "filter": "source_id == 'bass2' and flow_direction.notna()"},
+     {"id": "flow_event_counts", "op": "value_counts", "column": "flow_event", "filter": "source_id == 'bass2' and flow_event.notna()"},
+     {"id": "pmma_rod_rows", "op": "count", "filter": "source_id == 'bass2' and material_id == 'pmma' and sample_geometry == 'rod'"},
+     {"id": "pmma_rod_lowest_o2", "op": "min", "column": "o2_pct", "filter": "source_id == 'bass2' and material_id == 'pmma' and sample_geometry == 'rod'", "carry": ["o2_final_pct", "flow_cms", "flow_event"]},
+     {"id": "rows_at_published_concurrent_minimum", "op": "rows", "filter": "source_id == 'bass2' and (o2_pct == @v or o2_final_pct == @v)", "bind": {"v": "ICES19.limits:o2_pct_min_concurrent_rod"}, "carry": ["material_id", "sample_geometry", "o2_pct", "o2_final_pct", "flow_cms", "flow_event"]},
+     {"id": "rows_at_published_opposed_minimum", "op": "rows", "filter": "source_id == 'bass2' and (o2_pct == @v or o2_final_pct == @v)", "bind": {"v": "ICES19.limits:o2_pct_min_opposed_rod"}, "carry": ["material_id", "sample_geometry", "o2_pct", "o2_final_pct", "flow_cms", "flow_event"]},
+     {"id": "pmma_rod_flow_inside_iss_range", "op": "count", "filter": "source_id == 'bass2' and material_id == 'pmma' and sample_geometry == 'rod' and flow_cms >= @lo and flow_cms <= @hi", "bind": {"lo": "ICES19.issflow:flow_cms_range.0", "hi": "ICES19.issflow:flow_cms_range.1"}},
+     {"id": "pmma_rod_flow_at_lower_end_of_iss_range", "op": "count", "filter": "source_id == 'bass2' and material_id == 'pmma' and sample_geometry == 'rod' and flow_cms == @lo", "bind": {"lo": "ICES19.issflow:flow_cms_range.0"}},
+     {"id": "pmma_rod_flow_below_iss_range", "op": "count", "filter": "source_id == 'bass2' and material_id == 'pmma' and sample_geometry == 'rod' and flow_cms < @lo", "bind": {"lo": "ICES19.issflow:flow_cms_range.0"}},
+     {"id": "blowoff_rows", "op": "rows", "filter": "source_id == 'bass2' and flow_event == 'blowoff'", "carry": ["material_id", "sample_geometry", "o2_pct", "flow_cms"]}
+    ]
+   },
+   "caption": {
+    "means": "What the recorded BASS-II rows hold on the oxygen and flow axes of the published boundary, and which rows share the published minimum values. Team counts over NASA cells.",
+    "does_not_mean": "No boundary is drawn or fitted and no row is assigned to the concurrent or the opposed value: that mapping is the paper's, not the team's. A row without an event word is not a row that burned steadily. The published values stand at 1 atm, in microgravity, for PMMA rods; the 1g values of ICES19.limits (17 and 15.4) are normal-gravity statements of the same item and are outside this card's gravity axis."
+   }
+  },
+  {
+   "id": "flex_loi",
+   "title": "FLEX limiting oxygen index of methanol and heptane droplets (published values), beside the lowest oxygen recorded",
+   "source_items": ["MST14.loi", "FLEX.loi", "FLEX.mec", "TP216046.loi"],
+   "in_our_references": true,
+   "statement": [
+    {"item": "MST14.loi", "field": "text", "words": "LOI in oxygen/nitrogen: 0.12 for methanol and 0.15 for heptane; with carbon dioxide dispersed into air at 1 atm: about 0.14 and 0.17."},
+    {"item": "FLEX.loi", "field": "text", "words": "Limiting Oxygen Index (LOI): the oxygen mole fraction below which a steady flame cannot exist for a given material and ambient condition."},
+    {"item": "FLEX.mec", "field": "text", "words": "LOI = 0.209 (1 - MEC)."},
+    {"item": "TP216046.loi", "field": "quote", "words": "A principle objective was to determine the limiting oxygen index (LOI), the oxygen percentage below which combustion would not occur."}
+   ],
+   "validity": {
+    "gravity": {"words": "unstated", "normalized": "unstated", "not_used": [{"item": "FLEX.objective1", "field": "quote", "words": "in reduced gravity", "why": "an objective of the requirements document, not a statement of MST14.loi; 'reduced gravity' is kept as words"}]},
+    "pressure": {"words": [{"item": "MST14.loi", "field": "text", "words": "with carbon dioxide dispersed into air at 1 atm"}], "normalized": {"kind": "points", "unit": "kPa", "as_written": [{"value": 1, "unit": "atm"}], "values": [101.325]}, "scope": "the item states 1 atm for the values with carbon dioxide; for the oxygen/nitrogen values it states no pressure"},
+    "oxygen": {"words": "unstated", "normalized": "unstated"},
+    "flow": {"words": "unstated", "normalized": "unstated"},
+    "material": {"words": [{"item": "MST14.loi", "field": "text", "words": "0.12 for methanol and 0.15 for heptane"}], "normalized": ["methanol", "heptane"]},
+    "criterion": {"words": [{"item": "FLEX.loi", "field": "text", "words": "the oxygen mole fraction below which a steady flame cannot exist for a given material and ambient condition"}], "normalized": "unstated", "words_only": true, "remark": "the definition of the 2005 requirements document; the criterion used for the values of MST14.loi is not in the item (abstract only)"},
+    "geometry": {"words": "unstated", "normalized": "unstated"}
+   },
+   "needs": ["source_id", "fuel_material", "o2_pct", "co2_pct", "he_pct", "pressure_kpa", "test_end"],
+   "check": {
+    "kind": "recorded_facts",
+    "description": "Show the published LOI values beside the lowest oxygen recorded in the FLEX rows per fuel, with nitrogen only and with carbon dioxide added, and the test end recorded at that oxygen.",
+    "status": "not_testable_here",
+    "status_reason": "The lowest oxygen tested is not an LOI: no lower oxygen was run in the table, the criterion behind the published values was not read (abstract only), and 'extinction' in test_end is how a droplet burn ended, which happens over the whole oxygen range. FLEX.mec is not applied: no item states that MEC equals the co2_pct column.",
+    "published": [
+     {"item": "MST14.loi", "key": "loi_methanol_n2", "scale": 100, "unit": "%"},
+     {"item": "MST14.loi", "key": "loi_heptane_n2", "scale": 100, "unit": "%"},
+     {"item": "MST14.loi", "key": "loi_methanol_co2", "scale": 100, "unit": "%"},
+     {"item": "MST14.loi", "key": "loi_heptane_co2", "scale": 100, "unit": "%"}
+    ],
+    "facts": [
+     {"id": "flex_rows", "op": "count", "filter": "source_id == 'flex'"},
+     {"id": "test_end_counts", "op": "value_counts", "column": "test_end", "filter": "source_id == 'flex'"},
+     {"id": "lowest_o2_nitrogen_only_by_fuel", "op": "min_by_group", "group": "fuel_material", "column": "o2_pct", "filter": "source_id == 'flex' and co2_pct == 0 and he_pct == 0", "carry": ["pressure_kpa", "test_end"]},
+     {"id": "lowest_o2_with_co2_by_fuel", "op": "min_by_group", "group": "fuel_material", "column": "o2_pct", "filter": "source_id == 'flex' and co2_pct > 0 and he_pct == 0", "carry": ["co2_pct", "pressure_kpa", "test_end"]}
+    ]
+   },
+   "caption": {
+    "means": "The published LOI values and the lowest oxygen in the FLEX table, side by side, each with its source. Scaling a mole fraction by 100 to a percentage is team arithmetic.",
+    "does_not_mean": "The lowest oxygen tested is not an LOI. No lower oxygen was run. The criterion behind the published values was not read (abstract only). No LOI is estimated from the table and no boundary is fitted."
+   }
+  },
+  {
+   "id": "droplet_d_squared",
+   "title": "d-squared form of droplet burning, checked as a relation between recorded FLEX columns",
+   "source_items": ["TP216046.columns"],
+   "in_our_references": false,
+   "not_in_our_references_note": "No item of references.json states the d-squared form (d^2 = d0^2 - K t). The team wrote it from general knowledge of combustion. TP216046.columns is held only as the pointer to the column definitions of the FLEX table and does not state the form. The script searches every item for the words listed under 'absence_search' and stops if one is found.",
+   "statement": [
+    {"item": "TP216046.columns", "field": "text", "words": "Meaning and units of the FLEX data columns (Appendix A.1, Table IX)."}
+   ],
+   "validity": {
+    "gravity": {"words": "unstated", "normalized": "unstated"},
+    "pressure": {"words": "unstated", "normalized": "unstated"},
+    "oxygen": {"words": "unstated", "normalized": "unstated"},
+    "flow": {"words": "unstated", "normalized": "unstated"},
+    "material": {"words": "unstated", "normalized": "unstated"},
+    "criterion": {"words": "unstated", "normalized": "unstated"},
+    "geometry": {"words": "unstated", "normalized": "unstated"}
+   },
+   "needs": ["source_id", "fuel_material", "initial_diameter_mm", "extinction_diameter_mm", "burning_rate_mm2_s", "burn_time_s", "test_end"],
+   "check": {
+    "kind": "expression_ratio",
+    "description": "For every FLEX row with an initial diameter, an extinction diameter above zero and below the initial one, a burning rate above zero and a burn time above zero, compute burn_time_s / ((d0^2 - d_ext^2) / K) (team computation; K read as mm2/s, as the team reads the column). Under the d-squared form with a constant K the ratio is 1.",
+    "absence_search": ["squared", "d^2", "d2-law", "d2 law", "d-squared"],
+    "filter": "source_id == 'flex' and initial_diameter_mm > 0 and extinction_diameter_mm > 0 and extinction_diameter_mm < initial_diameter_mm and burning_rate_mm2_s > 0 and burn_time_s > 0",
+    "expression": "burn_time_s / ((initial_diameter_mm ** 2 - extinction_diameter_mm ** 2) / burning_rate_mm2_s)",
+    "expression_label": "burn_time_s / ((initial_diameter_mm^2 - extinction_diameter_mm^2) / burning_rate_mm2_s)",
+    "bands": [0.1, 0.2, 0.5],
+    "group_by": ["fuel_material", "test_end"],
+    "extremes": 3,
+    "criterion": {
+     "text": "columns_consistent_with_form if the median ratio lies within the median band of 1 and at least the given share of rows lies within the share band of 1; otherwise inconsistent. Both are team parameters, written after the scouts' numbers were seen.",
+     "median_band": 0.1,
+     "share_band": 0.2,
+     "min_share": 0.75,
+     "status_if_met": "columns_consistent_with_form",
+     "status_if_not_met": "inconsistent"
+    },
+    "placebo": {
+     "column": "burning_rate_mm2_s",
+     "permutation": "reverse_within_group",
+     "group": "fuel_material",
+     "order_by": ["source_row"],
+     "description": "The same computation on the same rows, with the burning-rate values reversed in order within each fuel (rows ordered by source_row). Every row keeps its own diameters and burn time and gets the burning rate of another test of the same fuel. If the check discriminates, the placebo should fall short of the criterion."
+    }
+   },
+   "caption": {
+    "means": "Consistent with the table means the recorded columns agree with each other under the d-squared form. Team computation, not a NASA conclusion.",
+    "does_not_mean": "This is not a test of a physical law: K is itself a reported value of the same experiment, and the form is not stated by any document we hold. The placebo shows how much of the agreement disappears when K is taken from another test of the same fuel."
+   }
+  },
+  {
+   "id": "cfi_droplet",
+   "title": "Cool-flame droplet extinction (CFI): extinction diameter as a measure of kinetic times",
+   "source_items": ["CFI14.extinction", "CFI14.motivation"],
+   "in_our_references": true,
+   "statement": [
+    {"item": "CFI14.extinction", "field": "quote", "words": "the droplet extinction diameter provides a stringent measurement of chemical-kinetic characteristic times"},
+    {"item": "CFI14.motivation", "field": "quote", "words": "Understanding the combustion characteristics of liquid hydrocarbon fuels is of practical and fundamental importance."}
+   ],
+   "validity": {
+    "gravity": {"words": "unstated", "normalized": "unstated"},
+    "pressure": {"words": "unstated", "normalized": "unstated"},
+    "oxygen": {"words": "unstated", "normalized": "unstated"},
+    "flow": {"words": "unstated", "normalized": "unstated"},
+    "material": {"words": "unstated", "normalized": "unstated"},
+    "criterion": {"words": "unstated", "normalized": "unstated"},
+    "geometry": {"words": [{"item": "CFI14.extinction", "field": "quote", "words": "droplet"}], "normalized": "as_written"}
+   },
+   "needs": ["source_id", "initial_diameter_mm", "extinction_diameter_mm", "burning_rate_mm2_s", "burn_time_s", "test_end"],
+   "check": {
+    "kind": "columns_present",
+    "description": "Count the CFI rows of tests.csv that hold any of the outcome columns the statement is about.",
+    "filter": "source_id == 'cfi'",
+    "columns": ["initial_diameter_mm", "extinction_diameter_mm", "burning_rate_mm2_s", "burn_time_s", "test_end"],
+    "criterion": {
+     "text": "not_testable_here if no row of the filter holds any of the columns.",
+     "status_if_none": "not_testable_here"
+    }
+   },
+   "caption": {
+    "means": "The CFI table in tests.csv holds conditions only (fuel, pressure, oxygen, helium).",
+    "does_not_mean": "It says nothing about the experiment's raw data, which PSI lists by file name and which was not read. The stated motivation of the paper is liquid-fuel combustion, not fire safety."
+   }
+  }
+ ]
+}

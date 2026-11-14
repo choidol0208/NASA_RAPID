@@ -1,0 +1,692 @@
+{
+ "_meta": {
+  "generated_by": "pipeline/lab/range_gate.py (AI-generated code, branch data-lab, experiment, not reviewed). Deterministic: no timestamps.",
+  "inputs": [
+   "pipeline/spec/relation_cards.json",
+   "pipeline/spec/references.json",
+   "pipeline/spec/scenarios.json",
+   "pipeline/spec/coverage.json",
+   "data/pipeline/coverage_grid.csv"
+  ],
+  "axis_values": {
+   "inside": "the scenario sets a range (or a gravity level) and every value of it lies inside what the card states",
+   "outside": "the scenario's range is not contained in what the card states (overlap 'partial' or 'none' is given); the card's verbatim words are shown",
+   "card_unstated": "the card's items state nothing on this axis",
+   "scenario_unstated": "the card states the axis and the scenario sets no range or level for it"
+  },
+  "containment_rule": "A range of the scenario is inside a range of the card only if both of its ends lie inside, with the inclusive flags (scenario ranges: a minimum is included and a maximum is not unless the scenario says otherwise; an open end lies inside only an open end). A card that states single values (points) contains no scenario range, because no scenario range is a single value. Gravity is inside if the scenario's level is one of the card's levels.",
+  "overall": [
+   [
+    "not_applicable",
+    "the card is not in our references"
+   ],
+   [
+    "outside_stated_range",
+    "at least one compared axis is outside"
+   ],
+   [
+    "not_applicable",
+    "gravity is card_unstated or scenario_unstated"
+   ],
+   [
+    "may_be_quoted_here",
+    "no compared axis is outside and gravity is inside"
+   ]
+  ],
+  "overall_note": "may_be_quoted_here says only that no range stated by the card excludes the scenario. Axes that the card does not state do not block it and are named in the sentence. It is not a judgement of the condition.",
+  "range_notation": "[a, b] includes both ends, (a, b) neither; -inf or +inf marks an end the range does not set."
+ },
+ "scenario": {
+  "id": "exploration_8_2_34",
+  "label": "Exploration atmosphere 8.2 psia / 34% O2",
+  "ranges": {
+   "o2_pct": {
+    "min": 32,
+    "max": 36,
+    "max_inclusive": true
+   },
+   "pressure_kpa": {
+    "min": null,
+    "max": 62.8
+   }
+  },
+  "gravity_level": null
+ },
+ "headline": {
+  "result": "no_held_relation_covers_this_condition",
+  "may_be_quoted_here": [],
+  "outside_stated_range": 5,
+  "not_applicable": 4,
+  "sentence": "No held relation covers this condition. Of the 9 cards, none may be quoted for the Exploration atmosphere 8.2 psia / 34% O2 scenario: 5 outside a stated range, 4 not comparable."
+ },
+ "cards": [
+  {
+   "card_id": "bass2_co_co2_ratio",
+   "title": "CO/CO2 molar ratio range of BASS-II microgravity flames",
+   "in_our_references": true,
+   "axes": [
+    {
+     "axis": "oxygen",
+     "scenario": "[32, 36] %",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "pressure",
+     "scenario": "(-inf, 62.8) kPa",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "gravity",
+     "scenario": null,
+     "card": [
+      "microgravity"
+     ],
+     "result": "scenario_unstated",
+     "card_words": "microgravity flames",
+     "card_items": [
+      "ICES19.coratio"
+     ]
+    },
+    {
+     "axis": "flow",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    }
+   ],
+   "shown_not_compared": {
+    "material": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    },
+    "criterion": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    },
+    "geometry": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    }
+   },
+   "overall": "not_applicable",
+   "reason": "gravity_scenario_unstated",
+   "sentence": "CO/CO2 molar ratio range of BASS-II microgravity flames (bass2_co_co2_ratio) is not placed for the Exploration atmosphere 8.2 psia / 34% O2 scenario: the scenario sets no gravity level, so the gate does not let the card be quoted. Axes: oxygen card_unstated; pressure card_unstated; gravity scenario_unstated; flow card_unstated."
+  },
+  {
+   "card_id": "of2012_gravity_margin",
+   "title": "Olson and Ferkul 2012, Eq. 1 oxygen margin by gravity level, recomputed from their Table I",
+   "in_our_references": true,
+   "axes": [
+    {
+     "axis": "oxygen",
+     "scenario": "[32, 36] %",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "pressure",
+     "scenario": "(-inf, 62.8) kPa",
+     "card": "the single values 70.327, 101.353 kPa",
+     "result": "outside",
+     "overlap": "none",
+     "card_words": "Mylar G at 10.2 psia / Ultem 1000 at 10.2 psia / Nomex HT90-40 at 14.7 psia",
+     "card_items": [
+      "OF2012.table1"
+     ]
+    },
+    {
+     "axis": "gravity",
+     "scenario": null,
+     "card": [
+      "normal",
+      "martian",
+      "lunar",
+      "microgravity"
+     ],
+     "result": "scenario_unstated",
+     "card_words": "1g ULOI 21.2 / Martian ULOI* 18.0 / Lunar ULOI* 15.6 / 0g ULOI* 17.0",
+     "card_items": [
+      "OF2012.table1"
+     ]
+    },
+    {
+     "axis": "flow",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    }
+   ],
+   "shown_not_compared": {
+    "material": {
+     "card_words": "Mylar G at 10.2 psia / Ultem 1000 at 10.2 psia / Nomex HT90-40 at 14.7 psia",
+     "card_items": [
+      "OF2012.table1"
+     ],
+     "normalized": [
+      "Mylar G",
+      "Ultem 1000",
+      "Nomex HT90-40"
+     ]
+    },
+    "criterion": {
+     "card_words": "MOC* is the maximum oxygen concentration at which the flame self-extinguished during the drop, ULOI* the minimum at which it survived the full drop; these criteria are not the same as in 1g. / The 1g ULOI is defined as the oxygen concentration at which a material passes the NASA STD 6001 Test 1 burn length criterion approximately half the time.",
+     "card_items": [
+      "OF2012.table1",
+      "OF2012.uloi"
+     ],
+     "normalized": "as_written"
+    },
+    "geometry": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    }
+   },
+   "overall": "outside_stated_range",
+   "reason": "axis_outside",
+   "sentence": "Olson and Ferkul 2012, Eq. 1 oxygen margin by gravity level, recomputed from their Table I (of2012_gravity_margin) is outside its stated range for the Exploration atmosphere 8.2 psia / 34% O2 scenario. pressure: the scenario sets (-inf, 62.8) kPa; the card states \"Mylar G at 10.2 psia / Ultem 1000 at 10.2 psia / Nomex HT90-40 at 14.7 psia\" (OF2012.table1), read as the single values 70.327, 101.353 kPa, overlap none. The card's values are not carried to this condition."
+  },
+  {
+   "card_id": "h2006_moc_vs_pressure",
+   "title": "Hirsch et al. 2006, MOC versus total pressure in normal gravity (Table 2)",
+   "in_our_references": true,
+   "axes": [
+    {
+     "axis": "oxygen",
+     "scenario": "[32, 36] %",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "pressure",
+     "scenario": "(-inf, 62.8) kPa",
+     "card": "[48.2, 101.3] kPa",
+     "result": "outside",
+     "overlap": "partial",
+     "card_words": "outside the 48.2 to 101.3 kPa (7 to 14.7 psia) range further testing is recommended",
+     "card_items": [
+      "H2006.range"
+     ]
+    },
+    {
+     "axis": "gravity",
+     "scenario": null,
+     "card": [
+      "normal"
+     ],
+     "result": "scenario_unstated",
+     "card_words": "normal gravity",
+     "card_items": [
+      "H2006.table2"
+     ]
+    },
+    {
+     "axis": "flow",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated",
+     "card_words": "quiescent",
+     "card_items": [
+      "H2006.table2"
+     ],
+     "card_words_only": true
+    }
+   ],
+   "shown_not_compared": {
+    "material": {
+     "card_words": "values key moc_vol_pct_by_total_pressure_kpa",
+     "card_items": [
+      "H2006.table2"
+     ],
+     "normalized": [
+      "PTFE",
+      "Kel-F 81",
+      "Silicone",
+      "Zytel 42",
+      "Viton A",
+      "Buna S",
+      "Neoprene",
+      "Buna N",
+      "EPDM Rubber",
+      "Polyethylene",
+      "Delrin"
+     ]
+    },
+    "criterion": {
+     "card_words": "Maximum oxygen concentration (MOC, vol %) which consistently results in self-extinguishment",
+     "card_items": [
+      "H2006.table2"
+     ],
+     "normalized": "as_written"
+    },
+    "geometry": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    }
+   },
+   "overall": "outside_stated_range",
+   "reason": "axis_outside",
+   "sentence": "Hirsch et al. 2006, MOC versus total pressure in normal gravity (Table 2) (h2006_moc_vs_pressure) is outside its stated range for the Exploration atmosphere 8.2 psia / 34% O2 scenario. pressure: the scenario sets (-inf, 62.8) kPa; the card states \"outside the 48.2 to 101.3 kPa (7 to 14.7 psia) range further testing is recommended\" (H2006.range), read as [48.2, 101.3] kPa, overlap partial. The card's values are not carried to this condition."
+  },
+  {
+   "card_id": "h2007_fixed_pressure",
+   "title": "Hirsch et al. 2007, oxygen thresholds at one fixed total pressure",
+   "in_our_references": true,
+   "axes": [
+    {
+     "axis": "oxygen",
+     "scenario": "[32, 36] %",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "pressure",
+     "scenario": "(-inf, 62.8) kPa",
+     "card": "the single value 70.1 kPa",
+     "result": "outside",
+     "overlap": "none",
+     "card_words": "a fixed total pressure of 70.1 kPa",
+     "card_items": [
+      "H2007.fixedpressure"
+     ]
+    },
+    {
+     "axis": "gravity",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "flow",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    }
+   ],
+   "shown_not_compared": {
+    "material": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    },
+    "criterion": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    },
+    "geometry": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    }
+   },
+   "overall": "outside_stated_range",
+   "reason": "axis_outside",
+   "sentence": "Hirsch et al. 2007, oxygen thresholds at one fixed total pressure (h2007_fixed_pressure) is outside its stated range for the Exploration atmosphere 8.2 psia / 34% O2 scenario. pressure: the scenario sets (-inf, 62.8) kPa; the card states \"a fixed total pressure of 70.1 kPa\" (H2007.fixedpressure), read as the single value 70.1 kPa, overlap none. The card's values are not carried to this condition."
+  },
+  {
+   "card_id": "h2011_linear_moc",
+   "title": "Hirsch et al. 2011, approximately linear MOC versus total pressure (slope range)",
+   "in_our_references": true,
+   "axes": [
+    {
+     "axis": "oxygen",
+     "scenario": "[32, 36] %",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "pressure",
+     "scenario": "(-inf, 62.8) kPa",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "gravity",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "flow",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    }
+   ],
+   "shown_not_compared": {
+    "material": {
+     "card_words": "For materials with MOC in the range 25-35% oxygen",
+     "card_items": [
+      "H2011.linear"
+     ],
+     "normalized": "unstated"
+    },
+    "criterion": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    },
+    "geometry": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    }
+   },
+   "overall": "not_applicable",
+   "reason": "gravity_card_unstated",
+   "sentence": "Hirsch et al. 2011, approximately linear MOC versus total pressure (slope range) (h2011_linear_moc) is not placed for the Exploration atmosphere 8.2 psia / 34% O2 scenario: the card's items state no gravity level, so the gate does not let it be quoted. Axes: oxygen card_unstated; pressure card_unstated; gravity card_unstated; flow card_unstated."
+  },
+  {
+   "card_id": "bass2_flammability_boundary",
+   "title": "BASS-II flammability boundary in oxygen and flow, and its published minimum oxygen values",
+   "in_our_references": true,
+   "axes": [
+    {
+     "axis": "oxygen",
+     "scenario": "[32, 36] %",
+     "card": "[13, 22] %",
+     "result": "outside",
+     "overlap": "none",
+     "card_words": "BASS-II varied oxygen from 13% to 22% by nitrogen dilution",
+     "card_items": [
+      "ICES19.pressure"
+     ]
+    },
+    {
+     "axis": "pressure",
+     "scenario": "(-inf, 62.8) kPa",
+     "card": "the single value 101.325 kPa",
+     "result": "outside",
+     "overlap": "none",
+     "card_words": "Pressure was not varied from 1 atmosphere.",
+     "card_items": [
+      "ICES19.pressure"
+     ]
+    },
+    {
+     "axis": "gravity",
+     "scenario": null,
+     "card": [
+      "microgravity"
+     ],
+     "result": "scenario_unstated",
+     "card_words": "forced convective flows in microgravity",
+     "card_items": [
+      "ICES19.goal"
+     ]
+    },
+    {
+     "axis": "flow",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    }
+   ],
+   "shown_not_compared": {
+    "material": {
+     "card_words": "BASS-II PMMA",
+     "card_items": [
+      "ICES19.limits"
+     ],
+     "normalized": [
+      "PMMA"
+     ]
+    },
+    "criterion": {
+     "card_words": "minimum oxygen concentration in the flammability boundary",
+     "card_items": [
+      "ICES19.limits"
+     ],
+     "normalized": "unstated"
+    },
+    "geometry": {
+     "card_words": "concurrent (stagnation-flow) rod tests / opposed-flow rods",
+     "card_items": [
+      "ICES19.limits"
+     ],
+     "normalized": "as_written"
+    }
+   },
+   "overall": "outside_stated_range",
+   "reason": "axis_outside",
+   "sentence": "BASS-II flammability boundary in oxygen and flow, and its published minimum oxygen values (bass2_flammability_boundary) is outside its stated range for the Exploration atmosphere 8.2 psia / 34% O2 scenario. oxygen: the scenario sets [32, 36] %; the card states \"BASS-II varied oxygen from 13% to 22% by nitrogen dilution\" (ICES19.pressure), read as [13, 22] %, overlap none. pressure: the scenario sets (-inf, 62.8) kPa; the card states \"Pressure was not varied from 1 atmosphere.\" (ICES19.pressure), read as the single value 101.325 kPa, overlap none. The card's values are not carried to this condition."
+  },
+  {
+   "card_id": "flex_loi",
+   "title": "FLEX limiting oxygen index of methanol and heptane droplets (published values), beside the lowest oxygen recorded",
+   "in_our_references": true,
+   "axes": [
+    {
+     "axis": "oxygen",
+     "scenario": "[32, 36] %",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "pressure",
+     "scenario": "(-inf, 62.8) kPa",
+     "card": "the single value 101.325 kPa",
+     "result": "outside",
+     "overlap": "none",
+     "card_words": "with carbon dioxide dispersed into air at 1 atm",
+     "card_items": [
+      "MST14.loi"
+     ]
+    },
+    {
+     "axis": "gravity",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "flow",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    }
+   ],
+   "shown_not_compared": {
+    "material": {
+     "card_words": "0.12 for methanol and 0.15 for heptane",
+     "card_items": [
+      "MST14.loi"
+     ],
+     "normalized": [
+      "methanol",
+      "heptane"
+     ]
+    },
+    "criterion": {
+     "card_words": "the oxygen mole fraction below which a steady flame cannot exist for a given material and ambient condition",
+     "card_items": [
+      "FLEX.loi"
+     ],
+     "normalized": "unstated"
+    },
+    "geometry": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    }
+   },
+   "overall": "outside_stated_range",
+   "reason": "axis_outside",
+   "sentence": "FLEX limiting oxygen index of methanol and heptane droplets (published values), beside the lowest oxygen recorded (flex_loi) is outside its stated range for the Exploration atmosphere 8.2 psia / 34% O2 scenario. pressure: the scenario sets (-inf, 62.8) kPa; the card states \"with carbon dioxide dispersed into air at 1 atm\" (MST14.loi), read as the single value 101.325 kPa, overlap none. The card's values are not carried to this condition."
+  },
+  {
+   "card_id": "droplet_d_squared",
+   "title": "d-squared form of droplet burning, checked as a relation between recorded FLEX columns",
+   "in_our_references": false,
+   "axes": [
+    {
+     "axis": "oxygen",
+     "scenario": "[32, 36] %",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "pressure",
+     "scenario": "(-inf, 62.8) kPa",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "gravity",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "flow",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    }
+   ],
+   "shown_not_compared": {
+    "material": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    },
+    "criterion": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    },
+    "geometry": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    }
+   },
+   "overall": "not_applicable",
+   "reason": "not_in_our_references",
+   "sentence": "d-squared form of droplet burning, checked as a relation between recorded FLEX columns (droplet_d_squared) is not compared with the Exploration atmosphere 8.2 psia / 34% O2 scenario: no document of our reference list states this relation."
+  },
+  {
+   "card_id": "cfi_droplet",
+   "title": "Cool-flame droplet extinction (CFI): extinction diameter as a measure of kinetic times",
+   "in_our_references": true,
+   "axes": [
+    {
+     "axis": "oxygen",
+     "scenario": "[32, 36] %",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "pressure",
+     "scenario": "(-inf, 62.8) kPa",
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "gravity",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    },
+    {
+     "axis": "flow",
+     "scenario": null,
+     "card": "unstated",
+     "result": "card_unstated"
+    }
+   ],
+   "shown_not_compared": {
+    "material": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    },
+    "criterion": {
+     "card_words": "unstated",
+     "card_items": [],
+     "normalized": "unstated"
+    },
+    "geometry": {
+     "card_words": "droplet",
+     "card_items": [
+      "CFI14.extinction"
+     ],
+     "normalized": "as_written"
+    }
+   },
+   "overall": "not_applicable",
+   "reason": "gravity_card_unstated",
+   "sentence": "Cool-flame droplet extinction (CFI): extinction diameter as a measure of kinetic times (cfi_droplet) is not placed for the Exploration atmosphere 8.2 psia / 34% O2 scenario: the card's items state no gravity level, so the gate does not let it be quoted. Axes: oxygen card_unstated; pressure card_unstated; gravity card_unstated; flow card_unstated."
+  }
+ ],
+ "coverage": {
+  "rule": "The scenario's cells are the cells of coverage.json (oxygen bin x pressure bin) that its oxygen and pressure ranges both intersect, with the inclusive flags. Counts are copied from coverage_grid.csv, rows with o2_basis 'ambient'. A scenario without both ranges has no cells. Counts of cells are listed one by one and not summed; the two phase totals are team sums over coverage_grid.csv rows of that phase.",
+  "scenario_oxygen_bins": [
+   "o2_30_36"
+  ],
+  "scenario_pressure_bins": [
+   "p_lt62_8"
+  ],
+  "has_cells": true,
+  "by_fuel_phase": [
+   {
+    "fuel_phase": "gas",
+    "rows_of_phase": 1095,
+    "rows_with_recorded_pressure": 660,
+    "cells": [
+     {
+      "o2_bin": "o2_30_36",
+      "pressure_bin": "p_lt62_8",
+      "o2_bin_label": "30 to 36%",
+      "pressure_bin_label": "below 62.8 kPa",
+      "tests": 9,
+      "investigation_ids": "PSI-159"
+     }
+    ],
+    "tests_in_oxygen_bins_pressure_not_recorded": 0,
+    "sentence": "gas fuel, ambient oxygen, in the scenario's cells: 30 to 36% x below 62.8 kPa, recorded tests: 9. Tests in the scenario's oxygen bins with no recorded pressure: 0. Rows of this phase with a recorded pressure: 660 of 1095 (team sums over coverage_grid.csv)."
+   },
+   {
+    "fuel_phase": "liquid",
+    "rows_of_phase": 353,
+    "rows_with_recorded_pressure": 352,
+    "cells": [
+     {
+      "o2_bin": "o2_30_36",
+      "pressure_bin": "p_lt62_8",
+      "o2_bin_label": "30 to 36%",
+      "pressure_bin_label": "below 62.8 kPa",
+      "tests": 0,
+      "investigation_ids": ""
+     }
+    ],
+    "tests_in_oxygen_bins_pressure_not_recorded": 0,
+    "sentence": "liquid fuel, ambient oxygen, in the scenario's cells: 30 to 36% x below 62.8 kPa, recorded tests: 0. Tests in the scenario's oxygen bins with no recorded pressure: 0. Rows of this phase with a recorded pressure: 352 of 353 (team sums over coverage_grid.csv)."
+   },
+   {
+    "fuel_phase": "solid",
+    "rows_of_phase": 376,
+    "rows_with_recorded_pressure": 0,
+    "cells": [
+     {
+      "o2_bin": "o2_30_36",
+      "pressure_bin": "p_lt62_8",
+      "o2_bin_label": "30 to 36%",
+      "pressure_bin_label": "below 62.8 kPa",
+      "tests": 0,
+      "investigation_ids": ""
+     }
+    ],
+    "tests_in_oxygen_bins_pressure_not_recorded": 0,
+    "sentence": "solid fuel, ambient oxygen, in the scenario's cells: 30 to 36% x below 62.8 kPa, recorded tests: 0. Tests in the scenario's oxygen bins with no recorded pressure: 0. Rows of this phase with a recorded pressure: 0 of 376 (team sums over coverage_grid.csv)."
+   }
+  ]
+ }
+}
