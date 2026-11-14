@@ -33,6 +33,10 @@ OPTIONAL = {
     "data/insights/cards.json": "data/insights/cards.json",
     "data/insights/scenarios.json": "data/insights/scenarios.json",
     "data/insights/evidence_map.json": "data/insights/evidence_map.json",
+    # "How AI is used here, and how it was checked" (pm request 1705)
+    "data/insights/quality.json": "data/insights/quality.json",
+    "data/insights/model_readiness.json": "data/insights/model_readiness.json",
+    "data/insights/robustness.json": "data/insights/robustness.json",
     "data/pipeline/scenario_needs.csv": "data/scenario_needs.csv",
     "pipeline/spec/scenarios.json": "data/scenario_spec.json",
 }

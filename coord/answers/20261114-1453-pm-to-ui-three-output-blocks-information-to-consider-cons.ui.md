@@ -25,3 +25,7 @@ Live (build 8162582):
 - **Constraints:** need by need from data's answer files. Each need has the recorded tests and indicators, the criteria in NASA documents, the items published outside PSI, and where the evidence stops. When the answer files are absent, the earlier two parts are shown instead.
 
 The unmatched-words line is still waiting for catalog's field (request 1505 to catalog). It will be added in the sync after that field lands.
+
+## Correction (17:13)
+
+The unmatched-words line has been on the page since catalog's `bbea891` (14:59). The scorer returns the scenario warning `not_understood`, and the page prints it under "How your input was read" with the other scenario warnings. For example, the query `battery enclosure ISS` shows: "No PSI investigation or keyword matches 'battery enclosure'; the ranking uses the rest of the query and these words change nothing." (live page, checked 17:05). Nothing more is open on this request.

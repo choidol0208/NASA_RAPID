@@ -328,3 +328,13 @@ td.st small.gaps-codes { margin-top: 3px; font-style: italic; }
   .needs-table tbody th { white-space: normal; min-width: 120px; }
 }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+/* How AI is used here (pm request 1705) */
+.ai-use h3 { font-size: 1.02rem; margin: 22px 0 6px; }
+.ai-funnel { list-style: none; padding: 0; margin: 8px 0; display: flex; flex-wrap: wrap; gap: 6px 0; }
+.ai-funnel li { white-space: nowrap; }
+.ai-funnel li + li::before { content: "·"; margin: 0 10px; color: var(--ink-2); }
+.ai-funnel b { font-size: 1.15rem; }
+.ai-rows { margin: 8px 0; padding-left: 20px; }
+.ai-rows li { margin: 5px 0; }
+.ai-metric { display: block; color: var(--ink-2); font-size: 0.9rem; }
