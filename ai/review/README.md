@@ -83,4 +83,4 @@ A `wording_issue` row is counted in `quality.json` and is a request to the code 
 
 The data role's text in `pipeline/spec/needs.json` is unchanged (pm does not own it); the two lines are no longer copied as written.
 
-Reviewed by a second AI session, or by a hackathon team member where a row says `person`; not by NASA or a combustion expert. On 14 November every reviewed row was read by an AI session and none by a person.
+Reviewed by a second AI session, or by a hackathon team member where a row says `person`. On 14 November every reviewed row was read by an AI session and none by a person.

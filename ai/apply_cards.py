@@ -544,13 +544,12 @@ def reviewer_line(reviews):
     roles = sorted({r["reviewer_role"] for r in reviews})
     if kinds == {"person"}:
         return (f"hackathon team member ({', '.join(roles)})",
-                "read against the PSI text by a hackathon team member, not by NASA or a combustion expert")
+                "read against the PSI text by a hackathon team member")
     if kinds == {"ai_session"}:
         return (f"second AI session ({', '.join(roles)} role)",
-                "checked against the PSI text by a second AI session, not by a person, NASA or a combustion expert")
+                "checked against the PSI text by a second AI session, not by a person")
     return (f"hackathon team member and second AI session ({', '.join(roles)})",
-            "checked against the PSI text by a hackathon team member or a second AI session, not by NASA or a "
-            "combustion expert")
+            "checked against the PSI text by a hackathon team member or a second AI session")
 
 
 def sheet_sentence(full, s):

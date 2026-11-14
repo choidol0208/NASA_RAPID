@@ -294,7 +294,7 @@ def quality(stats, rows, scenarios, recount):
                         "reproduced by ai/apply_review.py from ai/review/review_sheet.csv and the gate results of "
                         "ai/apply_cards.py. Rates are measured before removal and carry their n. Rows read by an AI "
                         "session are never counted as read by a person. The counts reviewed_person and reviewed_ai_session say who "
-                        "read the rows. Nothing was reviewed by NASA or by a combustion expert."),
+                        "read the rows."),
         "proposed": stats["proposed"],
         "passed_gates_first_pass": stats["passed_first"],
         "rejected_first_pass": stats["rejected_first"],
