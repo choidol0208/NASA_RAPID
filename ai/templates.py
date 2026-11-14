@@ -49,6 +49,39 @@ the oxygen, pressure, flow and gravity gaps, the flow comparison), the build use
 written and cites it as data/pipeline/evidence/scenario_<id>.json#<need id>/<statement id>; the templates
 below are kept for what the pipeline does not say (which table lacks a column, balance gas, test ends,
 the investigations outside the stated objective).
+
+After the 14:59 merge (the data role's literature check of the need links; the run before it was stopped at
+about 14:55 in the middle of this pass):
+- the lunar caveat uses the wording of coord/decisions.md 14:15: 'at 30 to 34% oxygen and about 0.7 atm (71 to
+  72 kPa)', '1 to 2 kPa above' the 10.2 psi of the challenge statement; the frame gives the challenge statement in
+  the wording of its reference item (CH.moonbase, hedges 'expected' and 'likely' kept) and the data role's
+  scenario caveat as written;
+- a need link rests on a purpose sentence of the PSI record or of a publication (verdict 'supported'), so the
+  evidence rule and the result notes no longer say 'stated in this record' for a link made through a paper;
+- the detection gap is built from D1 and D2 as they are (D1 counted, D2 none), not from 'D2 counted';
+- two tests read 'Both', not 'All 2'.
+
+Second careful-reader pass (14 November, after the repair of the stopped run; an AI session of the pm role read
+every sentence for iss and lunar_habitat again and recounted every number from the pipeline CSVs). Changes are
+marked 'reader 2:' below:
+- 'Every test in the PSI tables' spoke for all of PSI; it now says 'the PSI experimental tables used here';
+- the data role's scenario caveat is addressed to readers of its package ('Read the recorded pressure ... in each
+  need block before calling a test ...'); it is still given as written, but inside quotation marks and named as the
+  team's data note, so the instruction is not the page's own voice. The ISS caveat (the ranges set no balance
+  gas) is now shown in the ISS frame as well;
+- 'No counted test was recorded at 30% oxygen or more and at or below 10.2 psi' is true of the counted tests
+  only: gas-burner flames of PSI-159 were recorded there and are counted for no need. The frame now says so, and
+  the PSI-159 result note says where its tests inside the bins were recorded;
+- the evidence rule says who made the link between a purpose sentence and a need (the team pipeline; an AI
+  reading, not reviewed by a person, while pipeline/spec/needs.json says so);
+- a reading that still says 'no test is counted' next to a count above zero gets a team note (D1 until the data
+  role's rewritten reading is merged);
+- the detection gap says 'no pressure value in the PSI experimental tables', not 'no pressure in the table';
+- tests outside the stated objective: '(PSI-99) does not state this need as an objective' contradicted the PSI
+  record, which names the objective (the card of PSI-99 quotes it); the clause now says that the pipeline has no
+  supported match and, for a link marked 'differs', that the record names the objective and the publications read
+  state a different purpose for the investigation;
+- the droplet gap says 'the 17 counted tests' (uncounted gas-burner tests lie inside the same bins).
 """
 
 BUILT_BY = "ai/build_baseline.py"
@@ -200,7 +233,9 @@ def by_investigation(by_inv, n=None, single=None):
     if n is None:
         return f"By investigation: {by_inv}."
     if single:
-        return (f"All {n} come from {single}." if n != 1 else f"It comes from {single}.")
+        # reader (14:59 merge): 'All 2 come from' read badly; two tests are 'Both'
+        return (f"It comes from {single}." if n == 1 else f"Both come from {single}." if n == 2 else
+                f"All {n} come from {single}.")
     return f"The {n} by investigation: {by_inv}."
 
 
@@ -252,7 +287,7 @@ def basis_clause(u, x, y):
 
 
 def phase_clause(n, noun_many, solid):
-    head = "It is" if n == 1 else f"All {n} are"
+    head = "It is" if n == 1 else "Both are" if n == 2 else f"All {n} are"
     if solid:
         return f"{head} {noun_many}."
     return f"{head} {noun_many}; none is a solid-material test."
@@ -299,8 +334,9 @@ def balance_diluted(k, c, h, b, zero, n):
 
 def balance_zero(zero, n):
     if zero == n:
-        return (f"All {n} have recorded carbon dioxide and helium fractions of zero" if n != 1 else
-                "It has recorded carbon dioxide and helium fractions of zero")
+        return ("It has recorded carbon dioxide and helium fractions of zero" if n == 1 else
+                "Both have recorded carbon dioxide and helium fractions of zero" if n == 2 else
+                f"All {n} have recorded carbon dioxide and helium fractions of zero")
     return f"{zero} of these {n} have recorded carbon dioxide and helium fractions of zero"
 
 
@@ -338,16 +374,35 @@ def no_usable_in_range(variable):
 
 
 def gravity_sentence(level):
-    return (f"Every test in the PSI tables is a microgravity test; none was run at "
+    # reader 2: 'the PSI tables' spoke for all of PSI; the claim holds for the tables the team processed
+    return (f"Every test in the PSI experimental tables used here is a microgravity test; none was run at "
             f"{GRAVITY_WORD[level]} gravity.")
 
 
-def outside_objective(k, ids, includes_stream=False, further=True):
+def outside_objective(k, ids, includes_stream=False, further=True, differs=(), topic_only=()):
+    """Tests that record the variables of a need and are not counted for it.
+    reader 2: '(PSI-99) does not state this need as an objective' was wrong where the PSI record does name the
+    objective (the Saffire-I, -II and -III records share one objective sentence) and the investigators' papers give
+    it to another flight: the card of PSI-99 quotes that very sentence. The clause now says what the rule is (no
+    match that the publications read support) and, for a link the pipeline marks 'differs' or 'topic_only', what
+    the record says and what the publications say, in the words of pipeline/spec/needs.json _meta.stated_by_rule.
+    differs, topic_only: [(investigation id, [publication item ids])]."""
     one = len(ids) == 1
     # reader: 'further' only where tests are counted; after 'no test is counted' it pointed at nothing
     s = (f"{k} {'further ' if further else ''}{plural(k, 'test records', 'tests record')} the needed variables, but "
-         f"{'the investigation' if one else 'the investigations'} ({join_and(ids)}) {'does' if one else 'do'} "
-         f"not state this need as an objective; {plural(k, 'it is', 'they are')} not counted.")
+         f"the team pipeline has no supported match between this need and a purpose sentence of "
+         f"{'the investigation' if one else 'the investigations'} ({join_and(ids)}); "
+         f"{plural(k, 'it is', 'they are')} not counted.")
+    for acc, items in differs:
+        cite = f" ({join_and(items)})" if items else ""
+        # what the cited item shows: the purpose the investigators state for this investigation is another one
+        # (the pipeline's verdict 'differs': they give this objective to another flight or another area)
+        s += (f" The PSI record of {acc} names this objective, but the publications that were read state a "
+              f"different purpose for this investigation{cite}.")
+    for acc, items in topic_only:
+        cite = f" ({join_and(items)})" if items else ""
+        s += (f" The PSI record of {acc} names the topic; in the publications that were read, the stated purpose "
+              f"of the experiment is another one or was not found{cite}.")
     if includes_stream:
         # review: 139 of the 272 PSI-159 tests outside S1's stated objective are inverse flames
         s += (" These include inverse-flame tests, whose oxygen value is the burner stream and not an "
@@ -399,8 +454,28 @@ def frame_bins(label, ranges):
 
 
 # review: which objective sentence backs which need is the team pipeline's reading, so it is said.
-FRAME_RULE = ("A test is counted for a need only if its investigation's PSI record states that need "
-              "as an objective (objective sentences are linked to needs by the team pipeline).")
+# 14:59 merge (data role's literature check, pipeline/spec/needs.json _meta.stated_by_rule): a link rests on what
+# the investigators or a NASA project document state as the purpose of the experiment, in the PSI record or in a
+# publication, and only links the publications read support are counted (D1 rests on a publication only).
+# reader 2: the bracket '(the team pipeline links these sentences to needs and counts only the links that the
+# publications it read support)' was hard to follow; it is now two plain sentences, and FRAME_RULE_AI says who made
+# the match (shown while pipeline/spec/needs.json _meta.generated_by says the file is not human-reviewed).
+FRAME_RULE = ("A test is counted for a need only if its investigation states that need as an objective, in its "
+              "PSI record or in a publication of the investigators or of NASA. The team pipeline matched these "
+              "purpose sentences to the needs; a match is counted only where the publications that were read "
+              "support it.")
+FRAME_RULE_AI = "The matching was done by an AI assistant and has not been reviewed by a person."
+NOT_HUMAN_REVIEWED = "not human-reviewed"  # the marker in pipeline/spec/needs.json _meta.generated_by
+
+
+def frame_rule(ai_unreviewed):
+    return FRAME_RULE + (" " + FRAME_RULE_AI if ai_unreviewed else "")
+
+
+def data_note(caveat):
+    """reader 2: the data role's caveat on a scenario (evidence package, environment.caveat), as written. It is
+    addressed to readers of the package, so it is put in quotation marks and named as the team's data note."""
+    return f"The team's data note on these ranges reads: \"{caveat.strip()}\""
 # reader: says what an inverse-flame oxygen value is, in the words of pipeline/spec/variables.json (o2_basis)
 FRAME_STREAM = ("Inverse-flame tests, whose oxygen value is the burner stream (the gas issuing from the burner, "
                 "not the surrounding atmosphere), are never matched to a crew atmosphere.")
@@ -408,9 +483,11 @@ FRAME_STREAM = ("Inverse-flame tests, whose oxygen value is the burner stream (t
 
 # review: 'PSI has no partial-gravity combustion data' spoke for all of PSI; the claim the code can
 # check is about the test tables, with the team's own gravity classification, and it is worded so.
-FRAME_GRAVITY = ("Every test in the PSI test tables is a microgravity test (gravity level set per table by the "
-                 "team from the PSI record); the tables hold no partial-gravity test, and microgravity and 1 g "
-                 "results are not shown here as bounds for lunar or Martian gravity.")
+# reader 2: 'the PSI test tables' still read as all of PSI; 'the PSI experimental tables used here' are the tables of
+# the investigations the team processed.
+FRAME_GRAVITY = ("Every test in the PSI experimental tables used here is a microgravity test (gravity level set per "
+                 "table by the team from the PSI record); these tables hold no partial-gravity test, and "
+                 "microgravity and 1 g results are not shown here as bounds for lunar or Martian gravity.")
 
 
 def nasa_gravity_gap(quote):
@@ -470,45 +547,102 @@ def _above(lo, hi):
     return f"about {num(lo)} kPa above it" if lo == hi else f"{num(lo)} to {num(hi)} kPa above it"
 
 
-def frame_challenge_bound(o2_min, psi, kpa, hedge, from_copy, n_below, inside):
-    """inside: None, or {n, noun, o2 (lo, hi), kpa (lo, hi), atm, above (lo, hi) or None} for the counted
-    tests inside the team bins. The challenge statement's hedge word ('expected', 'likely') is kept."""
-    where = "CH.moonbase, read from a copy" if from_copy else "CH.moonbase"
-    what = f"the {hedge} Moon Base atmosphere" if hedge else "the Moon Base atmosphere"
-    s = (f"The challenge statement names {num(o2_min)}% oxygen or more and {num(psi)} psi ({num(kpa)} kPa) or "
-         f"less as {what} ({where}); the team's pressure bin is wider than that. ")
-    at = f"at {num(o2_min)}% oxygen or more and at or below {num(psi)} psi"
+def recorded_at(o2, kpa, atm):
+    """'30 to 34% oxygen and about 0.7 atm (71 to 72 kPa)' (coord/decisions.md 14:15: the 17 matched lunar
+    tests are described as 'at 30 to 34% oxygen and about 0.7 atm (71 to 72 kPa)'). kpa is the recorded range
+    rounded to whole kPa; atm is printed only when the data role's scenario note names that atm value."""
+    p = f"about {num(atm)} atm ({_span(*kpa, 'kPa')})" if atm is not None else _span(*kpa, "kPa")
+    return f"{_span(*o2, '%', '')} oxygen and {p}"
+
+
+def _bound_words(o2_min, psi):
+    return f"at {num(o2_min)}% oxygen or more and at or below {num(psi)} psi"
+
+
+def frame_challenge_bound(item_text, psi, kpa, o2_min, n_below, inside, caveat=None, uncounted=()):
+    """The challenge statement's atmosphere in the wording of its reference item (CH.moonbase, given as
+    recorded, with its own hedges such as 'expected' and 'likely'; not put in quotation marks, because the item
+    gives the wording as reported, not a verbatim quote), the data role's caveat on the scenario as written
+    (reader 2: in quotation marks, named as the team's data note), and the sentence of decision 14:15: no counted
+    test at or below the bound; the counted tests inside the bins were recorded 1 to 2 kPa above it.
+    inside: None, or {n, noun, o2 (lo, hi), kpa (lo, hi), atm, above (lo, hi) or None} for the counted tests inside
+    the team bins. uncounted: [{noun, inv, linked}] for the tests that are counted for no need and were recorded at
+    or below the bound (reader 2: 'no counted test' must not be read as 'no test')."""
+    s = (f"The challenge statement, in the wording the team recorded from it (CH.moonbase): "
+         f"{item_text.rstrip('. ')} ({num(psi)} psi = {num(kpa)} kPa). ")
+    if caveat:
+        s += data_note(caveat) + " "
+    at = _bound_words(o2_min, psi)
     s += (f"No counted test was recorded {at}" if n_below == 0 else
           f"{n_below} counted {plural(n_below, 'test was', 'tests were')} recorded {at}")
     if inside:
-        atm = f" (about {num(inside['atm'])} atm)" if inside.get("atm") is not None else ""
-        s += (f": the {inside['n']} counted {plural(inside['n'], 'test')} inside the bins "
-              f"{plural(inside['n'], 'is a', 'are')} {inside['noun']} recorded at "
-              f"{_span(*inside['o2'], '%', '')} oxygen and {_span(*inside['kpa'], 'kPa')}{atm}")
+        s += (f"; the {inside['n']} counted {plural(inside['n'], 'test')} inside the bins "
+              f"{plural(inside['n'], 'is a', 'are')} {inside['noun']} recorded ")
         if inside.get("above"):
-            s += ", " + _above(*inside["above"])
+            s += f"{_above(*inside['above'])}, at "
+        else:
+            s += "at "
+        s += recorded_at(inside["o2"], inside["kpa"], inside.get("atm"))
+    s += "."
+    for g in uncounted:
+        s += " " + uncounted_below(g["noun"], g["inv"], at, g["linked"])
+    return s
+
+
+def uncounted_below(noun_many, inv, at, linked):
+    """reader 2: tests that are counted for no need and were recorded at or below the challenge-statement bound
+    (PSI-159: gas-burner flames at about half an atmosphere and 33 to 39% oxygen). No count is printed here; the
+    result note of the investigation gives the tests inside the team bins. linked: the investigation has a
+    supported need link, so the reason 'links none of the needs' is not given."""
+    s = f"{cap(noun_many)} of {inv} were recorded {at}; they are counted for no need"
+    if not linked:
+        s += ", because the team pipeline links none of the needs to an objective stated for that investigation"
     return s + "."
 
 
 def matched_bound_clause(n, o2, kpa, atm, above, psi, bound_kpa, o2_min, n_below):
     """The same caveat next to the count in a need statement (decision 14:15: 'the caveat is shown wherever
     the count is'). above is None when the tests are not all above the challenge-statement pressure."""
-    atm_txt = f" (about {num(atm)} atm)" if atm is not None else ""
-    s = (f"{'These ' + str(n) + ' were' if n != 1 else 'It was'} recorded at {_span(*o2, '%', '')} oxygen and "
-         f"{_span(*kpa, 'kPa')}{atm_txt}")
+    s = f"{'These ' + str(n) + ' were' if n != 1 else 'It was'} recorded at {recorded_at(o2, kpa, atm)}"
     if above:
-        s += (f", which is inside the team's pressure bin and {_above(*above).replace(' above it', '')} above the "
-              f"{num(psi)} psi ({num(bound_kpa)} kPa) of the challenge statement (CH.moonbase)")
-    at = f"at {num(o2_min)}% oxygen or more and at or below {num(psi)} psi"
+        s += (f", {_above(*above).replace(' above it', '')} above the {num(psi)} psi ({num(bound_kpa)} kPa) of the "
+              "challenge statement (CH.moonbase) and inside the team's wider pressure bin")
+    at = _bound_words(o2_min, psi)
     s += (f"; no counted test was recorded {at}." if n_below == 0 else
           f"; {n_below} counted {plural(n_below, 'test was', 'tests were')} recorded {at}.")
     return s
 
 
-def bound_short(kpa, psi, bound_kpa):
+def bound_short(o2, kpa, atm, above, psi, bound_kpa):
     """Short form for a gap line or a result note that repeats the count."""
-    return (f"recorded at {_span(*kpa, 'kPa')}, above the {num(psi)} psi ({num(bound_kpa)} kPa) of the challenge "
-            "statement")
+    s = f"recorded at {recorded_at(o2, kpa, atm)}"
+    if above:
+        s += f", {_above(*above).replace(' above it', '')} above the {num(psi)} psi ({num(bound_kpa)} kPa) of the challenge statement"
+    else:
+        s += f", above the {num(psi)} psi ({num(bound_kpa)} kPa) of the challenge statement"
+    return s
+
+
+def bound_short_below(o2, kpa, atm, psi, bound_kpa, counted_none):
+    """reader 2: the same short form for tests inside the bins that were recorded below the challenge-statement
+    pressure (the PSI-159 gas-burner flames in the lunar-habitat bins). counted_none: none of them is counted for
+    a need, which is said next to the values."""
+    s = (f"recorded at {recorded_at(o2, kpa, atm)}, below the {num(psi)} psi ({num(bound_kpa)} kPa) of the "
+         "challenge statement")
+    return s + ("; counted for no need" if counted_none else "")
+
+
+def reading_mismatch(u, invs, items):
+    """reader 2: the need's reading is the data role's text and is used as written. Where it still says that no
+    test is counted next to a count above zero (D1 after the literature check, until the rewritten reading is
+    merged), the statement says which of the two is current and why the tests are counted. invs, items: the
+    investigations whose counted tests rest on a publication only, and the publication items (may be empty)."""
+    s = (f"Team note: this reading still says that no test is counted; the {u} "
+         f"{plural(u, 'test', 'tests')} in the count above {plural(u, 'is', 'are')} counted")
+    if invs and items:
+        s += (f", through a purpose sentence in a publication on {join_and(invs)} ({join_and(items)}) and not "
+              "in the PSI record")
+    return s + "."
 
 
 def flow_outside(n):
@@ -616,12 +750,19 @@ NOTE_ROW_UNIT = {
 NOTE_NO_TABLE = "PSI holds no experimental table for this investigation."
 
 
-def note_objectives(needs):
-    """needs: list of 'P1 (Flammability limit)' strings."""
-    if not needs:
-        return "The team pipeline links none of the needs to an objective stated in this record."
-    word = plural(len(needs), "need")
-    return f"The team pipeline links {word} {join_and(needs)} to objectives stated in this record."
+def note_objectives(in_record, publication_only=()):
+    """in_record: 'P1 (Flammability limit)' strings for needs linked through a sentence of this PSI record;
+    publication_only: those linked through a publication only (14:59 merge: D1 rests on BASS2TM.products).
+    Only links with verdict 'supported' are passed (objective_links.csv)."""
+    if not in_record and not publication_only:
+        return "The team pipeline links none of the needs to an objective stated for this investigation."
+    parts = []
+    if in_record:
+        parts.append(f"{plural(len(in_record), 'need')} {join_and(in_record)} to objectives stated in this record")
+    if publication_only:
+        parts.append(f"{plural(len(publication_only), 'need')} {join_and(publication_only)} to an objective "
+                     "stated in a publication on this investigation")
+    return f"The team pipeline links {', and '.join(parts)}."
 
 
 def note_tie(names):
@@ -657,9 +798,10 @@ NOTE_MARS = ("The preset sets no atmosphere, so the ranking compares only flow a
 def gap_gravity(level, quote):
     # review: 'are not bounds' was stated as the team's own finding with a source (TB008.gaps) that does
     # not say it; the page now says what it does (it does not treat them as bounds) and quotes NASA.
+    # reader 2: 'the PSI tables' spoke for all of PSI
     g = GRAVITY_WORD[level]
-    return (f"Every test in the PSI tables is a microgravity test; none was run at {g} gravity, and "
-            f"microgravity and 1 g results are not treated here as bounds for {g} gravity. "
+    return (f"Every test in the PSI experimental tables used here is a microgravity test; none was run at {g} "
+            f"gravity, and microgravity and 1 g results are not treated here as bounds for {g} gravity. "
             + nasa_gravity_gap(quote))
 
 
@@ -670,8 +812,10 @@ def gap_gravity_needed(level):
 def gap_solid(n_inv, max_solid_o2, no_o2_tables=()):
     # review: 'no solid-sample test has an oxygen value above 22.2%' left out that several solid-sample
     # tables record no oxygen at all
-    s = (f"In the PSI experimental tables of the {n_inv} investigations, no solid-sample test has a recorded "
-         f"oxygen value above {num(max_solid_o2)}%, and pressure is not a column in any solid-sample table.")
+    # reader 2: 'the 24 investigations' are the ones used here, not all of PSI
+    s = (f"In the PSI experimental tables of the {n_inv} investigations used here, no solid-sample test has a "
+         f"recorded oxygen value above {num(max_solid_o2)}%, and pressure is not a column in any solid-sample "
+         "table.")
     if no_o2_tables:
         s += (f" Oxygen is not a column in the solid-sample {plural(len(no_o2_tables), 'table')} of "
               f"{join_and(no_o2_tables)}.")
@@ -713,7 +857,9 @@ GAP_SOLID_NEEDED = "test-level records in PSI for solid samples with both oxygen
 
 
 def gap_phase(n, inv_names, caveat=None):
-    s = (f"The {n} tests inside this scenario's team bins for extinction conditions (S1) are all "
+    # reader 2: 'the 17 tests inside the bins' are the counted ones; gas-burner tests that are counted for no need
+    # lie inside the same bins (PSI-159), so the sentence says 'counted'
+    s = (f"The {n} counted tests inside this scenario's team bins for extinction conditions (S1) are all "
          f"fuel-droplet tests ({join_and(inv_names)}); none is a solid-material or gas-burner test.")
     if caveat:  # reader: decision 14:15, the caveat goes wherever the count is shown
         s += f" They were {caveat}."
@@ -724,19 +870,26 @@ GAP_PHASE_NEEDED = ("test-level records in PSI of extinction tests with solid ma
                     "oxygen and pressure inside these bins")
 
 
-def gap_detection(d2_u, d2_inv, d2_missing, d1_not_measured, d1_stated=False, n_inv=None):
+def _detection_part(need_id, what, n, invs, missing):
+    """One need of the detection gap. missing: the variables ('oxygen', 'pressure') no table of the counted
+    tests has as a column."""
+    if n == 0:
+        return f"no test is counted for {what} ({need_id})"
+    s = f"the {n} {plural(n, 'test')} counted for {what} ({need_id}, {join_and(invs)})"
+    if missing:
+        # reader 2: 'no pressure in the table' -> the fact is that the PSI experimental tables hold no value
+        s += (f" {plural(n, 'has', 'have')} no {' and no '.join(missing)} value in the PSI experimental "
+              "tables")
+    return s
+
+
+def gap_detection(d1, d2):
+    """14:59 merge (the data role's literature check): D1 is counted through a publication of the BASS-II
+    investigators (BASS2TM.products) and D2 has no counted test (the SAME tables hold conditions only).
+    d1, d2: {n, invs, missing} with missing the variables that are not columns of the counted tests' tables."""
     # reader: 'counted for', the word the need statements use ('usable' was the older word for the same tests)
-    s = (f"For detection, the {d2_u} smoke {plural(d2_u, 'test')} counted for smoke generation conditions (D2, "
-         f"{join_and(d2_inv)}) {plural(d2_u, 'has', 'have')} neither oxygen nor pressure in the table"
-         if d2_missing else
-         f"For detection, {d2_u} smoke {plural(d2_u, 'test is', 'tests are')} counted for smoke generation "
-         f"conditions (D2, {join_and(d2_inv)})")
-    if d1_not_measured:
-        # review: which objective backs which need is the team pipeline's reading
-        s += (f", and no investigation among the {n_inv} both states the measurement of combustion products "
-              "(D1) as an objective and records the variables it needs" if d1_stated else
-              f", and the team pipeline finds no investigation among the {n_inv} whose PSI record states the "
-              "measurement of combustion products (D1) as an objective")
+    s = ("For detection, " + _detection_part("D1", "combustion products", d1["n"], d1["invs"], d1["missing"])
+         + ", and " + _detection_part("D2", "smoke generation conditions", d2["n"], d2["invs"], d2["missing"]))
     # review: the item says detection systems 'are based on inadequate knowledge of ...'; worded as that
     return s + (". The NASA workshop report NASA/CP-2003-212103 describes knowledge of the fire signatures of "
                 "spacecraft materials, and of the effect of low gravity on them, as inadequate for detection "

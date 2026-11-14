@@ -3,11 +3,11 @@
   "built_by": "ai/model_readiness.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T14:38:41+09:00",
+  "generated_at": "2026-11-14T15:49:19+09:00",
   "inputs_sha256": {
-   "data/pipeline/tests.csv": "5ba43199cee4657cabf0fca8e27681ce25e83f9f6857d033c089deebaa84fb7a",
-   "pipeline/spec/sources.json": "2fec33112f1fd6791326817d1825fe63b89d4db6085730479acd776a4b2a5447",
-   "pipeline/spec/variables.json": "d6f8ca5fdf52f2f321cd0e59aa0b3bdacdd2614c9555133aff89dca9e1795852"
+   "data/pipeline/tests.csv": "b8acc1073fbc33a37563eb7f7cd12811e602fb7363ee69982d97860f05522211",
+   "pipeline/spec/sources.json": "acf3d0a4b35ece951278bb71bca6a3c8c5b40ec542891ef63d1a1609f99140ec",
+   "pipeline/spec/variables.json": "aeb90a947fe4f4d6a8d49e3907bb82cf32fe22416b7700aa31abcf3990aa21f3"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). No language model ran to build it. Counts, recorded ranges and grouped cross-validation errors are computed by code from NASA PSI tables (data/pipeline/tests.csv); the verdicts are fixed rules applied by code. Team output, not a NASA conclusion. No fitted model or model output is in this file.",
   "libraries": {
@@ -15,11 +15,11 @@
    "numpy": "2.1.3",
    "scikit-learn": "1.6.1"
   },
-  "content_sha256": "3df72ac722c02fd72a687f49a86c9b04da468d68aee0ee05865aa5c38b343989"
+  "content_sha256": "1508ba07bc1f29bd9152415214d870d0d2d0ede6b58205c42ef202ed190aa5b6"
  },
  "title": "Can these NASA tables support an outcome model?",
  "fixed_line": "None is a cabin-material flammability model.",
- "labels_and_limits": "The team's statistical diagnostics on NASA PSI tables. They describe these droplet and gas-burner experiments only. FLEX extinction is a droplet-flame outcome, not material flammability. \"Indicative\" means a simple model beat the base rate under 5-fold grouped cross-validation, nothing more. No fitted model, coefficient or model output is shipped, and none is offered for any condition, inside or outside the recorded ranges.",
+ "labels_and_limits": "The team's statistical diagnostics on NASA PSI tables. They describe the experiments in these tables only. FLEX extinction is a droplet-flame outcome, not material flammability. \"Indicative\" means a simple model beat the base rate under 5-fold grouped cross-validation, nothing more. No fitted model, coefficient or model output is shipped, and none is offered for any condition, inside or outside the recorded ranges.",
  "counts_note": "Counts are recorded tests in NASA's open PSI experimental tables, the team's computation. 'Not recorded' is never zero and never 101 kPa.",
  "flag_rule": "Cells that carry a flag in the flags column of data/pipeline/tests.csv are left out. A test is not counted in a row when its label cell, its test id, or any condition cell the row needs (listed in 'required_cells') is flagged or empty; each row gives these exclusions in 'excluded'. A recorded range uses only unflagged, non-empty cells, and 'range_values_n' gives how many.",
  "basis_rule": "Rows are split by o2_basis and never pooled: 'ambient' is the oxygen of the surrounding atmosphere, 'oxidizer_stream' is the oxygen of the gas issuing from the burner (CFI-G inverse flames). Burner-stream oxygen is not a habitat atmosphere and is never compared with ambient oxygen.",
@@ -733,7 +733,7 @@
    "model": null,
    "cv": null,
    "verdict": "too few",
-   "reason": "Under the fixed rule: 0 tests (under 100); no grouping rule set for this label. No cross-validation is run.",
+   "reason": "Under the fixed rule: 0 tests left by the flag rule, of the 2 that record the label (under 100); no grouping rule set for this label. No cross-validation is run.",
    "sources": [
     "PSI-99",
     "pipeline/spec/sources.json#saffire2"
@@ -782,7 +782,7 @@
    "model": null,
    "cv": null,
    "verdict": "too few",
-   "reason": "Under the fixed rule: 0 tests (under 100); no grouping rule set for this label. No cross-validation is run.",
+   "reason": "Under the fixed rule: 0 tests left by the flag rule, of the 8 that record the label (under 100); no grouping rule set for this label. No cross-validation is run.",
    "sources": [
     "PSI-99",
     "pipeline/spec/sources.json#saffire2"
@@ -794,8 +794,8 @@
    "source_id": "bass2",
    "investigation_id": "PSI-25",
    "column": "o2_final_pct",
-   "tests_with_a_value": 127,
-   "unflagged_values": 127,
+   "tests_with_a_value": 122,
+   "unflagged_values": 122,
    "o2_basis": [
     "ambient"
    ],
@@ -1009,17 +1009,6 @@
     "ambient"
    ],
    "note": "listed with its count only; not assessed as a label here"
-  },
-  {
-   "source_id": "same",
-   "investigation_id": "PSI-102",
-   "column": "mass_loss_rate_mg_min",
-   "tests_with_a_value": 4,
-   "unflagged_values": 4,
-   "o2_basis": [
-    "not recorded"
-   ],
-   "note": "listed with its count only; not assessed as a label here"
   }
  ],
  "tables_without_outcome_column": [
@@ -1048,6 +1037,12 @@
    "note": "no outcome column has a recorded value in tests.csv for this table"
   },
   {
+   "source_id": "same",
+   "investigation_id": "PSI-102",
+   "tests": 4,
+   "note": "no outcome column has a recorded value in tests.csv for this table"
+  },
+  {
    "source_id": "same_r",
    "investigation_id": "PSI-101",
    "tests": 109,
@@ -1062,9 +1057,9 @@
  ],
  "not_covered": [
   "None is a cabin-material flammability model.",
-  "No solid-sample table has a recorded pressure: in all 376 solid-fuel tests the pressure cell is empty (not recorded, which is not 101 kPa).",
-  "No solid-sample test has recorded oxygen above 22.2%.",
-  "No table has a partial-gravity test: every test row in tests.csv is recorded at microgravity. Microgravity and 1 g results are not bounds for lunar or Martian gravity."
+  "No solid-fuel test has a pressure value in the PSI experimental tables used here (0 of 376); a value that is not recorded is not 101 kPa.",
+  "No solid-fuel test in these tables has a recorded oxygen value above 22.2%.",
+  "No table has a partial-gravity test: every test row in the team's tests.csv is recorded at microgravity (gravity level set per table by the team from the PSI record). Microgravity and 1 g results are not bounds for lunar or Martian gravity."
  ],
  "not_covered_facts": {
   "solid_tests": 376,

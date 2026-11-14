@@ -69,11 +69,13 @@ def check_model(model):
 
 def _http(method, path, payload=None, timeout=None):
     """The only place that opens a network connection."""
+    # the allowlist is checked first, so a blocked model is refused as ModelNotAllowed whether or not
+    # AI_NO_MODEL_CALLS is set (ai/test_llm.py runs under ai/build_all.py's environment too)
+    if payload is not None and "model" in payload:
+        check_model(payload["model"])
     if os.environ.get(NO_CALLS_ENV) == "1":
         raise ModelCallsDisabled(f"{NO_CALLS_ENV}=1: this run makes no model call (ai/build_all.py rebuilds "
                                  "from the logged model output only)")
-    if payload is not None and "model" in payload:
-        check_model(payload["model"])
     url = config.OLLAMA_URL.rstrip("/") + path
     data = None if payload is None else json.dumps(payload).encode("utf-8")
     req = urllib.request.Request(url, data=data, method=method,

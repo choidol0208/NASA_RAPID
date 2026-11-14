@@ -47,7 +47,9 @@ The file is a JSON list. Each entry has exactly these fields, all required and n
 | `reason` | why it is removed: what the cited PSI sentence says and how the model sentence differs. Quote the record only in short phrases |
 | `reviewer_kind` | always `ai_session_pm` (an AI session of the pm role). A person or the data role's session uses the review sheet instead |
 
-To add an entry, append an object to the list, then run `python3 ai/build_all.py` (no model call). The build reports an entry that matches no sentence (`entries_matching_no_sentence` in `quality.json`); such an entry removes nothing, so check the text. A sentence is never reworded by an entry; it is only removed. Entries of 14 November: PSI-159 sentence 1 (the record says testing "can demonstrate the following for the first time, contributing to an improved understanding of cool flame kinetics"; the model sentence made the improvement itself the first-time result).
+To add an entry, append an object to the list, then run `python3 ai/build_all.py` (no model call). The build reports an entry that matches no sentence (`entries_matching_no_sentence` in `quality.json`); such an entry removes nothing, so check the text. A sentence is never reworded by an entry; it is only removed.
+
+Entries of 14 November: four, written by a pm session that was stopped at about 14:55 while it was reading the sentences (PSI-159 sentence 1, PSI-26 sentence 0, PSI-99 sentence 1, PSI-117 sentence 1; each `reason` says what the cited record sentence says). All four match a shown sentence and are applied. The reading was not finished: the next pm step re-reads every model sentence and decides the list again (entries may be added or taken out); until then the four stand as written. For example, PSI-159 sentence 1: the record says testing "can demonstrate the following for the first time, contributing to an improved understanding of cool flame kinetics"; the model sentence made the improvement itself the first-time result.
 
 ## What happens to the verdicts
 

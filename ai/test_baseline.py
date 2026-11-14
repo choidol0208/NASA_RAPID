@@ -150,6 +150,9 @@ class BuiltFiles(unittest.TestCase):
                 self.assertTrue(any(i.startswith("status.") for i in ids), (e["id"], n["need_id"]))
                 self.assertIn("need.reading", ids)
                 for x in cited:
+                    value = R.resolve(x)["data"]["value"]
+                    if not (isinstance(value, str) or (isinstance(value, dict) and "text" in value)):
+                        continue  # a structured value (matched_ranges) is cited for its numbers, not as a sentence
                     self.assertIn(R.resolve(x)["text"].rstrip("."), n["statement"], x)
                 need = self.ctx.need[n["need_id"]]
                 self.assertIn(need["reading"].rstrip("."), n["statement"])
@@ -284,7 +287,9 @@ class BuiltFiles(unittest.TestCase):
                 self.assertNotRegex(t, r"\brank(ed|s)?\s*(#|no\.?\s*)?\d", t)
                 self.assertNotRegex(t, r"\b(first|second|third)\b(?! two)", t)
                 for s in scores:
-                    self.assertNotIn(s, t, (sc, s, t))
+                    # a number with a unit after it is a value of the note (config 1.1.0 gives one lunar score of
+                    # 70.3, the kPa of the challenge-statement bound), not a printed score
+                    self.assertNotRegex(t, rf"(?<![\d.]){re.escape(s)}(?![\d.]|\s?(kPa|psi|atm|%|cm/s))", (sc, s, t))
 
     def test_no_table_only_without_sources_entry(self):
         with_entry = {s["investigation_id"] for s in self.ctx.sources}
@@ -423,35 +428,47 @@ class BuiltFiles(unittest.TestCase):
         ps = [float(tests[t]["pressure_kpa"]) for t in inside]
         os_ = [float(tests[t]["o2_pct"]) for t in inside]
         self.assertGreater(min(ps), bound)  # every one of them is above the challenge-statement pressure
-        lo, hi = round(min(ps), 1), round(max(ps), 1)
+        lo, hi = int(round(min(ps))), int(round(max(ps)))  # whole kPa, as decision 14:15 words it
         above = (int(round(min(ps) - bound)), int(round(max(ps) - bound)))
         atm = {round(min(ps) / 101.325, 1), round(max(ps) / 101.325, 1)}
         self.assertEqual(len(atm), 1)
+        atm = atm.pop()
+        at = f"{T.num(min(os_))} to {T.num(max(os_))}% oxygen and about {T.num(atm)} atm ({lo} to {hi} kPa)"
         e = self.sc["lunar_habitat"]
         want_frame = (f"No counted test was recorded at {T.num(ch['o2_pct_min'])}% oxygen or more and at or below "
-                      f"{T.num(ch['pressure_psia_max'])} psi: the {len(inside)} counted tests inside the bins are "
-                      f"fuel-droplet tests recorded at {T.num(min(os_))} to {T.num(max(os_))}% oxygen and {lo} to {hi} kPa "
-                      f"(about {T.num(atm.pop())} atm), {above[0]} to {above[1]} kPa above it.")
+                      f"{T.num(ch['pressure_psia_max'])} psi; the {len(inside)} counted tests inside the bins are "
+                      f"fuel-droplet tests recorded {above[0]} to {above[1]} kPa above it, at {at}.")
         self.assertIn(want_frame, e["frame"])
-        self.assertIn(f"{T.num(ch['pressure_psia_max'])} psi ({round(bound, 1)} kPa) or less as the expected Moon Base "
-                      "atmosphere", e["frame"])
-        self.assertIn("expected", refs["CH.moonbase"]["text"])  # the hedge kept in the frame is the item's own
+        # the challenge statement in the item's own wording (hedges kept), and the data role's caveat as written
+        self.assertIn(refs["CH.moonbase"]["text"].rstrip(". "), e["frame"])
+        self.assertIn(f"({T.num(ch['pressure_psia_max'])} psi = {round(bound, 1)} kPa)", e["frame"])
+        pk = json.loads((ROOT / B.F_PACKAGES / "scenario_lunar_habitat.json").read_text(encoding="utf-8"))
+        self.assertIn(pk["environment"]["caveat"], e["frame"])
+        self.assertIn(f"{B.F_PACKAGES}/scenario_lunar_habitat.json#environment.caveat", e["frame_sources"])
         f = e["frame_facts"]
         self.assertEqual(f["counted_tests_at_or_below_challenge_bound"], 0)
         self.assertEqual(f["counted_tests_inside_bins"], len(inside))
         self.assertEqual(sorted(f["recorded_pressure_kpa_in_tests_csv"].values()), [min(ps), max(ps)])
         self.assertEqual(f["kpa_above_challenge_bound_rounded"], list(above))
-        # the rounded pressures are stated by the data role's scenario note, which the frame cites
+        # the matched ranges of the data role's package equal this recount and are cited
+        s1_pk = package_need("lunar_habitat", "S1")["matched_ranges"]
+        self.assertEqual((s1_pk["pressure_kpa"]["min"], s1_pk["pressure_kpa"]["max"]), (min(ps), max(ps)))
+        self.assertEqual((s1_pk["o2_pct"]["min"], s1_pk["o2_pct"]["max"]), (min(os_), max(os_)))
+        self.assertTrue(any(x.endswith(".matched_ranges") for x in e["frame_sources"]))
+        # 'about 0.7 atm' is printed because the data role's scenario note names 0.7 atm; the frame cites it
         note_src = next(x for x in e["frame_sources"] if x.startswith(f"{B.F_SCENARIOS}#scenarios."))
         note = R.resolve(note_src)["text"]
         self.assertEqual(note, self.sp.scen["lunar_habitat"]["note"])
-        self.assertIn(f"{lo} to {hi} kPa", note)
-        # wherever the count of the matched tests is shown, the recorded pressure is next to it
-        short = f"recorded at {lo} to {hi} kPa, above the {T.num(ch['pressure_psia_max'])} psi ({round(bound, 1)} kPa) of the challenge statement"
+        self.assertIn(f"{T.num(atm)} atm", note)
+        # wherever the count of the matched tests is shown, the recorded oxygen and pressure are next to it
+        short = (f"recorded at {at}, {above[0]} to {above[1]} kPa above the {T.num(ch['pressure_psia_max'])} psi "
+                 f"({round(bound, 1)} kPa) of the challenge statement")
         s1 = self.need("lunar_habitat", "S1")["statement"]
-        self.assertIn(f"These {len(inside)} were recorded at {T.num(min(os_))} to {T.num(max(os_))}% oxygen and {lo} to {hi} kPa", s1)
+        self.assertIn(f"These {len(inside)} were recorded at {at}", s1)
         self.assertIn(f"{above[0]} to {above[1]} kPa above the {T.num(ch['pressure_psia_max'])} psi ({round(bound, 1)} kPa) of the "
-                      "challenge statement (CH.moonbase); no counted test was recorded at", s1)
+                      "challenge statement (CH.moonbase) and inside the team's wider pressure bin; no counted test was "
+                      "recorded at", s1)
+        self.assertTrue(any(x.endswith(".matched_ranges") for x in self.need("lunar_habitat", "S1")["sources"]))
         gap = next(g for g in e["gaps"] if g["rule"] == "s1_phase_droplets_only")
         self.assertIn(f"They were {short}.", gap["text"])
         note69 = next(n for n in e["result_notes"] if n["investigation_id"] == "PSI-69")
@@ -465,6 +482,65 @@ class BuiltFiles(unittest.TestCase):
             self.assertNotIn("challenge statement (CH.moonbase)", t)
             self.assertNotIn("Moon Base", t)
         self.assertNotIn("counted_tests_at_or_below_challenge_bound", iss["frame_facts"])
+
+    # ---------------------------------------------------------------- 14:59 merge (literature check of the links)
+    def test_objective_links_supported_only_and_never_an_empty_field(self):
+        links = _csv(B.F_OBJ_LINKS)
+        supported = {(r["need_id"], r["investigation_id"]) for r in links if r["verdict"] == "supported"}
+        # every counted test belongs to a supported link (need_tests.csv 'stated' = verdict 'supported')
+        for r in self.sp.links:
+            if r["objective_link"] == "stated":
+                self.assertIn((r["need_id"], r["investigation_id"]), supported, r)
+        for e in self.res["scenarios"]:
+            for item in e["needs"] + e["result_notes"]:
+                for s in item["sources"]:
+                    self.assertNotRegex(s, r"^PSI-\d+\.$", s)  # the 'PSI-25.' failure of the interrupted run
+                    self.assertTrue(R.check(s), s)
+        # D1/PSI-25 has no record field: it is cited through its publication item
+        d1 = self.need("iss", "D1")
+        self.assertIn(f"{B.F_REFS}#BASS2TM.products", d1["sources"])
+        self.assertIn(f"{B.F_OBJ_LINKS}#D1/PSI-25", d1["sources"])
+        # a link with verdict 'differs' or 'topic_only' is never named as a stated objective in a note
+        not_supported = {(r["need_id"], r["investigation_id"]) for r in links} - supported
+        for e in self.res["scenarios"]:
+            for n in e["result_notes"]:
+                for nid in n["facts"].get("needs_stated", []):
+                    self.assertNotIn((nid, n["investigation_id"]), not_supported)
+        note25 = next(n for n in self.sc["iss"]["result_notes"] if n["investigation_id"] == "PSI-25")
+        self.assertIn("D1 (Combustion products) to an objective stated in a publication on this investigation",
+                      note25["text"])
+
+    def test_detection_gap_is_built_from_d1_and_d2_as_they_are(self):
+        for sc in ("iss", "lunar_habitat"):
+            gap = next(g for g in self.sc[sc]["gaps"] if g["rule"] == "detection")
+            d1, d2 = len(self.sp.stated("D1")), len(self.sp.stated("D2"))
+            self.assertEqual((gap["facts"]["d1_counted_tests"], gap["facts"]["d2_counted_tests"]), (d1, d2))
+            if d2 == 0:
+                self.assertIn("no test is counted for smoke generation conditions (D2)", gap["text"])
+            if d1:
+                self.assertIn(f"the {d1} tests counted for combustion products (D1", gap["text"])
+
+    def test_documented_elsewhere_sentences_are_used_as_written_next_to_the_gap(self):
+        p1 = self.need("iss", "P1")
+        cited = [s for s in p1["sources"] if ".statements." in s]
+        self.assertTrue(cited)
+        for s in cited:
+            self.assertIn(R.resolve(s)["text"], p1["statement"])
+        self.assertIn("The sentence is not used as a value of any test.", p1["statement"])
+
+    def test_two_tests_read_as_both(self):
+        p3 = self.need("iss", "P3")
+        if p3["facts"].get("tests_oxygen_only") == 2:
+            self.assertNotIn("All 2 ", p3["statement"])
+            self.assertIn("Both come from", p3["statement"])
+
+    def test_reading_that_contradicts_the_count_is_reported(self):
+        # pipeline/spec/needs.json D1 reading says no test is counted although the literature check counts
+        # BASS-II tests for D1; the build reports it and keeps the reading as written (not pm's file)
+        reading = self.ctx.need["D1"]["reading"]
+        if self.sp.stated("D1") and B.READING_SAYS_NONE.search(reading):
+            self.assertTrue(any("/D1:" in w for w in self.res["warnings"]))
+            self.assertIn(reading.rstrip("."), self.need("iss", "D1")["statement"])
 
     def test_flow_comparison_says_where_the_remaining_tests_are(self):
         for sc in ("iss",):
@@ -514,6 +590,167 @@ class BuiltFiles(unittest.TestCase):
         k = p1["facts"]["tests_oxygen_only"]
         self.assertEqual(sum(p1["facts"]["oxygen_only_by_investigation"].values()), k)
         self.assertIn(f"The {k} by investigation: ", p1["statement"])
+
+    # ---------------------------------------------------------------- second careful-reader pass (14 Nov)
+    def test_no_counted_test_is_not_no_test_uncounted_tests_at_or_below_the_bound_are_named(self):
+        """'No counted test was recorded at 30% oxygen or more and at or below 10.2 psi' is about counted tests.
+        Tests that are counted for no need and were recorded there are named in the lunar frame, and the result
+        note of the investigation says where its tests inside the bins were recorded. Recounted here from
+        tests.csv, need_tests.csv and references.json only."""
+        refs = {it["id"]: it for r in json.loads((ROOT / B.F_REFS).read_text())["references"] for it in r.get("items", [])}
+        ch = refs["CH.moonbase"]["values"]
+        bound = ch["pressure_psia_max"] * 6.894757
+        tests = self.sp.tests
+        counted = {r["test_id"] for r in self.sp.links if r["objective_link"] == "stated"}
+        at_or_below = [t for t, row in tests.items() if row["o2_basis"] == "ambient" and row["o2_pct"]
+                       and row["pressure_kpa"] and float(row["o2_pct"]) >= ch["o2_pct_min"]
+                       and float(row["pressure_kpa"]) <= bound]
+        self.assertTrue(at_or_below)  # such tests exist in the tables today (PSI-159 at about half an atmosphere)
+        self.assertFalse(set(at_or_below) & counted)  # and none of them is counted: the decision's sentence holds
+        invs = sorted({tests[t]["investigation_id"] for t in at_or_below}, key=B.acc_key)
+        e = self.sc["lunar_habitat"]
+        self.assertEqual(e["frame_facts"]["investigations_with_uncounted_tests_at_or_below_challenge_bound"], invs)
+        supported = {r["investigation_id"] for r in _csv(B.F_OBJ_LINKS) if r["verdict"] == "supported"}
+        for acc in invs:
+            self.assertNotIn(acc, supported)  # the reason the frame gives
+            kinds = {(tests[t]["fuel_phase"], tests[t]["sample_geometry"]) for t in at_or_below
+                     if tests[t]["investigation_id"] == acc}
+            self.assertEqual(len(kinds), 1)
+            noun = T.cap(T.kind_noun(*next(iter(kinds)), 2))
+            self.assertIn(f"{noun} of {self.ctx.name(acc)} were recorded at {T.num(ch['o2_pct_min'])}% oxygen or more "
+                          f"and at or below {T.num(ch['pressure_psia_max'])} psi; they are counted for no need, because "
+                          "the team pipeline links none of the needs to an objective stated for that investigation.",
+                          e["frame"])
+            self.assertTrue(any(s.startswith(f"{B.F_TESTS}#") and tests[s.split("#")[1]]["investigation_id"] == acc
+                                for s in e["frame_sources"]))
+        # the frame prints no count of them (ai/check_all.py has no second path for it); the result note does,
+        # for the tests inside the team bins
+        in_bins = [t for t in tests if self.sp.tier("lunar_habitat", t) == "atmosphere"
+                   and tests[t]["investigation_id"] == "PSI-159"]
+        self.assertTrue(in_bins)
+        self.assertTrue(all(float(tests[t]["pressure_kpa"]) <= bound for t in in_bins))
+        self.assertFalse(set(in_bins) & counted)
+        os_ = [float(tests[t]["o2_pct"]) for t in in_bins]
+        ps = [float(tests[t]["pressure_kpa"]) for t in in_bins]
+        note = next(n for n in e["result_notes"] if n["investigation_id"] == "PSI-159")
+        want = (f"{len(in_bins)} of its {sum(1 for t in tests.values() if t['investigation_id'] == 'PSI-159' and t['o2_basis'] == 'ambient' and t['o2_pct'])} "
+                f"tests with recorded ambient oxygen have oxygen and pressure inside this scenario's team bins "
+                f"(recorded at {int(round(min(os_)))} to {int(round(max(os_)))}% oxygen and {int(round(min(ps)))} kPa, "
+                f"below the {T.num(ch['pressure_psia_max'])} psi ({round(bound, 1)} kPa) of the challenge statement; "
+                "counted for no need)")
+        self.assertEqual(int(round(min(ps))), int(round(max(ps))))
+        self.assertIn(want, note["text"])
+        self.assertEqual(note["facts"]["recorded_o2_pct"], {"min": min(os_), "max": max(os_)})
+        self.assertEqual(note["facts"]["tests_inside_bins_counted_for_a_need"], 0)
+        # the same tests are never worded as above the bound, and the FLEX note keeps the decision's wording
+        self.assertNotIn("kPa above", note["text"])
+        # no such sentence where the scenario does not rest on the challenge statement
+        self.assertNotIn("counted for no need", self.sc["iss"]["frame"])
+
+    def test_scenario_caveat_is_shown_as_the_teams_data_note_in_quotation_marks(self):
+        """The data role's caveat is addressed to readers of its package ('Read the recorded pressure ...'); it
+        is given as written, inside quotation marks, and every scenario that has one shows it."""
+        for sc in ("iss", "lunar_habitat"):
+            pk = json.loads((ROOT / B.F_PACKAGES / f"scenario_{sc}.json").read_text(encoding="utf-8"))
+            caveat = pk["environment"]["caveat"]
+            self.assertTrue(caveat)
+            self.assertIn(f"The team's data note on these ranges reads: \"{caveat}\"", self.sc[sc]["frame"])
+            self.assertIn(f"{B.F_PACKAGES}/scenario_{sc}.json#environment.caveat", self.sc[sc]["frame_sources"])
+            self.assertEqual(self.sc[sc]["frame"].count(caveat), 1)
+        for sc in ("spacesuit", "mars_habitat"):
+            pk = json.loads((ROOT / B.F_PACKAGES / f"scenario_{sc}.json").read_text(encoding="utf-8"))
+            if not pk["environment"].get("caveat"):
+                self.assertNotIn("data note", self.sc[sc]["frame"])
+
+    def test_evidence_rule_says_who_matched_the_sentences(self):
+        meta = json.loads((ROOT / B.F_NEEDS).read_text(encoding="utf-8"))["_meta"]
+        unreviewed = "not human-reviewed" in meta["generated_by"].lower()
+        for e in self.res["scenarios"]:
+            self.assertIn(T.FRAME_RULE, e["frame"])
+            self.assertEqual(T.FRAME_RULE_AI in e["frame"], unreviewed)
+            self.assertNotIn("counts only the links that the publications it read support", e["frame"])
+
+    def test_a_reading_that_contradicts_the_count_gets_a_team_note(self):
+        reading = self.ctx.need["D1"]["reading"]
+        n_d1 = len(self.sp.stated("D1"))
+        for sc in ("iss", "lunar_habitat"):
+            for n in self.sc[sc]["needs"]:
+                r = self.ctx.need[n["need_id"]]["reading"]
+                contradicts = bool(n["facts"]["usable_tests"]) and bool(B.READING_SAYS_NONE.search(r))
+                self.assertEqual("Team note: this reading still says that no test is counted" in n["statement"],
+                                 contradicts, (sc, n["need_id"]))
+                self.assertIn(r.rstrip("."), n["statement"])  # the reading itself stays as written
+        if n_d1 and B.READING_SAYS_NONE.search(reading):
+            links = [r for r in _csv(B.F_OBJ_LINKS) if r["need_id"] == "D1" and r["verdict"] == "supported"]
+            self.assertTrue(all(not r["record_field"].strip() and r["publication_item"].strip() for r in links))
+            items = sorted({r["publication_item"] for r in links})
+            self.assertTrue(self.need("iss", "D1")["statement"].endswith(
+                f"Team note: this reading still says that no test is counted; the {n_d1} tests in the count above "
+                f"are counted, through a purpose sentence in a publication on PSI-25 (BASS-II) ({T.join_and(items)}) "
+                "and not in the PSI record."))
+
+    def test_texts_speak_of_the_tables_used_here_not_of_all_of_psi(self):
+        for sc in ("iss", "lunar_habitat"):
+            e = self.sc[sc]
+            team = [e["frame"]] + [g["text"] for g in e["gaps"] if g["status"] == "from_rule"]
+            for t in team:
+                self.assertNotIn("Every test in the PSI tables", t)
+                self.assertNotIn("the PSI test tables", t)
+            gap = next(g for g in e["gaps"] if g["rule"] == "detection")
+            self.assertNotIn("no pressure in the table", gap["text"])
+            if gap["facts"]["d1_not_columns"]:
+                self.assertIn("no pressure value in the PSI experimental tables", gap["text"])
+            solid = next(g for g in e["gaps"] if g["rule"] == "solid_at_atmosphere")
+            self.assertIn(f"In the PSI experimental tables of the {self.ctx.n_investigations} investigations used here",
+                          solid["text"])
+            # the droplet gap speaks of the counted tests: uncounted gas-burner tests lie inside the same bins
+            drop = next(g for g in e["gaps"] if g["rule"] == "s1_phase_droplets_only")
+            n_s1 = len(self.sp.ids(sc, "S1", "atmosphere"))
+            self.assertTrue(drop["text"].startswith(f"The {n_s1} counted tests inside this scenario's team bins"))
+            uncounted_gas = [t for t, row in self.sp.tests.items() if self.sp.tier(sc, t) == "atmosphere"
+                             and row["fuel_phase"] == "gas"]
+            self.assertTrue(uncounted_gas)
+            self.assertFalse(set(uncounted_gas) & {r["test_id"] for r in self.sp.links if r["objective_link"] == "stated"})
+        grav = next(g for g in self.sc["lunar_habitat"]["gaps"] if g["rule"].startswith("gravity:"))
+        self.assertIn("Every test in the PSI experimental tables used here is a microgravity test", grav["text"])
+        self.assertTrue(all(t["gravity_level"] == "microgravity" for t in self.sp.tests.values()))
+
+    def test_tests_outside_the_objective_never_contradict_the_psi_record(self):
+        """'(PSI-99) does not state this need as an objective' was wrong: the PSI-99 record names the objective
+        and the card quotes it; the link is marked 'differs' by the literature check. The clause says that the
+        pipeline has no supported match, and for a 'differs' link what the record and the publications say."""
+        links = _csv(B.F_OBJ_LINKS)
+        seen_differs = 0
+        for sc in ("iss", "lunar_habitat"):
+            for n in self.sc[sc]["needs"]:
+                self.assertNotIn("not state this need as an objective", n["statement"])
+                outside = sorted({self.sp.tests[r["test_id"]]["investigation_id"] for r in self.sp.links
+                                  if r["need_id"] == n["need_id"] and r["objective_link"] != "stated"}, key=B.acc_key)
+                if not outside:
+                    self.assertNotIn("supported match", n["statement"])
+                    continue
+                self.assertIn("the team pipeline has no supported match between this need and a purpose sentence of "
+                              f"the investigation{'s' if len(outside) > 1 else ''} ({T.join_and(outside)})",
+                              n["statement"])
+                for acc in outside:
+                    rows = [r for r in links if r["need_id"] == n["need_id"] and r["investigation_id"] == acc]
+                    self.assertFalse(any(r["verdict"] == "supported" for r in rows))
+                    differs = [r for r in rows if r["verdict"] == "differs" and r["record_field"].strip()]
+                    if differs:
+                        seen_differs += 1
+                        rec = json.loads((config.PSI_CATALOG_DIR / f"{acc}.json").read_text(encoding="utf-8"))
+                        for r in differs:  # the record does name the objective: the quoted words are in its field
+                            self.assertIn(" ".join(r["quote"].split()), " ".join(rec[r["record_field"]].split()))
+                        items = sorted({r["publication_item"] for r in differs if r["publication_item"].strip()})
+                        self.assertIn(f"The PSI record of {acc} names this objective, but the publications that were "
+                                      f"read state a different purpose for this investigation ({T.join_and(items)}).",
+                                      n["statement"])
+                        for i in items:
+                            self.assertIn(f"{B.F_REFS}#{i}", n["sources"])
+                        self.assertEqual(n["facts"]["outside_objective_link_verdicts"][acc], "differs")
+                    else:
+                        self.assertNotIn(f"The PSI record of {acc} names this objective", n["statement"])
+        self.assertGreater(seen_differs, 0)  # PSI-98 for P1 and PSI-99 for P3 today
 
     # ---------------------------------------------------------------- cards
     def test_cards_are_verbatim_quotes(self):

@@ -3,43 +3,51 @@
   "built_by": "ai/evidence_map.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T14:53:09+09:00",
+  "generated_at": "2026-11-14T15:46:15+09:00",
   "inputs_sha256": {
-   "data/pipeline/scenario_tests.csv": "b746f248a3a442b6ef770388693c1cb7032b3b2c658898ecb33616800fd8ee6c",
-   "data/pipeline/tests.csv": "5ba43199cee4657cabf0fca8e27681ce25e83f9f6857d033c089deebaa84fb7a",
+   "data/pipeline/scenario_tests.csv": "6581e840553a2d4197d90ecc2ad94b5b307747112f81b4d418a2e357ae45eaab",
+   "data/pipeline/tests.csv": "b8acc1073fbc33a37563eb7f7cd12811e602fb7363ee69982d97860f05522211",
    "data/psi/experimental_tables/PSI-20_Experimental table_ACME BRE.csv": "4aa5d3f98708ceacced5c620d46858b9965f8d4d941b203229f46467d53e5ab7",
    "data/psi/manifest.json": "48e213ba2120d4ba52544cb068cde03a5d71ba53d4f1ad5ccf38d5e0eb7841e7",
-   "pipeline/spec/references.json": "b8a58b622268c973f8837762324734a30b60b0b3d5aebc4882f6eed2343cb5b9",
-   "pipeline/spec/scenarios.json": "f274bcac374eb46e61fb32f6a91b32a3b27bd3df8ecd3a006ae79b97363f29ae",
-   "pipeline/spec/sources.json": "2fec33112f1fd6791326817d1825fe63b89d4db6085730479acd776a4b2a5447",
-   "scoring/scoring_config.json": "09a2ac8dabe2eb63bf73bc9836034238652fde510b510d97b5081aec9c455567"
+   "pipeline/spec/references.json": "cf3b2e626f279de68478382d917adef7a8002860cc2e76a53580d1c999d9b723",
+   "pipeline/spec/scenarios.json": "b9d39a7478b5198f4e4688277e46acb7e639c9a8885d7e84b38d99f7e038c74d",
+   "pipeline/spec/sources.json": "acf3d0a4b35ece951278bb71bca6a3c8c5b40ec542891ef63d1a1609f99140ec",
+   "scoring/scoring_config.json": "2db36189feb9ef4db06afd74c75a3799ff3d96466c4c0ceafa61c6cf6f324acf"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). No language model ran to build it. Text in it is quoted or copied from the cited NASA sources by code; counts and fields are computed by code. Team output, not a NASA conclusion.",
-  "content_sha256": "4d07e8cec010d671388ea538fef160f67f63ec075e0e4823e326d69dee4d3ccc"
+  "content_sha256": "ee8501cc18e06961c1fa49154f35e72510d3516f1d130816384755880e2a8101"
  },
  "labels": {
   "title": "Where the PSI test tables stop",
   "lane_notes": {
+   "gas": "386 with a recorded ambient oxygen value (PSI-10, PSI-159), from 18.0% to 40% oxygen; 246 at 30% oxygen or more",
+   "liquid": "353 with a recorded ambient oxygen value (PSI-39, PSI-69), from 12% to 34% oxygen; 24 at 30% oxygen or more",
+   "solid": "139 with a recorded ambient oxygen value (PSI-25, PSI-98, PSI-99), from 13.6% to 22.2% oxygen; 0 at 30% oxygen or more; no solid-sample test with a recorded oxygen value above 22.2% in the experimental tables of the 24 PSI investigations used here (237 solid-sample tests record no oxygen value); pressure is not a column in the PSI experimental tables of the solid-sample tests"
+  },
+  "lane_details": {
    "gas": {
     "name": "Gas flames",
-    "text": "Gas flames: 386 tests with a recorded ambient oxygen value (PSI-10, PSI-159); recorded oxygen 17.9686% to 40%; 246 at 30% oxygen or more."
+    "text": "Gas flames: 386 tests with a recorded ambient oxygen value (PSI-10, PSI-159); recorded oxygen 18.0% to 40%; 246 at 30% oxygen or more.",
+    "short": "386 with a recorded ambient oxygen value (PSI-10, PSI-159), from 18.0% to 40% oxygen; 246 at 30% oxygen or more"
    },
    "liquid": {
     "name": "Fuel droplets",
-    "text": "Fuel droplets: 353 tests with a recorded ambient oxygen value (PSI-39, PSI-69); recorded oxygen 12% to 34%; 24 at 30% oxygen or more."
+    "text": "Fuel droplets: 353 tests with a recorded ambient oxygen value (PSI-39, PSI-69); recorded oxygen 12% to 34%; 24 at 30% oxygen or more.",
+    "short": "353 with a recorded ambient oxygen value (PSI-39, PSI-69), from 12% to 34% oxygen; 24 at 30% oxygen or more"
    },
    "solid": {
     "name": "Solid fuels",
-    "text": "Solid fuels: 140 tests with a recorded ambient oxygen value (PSI-25, PSI-98, PSI-99); recorded oxygen 13.6% to 22.2%; 0 at 30% oxygen or more.",
-    "end_label": "no solid-sample test with a recorded oxygen value above 22.2% in the tables of the 24 PSI investigations (236 solid-sample tests record no oxygen value)",
-    "pressure_note": "pressure is not a column in the PSI tables of the solid-sample tests"
+    "text": "Solid fuels: 139 tests with a recorded ambient oxygen value (PSI-25, PSI-98, PSI-99); recorded oxygen 13.6% to 22.2%; 0 at 30% oxygen or more.",
+    "short": "139 with a recorded ambient oxygen value (PSI-25, PSI-98, PSI-99), from 13.6% to 22.2% oxygen; 0 at 30% oxygen or more",
+    "end_label": "no solid-sample test with a recorded oxygen value above 22.2% in the experimental tables of the 24 PSI investigations used here (237 solid-sample tests record no oxygen value)",
+    "pressure_note": "pressure is not a column in the PSI experimental tables of the solid-sample tests"
    }
   },
   "caption": [
-   "Each dot is one or more recorded tests from the experimental tables of the 24 NASA PSI investigations used here: the 879 tests with a recorded ambient oxygen value, from 7 of the investigations, all run in microgravity. Also drawn: atmospheres cited from NASA documents and the challenge statement, and the team's own presets and counting ranges. A plot by the team; a dot means a test was run at that oxygen level, not that anything burned or went out; a dot near a target atmosphere does not mean the test represents that atmosphere, because fuel, flow, pressure, balance gas and gravity can differ; not operational safety guidance.",
+   "Each dot is one or more recorded tests from the experimental tables of the 24 NASA PSI investigations used here: the 878 tests with a recorded ambient oxygen value, from 7 of the investigations, all run in microgravity. Also drawn: atmospheres cited from NASA documents and the challenge statement, and the team's own presets and counting ranges. A plot by the team; a dot means a test was run at that oxygen level, not that anything burned or went out; a dot near a target atmosphere does not mean the test represents that atmosphere, because fuel, flow, pressure, balance gas and gravity can differ; not operational safety guidance.",
    "Oxygen percent alone does not define an atmosphere; pressure and balance gas are shown where the table records them.",
    "Gas-burner flames that emulate condensed fuels (PSI-20) were run at listed oxygen concentrations up to 40% (approximate, as the table notes say); that table is per test day and is not plotted.",
-   "Outside PSI, Table 1 of the paper 'Preliminary Results from the Saffire VI Experiment' (ICES-2024-365) lists the sample test conditions of the five Saffire IV to VI samples considered in that paper, from 22.0 to 31.0 mol % oxygen and 54.1 to 100.0 kPa (drawn as crosses; cited, never counted); none of the 24 PSI investigations used here is one of these flights; the values were read from the paper by an AI assistant and not checked by a person."
+   "Outside PSI, Table 1 of the paper 'Preliminary Results from the Saffire VI Experiment' (ICES-2024-365) lists the sample test conditions of the five Saffire IV to VI samples considered in that paper, from 22.0 to 31.0 mol % oxygen and 54.1 to 100.0 kPa (cited, never counted); none of the 24 PSI investigations used here is one of these flights; the values were read from the paper by an AI assistant and not checked by a person."
   ],
   "caption_sources": [
    [
@@ -62,10 +70,8 @@
     "pipeline/spec/references.json#SAF456.conditions"
    ]
   ],
-  "saffire_note": {
-   "text": "Outside PSI, Table 1 of the paper 'Preliminary Results from the Saffire VI Experiment' (ICES-2024-365) lists the sample test conditions of the five Saffire IV to VI samples considered in that paper, from 22.0 to 31.0 mol % oxygen and 54.1 to 100.0 kPa (drawn as crosses; cited, never counted); none of the 24 PSI investigations used here is one of these flights; the values were read from the paper by an AI assistant and not checked by a person.",
-   "source": "pipeline/spec/references.json#SAF456.conditions"
-  },
+  "saffire_note": "Outside PSI, Table 1 of the paper 'Preliminary Results from the Saffire VI Experiment' (ICES-2024-365) lists the sample test conditions of the five Saffire IV to VI samples considered in that paper, from 22.0 to 31.0 mol % oxygen and 54.1 to 100.0 kPa (cited, never counted); none of the 24 PSI investigations used here is one of these flights; the values were read from the paper by an AI assistant and not checked by a person",
+  "saffire_note_source": "pipeline/spec/references.json#SAF456.conditions",
   "saffire_status": "item found in references.json; markers written from its values",
   "hollow_marker_meaning": "carbon dioxide or helium added to the atmosphere (balance_gas co2_added, he_added)"
  },
@@ -8750,7 +8756,7 @@
    "fuel_phase": "solid",
    "investigation_id": "PSI-98",
    "source_id": "saffire1",
-   "o2_pct": 21.6,
+   "o2_pct": 21.7,
    "pressure_kpa": null,
    "balance_gas": "not_recorded",
    "n_tests": 1,
@@ -8758,7 +8764,7 @@
     "SAFFIRE-1-S1"
    ],
    "value_flags": [
-    "o2_pct:range_in_source_midpoint_used"
+    "o2_pct:range_in_source_start_value_named_in_publication"
    ]
   },
   {
@@ -8780,50 +8786,22 @@
    "fuel_phase": "solid",
    "investigation_id": "PSI-99",
    "source_id": "saffire2",
-   "o2_pct": 21.95,
-   "pressure_kpa": null,
-   "balance_gas": "not_recorded",
-   "n_tests": 1,
-   "test_ids": [
-    "SAFFIRE-2-2-9"
-   ],
-   "value_flags": [
-    "o2_pct:range_in_source_midpoint_used"
-   ]
-  },
-  {
-   "fuel_phase": "solid",
-   "investigation_id": "PSI-99",
-   "source_id": "saffire2",
-   "o2_pct": 22.05,
-   "pressure_kpa": null,
-   "balance_gas": "not_recorded",
-   "n_tests": 1,
-   "test_ids": [
-    "SAFFIRE-2-2-8"
-   ],
-   "value_flags": [
-    "o2_pct:range_in_source_midpoint_used"
-   ]
-  },
-  {
-   "fuel_phase": "solid",
-   "investigation_id": "PSI-99",
-   "source_id": "saffire2",
    "o2_pct": 22.1,
    "pressure_kpa": null,
    "balance_gas": "not_recorded",
-   "n_tests": 6,
+   "n_tests": 7,
    "test_ids": [
     "SAFFIRE-2-2-2",
     "SAFFIRE-2-2-3",
     "SAFFIRE-2-2-4",
     "SAFFIRE-2-2-5",
     "SAFFIRE-2-2-6",
-    "SAFFIRE-2-2-7"
+    "SAFFIRE-2-2-7",
+    "SAFFIRE-2-2-8"
    ],
    "value_flags": [
-    "o2_pct:approximate_in_source"
+    "o2_pct:approximate_in_source",
+    "o2_pct:range_in_source_start_value_named_in_publication"
    ]
   }
  ],
@@ -8900,8 +8878,8 @@
    "status": "no column",
    "investigation_id": "PSI-99",
    "fuel_phase": "solid",
-   "tests_plotted": 9,
-   "tests_without_pressure_value": 9,
+   "tests_plotted": 8,
+   "tests_without_pressure_value": 8,
    "raw_pressure_columns": [],
    "source": "pipeline/spec/sources.json#saffire2"
   }
@@ -8921,11 +8899,12 @@
    "why": "Oxygen of the oxidizer stream of an inverse flame (o2_basis 'oxidizer_stream') is not the oxygen of an atmosphere a crew breathes, so these tests are never mixed with the ambient points."
   },
   "no_ambient_oxygen_value": {
-   "n": 671,
+   "n": 672,
    "rule": "Tests with no o2_basis, or with o2_basis 'ambient' and an empty o2_pct: the table records no oxygen value for them. Not recorded is not zero.",
    "no_oxygen_basis": 669,
-   "ambient_basis_without_value": 2,
+   "ambient_basis_without_value": 3,
    "ambient_basis_without_value_test_ids": [
+    "SAFFIRE-2-2-9",
     "SAFFIRE-3-S1",
     "SAFFIRE-3-S2"
    ],
@@ -8935,6 +8914,12 @@
      "tests": 121,
      "investigation_id": "PSI-26",
      "source": "pipeline/spec/sources.json#bass"
+    },
+    "saffire2": {
+     "status": "column, cells empty",
+     "tests": 1,
+     "investigation_id": "PSI-99",
+     "source": "pipeline/spec/sources.json#saffire2"
     },
     "saffire3": {
      "status": "no column",
@@ -8963,6 +8948,7 @@
    },
    "by_investigation": {
     "PSI-26": 121,
+    "PSI-99": 1,
     "PSI-100": 2,
     "PSI-101": 109,
     "PSI-102": 4,
@@ -8970,7 +8956,7 @@
    },
    "by_fuel_phase": {
     "gas": 435,
-    "solid": 236
+    "solid": 237
    }
   },
   "psi20_test_day_table": {
@@ -9135,20 +9121,20 @@
   {
    "id": "CH.moonbase",
    "kind": "challenge_statement",
-   "label": "Challenge statement: Moon Base atmosphere expected at 30% oxygen or more and 10.2 psi or less (read from a copy)",
+   "label": "Challenge statement: Moon Base and pressurized-rover atmosphere expected between spacesuit and Earth conditions: oxygen likely 30% or more, pressure 10.2 psi or less (checked on the official page by another session of the team)",
    "o2_min": 30.0,
    "pressure_max": 70.3,
    "pressure_psia_max": 10.2,
    "pressure_conversion": "contract pair (contracts/README.md: 14.7 psi = 101.3 kPa, 10.2 psi = 70.3 kPa)",
    "draw": "line_and_region",
-   "as_written": "30% oxygen or more and 10.2 psi or less",
+   "as_written": "oxygen likely 30% or more, pressure 10.2 psi or less",
    "source": "pipeline/spec/references.json#CH.moonbase",
    "reference_id": "CHALLENGE-2026",
-   "reference_title": "Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
+   "reference_title": "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
    "issuer": "NASA Space Apps Challenge",
    "reference_kind": "challenge",
-   "access": "read_from_copy",
-   "access_note": "read from a copy"
+   "access": "read_by_teammate",
+   "access_note": "checked on the official page by another session of the team"
   },
   {
    "id": "preset.iss",
@@ -9168,7 +9154,7 @@
    "label": "Lunar base or pressurized rover (team preset: corner of the challenge-statement range): 30% oxygen, 70.3 kPa",
    "o2_pct": 30.0,
    "pressure_kpa": 70.3,
-   "as_written": "Challenge text: lunar bases and pressurized rovers at >=30% O2 and <=10.2 psi (70.3 kPa). Ventilation assumed.",
+   "as_written": "Challenge statement (Flame in Freefall, 'Spacesuits and oxygen concentration'): Moon Base and pressurized-rover atmosphere likely at 30% O2 or more and 10.2 psi (70.3 kPa) or less. Ventilation assumed.",
    "source": "scoring/scoring_config.json#presets.lunar_habitat",
    "access": "team",
    "access_note": "the team's own value (ui role, scoring/scoring_config.json)",
@@ -9180,7 +9166,7 @@
    "label": "Spacesuit (team preset; given as text, off the oxygen axis of the map): 100% oxygen, 29.6 kPa",
    "o2_pct": 100.0,
    "pressure_kpa": 29.6,
-   "as_written": "Challenge text: spacesuits at 4.3 psi (29.6 kPa), 100% O2.",
+   "as_written": "Challenge statement (Flame in Freefall, 'Spacesuits and oxygen concentration'): spacesuits at 100% O2 and 4.3 psi (29.6 kPa).",
    "source": "scoring/scoring_config.json#presets.spacesuit",
    "access": "team",
    "access_note": "the team's own value (ui role, scoring/scoring_config.json)",
@@ -9250,13 +9236,14 @@
    "pressure_max": 85.8,
    "pressure_min_inclusive": true,
    "pressure_max_inclusive": false,
-   "as_written": "The challenge text gives 30% oxygen or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement, which was read from a copy and not checked on the official page; NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
+   "as_written": "The challenge text gives oxygen likely 30% or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement (CH.moonbase: oxygen likely 30% or more, pressure 10.2 psi or less; checked on the official page by another session of the team on 2026-11-14); NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
    "basis_items": [
     "CH.moonbase",
     "EAWG.atmospheres",
     "EA.8.2-34",
     "TB14639.worstcase",
-    "TB008.gaps"
+    "TB008.gaps",
+    "CH.partial_gravity"
    ],
    "tests_inside": 26,
    "tests_inside_by_investigation": {
@@ -9294,8 +9281,9 @@
    "pressure_max": 62.8,
    "pressure_min_inclusive": true,
    "pressure_max_inclusive": false,
-   "as_written": "4.3 psia (29.6 kPa), 100% oxygen. These two values are not in the cited reference items (SMAC.atmospheres lists 14.7, 10.2 and 8.2 psia; EAWG.atmospheres lists cabin atmospheres), so they have no checked source in references.json. The oxygen range 95 to 100% and the pressure bin below 62.8 kPa are the team's choice: any recorded pressure below 62.8 kPa is inside the range. No gravity level is set.",
+   "as_written": "4.3 psi (29.6 kPa), 100% oxygen, as given in the challenge statement (CH.spacesuit). The oxygen range 95 to 100% and the pressure bin below 62.8 kPa are the team's choice: any recorded pressure below 62.8 kPa is inside the range. No gravity level is set.",
    "basis_items": [
+    "CH.spacesuit",
     "SMAC.atmospheres",
     "EAWG.atmospheres"
    ],
@@ -9451,13 +9439,13 @@
  ],
  "sums": {
   "tests_csv_rows": 1824,
-  "plotted": 879,
+  "plotted": 878,
   "plotted_with_pressure": 738,
-  "plotted_without_pressure": 141,
+  "plotted_without_pressure": 140,
   "plotted_by_phase": {
    "gas": 386,
    "liquid": 353,
-   "solid": 140
+   "solid": 139
   },
   "with_pressure_by_phase": {
    "gas": 386,
@@ -9466,17 +9454,17 @@
   },
   "without_pressure_by_investigation": {
    "PSI-25": 129,
-   "PSI-99": 9,
+   "PSI-99": 8,
    "PSI-98": 2,
    "PSI-69": 1
   },
   "with_pressure_above_110_kpa": 147,
   "oxidizer_stream": 274,
-  "no_ambient_oxygen_value": 671,
+  "no_ambient_oxygen_value": 672,
   "total": 1824,
-  "points": 650,
+  "points": 648,
   "points_with_pressure": 593,
-  "points_without_pressure": 57,
+  "points_without_pressure": 55,
   "balance_gas_with_pressure": {
    "n2_only": 166,
    "co2_added": 122,
@@ -9487,7 +9475,7 @@
    "n2_only": 166,
    "co2_added": 123,
    "he_added": 64,
-   "not_recorded": 526
+   "not_recorded": 525
   },
   "tests_gas_fractions_not_summing_to_1": {
    "n": 33,
@@ -9534,12 +9522,12 @@
    },
    "solid": {
     "label": "Solid fuels",
-    "plotted": 140,
+    "plotted": 139,
     "max_o2_pct": 22.2,
     "at_or_above_30_pct_o2": 0,
-    "not_plotted": 236,
+    "not_plotted": 237,
     "not_plotted_oxidizer_stream": 0,
-    "not_plotted_no_ambient_oxygen_value": 236
+    "not_plotted_no_ambient_oxygen_value": 237
    }
   },
   "flight_tests_not_in_psi_counted": 0,

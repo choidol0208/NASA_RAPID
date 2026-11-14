@@ -250,14 +250,18 @@ class PolicyAndLintTest(unittest.TestCase):
         reworded Olson and Ferkul sentence, the flow and test-end clauses. Each is lint-clean, carries no
         advice, prediction or verdict wording, and prints only numbers that are in its facts."""
         from ai import templates as T
-        inside = {"n": 17, "noun": "fuel-droplet tests", "o2": (30.0, 34.0), "kpa": (71.2, 72.4), "atm": 0.7,
+        inside = {"n": 17, "noun": "fuel-droplet tests", "o2": (30.0, 34.0), "kpa": (71, 72), "atm": 0.7,
                   "above": (1, 2)}
-        facts = {"o2": [30, 34], "psi": 10.2, "kpa": [70.3, 71.2, 72.4], "atm": 0.7, "above": [1, 2], "n": 17,
+        facts = {"o2": [30, 34], "psi": 10.2, "kpa": [70.3, 71, 72, 85.8], "atm": 0.7, "above": [1, 2], "n": 17,
                  "materials": 3, "seconds": 5.18, "flow_rest": 9}
+        item = ("Moon Base and pressurized-rover atmosphere expected between spacesuit and Earth conditions: oxygen "
+                "likely 30% or more, pressure 10.2 psi or less.")
+        caveat = ("The pressure range of this scenario reaches up to 85.8 kPa, above the 70.3 kPa (10.2 psi) of the "
+                  "challenge statement, so that tests set to 0.7 atm are inside it.")
         sentences = [
-            T.frame_challenge_bound(30, 10.2, 70.3, "expected", True, 0, inside),
-            T.matched_bound_clause(17, (30.0, 34.0), (71.2, 72.4), 0.7, (1, 2), 10.2, 70.3, 30, 0),
-            "They were " + T.bound_short((71.2, 72.4), 10.2, 70.3) + ".",
+            T.frame_challenge_bound(item, 10.2, 70.3, 30, 0, inside, caveat),
+            T.matched_bound_clause(17, (30.0, 34.0), (71, 72), 0.7, (1, 2), 10.2, 70.3, 30, 0),
+            "They were " + T.bound_short((30.0, 34.0), (71, 72), 0.7, (1, 2), 10.2, 70.3) + ".",
             T.frame_drop_tests("lunar", "every", "every", 5.18, True, True, 3, True),
             T.frame_drop_tests("martian", "every", "some", 5.18, True, True, 3, True),
             T.flow_outside(9),
@@ -277,8 +281,12 @@ class PolicyAndLintTest(unittest.TestCase):
                       LP.lint("At lunar gravity the limits lie between those at 0 g and 1 g."))
         self.assertIn("partial_gravity_result_from_psi",
                       LP.lint("The 17 FLEX tests showed how droplets burned at lunar gravity."))
-        # the caveat never says the 17 tests were at or below the challenge-statement pressure
+        # the caveat never says the 17 tests were at or below the challenge-statement pressure, and it uses the
+        # wording of coord/decisions.md 14:15
         self.assertNotRegex(sentences[1], r"17 were recorded at or below")
+        for s in sentences[:3]:
+            self.assertIn("30 to 34% oxygen and about 0.7 atm (71 to 72 kPa)", s)
+        self.assertIn("No counted test was recorded at 30% oxygen or more and at or below 10.2 psi", sentences[0])
 
 
 class ModalityAndHedgeTest(unittest.TestCase):
@@ -595,14 +603,82 @@ class TemplateWordingTest(unittest.TestCase):
             T.gap_gravity_needed("lunar"), T.gap_solid(24, 22.2, ["PSI-26 (BASS)"]), T.gap_solid_psi20(40.0, True),
             T.gap_solid_saffire([("VI-2", 31.0, 54.1), ("VI-3", 30.3, 54.6)], 5, 24, True), T.GAP_SOLID_NEEDED,
             T.test_end_clause(17, [("disruption", 15), ("completion", 2)], True),
-            T.gap_phase(17, ["PSI-69 (FLEX)"]), T.gap_detection(4, ["PSI-102"], True, True, False, 24),
+            T.gap_phase(17, ["PSI-69 (FLEX)"]),
+            T.gap_detection({"n": 122, "invs": ["PSI-25 (BASS-II)"], "missing": ["pressure"]},
+                            {"n": 0, "invs": [], "missing": []}),
+            T.note_objectives(["P1 (Flammability limit)"], ["D1 (Combustion products)"]),
             T.note_phase("gas", "solid"), T.note_assumed(["pressure"]), T.note_spacesuit(95, 100), T.NOTE_MARS,
             T.note_stream(154), T.NOTE_NEAR, T.note_tie(["FLEX"]),
             T.note_test_day_oxygen(21.0, 40.0, ["3400%", "2100%"], True),
             T.cell_not_used("pressure_kpa", 1, ["PSI-69 (FLEX)"], ["0"], "Ambient pressure; mmHg", "out_of_range"),
             T.outside_objective(272, ["PSI-159"], True), T.status_atmosphere_not_specified(136),
             T.gravity_sentence("lunar"), T.SCENARIO_LABEL, T.CARD_LABEL,
+            # second careful-reader pass (14 Nov)
+            T.frame_rule(True), T.frame_rule(False),
+            T.data_note("The ranges set oxygen, pressure and flow only. Matched tests can have carbon dioxide or "
+                        "helium added to the atmosphere; each need block gives the number."),
+            T.uncounted_below("gas-burner flames", "PSI-159 (ACME CFI-G)",
+                              "at 30% oxygen or more and at or below 10.2 psi", False),
+            T.uncounted_below("tests", "PSI-39 (CFI)", "at 30% oxygen or more and at or below 10.2 psi", True),
+            "9 of its 179 tests have oxygen and pressure inside this scenario's team bins ("
+            + T.bound_short_below((33, 36), (51, 51), None, 10.2, 70.3, True) + ").",
+            T.reading_mismatch(122, ["PSI-25 (BASS-II)"], ["BASS2TM.products"]), T.reading_mismatch(1, [], []),
+            T.outside_objective(2, ["PSI-98"], False, True, differs=[("PSI-98", ["SAF16.saffire1"])]),
+            T.outside_objective(9, ["PSI-10", "PSI-39"], False, False, topic_only=[("PSI-10", ["ACME14.flamedesign"]),
+                                                                                   ("PSI-39", [])]),
+            T.gap_phase(17, ["PSI-69 (FLEX)"], "recorded at 30 to 34% oxygen"),
         ]
+
+    def test_second_reader_pass_sentences(self):
+        """What the second careful-reader pass changed, pinned: which tables a sentence speaks for, whose voice
+        the data role's caveat is in, and that 'no counted test' is followed by the tests that are not counted."""
+        for s in (T.FRAME_GRAVITY, T.gravity_sentence("lunar"), T.gap_gravity("lunar", self.QUOTE)):
+            self.assertIn("Every test in the PSI experimental tables used here is a microgravity test", s)
+        self.assertIn("investigations used here", T.gap_solid(24, 22.2))
+        self.assertIn("have no pressure value in the PSI experimental tables",
+                      T.gap_detection({"n": 122, "invs": ["PSI-25 (BASS-II)"], "missing": ["pressure"]},
+                                      {"n": 0, "invs": [], "missing": []}))
+        caveat = "Read the recorded pressure of the matched tests in each need block before calling a test 'x'."
+        note = T.data_note(caveat)
+        self.assertEqual(note, f"The team's data note on these ranges reads: \"{caveat}\"")
+        inside = {"n": 17, "noun": "fuel-droplet tests", "o2": (30.0, 34.0), "kpa": (71, 72), "atm": 0.7,
+                  "above": (1, 2)}
+        frame = T.frame_challenge_bound("Oxygen likely 30% or more, pressure 10.2 psi or less.", 10.2, 70.3, 30, 0,
+                                        inside, caveat,
+                                        [{"noun": "gas-burner flames", "inv": "PSI-159 (ACME CFI-G)", "linked": False}])
+        # the decision's sentence is kept word for word, the caveat sits inside the quotation marks before it, and
+        # the uncounted tests follow it
+        decision = ("No counted test was recorded at 30% oxygen or more and at or below 10.2 psi; the 17 counted "
+                    "tests inside the bins are fuel-droplet tests recorded 1 to 2 kPa above it, at 30 to 34% oxygen "
+                    "and about 0.7 atm (71 to 72 kPa).")
+        self.assertIn(note + " " + decision + " Gas-burner flames of PSI-159 (ACME CFI-G) were recorded at 30% "
+                      "oxygen or more and at or below 10.2 psi; they are counted for no need, because the team "
+                      "pipeline links none of the needs to an objective stated for that investigation.", frame)
+        self.assertNotIn("because the team pipeline",
+                         T.uncounted_below("tests", "PSI-39 (CFI)", "at 30% oxygen or more and at or below 10.2 psi", True))
+        self.assertEqual(T.bound_short_below((33, 36), (51, 51), None, 10.2, 70.3, True),
+                         "recorded at 33 to 36% oxygen and 51 kPa, below the 10.2 psi (70.3 kPa) of the challenge "
+                         "statement; counted for no need")
+        self.assertTrue(T.frame_rule(True).endswith(T.FRAME_RULE_AI))
+        self.assertEqual(T.frame_rule(False), T.FRAME_RULE)
+        self.assertEqual(T.reading_mismatch(122, ["PSI-25 (BASS-II)"], ["BASS2TM.products"]),
+                         "Team note: this reading still says that no test is counted; the 122 tests in the count "
+                         "above are counted, through a purpose sentence in a publication on PSI-25 (BASS-II) "
+                         "(BASS2TM.products) and not in the PSI record.")
+        self.assertEqual(T.reading_mismatch(1, [], []),
+                         "Team note: this reading still says that no test is counted; the 1 test in the count above "
+                         "is counted.")
+        # tests outside the stated objective: never 'does not state this need as an objective' (the PSI record of
+        # PSI-98 and PSI-99 names the objective; the literature check marks the link 'differs')
+        out = T.outside_objective(2, ["PSI-98"], False, True, differs=[("PSI-98", ["SAF16.saffire1"])])
+        self.assertEqual(out, "2 further tests record the needed variables, but the team pipeline has no supported "
+                              "match between this need and a purpose sentence of the investigation (PSI-98); they "
+                              "are not counted. The PSI record of PSI-98 names this objective, but the publications "
+                              "that were read state a different purpose for this investigation (SAF16.saffire1).")
+        self.assertNotIn("not state this need", T.outside_objective(272, ["PSI-159"], True))
+        self.assertTrue(T.outside_objective(272, ["PSI-159"], True).endswith(
+            "These include inverse-flame tests, whose oxygen value is the burner stream and not an atmosphere."))
+        self.assertTrue(T.gap_phase(17, ["PSI-69 (FLEX)"]).startswith("The 17 counted tests inside"))
 
     def test_no_lint_no_advice_no_banned_token(self):
         for s in self.sentences():

@@ -85,9 +85,12 @@ BASIS_RULE = (
     "oxygen is not a habitat atmosphere and is never compared with ambient oxygen.")
 COUNTS_NOTE = ("Counts are recorded tests in NASA's open PSI experimental tables, the team's computation. "
                "'Not recorded' is never zero and never 101 kPa.")
+# Second careful-reader pass (14 November): 'these droplet and gas-burner experiments only' left out that the
+# table also lists BASS-II and Saffire-II labels (solid samples, not modelled); it now says 'the experiments in
+# these tables only'.
 LABELS_AND_LIMITS = (
-    "The team's statistical diagnostics on NASA PSI tables. They describe these droplet and gas-burner "
-    "experiments only. FLEX extinction is a droplet-flame outcome, not material flammability. \"Indicative\" "
+    "The team's statistical diagnostics on NASA PSI tables. They describe the experiments in these tables "
+    "only. FLEX extinction is a droplet-flame outcome, not material flammability. \"Indicative\" "
     f"means a simple model beat the base rate under {N_FOLDS}-fold grouped cross-validation, nothing more. "
     "No fitted model, coefficient or model output is shipped, and none is offered for any condition, inside "
     "or outside the recorded ranges.")
@@ -434,10 +437,15 @@ def cv_verdict(cv):
     return VERDICT_BEATS if (b["mean"] - m["mean"]) > margin else VERDICT_NO_BETTER
 
 
-def too_few_reasons(n, groups, classes):
+def too_few_reasons(n, groups, classes, n_recorded=None):
     out = []
     if n < MIN_N:
-        out.append(f"{n} tests (under {MIN_N})")
+        # Second careful-reader pass (14 November): '0 tests' beside a label that 2 or 8 tests record did not say
+        # where the tests went; the flag rule (FLAG_RULE) left them out, and the reason now says so.
+        if n_recorded is not None and n_recorded != n:
+            out.append(f"{n} tests left by the flag rule, of the {n_recorded} that record the label (under {MIN_N})")
+        else:
+            out.append(f"{n} tests (under {MIN_N})")
     if groups is None:
         out.append("no grouping rule set for this label")
     elif groups < MIN_GROUPS:
@@ -540,7 +548,7 @@ def build_row(df, spec, n_folds=N_FOLDS, seed=SEED):
                          "condition ranges and the group count, and no classifier is fitted.")
         return row
 
-    few = too_few_reasons(len(inc), groups, classes)
+    few = too_few_reasons(len(inc), groups, classes, n_recorded)
     if few:
         row["verdict"] = VERDICT_TOO_FEW
         row["reason"] = "Under the fixed rule: " + "; ".join(few) + ". No cross-validation is run."
@@ -618,13 +626,17 @@ def not_covered(df):
     assert max_solid_o2 == 22.2, f"highest solid-fuel oxygen is now {max_solid_o2}; the fixed line is wrong"
     assert not partial, f"partial-gravity rows now exist: {partial}; the fixed line is wrong"
     level_words = " and ".join({"microgravity": "microgravity", "1g": "1 g"}[lv] for lv in levels)
+    # Second careful-reader pass (14 November): 'the pressure cell is empty' was the wrong word where pressure is not
+    # a column of the solid-sample tables at all; the lines now say what tests.csv shows (no value) and which
+    # tables are meant (the PSI experimental tables the team processed, not all of PSI and not NASA's raw data).
     return [
         FIXED_LINE,
-        f"No solid-sample table has a recorded pressure: in all {n_solid} solid-fuel tests the pressure cell is "
-        "empty (not recorded, which is not 101 kPa).",
-        "No solid-sample test has recorded oxygen above 22.2%.",
-        f"No table has a partial-gravity test: every test row in tests.csv is recorded at {level_words}. "
-        "Microgravity and 1 g results are not bounds for lunar or Martian gravity.",
+        f"No solid-fuel test has a pressure value in the PSI experimental tables used here ({solid_with_p} of "
+        f"{n_solid}); a value that is not recorded is not 101 kPa.",
+        "No solid-fuel test in these tables has a recorded oxygen value above 22.2%.",
+        f"No table has a partial-gravity test: every test row in the team's tests.csv is recorded at {level_words} "
+        "(gravity level set per table by the team from the PSI record). Microgravity and 1 g results are not "
+        "bounds for lunar or Martian gravity.",
     ], {"solid_tests": n_solid, "solid_tests_with_pressure": solid_with_p, "highest_solid_o2_pct": max_solid_o2,
         "gravity_levels": levels}
 

@@ -41,6 +41,14 @@ Hard checks (files pm owns):
                frame_text_origin, ai_generated false); every cited pipeline sentence
                (data/pipeline/evidence/...#need/statement) is in the text as written
 
+  readiness    model_readiness.json equals a fresh build of ai/model_readiness.py (same seed) and passes its
+               wording and source checks (ai/model_readiness.py check)
+  robustness   robustness.json: live top 3, config version and assumed_dims equal rank() now; the shares
+               rebuild by the NumPy path (ai/robustness.py check_file)
+
+Reported as info (never fails): a need statement whose pipeline reading says no test is counted while its
+count is above zero (the data role's text; the fix is in pipeline/spec/needs.json).
+
 Report-only (files pm does not own; never fails): the linter and the advice lexicon over the warning
 strings in scoring/scoring_config.json, the why and main_gap strings of rank() for the four queries,
 and the objectives and key_findings columns of data/catalog/*.csv. The hits are printed and, with
@@ -931,6 +939,9 @@ def _facts_found(facts, bags, sources):
         if any(abs(round(x * f, d) - v) < 1e-9 for x in src_psi for f in (CONSTANTS_PSI_KPA,) for d in (1, 2)):
             by_src += 1  # a psi value of a cited source written in kPa by code (1 psi = 6.894757 kPa)
             continue
+        if any(abs(round(x, d) - v) < 1e-9 for x in src_nums for d in (0, 1)):
+            by_src += 1  # a value of a cited source rounded by code to whole units or 0.1 ('71 to 72 kPa')
+            continue
         missing.append(v)
     return missing, len(vals), by_src
 
@@ -945,7 +956,13 @@ def _check_statement(rep, where, item, text_key, bags, extra_sources=()):
         rep.fail("scenarios", f"{where}: text_origin is {item.get('text_origin')!r}, not 'template' (code-built text)")
     for s in sources:
         if s.startswith(PIPELINE_SENTENCES) and "#" in s and resolve.check(s):
-            fixed = resolve.resolve(s)["text"]
+            r = resolve.resolve(s)
+            value = (r.get("data") or {}).get("value")
+            # a fixed sentence (a string, or a statement object with its text) must be in the text as written; a
+            # structured value of a package (matched_ranges) is cited for its numbers, checked with the facts
+            if not (isinstance(value, str) or (isinstance(value, dict) and isinstance(value.get("text"), str))):
+                continue
+            fixed = r["text"]
             if C._norm_quote(fixed) not in C._norm_quote(text) and fixed.rstrip(". ") not in text:
                 rep.fail("scenarios", f"{where}: cites the pipeline sentence {s} but does not contain it as written")
     res = C.check_template(text, item.get("facts") or {}, sources)
@@ -1015,6 +1032,12 @@ def check_scenarios(rep, path, ev, recount=None, live_rank=True):
             a, b = _check_statement(rep, f"{sid} need {x.get('need_id')}", x, "statement",
                                     scen + [rc["bag_need"].get((sid, x.get("need_id")), set())])
             n_facts, n_src, n_items = n_facts + a, n_src + b, n_items + 1
+            # the need's reading is the data role's text, used as written; a reading that says no test is counted
+            # next to a count above zero is reported (not a pm failure: the fix is in pipeline/spec/needs.json)
+            reading = (x.get("statement") or "").split(T.READING_LEAD)[-1]
+            if (x.get("facts") or {}).get("usable_tests") and re.search(r"\bno test is counted\b", reading, re.I):
+                rep.info(sec, f"{sid} need {x.get('need_id')}: the pipeline's reading says no test is counted next to "
+                              f"{x['facts']['usable_tests']} counted tests (data role's text in pipeline/spec/needs.json)")
         for i, x in enumerate(e.get("gaps") or []):
             a, b = _check_statement(rep, f"{sid} gap {i + 1}", x, "text",
                                     scen + [bag_all_needs] + list(rc["table_bags"].values()))
@@ -1042,6 +1065,24 @@ def check_scenarios(rep, path, ev, recount=None, live_rank=True):
                     f"{n_facts} facts values recounted ({n_src} of them found in a cited source)")
     else:
         rep.info(sec, f"{n_items} statements, {n_facts} facts values checked ({n_src} via a cited source)")
+
+
+# ====================================================================== components J and K
+
+def check_readiness_and_robustness(rep):
+    """model_readiness.json equals a fresh build (ai/model_readiness.py check) and robustness.json is current
+    against rank() now (ai/robustness.py check_file, NumPy path only). Both need NumPy (and scikit-learn for
+    the readiness rebuild); without them the check fails, it does not skip."""
+    try:
+        from ai import model_readiness
+        model_readiness.check(rep)
+    except ImportError as exc:
+        rep.fail("model_readiness", f"cannot import ai/model_readiness.py: {exc}")
+    try:
+        from ai import robustness
+        robustness.check_file(rep)
+    except ImportError as exc:
+        rep.fail("robustness", f"cannot import ai/robustness.py: {exc}")
 
 
 # ====================================================================== report-only lint
@@ -1097,6 +1138,7 @@ def run(final=False, live_rank=True):
     if ev is not None:
         check_cards(rep, INSIGHTS / "cards.json", ev, final=final)
         check_scenarios(rep, INSIGHTS / "scenarios.json", ev, recount=rc, live_rank=live_rank)
+    check_readiness_and_robustness(rep)
     lint_report(rep, live_rank=live_rank)
     return rep
 

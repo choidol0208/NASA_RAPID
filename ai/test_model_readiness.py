@@ -167,6 +167,12 @@ class BuiltFile(unittest.TestCase):
                 if few:
                     self.assertIsNone(r["model"])
                     self.assertIsNone(r["baseline"])
+                    # second careful-reader pass: where the flag rule left tests out, the reason says how many
+                    # record the label, so '0 tests' is not read as 'the table has none'
+                    if r["n"] < mr.MIN_N and r["n"] != r["n_label_recorded"]:
+                        self.assertIn(f"{r['n']} tests left by the flag rule, of the {r['n_label_recorded']} that "
+                                      "record the label", r["reason"])
+                        self.assertEqual(r["excluded"]["tests"], r["n_label_recorded"] - r["n"])
                 else:
                     self.assertEqual(r["verdict"], mr.cv_verdict({"baseline": r["baseline"], "model": r["model"]}))
                     for part in (r["model"], r["baseline"]):
@@ -199,8 +205,12 @@ class BuiltFile(unittest.TestCase):
         nc = self.payload["not_covered"]
         self.assertEqual(self.payload["fixed_line"], "None is a cabin-material flammability model.")
         self.assertEqual(nc[0], self.payload["fixed_line"])
-        self.assertTrue(any("No solid-sample table has a recorded pressure" in x for x in nc))
-        self.assertIn("No solid-sample test has recorded oxygen above 22.2%.", nc)
+        # second careful-reader pass: 'in the PSI experimental tables', no 'empty cell' where there is no column
+        self.assertTrue(any(x.startswith("No solid-fuel test has a pressure value in the PSI experimental tables "
+                                         "used here (0 of ") for x in nc))
+        self.assertFalse(any("cell is empty" in x for x in nc))
+        self.assertIn("No solid-fuel test in these tables has a recorded oxygen value above 22.2%.", nc)
+        self.assertIn("They describe the experiments in these tables only.", self.payload["labels_and_limits"])
         self.assertTrue(any(x.startswith("No table has a partial-gravity test") for x in nc))
         solid = self.df[self.df["fuel_phase"] == "solid"]
         self.assertEqual(self.payload["not_covered_facts"]["solid_tests"], len(solid))

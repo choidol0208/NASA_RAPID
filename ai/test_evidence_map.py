@@ -141,12 +141,31 @@ class PressureTest(Built):
         self.assertEqual(self.p["sums"]["max_o2_by_phase"]["solid"], second_path(self.tests)["solid"]["max_o2_pct"])
         amb = [float(t["o2_pct"]) for t in self.tests.values() if t["o2_basis"] == "ambient" and t["o2_pct"].strip()]
         self.assertEqual(self.p["sums"]["max_o2_ambient"], max(amb))
-        lab = self.p["labels"]["lane_notes"]["solid"]
+        lab = self.p["labels"]["lane_details"]["solid"]
         self.assertIn("above 22.2%", lab["end_label"])
         no_val = sum(1 for t in self.tests.values() if t["fuel_phase"] == "solid"
                      and not (t["o2_basis"] == "ambient" and t["o2_pct"].strip()))
         self.assertIn(f"{no_val} solid-sample tests record no oxygen value", lab["end_label"])
-        self.assertEqual(lab["pressure_note"], "pressure is not a column in the PSI tables of the solid-sample tests")
+        # second careful-reader pass: 'in the PSI experimental tables', and 'used here' for the 24 investigations
+        self.assertEqual(lab["pressure_note"],
+                         "pressure is not a column in the PSI experimental tables of the solid-sample tests")
+        self.assertIn("in the experimental tables of the 24 PSI investigations used here", lab["end_label"])
+
+    def test_lane_labels_round_oxygen_to_one_decimal_and_keep_the_value_in_sums(self):
+        """A lane label shows oxygen to one decimal at most; the value as written in tests.csv is in sums."""
+        second = second_path(self.tests)
+        for ph, _ in em.LANES:
+            vals = [float(t["o2_pct"]) for t in self.tests.values()
+                    if t["fuel_phase"] == ph and t["o2_basis"] == "ambient" and t["o2_pct"].strip()]
+            self.assertEqual(self.p["sums"]["min_o2_by_phase"][ph], min(vals))
+            self.assertEqual(self.p["sums"]["max_o2_by_phase"][ph], second[ph]["max_o2_pct"])
+            note = self.p["labels"]["lane_notes"][ph]
+            self.assertIn(f"from {em.fmt1(min(vals))}% to {em.fmt1(max(vals))}% oxygen", note)
+            for m in re.findall(r"\d+\.\d+", note):
+                self.assertLessEqual(len(m.split(".")[1]), 1, note)
+        self.assertEqual(em.fmt1(17.9686), "18.0")
+        self.assertEqual(em.fmt1(40.0), "40")
+        self.assertEqual(em.fmt1(13.6), "13.6")
 
 
 class BalanceGasTest(Built):
@@ -337,7 +356,8 @@ class SaffireTest(Built):
         # never counted: the plotted points and every sum are PSI tests only
         self.assertEqual(self.p["sums"]["flight_tests_not_in_psi_counted"], 0)
         self.assertEqual(sum(p["n_tests"] for p in self.p["points"]), self.p["sums"]["plotted"])
-        note = self.p["labels"]["saffire_note"]["text"]
+        note = next(c for c in self.p["labels"]["caption"] if c.startswith("Outside PSI, Table 1"))
+        self.assertEqual(self.p["labels"]["saffire_note"], note.rstrip("."))  # the string web/app.js prints
         self.assertIn("five Saffire IV to VI samples considered in that paper", note)
         self.assertNotRegex(note, r"\bmeasured\b|\bset points?\b")
         self.assertIn(f"{min(r['o2_pct'] for r in rows):.1f} to {max(r['o2_pct'] for r in rows):.1f} mol % oxygen", note)
@@ -391,8 +411,9 @@ class WordingTest(Built):
     def _texts(self):
         lab = self.p["labels"]
         out = [lab["title"], lab["hollow_marker_meaning"], *lab["caption"]]
-        for v in lab["lane_notes"].values():
+        for v in lab["lane_details"].values():
             out += [x for k, x in v.items() if isinstance(x, str)]
+        out += list(lab["lane_notes"].values())
         out += [t["label"] for t in self.p["targets"]]
         return out
 
@@ -414,6 +435,22 @@ class WordingTest(Built):
         for srcs in lab["caption_sources"]:
             for s in srcs:
                 self.assertTrue((ROOT / s).exists() or resolve.check(s), s)
+
+    def test_labels_have_the_shape_web_app_reads(self):
+        """web/app.js (ui, merged 14:59) prints labels.lane_notes[<lane>] and labels.saffire_note as strings:
+        'note[0].toUpperCase() + note.slice(1) + "."' and '"Small squares: " + labels.saffire_note + "; never
+        counted."'. An object there would print as '[object Object]' or stop the page."""
+        lab = self.p["labels"]
+        for ph, _ in em.LANES:
+            self.assertIsInstance(lab["lane_notes"][ph], str)
+            self.assertFalse(lab["lane_notes"][ph].endswith("."))
+            self.assertNotIn(lab["lane_details"][ph]["name"], lab["lane_notes"][ph])
+        self.assertIn(lab["lane_details"]["solid"]["end_label"], lab["lane_notes"]["solid"])
+        if lab["saffire_note"] is not None:
+            self.assertIsInstance(lab["saffire_note"], str)
+            self.assertFalse(lab["saffire_note"].endswith("."))
+            self.assertNotIn("crosses", lab["saffire_note"])  # the page draws small squares
+            self.assertTrue(resolve.check(lab["saffire_note_source"]))
 
     def test_no_verdict_or_prediction_wording_and_english(self):
         for s in self._texts():

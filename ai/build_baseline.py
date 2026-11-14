@@ -67,6 +67,7 @@ KPA_PER_ATM = 101.325
 CHALLENGE_ITEM = "CH.moonbase"  # references.json: the challenge statement's Moon Base atmosphere
 MEASURED_PRESSURE = re.compile(r"\bmeasure\s+pressure\b", re.I)
 SHORT_QUOTE_WORDS = 12  # design: add the next objective sentence when the first is under 12 words
+READING_SAYS_NONE = re.compile(r"\bno test is counted\b", re.I)
 
 
 class BuildStop(RuntimeError):
@@ -120,7 +121,13 @@ class Ctx:
         for r in _csv(F_SCEN_TESTS):
             self.scen_tests[r["scenario_id"]][r["test_id"]] = r
         self.scen_needs = {(r["scenario_id"], r["need_id"]): r for r in _csv(F_SCEN_NEEDS)}
-        self.obj_links = _csv(F_OBJ_LINKS)
+        # objective_links.csv (after the data role's literature check, commit a5a9e87): a link rests on a purpose
+        # sentence of the PSI record ('record_field', 'quote') and/or of a publication ('publication_item'), with a
+        # 'verdict'; only 'supported' links are counted (pipeline/spec/needs.json _meta.stated_by_rule). A link
+        # can have no record field (D1/PSI-25 rests on BASS2TM.products only), so a source is never built from
+        # an empty field.
+        self.obj_links_all = _csv(F_OBJ_LINKS)
+        self.obj_links = [r for r in self.obj_links_all if (r.get("verdict") or "supported") == "supported"]
         self.needs_doc = _json(F_NEEDS)
         self.needs = self.needs_doc["needs"]
         self.need = {n["id"]: n for n in self.needs}
@@ -141,6 +148,7 @@ class Ctx:
         self.ev = evmod.load(ROOT / F_EVIDENCE)
         self._records = {}
         self._bound = {}  # challenge_bound() per scenario
+        self.warnings = []  # inconsistencies in inputs the pm role does not own (printed, not fixed)
         # the data role's evidence packages, one per scenario (fixed sentences and counts per need)
         self.package_path, self.package = {}, {}
         for rel in package_files():
@@ -187,6 +195,19 @@ class Ctx:
 
     def links_of(self, acc):
         return [r for r in self.obj_links if r["investigation_id"] == acc]
+
+    def link_sources(self, r):
+        """Source strings of one supported objective link: its objective_links.csv row, the PSI record field
+        that holds the sentence (when the link has one) and the publication item (when it has one)."""
+        acc, nid = r["investigation_id"], r["need_id"]
+        out = [f"{F_OBJ_LINKS}#{nid}/{acc}"]
+        if (r.get("record_field") or "").strip():
+            out.append(f"{acc}.{r['record_field'].strip()}")
+        if (r.get("publication_item") or "").strip():
+            out.append(f"{F_REFS}#{r['publication_item'].strip()}")
+        if len(out) == 1:
+            stop(f"objective_links.csv {nid}/{acc}: a supported link with neither a record field nor a publication item")
+        return out
 
 
 # ====================================================================== recount
@@ -486,8 +507,18 @@ def challenge_bound(ctx, sc_id):
 
     def val(t, var):
         return fnum(ctx.test[t][var])
-    below = [t for t in counted if ctx.test[t]["o2_basis"] == "ambient" and val(t, "o2_pct") is not None
-             and val(t, "o2_pct") >= o2_min and val(t, "pressure_kpa") is not None and val(t, "pressure_kpa") <= exact]
+
+    def at_or_below(t):
+        return (ctx.test[t]["o2_basis"] == "ambient" and val(t, "o2_pct") is not None and val(t, "o2_pct") >= o2_min
+                and val(t, "pressure_kpa") is not None and val(t, "pressure_kpa") <= exact)
+    below = [t for t in counted if at_or_below(t)]
+    # reader 2: 'no counted test' is not 'no test'. Tests that are counted for no need and were recorded at or
+    # below the bound (PSI-159 gas-burner flames) are named in the frame, per investigation.
+    counted_set = set(counted)
+    uncounted_below = defaultdict(list)
+    for t in ctx.tests:
+        if t["test_id"] not in counted_set and at_or_below(t["test_id"]):
+            uncounted_below[t["investigation_id"]].append(t["test_id"])
     marks = ctx.scen_tests[sc_id]
     inside = [t for t in counted if marks[t]["tier"] == "atmosphere"]
     # the data role's note on the scenario (pipeline/spec/scenarios.json), cited by its key path; a source
@@ -498,30 +529,63 @@ def challenge_bound(ctx, sc_id):
     if not note or not resmod.check(note_src) or resmod.resolve(note_src)["text"] != note:
         note, note_src = "", None
     note_nums = {float(x) for x in re.findall(r"(?<![\w.])\d+(?:\.\d+)?(?![\w])", note)}
-    parent = _ref_parent(CHALLENGE_ITEM)
     text = (it or {}).get("text") or ""
-    b = {"psi": psi, "o2_min": o2_min, "kpa": round(exact, 1), "exact": exact,
-         "hedge": "expected" if re.search(r"\bexpected\b", text) else "likely" if re.search(r"\blikely\b", text) else "",
-         "from_copy": parent.get("access") == "read_from_copy",
+    caveat, caveat_src = scenario_caveat(ctx, sc_id)
+    b = {"psi": psi, "o2_min": o2_min, "kpa": round(exact, 1), "exact": exact, "item_text": text,
          "below": below, "inside": inside, "note_nums": note_nums, "note_src": note_src,
+         "caveat": caveat, "caveat_src": caveat_src, "counted": counted_set,
+         "uncounted_below": {acc: sorted(ids) for acc, ids in sorted(uncounted_below.items(), key=lambda kv: acc_key(kv[0]))},
          "atm_in_note": bool(re.search(r"\b\d+(?:\.\d+)? atm\b", note))}
     ctx._bound[sc_id] = b
     return b
 
 
-def bound_span(ctx, b, ids):
+def scenario_caveat(ctx, sc_id):
+    """The data role's caveat on a scenario (evidence package, environment.caveat) and its source string, or
+    (None, None). 14:59 merge: it is used as written and cited (contracts/README.md: the scenario caveat is cited
+    by its key path). reader 2: every scenario that has one shows it, not only lunar_habitat."""
+    pk = ctx.package.get(sc_id) or {}
+    caveat = ((pk.get("environment") or {}).get("caveat") or "").strip()
+    if not caveat:
+        return None, None
+    src = f"{ctx.package_path[sc_id]}#environment.caveat"
+    if resmod.resolve(src)["text"] != caveat:
+        stop(f"{src} does not resolve to the caveat used")
+    return caveat, src
+
+
+def package_ranges(ctx, sc_id, ids):
+    """The data role's matched ranges (evidence package, needs[i].matched_ranges) of the need block whose
+    matched tests are exactly these tests, with its source string; (None, None) when no block matches."""
+    pk = ctx.package.get(sc_id) or {}
+    want = set(ids)
+    for i, n in enumerate(pk.get("needs") or []):
+        if {m["test_id"] for m in n.get("matched_tests") or []} == want and n.get("matched_ranges"):
+            src = f"{ctx.package_path[sc_id]}#needs.{i}.matched_ranges"
+            if resmod.resolve(src)["data"]["value"] != n["matched_ranges"]:
+                stop(f"{src} does not resolve to the matched ranges used")
+            return n["matched_ranges"], src
+    return None, None
+
+
+def bound_span(ctx, b, ids, sc_id=None):
     """Recorded oxygen and pressure of these tests against the challenge-statement bound: the values as
-    shown, the tests.csv rows they come from, the facts and the sources. None when a value is missing."""
+    shown, the tests.csv rows they come from, the facts and the sources. None when a value is missing.
+    coord/decisions.md 14:15: the pressures are shown as whole kPa ('about 0.7 atm (71 to 72 kPa)'); where the
+    data role's evidence package has a need block with exactly these matched tests, its matched_ranges must
+    equal the values recounted here from tests.csv, and it is cited."""
     rows = [(t, fnum(ctx.test[t]["o2_pct"]), fnum(ctx.test[t]["pressure_kpa"])) for t in ids]
     if not rows or any(o is None or p is None for _, o, p in rows):
         return None
     o_lo, o_hi = min(rows, key=lambda r: (r[1], r[0])), max(rows, key=lambda r: (r[1], r[0]))
     p_lo, p_hi = min(rows, key=lambda r: (r[2], r[0])), max(rows, key=lambda r: (r[2], r[0]))
-
-    def shown(v):  # 0.1 kPa when the data role's note states that rounded value, else as in tests.csv
-        r = round(v, 1)
-        return r if r in b["note_nums"] else v
-    kpa = (shown(p_lo[2]), shown(p_hi[2]))
+    mr, mr_src = package_ranges(ctx, sc_id, ids) if sc_id else (None, None)
+    if mr is not None:
+        po, pp = mr.get("o2_pct") or {}, mr.get("pressure_kpa") or {}
+        if (po.get("recorded"), pp.get("recorded")) != (len(rows), len(rows)) or \
+                (po.get("min"), po.get("max"), pp.get("min"), pp.get("max")) != (o_lo[1], o_hi[1], p_lo[2], p_hi[2]):
+            stop(f"{mr_src} differs from the recount of the matched tests from tests.csv")
+    kpa = (int(round(p_lo[2])), int(round(p_hi[2])))
     atm = {round(p_lo[2] / KPA_PER_ATM, 1), round(p_hi[2] / KPA_PER_ATM, 1)}
     atm = atm.pop() if len(atm) == 1 and b["atm_in_note"] and next(iter(atm)) in b["note_nums"] else None
     above = None
@@ -534,17 +598,23 @@ def bound_span(ctx, b, ids):
                                  "psi_to_kpa": KPA_PER_PSI},
              "tests_with_these_values": len(rows),
              "recorded_o2_pct": {"min": o_lo[1], "max": o_hi[1]},
-             "recorded_pressure_kpa_as_shown": {"min": kpa[0], "max": kpa[1]},
+             "recorded_pressure_kpa_rounded": {"min": kpa[0], "max": kpa[1]},
              "recorded_pressure_kpa_in_tests_csv": {p_lo[0]: p_lo[2], p_hi[0]: p_hi[2]},
              "counted_tests_at_or_below_challenge_bound": len(b["below"])}
+    # reader 2: an oxygen value with decimals (PSI-159: 33.2446%, from a mole fraction in the NASA table) is shown as
+    # a whole percent, like the pressures; the values as written in tests.csv stay in the facts
+    o2 = (o_lo[1], o_hi[1])
+    if not all(float(v).is_integer() for v in o2):
+        o2 = (int(round(o_lo[1])), int(round(o_hi[1])))
+        facts["recorded_o2_pct_rounded"] = {"min": o2[0], "max": o2[1]}
     if atm is not None:
         facts["recorded_pressure_atm_rounded"] = atm
     if above:
         facts["kpa_above_challenge_bound_rounded"] = list(above)
     sources = [f"{F_REFS}#{CHALLENGE_ITEM}"] + ([b["note_src"]] if b["note_src"] else []) \
-        + [f"{F_TESTS}#{t}" for t in cited]
-    return {"o2": (o_lo[1], o_hi[1]), "kpa": kpa, "atm": atm, "above": above, "facts": facts, "sources": sources,
-            "all_above": p_lo[2] > b["exact"]}
+        + ([mr_src] if mr_src else []) + [f"{F_TESTS}#{t}" for t in cited]
+    return {"o2": o2, "kpa": kpa, "atm": atm, "above": above, "facts": facts, "sources": sources,
+            "all_above": p_lo[2] > b["exact"], "all_at_or_below": p_hi[2] <= b["exact"]}
 
 
 
@@ -563,10 +633,14 @@ def need_entry(ctx, sc_id, need):
     parts = [T.lead(sc["ranges"])]
     counted = []
 
+    missing_said = []  # (variable, source ids) of every 'not a column / empty cell' clause in the statement
+
     def add_missing(ids, var):
         txt, f, s = missing_clause(ctx, ids, var)
         facts.update(f)
         sources.extend(s)
+        if txt:
+            missing_said.append((var, {ctx.test[t]["source_id"] for t in ids if not ctx.test[t][var]}))
         return txt
 
     def add_pipe(stmt_id, required=True):
@@ -595,7 +669,7 @@ def need_entry(ctx, sc_id, need):
         # reader (decision 14:15): where the pressure bin reaches above the challenge-statement pressure,
         # the recorded oxygen and pressure of the matched tests go right next to their count
         b = challenge_bound(ctx, sc_id)
-        span = bound_span(ctx, b, counted) if b else None
+        span = bound_span(ctx, b, counted, sc_id) if b else None
         if span:
             parts.append(T.matched_bound_clause(len(counted), span["o2"], span["kpa"], span["atm"], span["above"],
                                                 b["psi"], b["kpa"], b["o2_min"], len(b["below"])))
@@ -704,14 +778,52 @@ def need_entry(ctx, sc_id, need):
         else:  # recount() already stops on an unknown code
             stop(f"no wording for gap code {code!r}")
         rules.append(f"gap:{code}")
+    # (f2) what a NASA record or a paper of the investigators says about a variable the table does not hold:
+    # the data role's fixed 'documented.elsewhere' sentences (pipeline README: carried next to the gap, never used
+    # as a value), placed after the clause that names the missing variable for that table, used as written
+    for stmt_src, text, var, sid, said_in in documented_elsewhere(ctx, sc_id, nid):
+        if any(v == var and sid in sids for v, sids in missing_said):
+            parts.append(full_stop(text))
+            sources.append(stmt_src)
+            if said_in and f"{F_REFS}#{said_in}" not in sources and resmod.check(f"{F_REFS}#{said_in}"):
+                sources.append(f"{F_REFS}#{said_in}")
+            nums = re.findall(r"(?<![\w.\-])\d+(?:\.\d+)?(?![\w])", text)
+            if nums:
+                facts.setdefault("documented_elsewhere_numerals_as_written", [])
+                facts["documented_elsewhere_numerals_as_written"] += [float(x) if "." in x else int(x) for x in nums]
+            rules.append(f"pipeline:documented.elsewhere:{sid}")
     # (e) recorded outside the stated objective
     if rc["outside"]:
         ids = sorted({ctx.test[t]["investigation_id"] for t in rc["outside"]}, key=acc_key)
         # review: these tests are not counted, but the sentence must not let burner-stream oxygen
         # pass as an atmosphere (139 of the 272 PSI-159 tests outside S1 are inverse flames)
         stream_out = any(ctx.test[t]["o2_basis"] == "oxidizer_stream" for t in rc["outside"])
-        parts.append(T.outside_objective(len(rc["outside"]), ids, stream_out, further=u > 0))
+        # reader 2: an investigation whose PSI record names the objective but whose link the literature check marks
+        # 'differs' or 'topic_only' is said as that, with the publication item; 'does not state this need as an
+        # objective' contradicted the record (PSI-98 for P1, PSI-99 for P3: the shared Saffire objective sentence)
+        unsupported = {"differs": [], "topic_only": []}
+        verdicts = {}
+        for acc in ids:
+            rows = [r for r in ctx.obj_links_all if r["need_id"] == nid and r["investigation_id"] == acc]
+            if any((r.get("verdict") or "supported") == "supported" for r in rows):
+                stop(f"{sc_id}/{nid}: tests of {acc} are outside the stated objective but objective_links.csv has "
+                     "a supported link for them")
+            for verdict in unsupported:
+                hit = [r for r in rows if r.get("verdict") == verdict and (r.get("record_field") or "").strip()]
+                if not hit:
+                    continue
+                items = unique(r["publication_item"].strip() for r in hit if (r.get("publication_item") or "").strip())
+                unsupported[verdict].append((acc, items))
+                verdicts[acc] = verdict
+                sources.append(f"{F_OBJ_LINKS}#{nid}/{acc}")
+                sources.extend(f"{acc}.{r['record_field'].strip()}" for r in hit)
+                sources.extend(f"{F_REFS}#{i}" for i in items)
+                break
+        parts.append(T.outside_objective(len(rc["outside"]), ids, stream_out, further=u > 0,
+                                         differs=unsupported["differs"], topic_only=unsupported["topic_only"]))
         facts.update(tests_recorded_outside_objective=len(rc["outside"]), outside_objective_investigations=ids)
+        if verdicts:
+            facts["outside_objective_link_verdicts"] = verdicts
         if stream_out:
             facts["outside_objective_includes_inverse_flames"] = True
             rules.append("clause:outside_objective_inverse_flames")
@@ -723,15 +835,55 @@ def need_entry(ctx, sc_id, need):
     if ws(reading) != ws(need.get("reading") or ""):
         stop(f"{rsrc} is not the reading of {nid} in pipeline/spec/needs.json")
     parts.append(T.READING_LEAD + full_stop(reading))
+    # the reading is the data role's text and is used as written; where it says that no test is counted while
+    # the count is not zero (D1 after the literature check of commit a5a9e87), the build says so loudly
+    if u > 0 and READING_SAYS_NONE.search(reading):
+        msg = (f"{sc_id}/{nid}: the pipeline's reading says no test is counted, but {u} tests are counted "
+               f"({rsrc}; pipeline/spec/needs.json); a request to the data role, not fixed here")
+        if msg not in ctx.warnings:
+            ctx.warnings.append(msg)
+        # reader 2: the reading is not changed, but the statement must not contradict itself without a word: a
+        # team note says which of the two is current and, where every counted test rests on a publication only,
+        # through which item (D1: BASS2TM.products). The note goes away when the reading no longer says so.
+        accs = sorted({ctx.test[t]["investigation_id"] for t in rc["usable"]}, key=acc_key)
+        own = [r for r in ctx.obj_links if r["need_id"] == nid and r["investigation_id"] in accs]
+        pub_only = bool(own) and all(not (r.get("record_field") or "").strip()
+                                     and (r.get("publication_item") or "").strip() for r in own)
+        items = unique(r["publication_item"].strip() for r in own) if pub_only else []
+        parts.append(T.reading_mismatch(u, [ctx.name(a) for a in accs] if pub_only else [], items))
+        rules.append("clause:reading_mismatch")
     sources.append(rsrc)
     rules.append("pipeline:need.reading")
     # the stated objectives behind the counted tests
     for acc in sorted({ctx.test[t]["investigation_id"] for t in rc["usable"]}, key=acc_key):
-        for r in ctx.obj_links:
-            if r["need_id"] == nid and r["investigation_id"] == acc:
-                sources += [f"{F_OBJ_LINKS}#{nid}/{acc}", f"{acc}.{r['record_field']}"]
+        links = [r for r in ctx.obj_links if r["need_id"] == nid and r["investigation_id"] == acc]
+        if not links:
+            stop(f"{sc_id}/{nid}: tests of {acc} are counted but objective_links.csv has no supported link for them")
+        for r in links:
+            sources += ctx.link_sources(r)
     return {"need_id": nid, "need": need["name"], "statement": " ".join(parts), "sources": unique(sources),
             "status": st, "facts": facts, "text_origin": "template", "rule": rules}
+
+
+def documented_elsewhere(ctx, sc_id, nid):
+    """[(source, text, variable, source_id, said_in)] for the 'documented.elsewhere' sentences of this need in the
+    scenario's evidence package. The sentences share one id, so each is cited by its key path
+    (needs.<i>.statements.<j>), which must resolve to the same text."""
+    pk = ctx.package.get(sc_id) or {}
+    out = []
+    for i, n in enumerate(pk.get("needs") or []):
+        if n.get("need_id") != nid:
+            continue
+        said = {(d.get("source_id"), d.get("variable")): d.get("said_in") for d in n.get("documented_elsewhere") or []}
+        for j, st in enumerate(n.get("statements") or []):
+            if st.get("id") != "documented.elsewhere":
+                continue
+            src = f"{ctx.package_path[sc_id]}#needs.{i}.statements.{j}"
+            if resmod.resolve(src)["text"] != st["text"]:
+                stop(f"{src} does not resolve to the sentence used")
+            out.append((src, st["text"], st.get("variable"), st.get("source_id"),
+                        said.get((st.get("source_id"), st.get("variable")))))
+    return out
 
 
 def check_added_gas(ctx, sc_id, nid, rc, counted, bf):
@@ -831,14 +983,17 @@ def frame(ctx, sc_id, g):
     parts = [T.frame_bins(label, sc["ranges"])]
     sources = [f"{F_SCENARIOS}#{sc_id}"]
     facts = {}
+    # reader 2: who matched the purpose sentences to the needs is said while needs.json says it is not human-reviewed
+    rule = T.frame_rule(T.NOT_HUMAN_REVIEWED in str(ctx.needs_doc["_meta"].get("generated_by", "")).lower())
     if sc["ranges"]:
         facts["team_bins"] = bins_facts(sc["ranges"])
         # reader (decision 14:15): the lunar-habitat frame says that the pressure bin is wider than the
         # challenge-statement pressure, that no counted test was recorded at or below it with the
         # challenge-statement oxygen, and where the counted tests inside the bins were recorded
         b = challenge_bound(ctx, sc_id)
+        caveat, caveat_src = scenario_caveat(ctx, sc_id)
         if b:
-            span = bound_span(ctx, b, b["inside"]) if b["inside"] else None
+            span = bound_span(ctx, b, b["inside"], sc_id) if b["inside"] else None
             inside = None
             if span:
                 kinds = {(ctx.test[t]["fuel_phase"], ctx.test[t]["sample_geometry"]) for t in b["inside"]}
@@ -854,11 +1009,34 @@ def frame(ctx, sc_id, g):
                                               "pressure_kpa": b["kpa"], "psi_to_kpa": KPA_PER_PSI},
                              counted_tests_at_or_below_challenge_bound=len(b["below"]))
                 sources.append(f"{F_REFS}#{CHALLENGE_ITEM}")
-            parts.append(T.frame_challenge_bound(b["o2_min"], b["psi"], b["kpa"], b["hedge"], b["from_copy"],
-                                                 len(b["below"]), inside))
-        parts += [T.FRAME_RULE, T.FRAME_STREAM]
+            if not b["item_text"] or str(T.num(b["o2_min"])) not in b["item_text"] or str(T.num(b["psi"])) not in b["item_text"]:
+                stop(f"{CHALLENGE_ITEM}: the item text no longer carries its values {b['o2_min']}% and {b['psi']} psi")
+            # reader 2: tests counted for no need that were recorded at or below the bound, per investigation (no
+            # count is printed in the frame; the result note of the investigation gives its tests inside the bins)
+            uncounted = []
+            for acc, ids in b["uncounted_below"].items():
+                kinds = {(ctx.test[t]["fuel_phase"], ctx.test[t]["sample_geometry"]) for t in ids}
+                noun = T.kind_noun(*next(iter(kinds)), 2) if len(kinds) == 1 else "tests"
+                uncounted.append({"noun": noun, "inv": ctx.name(acc), "linked": bool(ctx.links_of(acc))})
+                lo = min(ids, key=lambda t: (fnum(ctx.test[t]["o2_pct"]), t))
+                hi = max(ids, key=lambda t: (fnum(ctx.test[t]["o2_pct"]), t))
+                sources.extend(f"{F_TESTS}#{t}" for t in unique([lo, hi]))
+            if uncounted:
+                facts["investigations_with_uncounted_tests_at_or_below_challenge_bound"] = list(b["uncounted_below"])
+            parts.append(T.frame_challenge_bound(b["item_text"], b["psi"], b["kpa"], b["o2_min"], len(b["below"]),
+                                                 inside, caveat, uncounted))
+            facts.setdefault("challenge_bound", {"o2_pct_min": b["o2_min"], "pressure_psi_max": b["psi"],
+                                                 "pressure_kpa": b["kpa"], "psi_to_kpa": KPA_PER_PSI})
+        elif caveat:
+            parts.append(T.data_note(caveat))
+        if caveat:
+            sources.append(caveat_src)
+            nums_caveat = re.findall(r"(?<![\w.])\d+(?:\.\d+)?(?![\w])", caveat)
+            if nums_caveat:
+                facts["caveat_numerals_as_written"] = [float(x) if "." in x else int(x) for x in nums_caveat]
+        parts += [rule, T.FRAME_STREAM]
     else:
-        parts.append(T.FRAME_RULE)
+        parts.append(rule)
     if sc.get("gravity_level") in ("lunar", "martian"):
         parts += [T.FRAME_GRAVITY, T.nasa_gravity_gap(nasa_quote(ctx, "TB008.gaps"))]
         sources.append(f"{F_REFS}#TB008.gaps")
@@ -947,9 +1125,9 @@ def gaps(ctx, sc_id, needs_out, recounts, g):
             gfacts, gsrc, caveat = {"s1_tests_atmosphere": len(ids), "investigations": invs}, [f"{F_SCEN_NEEDS}#{sc_id}/S1"], None
             # reader (decision 14:15): the caveat goes wherever the count of matched tests is shown
             b = challenge_bound(ctx, sc_id)
-            span = bound_span(ctx, b, ids) if b else None
+            span = bound_span(ctx, b, ids, sc_id) if b else None
             if span and span["all_above"]:
-                caveat = T.bound_short(span["kpa"], b["psi"], b["kpa"])
+                caveat = T.bound_short(span["o2"], span["kpa"], span["atm"], span["above"], b["psi"], b["kpa"])
                 gfacts.update(span["facts"])
                 gsrc += span["sources"]
             out.append({"text": T.gap_phase(len(ids), [ctx.name(a) for a in invs], caveat),
@@ -958,24 +1136,26 @@ def gaps(ctx, sc_id, needs_out, recounts, g):
                         "status": "from_rule", "facts": gfacts,
                         "text_origin": "template"})
     # detection
-    if "D2" in recounts and "D1" in recounts and (recounts["D2"]["status"] != "in_atmosphere" or recounts["D1"]["status"] == "not_measured"):
-        d2 = recounts["D2"]["usable"]
-        srcs = sorted({ctx.test[t]["source_id"] for t in d2})
-        missing = bool(d2) and all("o2_pct" not in ctx.source_vars(s) and "pressure_kpa" not in ctx.source_vars(s) for s in srcs)
-        invs = sorted({ctx.test[t]["investigation_id"] for t in d2}, key=acc_key)
-        d1_nm = recounts["D1"]["status"] == "not_measured"
-        d1_stated = any(r["need_id"] == "D1" for r in ctx.obj_links)
-        if d2:
-            out.append({"text": T.gap_detection(len(d2), invs, missing, d1_nm, d1_stated, ctx.n_investigations),
-                        "needed_data": T.GAP_DETECTION_NEEDED,
-                        "sources": [f"{F_REFS}#CP2003.detection", f"{F_SCEN_NEEDS}#{sc_id}/D2", f"{F_SCEN_NEEDS}#{sc_id}/D1"]
-                        + [f"{F_SOURCES}#{s}" for s in srcs],
-                        "rule": "detection", "status": "from_rule",
-                        "facts": {"d2_usable_tests": len(d2), "d2_investigations": invs,
-                                  "d2_oxygen_and_pressure_not_columns": missing, "d1_not_measured": d1_nm,
-                                  "d1_stated_as_objective_by_any_investigation": d1_stated,
-                                  "investigations_in_psi": ctx.n_investigations},
-                        "text_origin": "template"})
+    # 14:59 merge: the detection gap was written for 'D2 counted, D1 not measured'; after the data role's
+    # literature check D1 is counted (BASS-II, through BASS2TM.products) and D2 has none, and the old code dropped
+    # the gap silently when D2 had no counted test. It is now built from both needs as they are.
+    if "D2" in recounts and "D1" in recounts and "in_atmosphere" not in (recounts["D1"]["status"], recounts["D2"]["status"]):
+        parts_d, facts_d, srcs_all = {}, {"investigations_in_psi": ctx.n_investigations}, []
+        for nid in ("D1", "D2"):
+            ids = recounts[nid]["usable"]
+            srcs = sorted({ctx.test[t]["source_id"] for t in ids})
+            missing = [T.VARIABLE_WORD[v] for v in ("o2_pct", "pressure_kpa")
+                       if ids and all(v not in ctx.source_vars(s) for s in srcs)]
+            invs = sorted({ctx.test[t]["investigation_id"] for t in ids}, key=acc_key)
+            parts_d[nid] = {"n": len(ids), "invs": [ctx.name(a) for a in invs], "missing": missing}
+            facts_d.update({f"{nid.lower()}_counted_tests": len(ids), f"{nid.lower()}_investigations": invs,
+                            f"{nid.lower()}_not_columns": missing})
+            srcs_all += [f"{F_SOURCES}#{s}" for s in srcs]
+        out.append({"text": T.gap_detection(parts_d["D1"], parts_d["D2"]),
+                    "needed_data": T.GAP_DETECTION_NEEDED,
+                    "sources": [f"{F_REFS}#CP2003.detection", f"{F_SCEN_NEEDS}#{sc_id}/D1", f"{F_SCEN_NEEDS}#{sc_id}/D2"]
+                    + srcs_all,
+                    "rule": "detection", "status": "from_rule", "facts": facts_d, "text_origin": "template"})
     # not covered (needs.json _meta.not_covered), copied as written
     for nc in ctx.needs_doc["_meta"].get("not_covered", []):
         if gravity_gap and nc["source_item"] == "TB008.gaps":
@@ -1147,10 +1327,19 @@ def note_for(ctx, sc_id, entry, out, in_top, g):
                 # reader (decision 14:15): the caveat goes wherever the count of matched tests is shown
                 caveat, b = None, challenge_bound(ctx, sc_id)
                 in_bins = [t["test_id"] for t in tests if marks[t["test_id"]]["tier"] == "atmosphere"]
-                span = bound_span(ctx, b, in_bins) if b and in_bins else None
+                span = bound_span(ctx, b, in_bins, sc_id) if b and in_bins else None
                 if span and span["all_above"]:
-                    caveat = T.bound_short(span["kpa"], b["psi"], b["kpa"])
+                    caveat = T.bound_short(span["o2"], span["kpa"], span["atm"], span["above"], b["psi"], b["kpa"])
                     facts.update(span["facts"])
+                    sources += span["sources"]
+                elif span and span["all_at_or_below"]:
+                    # reader 2: tests inside the bins that were recorded below the challenge-statement pressure
+                    # (PSI-159 in the lunar-habitat bins): where they were recorded, and that none is counted
+                    counted_none = not any(t in b["counted"] for t in in_bins)
+                    caveat = T.bound_short_below(span["o2"], span["kpa"], span["atm"], b["psi"], b["kpa"], counted_none)
+                    facts.update(span["facts"])
+                    if counted_none:
+                        facts["tests_inside_bins_counted_for_a_need"] = 0
                     sources += span["sources"]
                 parts.append(T.note_test_ambient(k, len(amb), k_oxy, ptxt, caveat))
                 facts.update(tests_ambient_o2=len(amb), tests_atmosphere=k, tests_oxygen_only=k_oxy, **pf)
@@ -1202,10 +1391,15 @@ def note_for(ctx, sc_id, entry, out, in_top, g):
     # sentence 3: stated objectives
     links = ctx.links_of(acc)
     nids = unique(r["need_id"] for r in links)
-    parts.append(T.note_objectives([f"{n} ({ctx.need[n]['name'] if n in ctx.need else n})" for n in nids]))
+    in_rec = [n for n in nids if any((r.get("record_field") or "").strip() for r in links if r["need_id"] == n)]
+    pub_only = [n for n in nids if n not in in_rec]
+    word = lambda n: f"{n} ({ctx.need[n]['name'] if n in ctx.need else n})"  # noqa: E731
+    parts.append(T.note_objectives([word(n) for n in in_rec], [word(n) for n in pub_only]))
     for r in links:
-        sources += [f"{F_OBJ_LINKS}#{r['need_id']}/{acc}", f"{acc}.{r['record_field']}"]
+        sources += ctx.link_sources(r)
     facts["needs_stated"] = nids
+    if pub_only:
+        facts["needs_stated_in_a_publication_only"] = pub_only
     # sentence 4: ties, without numbers
     ties = [r["investigation_id"] for r in out["ranking"]
             if r["psi_accession"] != acc and round(r["score"], 1) == round(entry["score"], 1)]
@@ -1486,7 +1680,8 @@ def build(ctx=None, scenario_ids=None):
     cards = [card(ctx, acc) for acc in sorted(ctx.ev["records"], key=acc_key)]
     check_sources(scenarios)
     check_sources(cards)
-    return {"scenarios": scenarios, "cards": cards, "skipped": skipped, "global": g, "ctx": ctx}
+    return {"scenarios": scenarios, "cards": cards, "skipped": skipped, "global": g, "ctx": ctx,
+            "warnings": list(ctx.warnings)}
 
 
 def write(res):
@@ -1552,6 +1747,8 @@ def report(res, ids_full):
     if res["skipped"]:
         print("\nskipped (no rows in the data role's files):", res["skipped"])
     print(f"\ncards: {len(res['cards'])}, status {Counter(c['status'] for c in res['cards'])}")
+    for w in res.get("warnings") or []:
+        print(f"WARNING (input text not owned by pm): {w}", file=sys.stderr)
 
 
 def main(argv=None):

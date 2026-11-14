@@ -9,7 +9,8 @@ Method (docs/ai_layer_design.json, component K; SMAA-style weight sampling):
 
 - Weights: draws from Dirichlet(50 x profile weights) ("local", around the configured profile) and
   from Dirichlet(1) ("uniform", no stated preference), over the profile's own keys whose weight is
-  not 0; a key with profile weight 0 (diluent) stays 0. Seed 42 for the file, seed 43 for the check.
+  not 0; a key with profile weight 0 (diluent) stays 0. Seed 42 for the file, seed 43 for the check;
+  8,000 draws per run (2,000 in the design; see DRAWS).
   numpy.random.default_rng([seed, 0]) draws the local run, default_rng([seed, 1]) the uniform run.
 - Re-scoring, two code paths that must agree:
   1. this file's own NumPy re-score. The similarities, the gate and the evidence factor do not
@@ -26,14 +27,14 @@ Method (docs/ai_layer_design.json, component K; SMAA-style weight sampling):
   others score more than it (by more than 1e-9). Two investigations that are level in every draw of
   both runs are reported as a tie, not as an order.
 - assumed_dims is copied from rank() at the profile weights: the atmosphere values the scorer filled
-  in (scoring_config.json atmosphere_fallback) because the record does not report them.
+  in (scoring_config.json atmosphere_fallback) because the team's catalog has no value for them.
   assumed_dims_scored keeps those that the query actually scores.
 
 Reads scoring/scorer.py, scoring/scoring_config.json and data/catalog/*.csv read-only; changes none
 of them. Sensitivity of the team's ranking to the team's own weights: not a probability that a study
 is relevant, and not a NASA result.
 
-Run:  python3 ai/robustness.py            (writes data/insights/robustness.json, about 15 s: 16,000 rank() calls)
+Run:  python3 ai/robustness.py            (writes data/insights/robustness.json, about a minute: 64,000 rank() calls)
       python3 ai/robustness.py --check    (builds in memory, compares with the file, writes nothing)
       check_file(rep)                     (for ai/check_all.py: fast checks, NumPy path only)
 """
@@ -62,7 +63,12 @@ QUERIES = (("iss", "ISS"), ("lunar_habitat", "lunar habitat"), ("spacesuit", "sp
            ("mars_habitat", "Mars base"))
 SEED = 42
 CHECK_SEED = 43
-DRAWS = 2000
+# 2,000 in the design (component K). After the 14:59 merge (scoring config 1.1.0: log-ratio oxygen distance, molar
+# heat capacity for the diluent) the 'lunar habitat' local shares of seeds 42 and 43 differed by 2.4 points at 2,000
+# draws, above the 2-point limit: the sampling error of two independent 2,000-draw samples (about 1.1 points for a
+# share near 85%) is too close to the limit. The limit is kept and the sample is made larger: at 8,000 draws the
+# same error is about 0.6 points. 8,000 draws per run, so the file takes about a minute to build.
+DRAWS = 8000
 CONCENTRATION = 50.0
 TIE_TOL = 1e-9
 MAX_SEED_DIFF_POINTS = 2.0
@@ -209,6 +215,35 @@ def _names(ids):
     return ", ".join(ids[:-1]) + " and " + ids[-1]
 
 
+# Second careful-reader pass (14 November, an AI session of the pm role read every display line):
+# - a share of 0.9998 was printed as '100%' ('among the first three in 100%' when 2 draws of 8,000 said otherwise),
+#   and a share above 0 that rounds to 0.0 would have been printed as 'first in none of them'. A share below 1 now
+#   prints as 'more than 99.9%', a share above 0 as 'less than 0.1%', and 'none' is said only for a share of 0;
+# - 'values the record does not report' named the wrong thing: the scorer fills in an atmosphere where the team's
+#   catalog has no value (scoring_config.json atmosphere_fallback), whatever a PSI record or a paper says;
+# - 'around the profile weights' was the team's jargon; the profile is the scorer's default one, so the lines say
+#   'drawn close to the team's default weights'.
+NEAR_ALL_PCT = 99.9
+NEAR_NONE_PCT = 0.1
+SAMPLED_NEAR = "drawn close to the team's default weights"
+
+
+def _pct(share):
+    """A share of the draws as a display line prints it."""
+    x = round(100 * share, 1)
+    if share < 1.0 and x >= 100.0:
+        return f"more than {NEAR_ALL_PCT:g}%"
+    if share > 0.0 and x <= 0.0:
+        return f"less than {NEAR_NONE_PCT:g}%"
+    return f"{x:g}%"
+
+
+def display_bounds(line):
+    """The bound values a display line prints ('more than 99.9%', 'less than 0.1%'), for its facts."""
+    return [v for v, phrase in ((NEAR_ALL_PCT, f"more than {NEAR_ALL_PCT:g}%"),
+                                (NEAR_NONE_PCT, f"less than {NEAR_NONE_PCT:g}%")) if phrase in line]
+
+
 def display_line(entry, run_facts):
     """The one line a dashboard could print under a live top-3 result, and the rule that chose it."""
     n = run_facts["draws_per_run"]
@@ -219,39 +254,38 @@ def display_line(entry, run_facts):
     if assumed:
         # Design rule: no stability figure where the rank rests on an assumed atmosphere.
         rule = "assumed_atmosphere"
-        line = (f"Rank uses an assumed atmosphere for values the record does not report "
+        line = (f"Rank uses an assumed atmosphere for values the team's catalog does not report "
                 f"({' and '.join(assumed)}).")
         if tied_all:
             rule = "assumed_atmosphere_and_tie"
             line = (f"{level} (a tie, not an order); the rank uses an assumed atmosphere for values the "
-                    f"record does not report ({' and '.join(assumed)}).")
+                    f"team's catalog does not report ({' and '.join(assumed)}).")
     elif tied_all:
         rule = "tie_in_every_draw"
         g = entry["first_or_tied_share_local"]  # level in every draw, so first together
         if g >= 1.0:
             line = f"{level}: a tie, not an order."
         else:
-            line = (f"{level} (a tie, not an order); the two are first together in {round(100 * g, 1):g}% "
-                    f"of the {n:,} drawn around the profile weights.") if len(tied_all) == 1 else (
-                    f"{level} (a tie, not an order); they are first together in {round(100 * g, 1):g}% "
-                    f"of the {n:,} drawn around the profile weights.")
+            who = "the two are" if len(tied_all) == 1 else "they are"
+            line = (f"{level} (a tie, not an order); {who} first together in {_pct(g)} of the {n:,} "
+                    f"{SAMPLED_NEAR}.")
     else:
-        x = round(100 * entry["first_or_tied_share_local"], 1)
-        z = round(100 * entry["top3_share_local"], 1)
+        first = entry["first_or_tied_share_local"]
+        top3 = entry["top3_share_local"]
         partners = [p for p in entry["tied_for_first_with"] if p["share"] > 0]
         if partners:
             p = max(partners, key=lambda q: q["share"])
-            y = round(100 * p["share"], 1)
             rule = "tied_share"
-            line = f"Tied for first with {p['investigation_id']} in {y:g}% of the team's {n:,} sampled weightings around the profile weights."
-        elif x > 0:
+            line = (f"Tied for first with {p['investigation_id']} in {_pct(p['share'])} of the {n:,} sampled "
+                    f"weightings {SAMPLED_NEAR}.")
+        elif first > 0:
             rule = "first_share"
-            line = (f"First in {x:g}% of the team's {n:,} sampled weightings around the profile weights, and among the first three in "
-                    f"{z:g}%.")
+            line = (f"First in {_pct(first)} of the {n:,} sampled weightings {SAMPLED_NEAR}, and among the "
+                    f"first three in {_pct(top3)}.")
         else:
             rule = "top3_share"
-            line = (f"Among the first three in {z:g}% of the team's {n:,} sampled weightings around the profile "
-                    f"weights, and first in none of them.")
+            line = (f"Among the first three in {_pct(top3)} of the {n:,} sampled weightings {SAMPLED_NEAR}, "
+                    "and first in none of them.")
     return line, rule
 
 
@@ -446,6 +480,8 @@ def add_lines(run, cfg):
         nums = dict(facts, group_size=1 + len(r["tied_in_every_draw_with"]),
                     shares_pct=[round(100 * r[k], 1) for k in SHARE_KEYS]
                     + [round(100 * p["share"], 1) for p in r["tied_for_first_with"]])
+        if display_bounds(line):  # 'more than 99.9%' / 'less than 0.1%': the bound is a printed number too
+            nums["display_bounds_pct"] = display_bounds(line)
         chk = C.check_template(line, nums)
         if not chk["ok"]:
             raise RobustnessError(f"{run['query']!r} {r['investigation_id']}: display line fails the template "

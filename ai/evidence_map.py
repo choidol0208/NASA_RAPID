@@ -64,26 +64,29 @@ ACCESS_NOTE = {
     "abstract_only": "source read at abstract level",
     "cited_not_read": "known only through a citation",
     "read_from_copy": "read from a copy",
+    # references.json _meta.access_values (added with the challenge statement's check on the official page)
+    "read_by_teammate": "checked on the official page by another session of the team",
 }
 
-# Counts recounted from data/pipeline/tests.csv after the data role's audit (1,824 test rows; the design's
-# component H numbers were computed on 1,867 rows before it). They are printed next to the build's own counts
+# Counts recounted from data/pipeline/tests.csv after the data role's audit and its literature check (1,824 test
+# rows; recounted again after the 14:59 merge, where one Saffire-II oxygen cell became empty: plotted 879 -> 878;
+# the design's component H numbers were computed on 1,867 rows before the audit). They are printed next to the build's own counts
 # and compared, never forced; ai/test_evidence_map.py recomputes each one by a second code path instead of
 # trusting this table, so a data change shows up here as a difference to look at, not as a hidden number.
 ANCHORS = {
-    "plotted": 879,
+    "plotted": 878,
     "plotted_with_pressure": 738,
-    "plotted_without_pressure": 141,
-    "plotted_by_phase": {"gas": 386, "liquid": 353, "solid": 140},
+    "plotted_without_pressure": 140,
+    "plotted_by_phase": {"gas": 386, "liquid": 353, "solid": 139},
     "oxidizer_stream": 274,
     "oxidizer_stream_without_oxygen_value": 11,
-    "no_ambient_oxygen_value": 671,
-    "no_ambient_oxygen_value_by_phase": {"gas": 435, "solid": 236},
+    "no_ambient_oxygen_value": 672,
+    "no_ambient_oxygen_value_by_phase": {"gas": 435, "solid": 237},
     "total": 1824,
     "balance_gas_with_pressure": {"n2_only": 166, "co2_added": 122, "he_added": 64, "not_recorded": 386},
     "points_with_pressure": 593,
     "with_pressure_above_110_kpa": 147,
-    "without_pressure_by_investigation": {"PSI-25": 129, "PSI-99": 9, "PSI-98": 2, "PSI-69": 1},
+    "without_pressure_by_investigation": {"PSI-25": 129, "PSI-99": 8, "PSI-98": 2, "PSI-69": 1},
     "max_o2_by_phase": {"solid": 22.2, "liquid": 34.0, "gas": 40.0},
     "at_or_above_30_by_phase": {"gas": 246, "liquid": 24, "solid": 0},
     "psi20_days": 18,
@@ -146,6 +149,13 @@ def num(s):
 def fmt(x):
     """A number as text without a trailing .0 for whole numbers (labels only)."""
     return str(int(x)) if float(x).is_integer() else repr(float(x))
+
+
+def fmt1(x):
+    """reader 2: an oxygen value in a lane label, to one decimal at most ('18.0', not '17.9686': the value comes
+    from a mole fraction in the NASA table and the label does not need four decimals). The value as written in
+    tests.csv stays in sums.min_o2_by_phase and sums.max_o2_by_phase."""
+    return str(int(x)) if float(x).is_integer() else f"{float(x):.1f}"
 
 
 def read_csv(path):
@@ -473,13 +483,21 @@ def build_targets(refs, scen, scoring, tests, scenario_tests):
     # challenge_statement
     _, ch = idx["CH.moonbase"]
     kpa, conv = psia_to_kpa(ch["values"]["pressure_psia_max"])
+    # the data role rewrote the item after ui checked the official page (13:05): 'oxygen likely 30% or more,
+    # pressure 10.2 psi or less'. as_written is the part of the item text that carries the two values, found
+    # in the text (never typed in); the earlier wording is still accepted if the item goes back to it.
+    o2s, psis = fmt(ch["values"]["o2_pct_min"]), ch["values"]["pressure_psia_max"]
+    ch_as_written = next((w for w in (f"oxygen likely {o2s}% or more, pressure {psis} psi or less",
+                                      f"{o2s}% oxygen or more and {psis} psi or less") if w in ch["text"]), None)
+    if ch_as_written is None:
+        raise SystemExit(f"CH.moonbase: no phrase with {o2s}% and {psis} psi found in the item text {ch['text']!r}")
     ch_t = _ref_target(
         idx, "CH.moonbase", "challenge_statement",
         # reader: the label dropped the item's hedge ('expected') and said 'challenge statement' twice; it is
-        # now the item's own sentence, and the access note follows the reference (it was typed in)
+        # now the item's own sentence, and the access note follows the reference
         f"Challenge statement: {ch['text'].rstrip('. ')} "
         f"({ACCESS_NOTE.get(idx['CH.moonbase'][0]['access'], idx['CH.moonbase'][0]['access'])})",
-        f"{fmt(ch['values']['o2_pct_min'])}% oxygen or more and {ch['values']['pressure_psia_max']} psi or less",
+        ch_as_written,
         o2_min=float(ch["values"]["o2_pct_min"]), pressure_max=kpa,
         pressure_psia_max=float(ch["values"]["pressure_psia_max"]), pressure_conversion=conv,
         draw="line_and_region")
@@ -681,20 +699,31 @@ def build():
     def invs(rows):
         return ", ".join(sorted({t["investigation_id"] for t in rows}, key=inv_key))
 
-    lane_notes = {}
+    # web/app.js (ui, merged 14:59) prints labels.lane_notes[<lane>] as one string after the lane's count
+    # ('Gas flames: 386 recorded tests. <note>.'): it capitalises the first letter and adds the full stop. So
+    # lane_notes holds that string per lane, without the lane name and without a final full stop; the parts
+    # it is made of stay in labels.lane_details for other readers.
+    lane_details = {}
     for ph, name in LANES:
         rows = phase_rows[ph]
-        lane_notes[ph] = {
+        lane_details[ph] = {
             "name": name,
             "text": (f"{name}: {len(rows)} tests with a recorded ambient oxygen value ({invs(rows)}); "
-                     f"recorded oxygen {fmt(min_o2[ph])}% to {fmt(max_o2[ph])}%; {ge30[ph]} at 30% oxygen or more."),
+                     f"recorded oxygen {fmt1(min_o2[ph])}% to {fmt1(max_o2[ph])}%; {ge30[ph]} at 30% oxygen or more."),
+            "short": (f"{len(rows)} with a recorded ambient oxygen value ({invs(rows)}), from {fmt1(min_o2[ph])}% "
+                      f"to {fmt1(max_o2[ph])}% oxygen; {ge30[ph]} at 30% oxygen or more"),
         }
     solid_unrec = no_val_phase.get("solid", 0)
-    lane_notes["solid"]["end_label"] = (
-        f"no solid-sample test with a recorded oxygen value above {fmt(max_o2['solid'])}% in the tables "
-        f"of the {len(read_json(MANIFEST)['investigations'])} PSI investigations ({solid_unrec} solid-sample "
+    # reader 2: 'the tables of the 24 PSI investigations' read as all of PSI and 'the PSI tables' left out which
+    # tables; the claims hold for the PSI experimental tables of the investigations used here
+    lane_details["solid"]["end_label"] = (
+        f"no solid-sample test with a recorded oxygen value above {fmt(max_o2['solid'])}% in the experimental tables "
+        f"of the {len(read_json(MANIFEST)['investigations'])} PSI investigations used here ({solid_unrec} solid-sample "
         "tests record no oxygen value)")
-    lane_notes["solid"]["pressure_note"] = "pressure is not a column in the PSI tables of the solid-sample tests"
+    lane_details["solid"]["pressure_note"] = ("pressure is not a column in the PSI experimental tables of the "
+                                              "solid-sample tests")
+    lane_notes = {ph: d["short"] + "".join(f"; {d[k]}" for k in ("end_label", "pressure_note") if k in d)
+                  for ph, d in lane_details.items()}
 
     n_inv = len(read_json(MANIFEST)["investigations"])
     if any(t["gravity_level"] != "microgravity" for t in plotted):
@@ -735,7 +764,8 @@ def build():
             "the paper cited" if not title else f"the paper '{title}'"
         text = (f"Outside PSI, Table 1 of {paper} lists the sample test conditions of the {n_word} Saffire IV to "
                 f"VI samples considered in that paper, from {min(o2s):.1f} to {max(o2s):.1f} mol % oxygen and "
-                f"{min(ps):.1f} to {max(ps):.1f} kPa (drawn as crosses; cited, never counted)")
+                f"{min(ps):.1f} to {max(ps):.1f} kPa (cited, never counted)")
+        # reader (14:59 merge): the page draws these marks as small squares, so the note no longer names a shape
         if not late:
             text += f"; none of the {len(read_json(MANIFEST)['investigations'])} PSI investigations used here is one of these flights"
         note_txt = " ".join(str(x.get("note", "")) for x in found)
@@ -753,9 +783,13 @@ def build():
         "labels": {
             "title": "Where the PSI test tables stop",
             "lane_notes": lane_notes,
+            "lane_details": lane_details,
             "caption": caption,
             "caption_sources": caption_sources,
-            "saffire_note": saffire_note,
+            # web/app.js prints labels.saffire_note as a string inside its legend ('Small squares: <note>; never
+            # counted.'), so it is the sentence without its final full stop; the full sentence is in the caption
+            "saffire_note": saffire_note["text"].rstrip(".") if saffire_note else None,
+            "saffire_note_source": saffire_note["source"] if saffire_note else None,
             "saffire_status": ("item found in references.json; markers written from its values" if saffire_note
                                else "item found in references.json but its values are not machine-readable; "
                                     "nothing written" if found

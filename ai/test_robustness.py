@@ -152,7 +152,7 @@ class FileTest(unittest.TestCase):
             for k in CONTRACT_RUN:
                 self.assertIn(k, run)
             self.assertEqual(run["seed"], 42)
-            self.assertEqual(run["draws"], 2000)
+            self.assertEqual(run["draws"], R.DRAWS)  # 8,000 since the 14:59 merge (see ai/robustness.py DRAWS)
             self.assertEqual(run["concentration"], 50)
             self.assertEqual(run["tie_tolerance"], 1e-9)
             self.assertEqual(run["config_version"], CFG["version"])
@@ -205,6 +205,46 @@ class FileTest(unittest.TestCase):
             self.assertTrue(top["tied_in_every_draw_with"], q)
             self.assertTrue(any(g["first_or_tied_in_every_draw"] for g in run["structural_ties"]), q)
             self.assertIn("a tie, not an order", top["display_line"])
+
+    def test_display_lines_never_round_a_share_up_to_all_or_down_to_none(self):
+        """Second careful-reader pass (14 Nov): a top-3 share of 0.9998 was printed as '100%'. '100%' is said
+        only for a share of exactly 1, 'none' only for a share of exactly 0."""
+        self.assertEqual(R._pct(1.0), "100%")
+        self.assertEqual(R._pct(0.9998), "more than 99.9%")
+        self.assertEqual(R._pct(0.0), "0%")
+        self.assertEqual(R._pct(0.0001), "less than 0.1%")
+        self.assertEqual(R._pct(0.8561), "85.6%")
+        facts = {"draws_per_run": 8000, "draws_both_runs": 16000}
+        base = {"assumed_dims_scored": [], "tied_in_every_draw_with": [], "tied_for_first_with": []}
+        line, rule = R.display_line(dict(base, first_or_tied_share_local=0.0001, top3_share_local=0.9998), facts)
+        self.assertEqual(rule, "first_share")  # a share above 0 is never 'first in none of them'
+        self.assertIn("First in less than 0.1%", line)
+        self.assertIn("among the first three in more than 99.9%", line)
+        self.assertEqual(R.display_bounds(line), [99.9, 0.1])
+        line, rule = R.display_line(dict(base, first_or_tied_share_local=0.0, top3_share_local=1.0), facts)
+        self.assertEqual((rule, R.display_bounds(line)), ("top3_share", []))
+        self.assertIn("Among the first three in 100% of the 8,000 sampled weightings", line)
+        self.assertTrue(line.endswith("and first in none of them."))
+        # the written file: every line that says 100% rests on a share of exactly 1, 'none' on exactly 0
+        for run in self.data["runs"]:
+            for r in run["results"]:
+                line = r.get("display_line") or ""
+                if "among the first three in 100%" in line.lower():
+                    self.assertEqual(r["top3_share_local"], 1.0, (run["query"], r["investigation_id"]))
+                if "first in none of them" in line:
+                    self.assertEqual(r["first_or_tied_share_local"], 0.0, (run["query"], r["investigation_id"]))
+                if R.display_bounds(line):
+                    self.assertEqual(r["display_facts"]["display_bounds_pct"], R.display_bounds(line))
+
+    def test_display_lines_name_the_catalog_and_the_default_weights(self):
+        for run in self.data["runs"]:
+            for r in run["results"]:
+                line = r.get("display_line") or ""
+                self.assertNotIn("the record does not report", line)
+                self.assertNotIn("profile weights", line)
+                if r.get("assumed_dims_scored") and r.get("live_rank"):
+                    self.assertIn("for values the team's catalog does not report", line)
+        self.assertEqual(CFG["default_profile"], self.data["runs"][0]["profile"])  # 'the team's default weights'
 
     def test_parity_and_default_check_recorded(self):
         for run in self.data["runs"]:

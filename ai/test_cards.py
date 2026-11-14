@@ -169,8 +169,9 @@ class LabelsTest(Built):
 class BuildAllTest(unittest.TestCase):
     def test_order_of_the_steps(self):
         cmds = [cmd[0] for _, cmd in build_all.steps()]
-        self.assertEqual(cmds, ["ai/evidence.py", "ai/build_baseline.py", "ai/evidence_map.py", "ai/apply_cards.py",
-                                "ai/audit_catalog.py", "ai/apply_review.py", "ai/check_all.py"])
+        self.assertEqual(cmds, ["ai/evidence.py", "ai/build_baseline.py", "ai/evidence_map.py", "ai/model_readiness.py",
+                                "ai/robustness.py", "ai/apply_cards.py", "ai/audit_catalog.py", "ai/apply_review.py",
+                                "ai/check_all.py"])
         self.assertTrue(all("--repair" not in cmd for _, cmd in build_all.steps()))
         self.assertIn("--final", dict(build_all.steps(final=True))["check"])
         self.assertEqual(build_all.NO_CALLS_ENV, llm.NO_CALLS_ENV)

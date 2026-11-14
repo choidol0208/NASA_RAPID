@@ -9,15 +9,21 @@ Order (each step reads what the steps before it wrote):
   1 evidence      ai/evidence.py         data/insights/evidence.json (PSI record prose as numbered units)
   2 baseline      ai/build_baseline.py   data/insights/scenarios.json and the 24 quoted cards in cards.json
   3 evidence map  ai/evidence_map.py     data/insights/evidence_map.json
-  4 apply cards   ai/apply_cards.py      cards.json from the logged gpt-oss:20b candidates and repairs in
+  4 readiness     ai/model_readiness.py  data/insights/model_readiness.json (counts, ranges, grouped
+                                         cross-validation with scikit-learn; no language model)
+  5 robustness    ai/robustness.py       data/insights/robustness.json (rank() under sampled weights, NumPy;
+                                         about 15 s)
+  6 apply cards   ai/apply_cards.py      cards.json from the logged gpt-oss:20b candidates and repairs in
                                          ai/runs/ (no --repair: no model call), minus the reviewed removals
                                          of ai/review/pm_prereview.json; rewrites ai/review/review_sheet.csv
-  5 catalog audit ai/audit_catalog.py    data/insights/catalog_trace.json
-  6 apply review  ai/apply_review.py     the verdicts of ai/review/review_sheet.csv; cards.json, quality.json
-  7 check         ai/check_all.py        every hard check; exit 1 on any failure
+  7 catalog audit ai/audit_catalog.py    data/insights/catalog_trace.json
+  8 apply review  ai/apply_review.py     the verdicts of ai/review/review_sheet.csv; cards.json, quality.json
+  9 check         ai/check_all.py        every hard check; exit 1 on any failure
 
-Step 2 overwrites cards.json with the quoted baseline, so steps 4 and 6 must run after it; that is why
-this script exists. Each step runs as its own process with AI_NO_MODEL_CALLS=1, so ai/llm.py refuses any
+Step 2 overwrites cards.json with the quoted baseline, so steps 6 and 8 must run after it; that is why
+this script exists. Steps 4 and 5 read only data/pipeline/tests.csv, the catalog and scoring/; they were
+run by hand before the 14:59 merge and their files went stale when those inputs changed, so they are steps
+here. Each step runs as its own process with AI_NO_MODEL_CALLS=1, so ai/llm.py refuses any
 network call to a model (ai/llm.py ModelCallsDisabled). The run records in ai/runs/*.jsonl are read, never
 written. The script stops at the first step that fails and exits with that step's code (1 if it was 0).
 Standard library only.
@@ -36,6 +42,8 @@ STEPS = (
     ("evidence", ["ai/evidence.py"]),
     ("baseline scenarios and quoted cards", ["ai/build_baseline.py"]),
     ("evidence map", ["ai/evidence_map.py"]),
+    ("model readiness", ["ai/model_readiness.py"]),
+    ("robustness", ["ai/robustness.py"]),
     ("apply cards (logged model output, no model call)", ["ai/apply_cards.py", "--quiet"]),
     ("catalog audit", ["ai/audit_catalog.py"]),
     ("apply review", ["ai/apply_review.py"]),
