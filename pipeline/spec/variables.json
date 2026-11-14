@@ -60,6 +60,11 @@
    "unit": "ambient | oxidizer_stream",
    "meaning": "Whether o2_pct is the surrounding atmosphere or the gas issuing from the burner"
   },
+  "o2_range_as_written": {
+   "kind": "condition",
+   "unit": "text",
+   "meaning": "The oxygen cell as written, where it holds two numbers (Saffire-I and Saffire-II: the oxygen before and after the burn of the sample, derived by NASA from CO2 production). Kept as text; o2_pct holds a single value only where a publication of the investigators names the initial oxygen"
+  },
   "co2_pct": {
    "kind": "condition",
    "unit": "% by volume",
@@ -98,7 +103,7 @@
   "heating_ratio": {
    "kind": "condition",
    "unit": "ratio",
-   "meaning": "SAME heater resistance ratio Rt/R0 (interpretation unconfirmed)"
+   "meaning": "SAME-R heater setting Rt/R0: the ratio of the resistance of the heated wire to its resistance at room temperature (SAMER.rtr0). Not a temperature"
   },
   "aging_time_s": {
    "kind": "condition",
@@ -181,9 +186,14 @@
    "meaning": "CO after the test"
   },
   "mass_loss_rate_mg_min": {
-   "kind": "outcome",
+   "kind": "condition",
    "unit": "mg/min",
-   "meaning": "Sample mass loss rate as written in the 'Weight loss rate (mg/min)' column of the SAME table; the table does not say whether it is a set value or a measured result"
+   "meaning": "Target weight loss rate of the planned SAME test matrix, as written in the 'Weight loss rate (mg/min)' column of the SAME table (SAMEEIRD.target, SAMEEIRD.matrix). A planned value, not a measured result"
+  },
+  "smoke_particle_size_um": {
+   "kind": "outcome",
+   "unit": "micrometre",
+   "meaning": "Size of the smoke particles, which the SAME investigators report in their final reports and papers (SAME.sizes, SAMEFSR.results). No PSI experimental table has a column for it; the variable is listed so that the smoke need has the outcome the literature names, and it has no value in any test"
   }
  },
  "derived": {
