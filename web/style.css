@@ -200,6 +200,18 @@ td.is-target { outline: 3px solid var(--ink); outline-offset: -3px; }
 .cov-other { margin-top: 12px; }
 .cov-other summary { font: 600 1.1rem var(--display); }
 
+/* scenario row and tests */
+.needs-table tr.scenario-row th, .needs-table tr.scenario-row td { border-bottom: 3px solid var(--ink); }
+.needs-table tr.scenario-row th small { display: block; font-size: 0.78rem; color: var(--ink-2); white-space: normal; max-width: 220px; }
+td.st small.gaps-codes { margin-top: 3px; font-style: italic; }
+.tests { margin: 40px 0; }
+.tests .presets { margin: 0 0 12px; }
+.tests-table td { vertical-align: top; }
+.tests-list summary { cursor: pointer; color: var(--blue); font-weight: 700; }
+.tests-list .ids a { white-space: nowrap; }
+.tests-list .ids { font-size: 0.85rem; line-height: 1.6; text-align: left; max-width: 46ch; margin: 4px 0 0; }
+.tests-list .gap { text-align: left; font-size: 0.85rem; margin: 4px 0 0; }
+
 /* model-written text */
 .ai-note { margin: 12px 0 0; padding: 10px 14px; background: #fbf7ec; border: 1px dashed var(--amber); border-radius: 6px; }
 .ai-note p { margin: 0 0 6px; }

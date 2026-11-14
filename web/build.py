@@ -31,6 +31,9 @@ DATA = {
 OPTIONAL = {
     "data/insights/cards.json": "data/insights/cards.json",
     "data/insights/scenarios.json": "data/insights/scenarios.json",
+    "data/pipeline/scenario_needs.csv": "data/scenario_needs.csv",
+    "data/pipeline/scenario_tests.csv": "data/scenario_tests.csv",
+    "pipeline/spec/scenarios.json": "data/scenario_spec.json",
 }
 
 

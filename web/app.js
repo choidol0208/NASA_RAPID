@@ -289,6 +289,8 @@ function renderNeeds(out, pipe, expanded) {
   }
   const order = PILLARS.flatMap(([pid]) => needs.filter((n) => n.pillar === pid));
   const tb = h("tbody");
+  const srow = scenarioNeedsRow(out, pipe, order);
+  if (srow) tb.append(srow);
   for (const r of ordered) {
     const srcs = byInv.get(r.psi_accession);
     const label = h("th", { scope: "row" }, h("b", {}, r.investigation_id), " ", h("span", { class: "acc" }, r.psi_accession));
@@ -363,6 +365,148 @@ function renderScenarioText(out, sc, cat) {
   if (Array.isArray(sc.gaps) && sc.gaps.length) {
     gapsBox.append(h("ul", { class: "ai-list" }, sc.gaps.map((g) => h("li", {}, g.text, g.needed_data ? h("span", { class: "gap" }, " Data that would close it: ", g.needed_data) : null))), aiLabel(sc));
     $("#gaps-section").hidden = false;
+  }
+}
+
+
+// ------------------------------------------------------------------ scenario matching (data role)
+const SN_STATUS = {
+  in_atmosphere: ["In your atmosphere", "st-measured"],
+  oxygen_only: ["At your oxygen, pressure not recorded", "st-partial"],
+  pressure_only: ["At your pressure, oxygen not recorded", "st-partial"],
+  other_atmosphere: ["Only other atmospheres", "st-cond"],
+  not_measured: ["No usable test", "st-none"],
+};
+const TIERS = [
+  ["atmosphere", "In your atmosphere", "oxygen and pressure both recorded and inside the ranges"],
+  ["oxygen_only", "At your oxygen, no pressure recorded", "oxygen inside the range; the table records no pressure"],
+  ["pressure_only", "At your pressure, no oxygen recorded", "pressure inside the range; the table records no oxygen"],
+];
+function gapWords(code) {
+  const [v, why] = code.split(":");
+  const name = { oxygen: "oxygen", pressure: "pressure", gravity: "gravity", flow: "flow" }[v] || v;
+  if (why === "not_recorded") return `${name} not recorded`;
+  if (why === "no_usable_test_in_range") return `no usable test at your ${name}`;
+  const m = /^no_usable_test_at_(.+)$/.exec(why || "");
+  if (m) return `no test at ${m[1]} ${name}`;
+  return `${name}: ${String(why).replace(/_/g, " ")}`;
+}
+function scenarioId(out, pipe) {
+  const id = out.scenario.preset;
+  return id && pipe.scenarioSpec && pipe.scenarioSpec.scenarios.some((x) => x.id === id) ? id : null;
+}
+function rangeText(r, unit) {
+  if (!r) return "any";
+  const lo = r.min === null || r.min === undefined ? null : r.min, hi = r.max === null || r.max === undefined ? null : r.max;
+  if (lo !== null && hi !== null) return `${lo} to ${r.max_inclusive ? "" : "below "}${hi}${unit}`;
+  if (lo !== null) return `${lo}${unit} or more`;
+  return `${r.max_inclusive ? "up to " : "below "}${hi}${unit}`;
+}
+function scenarioRanges(spec) {
+  const r = spec.ranges || {};
+  const parts = [`oxygen ${rangeText(r.o2_pct, "%")}`, `pressure ${rangeText(r.pressure_kpa, " kPa")}`];
+  if (r.flow_cms) parts.push(`flow ${rangeText(r.flow_cms, " cm/s")}`);
+  if (spec.gravity_level) parts.push(/gravity$/.test(spec.gravity_level) ? spec.gravity_level : `${spec.gravity_level} gravity`);
+  return parts.join(", ");
+}
+
+function scenarioNeedsRow(out, pipe, order) {
+  const sid = scenarioId(out, pipe);
+  if (!sid || !pipe.scenarioNeeds) return null;
+  const rows = pipe.scenarioNeeds.filter((r) => r.scenario_id === sid);
+  if (!rows.length) return null;
+  const tr = h("tr", { class: "scenario-row" }, h("th", { scope: "row" }, h("b", {}, "All tables, in your atmosphere"),
+    h("small", {}, scenarioRanges(pipe.scenarioSpec.scenarios.find((x) => x.id === sid)))));
+  for (const n of order) {
+    const r = rows.find((x) => x.need_id === n.id);
+    if (!r) { tr.append(h("td", { class: "st-missing" }, "—")); continue; }
+    const [name, cl] = SN_STATUS[r.status] || [r.status, ""];
+    const tierN = r.status === "in_atmosphere" ? r.tests_atmosphere : r.status === "oxygen_only" ? r.tests_oxygen_only
+      : r.status === "pressure_only" ? r.tests_pressure_only : null;
+    const invs = r.status === "in_atmosphere" ? r.investigations_atmosphere : r.status === "oxygen_only" ? r.investigations_oxygen_only
+      : r.status === "pressure_only" ? r.investigations_pressure_only : "";
+    const gaps = r.gaps ? r.gaps.split(";").filter(Boolean).map(gapWords) : [];
+    tr.append(h("td", { class: "st " + cl, title: `${r.usable_tests} usable tests for this need in all tables.` },
+      rowLink("data/pipeline/scenario_needs.csv", r, name),
+      tierN !== null ? h("small", {}, `${tierN} of ${r.usable_tests} usable tests${invs ? ", " + invs.split(";").join(", ") : ""}`) : h("small", {}, `${r.usable_tests} usable tests elsewhere`),
+      gaps.length ? h("small", { class: "gaps-codes" }, gaps.join("; ")) : null));
+  }
+  return tr;
+}
+
+let testsIndex = null; // test_id -> row of tests.csv, loaded on first use
+async function loadTestsIndex() {
+  if (testsIndex) return testsIndex;
+  const text = await loadText("data/tests.csv");
+  testsIndex = new Map(parseRows(text).map((r) => [r.test_id, r]));
+  return testsIndex;
+}
+function testLink(id) {
+  const t = testsIndex && testsIndex.get(id);
+  if (t && t.source_file && /^\d+$/.test(t.source_row))
+    return link(`${REPO}data/psi/experimental_tables/${encodeURIComponent(t.source_file)}?plain=1#L${t.source_row}`, id);
+  if (t) return rowLink("data/pipeline/tests.csv", t, id);
+  return h("span", {}, id);
+}
+
+async function renderTests(out, pipe, cat, phaseFilter) {
+  const sec = $("#tests");
+  const box = $("#tests-body");
+  const sid = scenarioId(out, pipe);
+  if (!sid || !pipe.hasScenarioTests) { sec.hidden = true; return; }
+  sec.hidden = false;
+  box.replaceChildren(h("p", { class: "gap" }, "Loading the test list…"));
+  let rows;
+  try {
+    if (!pipe.scenarioTests) pipe.scenarioTests = parseRows(await loadText("data/scenario_tests.csv"));
+    await loadTestsIndex();
+    rows = pipe.scenarioTests.filter((r) => r.scenario_id === sid);
+  } catch (e) { box.replaceChildren(h("p", { class: "gap" }, "Test list: not available yet.")); return; }
+  const spec = pipe.scenarioSpec.scenarios.find((x) => x.id === sid);
+  const phases = ["all", ...[...new Set(rows.map((r) => r.fuel_phase).filter(Boolean))].sort()];
+  const want = phaseFilter || (phases.includes(out.scenario.fuel_phase) ? out.scenario.fuel_phase : "all");
+  box.replaceChildren();
+  box.append(h("p", { class: "intro" }, h("b", {}, `${spec.label}: `), scenarioRanges(spec), ". ",
+    spec.note || "", " ", link(REPO + "pipeline/spec/scenarios.json", "(scenario ranges)")));
+  const bar = h("div", { class: "presets", role: "group", "aria-label": "Fuel phase" });
+  for (const ph of phases) {
+    const b = h("button", { type: "button", "aria-pressed": String(ph === want) }, ph === "all" ? "All fuels" : `${ph[0].toUpperCase()}${ph.slice(1)} fuels`);
+    b.addEventListener("click", () => renderTests(out, pipe, cat, ph));
+    bar.append(b);
+  }
+  box.append(bar);
+  const sel = rows.filter((r) => want === "all" || r.fuel_phase === want);
+  const byInv = new Map();
+  for (const r of sel) {
+    if (r.tier === "other") continue;
+    if (!byInv.has(r.investigation_id)) byInv.set(r.investigation_id, { atmosphere: [], oxygen_only: [], pressure_only: [] });
+    byInv.get(r.investigation_id)[r.tier].push(r);
+  }
+  const otherN = sel.filter((r) => r.tier === "other").length;
+  const name = (acc) => { const inv = Object.values(cat.investigations).find((v) => v.psi_accession === acc); return inv ? inv.investigation_id : acc; };
+  if (!byInv.size) {
+    box.append(h("p", { class: "cov-sum is-thin" }, h("b", {}, "No recorded test "), want === "all" ? "" : `with ${want} fuel `,
+      `matches these ranges for oxygen or pressure. ${otherN} recorded test${otherN === 1 ? " was" : "s were"} run in other conditions or did not record them.`));
+  } else {
+    const thead = h("tr", {}, h("th", { scope: "col" }, "Investigation"), ...TIERS.map(([, l, d]) => h("th", { scope: "col", class: "num", title: d }, l)));
+    const tb = h("tbody");
+    for (const [acc, t] of byInv) {
+      const tr = h("tr", {}, h("th", { scope: "row" }, h("b", {}, name(acc)), " ", link(`https://psi.nasa.gov/physci/repo/data/investigations/${acc}`, acc)));
+      for (const [tier] of TIERS) {
+        const list = t[tier];
+        if (!list.length) { tr.append(h("td", { class: "num c-none" }, "0")); continue; }
+        const flowIn = list.filter((r) => r.flow_match === "in").length;
+        const gravDiff = list.filter((r) => r.gravity_match === "different").length;
+        tr.append(h("td", { class: "num" }, h("details", { class: "tests-list" },
+          h("summary", {}, `${list.length} test${list.length === 1 ? "" : "s"}`),
+          h("p", { class: "gap" }, spec.ranges && spec.ranges.flow_cms ? `${flowIn} with flow in range. ` : "", gravDiff ? `All ${gravDiff} at microgravity, not ${spec.gravity_level} gravity. ` : ""),
+          h("p", { class: "ids" }, ...list.flatMap((r, i) => [i ? ", " : "", testLink(r.test_id)])))));
+      }
+      tb.append(tr);
+    }
+    box.append(h("div", { class: "table-wrap" }, h("table", { class: "tests-table" }, h("thead", {}, thead), tb)));
+    box.append(h("p", { class: "gap" }, `${otherN} more recorded test${otherN === 1 ? "" : "s"} ${want === "all" ? "" : `with ${want} fuel `}were run in other conditions or did not record oxygen and pressure. `,
+      "Each test id links to its row in the NASA PSI table. Matching: ", link(REPO + "data/pipeline/scenario_tests.csv", "data/pipeline/scenario_tests.csv"), "."));
   }
 }
 
@@ -499,6 +643,11 @@ async function main() {
     coverage: cv,
     refs: rf ? parseRows(rf) : null,
   };
+  const [sn, ss, stHead] = await Promise.all([optText("data/scenario_needs.csv"), loadJSON("data/scenario_spec.json", null),
+    fetch("data/scenario_tests.csv", { method: "HEAD" }).then((r) => r.ok).catch(() => false)]);
+  pipe.scenarioNeeds = sn ? parseRows(sn) : null;
+  pipe.scenarioSpec = ss && Array.isArray(ss.scenarios) ? ss : null;
+  pipe.hasScenarioTests = Boolean(stHead && pipe.scenarioSpec);
   // line numbers in the CSV files (header is line 1), for links to the exact source row
   cat.configurations.forEach((c, i) => { c._line = i + 2; });
   Object.values(cat.investigations).forEach((v) => { v._line = invOrder.indexOf(v.investigation_id) + 2; });
@@ -517,7 +666,7 @@ async function main() {
     renderAssumptions(out, config);
     renderWarnings($("#scenario-warnings"), out.warnings);
     if (out.status !== "ok") {
-      show("#top", false); show("#all", false); show("#needs", false); show("#coverage", false); show("#gaps-section", false);
+      show("#top", false); show("#all", false); show("#needs", false); show("#coverage", false); show("#gaps-section", false); show("#tests", false);
       $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
@@ -529,6 +678,7 @@ async function main() {
     renderRanking(out);
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);
+    renderTests(out, pipe, cat);
     show("#top", true); show("#all", true); show("#needs", true); show("#coverage", true);
   }
 
