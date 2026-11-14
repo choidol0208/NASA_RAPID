@@ -21,6 +21,8 @@ function h(tag, attrs = {}, ...kids) {
   return el;
 }
 const link = (href, text) => h("a", { href, target: "_blank", rel: "noopener" }, text);
+// Element.append(null) prints the word "null": append only real children.
+const put = (el, ...kids) => el.append(...kids.flat().filter((k) => k !== null && k !== undefined && k !== false));
 
 function cls(v, unknown, assumed) {
   if (unknown) return "s-unk";
@@ -209,9 +211,12 @@ function renderResults(out, cat, insights, sc) {
         Array.isArray(card.key_points) && card.key_points.length ? h("ul", {}, card.key_points.map((k) => h("li", {}, k.text, " ", sourceLinks(k.source, cat)))) : null)
         : h("p", { class: "gap" }, "Written summary: not available yet."),
       r.other_configs.length ? h("p", { class: "gap" }, "Other configurations in this investigation: ", r.other_configs.join(", ")) : null);
+    const rawSentence = insights.raw && insights.raw.sentences ? insights.raw.sentences[r.psi_accession] : null;
+    const rawLine = rawSentence ? h("p", { class: "raw-line" }, h("b", {}, "Raw data in PSI: "), rawSentence, " ",
+      link(REPO + insights.raw.source, "(team count from the PSI file listing)")) : null;
     const note = noteFor(sc, r);
     const noteEl = note ? h("div", { class: "ai-note" }, h("p", {}, h("b", {}, "Team note: "), note.text, " ", sourceLinks(note.sources, cat)), itemTag(note, sc)) : null;
-    ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, links, more));
+    ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, links, rawLine, more));
   }
 }
 
@@ -395,23 +400,27 @@ function renderScenarioText(out, sc, cat) {
   const rest = (sc.result_notes || []).filter((n) => !top.has(n.investigation_id));
   if (rest.length) {
     const L = listLabel(rest, sc);
-    other.append(h("h3", {}, "Other investigations"), h("ul", { class: "ai-list" },
+    put(other, h("h3", {}, "Other investigations"), h("ul", { class: "ai-list" },
       rest.map((n) => h("li", {}, h("b", {}, n.investigation_id), ": ", n.text, " ", sourceLinks(n.sources, cat), L.inline ? [" ", itemTag(n, sc)] : null))), L.tag);
   }
   // The scenario's frame (ranges, gravity, what PSI cannot say) sits above the need list.
   if (typeof sc.frame === "string" && sc.frame.trim()) {
     const fx = { text_origin: sc.frame_text_origin || sc.text_origin };
-    frameBox.append(h("p", { class: "frame" }, sc.frame, " ",
-      Array.isArray(sc.frame_sources) && sc.frame_sources.length ? [sourceLinks(sc.frame_sources, cat), " "] : null, itemTag(fx, sc)));
+    // Long frames (the lunar one is ~540 words): first two sentences, the rest folded (pm request 1622).
+    const sents = sc.frame.match(/[^.!?]+(?:[.!?]+(?=\s|$)|$)/g) || [sc.frame];
+    const lead = sents.slice(0, 2).join("").trim(), rest = sents.slice(2).join("").trim();
+    frameBox.append(h("div", { class: "frame" }, h("p", {}, lead, " ",
+      Array.isArray(sc.frame_sources) && sc.frame_sources.length ? [sourceLinks(sc.frame_sources, cat), " "] : null, itemTag(fx, sc)),
+      rest ? h("details", { class: "more" }, h("summary", {}, "Read the rest of the frame"), h("p", {}, rest)) : null));
   }
   if (Array.isArray(sc.needs) && sc.needs.length) {
     const L = listLabel(sc.needs, sc);
-    needsBox.append(h("h3", {}, "For this scenario"),
+    put(needsBox, h("h3", {}, "For this scenario"),
       h("ul", { class: "ai-list" }, sc.needs.map((n) => h("li", {}, h("b", {}, n.need_id), ": ", n.statement, " ", sourceLinks(n.sources, cat), L.inline ? [" ", itemTag(n, sc)] : null))), L.tag);
   }
   if (Array.isArray(sc.gaps) && sc.gaps.length) {
     const L = listLabel(sc.gaps, sc);
-    gapsBox.append(h("ul", { class: "ai-list" }, sc.gaps.map((g) => h("li", {}, g.text,
+    put(gapsBox, h("ul", { class: "ai-list" }, sc.gaps.map((g) => h("li", {}, g.text,
       Array.isArray(g.sources) && g.sources.length ? [" ", sourceLinks(g.sources, cat)] : null,
       g.needed_data ? h("span", { class: "gap" }, " Data that would close it: ", g.needed_data) : null,
       L.inline ? [" ", itemTag(g, sc)] : null))), L.tag);
@@ -552,7 +561,7 @@ function renderCompare(out, pipe, runQuery) {
     summary.push(`${spec.label || id}: matched tests for ${withTests} of ${order.length} needs`);
   }
   const caveats = COMPARE.map(([id]) => specOf(id)).filter((s) => s.caveat).map((s) => h("li", {}, h("b", {}, `${s.label}: `), s.caveat));
-  box.append(h("h3", {}, "ISS and lunar habitat, side by side"),
+  put(box, h("h3", {}, "ISS and lunar habitat, side by side"),
     h("p", { class: "team-note" }, "Counted recorded tests matched to each scenario's oxygen and pressure range, per need (counted only where the investigation states the need as an objective). Team computation from the PSI tables."),
     h("div", { class: "table-wrap" }, h("table", { class: "compare-table" }, h("thead", {}, thead), tb)),
     h("p", { class: "cov-sum" }, summary.join(". ") + "."),
@@ -592,7 +601,7 @@ async function renderExport(out, pipe, cat) {
     link(`${RAW}data/pipeline/values_long.csv`, "every value with its source column (CSV)"), "."));
   const invOf = (acc) => Object.values(cat.investigations).find((v) => v.psi_accession === acc);
   const cites = accs.map(invOf).filter(Boolean).sort((a, b) => a.investigation_id.localeCompare(b.investigation_id));
-  box.append(h("h3", {}, "Take the data with you"), h("ul", { class: "export-list" }, items),
+  put(box, h("h3", {}, "Take the data with you"), h("ul", { class: "export-list" }, items),
     cites.length ? h("details", { class: "more cite" }, h("summary", {}, `How to cite: ${cites.length} NASA PSI dataset${cites.length === 1 ? "" : "s"} (the top results${exportFile && OPTIONAL_HAS(exportFile) ? " and the matched-tests download" : ""})`),
       h("ul", { class: "cite-list" }, cites.map((v) => h("li", {}, `${v.investigation_name} (${v.investigation_id}, ${v.psi_accession}). NASA Physical Sciences Informatics. `,
         v.dataset_doi ? link("https://doi.org/" + v.dataset_doi, "https://doi.org/" + v.dataset_doi) : "DOI not stated"))),
@@ -624,7 +633,7 @@ function renderPoints(out, pipe) {
       said ? [h("span", {}, `— ${spec ? spec.label : "this environment"}: ${said}. `), rowLink("data/pipeline/scenario_needs.csv", r, "row")] : null,
       typeof n.reading === "string" && n.reading ? h("span", { class: "gap reading" }, " What a count means: ", n.reading) : null));
   }
-  box.append(h("h3", {}, sid ? `Points to consider for ${spec ? spec.label : sid}` : "Points to consider"),
+  put(box, h("h3", {}, sid ? `Points to consider for ${spec ? spec.label : sid}` : "Points to consider"),
     sid ? null : h("p", { class: "gap" }, "Counts per environment are computed for the two demo scenarios (ISS, lunar habitat). For other inputs, the table below shows each ranked investigation."),
     ul);
 }
@@ -1023,12 +1032,17 @@ async function renderEvidenceMap(out, pipe) {
   if (!pts.length) { box.append(h("p", { class: "gap" }, "Evidence map: not available yet.")); return; }
   try { await loadTestsIndex(); } catch (e) { /* dot links then point to tests.csv */ }
   const labels = em.labels || {};
-  const targets = (Array.isArray(em.targets) ? em.targets : []).filter((t) => targetO2(t) !== null);
+  const allTargets = Array.isArray(em.targets) ? em.targets : [];
+  // draw: "text" marks (the spacesuit, 95 to 100% oxygen) are given as text, off the axis (pm request 1622).
+  const textTargets = allTargets.filter((t) => t.draw === "text");
+  const targets = allTargets.filter((t) => t.draw !== "text" && targetO2(t) !== null);
+  // By default only the challenge statement and the two demo presets; the rest behind a switch.
+  const isPrimary = (t) => t.kind === "challenge_statement" || t.id === "preset.iss" || t.id === "preset.lunar_habitat";
   const flights = Array.isArray(em.flight_tests_not_in_psi) ? em.flight_tests_not_in_psi.filter((t) => typeof t.o2_pct === "number") : [];
   const userO2 = typeof out.scenario.o2_pct === "number" ? out.scenario.o2_pct : null;
   const axisMax = (em.axes && em.axes.o2_pct && em.axes.o2_pct.max) || 45;
   const top = Math.max(axisMax, ...pts.map((p) => p.o2_pct), ...targets.map(targetO2), ...flights.map((t) => t.o2_pct), userO2 || 0);
-  const xmax = Math.min(100, Math.ceil(top / 5) * 5 + (top >= axisMax ? 5 : 0));
+  const xmax = Math.min(100, Math.ceil(top / 5) * 5 + (top > axisMax ? 5 : 0));
   const W = 760, L = 112, R = 20, T = 44, LH = 62, B = 36, H = T + LANES.length * LH + B;
   const x = (o2) => L + ((W - L - R) * o2) / xmax;
   const svg = sv("svg", { viewBox: `0 0 ${W} ${H}`, class: "emap", role: "img",
@@ -1060,17 +1074,24 @@ async function renderEvidenceMap(out, pipe) {
     if (id === "solid" && mine.length) {
       const hi = Math.max(...mine.map((p) => p.o2_pct));
       svg.append(sv("line", { x1: x(hi), x2: x(hi), y1: y0 + 4, y2: y0 + LH - 4, class: "emap-end" }),
-        sv("text", { x: x(hi) + 6, y: y0 + LH / 2 + 4, class: "emap-end-label" }, `highest recorded: ${hi}%`));
+        sv("text", { x: x(hi) + 6, y: y0 + LH / 2 + 4, class: "emap-end-label" }, `ends at ${hi}%`, sv("title", {}, `Highest recorded oxygen of a solid-fuel test: ${hi}%`)));
     }
   });
+  const usedLabelX = [];
   targets.forEach((t, i) => {
     const tx = x(targetO2(t));
     const onYou = userO2 !== null && Math.abs(targetO2(t) - userO2) < 0.5; // keep the number readable beside the input line
-    svg.append(sv("line", { x1: tx, x2: tx, y1: T - 4, y2: T + LANES.length * LH, class: "emap-target" }),
-      sv("text", { x: onYou ? tx - 8 : tx, y: T - 7, class: "emap-target-n", "text-anchor": onYou ? "end" : "middle" }, String(i + 1)));
+    // Marks at the same oxygen (the challenge's 30% and the lunar preset): spread their numbers apart.
+    let lx = onYou ? tx - 8 : tx;
+    const sameGroup = isPrimary(t);
+    while (usedLabelX.some((u) => u.primary === sameGroup && Math.abs(u.x - lx) < 12)) lx -= 14;
+    usedLabelX.push({ x: lx, primary: sameGroup });
+    svg.append(sv("line", { x1: tx, x2: tx, y1: T - 4, y2: T + LANES.length * LH, class: isPrimary(t) ? "emap-target" : "emap-target secondary" }),
+      sv("text", { x: lx, y: T - 7, class: isPrimary(t) ? "emap-target-n" : "emap-target-n secondary", "text-anchor": onYou || lx !== tx ? "end" : "middle" }, String(i + 1)));
   });
   flights.forEach((t) => svg.append(sv("rect", { x: x(t.o2_pct) - 4, y: T + 2 * LH + LH - 14, width: 8, height: 8, class: "emap-flight" },
-    sv("title", {}, `${t.label || "NASA flight test"}: ${t.o2_pct}% O2 (published by NASA, not in PSI; not counted)`))));
+    sv("title", {}, [`${t.label || "Flight sample from a published paper (not in PSI, not counted)"}: ${t.o2_pct}% O2`,
+      typeof t.pressure_kpa === "number" ? `, ${t.pressure_kpa} kPa` : "", t.what ? `. ${t.what}` : ""].join("")))));
   if (userO2 !== null) {
     const ux = x(Math.min(userO2, xmax));
     svg.append(sv("line", { x1: ux, x2: ux, y1: 6, y2: T + LANES.length * LH, class: "emap-you" }),
@@ -1096,7 +1117,14 @@ async function renderEvidenceMap(out, pipe) {
     counts.append(li);
   }
   const marks = targets.length ? h("ol", { class: "emap-targets" }, targets.map((t) =>
-    h("li", {}, t.label || t.id, " ", h("span", { class: "gap" }, `(${String(t.kind || "").replace(/_/g, " ")}; ${t.source || "source not given"}${t.access ? ", " + t.access : ""}). A mark, not a limit.`)))) : null;
+    h("li", { class: isPrimary(t) ? null : "secondary-item" }, t.label || t.id, " ", h("span", { class: "gap" }, `(${String(t.kind || "").replace(/_/g, " ")}; ${t.source || "source not given"}${t.access ? ", " + t.access : ""}). A mark, not a limit.`),
+      isPrimary(t) ? null : h("span", { class: "gap" }, " Drawn when cited atmospheres are shown.")))) : null;
+  const textMarks = textTargets.length ? h("p", { class: "gap" }, "Given as text, off the oxygen axis: ", textTargets.map((t) => t.label || t.id).join("; "), ".") : null;
+  const toggle = targets.some((t) => !isPrimary(t)) ? (() => {
+    const cb = h("input", { type: "checkbox", id: "emap-cited" });
+    cb.addEventListener("change", () => wrap.classList.toggle("show-secondary", cb.checked));
+    return h("label", { class: "emap-toggle", for: "emap-cited" }, cb, " Show cited atmospheres and the team's counting ranges (", String(targets.filter((t) => !isPrimary(t)).length), " more marks)");
+  })() : null;
   const np = em.not_plotted || {};
   const missing = [];
   if (np.oxidizer_stream && np.oxidizer_stream.n) missing.push(`${np.oxidizer_stream.n} tests whose oxygen value is a burner's oxidizer stream${np.oxidizer_stream.why ? ": " + np.oxidizer_stream.why : ""}`);
@@ -1107,8 +1135,9 @@ async function renderEvidenceMap(out, pipe) {
     userO2 === null ? h("p", { class: "warn" }, "Your input has no oxygen value, so it is not marked. Add one, for example 30% O2.") : null,
     wrap,
     h("p", { class: "gap emap-legend" }, "Filled dot: tests in nitrogen balance or balance not recorded. Hollow dot: carbon dioxide or helium added. Dot size grows with the number of tests. Each dot links to its row in the NASA table.",
-      flights.length ? " Small squares: " + (labels.saffire_note || "published by NASA, not in PSI (checked 14 Nov 2026)") + "; never counted." : ""),
-    counts, marks,
+      flights.length ? " Small squares: " + (labels.saffire_note && !(labels.caption || []).join(" ").includes(labels.saffire_note)
+        ? labels.saffire_note : `${flights[0].label || "flight samples from a published paper (not in PSI, not counted)"}; see the note below the list.`) : ""),
+    toggle, counts, marks, textMarks,
     missing.length ? h("p", { class: "gap" }, "Not in the picture: ", missing.join("; "), ".") : null,
     Array.isArray(labels.caption) && labels.caption.length ? h("p", { class: "gap" }, labels.caption.join(" ")) : null,
     h("p", { class: "gap" }, "Points: ", link(REPO + "data/insights/evidence_map.json", "data/insights/evidence_map.json"), ", built by team code from ",
@@ -1151,6 +1180,7 @@ async function main() {
       loadJSON("data/scoring_config.json"), loadText("data/investigations.csv"), loadText("data/configurations.csv"),
       optJSON("data/insights/cards.json", null)]);
     insights.scenarios = await optJSON("data/insights/scenarios.json", []);
+    insights.raw = await optJSON("data/raw_inventory_sentences.json", null);
     if (!Array.isArray(insights.scenarios)) insights.scenarios = [];
     if (build && /^[0-9a-f]{7,40}$/.test(build.commit)) REPO = REPO_BASE + build.commit + "/";
     config = cfg;

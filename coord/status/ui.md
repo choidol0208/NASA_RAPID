@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 16:08 KST
+updated: 2026-11-14 16:54 KST
 state: working
 blocked_on: none
 ---
@@ -31,6 +31,27 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - All 1,824 test links point at an existing NASA table row; the 1,050 whose table has a test-number column match it.
   - It replaces the catalog-vs-pipeline step in pages.yml (catalog request 1429, done).
 
+- 16:29, pm's and data's files are on the page, live with this push:
+  - The evidence map draws (0 to 45% oxygen; the solid lane ends at 22.2%; the challenge's 30% and the two presets marked, the rest behind a switch).
+  - The model-written cards show with their AI label.
+  - The scenario frame shows its first two sentences, the rest folded.
+  - Raw-data sentences appear under each result.
+  - Constraints run need by need from data's answer files.
+- pm 1622 done (all four fixes plus both optional items), so 1306 item 1 is now live. 1449 item 3 (raw-data line) done.
+- 16:31, U5 done: final media in `web/media/`, taken from the public page with its real web fonts. pm, for the slides and the project page:
+  - `01_iss_first_screen.png` and `02_lunar_first_screen.png` (each with the at-a-glance line);
+  - `03_compare_iss_lunar.png` (ISS 4 of 6, lunar habitat 1 of 6);
+  - `04_lunar_evidence_map.png` (the solid lane ends at 22.2%, the lunar 30% marked);
+  - `05_lunar_constraints.png` (need by need, the first need open);
+  - `06_lunar_coverage_solid.png`;
+  - `07_lunar_phone.png` (390 px);
+  - `demo_iss_to_lunar.gif` (2.3 MB: ISS, then lunar habitat, the comparison, the evidence map);
+  - `og.png` (1200x630 link preview; the build now serves it).
+  - The six 11:28 drafts (`01_iss_top.png` … `06_lunar_phone.png`) are removed: old layout and results from before catalog 1.1.0. Retake any time with `node web/capture_media.mjs`.
+- 16:42: 1306, 1449 and 1453 marked done. pm 1630 accepted: the four slide captures (slide1_top, slide2_iss_result, slide3_iss_needs, slide7_iss_tests; 2216 to 2560 px wide) plus the evidence map are in the capture script, and a trial run on the live page passed. The final run is after the 19:00 freeze and the switch to main (about 19:15); the status will name the build commit.
+- Open: the unmatched-words line (waits for catalog's field); the 19:00 switch of the Pages trigger to `main` only.
+- 16:54: merged catalog's weight review (`1ff56df`, no value changed). The method section now says: "The weights are the team's proposal, not NASA guidance. A team member approved them as they are; no combustion specialist has reviewed them." No name on the page. Checks: unit tests 38/38, integration 33 results with 0 broken joins, build.
+- pm: on the board, U5, U6 and U7 are done (U5's media at 16:31, the 1630 slide captures follow at about 19:15); D7's raw-data file is already on the page.
 - 16:08, for pm request 1306 (due 16:30): the evidence-map view is built and tested, but `data/insights/evidence_map.json` is not on `main` yet, so the picture is not drawing on the public page.
   - It switches on in the first build that has the file. Any push to `main` or `catalog-filter` builds it, so no ui change is needed.
   - Proposal: if the file is not on `main` by 18:00, pm puts its static SVG at `data/insights/evidence_map.svg`. I would show that image in the same place, with the same fixed labels, and I can wire the fallback in one sync.
