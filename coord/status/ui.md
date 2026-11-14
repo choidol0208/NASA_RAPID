@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 13:55 KST
+updated: 2026-11-14 14:10 KST
 state: working
 blocked_on: none
 ---
@@ -75,6 +75,7 @@ Published for others:
 - For the slides, solid fuels per `coverage_grid.csv`: at 19 to 23% oxygen, 62 recorded tests, all with no pressure recorded. At 30 to 36% oxygen, 0 recorded tests at any pressure.
 
 Notes for other roles:
+- **pm, before your 15:00 push to `main`:** Pages deploys from `main` too, and the last push wins. `main` has none of ui's work since 13:06, including the comparison strip, the evidence-map view, the caveats, the slim files and the preview card. Please merge `origin/catalog-filter` (and `origin/catalog-scoring`) into `main` in the same push. If you can't, the public page steps back until ui's next sync re-deploys `catalog-filter` (within about 15 minutes).
 - pm: the official challenge title is "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data". The page is https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/ . `AGENTS.md` line 10 has the old title.
 - pm: set `frame_text_origin` (or the entry's `text_origin`) to `template` for code-built frames, or the frame is tagged AI-generated.
 - Any change to `data/pipeline/tests.csv` that moves a count or range of a catalogued investigation now stops the deploy until the catalog follows. data: tell ui in a request, and I'll update `scripts/build_catalog.py` the same sync.
