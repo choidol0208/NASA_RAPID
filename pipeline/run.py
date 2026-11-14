@@ -10,6 +10,7 @@ declared in pipeline/spec/:
     sources.json    how each PSI table maps onto the standard variables
     references.json the standards, requirements and published results behind each need
     coverage.json   bin edges for the coverage grid
+    scenarios.json  crewed environments to compare the recorded tests with
 
 Stages
     1 ingest       read each PSI table as text; nothing is changed
@@ -238,6 +239,91 @@ def coverage_grid(tests, cov):
     return pd.DataFrame(rows)
 
 
+def in_range(value, r):
+    low = r.get("min") is None or value > r["min"] or (value == r["min"] and r.get("min_inclusive", True))
+    high = r.get("max") is None or value < r["max"] or (value == r["max"] and r.get("max_inclusive", False))
+    return low and high
+
+
+def match_scenarios(tests, links, needs, scen_spec, report):
+    """Per scenario: mark every test against the scenario ranges, then count
+    the tests usable for each need by match tier (scenarios.json)."""
+    usable = {}
+    for row in links.itertuples():
+        usable.setdefault(row.need_id, set()).add(row.test_id)
+    test_rows, need_rows = [], []
+    tiers = ["atmosphere", "oxygen_only", "pressure_only", "other"]
+    for sc in scen_spec["scenarios"]:
+        marks = {}
+        for t in tests:
+            m = {}
+            for var in ("o2_pct", "pressure_kpa", "flow_cms"):
+                r = sc["ranges"].get(var)
+                v = t.get(var)
+                m[var] = ("not_specified" if r is None else "not_recorded" if empty(v)
+                          else "in" if in_range(v, r) else "out")
+            if m["o2_pct"] in ("in", "out") and t.get("o2_basis") != "ambient":
+                m["o2_pct"] = "not_ambient"
+            m["gravity"] = "same" if t.get("gravity_level") == sc["gravity_level"] else "different"
+            o, p = m["o2_pct"], m["pressure_kpa"]
+            m["tier"] = ("atmosphere" if o == "in" and p == "in"
+                         else "oxygen_only" if o == "in" and p == "not_recorded"
+                         else "pressure_only" if p == "in" and o == "not_recorded" else "other")
+            marks[t["test_id"]] = m
+            test_rows.append({"scenario_id": sc["id"], "test_id": t["test_id"],
+                              "investigation_id": t["investigation_id"], "source_id": t["source_id"],
+                              "fuel_phase": t.get("fuel_phase"), "o2_match": o, "pressure_match": p,
+                              "flow_match": m["flow_cms"], "gravity_match": m["gravity"],
+                              "tier": m["tier"]})
+        by_id = {t["test_id"]: t for t in tests}
+        for need in needs:
+            ids = usable.get(need["id"], set())
+            row = {"scenario_id": sc["id"], "need_id": need["id"], "need": need["name"],
+                   "usable_tests": len(ids)}
+            for tier in tiers:
+                hit = [i for i in ids if marks[i]["tier"] == tier]
+                row[f"tests_{tier}"] = len(hit)
+                row[f"investigations_{tier}"] = ";".join(sorted(
+                    {by_id[i]["investigation_id"] for i in hit}, key=lambda x: int(x.split("-")[1])))
+            row["status"] = next((name for name, tier in (("in_atmosphere", "atmosphere"),
+                                                           ("oxygen_only", "oxygen_only"),
+                                                           ("pressure_only", "pressure_only"))
+                                  if row[f"tests_{tier}"]),
+                                 "other_atmosphere" if ids else "not_measured")
+            best = [i for i in ids if marks[i]["tier"] in ("atmosphere", "oxygen_only")]
+            row["matched_tests_flow_in_range"] = sum(marks[i]["flow_cms"] == "in" for i in best)
+            row["matched_tests_flow_not_recorded"] = sum(marks[i]["flow_cms"] == "not_recorded" for i in best)
+            row["matched_tests_same_gravity"] = sum(marks[i]["gravity"] == "same" for i in best)
+            gaps = []
+            if ids and not any(marks[i]["o2_pct"] == "in" for i in ids):
+                gaps.append("oxygen:not_recorded" if all(marks[i]["o2_pct"] == "not_recorded" for i in ids)
+                            else "oxygen:no_usable_test_in_range")
+            if ids and not any(marks[i]["pressure_kpa"] == "in" for i in ids):
+                gaps.append("pressure:not_recorded" if all(marks[i]["pressure_kpa"] == "not_recorded" for i in ids)
+                            else "pressure:no_usable_test_in_range")
+            if ids and not any(marks[i]["gravity"] == "same" for i in ids):
+                gaps.append(f"gravity:no_usable_test_at_{sc['gravity_level']}")
+            if not ids:
+                gaps.append("need:no_usable_test")
+            row["gaps"] = ";".join(gaps)
+            row["scenario_gravity_level"] = sc["gravity_level"]
+            need_rows.append(row)
+    # consistency with the ui presets
+    path = os.path.join(ROOT, "scoring", "scoring_config.json")
+    mismatch = []
+    if os.path.exists(path):
+        presets = json.load(open(path, encoding="utf-8")).get("presets", {})
+        for sc in scen_spec["scenarios"]:
+            values = presets.get(sc["id"], {}).get("values")
+            if values is None:
+                mismatch.append(f"{sc['id']}: no preset with this id")
+            else:
+                mismatch += [f"{sc['id']}.{k}: {v} here, {values.get(k)} in preset"
+                             for k, v in sc["nominal"].items() if values.get(k) != v]
+    report["scenario_preset_mismatch"] = mismatch
+    return pd.DataFrame(test_rows), pd.DataFrame(need_rows)
+
+
 def need_references(needs, references):
     """Need -> reference items. Fails if a need points to an unknown item."""
     items = {i["id"]: (r, i) for r in references for i in r["items"]}
@@ -305,6 +391,11 @@ def main():
     grid = coverage_grid(tests, spec("coverage.json"))
     assert grid.tests.sum() == len(tests)
     grid.to_csv(os.path.join(OUT, "coverage_grid.csv"), index=False)
+    sc_tests, sc_needs = match_scenarios(tests, links, needs["needs"], spec("scenarios.json"), report)
+    sc_tests.to_csv(os.path.join(OUT, "scenario_tests.csv"), index=False)
+    sc_needs.to_csv(os.path.join(OUT, "scenario_needs.csv"), index=False)
+    with open(os.path.join(OUT, "run_report.json"), "w", encoding="utf-8") as f:
+        json.dump(report, f, indent=1, ensure_ascii=False)
     refs = need_references(needs["needs"], spec("references.json")["references"])
     refs.to_csv(os.path.join(OUT, "need_references.csv"), index=False)
 
