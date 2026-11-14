@@ -1,0 +1,813 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated draft (Claude Code), 2026-11-14. Not human-reviewed.",
+  "purpose": "How each PSI experimental table maps onto the standard variables. One entry per table (22). 'columns' lists source column -> standard variable -> named rule in pipeline/rules.py. 'constants' are facts about the whole table that are not in a column. Tables whose rows are not individual tests are listed with the reason and are not standardized.",
+  "source": "NASA Physical Sciences Informatics (PSI), https://psi.nasa.gov, Combustion Science experimental tables"
+ },
+ "sources": [
+  {
+   "id": "flex",
+   "file": "PSI-69_Experimental table_FLEX.csv",
+   "investigation_id": "PSI-69",
+   "row_unit": "test",
+   "test_id": "FLEX-{FLEX Test #}",
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "liquid",
+    "sample_geometry": "droplet",
+    "o2_basis": "ambient"
+   },
+   "columns": [
+    {
+     "from": "Fuel",
+     "to": "fuel_material",
+     "rule": "lower"
+    },
+    {
+     "from": "Ambient pressure; mmHg",
+     "to": "pressure_kpa",
+     "rule": "number",
+     "params": {
+      "factor": 0.133322368
+     }
+    },
+    {
+     "from": "O initial ambient composition; mole fraction",
+     "to": "o2_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "CO initial ambient composition; mole fraction",
+     "to": "co2_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "He initial ambient composition; mole fraction",
+     "to": "he_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "Droplet initial diameter; mm",
+     "to": "initial_diameter_mm",
+     "rule": "number"
+    },
+    {
+     "from": "Visible flame extinction diameter; mm",
+     "to": "extinction_diameter_mm",
+     "rule": "number"
+    },
+    {
+     "from": "Burning rate; mm",
+     "to": "burning_rate_mm2_s",
+     "rule": "number"
+    },
+    {
+     "from": "Burn time; s",
+     "to": "burn_time_s",
+     "rule": "measure"
+    },
+    {
+     "from": "Test end",
+     "to": "test_end",
+     "rule": "lower"
+    }
+   ],
+   "basis": "NASA/TP-2015-216046, Appendix A.1 and Table IX: the 'O', 'N', 'CO' columns are O2, N2, CO2 mole fractions; 'Burning rate; mm' is in mm2/s"
+  },
+  {
+   "id": "bass2",
+   "file": "PSI-25_Experimental table_BASS-II.csv",
+   "investigation_id": "PSI-25",
+   "row_unit": "test",
+   "test_id": "BASS2-{Test #}",
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "solid",
+    "o2_basis": "ambient"
+   },
+   "columns": [
+    {
+     "from": "Fuel Sample Material",
+     "to": [
+      "fuel_material",
+      "sample_geometry",
+      "sample_thickness_mm",
+      "sample_width_cm",
+      "rod_diameter_mm"
+     ],
+     "rule": "bass_material"
+    },
+    {
+     "from": "Air display",
+     "to": [
+      "flow_cms",
+      "flow_min_cms",
+      "flow_event"
+     ],
+     "rule": "bass_flow",
+     "params": {
+      "max_cms": 40.0
+     }
+    },
+    {
+     "from": "Calibrated  initial O2 % by vol",
+     "to": "o2_pct",
+     "rule": "number"
+    },
+    {
+     "from": "Calibrated final O2 % by vol",
+     "to": "o2_final_pct",
+     "rule": "number"
+    },
+    {
+     "from": "Initial CO2 % by vol",
+     "to": "co2_initial_pct",
+     "rule": "number"
+    },
+    {
+     "from": "Final CO2 % by vol",
+     "to": "co2_final_pct",
+     "rule": "number"
+    },
+    {
+     "from": "Initial CO (ppm)",
+     "to": "co_initial_ppm",
+     "rule": "gas_reading"
+    },
+    {
+     "from": "Final CO (ppm)",
+     "to": "co_final_ppm",
+     "rule": "gas_reading"
+    }
+   ],
+   "basis": "PSI-25 'BASS-II_ReadMe.docx': Air display = duct flow in cm/s, CO 'OR' = over range (>1000 ppm); PSI-25 description: duct flow up to 40 cm/s"
+  },
+  {
+   "id": "bass",
+   "file": "PSI-26_Experimental table_BASS.csv",
+   "investigation_id": "PSI-26",
+   "row_unit": "test",
+   "test_id": "BASS-{As Run Test #}",
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "solid"
+   },
+   "columns": [
+    {
+     "from": "Fuel Sample Material",
+     "to": [
+      "fuel_material",
+      "sample_geometry",
+      "sample_thickness_mm",
+      "sample_width_cm",
+      "rod_diameter_mm"
+     ],
+     "rule": "bass_material"
+    }
+   ],
+   "basis": "Column names. The table lists samples only; conditions and results are in the Science Documents test matrices"
+  },
+  {
+   "id": "cfi",
+   "file": "PSI-39_Experimental table_CFI.csv",
+   "investigation_id": "PSI-39",
+   "row_unit": "test",
+   "test_id": "CFI-{Flex Number}",
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "liquid",
+    "sample_geometry": "droplet",
+    "o2_basis": "ambient"
+   },
+   "columns": [
+    {
+     "from": "Fuel",
+     "to": "fuel_material",
+     "rule": "text"
+    },
+    {
+     "from": "Pressure",
+     "to": "pressure_kpa",
+     "rule": "measure",
+     "params": {
+      "factor": 101.325
+     }
+    },
+    {
+     "from": "Oxygen",
+     "to": "o2_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "Helium",
+     "to": "he_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    }
+   ],
+   "basis": "Column names; pressure cells carry the unit 'atm'"
+  },
+  {
+   "id": "saffire1",
+   "file": "PSI-98_Experimental table_SAFFIRE-1.csv",
+   "investigation_id": "PSI-98",
+   "row_unit": "test",
+   "test_id": "SAFFIRE-1-{Sample Number}",
+   "require": [
+    "Air Flow (cm/s)"
+   ],
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "solid",
+    "sample_geometry": "sheet or slab",
+    "o2_basis": "ambient"
+   },
+   "columns": [
+    {
+     "from": "Material",
+     "to": "fuel_material",
+     "rule": "text"
+    },
+    {
+     "from": "Air Flow (cm/s)",
+     "to": "flow_cms",
+     "rule": "measure"
+    },
+    {
+     "from": "Percent O2",
+     "to": "o2_pct",
+     "rule": "o2_text"
+    },
+    {
+     "from": "Sample Thickness (cm)",
+     "to": "sample_thickness_mm",
+     "rule": "length",
+     "params": {
+      "default_unit": "cm"
+     }
+    },
+    {
+     "from": "Sample Length (cm)",
+     "to": "sample_length_cm",
+     "rule": "length",
+     "params": {
+      "default_unit": "cm",
+      "out": "cm"
+     }
+    },
+    {
+     "from": "Sample Width (cm)",
+     "to": "sample_width_cm",
+     "rule": "length",
+     "params": {
+      "default_unit": "cm",
+      "out": "cm"
+     }
+    },
+    {
+     "from": "Ignition Power (W)",
+     "to": "ignition_power_w",
+     "rule": "measure"
+    },
+    {
+     "from": "Ignition Time (s)",
+     "to": "ignition_time_s",
+     "rule": "measure"
+    },
+    {
+     "from": "Burn Time (s)",
+     "to": "burn_time_s",
+     "rule": "measure"
+    },
+    {
+     "from": "Flow Direction",
+     "to": "flow_direction",
+     "rule": "lower"
+    }
+   ],
+   "basis": "Column names"
+  },
+  {
+   "id": "saffire2",
+   "file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+   "investigation_id": "PSI-99",
+   "row_unit": "test",
+   "test_id": "SAFFIRE-2-{Sample Number}",
+   "require": [
+    "Air Flow (cm/s)"
+   ],
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "solid",
+    "sample_geometry": "sheet or slab",
+    "o2_basis": "ambient"
+   },
+   "columns": [
+    {
+     "from": "Material",
+     "to": "fuel_material",
+     "rule": "text"
+    },
+    {
+     "from": "Air Flow (cm/s)",
+     "to": "flow_cms",
+     "rule": "measure"
+    },
+    {
+     "from": "Percent O2 (Note 1)",
+     "to": "o2_pct",
+     "rule": "o2_text"
+    },
+    {
+     "from": "Samle Thickness",
+     "to": "sample_thickness_mm",
+     "rule": "length"
+    },
+    {
+     "from": "Sample Length",
+     "to": "sample_length_cm",
+     "rule": "length",
+     "params": {
+      "default_unit": "cm",
+      "out": "cm"
+     }
+    },
+    {
+     "from": "Sample Width (cm)",
+     "to": "sample_width_cm",
+     "rule": "length",
+     "params": {
+      "default_unit": "cm",
+      "out": "cm"
+     }
+    },
+    {
+     "from": "Ignition Power (W)",
+     "to": "ignition_power_w",
+     "rule": "measure"
+    },
+    {
+     "from": "Ignition Time (s)",
+     "to": "ignition_time_s",
+     "rule": "measure"
+    },
+    {
+     "from": "Burn Time (s)",
+     "to": "burn_time_s",
+     "rule": "measure"
+    },
+    {
+     "from": "Flow Direction",
+     "to": "flow_direction",
+     "rule": "lower"
+    },
+    {
+     "from": "?-g Burn Length",
+     "to": "burn_length_cm",
+     "rule": "length",
+     "params": {
+      "default_unit": "cm",
+      "out": "cm"
+     }
+    },
+    {
+     "from": "?-g Spread Length",
+     "to": "spread_rate_mm_s",
+     "rule": "measure"
+    }
+   ],
+   "basis": "Column names. The first character of the two microgravity columns is unreadable in the PSI file. The 'Spread Length' column holds rates in mm/s. The 1-g columns are not mapped"
+  },
+  {
+   "id": "saffire3",
+   "file": "PSI-100_Experimental table_SAFFIRE-3.csv",
+   "investigation_id": "PSI-100",
+   "row_unit": "test",
+   "test_id": "SAFFIRE-3-{Sample Number}",
+   "require": [
+    "Air Flow"
+   ],
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "solid",
+    "sample_geometry": "sheet or slab",
+    "o2_basis": "ambient"
+   },
+   "columns": [
+    {
+     "from": "Material",
+     "to": "fuel_material",
+     "rule": "text"
+    },
+    {
+     "from": "Air Flow",
+     "to": "flow_cms",
+     "rule": "measure"
+    },
+    {
+     "from": "Sample Thickness",
+     "to": "sample_thickness_mm",
+     "rule": "length",
+     "params": {
+      "default_unit": "cm"
+     }
+    },
+    {
+     "from": "Sample Length",
+     "to": "sample_length_cm",
+     "rule": "length",
+     "params": {
+      "default_unit": "cm",
+      "out": "cm"
+     }
+    },
+    {
+     "from": "Sample Width",
+     "to": "sample_width_cm",
+     "rule": "length",
+     "params": {
+      "default_unit": "cm",
+      "out": "cm"
+     }
+    },
+    {
+     "from": "Direction",
+     "to": "flow_direction",
+     "rule": "lower"
+    }
+   ],
+   "basis": "Column names"
+  },
+  {
+   "id": "cfig_normal",
+   "file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+   "investigation_id": "PSI-159",
+   "row_unit": "test",
+   "test_id": "CFIG-N-{Test}",
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "gas",
+    "sample_geometry": "spherical burner",
+    "o2_basis": "ambient"
+   },
+   "columns": [
+    {
+     "from": "Fuel",
+     "to": "fuel_material",
+     "rule": "text"
+    },
+    {
+     "from": "XO2 before test",
+     "to": "o2_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "XO2  after test",
+     "to": "o2_final_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "approx p (bar)",
+     "to": "pressure_kpa",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "Hot ignition",
+     "to": "hot_ignition",
+     "rule": "codes"
+    },
+    {
+     "from": "burn time (sec)",
+     "to": "burn_time_s",
+     "rule": "number"
+    },
+    {
+     "from": "Self-ext or flow term",
+     "to": "test_end",
+     "rule": "codes",
+     "params": {
+      "map": {
+       "se": "self-extinction",
+       "ft": "flow termination"
+      }
+     }
+    }
+   ],
+   "basis": "Column names and the PSI investigation description"
+  },
+  {
+   "id": "cfig_inverse",
+   "file": "PSI-159_Experimental table_CFI-G_Inverse Flames.csv",
+   "investigation_id": "PSI-159",
+   "row_unit": "test",
+   "test_id": "CFIG-I-{Test}",
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "gas",
+    "sample_geometry": "spherical burner",
+    "o2_basis": "oxidizer_stream"
+   },
+   "columns": [
+    {
+     "from": "Fuel",
+     "to": "fuel_material",
+     "rule": "text"
+    },
+    {
+     "from": "XO2",
+     "to": "o2_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "approx p (bar)",
+     "to": "pressure_kpa",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "Hot ignition",
+     "to": "hot_ignition",
+     "rule": "codes"
+    },
+    {
+     "from": "burn time (sec)",
+     "to": "burn_time_s",
+     "rule": "number"
+    },
+    {
+     "from": "Self -ext or flow term",
+     "to": "test_end",
+     "rule": "codes",
+     "params": {
+      "map": {
+       "se": "self-extinction",
+       "ft": "flow termination"
+      }
+     }
+    }
+   ],
+   "basis": "Column names and the PSI investigation description"
+  },
+  {
+   "id": "flame_design_normal",
+   "file": "PSI-10_Experimental table_Flame Design_Normal Flame.csv",
+   "investigation_id": "PSI-10",
+   "row_unit": "test",
+   "test_id": "FD-N-{Test}",
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "gas",
+    "sample_geometry": "spherical burner",
+    "o2_basis": "ambient"
+   },
+   "columns": [
+    {
+     "from": "Fuel",
+     "to": "fuel_material",
+     "rule": "text"
+    },
+    {
+     "from": "XO2 (init)",
+     "to": "o2_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "XO2 (final)",
+     "to": "o2_final_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "pinit (atm)",
+     "to": "pressure_kpa",
+     "rule": "number",
+     "params": {
+      "factor": 101.325
+     }
+    }
+   ],
+   "basis": "Column names and the PSI investigation description"
+  },
+  {
+   "id": "flame_design_inverse",
+   "file": "PSI-10_Experimental table_Flame Design_Inverse Flame.csv",
+   "investigation_id": "PSI-10",
+   "row_unit": "test",
+   "test_id": "FD-I-{Test}",
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "gas",
+    "sample_geometry": "spherical burner",
+    "o2_basis": "oxidizer_stream",
+    "fuel_material": "C2H4"
+   },
+   "columns": [
+    {
+     "from": "XO2",
+     "to": "o2_pct",
+     "rule": "number",
+     "params": {
+      "factor": 100
+     }
+    },
+    {
+     "from": "pinit (atm)",
+     "to": "pressure_kpa",
+     "rule": "number",
+     "params": {
+      "factor": 101.325
+     }
+    }
+   ],
+   "basis": "Column names and the PSI investigation description"
+  },
+  {
+   "id": "same",
+   "file": "PSI-102_Experimental table_SAME.csv",
+   "investigation_id": "PSI-102",
+   "row_unit": "test",
+   "test_id": "SAME-{Sample #}",
+   "require": [
+    "Air Flow (cm/s)"
+   ],
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "solid"
+   },
+   "columns": [
+    {
+     "from": "Sample Material",
+     "to": "fuel_material",
+     "rule": "text"
+    },
+    {
+     "from": "Air Flow (cm/s)",
+     "to": "flow_cms",
+     "rule": "number"
+    },
+    {
+     "from": "Weight loss rate (mg/min)",
+     "to": "mass_loss_rate_mg_min",
+     "rule": "number"
+    },
+    {
+     "from": "Aging Duration (minutes)",
+     "to": "aging_time_s",
+     "rule": "number",
+     "params": {
+      "factor": 60
+     }
+    }
+   ],
+   "basis": "Column names"
+  },
+  {
+   "id": "same_r",
+   "file": "PSI-101_Experimental table_SAME-R.csv",
+   "investigation_id": "PSI-101",
+   "row_unit": "test",
+   "test_id": "SAMER-{SAME Test #}",
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "solid"
+   },
+   "columns": [
+    {
+     "from": "Sample Type",
+     "to": "fuel_material",
+     "rule": "text"
+    },
+    {
+     "from": "Inlet velocity (cm/s)",
+     "to": "flow_cms",
+     "rule": "number"
+    },
+    {
+     "from": "Rt/R0",
+     "to": "heating_ratio",
+     "rule": "number"
+    },
+    {
+     "from": "Net aging time (sec)",
+     "to": "aging_time_s",
+     "rule": "number"
+    }
+   ],
+   "basis": "Column names. The meaning of Rt/R0 is not confirmed against a NASA document"
+  },
+  {
+   "id": "spice",
+   "file": "PSI-107_Experimental table_Spice.csv",
+   "investigation_id": "PSI-107",
+   "row_unit": "test",
+   "test_id": "SPICE-r{row}",
+   "constants": {
+    "gravity_level": "microgravity",
+    "fuel_phase": "gas",
+    "sample_geometry": "gas jet"
+   },
+   "columns": [
+    {
+     "from": "Fuel",
+     "to": "fuel_material",
+     "rule": "text"
+    },
+    {
+     "from": "Air Rate (cm/s)",
+     "to": "flow_cms",
+     "rule": "number"
+    }
+   ],
+   "basis": "Column names. The table has no test number, so the source row number is used"
+  },
+  {
+   "id": "slice",
+   "file": "PSI-106_Experimental table_Slice.csv",
+   "investigation_id": "PSI-106",
+   "row_unit": "test_day",
+   "not_standardized": "One row per test day; no per-test conditions"
+  },
+  {
+   "id": "flex2",
+   "file": "PSI-68_Experimental table_Flex2.csv",
+   "investigation_id": "PSI-68",
+   "row_unit": "planned_matrix",
+   "not_standardized": "One row per fuel with the planned ranges of conditions, not tests"
+  },
+  {
+   "id": "acme_bre",
+   "file": "PSI-20_Experimental table_ACME BRE.csv",
+   "investigation_id": "PSI-20",
+   "row_unit": "test_day",
+   "not_standardized": "One row per test day; oxygen is a list of the settings used that day"
+  },
+  {
+   "id": "cld_flame",
+   "file": "PSI-21_Experimental table_CLD Flame.csv",
+   "investigation_id": "PSI-21",
+   "row_unit": "test_day",
+   "not_standardized": "One row per test day"
+  },
+  {
+   "id": "acme_e_field_flames",
+   "file": "PSI-22_Experimental table_ACME E-FIELD Flames.csv",
+   "investigation_id": "PSI-22",
+   "row_unit": "test_day",
+   "not_standardized": "One row per test day"
+  },
+  {
+   "id": "acme_s_flame",
+   "file": "PSI-23_Experimental table_ACME s-Flame.csv",
+   "investigation_id": "PSI-23",
+   "row_unit": "test_day",
+   "not_standardized": "One row per test day"
+  },
+  {
+   "id": "daft",
+   "file": "PSI-47_Experimental table_DAFT.csv",
+   "investigation_id": "PSI-47",
+   "row_unit": "session",
+   "not_standardized": "One row per sampling session; no combustion test"
+  },
+  {
+   "id": "data_summary_table",
+   "file": "PSI-142_Experimental table_Data Summary Table.csv",
+   "investigation_id": "PSI-142",
+   "row_unit": "dataset_index",
+   "not_standardized": "Index of figures in publications"
+  }
+ ]
+}

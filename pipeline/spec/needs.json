@@ -1,0 +1,194 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated draft (Claude Code), 2026-11-14, NASA Space Apps Challenge 2026 hackathon. Not human-reviewed.",
+  "purpose": "What a spacecraft fire-safety engineer needs to know, written as questions, with the variables a test must record to help answer each one. The pipeline checks every data source against this list; it does not answer the questions itself.",
+  "basis": [
+   "Flame in Freefall challenge statement: prevention = ignition-source control and material selection, which depends on flammability limits; flammability depends on oxygen concentration and air flow; detection (SAME); suppression (FLEX)",
+   "A Researcher's Guide to: Combustion Science (NASA ISS Program Science Office, 2015), sections 'Solid-Fuel Combustion/Material Flammability' and 'Spacecraft Fire Safety'",
+   "PSI investigation records for BASS, BASS-II, Saffire, SAME, FLEX (objectives and hypotheses)"
+  ],
+  "status_rule": "measured = at least one outcome variable has values and every 'conditions_required' variable has values; partial = an outcome has values but a required condition is missing from the table; conditions_only = no outcome variable in the table; none = neither",
+  "scope_rule": "'scope' limits a need to the tests it is about (for example, material questions apply to solid samples). Tests outside the scope are not counted; a source with no test in scope gets the status out_of_scope."
+ },
+ "needs": [
+  {
+   "id": "P1",
+   "pillar": "prevention",
+   "name": "Flammability limit",
+   "question": "Down to what oxygen concentration, and in what range of flow speed, does this material keep burning?",
+   "conditions_required": [
+    "fuel_material",
+    "o2_pct",
+    "flow_cms"
+   ],
+   "conditions_useful": [
+    "sample_geometry",
+    "sample_thickness_mm",
+    "pressure_kpa",
+    "flow_direction",
+    "gravity_level"
+   ],
+   "outcomes_any": [
+    "flow_event",
+    "o2_consumed_pct_points",
+    "burn_time_s",
+    "burn_length_cm"
+   ],
+   "why": "Material selection rests on flammability limits; the 1-g screening test may not be conservative in low gravity.",
+   "scope": {
+    "fuel_phase": [
+     "solid"
+    ]
+   }
+  },
+  {
+   "id": "P2",
+   "pillar": "prevention",
+   "name": "Ignition",
+   "question": "How much energy and time does it take to ignite this material in this atmosphere?",
+   "conditions_required": [
+    "fuel_material",
+    "o2_pct"
+   ],
+   "conditions_useful": [
+    "flow_cms",
+    "pressure_kpa",
+    "sample_thickness_mm"
+   ],
+   "outcomes_any": [
+    "ignition_power_w",
+    "ignition_time_s",
+    "hot_ignition"
+   ],
+   "why": "Prevention includes controlling ignition sources; materials ignite more easily in low gravity.",
+   "scope": {
+    "fuel_phase": [
+     "solid"
+    ]
+   }
+  },
+  {
+   "id": "P3",
+   "pillar": "prevention",
+   "name": "Flame spread and growth",
+   "question": "Once lit, how fast does the flame spread and how large does it get?",
+   "conditions_required": [
+    "fuel_material",
+    "flow_cms",
+    "flow_direction"
+   ],
+   "conditions_useful": [
+    "o2_pct",
+    "pressure_kpa",
+    "sample_thickness_mm",
+    "sample_width_cm"
+   ],
+   "outcomes_any": [
+    "spread_rate_mm_s",
+    "burn_length_cm",
+    "burn_time_s"
+   ],
+   "why": "Sets the time available to respond and the size of fire a vehicle must tolerate.",
+   "scope": {
+    "fuel_phase": [
+     "solid"
+    ]
+   }
+  },
+  {
+   "id": "P4",
+   "pillar": "prevention",
+   "name": "Exploration atmosphere",
+   "question": "Was this material or fuel tested at the elevated oxygen and reduced pressure planned for Moon and Mars habitats?",
+   "conditions_required": [
+    "o2_pct",
+    "pressure_kpa"
+   ],
+   "conditions_useful": [
+    "fuel_material",
+    "fuel_phase",
+    "gravity_level"
+   ],
+   "outcomes_any": [
+    "burn_time_s",
+    "test_end",
+    "hot_ignition",
+    "flow_event",
+    "o2_consumed_pct_points"
+   ],
+   "why": "The Moon Base atmosphere is expected at 30% oxygen or more and 10.2 psi or less, which makes materials more flammable."
+  },
+  {
+   "id": "S1",
+   "pillar": "suppression",
+   "name": "Extinction conditions",
+   "question": "Under what conditions does the flame go out: lower oxygen, added inert gas, or reduced flow?",
+   "conditions_required": [
+    "fuel_material",
+    "o2_pct"
+   ],
+   "conditions_useful": [
+    "co2_pct",
+    "he_pct",
+    "pressure_kpa",
+    "flow_cms",
+    "flow_min_cms"
+   ],
+   "outcomes_any": [
+    "test_end",
+    "extinction_diameter_mm",
+    "flow_event"
+   ],
+   "why": "Suppression by inert-gas dilution and by stopping ventilation both depend on extinction limits."
+  },
+  {
+   "id": "D1",
+   "pillar": "detection",
+   "name": "Combustion products",
+   "question": "What does the fire or overheated material give off that a detector or a crew member would encounter?",
+   "conditions_required": [
+    "fuel_material"
+   ],
+   "conditions_useful": [
+    "o2_pct",
+    "flow_cms",
+    "sample_geometry"
+   ],
+   "outcomes_any": [
+    "co_produced_ppm",
+    "co2_produced_pct_points",
+    "co_to_co2_molar_ratio",
+    "mass_loss_rate_mg_min"
+   ],
+   "why": "Detection and post-fire response depend on what is produced; carbon monoxide is the main toxic hazard.",
+   "scope": {
+    "fuel_phase": [
+     "solid"
+    ]
+   }
+  },
+  {
+   "id": "D2",
+   "pillar": "detection",
+   "name": "Smoke generation conditions",
+   "question": "Under what heating, flow and aging conditions was smoke from this material characterised?",
+   "conditions_required": [
+    "fuel_material",
+    "flow_cms"
+   ],
+   "conditions_useful": [
+    "heating_ratio",
+    "aging_time_s"
+   ],
+   "outcomes_any": [
+    "mass_loss_rate_mg_min"
+   ],
+   "why": "Smoke particle size depends on flow and aging, and detectors respond differently to different sizes. Particle-size results are not in the experimental tables.",
+   "scope": {
+    "fuel_phase": [
+     "solid"
+    ]
+   }
+  }
+ ]
+}

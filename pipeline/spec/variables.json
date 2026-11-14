@@ -1,0 +1,275 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated draft (Claude Code), 2026-11-14. Not human-reviewed.",
+  "purpose": "The standard vocabulary. Every source column is mapped onto one of these names and units, so tests from different experiments can sit in one table.",
+  "derived_note": "Derived values are computed by the engine from 'formula', in the order listed. A formula is skipped when any input is empty or a 'skip_if' expression is true."
+ },
+ "variables": {
+  "fuel_material": {
+   "kind": "condition",
+   "unit": "",
+   "meaning": "Material or fuel burned"
+  },
+  "fuel_phase": {
+   "kind": "condition",
+   "unit": "solid | liquid | gas | aerosol",
+   "meaning": "Phase of the fuel as tested"
+  },
+  "sample_geometry": {
+   "kind": "condition",
+   "unit": "",
+   "meaning": "Shape of the sample or burner"
+  },
+  "sample_thickness_mm": {
+   "kind": "condition",
+   "unit": "mm",
+   "meaning": "Sample thickness"
+  },
+  "sample_width_cm": {
+   "kind": "condition",
+   "unit": "cm",
+   "meaning": "Sample width"
+  },
+  "sample_length_cm": {
+   "kind": "condition",
+   "unit": "cm",
+   "meaning": "Sample length"
+  },
+  "rod_diameter_mm": {
+   "kind": "condition",
+   "unit": "mm",
+   "meaning": "Rod diameter"
+  },
+  "initial_diameter_mm": {
+   "kind": "condition",
+   "unit": "mm",
+   "meaning": "Droplet diameter at ignition"
+  },
+  "o2_pct": {
+   "kind": "condition",
+   "unit": "% by volume",
+   "meaning": "Oxygen concentration at the start of the test"
+  },
+  "o2_basis": {
+   "kind": "condition",
+   "unit": "ambient | oxidizer_stream",
+   "meaning": "Whether o2_pct is the surrounding atmosphere or the gas issuing from the burner"
+  },
+  "co2_pct": {
+   "kind": "condition",
+   "unit": "% by volume",
+   "meaning": "Carbon dioxide added to the atmosphere before the test"
+  },
+  "he_pct": {
+   "kind": "condition",
+   "unit": "% by volume",
+   "meaning": "Helium added to the atmosphere before the test"
+  },
+  "pressure_kpa": {
+   "kind": "condition",
+   "unit": "kPa",
+   "meaning": "Ambient pressure"
+  },
+  "flow_cms": {
+   "kind": "condition",
+   "unit": "cm/s",
+   "meaning": "Imposed flow speed at the start of the test"
+  },
+  "flow_min_cms": {
+   "kind": "condition",
+   "unit": "cm/s",
+   "meaning": "Lowest flow speed set during the test"
+  },
+  "flow_direction": {
+   "kind": "condition",
+   "unit": "concurrent | opposed",
+   "meaning": "Flame spread direction relative to the flow"
+  },
+  "gravity_level": {
+   "kind": "condition",
+   "unit": "microgravity | 1g | lunar | martian",
+   "meaning": "Gravity level of the test"
+  },
+  "heating_ratio": {
+   "kind": "condition",
+   "unit": "ratio",
+   "meaning": "SAME heater resistance ratio Rt/R0 (interpretation unconfirmed)"
+  },
+  "aging_time_s": {
+   "kind": "condition",
+   "unit": "s",
+   "meaning": "Time the smoke was aged before measurement"
+  },
+  "ignition_power_w": {
+   "kind": "outcome",
+   "unit": "W",
+   "meaning": "Igniter power"
+  },
+  "ignition_time_s": {
+   "kind": "outcome",
+   "unit": "s",
+   "meaning": "Igniter on-time"
+  },
+  "hot_ignition": {
+   "kind": "outcome",
+   "unit": "yes | no | flash",
+   "meaning": "Whether a hot flame ignited"
+  },
+  "burn_time_s": {
+   "kind": "outcome",
+   "unit": "s",
+   "meaning": "Burn time"
+  },
+  "test_end": {
+   "kind": "outcome",
+   "unit": "as recorded; CFI-G codes SE/FT written out",
+   "meaning": "How the test ended, as recorded"
+  },
+  "extinction_diameter_mm": {
+   "kind": "outcome",
+   "unit": "mm",
+   "meaning": "Droplet diameter when the visible flame went out"
+  },
+  "burning_rate_mm2_s": {
+   "kind": "outcome",
+   "unit": "mm2/s",
+   "meaning": "Droplet burning rate constant"
+  },
+  "flow_event": {
+   "kind": "outcome",
+   "unit": "extinction | blowoff",
+   "meaning": "Event noted next to the flow settings"
+  },
+  "burn_length_cm": {
+   "kind": "outcome",
+   "unit": "cm",
+   "meaning": "Length burned in microgravity"
+  },
+  "spread_rate_mm_s": {
+   "kind": "outcome",
+   "unit": "mm/s",
+   "meaning": "Flame spread rate in microgravity"
+  },
+  "o2_final_pct": {
+   "kind": "outcome",
+   "unit": "% by volume",
+   "meaning": "Oxygen concentration after the test"
+  },
+  "co2_initial_pct": {
+   "kind": "outcome",
+   "unit": "% by volume",
+   "meaning": "CO2 before the test"
+  },
+  "co2_final_pct": {
+   "kind": "outcome",
+   "unit": "% by volume",
+   "meaning": "CO2 after the test"
+  },
+  "co_initial_ppm": {
+   "kind": "outcome",
+   "unit": "ppm",
+   "meaning": "CO before the test"
+  },
+  "co_final_ppm": {
+   "kind": "outcome",
+   "unit": "ppm",
+   "meaning": "CO after the test"
+  },
+  "mass_loss_rate_mg_min": {
+   "kind": "outcome",
+   "unit": "mg/min",
+   "meaning": "Sample mass loss rate"
+  }
+ },
+ "derived": {
+  "o2_consumed_pct_points": {
+   "unit": "percentage points",
+   "formula": "o2_pct - o2_final_pct",
+   "skip_if": [
+    {
+     "expr": "o2_final_pct > o2_pct + 0.5",
+     "flag": "final_o2_above_initial_in_source"
+    },
+    {
+     "expr": "o2_final_pct < 5",
+     "flag": "final_o2_implausibly_low_in_source"
+    }
+   ]
+  },
+  "co2_produced_pct_points": {
+   "unit": "percentage points",
+   "formula": "co2_final_pct - co2_initial_pct"
+  },
+  "co_produced_ppm": {
+   "unit": "ppm",
+   "formula": "co_final_ppm - co_initial_ppm"
+  },
+  "co_to_co2_molar_ratio": {
+   "unit": "mol/mol",
+   "formula": "co_produced_ppm * 1e-4 / co2_produced_pct_points",
+   "skip_if": [
+    {
+     "expr": "co_produced_ppm <= 0",
+     "flag": null
+    },
+    {
+     "expr": "co2_produced_pct_points < 0.05",
+     "flag": null
+    }
+   ]
+  },
+  "extinction_to_initial_diameter_ratio": {
+   "unit": "ratio",
+   "formula": "extinction_diameter_mm / initial_diameter_mm",
+   "flag_if": [
+    {
+     "expr": "value > 1",
+     "flag": "extinction_diameter_larger_than_initial"
+    }
+   ]
+  }
+ },
+ "ranges": {
+  "_note": "A value outside its range is emptied and flagged '<variable>:out_of_range'.",
+  "o2_pct": [
+   0,
+   100
+  ],
+  "o2_final_pct": [
+   0,
+   100
+  ],
+  "co2_pct": [
+   0,
+   100
+  ],
+  "he_pct": [
+   0,
+   100
+  ],
+  "pressure_kpa": [
+   0.001,
+   null
+  ],
+  "flow_cms": [
+   0,
+   null
+  ],
+  "flow_min_cms": [
+   0,
+   null
+  ],
+  "initial_diameter_mm": [
+   0.001,
+   null
+  ],
+  "extinction_diameter_mm": [
+   0,
+   null
+  ],
+  "burn_time_s": [
+   0,
+   null
+  ]
+ }
+}
