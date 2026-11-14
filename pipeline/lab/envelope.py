@@ -55,9 +55,9 @@ def on_segment(a, b, p):
 
 
 def position(h, p):
-    """(hull kind, position, inside) of point p."""
+    """(hull kind, position, inside) of point p; inside is None without a hull."""
     if not h:
-        return "none", "outside", False
+        return "none", "no hull", None
     if len(h) == 1:
         return "point", ("boundary" if h[0] == p else "outside"), h[0] == p
     if len(h) == 2:
@@ -71,20 +71,67 @@ def position(h, p):
     return "area", "interior", True
 
 
-def axis_numbers(values, nominal):
-    """values: list of Fractions (one per test)."""
-    if not values:
+def axis_flags(t, prefix):
+    return [f for f in t["flags"].split(";") if f.startswith(prefix)] if t["flags"] else []
+
+
+def half_unit(written):
+    """Half a unit of the last written digit of a Decimal as written."""
+    e = written.as_tuple().exponent
+    return Fraction(1, 2) * Fraction(10) ** e
+
+
+def axis_numbers(tests, axis, nominal, h, prefix):
+    """tests: tests with the axis recorded; nominal exact; h half unit of the nominal."""
+    if not tests:
         return {"tests_recorded": 0}
+    values = [frac(t[axis]) for t in tests]
+    flagged = [bool(axis_flags(t, prefix)) for t in tests]
     lo, hi = min(values), max(values)
     dist = min(abs(v - nominal) for v in values)
     nearest = sorted({v for v in values if abs(v - nominal) == dist})
+
+    def at(v):
+        return {"tests_at_value": sum(1 for x in values if x == v),
+                "flagged_tests_at_value": sum(1 for x, f in zip(values, flagged) if x == v and f)}
     return {
         "tests_recorded": len(values),
         "min": dec(lo), "max": dec(hi),
+        "min_flagged_tests_at_value": at(lo)["flagged_tests_at_value"],
+        "max_flagged_tests_at_value": at(hi)["flagged_tests_at_value"],
         "nominal_within_min_max": lo <= nominal <= hi,
-        "nearest": [{"value": dec(v), "gap": dec(v - nominal),
-                     "tests_at_value": sum(1 for x in values if x == v)} for v in nearest],
+        "nearest": [{"value": dec(v), "gap": dec(v - nominal), "below_nominal_rounding": abs(v - nominal) < h,
+                     **at(v)} for v in nearest],
+        "flagged_tests": [{"test_id": t["test_id"], "value": t[axis], "flags": axis_flags(t, prefix),
+                           "o2_range_as_written": t["o2_range_as_written"]}
+                          for t, f in zip(tests, flagged) if f],
     }
+
+
+def conversions(sources, used):
+    """axis -> source_id -> [{from, rule, params}] for the source columns that fill the axis."""
+    out = {}
+    for s in sources["sources"]:
+        if s["id"] not in used:
+            continue
+        for c in s.get("columns", []):
+            to = c.get("to")
+            to = to if isinstance(to, list) else [to]
+            for a in AXES:
+                if a in to and a in used[s["id"]]:
+                    out.setdefault(a, {}).setdefault(s["id"], []).append(
+                        {"from": c["from"], "rule": c["rule"], "params": c.get("params", {})})
+        for a in AXES:
+            if a in used[s["id"]] and a in s.get("constants", {}):
+                out.setdefault(a, {}).setdefault(s["id"], []).append({"constant": s["constants"][a]})
+    for a, by in out.items():
+        for sid, cols in by.items():
+            for c in cols:
+                if c.get("rule") == "number":
+                    for t in used[sid][a]:
+                        if "." in t and len(t.split(".")[1]) > 4:
+                            fail(f"{sid} {a} value {t} has more than 4 decimals (rule 'number' rounds to 4)")
+    return out
 
 
 def gravity_origin(sources):
@@ -123,11 +170,15 @@ def main():
                 fail(f"{r['test_id']} of need_tests.csv not in tests.csv")
             counted.setdefault(r["need_id"], set()).add(r["test_id"])
     basis_col, basis_val = E["choices"]["ambient_oxygen"]["column"], E["choices"]["ambient_oxygen"]["equals"]
+    prefix = E["choices"]["flagged_values"]["flag_prefix_by_axis"]
+    sources = load_json(ROOT / inp["sources"])
     out_dir = ROOT / S["output_dir"]
     index = []
     for sc, scx in zip(scenarios, scen_exact):
         assert sc["id"] == scx["id"]
         nominal = {a: frac(scx["nominal"][a]) for a in AXES if a in scx.get("nominal", {})}
+        half = {a: half_unit(scx["nominal"][a]) for a in AXES if a in scx.get("nominal", {})}
+        used = {}
         has_nominal = all(a in nominal for a in AXES)
         rng = sc["ranges"]
         blocks = []
@@ -135,7 +186,14 @@ def main():
             ids = sorted(counted.get(need["id"], set()))
             amb = [tests[i] for i in ids if tests[i]["o2_pct"] != "" and tests[i][basis_col] == basis_val]
             b = {"need_id": need["id"], "need": need["name"], "counted_tests": len(ids),
-                 "counted_tests_with_ambient_oxygen": len(amb)}
+                 "counted_tests_with_ambient_oxygen": len(amb),
+                 "excluded_o2_not_recorded": sum(1 for i in ids if tests[i]["o2_pct"] == ""),
+                 "excluded_basis_not_ambient": sum(1 for i in ids if tests[i]["o2_pct"] != ""
+                                                   and tests[i][basis_col] != basis_val)}
+            for t in amb:
+                for a in AXES:
+                    if t[a] != "":
+                        used.setdefault(t["source_id"], {}).setdefault(a, set()).add(t[a])
             # ranges (pipeline rule, float as the pipeline reads; exact rule checked beside it)
             o_in = [t for t in amb if rng.get("o2_pct") and in_range(float(t["o2_pct"]), rng["o2_pct"])]
             p_rec = [t for t in amb if t["pressure_kpa"] != ""]
@@ -175,14 +233,18 @@ def main():
             if has_nominal and amb:
                 b["nominal"] = {
                     "axes": {
-                        "o2_pct": axis_numbers([frac(t["o2_pct"]) for t in amb], nominal["o2_pct"]),
-                        "pressure_kpa": axis_numbers([frac(t["pressure_kpa"]) for t in p_rec], nominal["pressure_kpa"]),
+                        "o2_pct": axis_numbers(amb, "o2_pct", nominal["o2_pct"], half["o2_pct"], prefix["o2_pct"]),
+                        "pressure_kpa": axis_numbers(p_rec, "pressure_kpa", nominal["pressure_kpa"],
+                                                     half["pressure_kpa"], prefix["pressure_kpa"]),
                     }
                 }
                 pts = [(frac(t["o2_pct"]), frac(t["pressure_kpa"])) for t in joint]
                 h = hull(pts)
                 nom = (nominal["o2_pct"], nominal["pressure_kpa"])
                 kind, pos, inside = position(h, nom)
+                ho, hp = half["o2_pct"], half["pressure_kpa"]
+                corners = [(nom[0] + so * ho, nom[1] + sp * hp) for so in (-1, 1) for sp in (-1, 1)]
+                corners_in = None if kind == "none" else sum(1 for c in corners if position(h, c)[2])
                 deltas = [(abs(p[0] - nom[0]), abs(p[1] - nom[1])) for p in pts]
                 pareto = []
                 for i, (t, d) in enumerate(zip(joint, deltas)):
@@ -191,11 +253,20 @@ def main():
                     if not dominated:
                         pareto.append((d, t, pts[i]))
                 pareto.sort(key=lambda x: (x[0], x[1]["test_id"]))
+                comp = {}
+                for t in joint:
+                    k = (t["investigation_id"], t["fuel_phase"], t["sample_geometry"])
+                    comp[k] = comp.get(k, 0) + 1
                 b["nominal"]["joint"] = {
                     "tests_with_both_recorded": len(joint),
                     "distinct_points": len(set(pts)),
                     "investigations": sorted({t["investigation_id"] for t in joint},
                                              key=lambda x: int(x.split("-")[1])),
+                    "composition": [{"investigation_id": k[0], "fuel_phase": k[1], "sample_geometry": k[2], "tests": v}
+                                    for k, v in sorted(comp.items(), key=lambda kv: (int(kv[0][0].split("-")[1]),
+                                                                                     kv[0][1], kv[0][2]))],
+                    "rounding_half_unit": {"o2_pct": dec(ho), "pressure_kpa": dec(hp)},
+                    "rounding_box_corners_inside": corners_in,
                     "hull_kind": kind,
                     "hull_has_area": kind == "area",
                     "hull_vertices_ccw": [[dec(v[0]), dec(v[1])] for v in h],
@@ -205,17 +276,24 @@ def main():
                         "test_id": t["test_id"], "investigation_id": t["investigation_id"],
                         "o2_pct": dec(p[0]), "pressure_kpa": dec(p[1]),
                         "delta_o2_pct": dec(p[0] - nom[0]), "delta_pressure_kpa": dec(p[1] - nom[1]),
+                        "delta_o2_below_nominal_rounding": abs(p[0] - nom[0]) < ho,
+                        "delta_pressure_below_nominal_rounding": abs(p[1] - nom[1]) < hp,
+                        "flags_on_axes": [f for a in AXES for f in axis_flags(t, prefix[a])],
                         "source_file": t["source_file"], "source_row": t["source_row"]} for d, t, p in pareto],
                 }
-            elif not amb:
-                b["nominal"] = {"note": sentences["no_tests"]}
+                if kind == "none":
+                    b["nominal"]["notes"] = [sentences["no_hull"]]
             else:
-                b["nominal"] = {"note": sentences["no_nominal"]}
+                b["nominal"] = {"notes": ([sentences["no_tests"]] if not amb else [])
+                                + ([sentences["no_nominal"]] if not has_nominal else [])}
             blocks.append(b)
         all_origins = sorted({o for b in blocks for o in b["gravity"]["origin_of_gravity_level"]})
         notes = [sentences["values_source"], sentences["no_outcome"], sentences["hull_inside"],
-                 sentences["hull_outside"], sentences["counts_not_added"],
-                 sentences["nominal_not_design"] if has_nominal else sentences["no_nominal"]]
+                 sentences["hull_outside"], sentences["no_hull"], sentences["pooled"], sentences["nearest_separate"],
+                 sentences["flagged"], sentences["counts_not_added"]]
+        notes += [sentences["nominal_not_design"], sentences["nominal_rounding"]] if has_nominal else [sentences["no_nominal"]]
+        if any(a not in AXES for a in sc["ranges"]):
+            notes.append(sentences["ranges_not_applied"])
         if "column" in all_origins:
             notes.append(sentences["gravity_column"])
         else:
@@ -223,16 +301,21 @@ def main():
             if levels not in ([], ["microgravity"]):
                 fail(f"gravity_constant sentence names microgravity, levels recorded are {levels}")
             notes.append(sentences["gravity_constant"])
+        gravity_note = notes[-1]
         if sc["gravity_level"] is None:
             notes.append(sentences["gravity_not_set"])
+            gravity_note += " " + sentences["gravity_not_set"]
         doc = {
             "_meta": {"generated_by": META, "script": "pipeline/lab/envelope.py", "spec": "pipeline/spec/lab_numbers.json",
                       "inputs": inp, "numbers": "exact decimal strings"},
             "scenario": {"id": sc["id"], "label": sc["label"],
                          "nominal": {a: dec(nominal[a]) for a in nominal},
                          "ranges": scenarios_ranges(scx), "gravity_level": sc["gravity_level"]},
+            "conversions": {a: {sid: cols for sid, cols in sorted(by.items())}
+                            for a, by in sorted(conversions(sources, used).items())},
             "choices": {k: v["value"] for k, v in E["choices"].items()},
             "notes": notes,
+            "gravity_note": gravity_note,
             "needs": blocks,
         }
         scan_words(doc, words, f"envelope {sc['id']}")
@@ -253,6 +336,7 @@ def scenarios_ranges(scx):
     out = {}
     for a, r in sorted(scx["ranges"].items()):
         out[a] = {k: (dec(frac(v)) if k in ("min", "max") and v is not None else v) for k, v in sorted(r.items())}
+        out[a]["applied"] = a in AXES
     return out
 
 
@@ -269,8 +353,10 @@ def fmt_range(name, r):
 def fmt_axis(a):
     if a.get("tests_recorded", 0) == 0:
         return "0 | - | - | - | -"
-    near = "; ".join(f"{n['value']} (gap {n['gap']}, {n['tests_at_value']} tests)" for n in a["nearest"])
-    return f"{a['tests_recorded']} | {a['min']} | {a['max']} | {'yes' if a['nominal_within_min_max'] else 'no'} | {near}"
+    near = "; ".join(f"{n['value']} (gap {n['gap']}{', below nominal rounding' if n['below_nominal_rounding'] else ''}, "
+                     f"{n['tests_at_value']} tests, {n['flagged_tests_at_value']} flagged)" for n in a["nearest"])
+    return (f"{a['tests_recorded']} | {a['min']} ({a['min_flagged_tests_at_value']} flagged) | "
+            f"{a['max']} ({a['max_flagged_tests_at_value']} flagged) | {'yes' if a['nominal_within_min_max'] else 'no'} | {near}")
 
 
 def render_md(doc):
@@ -280,45 +366,70 @@ def render_md(doc):
     nom = sc["nominal"]
     L.append("Nominal point: " + (", ".join(f"{k} = {v}" for k, v in sorted(nom.items())) or "none") +
              f". Gravity level: {sc['gravity_level'] or 'not set'}.")
-    L.append("Ranges: " + ("; ".join(fmt_range(k, r) for k, r in sc["ranges"].items()) or "none") + ".")
+    L.append("Ranges: " + ("; ".join(fmt_range(k, r) + ("" if r["applied"] else " (not applied: not an axis)")
+                                     for k, r in sc["ranges"].items()) or "none") + ".")
+    if doc["conversions"]:
+        L.append("Conversions by the pipeline (pipeline/spec/sources.json): " + "; ".join(
+            f"{a} of {sid}: " + ", ".join(
+                (f"'{c['from']}' rule {c['rule']}" + (f" factor {c['params']['factor']}" if "factor" in c["params"] else "")
+                 if "rule" in c else f"constant {c['constant']}") for c in cols)
+            for a, by in doc["conversions"].items() for sid, cols in by.items()) + ".")
     L += ["", "## Notes", ""] + [f"- {n}" for n in doc["notes"]]
     L += ["", "## Choices (spec parameters)", ""] + [f"- `{k}`: {v}" for k, v in sorted(doc["choices"].items())]
     L += ["", "## Summary per need", "",
-          "| Need | counted tests | with ambient O2 | with O2 and pressure | hull | nominal position | O2 in range | pressure in range | both in range | same gravity (O2 and pressure tests) |",
-          "|---|---|---|---|---|---|---|---|---|---|"]
+          "| Need | counted tests | with ambient O2 | with O2 and pressure | pooled tests (investigation, phase, geometry: tests) | hull | nominal position | O2 in range | pressure in range | both in range | gravity_level string equal to scenario's (table constant, not a match in data) |",
+          "|---|---|---|---|---|---|---|---|---|---|---|"]
     for b in doc["needs"]:
         j = b.get("nominal", {}).get("joint", {})
         r = b["ranges"]
         o = r["o2_pct"]; p = r["pressure_kpa"]
+        comp = "; ".join(f"{c['investigation_id']} {c['fuel_phase']} {c['sample_geometry']}: {c['tests']}"
+                         for c in j.get("composition", [])) or "-"
         L.append(f"| {b['need_id']} {b['need']} | {b['counted_tests']} | {b['counted_tests_with_ambient_oxygen']} | "
-                 f"{j.get('tests_with_both_recorded', '-')} | {j.get('hull_kind', '-')} | {j.get('nominal_position', '-')} | "
+                 f"{j.get('tests_with_both_recorded', '-')} | {comp} | {j.get('hull_kind', '-')} | {j.get('nominal_position', '-')} | "
                  f"{str(o['tests_inside']) + ' of ' + str(o['of_tests']) if o['set'] else 'not set'} | "
                  f"{str(p['tests_inside']) + ' of ' + str(p['of_tests']) if p['set'] else 'not set'} | "
                  f"{r['both_inside']} | {b['gravity']['tests_same_level_of_joint_tests']} |")
+    L += ["", doc["gravity_note"]]
     for b in doc["needs"]:
         L += ["", f"## {b['need_id']} {b['need']}", ""]
         n = b.get("nominal", {})
-        if "note" in n:
-            L.append(n["note"])
-            continue
+        L.append(f"Counted tests left out: {b['excluded_o2_not_recorded']} without o2_pct, "
+                 f"{b['excluded_basis_not_ambient']} with o2_basis not ambient.")
+        L.append("")
         if "axes" not in n:
+            L += [x for note in n.get("notes", []) for x in (note, "")][:-1]
             continue
         L += ["| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value |",
               "|---|---|---|---|---|---|"]
         for a in AXES:
             L.append(f"| {a} | {fmt_axis(n['axes'][a])} |")
+        if any(n["axes"][a].get("flagged_tests") for a in AXES):
+            L.append("")
+        for a in AXES:
+            for f in n["axes"][a].get("flagged_tests", []):
+                L.append(f"- flagged test ({a}): {f['test_id']} value {f['value']}, flags {', '.join(f['flags'])}"
+                         + (f", written in source as '{f['o2_range_as_written']}'" if f["o2_range_as_written"] else ""))
         j = n["joint"]
+        if j["hull_kind"] == "none":
+            L += ["", f"Tests with both recorded: 0. Hull: none. Nominal point: no position."]
+            L += [""] + [x for note in n.get("notes", []) for x in (note, "")][:-1]
+            continue
         L += ["", f"Tests with both recorded: {j['tests_with_both_recorded']} ({j['distinct_points']} distinct points; "
-              f"{', '.join(j['investigations']) or 'none'}). Hull: {j['hull_kind']}"
+              f"{', '.join(j['investigations'])}). Hull: {j['hull_kind']}"
               f"{'' if j['hull_has_area'] else ' (no area)'}. Nominal point: {j['nominal_position']}, inside = "
-              f"{'true' if j['nominal_inside_hull'] else 'false'}.", ""]
+              f"{'true' if j['nominal_inside_hull'] else 'false'}. Rounding box (nominal +- "
+              f"{j['rounding_half_unit']['o2_pct']} o2_pct, +- {j['rounding_half_unit']['pressure_kpa']} pressure_kpa): "
+              f"{j['rounding_box_corners_inside']} of 4 corners inside.", ""]
         if j["nearest_tests_pareto"]:
             L += ["Nearest tests (Pareto set in |delta o2_pct|, |delta pressure_kpa|):", "",
-                  "| test | investigation | o2_pct | pressure_kpa | delta o2_pct | delta pressure_kpa | source |",
-                  "|---|---|---|---|---|---|---|"]
+                  "| test | investigation | o2_pct | pressure_kpa | delta o2_pct | delta pressure_kpa | flags on axes | source |",
+                  "|---|---|---|---|---|---|---|---|"]
             for t in j["nearest_tests_pareto"]:
                 L.append(f"| {t['test_id']} | {t['investigation_id']} | {t['o2_pct']} | {t['pressure_kpa']} | "
-                         f"{t['delta_o2_pct']} | {t['delta_pressure_kpa']} | {t['source_file']} row {t['source_row']} |")
+                         f"{t['delta_o2_pct']}{' (below nominal rounding)' if t['delta_o2_below_nominal_rounding'] else ''} | "
+                         f"{t['delta_pressure_kpa']}{' (below nominal rounding)' if t['delta_pressure_below_nominal_rounding'] else ''} | "
+                         f"{', '.join(t['flags_on_axes']) or '-'} | {t['source_file']} row {t['source_row']} |")
     return "\n".join(L) + "\n"
 
 

@@ -1,7 +1,7 @@
 {
  "_meta": {
   "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
-  "purpose": "Parameters and fixed sentences of the lab numbers (pipeline/lab/envelope.py, pipeline/lab/order_changes.py, branch data-lab). Every choice the two scripts make is a parameter of this file; the outputs copy the parameters they used under 'choices'. No model, fitted relation, weight, interpolation or probability is used. Every number of the outputs is a value copied from data/pipeline/tests.csv or from a reference item's 'values', or a count, minimum, maximum, difference or the stated rank statistic of such values.",
+  "purpose": "Parameters and fixed sentences of the lab numbers (pipeline/lab/envelope.py, pipeline/lab/order_changes.py, branch data-lab). Every choice the two scripts make is a parameter of this file; the outputs copy the parameters they used under 'choices'. No model, fitted relation, weight, interpolation or probability is used. Every number of the outputs is a standardized value of data/pipeline/tests.csv (unit factors of sources.json applied by the pipeline, listed under 'conversions') or from a reference item's 'values', or a count, minimum, maximum, difference or the stated rank statistic of such values.",
   "status": "Experiment on branch data-lab, not merged into the pipeline."
  },
  "inputs": {
@@ -29,7 +29,7 @@
     "equals": "stated"
    },
    "ambient_oxygen": {
-    "value": "o2_pct recorded and o2_basis equal to 'ambient' (the rule of match_environments in pipeline/run.py: any other basis is marked not_ambient)",
+    "value": "o2_pct recorded and o2_basis equal to 'ambient' (the rule of match_environments in pipeline/run.py: any other basis is marked not_ambient); the numbers of counted tests left out because o2_pct is empty and because o2_basis is not 'ambient' are reported per need (excluded_o2_not_recorded, excluded_basis_not_ambient)",
     "column": "o2_basis",
     "equals": "ambient"
    },
@@ -40,7 +40,7 @@
     ]
    },
    "number_reading": {
-    "value": "every cell and every spec number is read as the exact decimal it is written as (Python fractions.Fraction of the written string); differences are exact"
+    "value": "every cell and every spec number is read as the exact decimal it is written as (Python fractions.Fraction of the written string); differences are exact. The cells are the pipeline's standardized values: where a source column has another unit, the pipeline multiplied the cell by a unit factor of pipeline/spec/sources.json and rounded the product to 4 decimals (rule 'number' of pipeline/rules.py); the factor of every source column used is copied under 'conversions'. The nominal values are read as written in scenarios.json and are themselves rounded figures: see 'nominal_rounding'"
    },
    "gap_sign": {
     "value": "gap = nearest recorded value minus nominal value; positive means the nearest recorded value is above the nominal value; 0 means a test has exactly the nominal value; where two recorded values are equally near (one above, one below), both are listed"
@@ -55,30 +55,61 @@
     "value": "fewer than 3 non-collinear distinct points: hull kind 'point' or 'segment', reported as 'no area'; inside is true only where the nominal point coincides with the point or lies on the segment"
    },
    "pareto": {
-    "value": "a test is listed when no other test of the set has |delta o2_pct| <= its |delta o2_pct| and |delta pressure_kpa| <= its |delta pressure_kpa| with at least one of the two strictly smaller; deltas = test value minus nominal value; no combined distance, no weight, no scaling; tests with identical deltas are all listed"
+    "value": "a test is listed when no other test of the set has |delta o2_pct| <= its |delta o2_pct| and |delta pressure_kpa| <= its |delta pressure_kpa| with at least one of the two strictly smaller; deltas = test value minus nominal value; no combined distance, no weight, no scaling; tests with identical deltas are all listed; dominance is decided per axis, so a change of unit on either axis does not change the set"
    },
    "gravity": {
-    "value": "count of tests whose gravity_level string equals the scenario's gravity_level string; a scenario with gravity_level null sets none"
+    "value": "count of tests whose gravity_level string equals the scenario's gravity_level string; a scenario with gravity_level null sets none; where gravity_level of every test used is a table constant of the team's source mapping, the count equals the number of tests of tables mapped to that level and carries no information beyond that mapping"
    },
    "ranges": {
     "value": "the in_range rule of pipeline/run.py (RANGE_DEFAULTS: min inclusive, max exclusive unless stated) applied to the scenario's ranges; a range the scenario does not set is reported as not set; the joint count requires oxygen and pressure both inside and is asserted equal to tests_atmosphere of scenario_needs.csv"
    },
    "scenarios_without_nominal": {
     "value": "a scenario whose nominal is empty gets no nominal-point numbers; its ranges are reported where set"
+   },
+   "flagged_values": {
+    "value": "a value whose test carries a flag on that axis in the 'flags' column of tests.csv (for example o2_pct:approximate_in_source, o2_pct:range_in_source_start_value_named_in_publication) is used as the number held in tests.csv, like every other value, and is not left out; per need and axis, every counted test with such a flag is listed with its flags and o2_range_as_written, and min, max, nearest and each Pareto test give the number of flagged tests at that value",
+    "flag_prefix_by_axis": {
+     "o2_pct": "o2_pct:",
+     "pressure_kpa": "pressure_kpa:"
+    }
+   },
+   "nominal_rounding": {
+    "value": "h = half a unit of the last digit written for the nominal value in scenarios.json (70.3 gives 0.05; 21.0 gives 0.05); a gap or Pareto delta with absolute value below h is marked below_nominal_rounding; the 4 corners (nominal +- h on each axis) are placed relative to the hull like the nominal point and the number inside is reported, so a reader sees whether the position changes within the written rounding of the nominal"
+   },
+   "pooling": {
+    "value": "the hull and the Pareto set pool every counted test with ambient oxygen and pressure both recorded, whatever its fuel, flow, geometry or investigation; the tests pooled are reported per investigation_id, fuel_phase and sample_geometry (joint.composition) and in the summary table"
+   },
+   "ranges_not_on_axes": {
+    "value": "a scenario range of a variable that is not one of 'axes' (flow_cms for the ISS) is printed with 'not applied' and enters no count"
+   },
+   "nearest_per_axis": {
+    "value": "the nearest recorded value of each axis is taken over that axis alone; the two axes can have their nearest value in different tests, and neither need be a test of the Pareto set: they are separate answers"
+   },
+   "no_hull": {
+    "value": "where no counted test records both values, hull kind is 'none', position is 'no hull' and inside is null (no position is defined)"
+   },
+   "notes_per_need": {
+    "value": "every per-need sentence that applies is shown (no_tests where no counted test has ambient oxygen, no_nominal where the scenario has no nominal point); there is no precedence"
    }
   },
   "sentences": {
-   "hull_inside": "Inside the hull of tested conditions means only that tests exist on several sides of this point; it says nothing about the outcome at this point.",
-   "hull_outside": "Outside means no arithmetic on these tests reaches this point.",
+   "hull_inside": "Inside (interior or boundary) means that the nominal point lies in the smallest convex region containing the tested (o2_pct, pressure_kpa) points. It does not mean that a test was run close to it: the deltas of the Pareto table give the distance to the closest tests on each axis. It says nothing about the outcome at this point.",
+   "hull_outside": "Outside means that the nominal point is not in that region: it lies on the outer side of at least one edge of the hull.",
    "counts_not_added": "Counts of different needs are not added: one test can be counted for several needs.",
-   "values_source": "Every value is copied from data/pipeline/tests.csv (the pipeline's standardized value, with source file and row); every other number is a count, minimum, maximum or difference of those values.",
+   "values_source": "Every value is the pipeline's standardized value in data/pipeline/tests.csv (with source file and row); where the source unit differs, it is the product of the source cell and the unit factor listed under 'conversions', rounded to 4 decimals by the pipeline. Every other number is a count, minimum, maximum or difference of those values.",
    "no_outcome": "These numbers say where tests were run, not what happened in them; no outcome variable is read.",
    "nominal_not_design": "The nominal point is the one written in scenarios.json; its note there says what it is.",
    "no_nominal": "scenarios.json gives no nominal point for this environment, so no nominal-point numbers are computed.",
-   "gravity_constant": "gravity_level in tests.csv is not a column of any PSI table: it is a constant that the team's source mapping (pipeline/spec/sources.json, 'constants') sets for the whole table. The count below therefore counts tests of tables the team mapped as microgravity.",
+   "gravity_constant": "gravity_level in tests.csv is not a column of any PSI table: it is a constant that the team's source mapping (pipeline/spec/sources.json, 'constants') sets for the whole table. The gravity count therefore equals the number of tests of tables the team mapped to the scenario's level and is not a match found in the data.",
    "gravity_column": "gravity_level in tests.csv comes from a column of the PSI table for at least one of these tests.",
    "gravity_not_set": "The scenario sets no gravity level.",
-   "no_tests": "No counted test of this need has a recorded ambient oxygen."
+   "no_tests": "No counted test of this need has a recorded ambient oxygen.",
+   "no_hull": "No hull: no counted test of this need records both an ambient oxygen and a pressure, so the nominal point has no position.",
+   "flagged": "A value flagged in tests.csv (for example 'approximate in source', or the start value of a range written in the source) is used as held; such tests are listed under 'flagged tests' and counted at min, max, nearest and in the Pareto table.",
+   "nearest_separate": "The nearest value of each axis is taken over that axis alone and can come from a different test on each axis; the Pareto table is a separate answer.",
+   "nominal_rounding": "The nominal values are rounded figures as written in scenarios.json; a gap smaller than half a unit of their last written digit is marked, and the rounding box corners show whether the position depends on that rounding.",
+   "pooled": "The hull and the Pareto set pool all counted tests that record both values, whatever the fuel, geometry, flow or investigation; the summary table names what was pooled.",
+   "ranges_not_applied": "A range marked 'not applied' is printed as written in scenarios.json and enters no count: it is not one of the axes."
   }
  },
  "order_changes": {
@@ -100,6 +131,12 @@
    },
    "material_pairs": {
     "value": "every unordered pair of materials, in the row order of the item"
+   },
+   "criterion": {
+    "value": "each condition column carries the criterion named in the spec; a column pair is marked same criterion yes or no; pairs with different criteria are counted like all others and marked"
+   },
+   "held": {
+    "value": "where the item holds a per-material condition (OF2012: test pressure), each class count is also given for the pairs whose held values differ"
    }
   },
   "tables": [
@@ -137,19 +174,23 @@
       "columns": [
        [
         "1g",
-        "uloi_o2_pct_1g"
+        "uloi_o2_pct_1g",
+        "1g criterion (ULOI, MOC)"
        ],
        [
         "martian",
-        "uloi_star_o2_pct_martian"
+        "uloi_star_o2_pct_martian",
+        "drop-tower criterion (ULOI*, MOC*)"
        ],
        [
         "lunar",
-        "uloi_star_o2_pct_lunar"
+        "uloi_star_o2_pct_lunar",
+        "drop-tower criterion (ULOI*, MOC*)"
        ],
        [
         "0g",
-        "uloi_star_o2_pct_0g"
+        "uloi_star_o2_pct_0g",
+        "drop-tower criterion (ULOI*, MOC*)"
        ]
       ]
      },
@@ -159,19 +200,23 @@
       "columns": [
        [
         "1g",
-        "moc_o2_pct_1g"
+        "moc_o2_pct_1g",
+        "1g criterion (ULOI, MOC)"
        ],
        [
         "martian",
-        "moc_star_o2_pct_martian"
+        "moc_star_o2_pct_martian",
+        "drop-tower criterion (ULOI*, MOC*)"
        ],
        [
         "lunar",
-        "moc_star_o2_pct_lunar"
+        "moc_star_o2_pct_lunar",
+        "drop-tower criterion (ULOI*, MOC*)"
        ],
        [
         "0g",
-        "moc_star_o2_pct_0g"
+        "moc_star_o2_pct_0g",
+        "drop-tower criterion (ULOI*, MOC*)"
        ]
       ]
      }
@@ -181,11 +226,22 @@
      "The item states that the low-gravity limits come from 5.18 s drop tower tests and that their criteria are not the same as in 1g.",
      "The delta O2 rows of the table are a difference the paper computes from the other rows and are not used here."
     ],
-    "held_differs_note": "The held values say that the materials were tested at different pressures; a pair of materials at different pressures compares two conditions at once."
+    "held_differs_note": "The held values say that the materials were tested at different pressures; a pair of materials at different pressures compares two conditions at once. The count of such pairs is given per class beside the counts.",
+    "criterion_differs_note": "Pairs of columns with different criteria (marked 'same criterion: no') compare a 1g limit with a drop-tower limit; the item says these criteria are not the same.",
+    "item_note_sentences": [
+     {
+      "sentence": "The item's note says that the 0g values were obtained with a concurrent flow of 30 cm/s (p. 4), that the Lunar and 0g data are from ref. 8 (Ferkul and Olson 2011), and that the asterisk on '0g*' is not defined anywhere in the paper.",
+      "words_in_item_note": [
+       "the 0g values were obtained with a concurrent flow of 30 cm/s (p. 4)",
+       "the Lunar and 0g data are from ref. 8 (Ferkul and Olson 2011)",
+       "the asterisk on '0g*' is not defined anywhere in the paper"
+      ]
+     }
+    ]
    }
   ],
   "fixed_notes": [
-   "Values are as printed.",
+   "Values are shown with the digits held in the item's 'values' (for example 18.0); comparisons read them as exact decimals.",
    "Measurement uncertainty or step size: not stated in the item. A difference of one printed unit may or may not be resolved by the test method.",
    "These counts describe the order of printed values; they say nothing about why the order changes."
   ],
@@ -282,7 +338,7 @@
     },
     {
      "item": "SAF456.conditions",
-     "reason": "one row per sample, each sample at its own condition; no material is held under 2 condition columns"
+     "reason": "one row per sample, each sample at its own pressure, oxygen and flow; SIBAL Cloth appears in two rows (IV-1, VI-2) at different conditions, but no quantity of a material is held under 2 condition columns of the same row"
     },
     {
      "item": "SAF17.o2_initial_I",
@@ -425,13 +481,21 @@
    "axes.nearest": "The recorded value(s) closest to the nominal value on that axis alone, the gap (value minus nominal) and the number of tests at that value.",
    "joint.tests_with_both_recorded, joint.distinct_points": "Tests with ambient oxygen and pressure both recorded, and the number of distinct (o2_pct, pressure_kpa) points among them.",
    "joint.hull_kind, joint.hull_vertices_ccw": "Convex hull of those points: 'area', 'segment', 'point' or 'none', with its vertices counter-clockwise.",
-   "joint.nominal_position, joint.nominal_inside_hull": "'interior', 'boundary' or 'outside' of the nominal point relative to the hull; boundary counts as inside.",
+   "joint.nominal_position, joint.nominal_inside_hull": "'interior', 'boundary', 'outside' or 'no hull' of the nominal point relative to the hull; boundary counts as inside; inside is null where there is no hull.",
    "joint.nearest_tests_pareto": "Tests not dominated in (|delta o2_pct|, |delta pressure_kpa|), each with both deltas and its source file and row.",
    "gravity.*": "Number of tests whose gravity_level equals the scenario's, and where gravity_level in tests.csv comes from.",
    "ranges.*": "Number of tests inside the scenario's oxygen range, inside its pressure range, and inside both; the last equals tests_atmosphere of scenario_needs.csv (checked).",
    "order.counts": "For one table, one quantity and one pair of condition columns: the number of material pairs in each class (same_order, reversed, tie_in_one, tie_in_both).",
    "order.kendall_tau_b": "Kendall tau-b of the two columns over all material pairs, as numerator, integer under the square root and rounded decimal.",
-   "order.reversed_and_tie_in_one_pairs": "Every material pair that is reversed or tied in one column only, with the four printed values."
+   "order.reversed_and_tie_in_one_pairs": "Every material pair that is reversed or tied in one column only, with the four printed values.",
+   "excluded_o2_not_recorded, excluded_basis_not_ambient": "Counted tests left out because o2_pct is empty, and because o2_basis is not 'ambient'.",
+   "axes.flagged_tests": "Counted tests with a flag on the axis in tests.csv, with the flags and o2_range_as_written; min, max and nearest carry flagged_tests_at_value.",
+   "axes.nearest.below_nominal_rounding": "Whether |gap| is smaller than half a unit of the last digit written for the nominal value.",
+   "joint.composition": "Number of pooled tests per investigation_id, fuel_phase and sample_geometry.",
+   "joint.rounding_box_corners_inside": "Of the 4 corners nominal +- h (h = half a unit of the last written digit, per axis), the number inside the hull.",
+   "conversions": "Per axis and source of the counted tests: the source column, the pipeline rule and its parameters (unit factor) from sources.json.",
+   "order.counts_held_differs": "The same class counts restricted to material pairs whose held condition (test pressure) differs.",
+   "order.same_criterion": "Whether the two condition columns carry the same criterion (spec)."
   }
  }
 }

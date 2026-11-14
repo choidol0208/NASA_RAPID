@@ -15,26 +15,95 @@
   "spec": "pipeline/spec/lab_numbers.json"
  },
  "choices": {
-  "ambient_oxygen": "o2_pct recorded and o2_basis equal to 'ambient' (the rule of match_environments in pipeline/run.py: any other basis is marked not_ambient)",
+  "ambient_oxygen": "o2_pct recorded and o2_basis equal to 'ambient' (the rule of match_environments in pipeline/run.py: any other basis is marked not_ambient); the numbers of counted tests left out because o2_pct is empty and because o2_basis is not 'ambient' are reported per need (excluded_o2_not_recorded, excluded_basis_not_ambient)",
   "axes": [
    "o2_pct",
    "pressure_kpa"
   ],
   "counted_tests": "need_tests.csv rows with objective_link equal to 'stated'",
   "degenerate_hull": "fewer than 3 non-collinear distinct points: hull kind 'point' or 'segment', reported as 'no area'; inside is true only where the nominal point coincides with the point or lies on the segment",
+  "flagged_values": "a value whose test carries a flag on that axis in the 'flags' column of tests.csv (for example o2_pct:approximate_in_source, o2_pct:range_in_source_start_value_named_in_publication) is used as the number held in tests.csv, like every other value, and is not left out; per need and axis, every counted test with such a flag is listed with its flags and o2_range_as_written, and min, max, nearest and each Pareto test give the number of flagged tests at that value",
   "gap_sign": "gap = nearest recorded value minus nominal value; positive means the nearest recorded value is above the nominal value; 0 means a test has exactly the nominal value; where two recorded values are equally near (one above, one below), both are listed",
-  "gravity": "count of tests whose gravity_level string equals the scenario's gravity_level string; a scenario with gravity_level null sets none",
+  "gravity": "count of tests whose gravity_level string equals the scenario's gravity_level string; a scenario with gravity_level null sets none; where gravity_level of every test used is a table constant of the team's source mapping, the count equals the number of tests of tables mapped to that level and carries no information beyond that mapping",
   "hull": "convex hull of the distinct recorded (o2_pct, pressure_kpa) points, monotone chain, exact rational arithmetic, no tolerance",
   "hull_boundary": "a point on an edge or a vertex of the hull is reported as position 'boundary' and counted as inside",
-  "number_reading": "every cell and every spec number is read as the exact decimal it is written as (Python fractions.Fraction of the written string); differences are exact",
-  "pareto": "a test is listed when no other test of the set has |delta o2_pct| <= its |delta o2_pct| and |delta pressure_kpa| <= its |delta pressure_kpa| with at least one of the two strictly smaller; deltas = test value minus nominal value; no combined distance, no weight, no scaling; tests with identical deltas are all listed",
+  "nearest_per_axis": "the nearest recorded value of each axis is taken over that axis alone; the two axes can have their nearest value in different tests, and neither need be a test of the Pareto set: they are separate answers",
+  "no_hull": "where no counted test records both values, hull kind is 'none', position is 'no hull' and inside is null (no position is defined)",
+  "nominal_rounding": "h = half a unit of the last digit written for the nominal value in scenarios.json (70.3 gives 0.05; 21.0 gives 0.05); a gap or Pareto delta with absolute value below h is marked below_nominal_rounding; the 4 corners (nominal +- h on each axis) are placed relative to the hull like the nominal point and the number inside is reported, so a reader sees whether the position changes within the written rounding of the nominal",
+  "notes_per_need": "every per-need sentence that applies is shown (no_tests where no counted test has ambient oxygen, no_nominal where the scenario has no nominal point); there is no precedence",
+  "number_reading": "every cell and every spec number is read as the exact decimal it is written as (Python fractions.Fraction of the written string); differences are exact. The cells are the pipeline's standardized values: where a source column has another unit, the pipeline multiplied the cell by a unit factor of pipeline/spec/sources.json and rounded the product to 4 decimals (rule 'number' of pipeline/rules.py); the factor of every source column used is copied under 'conversions'. The nominal values are read as written in scenarios.json and are themselves rounded figures: see 'nominal_rounding'",
+  "pareto": "a test is listed when no other test of the set has |delta o2_pct| <= its |delta o2_pct| and |delta pressure_kpa| <= its |delta pressure_kpa| with at least one of the two strictly smaller; deltas = test value minus nominal value; no combined distance, no weight, no scaling; tests with identical deltas are all listed; dominance is decided per axis, so a change of unit on either axis does not change the set",
+  "pooling": "the hull and the Pareto set pool every counted test with ambient oxygen and pressure both recorded, whatever its fuel, flow, geometry or investigation; the tests pooled are reported per investigation_id, fuel_phase and sample_geometry (joint.composition) and in the summary table",
   "ranges": "the in_range rule of pipeline/run.py (RANGE_DEFAULTS: min inclusive, max exclusive unless stated) applied to the scenario's ranges; a range the scenario does not set is reported as not set; the joint count requires oxygen and pressure both inside and is asserted equal to tests_atmosphere of scenario_needs.csv",
+  "ranges_not_on_axes": "a scenario range of a variable that is not one of 'axes' (flow_cms for the ISS) is printed with 'not applied' and enters no count",
   "scenarios_without_nominal": "a scenario whose nominal is empty gets no nominal-point numbers; its ranges are reported where set"
  },
+ "conversions": {
+  "o2_pct": {
+   "bass2": [
+    {
+     "from": "Calibrated  initial O2 % by vol",
+     "params": {},
+     "rule": "number"
+    }
+   ],
+   "flex": [
+    {
+     "from": "O initial ambient composition; mole fraction",
+     "params": {
+      "factor": 100
+     },
+     "rule": "number"
+    }
+   ],
+   "saffire1": [
+    {
+     "from": "Percent O2",
+     "params": {
+      "documented_start": {
+       "21.5 - 21.7": {
+        "reference_item": "SAF17.o2_initial_I",
+        "value": 21.7
+       }
+      }
+     },
+     "rule": "o2_text"
+    }
+   ],
+   "saffire2": [
+    {
+     "from": "Percent O2 (Note 1)",
+     "params": {
+      "documented_start": {
+       "22.1 to 22.0": {
+        "reference_item": "SAF17.o2_initial_II",
+        "value": 22.1
+       }
+      }
+     },
+     "rule": "o2_text"
+    }
+   ]
+  },
+  "pressure_kpa": {
+   "flex": [
+    {
+     "from": "Ambient pressure; mmHg",
+     "params": {
+      "factor": 0.133322368
+     },
+     "rule": "number"
+    }
+   ]
+  }
+ },
+ "gravity_note": "gravity_level in tests.csv is not a column of any PSI table: it is a constant that the team's source mapping (pipeline/spec/sources.json, 'constants') sets for the whole table. The gravity count therefore equals the number of tests of tables the team mapped to the scenario's level and is not a match found in the data.",
  "needs": [
   {
    "counted_tests": 133,
    "counted_tests_with_ambient_oxygen": 133,
+   "excluded_basis_not_ambient": 0,
+   "excluded_o2_not_recorded": 0,
    "gravity": {
     "levels_recorded": [
      "microgravity"
@@ -51,10 +120,80 @@
    "nominal": {
     "axes": {
      "o2_pct": {
+      "flagged_tests": [
+       {
+        "flags": [
+         "o2_pct:approximate_in_source"
+        ],
+        "o2_range_as_written": "",
+        "test_id": "SAFFIRE-2-2-1",
+        "value": "21.5"
+       },
+       {
+        "flags": [
+         "o2_pct:approximate_in_source"
+        ],
+        "o2_range_as_written": "",
+        "test_id": "SAFFIRE-2-2-2",
+        "value": "22.1"
+       },
+       {
+        "flags": [
+         "o2_pct:approximate_in_source"
+        ],
+        "o2_range_as_written": "",
+        "test_id": "SAFFIRE-2-2-3",
+        "value": "22.1"
+       },
+       {
+        "flags": [
+         "o2_pct:approximate_in_source"
+        ],
+        "o2_range_as_written": "",
+        "test_id": "SAFFIRE-2-2-4",
+        "value": "22.1"
+       },
+       {
+        "flags": [
+         "o2_pct:approximate_in_source"
+        ],
+        "o2_range_as_written": "",
+        "test_id": "SAFFIRE-2-2-5",
+        "value": "22.1"
+       },
+       {
+        "flags": [
+         "o2_pct:approximate_in_source"
+        ],
+        "o2_range_as_written": "",
+        "test_id": "SAFFIRE-2-2-6",
+        "value": "22.1"
+       },
+       {
+        "flags": [
+         "o2_pct:approximate_in_source"
+        ],
+        "o2_range_as_written": "",
+        "test_id": "SAFFIRE-2-2-7",
+        "value": "22.1"
+       },
+       {
+        "flags": [
+         "o2_pct:range_in_source_start_value_named_in_publication"
+        ],
+        "o2_range_as_written": "22.1 to 22.0",
+        "test_id": "SAFFIRE-2-2-8",
+        "value": "22.1"
+       }
+      ],
       "max": "22.2",
+      "max_flagged_tests_at_value": 0,
       "min": "13.6",
+      "min_flagged_tests_at_value": 0,
       "nearest": [
        {
+        "below_nominal_rounding": true,
+        "flagged_tests_at_value": 0,
         "gap": "0",
         "tests_at_value": 9,
         "value": "21"
@@ -68,16 +207,25 @@
      }
     },
     "joint": {
+     "composition": [],
      "distinct_points": 0,
      "hull_has_area": false,
      "hull_kind": "none",
      "hull_vertices_ccw": [],
      "investigations": [],
      "nearest_tests_pareto": [],
-     "nominal_inside_hull": false,
-     "nominal_position": "outside",
+     "nominal_inside_hull": null,
+     "nominal_position": "no hull",
+     "rounding_box_corners_inside": null,
+     "rounding_half_unit": {
+      "o2_pct": "0.05",
+      "pressure_kpa": "0.05"
+     },
      "tests_with_both_recorded": 0
-    }
+    },
+    "notes": [
+     "No hull: no counted test of this need records both an ambient oxygen and a pressure, so the nominal point has no position."
+    ]
    },
    "ranges": {
     "both_inside": 0,
@@ -98,6 +246,8 @@
   {
    "counted_tests": 0,
    "counted_tests_with_ambient_oxygen": 0,
+   "excluded_basis_not_ambient": 0,
+   "excluded_o2_not_recorded": 0,
    "gravity": {
     "levels_recorded": [],
     "origin_of_gravity_level": [],
@@ -108,7 +258,9 @@
    "need": "Ignition",
    "need_id": "P2",
    "nominal": {
-    "note": "No counted test of this need has a recorded ambient oxygen."
+    "notes": [
+     "No counted test of this need has a recorded ambient oxygen."
+    ]
    },
    "ranges": {
     "both_inside": 0,
@@ -129,6 +281,8 @@
   {
    "counted_tests": 2,
    "counted_tests_with_ambient_oxygen": 2,
+   "excluded_basis_not_ambient": 0,
+   "excluded_o2_not_recorded": 0,
    "gravity": {
     "levels_recorded": [
      "microgravity"
@@ -145,10 +299,32 @@
    "nominal": {
     "axes": {
      "o2_pct": {
+      "flagged_tests": [
+       {
+        "flags": [
+         "o2_pct:range_in_source_start_value_named_in_publication"
+        ],
+        "o2_range_as_written": "21.5 - 21.7",
+        "test_id": "SAFFIRE-1-S1",
+        "value": "21.7"
+       },
+       {
+        "flags": [
+         "o2_pct:approximate_in_source"
+        ],
+        "o2_range_as_written": "",
+        "test_id": "SAFFIRE-1-S2",
+        "value": "21.5"
+       }
+      ],
       "max": "21.7",
+      "max_flagged_tests_at_value": 1,
       "min": "21.5",
+      "min_flagged_tests_at_value": 1,
       "nearest": [
        {
+        "below_nominal_rounding": false,
+        "flagged_tests_at_value": 1,
         "gap": "0.5",
         "tests_at_value": 1,
         "value": "21.5"
@@ -162,16 +338,25 @@
      }
     },
     "joint": {
+     "composition": [],
      "distinct_points": 0,
      "hull_has_area": false,
      "hull_kind": "none",
      "hull_vertices_ccw": [],
      "investigations": [],
      "nearest_tests_pareto": [],
-     "nominal_inside_hull": false,
-     "nominal_position": "outside",
+     "nominal_inside_hull": null,
+     "nominal_position": "no hull",
+     "rounding_box_corners_inside": null,
+     "rounding_half_unit": {
+      "o2_pct": "0.05",
+      "pressure_kpa": "0.05"
+     },
      "tests_with_both_recorded": 0
-    }
+    },
+    "notes": [
+     "No hull: no counted test of this need records both an ambient oxygen and a pressure, so the nominal point has no position."
+    ]
    },
    "ranges": {
     "both_inside": 0,
@@ -192,6 +377,8 @@
   {
    "counted_tests": 298,
    "counted_tests_with_ambient_oxygen": 298,
+   "excluded_basis_not_ambient": 0,
+   "excluded_o2_not_recorded": 0,
    "gravity": {
     "levels_recorded": [
      "microgravity"
@@ -208,10 +395,15 @@
    "nominal": {
     "axes": {
      "o2_pct": {
+      "flagged_tests": [],
       "max": "34",
+      "max_flagged_tests_at_value": 0,
       "min": "12",
+      "min_flagged_tests_at_value": 0,
       "nearest": [
        {
+        "below_nominal_rounding": true,
+        "flagged_tests_at_value": 0,
         "gap": "0",
         "tests_at_value": 54,
         "value": "21"
@@ -221,10 +413,15 @@
       "tests_recorded": 298
      },
      "pressure_kpa": {
+      "flagged_tests": [],
       "max": "309.2946",
+      "max_flagged_tests_at_value": 0,
       "min": "70.1676",
+      "min_flagged_tests_at_value": 0,
       "nearest": [
        {
+        "below_nominal_rounding": true,
+        "flagged_tests_at_value": 0,
         "gap": "-0.0017",
         "tests_at_value": 6,
         "value": "101.2983"
@@ -235,6 +432,14 @@
      }
     },
     "joint": {
+     "composition": [
+      {
+       "fuel_phase": "liquid",
+       "investigation_id": "PSI-69",
+       "sample_geometry": "droplet",
+       "tests": 273
+      }
+     ],
      "distinct_points": 250,
      "hull_has_area": true,
      "hull_kind": "area",
@@ -273,8 +478,11 @@
      ],
      "nearest_tests_pareto": [
       {
+       "delta_o2_below_nominal_rounding": true,
        "delta_o2_pct": "0",
+       "delta_pressure_below_nominal_rounding": true,
        "delta_pressure_kpa": "0.025",
+       "flags_on_axes": [],
        "investigation_id": "PSI-69",
        "o2_pct": "21",
        "pressure_kpa": "101.325",
@@ -283,8 +491,11 @@
        "test_id": "FLEX-4"
       },
       {
+       "delta_o2_below_nominal_rounding": true,
        "delta_o2_pct": "0",
+       "delta_pressure_below_nominal_rounding": true,
        "delta_pressure_kpa": "0.025",
+       "flags_on_axes": [],
        "investigation_id": "PSI-69",
        "o2_pct": "21",
        "pressure_kpa": "101.325",
@@ -293,8 +504,11 @@
        "test_id": "FLEX-5"
       },
       {
+       "delta_o2_below_nominal_rounding": true,
        "delta_o2_pct": "0",
+       "delta_pressure_below_nominal_rounding": true,
        "delta_pressure_kpa": "0.025",
+       "flags_on_axes": [],
        "investigation_id": "PSI-69",
        "o2_pct": "21",
        "pressure_kpa": "101.325",
@@ -303,8 +517,11 @@
        "test_id": "FLEX-6"
       },
       {
+       "delta_o2_below_nominal_rounding": true,
        "delta_o2_pct": "0",
+       "delta_pressure_below_nominal_rounding": true,
        "delta_pressure_kpa": "0.025",
+       "flags_on_axes": [],
        "investigation_id": "PSI-69",
        "o2_pct": "21",
        "pressure_kpa": "101.325",
@@ -313,8 +530,11 @@
        "test_id": "FLEX-9"
       },
       {
+       "delta_o2_below_nominal_rounding": false,
        "delta_o2_pct": "-1",
+       "delta_pressure_below_nominal_rounding": true,
        "delta_pressure_kpa": "-0.0017",
+       "flags_on_axes": [],
        "investigation_id": "PSI-69",
        "o2_pct": "20",
        "pressure_kpa": "101.2983",
@@ -325,6 +545,11 @@
      ],
      "nominal_inside_hull": true,
      "nominal_position": "interior",
+     "rounding_box_corners_inside": 4,
+     "rounding_half_unit": {
+      "o2_pct": "0.05",
+      "pressure_kpa": "0.05"
+     },
      "tests_with_both_recorded": 273
     }
    },
@@ -404,6 +629,8 @@
   {
    "counted_tests": 122,
    "counted_tests_with_ambient_oxygen": 122,
+   "excluded_basis_not_ambient": 0,
+   "excluded_o2_not_recorded": 0,
    "gravity": {
     "levels_recorded": [
      "microgravity"
@@ -420,10 +647,15 @@
    "nominal": {
     "axes": {
      "o2_pct": {
+      "flagged_tests": [],
       "max": "22.2",
+      "max_flagged_tests_at_value": 0,
       "min": "13.6",
+      "min_flagged_tests_at_value": 0,
       "nearest": [
        {
+        "below_nominal_rounding": true,
+        "flagged_tests_at_value": 0,
         "gap": "0",
         "tests_at_value": 9,
         "value": "21"
@@ -437,16 +669,25 @@
      }
     },
     "joint": {
+     "composition": [],
      "distinct_points": 0,
      "hull_has_area": false,
      "hull_kind": "none",
      "hull_vertices_ccw": [],
      "investigations": [],
      "nearest_tests_pareto": [],
-     "nominal_inside_hull": false,
-     "nominal_position": "outside",
+     "nominal_inside_hull": null,
+     "nominal_position": "no hull",
+     "rounding_box_corners_inside": null,
+     "rounding_half_unit": {
+      "o2_pct": "0.05",
+      "pressure_kpa": "0.05"
+     },
      "tests_with_both_recorded": 0
-    }
+    },
+    "notes": [
+     "No hull: no counted test of this need records both an ambient oxygen and a pressure, so the nominal point has no position."
+    ]
    },
    "ranges": {
     "both_inside": 0,
@@ -467,6 +708,8 @@
   {
    "counted_tests": 0,
    "counted_tests_with_ambient_oxygen": 0,
+   "excluded_basis_not_ambient": 0,
+   "excluded_o2_not_recorded": 0,
    "gravity": {
     "levels_recorded": [],
     "origin_of_gravity_level": [],
@@ -477,7 +720,9 @@
    "need": "Smoke generation conditions",
    "need_id": "D2",
    "nominal": {
-    "note": "No counted test of this need has a recorded ambient oxygen."
+    "notes": [
+     "No counted test of this need has a recorded ambient oxygen."
+    ]
    },
    "ranges": {
     "both_inside": 0,
@@ -497,13 +742,19 @@
   }
  ],
  "notes": [
-  "Every value is copied from data/pipeline/tests.csv (the pipeline's standardized value, with source file and row); every other number is a count, minimum, maximum or difference of those values.",
+  "Every value is the pipeline's standardized value in data/pipeline/tests.csv (with source file and row); where the source unit differs, it is the product of the source cell and the unit factor listed under 'conversions', rounded to 4 decimals by the pipeline. Every other number is a count, minimum, maximum or difference of those values.",
   "These numbers say where tests were run, not what happened in them; no outcome variable is read.",
-  "Inside the hull of tested conditions means only that tests exist on several sides of this point; it says nothing about the outcome at this point.",
-  "Outside means no arithmetic on these tests reaches this point.",
+  "Inside (interior or boundary) means that the nominal point lies in the smallest convex region containing the tested (o2_pct, pressure_kpa) points. It does not mean that a test was run close to it: the deltas of the Pareto table give the distance to the closest tests on each axis. It says nothing about the outcome at this point.",
+  "Outside means that the nominal point is not in that region: it lies on the outer side of at least one edge of the hull.",
+  "No hull: no counted test of this need records both an ambient oxygen and a pressure, so the nominal point has no position.",
+  "The hull and the Pareto set pool all counted tests that record both values, whatever the fuel, geometry, flow or investigation; the summary table names what was pooled.",
+  "The nearest value of each axis is taken over that axis alone and can come from a different test on each axis; the Pareto table is a separate answer.",
+  "A value flagged in tests.csv (for example 'approximate in source', or the start value of a range written in the source) is used as held; such tests are listed under 'flagged tests' and counted at min, max, nearest and in the Pareto table.",
   "Counts of different needs are not added: one test can be counted for several needs.",
   "The nominal point is the one written in scenarios.json; its note there says what it is.",
-  "gravity_level in tests.csv is not a column of any PSI table: it is a constant that the team's source mapping (pipeline/spec/sources.json, 'constants') sets for the whole table. The count below therefore counts tests of tables the team mapped as microgravity."
+  "The nominal values are rounded figures as written in scenarios.json; a gap smaller than half a unit of their last written digit is marked, and the rounding box corners show whether the position depends on that rounding.",
+  "A range marked 'not applied' is printed as written in scenarios.json and enters no count: it is not one of the axes.",
+  "gravity_level in tests.csv is not a column of any PSI table: it is a constant that the team's source mapping (pipeline/spec/sources.json, 'constants') sets for the whole table. The gravity count therefore equals the number of tests of tables the team mapped to the scenario's level and is not a match found in the data."
  ],
  "scenario": {
   "gravity_level": "microgravity",
@@ -515,16 +766,19 @@
   },
   "ranges": {
    "flow_cms": {
+    "applied": false,
     "max": "30",
     "max_inclusive": true,
     "min": "5"
    },
    "o2_pct": {
+    "applied": true,
     "max": "23",
     "max_inclusive": true,
     "min": "19"
    },
    "pressure_kpa": {
+    "applied": true,
     "max": "116.8",
     "min": "85.8"
    }

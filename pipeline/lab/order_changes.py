@@ -24,6 +24,11 @@ def sign(x):
     return (x > 0) - (x < 0)
 
 
+def held(x):
+    """The digits as held in the item (JSON number read as Decimal keeps '18.0')."""
+    return str(x)
+
+
 def items_by_id(refs):
     out = {}
     for d in refs["references"]:
@@ -33,25 +38,27 @@ def items_by_id(refs):
 
 
 def matrix(tab, item):
-    """[(quantity id, label, columns [labels], rows [(material, [values], held)])]"""
+    """[(quantity id, label, columns [labels], criteria, rows [(material, [values], [held strings], held)])]"""
     v = item["values"]
     out = []
     if tab["layout"] == "dict_of_lists":
         for k in tab["path"]:
             v = v[k]
-        cols = [dec(frac(c)) for c in v[tab["columns_key"]]]
-        rows = [(m, [frac(x) for x in vals], None) for m, vals in v.items() if m != tab["columns_key"]]
+        cols = [held(c) for c in v[tab["columns_key"]]]
+        rows = [(m, [frac(x) for x in vals], [held(x) for x in vals], None)
+                for m, vals in v.items() if m != tab["columns_key"]]
         for q in tab["quantities"]:
-            out.append((q["id"], q["label"], cols, rows))
+            out.append((q["id"], q["label"], cols, [q.get("criterion")] * len(cols), rows))
     elif tab["layout"] == "rows":
         for q in tab["quantities"]:
-            cols = [c for c, _ in q["columns"]]
-            rows = [(r[tab["material_key"]], [frac(r[key]) for _, key in q["columns"]],
-                     dec(frac(r[tab["held_key"]])) if tab.get("held_key") else None) for r in v["rows"]]
-            out.append((q["id"], q["label"], cols, rows))
+            cols = [c[0] for c in q["columns"]]
+            crit = [c[2] if len(c) > 2 else None for c in q["columns"]]
+            rows = [(r[tab["material_key"]], [frac(r[c[1]]) for c in q["columns"]], [held(r[c[1]]) for c in q["columns"]],
+                     held(r[tab["held_key"]]) if tab.get("held_key") else None) for r in v["rows"]]
+            out.append((q["id"], q["label"], cols, crit, rows))
     else:
         fail(f"unknown layout {tab['layout']}")
-    for _, _, cols, rows in out:
+    for _, _, cols, _, rows in out:
         if len(rows) < 3 or len(cols) < 2 or any(len(r[1]) != len(cols) for r in rows):
             fail(f"{tab['id']}: needs at least 3 materials and 2 columns of equal length")
     return out
@@ -73,12 +80,14 @@ def tau_b(nc, nd, n0, n1, n2, digits):
     return {"numerator": nc - nd, "under_sqrt": den, "value": str(q), "value_exact": exact}
 
 
-def analyse(tab, qid, qlabel, cols, rows, digits):
+def analyse(tab, qid, qlabel, cols, crit, rows, digits):
     n = len(rows)
     n0 = n * (n - 1) // 2
     pairs_out = []
+    has_held = rows[0][3] is not None
     for (i, c1), (j, c2) in combinations(list(enumerate(cols)), 2):
         counts = {"same_order": 0, "reversed": 0, "tie_in_one": 0, "tie_in_both": 0}
+        counts_hd = dict(counts)
         n1 = n2 = 0
         listed = []
         for a, b in combinations(rows, 2):
@@ -89,21 +98,28 @@ def analyse(tab, qid, qlabel, cols, rows, digits):
             cls = ("tie_in_both" if s1 == 0 and s2 == 0 else "tie_in_one" if s1 == 0 or s2 == 0
                    else "same_order" if s1 == s2 else "reversed")
             counts[cls] += 1
+            if has_held and a[3] != b[3]:
+                counts_hd[cls] += 1
             if cls in ("reversed", "tie_in_one"):
                 e = {"class": cls, "material_a": a[0], "material_b": b[0],
-                     "a_col1": dec(a[1][i]), "b_col1": dec(b[1][i]),
-                     "a_col2": dec(a[1][j]), "b_col2": dec(b[1][j])}
-                if a[2] is not None:
-                    e["held_a"], e["held_b"] = a[2], b[2]
-                    e["held_same"] = a[2] == b[2]
+                     "a_col1": a[2][i], "b_col1": b[2][i],
+                     "a_col2": a[2][j], "b_col2": b[2][j]}
+                if has_held:
+                    e["held_a"], e["held_b"] = a[3], b[3]
+                    e["held_same"] = a[3] == b[3]
                 listed.append(e)
-        pairs_out.append({"column_1": c1, "column_2": c2, "material_pairs": n0, "counts": counts,
+        extra = {}
+        if has_held:
+            extra["counts_held_differs"] = counts_hd
+        if crit[i] is not None:
+            extra["criterion_1"], extra["criterion_2"], extra["same_criterion"] = crit[i], crit[j], crit[i] == crit[j]
+        pairs_out.append({"column_1": c1, "column_2": c2, "material_pairs": n0, "counts": counts, **extra,
                           "kendall_tau_b": tau_b(counts["same_order"], counts["reversed"], n0, n1, n2, digits),
                           "ties_in_column_1": n1, "ties_in_column_2": n2,
                           "reversed_and_tie_in_one_pairs": listed})
     return {"quantity": qid, "label": qlabel, "columns": cols, "materials": n,
-            "values": [{"material": m, "values": [dec(x) for x in v], **({"held": h} if h is not None else {})}
-                       for m, v, h in rows],
+            "values": [{"material": m, "values": hs, **({"held": h} if h is not None else {})}
+                       for m, v, hs, h in rows],
             "column_pairs": pairs_out}
 
 
@@ -121,12 +137,22 @@ def render_md(doc):
               "|---" * (len(q["columns"]) + 1 + ("held" in q["values"][0])) + "|"]
         for r in q["values"]:
             L.append(f"| {r['material']} | " + " | ".join(r["values"]) + (f" | {r['held']} |" if "held" in r else " |"))
-        L += ["", "| columns | pairs | same order | reversed | tie in one | tie in both | tau-b | tau-b exact form |",
-              "|---|---|---|---|---|---|---|---|"]
+        hd = "counts_held_differs" in q["column_pairs"][0]
+        cr = "same_criterion" in q["column_pairs"][0]
+        L += ["", "| columns | pairs | same order | reversed | tie in one | tie in both | tau-b | tau-b exact form |"
+              + (" same criterion |" if cr else "")
+              + (f" of these, pairs at different {t.get('held_label')} (same / rev / tie1 / tie2) |" if hd else ""),
+              "|---" * (8 + cr + hd) + "|"]
         for p in q["column_pairs"]:
             c, k = p["counts"], p["kendall_tau_b"]
-            L.append(f"| {p['column_1']} vs {p['column_2']} | {p['material_pairs']} | {c['same_order']} | {c['reversed']} | "
-                     f"{c['tie_in_one']} | {c['tie_in_both']} | {k['value']} | {k['numerator']} / sqrt({k['under_sqrt']}) |")
+            row = (f"| {p['column_1']} vs {p['column_2']} | {p['material_pairs']} | {c['same_order']} | {c['reversed']} | "
+                   f"{c['tie_in_one']} | {c['tie_in_both']} | {k['value']} | {k['numerator']} / sqrt({k['under_sqrt']}) |")
+            if cr:
+                row += f" {'yes' if p['same_criterion'] else 'no'} |"
+            if hd:
+                h = p["counts_held_differs"]
+                row += f" {h['same_order']} / {h['reversed']} / {h['tie_in_one']} / {h['tie_in_both']} |"
+            L.append(row)
         for p in q["column_pairs"]:
             if not p["reversed_and_tie_in_one_pairs"]:
                 continue
@@ -162,6 +188,13 @@ def main():
         doc_ref, item = by_id[tab["item"]]
         qs = [analyse(tab, *m, digits) for m in matrix(tab, item)]
         notes = list(O["fixed_notes"]) + list(tab.get("notes", []))
+        for ns in tab.get("item_note_sentences", []):
+            for w in ns["words_in_item_note"]:
+                if w not in item.get("note", ""):
+                    fail(f"{tab['id']}: '{w}' is not verbatim in the item's note")
+            notes.append(ns["sentence"])
+        if any(p.get("same_criterion") is False for q in qs for p in q["column_pairs"]):
+            notes.append(tab["criterion_differs_note"])
         helds = {r["held"] for q in qs for r in q["values"] if "held" in r}
         if len(helds) > 1:
             notes.append(tab["held_differs_note"])
@@ -182,6 +215,9 @@ def main():
         write_text(out_dir / f"order_{tab['id']}.md", md)
         summary.append({"table": tab["id"], "json": f"order_{tab['id']}.json", "md": f"order_{tab['id']}.md",
                         "quantities": {q["quantity"]: [{"columns": [p["column_1"], p["column_2"]], **p["counts"],
+                                                        **({"same_criterion": p["same_criterion"]} if "same_criterion" in p else {}),
+                                                        **({"held_differs": p["counts_held_differs"]}
+                                                           if "counts_held_differs" in p else {}),
                                                         "kendall_tau_b": p["kendall_tau_b"]["value"]}
                                                        for p in q["column_pairs"]] for q in qs}})
     search = {"rule": O["search"]["rule"], "items_with_values_looked_at": len(with_values),

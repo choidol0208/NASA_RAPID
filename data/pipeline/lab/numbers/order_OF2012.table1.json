@@ -8,19 +8,23 @@
  "choices": {
   "classes": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0",
   "column_pairs": "every unordered pair of condition columns, in the column order of the spec",
+  "criterion": "each condition column carries the criterion named in the spec; a column pair is marked same criterion yes or no; pairs with different criteria are counted like all others and marked",
+  "held": "where the item holds a per-material condition (OF2012: test pressure), each class count is also given for the pairs whose held values differ",
   "kendall_tau_b": "tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0",
   "material_pairs": "every unordered pair of materials, in the row order of the item",
   "tau_b_digits": 6,
   "values": "values are read as printed in the reference item's 'values' (exact decimals; JSON numbers read as decimal strings), no tolerance"
  },
  "notes": [
-  "Values are as printed.",
+  "Values are shown with the digits held in the item's 'values' (for example 18.0); comparisons read them as exact decimals.",
   "Measurement uncertainty or step size: not stated in the item. A difference of one printed unit may or may not be resolved by the test method.",
   "These counts describe the order of printed values; they say nothing about why the order changes.",
   "ULOI and MOC are reported separately and are not compared with each other.",
   "The item states that the low-gravity limits come from 5.18 s drop tower tests and that their criteria are not the same as in 1g.",
   "The delta O2 rows of the table are a difference the paper computes from the other rows and are not used here.",
-  "The held values say that the materials were tested at different pressures; a pair of materials at different pressures compares two conditions at once."
+  "The item's note says that the 0g values were obtained with a concurrent flow of 30 cm/s (p. 4), that the Lunar and 0g data are from ref. 8 (Ferkul and Olson 2011), and that the asterisk on '0g*' is not defined anywhere in the paper.",
+  "Pairs of columns with different criteria (marked 'same criterion: no') compare a 1g limit with a drop-tower limit; the item says these criteria are not the same.",
+  "The held values say that the materials were tested at different pressures; a pair of materials at different pressures compares two conditions at once. The count of such pairs is given per class beside the counts."
  ],
  "quantities": [
   {
@@ -34,6 +38,14 @@
       "tie_in_both": 0,
       "tie_in_one": 1
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 1,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "criterion_1": "1g criterion (ULOI, MOC)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 2,
       "under_sqrt": 6,
@@ -44,7 +56,7 @@
      "reversed_and_tie_in_one_pairs": [
       {
        "a_col1": "23.5",
-       "a_col2": "22",
+       "a_col2": "22.0",
        "b_col1": "23.5",
        "b_col2": "19.9",
        "class": "tie_in_one",
@@ -55,6 +67,7 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "same_criterion": false,
      "ties_in_column_1": 1,
      "ties_in_column_2": 0
     },
@@ -67,6 +80,14 @@
       "tie_in_both": 1,
       "tie_in_one": 0
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 1,
+      "tie_in_both": 1,
+      "tie_in_one": 0
+     },
+     "criterion_1": "1g criterion (ULOI, MOC)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 2,
       "under_sqrt": 4,
@@ -75,6 +96,7 @@
      },
      "material_pairs": 3,
      "reversed_and_tie_in_one_pairs": [],
+     "same_criterion": false,
      "ties_in_column_1": 1,
      "ties_in_column_2": 1
     },
@@ -87,6 +109,14 @@
       "tie_in_both": 0,
       "tie_in_one": 1
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 1,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "criterion_1": "1g criterion (ULOI, MOC)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 2,
       "under_sqrt": 6,
@@ -97,9 +127,9 @@
      "reversed_and_tie_in_one_pairs": [
       {
        "a_col1": "23.5",
-       "a_col2": "24",
+       "a_col2": "24.0",
        "b_col1": "23.5",
-       "b_col2": "23",
+       "b_col2": "23.0",
        "class": "tie_in_one",
        "held_a": "10.2",
        "held_b": "14.7",
@@ -108,6 +138,7 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "same_criterion": false,
      "ties_in_column_1": 1,
      "ties_in_column_2": 0
     },
@@ -120,6 +151,14 @@
       "tie_in_both": 0,
       "tie_in_one": 1
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 1,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 2,
       "under_sqrt": 6,
@@ -129,10 +168,10 @@
      "material_pairs": 3,
      "reversed_and_tie_in_one_pairs": [
       {
-       "a_col1": "22",
-       "a_col2": "21",
+       "a_col1": "22.0",
+       "a_col2": "21.0",
        "b_col1": "19.9",
-       "b_col2": "21",
+       "b_col2": "21.0",
        "class": "tie_in_one",
        "held_a": "10.2",
        "held_b": "14.7",
@@ -141,6 +180,7 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "same_criterion": true,
      "ties_in_column_1": 0,
      "ties_in_column_2": 1
     },
@@ -153,6 +193,14 @@
       "tie_in_both": 0,
       "tie_in_one": 0
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 0
+     },
+     "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 3,
       "under_sqrt": 9,
@@ -161,6 +209,7 @@
      },
      "material_pairs": 3,
      "reversed_and_tie_in_one_pairs": [],
+     "same_criterion": true,
      "ties_in_column_1": 0,
      "ties_in_column_2": 0
     },
@@ -173,6 +222,14 @@
       "tie_in_both": 0,
       "tie_in_one": 1
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 1,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 2,
       "under_sqrt": 6,
@@ -182,10 +239,10 @@
      "material_pairs": 3,
      "reversed_and_tie_in_one_pairs": [
       {
-       "a_col1": "21",
-       "a_col2": "24",
-       "b_col1": "21",
-       "b_col2": "23",
+       "a_col1": "21.0",
+       "a_col2": "24.0",
+       "b_col1": "21.0",
+       "b_col2": "23.0",
        "class": "tie_in_one",
        "held_a": "10.2",
        "held_b": "14.7",
@@ -194,6 +251,7 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "same_criterion": true,
      "ties_in_column_1": 1,
      "ties_in_column_2": 0
     }
@@ -213,9 +271,9 @@
      "material": "Mylar G",
      "values": [
       "21.2",
-      "18",
+      "18.0",
       "15.6",
-      "17"
+      "17.0"
      ]
     },
     {
@@ -223,9 +281,9 @@
      "material": "Ultem 1000",
      "values": [
       "23.5",
-      "22",
-      "21",
-      "24"
+      "22.0",
+      "21.0",
+      "24.0"
      ]
     },
     {
@@ -234,8 +292,8 @@
      "values": [
       "23.5",
       "19.9",
-      "21",
-      "23"
+      "21.0",
+      "23.0"
      ]
     }
    ]
@@ -251,6 +309,14 @@
       "tie_in_both": 0,
       "tie_in_one": 0
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 0
+     },
+     "criterion_1": "1g criterion (ULOI, MOC)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 3,
       "under_sqrt": 9,
@@ -259,6 +325,7 @@
      },
      "material_pairs": 3,
      "reversed_and_tie_in_one_pairs": [],
+     "same_criterion": false,
      "ties_in_column_1": 0,
      "ties_in_column_2": 0
     },
@@ -271,6 +338,14 @@
       "tie_in_both": 0,
       "tie_in_one": 1
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 1,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "criterion_1": "1g criterion (ULOI, MOC)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 2,
       "under_sqrt": 6,
@@ -280,7 +355,7 @@
      "material_pairs": 3,
      "reversed_and_tie_in_one_pairs": [
       {
-       "a_col1": "23",
+       "a_col1": "23.0",
        "a_col2": "19.9",
        "b_col1": "22.1",
        "b_col2": "19.9",
@@ -292,6 +367,7 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "same_criterion": false,
      "ties_in_column_1": 0,
      "ties_in_column_2": 1
     },
@@ -304,6 +380,14 @@
       "tie_in_both": 0,
       "tie_in_one": 0
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 0
+     },
+     "criterion_1": "1g criterion (ULOI, MOC)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 3,
       "under_sqrt": 9,
@@ -312,6 +396,7 @@
      },
      "material_pairs": 3,
      "reversed_and_tie_in_one_pairs": [],
+     "same_criterion": false,
      "ties_in_column_1": 0,
      "ties_in_column_2": 0
     },
@@ -324,6 +409,14 @@
       "tie_in_both": 0,
       "tie_in_one": 1
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 1,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 2,
       "under_sqrt": 6,
@@ -335,7 +428,7 @@
       {
        "a_col1": "21.1",
        "a_col2": "19.9",
-       "b_col1": "19",
+       "b_col1": "19.0",
        "b_col2": "19.9",
        "class": "tie_in_one",
        "held_a": "10.2",
@@ -345,6 +438,7 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "same_criterion": true,
      "ties_in_column_1": 0,
      "ties_in_column_2": 1
     },
@@ -357,6 +451,14 @@
       "tie_in_both": 0,
       "tie_in_one": 0
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 2,
+      "tie_in_both": 0,
+      "tie_in_one": 0
+     },
+     "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 3,
       "under_sqrt": 9,
@@ -365,6 +467,7 @@
      },
      "material_pairs": 3,
      "reversed_and_tie_in_one_pairs": [],
+     "same_criterion": true,
      "ties_in_column_1": 0,
      "ties_in_column_2": 0
     },
@@ -377,6 +480,14 @@
       "tie_in_both": 0,
       "tie_in_one": 1
      },
+     "counts_held_differs": {
+      "reversed": 0,
+      "same_order": 1,
+      "tie_in_both": 0,
+      "tie_in_one": 1
+     },
+     "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
+     "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
      "kendall_tau_b": {
       "numerator": 2,
       "under_sqrt": 6,
@@ -387,9 +498,9 @@
      "reversed_and_tie_in_one_pairs": [
       {
        "a_col1": "19.9",
-       "a_col2": "23",
+       "a_col2": "23.0",
        "b_col1": "19.9",
-       "b_col2": "22",
+       "b_col2": "22.0",
        "class": "tie_in_one",
        "held_a": "10.2",
        "held_b": "14.7",
@@ -398,6 +509,7 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "same_criterion": true,
      "ties_in_column_1": 1,
      "ties_in_column_2": 0
     }
@@ -416,20 +528,20 @@
      "held": "10.2",
      "material": "Mylar G",
      "values": [
-      "20",
-      "17",
+      "20.0",
+      "17.0",
       "14.1",
-      "16"
+      "16.0"
      ]
     },
     {
      "held": "10.2",
      "material": "Ultem 1000",
      "values": [
-      "23",
+      "23.0",
       "21.1",
       "19.9",
-      "23"
+      "23.0"
      ]
     },
     {
@@ -437,9 +549,9 @@
      "material": "Nomex HT90-40",
      "values": [
       "22.1",
-      "19",
+      "19.0",
       "19.9",
-      "22"
+      "22.0"
      ]
     }
    ]

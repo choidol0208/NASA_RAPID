@@ -8,7 +8,7 @@ Condition columns: total pressure (kPa).
 
 ## Notes
 
-- Values are as printed.
+- Values are shown with the digits held in the item's 'values' (for example 18.0); comparisons read them as exact decimals.
 - Measurement uncertainty or step size: not stated in the item. A difference of one printed unit may or may not be resolved by the test method.
 - These counts describe the order of printed values; they say nothing about why the order changes.
 - The item states normal gravity and quiescent conditions for every cell.
@@ -17,6 +17,8 @@ Condition columns: total pressure (kPa).
 
 - `classes`: for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0
 - `column_pairs`: every unordered pair of condition columns, in the column order of the spec
+- `criterion`: each condition column carries the criterion named in the spec; a column pair is marked same criterion yes or no; pairs with different criteria are counted like all others and marked
+- `held`: where the item holds a per-material condition (OF2012: test pressure), each class count is also given for the pairs whose held values differ
 - `kendall_tau_b`: tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0
 - `material_pairs`: every unordered pair of materials, in the row order of the item
 - `tau_b_digits`: 6
