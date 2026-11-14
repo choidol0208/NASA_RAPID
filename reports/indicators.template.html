@@ -221,7 +221,7 @@ function showNeed(id) {
     if (d.url) { const a = $("a", null, d.title); a.href = d.url; a.target = "_blank"; a.rel = "noopener"; docs.append(a); } else docs.append(document.createTextNode(d.title));
   });
   headBox.append(docs);
-  headBox.append($("p", "crit", need.stated.length ? "이 질문을 실험 목적으로 밝힌 PSI 기록 (원문):" : "이 질문을 실험 목적으로 밝힌 PSI 기록이 없습니다. " + need.stated_note));
+  headBox.append($("p", "crit", need.stated.length ? "연구진·NASA 문서가 밝힌 실험 목적 문장 (원문, 집계한 연결만):" : "이 질문을 실험 목적으로 밝힌 PSI 기록이 없습니다. " + need.stated_note));
   if (need.stated.length) { const ul = $("ul", "stated"); need.stated.forEach(s => { const li = $("li"); li.append($("span", "id", s.inv + "  "), document.createTextNode(s.quote)); ul.append(li); }); headBox.append(ul); }
   const parts = [headBox];
   if (!need.indicators.length) parts.push($("p", "empty", "이 질문에는 집계한 시험이 없어 지표가 없습니다."));
