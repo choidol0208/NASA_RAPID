@@ -1,10 +1,16 @@
 ---
 role: catalog
-updated: 2026-11-14 16:32 KST
+updated: 2026-11-14 16:49 KST
 state: working
 blocked_on: none
 ---
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`. Core work is done and live: everything up to `bbea891` is on `main` and `catalog-filter`, with config 1.1.0. What remains is the human lead's weight review, an optional human check of the demo values, and the freeze checks.
+
+Checked 16:48: the ranking numbers in pm's `docs/submission/submission_text.md` and `slides_outline.md` match the current state:
+- tests 38/38, validation 35/35, parity 86/86;
+- sensitivity 45/48 with rank 1 never changing;
+- source check: 107 values found plus 8 team readings, 24/24 range ends, 135/135 numbers in text;
+- demo scores: ISS 94, 94, 92.7; lunar habitat 79.1, 79.1, 76.1.
 
 Role, as the human lead set it at 14:29:
 - catalog: the user's conditions in, weights computed from the catalog, the top 1 to 3 experiments out;
@@ -65,8 +71,12 @@ Done since last sync (branch `catalog-scoring`):
 - Checks: 35 unit tests, validation 29/29, parity 68/68, catalog against tests.csv OK, `catalog.xlsx` rebuilt.
 
 Next:
-- Sync every 20 minutes until the 19:00 freeze; fixes only after that.
-- Rerun `validation/build_verification_sheet.py` if the demo top results change.
+- Human lead's review of the weights.
+  - When they say it is done, set `_about.generated_by` "reviewed: no" in `scoring/scoring_config.json` to the reviewer and date.
+  - If weights change, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the new numbers for the slides. No weight change after 18:00 without the human lead.
+- Optional, for a person on the team: `validation/verification_sheet.csv` (96 checks, 12 configurations). Checking the rows of the ISS and lunar habitat top results first is enough for the demo.
+- 19:00 freeze: after ui switches Pages to `main` only, confirm that `main` gives the same demo rankings. After that, fixes only.
+- Sync every 20 minutes. If any ranking number changes, tell pm, because the submission text and slides quote them.
 
 Published for others:
 - `data/catalog/configurations.csv`: three new columns after `atmosphere_basis` (additive), `o2_source`, `pressure_source`, `flow_source`. Values: `table`, `record`, `test_matrix`, `team`, or empty. The other columns are unchanged in name and order.
