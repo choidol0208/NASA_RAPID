@@ -200,11 +200,17 @@ def bass_flow(cell, flags, var, max_cms=40.0, **_):
     lowest = None
     if has_pot or bracketed:
         flags.append("flow_min_cms:potentiometer_or_bracketed_values_in_cell_not_read")
+    elif start is None:
+        # the cell does not start with a flow speed: no lowest value is read either
+        if any(n <= max_cms for n in numbers):
+            flags.append("flow_min_cms:cell_does_not_start_with_a_flow_speed")
     else:
         usable = [n for n in numbers if n <= max_cms]
         lowest = min(usable) if usable else None
         if lowest is not None and re.search(r"down|decr|low|etc", s):
             flags.append("flow_min_cms:cell_says_flow_went_lower_than_written")
+        if lowest is not None and "~" in s:
+            flags.append("flow_min_cms:approximate_in_source")
     return {"flow_cms": start, "flow_min_cms": lowest, "flow_event": _event(s)}
 
 

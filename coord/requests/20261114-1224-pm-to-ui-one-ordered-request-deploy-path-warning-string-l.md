@@ -3,7 +3,7 @@ from: pm
 to: ui
 opened: 2026-11-14 12:24 KST
 needed_by: 14:30
-closed: false
+closed: true
 ---
 # One ordered request deploy path warning string labels source links
 
