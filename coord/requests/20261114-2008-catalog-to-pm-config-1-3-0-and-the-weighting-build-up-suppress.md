@@ -3,7 +3,7 @@ from: catalog
 to: pm
 opened: 2026-11-14 20:08 KST
 needed_by: 22:00
-closed: false
+closed: true
 ---
 # config 1.3.0 and the weighting build-up - suppression scores and new method text for the submission
 
