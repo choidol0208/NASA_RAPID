@@ -117,6 +117,21 @@ class Interpretation(unittest.TestCase):
         sc, *_ = scorer.interpret("infant safety", CFG)  # 'fan' inside a word must not match
         self.assertNotIn("flow_state", sc)
 
+    def test_co2_is_not_oxygen(self):
+        sc, src, *_ = scorer.interpret("CO2 30% suppression ISS", CFG)
+        self.assertEqual(sc["o2_pct"], 21.0)  # from the ISS preset, not from "CO2 30%"
+        self.assertEqual(src["o2_pct"], "preset:iss")
+        sc, *_ = scorer.interpret("H2O2 leak", CFG)
+        self.assertNotIn("o2_pct", sc)
+        sc, *_ = scorer.interpret("CO2 5% and O2 25%", CFG)
+        self.assertEqual(sc["o2_pct"], 25.0)
+
+    def test_ceiling_is_not_fabric(self):
+        sc, *_ = scorer.interpret("천장 배선 과열", CFG)  # 천장 = ceiling, not 천 (cloth)
+        self.assertNotEqual(sc.get("fuel_class"), "fabric")
+        sc, *_ = scorer.interpret("천으로 된 커튼", CFG)
+        self.assertEqual(sc.get("fuel_class"), "fabric")
+
 
 class Ranking(unittest.TestCase):
     def test_out_of_scope(self):

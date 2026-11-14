@@ -143,9 +143,9 @@ def interpret(query, cfg):
         put("thermal_regime", "thick", "text")
     if _any(t, kw["rod"]):
         put("sample_geometry", "rod", "text")
-    # numbers with units
-    m = re.search(r"(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)", t) or \
-        re.search(r"(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?", t)
+    # numbers with units ("o2" must stand alone: "CO2 30%" is not 30% oxygen)
+    m = re.search(r"(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])", t) or \
+        re.search(r"(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?", t)
     if m:
         put("o2_pct", float(m.group(1)), "text")
     m = re.search(r"(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)\b", t)

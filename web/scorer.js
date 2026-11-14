@@ -107,8 +107,9 @@ export function interpret(query, cfg) {
   if (any(t, kw.thin)) put("thermal_regime", "thin", "text");
   else if (any(t, kw.thick)) put("thermal_regime", "thick", "text");
   if (any(t, kw.rod)) put("sample_geometry", "rod", "text");
-  let m = t.match(/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)/) ||
-    t.match(/(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/);
+  // "o2" must stand alone: "CO2 30%" is not 30% oxygen (mirrors scorer.py)
+  let m = t.match(/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])/) ||
+    t.match(/(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/);
   if (m) put("o2_pct", parseFloat(m[1]), "text");
   m = t.match(/(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![\p{L}\p{N}_])/u);
   if (m) put("pressure_kpa", pyRound(parseFloat(m[1]) * UNITS_TO_KPA[m[2]], 1), "text");

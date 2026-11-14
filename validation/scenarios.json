@@ -109,6 +109,9 @@
     {"id": "F06", "group": "fuel_phase", "query": "combustion gas detection",
      "why_ko": "연소 생성 기체의 감지는 감지 질문이다. 연료를 기체로 읽지 않고, 감지 조사(SAME, SAME-R)가 1위여야 한다.",
      "expect": {"status": "ok", "scenario": {"fuel_phase": null, "concern": "detection"}, "top1_in": ["SAME", "SAME-R"]}},
+    {"id": "F07", "group": "rough_input", "query": "CO2 30% suppression ISS",
+     "why_ko": "'CO2 30%'는 이산화탄소 농도다. 산소 30%로 읽으면 안 되고, 산소는 ISS 프리셋의 21%여야 한다.",
+     "expect": {"status": "ok", "scenario": {"o2_pct": 21.0, "concern": "suppression", "diluent": "CO2"}}},
 
     {"id": "T01", "group": "trap", "query": "spacesuit",
      "why_ko": "우주복 100% 산소는 PSI 주변 대기 시험의 최고치(40%)를 넘는다. 외삽 경고가 반드시 나와야 하고, 가장 높은 산소에서 시험한 조사(ACME-BRE, ACME-CFI-G)가 보여야 한다. 역화염의 산화제 흐름(최대 85%)은 대기가 아니라 비교하지 않는다.",

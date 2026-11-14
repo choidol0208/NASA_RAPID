@@ -1,7 +1,7 @@
 # Catalog filter validation report
 
-- Run: 2026-11-14 13:44 · target `scoring.scorer:rank`
-- Result: **28/28 scenarios passed**
+- Run: 2026-11-14 14:04 · target `scoring.scorer:rank`
+- Result: **29/29 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
 |---|---|---|---|---|---|
@@ -29,6 +29,7 @@
 | F04 | fuel_phase | liquid fuel lunar habitat | FLEX, FLEX-2, ACME-BRE | partial_gravity | PASS |
 | F05 | fuel_phase | inert gas suppression ISS | BASS, FLEX, BASS-II |  | PASS |
 | F06 | fuel_phase | combustion gas detection | SAME, SAME-R, DAFT |  | PASS |
+| F07 | rough_input | CO2 30% suppression ISS | FLEX, BASS, BASS-II |  | PASS |
 | T01 | trap | spacesuit | ACME-BRE, ACME-CFI-G, FLEX | o2_above_all | PASS |
 | T02 | trap | Mars base | BASS-II, SAFFIRE-II, BASS | partial_gravity, mars_atmosphere | PASS |
 | T03 | trap | hybrid rocket combustion chamber fire |  | out_of_scope | PASS |
