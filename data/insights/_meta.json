@@ -6,13 +6,14 @@
   "label": "Companion disclosure file: one AI-generation disclosure block per file in data/insights/, keyed by file name, written by ai/meta.py. The same block is inside every file that is a JSON object, under '_meta'."
  },
  "cards.json": {
-  "built_by": "ai/apply_cards.py",
+  "built_by": "ai/apply_review.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "gpt-oss:20b (f38aa0c53da5)",
-  "generated_at": "2026-11-14T16:17:32+09:00",
+  "generated_at": "2026-11-14T16:58:30+09:00",
   "inputs_sha256": {
    "ai/prompts/card_v3.txt": "e013dce7e2678ff2eadeebebc8659685a076112c92fc3a524bb27e6d0f604cd9",
    "ai/review/pm_prereview.json": "86369fdb2b5b5a6be878e8684d789bb7f0d728d4a49de2a0f14f05cf33a315e4",
+   "ai/review/review_sheet.csv": "8512833c4b95ecc36e2bc03ddea1fc4b978a74cd06a3383f812d10e0a864fe9d",
    "ai/runs/cards_20261114-v3-all24.jsonl": "e1cdc4fb4f3fdbdd3363a77cd7c72013f81dd0cdf7f7da16f5f81e052aafc851",
    "ai/runs/cards_20261114-v3-repair.jsonl": "ebd278cb7b7fae39c4b51263420c63e9cad1daedeea94008c9ffbd2fb38747dd",
    "data/insights/evidence.json": "66755d3357c4000ddbef645ee5fdde5d2c57bf07589565d4e5801cff2db289db",
@@ -45,10 +46,11 @@
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). Cards with status 'generated' or 'generated_partial' hold summary sentences written by the language model gpt-oss:20b (f38aa0c53da5), run locally through Ollama 0.40.16 (local); every such sentence passed the team's code gates (ai/checks.py) and names its PSI source; see each sentence's review field. Key points and 'fallback_quote' cards are verbatim NASA PSI text chosen by code. Team output, not a NASA conclusion; not operational safety guidance.",
   "entries": 24,
   "statuses": {
-   "generated": 15,
-   "generated_partial": 9
+   "fallback_quote": 4,
+   "generated": 1,
+   "generated_partial": 19
   },
-  "model_sentences": 61,
+  "model_sentences": 33,
   "prompt_file": "ai/prompts/card_v3.txt",
   "prompt_sha256": "e013dce7e2678ff2eadeebebc8659685a076112c92fc3a524bb27e6d0f604cd9",
   "params": {
@@ -63,13 +65,15 @@
   "runner": "Ollama 0.40.16 (local)",
   "baseline_built_by": "ai/build_baseline.py",
   "removed_by_prereview": 4,
-  "content_sha256": "05f37fbd584999ae74159a332b9e2c88c8fdce4464978ae63ae37a26b1726f03"
+  "review_applied": true,
+  "final": false,
+  "content_sha256": "41ffa202fb76cbcca65f5a1e3008faf7fb90de7c2c56e4b294e6d85bfdba230e"
  },
  "catalog_trace.json": {
   "built_by": "ai/audit_catalog.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T16:15:05+09:00",
+  "generated_at": "2026-11-14T16:58:29+09:00",
   "inputs_sha256": {
    "data/catalog/configurations.csv": "7cde1c23f4a3d5310f02d8c4b4e63d77f7773b95eace4fbf153cdbdeea494e82",
    "data/catalog/investigations.csv": "840e0266945d73b2482b74338c9924adc1d5c8a17696804b83c71d95ce1b10e2",
@@ -124,7 +128,7 @@
    "data/psi/manifest.json": "48e213ba2120d4ba52544cb068cde03a5d71ba53d4f1ad5ccf38d5e0eb7841e7",
    "pipeline/spec/sources.json": "acf3d0a4b35ece951278bb71bca6a3c8c5b40ec542891ef63d1a1609f99140ec",
    "scoring/scorer.py": "51c60b1030eaf621ed0ab504a2d8d3c88eaaa2b7daad45a6ff2f0e059a9dd793",
-   "scoring/scoring_config.json": "141a17d376affc1f08b8e738723606d81e1b0287ab9c493772d713168cd3735c"
+   "scoring/scoring_config.json": "a0ff182a1e8aed4bfe9824c888f98595179eb697c81bc690391380c828663b3c"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code); no language model ran to build it. It traces numbers in the team's AI-extracted catalog text to NASA PSI records and tables; a found number is not a check of its meaning. Team output, not a NASA conclusion.",
   "content_sha256": "a85bfe789d093de4d6ec160825e8d26f4560261cc8cccc3166b1426422d2c687"
@@ -196,16 +200,16 @@
   "built_by": "ai/evidence_map.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T16:13:43+09:00",
+  "generated_at": "2026-11-14T16:57:06+09:00",
   "inputs_sha256": {
    "data/pipeline/scenario_tests.csv": "6581e840553a2d4197d90ecc2ad94b5b307747112f81b4d418a2e357ae45eaab",
    "data/pipeline/tests.csv": "b8acc1073fbc33a37563eb7f7cd12811e602fb7363ee69982d97860f05522211",
    "data/psi/experimental_tables/PSI-20_Experimental table_ACME BRE.csv": "4aa5d3f98708ceacced5c620d46858b9965f8d4d941b203229f46467d53e5ab7",
    "data/psi/manifest.json": "48e213ba2120d4ba52544cb068cde03a5d71ba53d4f1ad5ccf38d5e0eb7841e7",
    "pipeline/spec/references.json": "cf3b2e626f279de68478382d917adef7a8002860cc2e76a53580d1c999d9b723",
-   "pipeline/spec/scenarios.json": "b9d39a7478b5198f4e4688277e46acb7e639c9a8885d7e84b38d99f7e038c74d",
+   "pipeline/spec/scenarios.json": "dd5cbcb035ae352e8008401929fb732a31a4a619d96602744dcc7594f11e7902",
    "pipeline/spec/sources.json": "acf3d0a4b35ece951278bb71bca6a3c8c5b40ec542891ef63d1a1609f99140ec",
-   "scoring/scoring_config.json": "141a17d376affc1f08b8e738723606d81e1b0287ab9c493772d713168cd3735c"
+   "scoring/scoring_config.json": "a0ff182a1e8aed4bfe9824c888f98595179eb697c81bc690391380c828663b3c"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). No language model ran to build it. Text in it is quoted or copied from the cited NASA sources by code; counts and fields are computed by code. Team output, not a NASA conclusion.",
   "content_sha256": "ee8501cc18e06961c1fa49154f35e72510d3516f1d130816384755880e2a8101"
@@ -232,29 +236,29 @@
   "built_by": "ai/apply_review.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T16:17:32+09:00",
+  "generated_at": "2026-11-14T16:58:30+09:00",
   "inputs_sha256": {
    "ai/prompts/card_v3.txt": "e013dce7e2678ff2eadeebebc8659685a076112c92fc3a524bb27e6d0f604cd9",
    "ai/review/pm_prereview.json": "86369fdb2b5b5a6be878e8684d789bb7f0d728d4a49de2a0f14f05cf33a315e4",
-   "ai/review/review_sheet.csv": "5cf823452f2b045ef318d28bfb7829d1ca7cc07c2679a643e7695a1edbcbca85",
+   "ai/review/review_sheet.csv": "8512833c4b95ecc36e2bc03ddea1fc4b978a74cd06a3383f812d10e0a864fe9d",
    "ai/runs/cards_20261114-v3-all24.jsonl": "e1cdc4fb4f3fdbdd3363a77cd7c72013f81dd0cdf7f7da16f5f81e052aafc851",
    "ai/runs/cards_20261114-v3-repair.jsonl": "ebd278cb7b7fae39c4b51263420c63e9cad1daedeea94008c9ffbd2fb38747dd",
-   "data/insights/cards.json": "b228d65c407e53166b82b351ea00c7e4fde66943fcf622e425e793a27149f00f",
-   "data/insights/scenarios.json": "280cb84d1f9e6b0f62d2dd1d6aa70946fa5fbd4fb81dabe5befad9ae717d427d"
+   "data/insights/cards.json": "834043a4647e3faa275e07d3fde1e374dca734937039835872b378e44dc19df8",
+   "data/insights/scenarios.json": "7f0c1416f7b8ccef4f1060de731a9a3c115dceb145a0f67553d786058a473c1f"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code); no language model ran to build it. Counts of the gpt-oss:20b card sentences, the code gates and the review verdicts, computed by code. Team output, not a NASA conclusion.",
-  "content_sha256": "bca8c9b3186248d2ff5c7b6dd44f1b4971801d6c3240cea8e92c5ae8c03db9c1"
+  "content_sha256": "2e86b5d06407814304297b8ea896c94d01a672570e7ef3a26e718e783f282f6a"
  },
  "robustness.json": {
   "built_by": "ai/robustness.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T16:15:04+09:00",
+  "generated_at": "2026-11-14T16:58:29+09:00",
   "inputs_sha256": {
    "data/catalog/configurations.csv": "7cde1c23f4a3d5310f02d8c4b4e63d77f7773b95eace4fbf153cdbdeea494e82",
    "data/catalog/investigations.csv": "840e0266945d73b2482b74338c9924adc1d5c8a17696804b83c71d95ce1b10e2",
    "scoring/scorer.py": "51c60b1030eaf621ed0ab504a2d8d3c88eaaa2b7daad45a6ff2f0e059a9dd793",
-   "scoring/scoring_config.json": "141a17d376affc1f08b8e738723606d81e1b0287ab9c493772d713168cd3735c"
+   "scoring/scoring_config.json": "a0ff182a1e8aed4bfe9824c888f98595179eb697c81bc690391380c828663b3c"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). No language model ran to build it. Shares are computed by code from the team's ranking (scoring.scorer) under sampled weights. Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
   "params": {
@@ -271,16 +275,16 @@
   "built_by": "ai/build_baseline.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T16:13:43+09:00",
+  "generated_at": "2026-11-14T16:57:06+09:00",
   "inputs_sha256": {
    "data/catalog/configurations.csv": "7cde1c23f4a3d5310f02d8c4b4e63d77f7773b95eace4fbf153cdbdeea494e82",
    "data/catalog/investigations.csv": "840e0266945d73b2482b74338c9924adc1d5c8a17696804b83c71d95ce1b10e2",
    "data/insights/evidence.json": "66755d3357c4000ddbef645ee5fdde5d2c57bf07589565d4e5801cff2db289db",
-   "data/pipeline/evidence/index.json": "ac96d74f0cccea9fa8f185e8fb56fed7d1294ba91478637d62e953651484be97",
+   "data/pipeline/evidence/index.json": "1f37f695bf1123488d2a3b6a69d3db49fb6ee49cd5cc3a74d76a6adb9f6cdc2f",
    "data/pipeline/evidence/scenario_exploration_10_2_26_5.json": "50ba8a99b8c5bbd31f3db06499732403de4ecbb280db3daf1fa3d0a96b08cd0f",
    "data/pipeline/evidence/scenario_exploration_8_2_34.json": "0e9a7c185cf0204d728dd61ed829c435f8332f28d2df31c4644f1f097094e003",
    "data/pipeline/evidence/scenario_iss.json": "f6a614979fedf85d76fd994fb9b4b392401a8e7d1dcb932440d3b8422dae56bb",
-   "data/pipeline/evidence/scenario_lunar_habitat.json": "60c9b8e574d6fec227d0e56ff46a08260929873c20bd32a50c462408909f22d3",
+   "data/pipeline/evidence/scenario_lunar_habitat.json": "51dbd51cf701aee8975d04eb953b070469d6556ddfa3bdeeff3d367916ddb4fe",
    "data/pipeline/evidence/scenario_mars_habitat.json": "d40c46f27dd4eeeaab5cbd2c4a94b399abb808dafbbb01a6046bd9845ba96b02",
    "data/pipeline/evidence/scenario_spacesuit.json": "5ba92ec88d922245a49089f0f4186f6b1895bbfddfa9d1677e35a7bd7e50a29d",
    "data/pipeline/need_tests.csv": "8f2cf847728016c6669a95931c89d06286ce7030214cece1d65d66a93d119a77",
@@ -290,12 +294,12 @@
    "data/pipeline/tests.csv": "b8acc1073fbc33a37563eb7f7cd12811e602fb7363ee69982d97860f05522211",
    "data/psi/experimental_tables/PSI-20_Experimental table_ACME BRE.csv": "4aa5d3f98708ceacced5c620d46858b9965f8d4d941b203229f46467d53e5ab7",
    "data/psi/manifest.json": "48e213ba2120d4ba52544cb068cde03a5d71ba53d4f1ad5ccf38d5e0eb7841e7",
-   "pipeline/spec/needs.json": "0bee4b3bfc479c9433df4d5719b384fae185f0cd4e4790965b5726b21ebb6565",
+   "pipeline/spec/needs.json": "37b65b46d5f86fa8640f08d72e77a53eec57980aa4a08b52c85f2b3dd3983d20",
    "pipeline/spec/references.json": "cf3b2e626f279de68478382d917adef7a8002860cc2e76a53580d1c999d9b723",
-   "pipeline/spec/scenarios.json": "b9d39a7478b5198f4e4688277e46acb7e639c9a8885d7e84b38d99f7e038c74d",
+   "pipeline/spec/scenarios.json": "dd5cbcb035ae352e8008401929fb732a31a4a619d96602744dcc7594f11e7902",
    "pipeline/spec/sources.json": "acf3d0a4b35ece951278bb71bca6a3c8c5b40ec542891ef63d1a1609f99140ec",
    "scoring/scorer.py": "51c60b1030eaf621ed0ab504a2d8d3c88eaaa2b7daad45a6ff2f0e059a9dd793",
-   "scoring/scoring_config.json": "141a17d376affc1f08b8e738723606d81e1b0287ab9c493772d713168cd3735c"
+   "scoring/scoring_config.json": "a0ff182a1e8aed4bfe9824c888f98595179eb697c81bc690391380c828663b3c"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code); no language model ran. Counts are computed by code from the pipeline CSVs and NASA PSI tables and every sentence is a fixed template filled with those counts or copied NASA text. Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
   "entries": [
@@ -305,6 +309,6 @@
    "mars_habitat"
   ],
   "text_origin": "template",
-  "content_sha256": "040126528158a03fe14e6ce89a06ff8609bfd4379c25f22f1c379a1e7d21b737"
+  "content_sha256": "59d10c10cc955be78b697999e4d560ea95d75fd6baef658fcc3db9c074693a15"
  }
 }

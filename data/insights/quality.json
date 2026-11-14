@@ -3,18 +3,18 @@
   "built_by": "ai/apply_review.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T16:17:32+09:00",
+  "generated_at": "2026-11-14T16:58:30+09:00",
   "inputs_sha256": {
    "ai/prompts/card_v3.txt": "e013dce7e2678ff2eadeebebc8659685a076112c92fc3a524bb27e6d0f604cd9",
    "ai/review/pm_prereview.json": "86369fdb2b5b5a6be878e8684d789bb7f0d728d4a49de2a0f14f05cf33a315e4",
-   "ai/review/review_sheet.csv": "5cf823452f2b045ef318d28bfb7829d1ca7cc07c2679a643e7695a1edbcbca85",
+   "ai/review/review_sheet.csv": "8512833c4b95ecc36e2bc03ddea1fc4b978a74cd06a3383f812d10e0a864fe9d",
    "ai/runs/cards_20261114-v3-all24.jsonl": "e1cdc4fb4f3fdbdd3363a77cd7c72013f81dd0cdf7f7da16f5f81e052aafc851",
    "ai/runs/cards_20261114-v3-repair.jsonl": "ebd278cb7b7fae39c4b51263420c63e9cad1daedeea94008c9ffbd2fb38747dd",
-   "data/insights/cards.json": "b228d65c407e53166b82b351ea00c7e4fde66943fcf622e425e793a27149f00f",
-   "data/insights/scenarios.json": "280cb84d1f9e6b0f62d2dd1d6aa70946fa5fbd4fb81dabe5befad9ae717d427d"
+   "data/insights/cards.json": "834043a4647e3faa275e07d3fde1e374dca734937039835872b378e44dc19df8",
+   "data/insights/scenarios.json": "7f0c1416f7b8ccef4f1060de731a9a3c115dceb145a0f67553d786058a473c1f"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code); no language model ran to build it. Counts of the gpt-oss:20b card sentences, the code gates and the review verdicts, computed by code. Team output, not a NASA conclusion.",
-  "content_sha256": "bca8c9b3186248d2ff5c7b6dd44f1b4971801d6c3240cea8e92c5ae8c03db9c1"
+  "content_sha256": "2e86b5d06407814304297b8ea896c94d01a672570e7ef3a26e718e783f282f6a"
  },
  "description": "Measured counts for the model-written card sentences (gpt-oss:20b) and their checks, reproduced by ai/apply_review.py from ai/review/review_sheet.csv and the gate results of ai/apply_cards.py. Rates are measured before removal and carry their n. Rows read by an AI session are never counted as read by a person. Reviewed by hackathon team members or a second AI session, not by NASA or a combustion expert.",
  "proposed": 70,
@@ -81,34 +81,41 @@
   ],
   "rule": "sentences that passed every code gate and were removed by the pm session's reviewed removals (ai/review/pm_prereview.json) before the review; each slot shows the quoted NASA sentence it cited. Counted apart from the review: not part of removed_by_review, verdicts or the support rate, and never a reason to set reviewed_by."
  },
- "removed_by_review": 0,
- "modality_removed": 0,
+ "removed_by_review": 28,
+ "modality_removed": 1,
  "reverted_by_final": 0,
- "shipped_model_sentences": 61,
+ "shipped_model_sentences": 33,
  "cards_by_status": {
-  "generated": 15,
-  "generated_partial": 9
+  "fallback_quote": 4,
+  "generated": 1,
+  "generated_partial": 19
  },
  "model_rows_in_sheet": 61,
  "reviewed_person": 0,
- "reviewed_ai_session": 0,
- "unreviewed_model_rows": 61,
+ "reviewed_ai_session": 61,
+ "unreviewed_model_rows": 0,
  "verdicts": {
-  "supported": 0,
-  "partly": 0,
+  "supported": 33,
+  "partly": 28,
   "not": 0
  },
  "modality_kept": {
-  "yes": 0,
-  "no": 0
+  "yes": 60,
+  "no": 1
  },
- "support_rate": null,
- "n": 0,
+ "support_rate": 0.541,
+ "n": 61,
  "support_rate_rule": "supported / reviewed model sentences, before removal; null while n is 0",
  "quote_rows": 98,
- "quote_verdicts": {},
+ "quote_verdicts": {
+  "relevant": 90,
+  "not_relevant": 8
+ },
  "template_statements": 226,
- "template_verdicts": {},
+ "template_verdicts": {
+  "wording_ok": 217,
+  "wording_issue": 4
+ },
  "recount_ok": true,
  "recount_failures": [],
  "second_opinion": null,

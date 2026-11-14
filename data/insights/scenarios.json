@@ -851,7 +851,7 @@
     "copied_from": "pipeline/spec/needs.json#not_covered"
    },
    {
-    "text": "Background particulate and chemical species in the cabin: First organizing question for fire signatures and detection (CP2004.det.q1); no need of this file covers it. The DAFT record (PSI-47) is in the catalogue: its objective field says 'The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME).', and its table is one row per sampling session, which the pipeline does not map.",
+    "text": "Background particulate and chemical species in the cabin: First organizing question for fire signatures and detection (CP2004.det.q1); no need of this file is about it. The DAFT record (PSI-47) is in the catalogue: its objective field says 'The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME).', and its table is one row per sampling session, which the pipeline does not map.",
     "needed_data": "measurements of this kind in the PSI experimental tables",
     "sources": [
      "pipeline/spec/needs.json#not_covered",
@@ -954,12 +954,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T16:13:43+09:00",
+  "updated": "2026-11-14T16:57:06+09:00",
   "fresh": {
    "ranker_config_version": "1.1.0",
-   "scoring_config_sha256": "141a17d376affc1f08b8e738723606d81e1b0287ab9c493772d713168cd3735c",
+   "scoring_config_sha256": "a0ff182a1e8aed4bfe9824c888f98595179eb697c81bc690391380c828663b3c",
    "catalog_sha256": "9fe40dddc477da61dda4b3ed649b41cf4d09f193a5de6d626db55173d4e0da0b",
-   "scenario_inputs_sha256": "d91a8a6029052e7fca065922e51cf2f8faa158d14449b64b5a2f6c1bdfd59e5e",
+   "scenario_inputs_sha256": "1d66442c4048f48729c5e0b7671152f64d4394f867e98c8d1259e963876ce548",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  },
@@ -967,7 +967,7 @@
   "id": "lunar_habitat",
   "query": "lunar habitat",
   "ranking_source": "scoring.scorer.rank",
-  "frame": "For the Lunar base or pressurized rover scenario, the oxygen and pressure recorded for each test are compared with the team bins (oxygen 30 to 36%, pressure below 85.8 kPa); the bins are the team's choice. A test whose table holds no pressure value, or no oxygen value, is reported apart and is never placed inside a bin. The challenge statement, in the wording the team recorded from it (CH.moonbase): Moon Base and pressurized-rover atmosphere expected between spacesuit and Earth conditions: oxygen likely 30% or more, pressure 10.2 psi or less (10.2 psi = 70.3 kPa). The team's data note on these ranges reads: \"The pressure range of this scenario reaches up to 85.8 kPa, above the 70.3 kPa (10.2 psi) of the challenge statement, so that tests set to 0.7 atm are inside it. Read the recorded pressure of the matched tests in each need block before calling a test 'at or below 10.2 psi'.\" No counted test was recorded at 30% oxygen or more and at or below 10.2 psi; the 17 counted tests inside the bins are fuel-droplet tests recorded 1 to 2 kPa above it, at 30 to 34% oxygen and about 0.7 atm (71 to 72 kPa). Gas-burner flames of PSI-159 (ACME CFI-G) were recorded at 30% oxygen or more and at or below 10.2 psi; they are counted for no need, because the team pipeline links none of the needs to an objective stated for that investigation. A test is counted for a need only if its investigation states that need as an objective, in its PSI record or in a publication of the investigators or of NASA. The team pipeline matched these purpose sentences to the needs; a match is counted only where the publications that were read support it. The matching was done by an AI assistant and has not been reviewed by a person. Inverse-flame tests, whose oxygen value is the burner stream (the gas issuing from the burner, not the surrounding atmosphere), are never matched to a crew atmosphere. Every test in the PSI experimental tables used here is a microgravity test (gravity level set per table by the team from the PSI record); these tables hold no partial-gravity test, and microgravity and 1 g results are not shown here as bounds for lunar or Martian gravity. NASA's fire protection technical brief OCHMO-TB-008 says: \"Material flammability in partial gravity remains a major gap for exploration missions.\" (TB008.gaps). Outside PSI, Table I of a paper on the NASA Technical Reports Server (Olson and Ferkul, NTRS-20130010991) gives limiting oxygen concentrations (the oxygen level below which the flame did not keep burning in the test) for three materials; for each of them, both limits at lunar gravity are lower than those at 1 g and at 0 g. These low-gravity limits come from 5.18 s drop-tower tests, and the paper says their extinction criteria are not the same as in 1 g; the table was read by an AI assistant and not checked by a person (OF2012.table1). Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
+  "frame": "For the Lunar base or pressurized rover scenario, the oxygen and pressure recorded for each test are compared with the team bins (oxygen 30 to 36%, pressure below 85.8 kPa); the bins are the team's choice. A test whose table holds no pressure value, or no oxygen value, is reported apart and is never placed inside a bin. The challenge statement, in the wording the team recorded from it (CH.moonbase): Moon Base and pressurized-rover atmosphere expected between spacesuit and Earth conditions: oxygen likely 30% or more, pressure 10.2 psi or less (10.2 psi = 70.3 kPa). The team's data note on these ranges reads: \"The pressure range of this scenario reaches up to 85.8 kPa, above the 70.3 kPa (10.2 psi) of the challenge statement, so that tests set to 0.7 atm are inside it. The 17 tests counted for a need inside its oxygen and pressure ranges were recorded at 71.2 to 72.4 kPa, above 10.2 psi; the 9 tests inside the ranges recorded at 50.7 kPa are not counted for a need.\" No counted test was recorded at 30% oxygen or more and at or below 10.2 psi; the 17 counted tests inside the bins are fuel-droplet tests recorded 1 to 2 kPa above it, at 30 to 34% oxygen and about 0.7 atm (71 to 72 kPa). Gas-burner flames of PSI-159 (ACME CFI-G) were recorded at 30% oxygen or more and at or below 10.2 psi; they are counted for no need, because the team pipeline links none of the needs to an objective stated for that investigation. A test is counted for a need only if its investigation states that need as an objective, in its PSI record or in a publication of the investigators or of NASA. The team pipeline matched these purpose sentences to the needs; a match is counted only where the publications that were read support it. The matching was done by an AI assistant and has not been reviewed by a person. Inverse-flame tests, whose oxygen value is the burner stream (the gas issuing from the burner, not the surrounding atmosphere), are never matched to a crew atmosphere. Every test in the PSI experimental tables used here is a microgravity test (gravity level set per table by the team from the PSI record); these tables hold no partial-gravity test, and microgravity and 1 g results are not shown here as bounds for lunar or Martian gravity. NASA's fire protection technical brief OCHMO-TB-008 says: \"Material flammability in partial gravity remains a major gap for exploration missions.\" (TB008.gaps). Outside PSI, Table I of a paper on the NASA Technical Reports Server (Olson and Ferkul, NTRS-20130010991) gives limiting oxygen concentrations (the oxygen level below which the flame did not keep burning in the test) for three materials; for each of them, both limits at lunar gravity are lower than those at 1 g and at 0 g. These low-gravity limits come from 5.18 s drop-tower tests, and the paper says their extinction criteria are not the same as in 1 g; the table was read by an AI assistant and not checked by a person (OF2012.table1). Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
   "frame_sources": [
    "pipeline/spec/scenarios.json#lunar_habitat",
    "pipeline/spec/references.json#CH.moonbase",
@@ -1027,7 +1027,12 @@
     70.3,
     10.2,
     0.7,
-    10.2
+    17,
+    71.2,
+    72.4,
+    10.2,
+    9,
+    50.7
    ],
    "tests_not_microgravity": 0,
    "of2012_gravity_level": "lunar",
@@ -1847,7 +1852,7 @@
     "copied_from": "pipeline/spec/needs.json#not_covered"
    },
    {
-    "text": "Background particulate and chemical species in the cabin: First organizing question for fire signatures and detection (CP2004.det.q1); no need of this file covers it. The DAFT record (PSI-47) is in the catalogue: its objective field says 'The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME).', and its table is one row per sampling session, which the pipeline does not map.",
+    "text": "Background particulate and chemical species in the cabin: First organizing question for fire signatures and detection (CP2004.det.q1); no need of this file is about it. The DAFT record (PSI-47) is in the catalogue: its objective field says 'The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME).', and its table is one row per sampling session, which the pipeline does not map.",
     "needed_data": "measurements of this kind in the PSI experimental tables",
     "sources": [
      "pipeline/spec/needs.json#not_covered",
@@ -1950,12 +1955,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T16:13:43+09:00",
+  "updated": "2026-11-14T16:57:06+09:00",
   "fresh": {
    "ranker_config_version": "1.1.0",
-   "scoring_config_sha256": "141a17d376affc1f08b8e738723606d81e1b0287ab9c493772d713168cd3735c",
+   "scoring_config_sha256": "a0ff182a1e8aed4bfe9824c888f98595179eb697c81bc690391380c828663b3c",
    "catalog_sha256": "9fe40dddc477da61dda4b3ed649b41cf4d09f193a5de6d626db55173d4e0da0b",
-   "scenario_inputs_sha256": "d91a8a6029052e7fca065922e51cf2f8faa158d14449b64b5a2f6c1bdfd59e5e",
+   "scenario_inputs_sha256": "1d66442c4048f48729c5e0b7671152f64d4394f867e98c8d1259e963876ce548",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  },
@@ -2749,7 +2754,7 @@
     "copied_from": "pipeline/spec/needs.json#not_covered"
    },
    {
-    "text": "Background particulate and chemical species in the cabin: First organizing question for fire signatures and detection (CP2004.det.q1); no need of this file covers it. The DAFT record (PSI-47) is in the catalogue: its objective field says 'The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME).', and its table is one row per sampling session, which the pipeline does not map.",
+    "text": "Background particulate and chemical species in the cabin: First organizing question for fire signatures and detection (CP2004.det.q1); no need of this file is about it. The DAFT record (PSI-47) is in the catalogue: its objective field says 'The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME).', and its table is one row per sampling session, which the pipeline does not map.",
     "needed_data": "measurements of this kind in the PSI experimental tables",
     "sources": [
      "pipeline/spec/needs.json#not_covered",
@@ -2852,12 +2857,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T16:13:43+09:00",
+  "updated": "2026-11-14T16:57:06+09:00",
   "fresh": {
    "ranker_config_version": "1.1.0",
-   "scoring_config_sha256": "141a17d376affc1f08b8e738723606d81e1b0287ab9c493772d713168cd3735c",
+   "scoring_config_sha256": "a0ff182a1e8aed4bfe9824c888f98595179eb697c81bc690391380c828663b3c",
    "catalog_sha256": "9fe40dddc477da61dda4b3ed649b41cf4d09f193a5de6d626db55173d4e0da0b",
-   "scenario_inputs_sha256": "d91a8a6029052e7fca065922e51cf2f8faa158d14449b64b5a2f6c1bdfd59e5e",
+   "scenario_inputs_sha256": "1d66442c4048f48729c5e0b7671152f64d4394f867e98c8d1259e963876ce548",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  },
@@ -3454,7 +3459,7 @@
     "copied_from": "pipeline/spec/needs.json#not_covered"
    },
    {
-    "text": "Background particulate and chemical species in the cabin: First organizing question for fire signatures and detection (CP2004.det.q1); no need of this file covers it. The DAFT record (PSI-47) is in the catalogue: its objective field says 'The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME).', and its table is one row per sampling session, which the pipeline does not map.",
+    "text": "Background particulate and chemical species in the cabin: First organizing question for fire signatures and detection (CP2004.det.q1); no need of this file is about it. The DAFT record (PSI-47) is in the catalogue: its objective field says 'The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME).', and its table is one row per sampling session, which the pipeline does not map.",
     "needed_data": "measurements of this kind in the PSI experimental tables",
     "sources": [
      "pipeline/spec/needs.json#not_covered",
@@ -3557,12 +3562,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T16:13:43+09:00",
+  "updated": "2026-11-14T16:57:06+09:00",
   "fresh": {
    "ranker_config_version": "1.1.0",
-   "scoring_config_sha256": "141a17d376affc1f08b8e738723606d81e1b0287ab9c493772d713168cd3735c",
+   "scoring_config_sha256": "a0ff182a1e8aed4bfe9824c888f98595179eb697c81bc690391380c828663b3c",
    "catalog_sha256": "9fe40dddc477da61dda4b3ed649b41cf4d09f193a5de6d626db55173d4e0da0b",
-   "scenario_inputs_sha256": "d91a8a6029052e7fca065922e51cf2f8faa158d14449b64b5a2f6c1bdfd59e5e",
+   "scenario_inputs_sha256": "1d66442c4048f48729c5e0b7671152f64d4394f867e98c8d1259e963876ce548",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  }
