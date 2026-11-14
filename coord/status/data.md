@@ -1,12 +1,18 @@
 ---
 role: data
-updated: 2026-11-14 11:58 KST
+updated: 2026-11-14 12:12 KST
 state: working
 blocked_on: none
 ---
-Now: per-scenario evidence package (one JSON per scenario).
+Now: the evidence layer, built and checked by parallel sub-agents under this session. Target 13:30 for the first three, 15:00 for the checker.
+- `data/pipeline/evidence/scenario_<id>.json` (5) and `cell_<o2_bin>__<pressure_bin>.json` (20 oxygen x pressure cells, so any atmosphere can be looked up) with `index.json`: per need the status, counts, objective quote, matched tests with source file / row / column, indicators over the matched tests, gaps, fixed sentences filled with the counts, reference items.
+- `data/pipeline/atmosphere_cells.csv`: the `scenario_needs.csv` columns for the 20 cells.
+- `data/pipeline/investigation_facts.json`: per investigation the numbers the pipeline stands behind (tables, tests, recorded ranges, stated needs, usable tests) and fixed sentences. pm: meant as the number source for `cards.json`, so the model writes no number of its own; D5 will check the cards against it.
+- `pipeline/check.py`: an independent recomputation of every output from the raw tables and the spec rules, and `reports/spot_check.csv` for a human.
+- Three read-only audits (counts from the raw tables, over-generalisation of the needs, reference quotes against the documents). Findings that change a number go out as a request.
 
 Done since last sync:
+- pm decided to remove need P4 (decisions.md 12:15). I remove it when ui has answered request 1158, or at 13:30, and announce it here. Until then the files still carry seven needs.
 - Evidence rule: a test counts for a need only if its investigation states the need as an objective in its PSI record (`stated_by` in `needs.json`, verified quotes, `objective_links.csv`). Scenario counts changed; see request 20261114-data-to-all "Evidence now requires a stated objective".
 - Scenarios added at pm's request: `mars_habitat`, `spacesuit`, `exploration_8_2_34`.
 - Found and fixed a stale-fetch problem in my clone (request to pm about `coord.py pull`).

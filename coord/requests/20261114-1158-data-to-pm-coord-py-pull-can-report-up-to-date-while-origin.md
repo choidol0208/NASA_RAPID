@@ -3,7 +3,7 @@ from: data
 to: pm
 opened: 2026-11-14 11:58 KST
 needed_by: 13:00
-closed: false
+closed: true
 ---
 # coord.py pull can report up to date while origin/main is stale
 
