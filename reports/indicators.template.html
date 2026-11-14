@@ -93,7 +93,7 @@ footer p { max-width: none; }
 <div class="wrap">
   <header>
     <h1>PSI 화재 안전 지표</h1>
-    <p class="lead">NASA PSI 연소 시험 표에서 규칙으로 뽑은 값을, 화재 안전이 알아야 하는 일곱 가지 질문별로 정리한 팀 내부 페이지입니다. 모든 값은 기록된 시험의 개수이거나 기록된 값의 최솟값·중앙값·최댓값입니다.</p>
+    <p class="lead">NASA PSI 연소 시험 표에서 규칙으로 뽑은 값을, 화재 안전이 알아야 하는 여섯 가지 질문별로 정리한 팀 내부 페이지입니다. 모든 값은 기록된 시험의 개수이거나 기록된 값의 최솟값·중앙값·최댓값입니다.</p>
     <div class="note"><p>AI가 만든 페이지이고 사람의 검토 전입니다. 값은 팀의 계산이며 NASA의 결론이 아닙니다. 연구 탐색용이며 안전 지침이 아닙니다. 지표마다 붙은 "읽는 법"이 그 값이 뜻하지 않는 것을 알려 줍니다.</p></div>
     <div class="figs" id="figs"></div>
   </header>
@@ -151,7 +151,7 @@ DATA.needs.forEach(need => {
     const r = s.needs.find(x => x.need_id === need.id); const c = $("td");
     c.append($("span", "state " + r.status, r.status_label));
     const n = r.atmosphere || r.oxygen_only;
-    c.append($("div", "sub", n ? `일치 시험 ${n}건 / 쓸 수 있는 시험 ${r.usable}건` : `쓸 수 있는 시험 ${r.usable}건 중 0건`));
+    c.append($("div", "sub", n ? `일치 시험 ${n}건 / 집계한 시험 ${r.usable}건` : `집계한 시험 ${r.usable}건 중 0건`));
     if (r.inv) c.append($("div", "id", r.inv));
     if (r.gaps.length) c.append($("div", "sub", "빈 곳: " + r.gaps.join(", ")));
     if (r.outside) c.append($("div", "sub", `목적 밖 기록 ${r.outside}건은 세지 않음`));
@@ -214,7 +214,7 @@ function showNeed(id) {
   const need = DATA.needs.find(n => n.id === id);
   [...tabs.children].forEach(b => b.setAttribute("aria-pressed", b.dataset.id === id));
   const headBox = $("div", "needhead");
-  headBox.append($("p", "q", need.question), $("p", "crit", "기준: " + need.criterion));
+  headBox.append($("p", "q", need.question), $("p", "crit", "기준과 읽는 법: " + need.criterion));
   const docs = $("p", "docs"); docs.append(document.createTextNode("근거 문서: "));
   need.docs.forEach((d, i) => {
     if (i) docs.append(document.createTextNode(" · "));
@@ -224,7 +224,7 @@ function showNeed(id) {
   headBox.append($("p", "crit", need.stated.length ? "이 질문을 실험 목적으로 밝힌 PSI 기록 (원문):" : "이 질문을 실험 목적으로 밝힌 PSI 기록이 없습니다. " + need.stated_note));
   if (need.stated.length) { const ul = $("ul", "stated"); need.stated.forEach(s => { const li = $("li"); li.append($("span", "id", s.inv + "  "), document.createTextNode(s.quote)); ul.append(li); }); headBox.append(ul); }
   const parts = [headBox];
-  if (!need.indicators.length) parts.push($("p", "empty", "이 질문은 위의 환경별 비교 표가 지표입니다."));
+  if (!need.indicators.length) parts.push($("p", "empty", "이 질문에는 집계한 시험이 없어 지표가 없습니다."));
   need.indicators.forEach(ind => parts.push(renderIndicator(ind)));
   box.replaceChildren(...parts);
   try { localStorage.setItem("psi-ind-need", id); } catch (e) {}

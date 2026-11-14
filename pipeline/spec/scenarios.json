@@ -14,7 +14,8 @@
   "ids": "Scenario ids and nominal values are the same as the presets in scoring/scoring_config.json (ui role). The engine reports a mismatch in run_report.json.",
   "evidence_rule": "Only tests whose investigation states the need as an objective (needs.json 'stated_by') are counted. tests_recorded_outside_objective counts the other tests that record the needed variables.",
   "added_gas": "Each test is also marked for gases added to the atmosphere: 'none' (carbon dioxide and helium both recorded as 0), 'co2_or_helium' (either above 0), 'not_recorded'. The mark does not change the tier; the number of matched tests with an added gas is reported next to it.",
-  "see_also": "'see_also' points to PSI records or table cells that name the atmosphere of the scenario and are not in the counts (tables that are not one row per test). The engine checks that the quoted sentence or cell is in the source."
+  "see_also": "'see_also' points to PSI records or table cells that name the atmosphere of the scenario and are not in the counts (tables that are not one row per test). The engine checks that the quoted sentence or cell is in the source.",
+  "caveat": "'caveat' is one or two sentences that must be shown wherever the scenario's counts are shown. It is copied into the evidence package and the index."
  },
  "scenarios": [
   {
@@ -46,7 +47,8 @@
     "EAWG.atmospheres",
     "ICES19.issflow"
    ],
-   "note": "Oxygen and pressure ranges are the coverage bins around 21% and 101.3 kPa (coverage.json): 19 to 23% oxygen and 85.8 to below 116.8 kPa. The oxygen range is the +/-2.0 point control box that EAWG.atmospheres recommends around its own nominal atmospheres, used here as a bin; the pressure range is the team's bin and is wider than the +/-0.2 psia box of the same item. No reference item gives an ISS operating range for oxygen or pressure. Flow is the normal ISS ventilation range (ICES19.issflow). The ranges set no balance gas: the count of matched tests with carbon dioxide or helium added to the atmosphere is given next to the tier."
+   "note": "Oxygen and pressure ranges are the coverage bins around 21% and 101.3 kPa (coverage.json): 19 to 23% oxygen and 85.8 to below 116.8 kPa. The oxygen range is the +/-2.0 point control box that EAWG.atmospheres recommends around its own nominal atmospheres, used here as a bin; the pressure range is the team's bin and is wider than the +/-0.2 psia box of the same item. No reference item gives an ISS operating range for oxygen or pressure. Flow is the normal ISS ventilation range (ICES19.issflow). The ranges set no balance gas: the count of matched tests with carbon dioxide or helium added to the atmosphere is given next to the tier.",
+   "caveat": "The ranges set oxygen, pressure and flow only. Matched tests can have carbon dioxide or helium added to the atmosphere; each need block gives the number."
   },
   {
    "id": "lunar_habitat",
@@ -72,9 +74,10 @@
     "EAWG.atmospheres",
     "EA.8.2-34",
     "TB14639.worstcase",
-    "TB008.gaps"
+    "TB008.gaps",
+    "CH.partial_gravity"
    ],
-   "note": "The challenge text gives 30% oxygen or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement, which was read from a copy and not checked on the official page; NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
+   "note": "The challenge text gives oxygen likely 30% or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement (CH.moonbase: oxygen likely 30% or more, pressure 10.2 psi or less; checked on the official page by another session of the team on 2026-11-14); NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
    "see_also": [
     {
      "investigation_id": "PSI-20",
@@ -85,8 +88,8 @@
     {
      "investigation_id": "PSI-20",
      "record_field": "researchImpacts",
-     "quote": "The ongoing combustion without air flow was notably seen in elevated-oxygen atmospheres which are being considered for use in future spacecraft",
-     "note": "A result stated in the PSI record, not a value of a mapped table."
+     "quote": "The ongoing combustion without air flow was notably seen in elevated-oxygen atmospheres which are being considered for use in future spacecraft, whereas such flames in a normal atmosphere of 21% oxygen self-extinguished in a short time.",
+     "note": "A result stated in the PSI record, not a value of a mapped table. The record calls these results preliminary."
     },
     {
      "investigation_id": "PSI-23",
@@ -98,7 +101,8 @@
      },
      "note": "The experimental table of PSI-23 has one row per test day (21 flames on this day, at about 1 atm per the table note), so its flames are not in the counts."
     }
-   ]
+   ],
+   "caveat": "The pressure range of this scenario reaches up to 85.8 kPa, above the 70.3 kPa (10.2 psi) of the challenge statement, so that tests set to 0.7 atm are inside it. Read the recorded pressure of the matched tests in each need block before calling a test 'at or below 10.2 psi'."
   },
   {
    "id": "mars_habitat",
@@ -107,7 +111,8 @@
    "ranges": {},
    "gravity_level": "martian",
    "basis": [
-    "TB008.gaps"
+    "TB008.gaps",
+    "CH.partial_gravity"
    ],
    "note": "The challenge text gives no Mars atmosphere, and the team did not use the working-group recommendation for surface habitats (8.0 psia or 7.6 psia with 32% oxygen, EAWG.atmospheres), so no oxygen or pressure range is set. Only the gravity gap can be reported."
   },
@@ -131,10 +136,11 @@
    },
    "gravity_level": null,
    "basis": [
+    "CH.spacesuit",
     "SMAC.atmospheres",
     "EAWG.atmospheres"
    ],
-   "note": "4.3 psia (29.6 kPa), 100% oxygen. These two values are not in the cited reference items (SMAC.atmospheres lists 14.7, 10.2 and 8.2 psia; EAWG.atmospheres lists cabin atmospheres), so they have no checked source in references.json. The oxygen range 95 to 100% and the pressure bin below 62.8 kPa are the team's choice: any recorded pressure below 62.8 kPa is inside the range. No gravity level is set."
+   "note": "4.3 psi (29.6 kPa), 100% oxygen, as given in the challenge statement (CH.spacesuit). The oxygen range 95 to 100% and the pressure bin below 62.8 kPa are the team's choice: any recorded pressure below 62.8 kPa is inside the range. No gravity level is set."
   },
   {
    "id": "exploration_8_2_34",
@@ -171,8 +177,8 @@
     {
      "investigation_id": "PSI-20",
      "record_field": "researchImpacts",
-     "quote": "The ongoing combustion without air flow was notably seen in elevated-oxygen atmospheres which are being considered for use in future spacecraft",
-     "note": "A result stated in the PSI record, not a value of a mapped table."
+     "quote": "The ongoing combustion without air flow was notably seen in elevated-oxygen atmospheres which are being considered for use in future spacecraft, whereas such flames in a normal atmosphere of 21% oxygen self-extinguished in a short time.",
+     "note": "A result stated in the PSI record, not a value of a mapped table. The record calls these results preliminary."
     }
    ]
   },

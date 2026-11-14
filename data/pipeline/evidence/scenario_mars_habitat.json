@@ -26,11 +26,24 @@
     "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
     "access": "full_text_read",
     "quote": "Material flammability in partial gravity remains a major gap for exploration missions."
+   },
+   {
+    "item_id": "CH.partial_gravity",
+    "type": "knowledge_gap",
+    "text": "PSI holds no partial-gravity combustion data yet; the page names LUCI as a future source.",
+    "where": "Potential considerations: Partial-gravity data",
+    "title": "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
+    "version": "2026",
+    "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/",
+    "access": "read_by_teammate",
+    "quote": null
    }
   ],
   "note": "The challenge text gives no Mars atmosphere, and the team did not use the working-group recommendation for surface habitats (8.0 psia or 7.6 psia with 32% oxygen, EAWG.atmospheres), so no oxygen or pressure range is set. Only the gravity gap can be reported.",
+  "caveat": null,
   "see_also": [],
-  "recorded_tests": []
+  "recorded_tests": [],
+  "statements": []
  },
  "needs": [
   {
@@ -53,11 +66,26 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [
     {
      "source_id": "bass2",
      "investigation_id": "PSI-25",
      "variable": "pressure_kpa",
+     "variable_label": "pressure",
      "quote": "Pressure was not varied from 1 atmosphere.",
      "said_in": "ICES19.pressure"
     },
@@ -65,14 +93,16 @@
      "source_id": "saffire1",
      "investigation_id": "PSI-98",
      "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
+     "variable_label": "pressure",
+     "quote": "solid state sensors were used to measure pressure",
      "said_in": "PSI-98.approach"
     },
     {
      "source_id": "saffire2",
      "investigation_id": "PSI-99",
      "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
+     "variable_label": "pressure",
+     "quote": "solid state sensors were used to measure pressure",
      "said_in": "PSI-99.approach"
     }
    ],
@@ -190,19 +220,19 @@
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-25 holds no value of pressure_kpa; ICES19.pressure says \"Pressure was not varied from 1 atmosphere.\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-25 holds no pressure. A NASA record or a paper of the investigators says: \"Pressure was not varied from 1 atmosphere.\" (source: ICES19.pressure). The sentence is not used as a value of any test.",
      "source_id": "bass2",
      "variable": "pressure_kpa"
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-98 holds no value of pressure_kpa; PSI-98.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-98 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-98.approach). The sentence is not used as a value of any test.",
      "source_id": "saffire1",
      "variable": "pressure_kpa"
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-99 holds no value of pressure_kpa; PSI-99.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-99 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-99.approach). The sentence is not used as a value of any test.",
      "source_id": "saffire2",
      "variable": "pressure_kpa"
     }
@@ -406,6 +436,20 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [],
    "objective": [
     {
@@ -437,7 +481,7 @@
    "gaps": [
     {
      "code": "need:no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "statements": [
@@ -455,7 +499,7 @@
     },
     {
      "id": "gap.need.no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "references": [
@@ -514,19 +558,35 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [
     {
      "source_id": "saffire1",
      "investigation_id": "PSI-98",
      "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
+     "variable_label": "pressure",
+     "quote": "solid state sensors were used to measure pressure",
      "said_in": "PSI-98.approach"
     },
     {
      "source_id": "saffire2",
      "investigation_id": "PSI-99",
      "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
+     "variable_label": "pressure",
+     "quote": "solid state sensors were used to measure pressure",
      "said_in": "PSI-99.approach"
     }
    ],
@@ -625,13 +685,13 @@
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-98 holds no value of pressure_kpa; PSI-98.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-98 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-98.approach). The sentence is not used as a value of any test.",
      "source_id": "saffire1",
      "variable": "pressure_kpa"
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-99 holds no value of pressure_kpa; PSI-99.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-99 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-99.approach). The sentence is not used as a value of any test.",
      "source_id": "saffire2",
      "variable": "pressure_kpa"
     }
@@ -703,11 +763,26 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [
     {
      "source_id": "bass2",
      "investigation_id": "PSI-25",
      "variable": "pressure_kpa",
+     "variable_label": "pressure",
      "quote": "Pressure was not varied from 1 atmosphere.",
      "said_in": "ICES19.pressure"
     }
@@ -841,7 +916,7 @@
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-25 holds no value of pressure_kpa; ICES19.pressure says \"Pressure was not varied from 1 atmosphere.\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-25 holds no pressure. A NASA record or a paper of the investigators says: \"Pressure was not varied from 1 atmosphere.\" (source: ICES19.pressure). The sentence is not used as a value of any test.",
      "source_id": "bass2",
      "variable": "pressure_kpa"
     }
@@ -990,6 +1065,20 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [],
    "objective": [],
    "investigations": [],
@@ -1015,7 +1104,7 @@
    "gaps": [
     {
      "code": "need:no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "statements": [
@@ -1037,7 +1126,7 @@
     },
     {
      "id": "gap.need.no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "references": [
@@ -1151,22 +1240,21 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
-   "documented_elsewhere": [
-    {
-     "source_id": "same",
-     "investigation_id": "PSI-102",
-     "variable": "o2_pct",
-     "quote": "The crew installed the near field hardware in the Glovebox",
-     "said_in": "PSI-102.approach"
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
     },
-    {
-     "source_id": "same",
-     "investigation_id": "PSI-102",
-     "variable": "pressure_kpa",
-     "quote": "The crew installed the near field hardware in the Glovebox",
-     "said_in": "PSI-102.approach"
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
     }
-   ],
+   },
+   "documented_elsewhere": [],
    "objective": [
     {
      "investigation_id": "PSI-102",
@@ -1240,18 +1328,6 @@
     {
      "id": "gap.gravity.no_usable_test_at_level",
      "text": "Gravity gap: none of the 4 tests counted for this need is recorded at the gravity level of this environment (martian)."
-    },
-    {
-     "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-102 holds no value of o2_pct; PSI-102.approach says \"The crew installed the near field hardware in the Glovebox\" (a sentence of a document, not a value of any test).",
-     "source_id": "same",
-     "variable": "o2_pct"
-    },
-    {
-     "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-102 holds no value of pressure_kpa; PSI-102.approach says \"The crew installed the near field hardware in the Glovebox\" (a sentence of a document, not a value of any test).",
-     "source_id": "same",
-     "variable": "pressure_kpa"
     }
    ],
    "references": [

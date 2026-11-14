@@ -1,10 +1,10 @@
 ---
 role: data
-updated: 2026-11-14 12:44 KST
+updated: 2026-11-14 13:28 KST
 state: working
 blocked_on: none
 ---
-Now: two reference items for pm (Saffire IV to VI conditions, Olson and Ferkul Table I), being checked cell by cell against the PDFs (14:00); last pass of the independent checker; then D5 when `ai/review/review_sheet.csv` lands.
+Now: waiting for D5 (`ai/review/review_sheet.csv`, about 15:40). The evidence layer is complete and checked; see request 20261114-1328 about the lunar-habitat pressure.
 
 Done since last sync (details and before/after numbers: request 20261114-1242-data-to-all "Audit fixes"):
 - Evidence layer is on `data-pipeline` (commit `a454a92` and later): `data/pipeline/evidence/` (6 scenarios, 20 oxygen x pressure cells, `index.json`), `atmosphere_cells.csv`, `investigation_facts.json`, `pipeline/check.py` with `validation_report.json`.
@@ -12,19 +12,27 @@ Done since last sync (details and before/after numbers: request 20261114-1242-da
 - Need P4 removed (pm's decision). Six needs. 1,824 test rows (was 1,867).
 - Objective links use the `objective` field of the PSI record only. Each need has a `reading`: what a counted test records and what the count does not mean.
 - New: scenario `exploration_10_2_26_5`; `added_gas` mark; gap codes `flow:not_recorded`, `flow:no_usable_test_in_range`; `see_also` pointers from scenarios to PSI-20 and PSI-23 (records and cells that name exploration atmospheres and are not in the counts); `documented_elsewhere` sentences (for example BASS-II: "Pressure was not varied from 1 atmosphere.", from the investigators' paper, shown next to the pressure gap and never used as a value).
-- Checker: 41 of 42 checks pass. The open one lists values that are not literally in a NASA cell (87 material names from the BASS-II ReadMe, 3 oxygen midpoints, 2 materials from the row above); all are flagged on the test and listed in `pipeline/README.md`.
+- Checker: 43 of 43 checks pass (`python3 pipeline/check.py`). Values that are not literally in a NASA cell (87 material names from the BASS-II ReadMe, 3 oxygen midpoints, 2 materials from the row above) pass only because each carries its flag; they are listed in `pipeline/README.md`.
+- pm's two reference items are in `references.json`: `SAF456.conditions` (ICES-2024-365, Table 1) and `OF2012.table1` (Olson and Ferkul 2012, Table I), both read cell by cell from the PDFs. See the answer to request 1224.
+- Wording pass over the remaining audit findings (commit `d9f5846`): `label`, `reading`, `note` and `_meta` texts only; no id, range, link or number changed, and `tests.csv`, `values_long.csv`, `need_tests.csv`, `scenario_needs.csv`, `scenario_tests.csv`, `coverage_grid.csv`, `capability_matrix.csv` are byte-identical to the previous commit. `indicators.csv` and the packages changed in their text columns.
+- Indicator `P1.lowest_flow_listed_at_extinction` removed (12 of its 14 values came from cells that say the flow went lower than the number written). 18 indicators now.
+- Acceptance review by a reviewer that was not involved (commit `eb0a8da` holds the fixes): reproduction byte for byte, 49 values traced to the raw cells with none wrong, 12 mutations all caught by the checker. Its main finding: the 17 lunar-habitat tests are recorded at 71.2 to 72.4 kPa, above the 70.3 kPa of the challenge bound (request 1328). Also fixed: five implausible BASS-II final-oxygen readings emptied and flagged, shorter package sentences, a `caveat` per scenario, the status sentence in `index.json`.
 - Agreed with pm: `scenario_needs.csv`, `scenario_tests.csv`, `need_tests.csv` frozen at 17:30.
 
 Next: D5 (my half of the review sheet, verdicts by 18:15); D6 final pass on `compliance/SOURCES.md` (21:00); `reports/spot_check.csv` for a human.
 
-Still not verified, for the human review: the challenge statement was read from a copy (the official page is not reachable from this session), so the lunar-habitat bound of 30% oxygen and 10.2 psi is unchecked; the needs, their readings and the objective links are an AI draft not seen by a combustion specialist.
+Counts pm asked for (after the 43 repeated or non-test rows were left out): tests with a recorded oxygen of the surrounding atmosphere (`o2_basis = ambient`): 879 = solid 140, liquid 353, gas 386. (Liquid was 361 before; 8 CFI rows repeated earlier rows.) A further 263 gas tests record the oxygen of an oxidizer stream, not of the atmosphere.
+
+Challenge statement: ui checked it on the official page (request 1305); `CHALLENGE-2026` now has the official URL and title, `CH.moonbase` says "oxygen likely 30% or more", and there are new items `CH.spacesuit`, `CH.partial_gravity`, `CH.hardware`. `access` is `read_by_teammate`.
+
+Still open for the human review: the needs, their readings and the objective links are an AI draft not seen by a combustion specialist; whether pressure should be required for P1 (all 136 counted tests have no pressure in the table); whether the SAME "weight loss rate" is a result or a setting (it is the only outcome behind the 4 counted D2 tests); the three oxygen midpoints.
 
 Published for others (all written by `python3 pipeline/run.py`; shapes below are stable, I will only add columns):
 - NEW `data/pipeline/evidence/index.json`, `scenario_<id>.json`, `cell_<o2_bin>__<pressure_bin>.json` — shape in `pipeline/README.md` "Evidence packages". Per need: `status`, `counts`, `reading`, `objective`, `investigations`, `matched_tests` (values with unit and source column, source file and row), `matched_by_fuel_phase`, `usable_elsewhere`, `documented_elsewhere`, `indicators`, `gaps`, `statements`, `references`. Field names stable; fields may be added.
 - NEW `data/pipeline/atmosphere_cells.csv` — 120 rows (20 cells x 6 needs), the columns of `scenario_needs.csv` plus `o2_bin`, `pressure_bin`. To look up any atmosphere: find the oxygen and pressure bin in `pipeline/spec/coverage.json`, then read the row or the cell package. Counts with tier `oxygen_only` repeat across the pressure bins of an oxygen bin and must not be summed.
 - NEW `data/pipeline/investigation_facts.json` — 24 entries: `tables`, `tests`, `variables` (n, min, max or value counts), `stated_needs`, `capability` (with `counted_tests` and `recorded_outside_objective`), `flags`, `statements`.
 - NEW `data/pipeline/validation_report.json` — result of `python3 pipeline/check.py`.
-- Row counts now: `values_long.csv` 18,450; `capability_matrix.csv` 132; `need_tests.csv` 848; `scenario_needs.csv` 36 (6 scenarios x 6 needs); `scenario_tests.csv` 10,944; `indicators.csv` 171 (19 indicators); `objective_links.csv` 23.
+- Row counts now: `values_long.csv` 18,450; `capability_matrix.csv` 132; `need_tests.csv` 848; `scenario_needs.csv` 36 (6 scenarios x 6 needs); `scenario_tests.csv` 10,944; `indicators.csv` 165 (18 indicators); `objective_links.csv` 23.
 - `data/pipeline/tests.csv` — 1,824 rows, one per test. Stable: `test_id`, `investigation_id`, `source_id`, every variable name in `pipeline/spec/variables.json` (36 standard including the new `material_id`, 5 derived), `flags`, `source_file`, `source_row`.
 - `data/pipeline/values_long.csv` — 18,741 rows, one per value: `test_id`, `investigation_id`, `variable`, `kind`, `value`, `unit`, `source_file`, `source_row`, `source_column`. Stable.
 - `data/pipeline/capability_matrix.csv` — 154 rows (7 needs x 22 tables): `need_id`, `pillar`, `need`, `investigation_id`, `source_id`, `row_unit`, `status`, `tests`, `tests_with_required_conditions`, `tests_with_outcome`, `usable_tests`, `required_missing`, `outcomes_present`, `note`. Status values: `measured`, `partial`, `conditions_only`, `none`, `out_of_scope`, `not_test_level`. Stable.

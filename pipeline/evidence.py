@@ -108,7 +108,8 @@ class Statements:
         if section in self.checked:
             return
         self.checked.add(section)
-        documented = dict(self.spec["fields"]["need"])
+        documented = {} if section in self.spec.get("sections_without_need_fields", []) \
+            else dict(self.spec["fields"]["need"])
         documented.update(self.spec["fields"].get(section, {}))
         if set(documented) != set(fields):
             self.stop(f"'fields' of section '{section}' differ from the block: "
@@ -253,7 +254,9 @@ class Builder:
                 if d["quote"] not in text:
                     raise SystemExit(f"sources.json {s['id']}: sentence not found in {said_in}: {d['quote'][:60]}")
                 out.append({"source_id": s["id"], "investigation_id": s["investigation_id"],
-                            "variable": d["variable"], "quote": d["quote"], "said_in": said_in})
+                            "variable": d["variable"],
+                            "variable_label": self.texts["labels"].get(d["variable"], d["variable"]),
+                            "quote": d["quote"], "said_in": said_in})
         return out
 
     def see_also(self, env):
@@ -283,9 +286,28 @@ class Builder:
             if tier in MATCHED:
                 key = (t["investigation_id"], plain(t.get("fuel_phase")) or self.texts["phase_not_recorded"])
                 cells.setdefault(key, {x: 0 for x in MATCHED})[tier] += 1
-        return [{"investigation_id": inv, "title": self.title(inv), "fuel_phase": phase, **counts}
+        counted = {}
+        for need in self.needs:
+            for i in self.usable.get(need["id"], set()):
+                t = self.by_id[i]
+                if marks[i]["tier"] in MATCHED:
+                    key = (t["investigation_id"],
+                           plain(t.get("fuel_phase")) or self.texts["phase_not_recorded"])
+                    counted.setdefault(key, [])
+                    if need["id"] not in counted[key]:
+                        counted[key].append(need["id"])
+        rows = [{"investigation_id": inv, "title": self.title(inv), "fuel_phase": phase, **counts,
+                 "counted_for": counted.get((inv, phase), [])}
                 for (inv, phase), counts in sorted(cells.items(),
                                                    key=lambda kv: (inv_number(kv[0][0]), kv[0][1]))]
+        sentences = []
+        for row in rows:
+            fields = {**row, "counted_for_n": len(row["counted_for"])}
+            s = self.statements.render("environment", fields, f"recorded tests of {row['investigation_id']}",
+                                       exactly_one=True)
+            sentences.append({**s[0], "investigation_id": row["investigation_id"],
+                              "fuel_phase": row["fuel_phase"]})
+        return rows, sentences
 
     def environment(self, env):
         out = {"id": env["id"], "kind": env["kind"], "label": env["label"]}
@@ -296,6 +318,7 @@ class Builder:
         out["gravity_level"] = env["gravity_level"]
         out["basis"] = self.references(env.get("basis", []), f"environment {env['id']}")
         out["note"] = env.get("note", "")
+        out["caveat"] = env.get("caveat")
         out["see_also"] = self.see_also(env)
         return out
 
@@ -345,7 +368,8 @@ class Builder:
         if not m:
             raise SystemExit(f"indicator {entry['indicator_id']}: group not readable: {entry['group']}")
         return t["group_join"].join(
-            self.statements.fill(t["group_item"], {"name": n, "value": v or t["group_value_empty"]},
+            self.statements.fill(t["group_item"], {"name": self.texts["labels"].get(n, n),
+                                                   "value": v or t["group_value_empty"]},
                                  "indicator_text.group_item")
             for n, v in zip(names, m.groups()))
 
@@ -393,6 +417,15 @@ class Builder:
             not self.engine.empty(t.get("o2_pct")) and t.get("o2_basis") != "ambient" for t in rest)
         elsewhere["investigation_ids"] = sorted({t["investigation_id"] for t in rest}, key=inv_number)
 
+        matched_ranges = {}
+        for var in ("o2_pct", "pressure_kpa"):
+            recorded = [plain(self.by_id[m["test_id"]][var]) for m in matched
+                        if not self.engine.empty(self.by_id[m["test_id"]].get(var))
+                        and (var != "o2_pct" or self.by_id[m["test_id"]].get("o2_basis") == "ambient")]
+            matched_ranges[var] = {"recorded": len(recorded),
+                                   "min": min(recorded) if recorded else None,
+                                   "max": max(recorded) if recorded else None,
+                                   "unit": self.units[var]}
         phases = {}
         for t in matched:
             phases[t["fuel_phase"] or self.texts["phase_not_recorded"]] = \
@@ -403,6 +436,7 @@ class Builder:
                  "reading": need.get("reading"), "note": need.get("note"),
                  "status": row["status"], "counts": counts,
                  "matched_by_fuel_phase": dict(sorted(phases.items())),
+                 "matched_ranges": matched_ranges,
                  "documented_elsewhere": documented,
                  "objective": self.objective.get(need["id"], []),
                  "investigations": sorted(investigations.values(),
@@ -425,6 +459,9 @@ class Builder:
             for k in ("recorded", "min", "max", "unit"):
                 fields[f"elsewhere_{short}_{k}"] = elsewhere[var][k]
         fields["elsewhere_o2_not_ambient"] = elsewhere["o2_pct"]["not_ambient"]
+        for var, short in (("o2_pct", "o2"), ("pressure_kpa", "pressure")):
+            for k in ("recorded", "min", "max", "unit"):
+                fields[f"matched_{short}_{k}"] = matched_ranges[var][k]
         fields["need_reading"] = need.get("reading")
         fields["need_note"] = need.get("note")
         fields["matched_fuel_phases"] = [f"{k} {v}" for k, v in sorted(phases.items())]
@@ -474,7 +511,7 @@ class Builder:
 
     def package(self, env, rows, marks):
         env_out = self.environment(env)
-        env_out["recorded_tests"] = self.recorded_tests(marks)
+        env_out["recorded_tests"], env_out["statements"] = self.recorded_tests(marks)
         indicators = self.indicator_entries(marks)
         return {"_meta": self.texts["package_meta"], "environment": env_out,
                 "needs": [self.need_block(env, env_out, need, rows[need["id"]], marks,
@@ -543,7 +580,10 @@ def write(engine, tests, links, obj_links, needs, var_spec, scenario_rows, scena
         e = package["environment"]
         index.append({"id": e["id"], "kind": e["kind"], "label": e["label"], "file": env["file"],
                       "ranges": e["ranges"], "gravity_level": e["gravity_level"],
-                      "status_by_need": {n["need_id"]: n["status"] for n in package["needs"]}})
+                      "caveat": e["caveat"],
+                      "status_by_need": {n["need_id"]: n["status"] for n in package["needs"]},
+                      "status_text_by_need": {n["need_id"]: n["statements"][0]["text"]
+                                              for n in package["needs"]}})
     dump({"_meta": b.texts["index_meta"], "packages": index}, os.path.join(folder, "index.json"))
     # a package of an environment that is no longer in the specs is removed
     keep = {e["file"] for e in index} | {"index.json"}
