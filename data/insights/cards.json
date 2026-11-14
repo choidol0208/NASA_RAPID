@@ -23,7 +23,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-10.hypothesis",
    "PSI-10.researchImpacts"
@@ -251,7 +251,7 @@
   },
   "license_note": "Licence: not stated in the PSI record.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -275,18 +275,18 @@
     "source": "PSI-20.hypothesis"
    },
    {
-    "text": "Planned approach: \"To accomplish the above objectives, flight experiments are proposed.\"",
-    "source": "PSI-20.approach"
-   },
-   {
     "text": "Impact statement in the record: \"BRE yielded important data relevant to spacecraft fire safety.\"",
     "source": "PSI-20.researchImpacts"
+   },
+   {
+    "text": "Stated objective: \"Observe burning behavior in long-duration microgravity for CH4/N2 and C2H4/N2mixtures on porous circular burners of 25 and 50 mm diameter.\"",
+    "source": "PSI-20.objective"
    }
   ],
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-20.objective",
    "PSI-20.hypothesis"
@@ -435,18 +435,18 @@
    {
     "role": "key_point",
     "origin": "quote",
-    "text": "To accomplish the above objectives, flight experiments are proposed.",
-    "field_label": "Planned approach:",
-    "source": "PSI-20.approach",
+    "text": "BRE yielded important data relevant to spacecraft fire safety.",
+    "field_label": "Impact statement in the record:",
+    "source": "PSI-20.researchImpacts",
     "char_start": 0,
-    "char_end": 68,
+    "char_end": 62,
     "evidence": [
      {
-      "id": "APP-1",
-      "source": "PSI-20.approach",
-      "quote": "To accomplish the above objectives, flight experiments are proposed.",
+      "id": "IMP-1",
+      "source": "PSI-20.researchImpacts",
+      "quote": "BRE yielded important data relevant to spacecraft fire safety.",
       "char_start": 0,
-      "char_end": 68
+      "char_end": 62
      }
     ],
     "checks": {
@@ -460,18 +460,18 @@
    {
     "role": "key_point",
     "origin": "quote",
-    "text": "BRE yielded important data relevant to spacecraft fire safety.",
-    "field_label": "Impact statement in the record:",
-    "source": "PSI-20.researchImpacts",
-    "char_start": 0,
-    "char_end": 62,
+    "text": "Observe burning behavior in long-duration microgravity for CH4/N2 and C2H4/N2mixtures on porous circular burners of 25 and 50 mm diameter.",
+    "field_label": "Stated objective:",
+    "source": "PSI-20.objective",
+    "char_start": 186,
+    "char_end": 325,
     "evidence": [
      {
-      "id": "IMP-1",
-      "source": "PSI-20.researchImpacts",
-      "quote": "BRE yielded important data relevant to spacecraft fire safety.",
-      "char_start": 0,
-      "char_end": 62
+      "id": "OBJ-3",
+      "source": "PSI-20.objective",
+      "quote": "Observe burning behavior in long-duration microgravity for CH4/N2 and C2H4/N2mixtures on porous circular burners of 25  and 50 mm diameter.",
+      "char_start": 186,
+      "char_end": 325
      }
     ],
     "checks": {
@@ -505,7 +505,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -514,19 +514,29 @@
    }
   },
   "record_title": "Advanced Combustion via Microgravity Experiments - Burning Rate Emulator",
-  "dataset_doi": "10.60555/vb93-3y72"
+  "dataset_doi": "10.60555/vb93-3y72",
+  "hidden_by_review": [
+   {
+    "item": "card:PSI-20:key_point:PSI-20.approach:APP-1",
+    "role": "key_point",
+    "source": "PSI-20.approach",
+    "unit_ids": [
+     "APP-1"
+    ],
+    "verdict": "not_relevant",
+    "reviewer_kind": "ai_session",
+    "reviewer_role": "data",
+    "replaced_by": null
+   }
+  ]
  },
  {
   "investigation_id": "PSI-21",
   "summary": "The record states that a goal of the study is to apply sophisticated numerical tools and quantitative diagnostic techniques to hydrocarbon diffusion flames in a microgravity environment. (PSI-21 record: researchImpacts)",
   "key_points": [
    {
-    "text": "Impact statement in the record: \"A goal of the study will be to apply sophisticated numerical tools and quantitative diagnostic techniques to the study of hydrocarbon diffusion flames in a microgravity environment.\"",
+    "text": "Impact statement in the record: \"Diffusion flames are the flame type of most practical combustion devices.\"",
     "source": "PSI-21.researchImpacts"
-   },
-   {
-    "text": "Planned approach: \"ACME CLD Flame project goals include the generation of improved computational models with improved soot sub-models that are effective for both dilute flames and sooting flames that vary from low to high soot loading levels.\"",
-    "source": "PSI-21.approach"
    },
    {
     "text": "Stated objective: \"In order to provide the experimental data needed to allow rigorous testing of computational models at the extremes of the fuel dilution spectrum, we have the following objectives: A) Characterize the behavior of weak coflow diffusion flames of methane and ethylene, as a function of velocity and fuel dilution, through measurement of flame shape, lift-off heights, temperatures and extinction limits.\"",
@@ -540,7 +550,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-21.researchImpacts"
   ],
@@ -594,43 +604,18 @@
    {
     "role": "key_point",
     "origin": "quote",
-    "text": "A goal of the study will be to apply sophisticated numerical tools and quantitative diagnostic techniques to the study of hydrocarbon diffusion flames in a microgravity environment.",
+    "text": "Diffusion flames are the flame type of most practical combustion devices.",
     "field_label": "Impact statement in the record:",
     "source": "PSI-21.researchImpacts",
-    "char_start": 878,
-    "char_end": 1059,
-    "evidence": [
-     {
-      "id": "IMP-6",
-      "source": "PSI-21.researchImpacts",
-      "quote": "A goal of the study will be to apply sophisticated numerical tools and quantitative diagnostic techniques to the study of hydrocarbon diffusion flames in a microgravity environment.",
-      "char_start": 878,
-      "char_end": 1059
-     }
-    ],
-    "checks": {
-     "verbatim_span": true,
-     "whitespace": "runs of spaces and line breaks shown as one space"
-    },
-    "lexical_support": 1.0,
-    "shared_with": [],
-    "review": null
-   },
-   {
-    "role": "key_point",
-    "origin": "quote",
-    "text": "ACME CLD Flame project goals include the generation of improved computational models with improved soot sub-models that are effective for both dilute flames and sooting flames that vary from low to high soot loading levels.",
-    "field_label": "Planned approach:",
-    "source": "PSI-21.approach",
     "char_start": 0,
-    "char_end": 223,
+    "char_end": 73,
     "evidence": [
      {
-      "id": "APP-1",
-      "source": "PSI-21.approach",
-      "quote": "ACME CLD Flame project goals include the generation of improved computational models with improved soot sub-models that are effective for both dilute flames and sooting flames that vary from low to high soot loading levels.",
+      "id": "IMP-1",
+      "source": "PSI-21.researchImpacts",
+      "quote": "Diffusion flames are the flame type of most practical combustion devices.",
       "char_start": 0,
-      "char_end": 223
+      "char_end": 73
      }
     ],
     "checks": {
@@ -721,7 +706,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -729,7 +714,33 @@
    }
   },
   "record_title": "Advanced Combustion via Microgravity Experiments / Coflow Laminar Diffusion Flame",
-  "dataset_doi": "10.60555/23e1-9950"
+  "dataset_doi": "10.60555/23e1-9950",
+  "hidden_by_review": [
+   {
+    "item": "card:PSI-21:key_point:PSI-21.researchImpacts:IMP-6",
+    "role": "key_point",
+    "source": "PSI-21.researchImpacts",
+    "unit_ids": [
+     "IMP-6"
+    ],
+    "verdict": "not_relevant",
+    "reviewer_kind": "ai_session",
+    "reviewer_role": "data",
+    "replaced_by": null
+   },
+   {
+    "item": "card:PSI-21:key_point:PSI-21.approach:APP-1",
+    "role": "key_point",
+    "source": "PSI-21.approach",
+    "unit_ids": [
+     "APP-1"
+    ],
+    "verdict": "not_relevant",
+    "reviewer_kind": "ai_session",
+    "reviewer_role": "data",
+    "replaced_by": null
+   }
+  ]
  },
  {
   "investigation_id": "PSI-22",
@@ -751,7 +762,7 @@
   "ai_generated": false,
   "model": "none: verbatim NASA text chosen by team code",
   "reviewed_by": null,
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-22.objective"
   ],
@@ -881,10 +892,6 @@
     "source": "PSI-23.approach"
    },
    {
-    "text": "Stated hypothesis: \"The transient numerical simulation of spherical flames developed as part of this program includes detailed chemistry and transport models, especially radiation mechanisms.\"",
-    "source": "PSI-23.hypothesis"
-   },
-   {
     "text": "Impact statement in the record: \"The impact of this work consists of both practical and fundamental aspects.\"",
     "source": "PSI-23.researchImpacts"
    }
@@ -892,7 +899,7 @@
   "ai_generated": false,
   "model": "none: verbatim NASA text chosen by team code",
   "reviewed_by": null,
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-23.objective"
   ],
@@ -952,31 +959,6 @@
    {
     "role": "key_point",
     "origin": "quote",
-    "text": "The transient numerical simulation of spherical flames developed as part of this program includes detailed chemistry and transport models, especially radiation mechanisms.",
-    "field_label": "Stated hypothesis:",
-    "source": "PSI-23.hypothesis",
-    "char_start": 0,
-    "char_end": 171,
-    "evidence": [
-     {
-      "id": "HYP-1",
-      "source": "PSI-23.hypothesis",
-      "quote": "The transient numerical simulation of spherical flames developed as part of this program includes detailed chemistry and transport models, especially radiation mechanisms.",
-      "char_start": 0,
-      "char_end": 171
-     }
-    ],
-    "checks": {
-     "verbatim_span": true,
-     "whitespace": "runs of spaces and line breaks shown as one space"
-    },
-    "lexical_support": 1.0,
-    "shared_with": [],
-    "review": null
-   },
-   {
-    "role": "key_point",
-    "origin": "quote",
     "text": "The impact of this work consists of both practical and fundamental aspects.",
     "field_label": "Impact statement in the record:",
     "source": "PSI-23.researchImpacts",
@@ -1011,7 +993,21 @@
    "researchImpacts": "first quotable unit"
   },
   "record_title": "Advanced Combustion via Microgravity Experiments-Structure and Response of Spherical Diffusion Flames",
-  "dataset_doi": "10.60555/k57n-p030"
+  "dataset_doi": "10.60555/k57n-p030",
+  "hidden_by_review": [
+   {
+    "item": "card:PSI-23:key_point:PSI-23.hypothesis:HYP-1",
+    "role": "key_point",
+    "source": "PSI-23.hypothesis",
+    "unit_ids": [
+     "HYP-1"
+    ],
+    "verdict": "not_relevant",
+    "reviewer_kind": "ai_session",
+    "reviewer_role": "data",
+    "replaced_by": null
+   }
+  ]
  },
  {
   "investigation_id": "PSI-25",
@@ -1037,7 +1033,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-25.hypothesis",
    "PSI-25.researchImpacts"
@@ -1263,7 +1259,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit that names the objective",
     "approach": "first quotable unit",
@@ -1291,14 +1287,14 @@
     "source": "PSI-26.approach"
    },
    {
-    "text": "Stated objective: \"The relation between these can be investigated by observing flames burning for the longer times available in flight.\"",
+    "text": "Stated objective: \"Assess the effectiveness of an inert, gaseous extinguishing agent (similar to that used on ISS) in putting out flames over different materials, geometries, preheating, and flow.\"",
     "source": "PSI-26.objective"
    }
   ],
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-26.objective",
    "PSI-26.hypothesis",
@@ -1513,18 +1509,18 @@
    {
     "role": "key_point",
     "origin": "quote",
-    "text": "The relation between these can be investigated by observing flames burning for the longer times available in flight.",
+    "text": "Assess the effectiveness of an inert, gaseous extinguishing agent (similar to that used on ISS) in putting out flames over different materials, geometries, preheating, and flow.",
     "field_label": "Stated objective:",
     "source": "PSI-26.objective",
-    "char_start": 212,
-    "char_end": 328,
+    "char_start": 583,
+    "char_end": 760,
     "evidence": [
      {
-      "id": "OBJ-3",
+      "id": "OBJ-5",
       "source": "PSI-26.objective",
-      "quote": "The relation between these can be investigated by observing flames burning for the longer times available in flight.",
-      "char_start": 212,
-      "char_end": 328
+      "quote": "Assess the effectiveness of an inert, gaseous extinguishing agent (similar to that used on ISS) in putting out flames over different materials, geometries, preheating, and flow.",
+      "char_start": 583,
+      "char_end": 760
      }
     ],
     "checks": {
@@ -1558,7 +1554,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -1575,6 +1571,20 @@
     "reason": "Stronger than the record, and wrong in number. The first objective in the record is to 'Begin to bridge the gap between the normal gravity NASA-STD-6001 Test#1 method, ground-based microgravity tests, and actual material flammability in microgravity' (OBJ-2). The sentence drops 'Begin to' and names two of the three things, so the aim reads as bridging the gap outright. The second objective is to 'Assess the effectiveness of an inert, gaseous extinguishing agent (similar to that used on ISS)' (OBJ-5): one agent. The sentence says 'agents', as if several were assessed. Removed; the slot shows the quoted NASA sentence.",
     "reviewer_kind": "ai_session_pm",
     "replaced_by": "PSI-26.objective"
+   }
+  ],
+  "hidden_by_review": [
+   {
+    "item": "card:PSI-26:key_point:PSI-26.objective:OBJ-3",
+    "role": "key_point",
+    "source": "PSI-26.objective",
+    "unit_ids": [
+     "OBJ-3"
+    ],
+    "verdict": "not_relevant",
+    "reviewer_kind": "ai_session",
+    "reviewer_role": "data",
+    "replaced_by": null
    }
   ]
  },
@@ -1602,7 +1612,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-39.hypothesis",
    "PSI-39.researchImpacts"
@@ -1828,7 +1838,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -1863,7 +1873,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-47.hypothesis",
    "PSI-47.researchImpacts"
@@ -2096,7 +2106,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -2131,7 +2141,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-60.approach"
   ],
@@ -2305,7 +2315,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -2340,7 +2350,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-62.objective"
   ],
@@ -2514,7 +2524,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -2538,10 +2548,6 @@
     "source": "PSI-68.approach"
    },
    {
-    "text": "Stated hypothesis: \"Fairly sophisticated numerical simulations of convective droplet combustion have been developed in the last decade where the key contribution is the inclusion of full Navier-Stokes equations for the gas-phase flow field.\"",
-    "source": "PSI-68.hypothesis"
-   },
-   {
     "text": "Stated objective: \"Detailed experimental objectives can be further itemized as: 1. Investigate the role of liquid-phase mixing on the burning characteristics of bi-component fuel droplets.\"",
     "source": "PSI-68.objective"
    }
@@ -2549,7 +2555,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-68.researchImpacts"
   ],
@@ -2653,31 +2659,6 @@
    {
     "role": "key_point",
     "origin": "quote",
-    "text": "Fairly sophisticated numerical simulations of convective droplet combustion have been developed in the last decade where the key contribution is the inclusion of full Navier-Stokes equations for the gas-phase flow field.",
-    "field_label": "Stated hypothesis:",
-    "source": "PSI-68.hypothesis",
-    "char_start": 0,
-    "char_end": 220,
-    "evidence": [
-     {
-      "id": "HYP-1",
-      "source": "PSI-68.hypothesis",
-      "quote": "Fairly sophisticated numerical simulations of convective droplet combustion have been developed in the last decade where the key contribution is the inclusion of full Navier-Stokes equations for the gas-phase flow field.",
-      "char_start": 0,
-      "char_end": 220
-     }
-    ],
-    "checks": {
-     "verbatim_span": true,
-     "whitespace": "runs of spaces and line breaks shown as one space"
-    },
-    "lexical_support": 1.0,
-    "shared_with": [],
-    "review": null
-   },
-   {
-    "role": "key_point",
-    "origin": "quote",
     "text": "Detailed experimental objectives can be further itemized as: 1. Investigate the role of liquid-phase mixing on the burning characteristics of bi-component fuel droplets.",
     "field_label": "Stated objective:",
     "source": "PSI-68.objective",
@@ -2730,7 +2711,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -2739,7 +2720,21 @@
    }
   },
   "record_title": "Flame Extinguishment Experiment - 2",
-  "dataset_doi": "10.60555/byp8-h018"
+  "dataset_doi": "10.60555/byp8-h018",
+  "hidden_by_review": [
+   {
+    "item": "card:PSI-68:key_point:PSI-68.hypothesis:HYP-1",
+    "role": "key_point",
+    "source": "PSI-68.hypothesis",
+    "unit_ids": [
+     "HYP-1"
+    ],
+    "verdict": "not_relevant",
+    "reviewer_kind": "ai_session",
+    "reviewer_role": "data",
+    "replaced_by": null
+   }
+  ]
  },
  {
   "investigation_id": "PSI-69",
@@ -2765,7 +2760,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-69.hypothesis"
   ],
@@ -2941,7 +2936,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -2976,7 +2971,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-98.researchImpacts"
   ],
@@ -3168,7 +3163,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -3195,16 +3190,12 @@
    {
     "text": "Planned approach: \"The Saffire-II experiment was performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS.\"",
     "source": "PSI-99.approach"
-   },
-   {
-    "text": "Stated hypothesis: \"To address this knowledge gap, this investigation proposed to conduct large-scale fire safety experiments in an expendable spacecraft without risk to a crew.\"",
-    "source": "PSI-99.hypothesis"
    }
   ],
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-99.objective",
    "PSI-99.hypothesis",
@@ -3415,34 +3406,6 @@
     "lexical_support": 1.0,
     "shared_with": [],
     "review": null
-   },
-   {
-    "role": "key_point",
-    "origin": "quote",
-    "text": "To address this knowledge gap, this investigation proposed to conduct large-scale fire safety experiments in an expendable spacecraft without risk to a crew.",
-    "field_label": "Stated hypothesis:",
-    "source": "PSI-99.hypothesis",
-    "char_start": 635,
-    "char_end": 792,
-    "evidence": [
-     {
-      "id": "HYP-4",
-      "source": "PSI-99.hypothesis",
-      "quote": "To address this knowledge gap, this investigation proposed to conduct large-scale fire safety experiments in an expendable spacecraft without risk to a crew.",
-      "char_start": 635,
-      "char_end": 792
-     }
-    ],
-    "checks": {
-     "verbatim_span": true,
-     "whitespace": "runs of spaces and line breaks shown as one space"
-    },
-    "lexical_support": 1.0,
-    "shared_with": [
-     "PSI-98",
-     "PSI-100"
-    ],
-    "review": null
    }
   ],
   "label": "AI-written summary (gpt-oss:20b, run offline by the team) of NASA PSI record PSI-99. Each sentence names and quotes its PSI source and passed the team's code checks; checked against the PSI text by a second AI session, not by a person, NASA or a combustion expert. A summary describes what the record states (often aims and hypotheses), not what NASA measured. The key points under it are quoted from the PSI record with their field labels. Not NASA's conclusion; not operational safety guidance. One summary sentence was removed after the code checks by the pm session's reviewed removals (ai/review/pm_prereview.json); its place shows the quoted NASA sentence it cited.",
@@ -3467,7 +3430,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -3484,6 +3447,20 @@
     "reason": "Subject changed and the stated reason dropped. The record says 'the use of terrestrial fires and fire standards to design spacecraft fire safety systems presents an inherent risk to the vehicle because of the significant level of uncertainty' (HYP-1). The sentence says the differences 'make terrestrial fire standards risky for spacecraft safety': the risk moves from using terrestrial fires and standards for design to the standards themselves, 'terrestrial fires' and 'to the vehicle' are gone, and 'because of the significant level of uncertainty' is left out, so it reads as a verdict on the standards. Removed; the slot shows the quoted NASA sentence.",
     "reviewer_kind": "ai_session_pm",
     "replaced_by": "PSI-99.hypothesis"
+   }
+  ],
+  "hidden_by_review": [
+   {
+    "item": "card:PSI-99:key_point:PSI-99.hypothesis:HYP-4",
+    "role": "key_point",
+    "source": "PSI-99.hypothesis",
+    "unit_ids": [
+     "HYP-4"
+    ],
+    "verdict": "not_relevant",
+    "reviewer_kind": "ai_session",
+    "reviewer_role": "data",
+    "replaced_by": null
    }
   ],
   "shared_text_note": "Part of the PSI text this summary rests on is the same, word for word, in PSI-98 and PSI-100."
@@ -3512,7 +3489,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-100.objective",
    "PSI-100.researchImpacts"
@@ -3751,7 +3728,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -3783,7 +3760,7 @@
   "ai_generated": false,
   "model": "none: verbatim NASA text chosen by team code",
   "reviewed_by": null,
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-101.objective"
   ],
@@ -3930,7 +3907,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-102.hypothesis",
    "PSI-102.researchImpacts"
@@ -4157,7 +4134,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -4193,7 +4170,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-106.objective",
    "PSI-106.hypothesis",
@@ -4467,7 +4444,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -4502,7 +4479,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-107.objective",
    "PSI-107.hypothesis"
@@ -4721,7 +4698,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -4752,7 +4729,7 @@
   "ai_generated": false,
   "model": "none: verbatim NASA text chosen by team code",
   "reviewed_by": null,
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-115.objective"
   ],
@@ -4893,7 +4870,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-117.hypothesis",
    "PSI-117.researchImpacts"
@@ -5074,7 +5051,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -5118,7 +5095,7 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
    "PSI-142.hypothesis",
    "PSI-142.researchImpacts"
@@ -5344,7 +5321,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -5357,7 +5334,7 @@
  },
  {
   "investigation_id": "PSI-159",
-  "summary": "Stated hypothesis: \"The hypotheses of this research are that testing aboard the ISS can demonstrate the following for the first time, contributing to an improved understanding of cool flame kinetics.\" The record states that research into cool diffusion flames (whose peak temperatures are 500 – 1000 K) has grown exponentially since they were discovered in 2012. (PSI-159 record: researchImpacts)",
+  "summary": "The record states that research into cool diffusion flames (whose peak temperatures are 500 – 1000 K) has grown exponentially since they were discovered in 2012. (PSI-159 record: researchImpacts)",
   "key_points": [
    {
     "text": "Impact statement in the record: \"Research into cool diffusion flames (whose peak temperatures are 500 – 1000 K) has grown exponentially since they were discovered in 2012.\"",
@@ -5375,45 +5352,13 @@
   "ai_generated": true,
   "model": "gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16",
   "reviewed_by": "second AI session (data role)",
-  "updated": "2026-11-14T16:58:30+09:00",
+  "updated": "2026-11-14T17:33:25+09:00",
   "summary_sources": [
-   "PSI-159.hypothesis",
    "PSI-159.researchImpacts"
   ],
   "built_by": "ai/apply_cards.py",
   "status": "generated_partial",
   "sentences": [
-   {
-    "role": "summary",
-    "origin": "quote",
-    "text": "The hypotheses of this research are that testing aboard the ISS can demonstrate the following for the first time, contributing to an improved understanding of cool flame kinetics.",
-    "field_label": "Stated hypothesis:",
-    "source": "PSI-159.hypothesis",
-    "char_start": 0,
-    "char_end": 179,
-    "evidence": [
-     {
-      "id": "HYP-1",
-      "source": "PSI-159.hypothesis",
-      "quote": "The hypotheses of this research are that testing aboard the ISS can demonstrate the following for the first time, contributing to an improved understanding of cool flame kinetics.",
-      "char_start": 0,
-      "char_end": 179
-     }
-    ],
-    "checks": {
-     "verbatim_span": true,
-     "whitespace": "runs of spaces and line breaks shown as one space"
-    },
-    "lexical_support": 1.0,
-    "shared_with": [],
-    "review": null,
-    "n": 1,
-    "replaces": {
-     "n": 1,
-     "removed_by": "ai/review/pm_prereview.json",
-     "reviewer_kind": "ai_session_pm"
-    }
-   },
    {
     "role": "summary",
     "origin": "model",
@@ -5534,7 +5479,7 @@
     "review": null
    }
   ],
-  "label": "AI-written summary (gpt-oss:20b, run offline by the team) of NASA PSI record PSI-159. Each sentence names and quotes its PSI source and passed the team's code checks; checked against the PSI text by a second AI session, not by a person, NASA or a combustion expert. A summary describes what the record states (often aims and hypotheses), not what NASA measured. The key points under it are quoted from the PSI record with their field labels. Not NASA's conclusion; not operational safety guidance. One summary sentence was removed after the code checks by the pm session's reviewed removals (ai/review/pm_prereview.json); its place shows the quoted NASA sentence it cited.",
+  "label": "AI-written summary (gpt-oss:20b, run offline by the team) of NASA PSI record PSI-159. Each sentence names and quotes its PSI source and passed the team's code checks; checked against the PSI text by a second AI session, not by a person, NASA or a combustion expert. A summary describes what the record states (often aims and hypotheses), not what NASA measured. The key points under it are quoted from the PSI record with their field labels. Not NASA's conclusion; not operational safety guidance. One summary sentence was removed after the code checks by the pm session's reviewed removals (ai/review/pm_prereview.json); the NASA sentence it cited is not shown, because the review (a second AI session) marked it not relevant to show here.",
   "prompt_sha256": "e013dce7e2678ff2eadeebebc8659685a076112c92fc3a524bb27e6d0f604cd9",
   "params": {
    "prompt_file": "ai/prompts/card_v3.txt",
@@ -5556,7 +5501,7 @@
   },
   "license_note": "Licence of the PSI record: CC0-1.0.",
   "pick_rule": {
-   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4",
+   "key_points": "first cited unit of each summary sentence, then the quoted baseline key points for fields not yet shown, then the model's key_ids; at most 4; a quote marked not_relevant in the review sheet is skipped",
    "baseline": {
     "objective": "first quotable unit",
     "approach": "first quotable unit",
@@ -5572,7 +5517,22 @@
     "sentence": "The record hypothesizes that testing aboard the ISS can demonstrate the first-time improvement in understanding cool flame kinetics. (PSI-159 record: hypothesis)",
     "reason": "A clipped sentence completed with the model's own words. The record says testing aboard the ISS 'can demonstrate the following for the first time, contributing to an improved understanding of cool flame kinetics' (HYP-1), and 'the following' is the list of flames in HYP-2 to HYP-6 (for example 'Steady-state cool diffusion flames on spherical porous burners'). The sentence says testing 'can demonstrate the first-time improvement in understanding cool flame kinetics': what would be shown for the first time is the listed flames, not an improvement in understanding, which the record only says they contribute to. Removed; the slot shows the quoted NASA sentence.",
     "reviewer_kind": "ai_session_pm",
-    "replaced_by": "PSI-159.hypothesis"
+    "replaced_by": null
+   }
+  ],
+  "hidden_by_review": [
+   {
+    "item": "card:PSI-159:summary:PSI-159.hypothesis:HYP-1",
+    "role": "summary",
+    "source": "PSI-159.hypothesis",
+    "unit_ids": [
+     "HYP-1"
+    ],
+    "verdict": "not_relevant",
+    "reviewer_kind": "ai_session",
+    "reviewer_role": "data",
+    "replaced_by": null,
+    "slot_of_removed_sentence": 1
    }
   ]
  }

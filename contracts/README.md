@@ -112,7 +112,8 @@ Array of 24, one entry per investigation, shown next to the result. The page rea
 | `prompt_sha256`, `params` | string or null, object | prompt file hash and model settings, log files and sentence counts (`sentences_proposed`, `sentences_shipped`, `sentences_removed_by_prereview`); `null` and `{}` for a `fallback_quote` card |
 | `pick_rule` | object | the fixed rules that chose the quoted sentences |
 | `shared_text_note` | string, optional | when the cited PSI text is word for word the same in other records |
-| `removed_before_review` | array, optional | `[{ n, sentence, reason, reviewer_kind: "ai_session_pm", replaced_by }]`, the reviewed removals applied to this card |
+| `removed_before_review` | array, optional | `[{ n, sentence, reason, reviewer_kind: "ai_session_pm", replaced_by }]`, the reviewed removals applied to this card. `replaced_by` is the record field of the quote shown in the slot, or `null` when no slot is shown (every unit the sentence cited is marked `not_relevant` in the review sheet; PSI-159 since 14 Nov) |
+| `hidden_by_review` | array, optional | `[{ item, role, source, unit_ids[], verdict: "not_relevant", reviewer_kind, reviewer_role, replaced_by, slot_of_removed_sentence? }]`: verbatim quotes this card does not show because a reviewer marked their row of `ai/review/review_sheet.csv` `not_relevant` (added 14 Nov; the page need not read it). A model sentence whose first cited unit is listed here keeps its bracketed source but has no key point for that unit |
 | `sentences` | array | one per shown sentence, below |
 
 `sentences[]`: `role` (`summary`, `key_point`), `origin` (`quote`, `model`), `text`, `field_label` (`null` for a model sentence), `evidence`, `checks{}`, `lexical_support`, `shared_with[]`, `review` (`null` until reviewed). A quote also has `source`, `char_start`, `char_end` (offsets in the record field); a quote that fills the slot of a removed model sentence has `n` and `replaces { n, removed_by, reviewer_kind }`. A model sentence also has `n`, `cited_fields[]`, `repaired`, `first_pass_reasons[]`.
@@ -171,7 +172,7 @@ Object, built by `ai/audit_catalog.py` (no language model): for every number in 
 
 ### `data/insights/quality.json`
 
-Object, built by `ai/apply_review.py` (no language model): measured counts of the model sentences and their checks. Sentences proposed, passed and rejected by each gate, repaired, `removed_before_review` (`{ n, reviewer_kind: "ai_session_pm", file, sentences[], ... }`, the reviewed removals, counted apart from the review), `removed_by_review`, shipped, cards by status, rows reviewed by a person and by an AI session (separately), verdicts, `support_rate` with its `n`, and `recount_ok`.
+Object, built by `ai/apply_review.py` (no language model): measured counts of the model sentences and their checks. Sentences proposed, passed and rejected by each gate, repaired, `removed_before_review` (`{ n, reviewer_kind: "ai_session_pm", file, sentences[], ... }`, the reviewed removals, counted apart from the review), `removed_by_review`, shipped, cards by status, rows reviewed by a person and by an AI session (separately), verdicts, `support_rate` with its `n`, and `recount_ok`. Added 14 Nov: `quotes_not_shown_by_review` (`{ n, rows[], kept_although_marked[], marked_rows_matching_no_quote[], rule }`, quotes left out because a reviewer marked them `not_relevant`, counted apart from the model-sentence counts), `quote_rows_shown` and `rows_without_verdict` (`{ n, by_origin, items[], rule }`, the sheet rows that go back to the reviewer).
 
 ### `data/insights/_meta.json`
 

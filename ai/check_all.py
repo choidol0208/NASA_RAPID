@@ -30,8 +30,13 @@ Hard checks (files pm owns):
                passes gates 1-11 (recomputed from its model_quote), ends with its bracketed source, has its
                first cited unit among the key points, and has no 'not'/'partly' verdict or modality 'no';
                no sentence listed in ai/review/pm_prereview.json remains, and its slot is the quoted unit;
+               no quote listed under hidden_by_review (marked not_relevant in the review sheet) is shown;
                ai_generated is true exactly when a model sentence is shown; with --final no unreviewed
                model sentence; no fact-check-model score
+  sheet        ai/review/review_sheet.csv lists exactly what the cards and scenarios show (rows with shown =
+               yes, matched by item and sentence_sha) plus the rows whose verdict removes their sentence
+               (shown = no); no row marked not, partly, modality no or not_relevant is shown, except a card's
+               last quoted summary sentence (a card never shows an empty summary; listed in quality.json)
   scenarios    scenarios.json: one entry per contract query; one need entry per need id in needs.json;
                every template statement passes check_template; every facts value is found by the
                recount (or as a numeral in a cited source); every source resolves; result-note ids equal
@@ -780,7 +785,9 @@ def check_card(rep, card, ev, final=False, prereview=()):
             elif sorted(fields) != cited_fields:
                 rep.fail(sec, f"{inv}: bracketed source names {fields}, cited units are {cited_fields}")
             first = (s.get("evidence") or [{}])[0].get("id")
-            if first not in kp_units:
+            hidden_units = {u for h in card.get("hidden_by_review") or [] if h.get("role") == "key_point"
+                            for u in h.get("unit_ids") or []}
+            if first not in kp_units and first not in hidden_units:
                 rep.fail(sec, f"{inv}: first cited unit {first} is not among the key points")
             if text not in (card.get("summary") or ""):
                 rep.fail(sec, f"{inv}: model summary sentence is not in the card's summary string")
@@ -794,6 +801,65 @@ def check_card(rep, card, ev, final=False, prereview=()):
             rep.fail(sec, f"{inv}: unreviewed model sentence remains (--final)")
     if card.get("reviewed_by") and any(not s.get("review") for s in model_sents):
         rep.fail(sec, f"{inv}: reviewed_by is set but not every model sentence has a review")
+    shown_items = {apply_cards_quote_item(inv, s) for s in sents if s.get("origin") == "quote"}
+    for h in card.get("hidden_by_review") or []:
+        if h.get("item") in shown_items:
+            rep.fail(sec, f"{inv}: {h.get('item')} is listed under hidden_by_review but is shown")
+
+
+def apply_cards_quote_item(inv, s):
+    from ai import apply_cards
+    return apply_cards.quote_item(inv, s)
+
+
+def check_sheet(rep, cards_path, scenarios_path, ev):
+    """The review sheet lists what the page shows: every shown card sentence and scenario statement has a row
+    with shown = yes, no row with shown = yes is missing from the page, and no row whose verdict removes its
+    sentence is shown (ai/apply_review.py refresh_sheet; independent check of 14 Nov 17:10)."""
+    from ai import apply_review
+    sec = "sheet"
+    sheet = apply_review.SHEET
+    if not sheet.exists() or not Path(cards_path).exists():
+        rep.not_built(sec, f"{_rel(sheet)}: not built yet")
+        return
+    before = len(rep.failures())
+    rows = apply_review.read_sheet(sheet)
+    if rows and "shown" not in rows[0]:
+        rep.fail(sec, f"{_rel(sheet)} has no 'shown' column; rebuild with python3 ai/build_all.py")
+        return
+    cards = json.loads(Path(cards_path).read_text(encoding="utf-8"))
+    scen = json.loads(Path(scenarios_path).read_text(encoding="utf-8")) if Path(scenarios_path).exists() else []
+    model, quotes = apply_review.card_rows(cards, ev)
+    page = {(r["item"], r["sentence_sha"]) for r in model + quotes + apply_review.template_rows(scen)}
+    shown = {(r["item"], r["sentence_sha"]) for r in rows if r.get("shown") == "yes"}
+    keys = [(r["item"], r["sentence_sha"]) for r in rows]
+    for k in sorted(page - shown):
+        rep.fail(sec, f"shown on the page but no row with shown = yes: {k[0]} ({k[1]})")
+    for k in sorted(shown - page):
+        rep.fail(sec, f"row with shown = yes that the page does not show: {k[0]} ({k[1]})")
+    dup = [k for k, n in Counter(keys).items() if n > 1]
+    if dup:
+        rep.fail(sec, f"{len(dup)} duplicate row(s): {dup[:3]}")
+    one_summary = {c["investigation_id"] for c in cards
+                   if sum(s.get("role") == "summary" for s in c.get("sentences") or []) == 1}
+    for r in rows:
+        v = (r.get("verdict") or "").strip()
+        removing = ((r["origin"] == "model" and (v in VERDICT_REMOVE or (r.get("modality_kept") or "").strip() == "no"))
+                    or (r["origin"] == "quote" and v == "not_relevant"))
+        if r.get("shown") == "yes" and removing:
+            inv = r["item"].split(":")[1]
+            last = r["origin"] == "quote" and r["role"] == "summary" and inv in one_summary
+            if last:
+                rep.info(sec, f"{r['item']} is marked not_relevant and stays as the card's last summary quote")
+            else:
+                rep.fail(sec, f"{r['item']}: verdict {v!r} but shown = yes")
+        if r.get("shown") == "no" and not removing and r["origin"] != "model":
+            rep.fail(sec, f"{r['item']}: shown = no without a verdict that removes it")
+    n_no = sum(r.get("shown") == "no" for r in rows)
+    if len(rep.failures()) == before:
+        rep.ok(sec, f"{len(rows)} rows: {len(shown)} shown (= every sentence the cards and scenarios show), {n_no} not "
+                    f"shown because of a verdict or --final; {sum(not (r.get('verdict') or '').strip() for r in rows)} "
+                    "row(s) without a verdict")
 
 
 def check_cards(rep, path, ev, final=False):
@@ -823,9 +889,12 @@ def check_cards(rep, path, ev, final=False):
     by_status = Counter(c.get("status") for c in data)
     n_ev = sum(len(s.get("evidence") or []) for c in data for s in c.get("sentences") or [])
     n_pre = sum(len(c.get("removed_before_review") or []) for c in data)
+    n_slot = sum(1 for c in data for x in c.get("removed_before_review") or [] if x.get("replaced_by"))
+    n_hid = sum(len(c.get("hidden_by_review") or []) for c in data)
     if len(rep.failures()) == before:
         rep.ok("cards", f"{len(data)} cards pass; {model_n} model sentence(s) re-gated; {n_ev} stored evidence quotes "
-                        f"equal their unit; {n_pre} sentence(s) removed before review shown as quoted slots; "
+                        f"equal their unit; {n_pre} sentence(s) removed before review, {n_slot} of them shown as quoted "
+                        f"slots; {n_hid} quote(s) marked not_relevant not shown; "
                         f"status {dict(by_status)}")
     else:
         rep.info("cards", f"{model_n} model sentence(s); status {dict(by_status)}")
@@ -1138,6 +1207,7 @@ def run(final=False, live_rank=True):
     if ev is not None:
         check_cards(rep, INSIGHTS / "cards.json", ev, final=final)
         check_scenarios(rep, INSIGHTS / "scenarios.json", ev, recount=rc, live_rank=live_rank)
+        check_sheet(rep, INSIGHTS / "cards.json", INSIGHTS / "scenarios.json", ev)
     check_readiness_and_robustness(rep)
     lint_report(rep, live_rank=live_rank)
     return rep

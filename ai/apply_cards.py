@@ -17,7 +17,14 @@ prompt ai/prompts/card_v3.txt). For each of the 24 records:
    sentence listed there (investigation_id and exact text) is dropped although it passed every gate,
    and its slot in the summary shows the quoted NASA sentence it cited first, with its field label.
    These removals are counted apart from the data role's review and never set reviewed_by.
-4. A card keeps the quoted baseline card of ai/build_baseline.py (status 'fallback_quote',
+4. Quotes marked not_relevant in the review sheet (ai/review/README.md): a quote row whose verdict is
+   'not_relevant' (matched by sheet item and sentence sha) is not shown on its card. A key point is
+   dropped and the pick rule below simply goes on to its next candidate (no other sentence is chosen
+   in its place). The quoted slot of a removed sentence uses the next unit that sentence cited, if one
+   is quotable and not marked, else the slot is left out. A quoted summary is never emptied: a marked
+   quote that is the card's last summary sentence stays and is listed in quality.json
+   (quotes_marked_but_kept). Every card lists what was left out under 'hidden_by_review'.
+5. A card keeps the quoted baseline card of ai/build_baseline.py (status 'fallback_quote',
    ai_generated false) when no summary sentence survives. Otherwise:
    - summary = the surviving sentences, each ending with its source in brackets,
      '(PSI-25 record: objective)', built from the fields of its cited units;
@@ -28,8 +35,9 @@ prompt ai/prompts/card_v3.txt). For each of the 24 records:
      gate, a reviewed removal or the review);
    - every model sentence has review null and the card has reviewed_by null. Only
      ai/apply_review.py sets them, from ai/review/review_sheet.csv.
-5. Writes data/insights/cards.json (disclosure block in data/insights/_meta.json) and the review
-   sheet (ai/apply_review.py write_sheet). The gate log ai/runs/cards_20261114-v3-gates.jsonl is a run
+6. Writes data/insights/cards.json (disclosure block in data/insights/_meta.json) and the review
+   sheet (ai/apply_review.py refresh_sheet: built with the sheet's verdicts applied, so that the sheet
+   lists what the reviewed cards show, plus the rows whose verdict removed their sentence). The gate log ai/runs/cards_20261114-v3-gates.jsonl is a run
    record: it is written only with --repair (new model calls) or --write-gate-log, never by a rebuild.
 
 Quotes are taken by code. Every key point and every stored evidence 'quote' is the exact text of the
@@ -97,6 +105,38 @@ PREREVIEW_KIND = "ai_session_pm"
 PREREVIEW_FIELDS = ("investigation_id", "sentence", "reason", "reviewer_kind")
 LABEL_SLOT = (" One summary sentence was removed after the code checks by the pm session's reviewed "
               "removals (ai/review/pm_prereview.json); its place shows the quoted NASA sentence it cited.")
+LABEL_SLOT_NONE = (" One summary sentence was removed after the code checks by the pm session's reviewed "
+                   "removals (ai/review/pm_prereview.json); the NASA sentence it cited is not shown, because the "
+                   "review (a second AI session) marked it not relevant to show here.")
+HIDE_VERDICT = "not_relevant"
+
+
+def quote_item(inv, s):
+    """Row id of a quoted sentence (key point, quoted summary or slot) in ai/review/review_sheet.csv."""
+    ids = [e["id"] for e in s.get("evidence") or []]
+    return f"card:{inv}:{s['role']}:{s.get('source')}:{ids[0] if ids else ''}"
+
+
+def quote_key(inv, s):
+    """(sheet item, sentence sha) of a quoted sentence: how a quote verdict is matched to it."""
+    return quote_item(inv, s), _sha(s["text"])
+
+
+def hidden_entry(inv, s, rv, replaced_by=None):
+    return OrderedDict([("item", quote_item(inv, s)), ("role", s["role"]), ("source", s.get("source")),
+                        ("unit_ids", [e["id"] for e in s.get("evidence") or []]),
+                        ("verdict", HIDE_VERDICT), ("reviewer_kind", rv.get("reviewer_kind")),
+                        ("reviewer_role", rv.get("reviewer_role")), ("replaced_by", replaced_by)])
+
+
+def log_hidden(hidden_log, inv, entry, sent):
+    """Build-side record of a quote left out: the card entry plus the sentence (for the sheet row)."""
+    hidden_log.append(dict(entry, investigation_id=inv, _key=quote_key(inv, sent), _sentence=copy.deepcopy(sent)))
+
+
+def public(entries):
+    """Log entries without the build-side keys (for quality.json)."""
+    return [{k: v for k, v in e.items() if not k.startswith("_")} for e in entries]
 
 
 def _now():
@@ -304,19 +344,76 @@ def key_point_from_unit(ctx, inv, uid):
     return kp, sent, {x["id"] for x in used}, u["field"]
 
 
-def assemble(ctx, base, inv, survivors, n_proposed, cand, meta, review_word=REVIEW_NONE, slots=()):
+def hide_in_base(card, inv, hidden, hidden_log, kept_log):
+    """The quoted baseline card without its quotes marked not_relevant. A key point is dropped (the
+    baseline rule has one candidate per field, so nothing takes its place). A quoted summary sentence
+    is dropped only while another summary quote is left; the last one stays and is logged in kept_log."""
+    if not hidden:
+        return card
+    out_sents, kps, gone = [], [], []
+    summary = [s for s in card["sentences"] if s["role"] == "summary"]
+    kp_by_text = {kp["text"]: kp for kp in card["key_points"]}
+    for s in card["sentences"]:
+        rv = hidden.get(quote_key(inv, s))
+        if rv and s["role"] == "summary":
+            left = [x for x in summary if x is not s and not hidden.get(quote_key(inv, x))]
+            if not left:
+                kept_log.append({"investigation_id": inv, "item": quote_item(inv, s), "_key": quote_key(inv, s),
+                                 "why": "the card's last quoted summary sentence; a card never shows an empty "
+                                        "summary, so it stays shown and is listed here"})
+                out_sents.append(s)
+                continue
+        if rv:
+            gone.append((s, hidden_entry(inv, s, rv)))
+            continue
+        out_sents.append(s)
+        if s["role"] == "key_point":
+            kps.append(kp_by_text[T.key_point(s["field_label"], s["text"])])
+    if not gone:
+        return card
+    card["sentences"] = out_sents
+    card["key_points"] = kps
+    card["summary"] = T.card_summary([s["text"] for s in out_sents if s["role"] == "summary"])
+    card["hidden_by_review"] = [h for _, h in gone]
+    for s, h in gone:
+        log_hidden(hidden_log, inv, h, s)
+    return card
+
+
+def assemble(ctx, base, inv, survivors, n_proposed, cand, meta, review_word=REVIEW_NONE, slots=(), hidden=None,
+             hidden_log=None, kept_log=None):
     """Card from the surviving model sentences. survivors: [{n, text, evidence, res, repaired, ...}].
     slots: sentences removed by the reviewed removals; each keeps its place in the summary as the quoted
-    NASA sentence it cited first (with its field label)."""
+    NASA sentence it cited first (with its field label), or the next quotable one it cited when that one is
+    marked not_relevant, or no quote at all. hidden: {(sheet item, sha): review} of the quote rows marked
+    not_relevant (ai/apply_review.py hidden_quotes)."""
+    hidden = hidden or {}
+    hidden_log = hidden_log if hidden_log is not None else []
+    kept_log = kept_log if kept_log is not None else []
     if not survivors:
-        card = copy.deepcopy(base)
-        return card
+        return hide_in_base(copy.deepcopy(base), inv, hidden, hidden_log, kept_log)
     ev = ctx.ev
+    gone = []  # (sentence, review, slot n or None)
     summary_sents, summary_sources, slot_sents, slot_ids, slot_fields = [], [], [], set(), set()
+    slot_used = {}
     for s in slots:
-        uid = s["evidence"][0]["id"]
-        kp, sent, ids, field = key_point_from_unit(ctx, inv, uid)
-        sent["role"] = "summary"
+        chosen = None
+        for e in s["evidence"]:
+            if not evmod.unit(inv, e["id"], ev)["quotable"]:
+                continue
+            kp, sent, ids, field = key_point_from_unit(ctx, inv, e["id"])
+            sent["role"] = "summary"
+            rv = hidden.get(quote_key(inv, sent))
+            if rv:
+                gone.append((sent, rv, s["n"]))
+                slot_ids |= ids  # a marked unit is not shown elsewhere on this card either
+                continue
+            chosen = (kp, sent, ids, field)
+            break
+        slot_used[s["n"]] = chosen[1]["source"] if chosen else None
+        if chosen is None:
+            continue
+        kp, sent, ids, field = chosen
         sent["n"] = s["n"]
         sent["replaces"] = {"n": s["n"], "removed_by": "ai/review/pm_prereview.json",
                             "reviewer_kind": s["prereview"]["reviewer_kind"]}
@@ -354,6 +451,11 @@ def assemble(ctx, base, inv, survivors, n_proposed, cand, meta, review_word=REVI
         kp, sent, ids, field = key_point_from_unit(ctx, inv, uid)
         if ids & used_ids:
             return
+        rv = hidden.get(quote_key(inv, sent))
+        if rv:  # marked not_relevant: not shown; the rule goes on to its next candidate
+            gone.append((sent, rv, None))
+            used_ids.update(ids)
+            return
         key_points.append(kp)
         kp_sents.append(sent)
         used_ids.update(ids)
@@ -365,6 +467,11 @@ def assemble(ctx, base, inv, survivors, n_proposed, cand, meta, review_word=REVI
         field = kp["source"].split(".", 1)[1]
         ids = {e["id"] for e in sent["evidence"]}
         if len(key_points) >= MAX_KEY_POINTS or field in fields_shown or ids & used_ids:
+            continue
+        rv = hidden.get(quote_key(inv, sent))
+        if rv:
+            gone.append((copy.deepcopy(sent), rv, None))
+            used_ids.update(ids)
             continue
         key_points.append(copy.deepcopy(kp))
         kp_sents.append(copy.deepcopy(sent))
@@ -388,7 +495,8 @@ def assemble(ctx, base, inv, survivors, n_proposed, cand, meta, review_word=REVI
         ("built_by", BUILT_BY),
         ("status", "generated_partial" if partial else "generated"),
         ("sentences", [{k: v for k, v in x.items() if k != "summary_text"} for x in ordered] + kp_sents),
-        ("label", LABEL_MODEL.format(inv=inv, review=review_word) + (LABEL_SLOT if slots else "")),
+        ("label", LABEL_MODEL.format(inv=inv, review=review_word)
+         + (LABEL_SLOT if slot_sents else "") + (LABEL_SLOT_NONE if len(slot_sents) < len(slots) else "")),
         ("prompt_sha256", meta["prompt_file_sha256"]),
         ("params", {"prompt_file": meta["prompt_file"], "call_prompt_sha256": cand.get("prompt_sha256"),
                     "model_digest": cand.get("digest"), "options": cand.get("options"),
@@ -398,7 +506,8 @@ def assemble(ctx, base, inv, survivors, n_proposed, cand, meta, review_word=REVI
                     "sentences_removed_by_prereview": len(slots)}),
         ("license_note", base["license_note"]),
         ("pick_rule", {"key_points": ("first cited unit of each summary sentence, then the quoted baseline key "
-                                      "points for fields not yet shown, then the model's key_ids; at most 4"),
+                                      "points for fields not yet shown, then the model's key_ids; at most 4; a "
+                                      "quote marked not_relevant in the review sheet is skipped"),
                        "baseline": base.get("pick_rule")}),
         ("record_title", base.get("record_title")),
         ("dataset_doi", base.get("dataset_doi")),
@@ -406,8 +515,16 @@ def assemble(ctx, base, inv, survivors, n_proposed, cand, meta, review_word=REVI
     if slots:
         card["removed_before_review"] = [{"n": s["n"], "sentence": s["full"], "reason": s["prereview"]["reason"],
                                           "reviewer_kind": s["prereview"]["reviewer_kind"],
-                                          "replaced_by": f"{inv}.{evmod.unit(inv, s['evidence'][0]['id'], ev)['field']}"}
+                                          "replaced_by": slot_used.get(s["n"])}
                                          for s in slots]
+    if gone:
+        card["hidden_by_review"] = []
+        for sent, rv, n in gone:
+            h = hidden_entry(inv, sent, rv, replaced_by=slot_used.get(n) if n is not None else None)
+            if n is not None:
+                h["slot_of_removed_sentence"] = n
+            card["hidden_by_review"].append(h)
+            log_hidden(hidden_log, inv, h, sent)
     if shared:
         card["shared_text_note"] = ("Part of the PSI text this summary rests on is the same, word for word, in "
                                     + " and ".join(shared) + ".")
@@ -436,14 +553,26 @@ def reviewer_line(reviews):
             "combustion expert")
 
 
+def sheet_sentence(full, s):
+    """A model sentence that is not shown (removed by the review or by --final), in the shape
+    ai/apply_review.py card_rows reads, so that its sheet row and verdict are kept."""
+    return {"role": "summary", "origin": "model", "n": s["n"], "text": full,
+            "evidence": [{"id": e["id"]} for e in s["evidence"]], "checks": s["res"]["checks"],
+            "lexical_support": s["res"]["lexical_support"], "repaired": s["repaired"]}
+
+
 def build(candidates=CANDIDATES, do_repair=False, ctx=None, log=print, reviews=None, final=False,
-          prereview_path=PREREVIEW):
+          prereview_path=PREREVIEW, hidden_quotes=None):
     """Gate the candidates (and repair once if do_repair) and return {cards, stats, gate_lines, baseline}.
 
-    reviews  {(sheet item, sentence sha): {verdict, modality_kept, reviewer_kind, reviewer_role}} from
-             ai/apply_review.py; a sentence marked 'not' or 'partly' or modality_kept 'no' is removed
-    final    also revert to its quote any card that keeps an unreviewed model sentence
+    reviews        {(sheet item, sentence sha): {verdict, modality_kept, reviewer_kind, reviewer_role}} from
+                   ai/apply_review.py; a sentence marked 'not' or 'partly' or modality_kept 'no' is removed
+    hidden_quotes  {(sheet item, sentence sha): review} of the quote rows marked not_relevant; such a quote is
+                   not shown (ai/review/README.md)
+    final          also revert to its quote any card that keeps an unreviewed model sentence
     """
+    hidden = dict(hidden_quotes or {})
+    hidden_log, kept_log, not_shown = [], [], []
     ctx = ctx or BB.Ctx()
     ev = ctx.ev
     meta, cands, raws = load_candidates(candidates)
@@ -463,7 +592,7 @@ def build(candidates=CANDIDATES, do_repair=False, ctx=None, log=print, reviews=N
                    else "model abstained" if cand.get("abstain") else "no sentence")
             gate_lines.append({"kind": "card", "record": inv, "status": "fallback_quote", "why": why})
             st["cards_without_candidate"] += 1
-            cards.append(copy.deepcopy(base))
+            cards.append(hide_in_base(copy.deepcopy(base), inv, hidden, hidden_log, kept_log))
             per_card[inv] = {"proposed": 0, "shipped": 0, "status": "fallback_quote", "why": why}
             continue
         rec = evmod.record(inv, ev)
@@ -558,6 +687,8 @@ def build(candidates=CANDIDATES, do_repair=False, ctx=None, log=print, reviews=N
                     st["reviewed_shipped"] += 1
                     if rv["verdict"] in REMOVE_VERDICTS or rv["modality_kept"] == "no":
                         st["removed_by_review"] += 1
+                        not_shown.append({"investigation_id": inv, "why": "review",
+                                          "sentence": sheet_sentence(full, s)})
                         if rv["modality_kept"] == "no":
                             st["modality_removed"] += 1
                         gate_lines.append({"kind": "sentence", "record": inv, "n": s["n"], "stage": "review",
@@ -571,11 +702,16 @@ def build(candidates=CANDIDATES, do_repair=False, ctx=None, log=print, reviews=N
             if final and any(not s.get("review") for s in survivors):
                 st["reverted_final"] += 1
                 st["removed_final"] += len(survivors)
+                for s in survivors:
+                    fields = {evmod.unit(inv, e["id"], ev)["field"] for e in s["evidence"]}
+                    not_shown.append({"investigation_id": inv, "why": "final",
+                                      "sentence": sheet_sentence(s["text"].rstrip() + suffix(inv, fields), s)})
                 survivors = []
             if survivors and all(s.get("review") for s in survivors):
                 reviewed_by, review_word = reviewer_line([s["review"] for s in survivors])
         card = assemble(ctx, base, inv, survivors, n_items, cand, meta, review_word,
-                        slots=[x for x in slots if survivors])
+                        slots=[x for x in slots if survivors], hidden=hidden, hidden_log=hidden_log,
+                        kept_log=kept_log)
         if survivors:
             card["reviewed_by"] = reviewed_by
         cards.append(card)
@@ -587,6 +723,9 @@ def build(candidates=CANDIDATES, do_repair=False, ctx=None, log=print, reviews=N
         per_card[c["investigation_id"]]["shipped"] = sum(x.get("origin") == "model" for x in c["sentences"])
     st["shipped"] = sum(v["shipped"] for v in per_card.values())
     st["dropped"] = st["proposed"] - st["passed_first"] - st["repaired"]
+    matched = {h["_key"] for h in hidden_log} | {k["_key"] for k in kept_log}
+    not_shown += [{"investigation_id": h["investigation_id"], "why": "quote_not_relevant", "sentence": h["_sentence"]}
+                  for h in hidden_log]
     cands_shown = sum(1 for c in cards if c.get("removed_before_review"))
     st["cards_with_prereview_slot"] = cands_shown
     stats = {
@@ -608,6 +747,9 @@ def build(candidates=CANDIDATES, do_repair=False, ctx=None, log=print, reviews=N
         "reviewed_shipped": st["reviewed_shipped"], "removed_by_review": st["removed_by_review"],
         "modality_removed": st["modality_removed"], "reverted_final": st["reverted_final"],
         "removed_final": st["removed_final"],
+        "hidden_quotes": public(hidden_log), "quotes_marked_but_kept": public(kept_log),
+        "hidden_rows_matching_no_quote": sorted(k[0] for k in set(hidden) - matched),
+        "not_shown": not_shown,
         "per_card": per_card,
         "candidates_log": _rel(candidates), "repair_log": _rel(llm.run_log_path(REPAIR_RUN)),
         "prompt_file": meta["prompt_file"], "prompt_file_sha256": meta["prompt_file_sha256"],
@@ -677,7 +819,7 @@ def write_gate_log(res):
                       "gates": "ai/checks.py check_sentence (gates 1 to 11) plus the writer rule key_point",
                       "created": _now()}}
     lines = [head] + res["gate_lines"] + [{"kind": "stats", **{k: v for k, v in res["stats"].items()
-                                                                 if k != "per_card"}}]
+                                                                 if k not in ("per_card", "not_shown")}}]
     path.write_text("".join(json.dumps(x, ensure_ascii=False) + "\n" for x in lines), encoding="utf-8")
     return path
 
@@ -739,7 +881,10 @@ def main(argv=None):
     if a.repair or a.write_gate_log:
         written.append(_rel(write_gate_log(res)))
     from ai import apply_review  # noqa: E402  (the sheet writer lives with the review tools)
-    sheet = apply_review.write_sheet(res["cards"])
+    # The sheet lists what the cards show once the sheet's verdicts are applied (a review removal changes
+    # which key points are picked), plus the rows whose verdict removed their sentence; a sheet written from
+    # the unreviewed cards above went out of step with the page (independent check, 14 Nov 17:10).
+    sheet = apply_review.refresh_sheet(candidates=Path(a.candidates))
     out(f"\nwrote {', '.join(written)} and {_rel(sheet['path'])} ({sheet['rows']} rows, "
         f"{sheet['kept']} earlier verdicts kept)" + ("" if len(written) > 1 else
                                                     "; the gate log in ai/runs/ was left as it is (a run record)"))

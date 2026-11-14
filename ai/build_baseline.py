@@ -46,6 +46,7 @@ F_NEEDS = "pipeline/spec/needs.json"
 F_SCENARIOS = "pipeline/spec/scenarios.json"
 F_SOURCES = "pipeline/spec/sources.json"
 F_REFS = "pipeline/spec/references.json"
+F_VARIABLES = "pipeline/spec/variables.json"
 F_SCORING = "scoring/scoring_config.json"
 F_CONFIGS = "data/catalog/configurations.csv"
 F_INVEST = "data/catalog/investigations.csv"
@@ -137,10 +138,11 @@ class Ctx:
         self.sources_of = defaultdict(list)
         for s in self.sources:
             self.sources_of[s["investigation_id"]].append(s)
-        self.refs = {}
+        self.refs, self.ref_doc = {}, {}
         for r in _json(F_REFS)["references"]:
             for it in r.get("items", []):
                 self.refs[it["id"]] = it
+                self.ref_doc[it["id"]] = r
         self.manifest = _json(F_MANIFEST)
         self.n_investigations = len(self.manifest["investigations"])
         self.configs = {c["config_id"]: c for c in _csv(F_CONFIGS)}
@@ -1156,10 +1158,13 @@ def gaps(ctx, sc_id, needs_out, recounts, g):
                     "sources": [f"{F_REFS}#CP2003.detection", f"{F_SCEN_NEEDS}#{sc_id}/D1", f"{F_SCEN_NEEDS}#{sc_id}/D2"]
                     + srcs_all,
                     "rule": "detection", "status": "from_rule", "facts": facts_d, "text_origin": "template"})
-    # not covered (needs.json _meta.not_covered), copied as written
+    # not covered (needs.json _meta.not_covered), copied as written, except the lines a review found unsupported
     for nc in ctx.needs_doc["_meta"].get("not_covered", []):
         if gravity_gap and nc["source_item"] == "TB008.gaps":
             continue  # the same NASA gap is the gravity entry above
+        if nc["source_item"] in REWORDED_NOT_COVERED:
+            out.append(REWORDED_NOT_COVERED[nc["source_item"]](ctx, nc))
+            continue
         text = T.gap_not_covered(nc["area"], nc["why"])
         # a copied line can name a test by its number ('Test 1'); the numerals are recorded as copied
         # wording, so the template number check has them and nobody reads them as a count
@@ -1173,6 +1178,87 @@ def gaps(ctx, sc_id, needs_out, recounts, g):
                     # else as AI-generated); copied_from says that the line is the team's spec text, as written
                     "text_origin": "template", "copied_from": f"{F_NEEDS}#not_covered"})
     return out
+
+
+# Two not_covered lines of pipeline/spec/needs.json (the data role's text) are not copied as written: the review
+# of 14 November (data role, reviewer notes in ai/review/review_sheet.csv) found that 'every test in the PSI tables
+# is a microgravity test' and 'Required monitoring targets; the PSI tables record ...' say more than the data and
+# the cited item support. The area is still taken from needs.json; the rest is built here from the files it rests
+# on, and the build stops when those files no longer support the wording.
+GAS_COLUMN_PREFIX = (("co_", "carbon monoxide"), ("co2_", "carbon dioxide"))
+
+
+def mapped_gravity_tests(ctx):
+    """The number of mapped tests, after checking that the gravity level of every table with tests is the table
+    constant 'microgravity' of the source mapping (sources.json 'constants') and never a column."""
+    for sid in sorted({t["source_id"] for t in ctx.tests}):
+        src = ctx.source[sid]
+        if src.get("constants", {}).get("gravity_level") != "microgravity":
+            stop(f"{F_SOURCES} {sid}: gravity_level is not the table constant 'microgravity'; the partial-gravity gap "
+                 "no longer holds")
+        for c in src.get("columns", []):
+            to = c["to"] if isinstance(c["to"], list) else [c["to"]]
+            if "gravity_level" in to:
+                stop(f"{F_SOURCES} {sid}: gravity_level is read from a column; the partial-gravity gap no longer holds")
+    if any(t["gravity_level"] != "microgravity" for t in ctx.tests):
+        stop("a mapped test is not set to microgravity; the partial-gravity gap no longer holds")
+    return len(ctx.tests)
+
+
+def recorded_product_gases(ctx):
+    """The combustion-product gases that have a value in a mapped test, in words, from the non-condition gas
+    readings of variables.json (oxygen readings are not products). An unknown gas reading, or a value in the
+    smoke column, stops the build."""
+    var = _json(F_VARIABLES)
+    found = set()
+    for k, v in list(var["variables"].items()) + list(var["derived"].items()):
+        if v.get("kind") == "condition" or k.startswith("o2_"):
+            continue
+        if k == "smoke_particle_size_um":
+            if any((t.get(k) or "").strip() for t in ctx.tests):
+                stop("a mapped test now has a smoke particle size; the products gap no longer holds")
+            continue
+        if v.get("unit") not in ("ppm", "% by volume", "percentage points", "mol/mol"):
+            continue
+        gas = next((g for p, g in GAS_COLUMN_PREFIX if k.startswith(p)), None)
+        if gas is None:
+            stop(f"{F_VARIABLES} {k}: a gas reading the products gap does not name")
+        if any((t.get(k) or "").strip() for t in ctx.tests):
+            found.add(gas)
+    return [g for _, g in GAS_COLUMN_PREFIX if g in found]
+
+
+def gap_partial_gravity(ctx, nc):
+    n = mapped_gravity_tests(ctx)
+    return {"text": T.gap_partial_gravity(nc["area"], n), "needed_data": T.GAP_NOT_COVERED_NEEDED,
+            "sources": [f"{F_NEEDS}#not_covered", f"{F_REFS}#TB008.gaps", f"{F_SOURCES}#purpose"],
+            "rule": "not_covered_reworded:TB008.gaps", "status": "from_rule", "facts": {"mapped_tests": n},
+            "text_origin": "template", "area_from": f"{F_NEEDS}#not_covered"}
+
+
+def gap_monitoring_targets(ctx, nc):
+    item = ctx.refs.get(nc["source_item"])
+    doc = ctx.ref_doc.get(nc["source_item"])
+    if not item or not doc:
+        stop(f"references.json has no item {nc['source_item']}")
+    m = re.search(r"\(([^)]+)\)\s*$", nc["area"])
+    gases = [g.strip() for g in m.group(1).split(",")] if m else []
+    if not gases or any(g not in item["text"] for g in gases):
+        stop(f"{nc['source_item']}: the item does not give a range for every gas the area names ({gases})")
+    recorded = recorded_product_gases(ctx)
+    if not recorded:
+        stop("no product gas has a value in the mapped tests; the products gap no longer holds")
+    title = doc["title"].split(",")[0].strip()
+    return {"text": T.gap_monitoring_targets(nc["area"], title, doc["id"], recorded),
+            "needed_data": T.GAP_NOT_COVERED_NEEDED,
+            "sources": [f"{F_NEEDS}#not_covered", f"{F_REFS}#{nc['source_item']}"],
+            "rule": f"not_covered_reworded:{nc['source_item']}", "status": "from_rule",
+            "facts": {"gases_with_a_range_in_the_item": gases, "product_gases_recorded": recorded,
+                      "document": doc["id"]},
+            "text_origin": "template", "area_from": f"{F_NEEDS}#not_covered"}
+
+
+REWORDED_NOT_COVERED = {"TB008.gaps": gap_partial_gravity, "3001.T6.2-3": gap_monitoring_targets}
 
 
 def in_range(v, r):
@@ -1422,8 +1508,6 @@ def note_for(ctx, sc_id, entry, out, in_top, g):
         o2r = sc["ranges"]["o2_pct"]
         if g["max_ambient_o2"][0] >= o2r["min"] or g["max_stream_o2"][0] >= o2r["min"]:
             stop("a test now has oxygen in the spacesuit bin: the fixed spacesuit sentence no longer holds")
-        if not any(w["code"] == "oxidizer_stream" for r in out["results"] for w in r["warnings"]):
-            stop("no spacesuit result is an inverse flame any more: the fixed spacesuit sentence no longer holds")
         parts.append(T.note_spacesuit(o2r["min"], o2r["max"]))
         facts["team_bins"] = bins_facts({"o2_pct": o2r})
         rules.append("fixed:spacesuit")
@@ -1687,7 +1771,7 @@ def build(ctx=None, scenario_ids=None):
 def write(res):
     scen = keep_updated(res["scenarios"], OUT_SCENARIOS, "id")
     cards = keep_updated(res["cards"], OUT_CARDS, "investigation_id")
-    inputs_s = scenario_inputs() + [F_OBJ_LINKS, F_SOURCES, F_REFS, F_SCORING, F_CONFIGS, F_INVEST, F_MANIFEST,
+    inputs_s = scenario_inputs() + [F_OBJ_LINKS, F_SOURCES, F_REFS, F_VARIABLES, F_SCORING, F_CONFIGS, F_INVEST, F_MANIFEST,
                                         F_EVIDENCE, f"{TABLE_DIR}/PSI-20_Experimental table_ACME BRE.csv",
                                         "scoring/scorer.py"]
     bs = metamod.meta(T.BUILT_BY, config.NO_MODEL, inputs_s, label=(

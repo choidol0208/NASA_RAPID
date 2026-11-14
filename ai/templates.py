@@ -783,10 +783,13 @@ def note_assumed(dims):
 
 
 def note_spacesuit(lo, hi):
-    # review: no rank word ('the first two'); the build checks that an inverse flame is among the results
-    return (f"No test in the PSI tables has oxygen inside this scenario's team bin ({num(lo)} to {num(hi)}%); the "
-            "results are listed for completeness, and the inverse flames among them record burner-stream "
-            "oxygen, not an atmosphere.")
+    # review: no rank word ('the first two')
+    # review (data role, 14 Nov, notes of PSI-68 and PSI-62): the closing clause spoke of 'the results listed' and
+    # 'the inverse flames among them' on notes of investigations with no test-level table and no inverse flame. The
+    # clause now speaks of this investigation only; where its table has inverse-flame tests, the note's own
+    # sentence before it (note_stream) says so with their count. 'the PSI tables' -> 'the mapped PSI tables'.
+    return (f"No test in the mapped PSI tables has oxygen inside this scenario's team bin ({num(lo)} to "
+            f"{num(hi)}%); this investigation is listed for completeness.")
 
 
 NOTE_MARS = ("The preset sets no atmosphere, so the ranking compares only flow and research purpose (with "
@@ -902,6 +905,26 @@ GAP_DETECTION_NEEDED = ("test-level records in PSI of smoke and combustion-produ
 
 def gap_not_covered(area, why):
     return f"{area}: {why}"
+
+
+def gap_partial_gravity(area, n_tests):
+    """The needs.json line for TB008.gaps, reworded by team code (review, data role, 14 Nov): 'every test in the
+    PSI tables is a microgravity test' read as a value of every table, while the gravity level is a constant
+    that the team's source mapping sets per table (pipeline/spec/sources.json 'constants'), and it holds for
+    the mapped tests only. n_tests: the mapped tests (tests.csv rows), every one of them set to microgravity."""
+    return (f"{area}: Named a major gap in NASA's fire protection technical brief OCHMO-TB-008 (TB008.gaps). "
+            "The team's source mapping sets the gravity level per table, as a table constant and not from a table "
+            f"column, to microgravity for every mapped table that holds tests, so all {n_tests:,} mapped tests are classed as "
+            "microgravity tests and none as a partial-gravity test.")
+
+
+def gap_monitoring_targets(area, standard_title, standard_id, recorded):
+    """The needs.json line for 3001.T6.2-3, reworded by team code (review, data role, 14 Nov): 'Required
+    monitoring targets' did not say who requires them, and the cited item gives monitoring ranges (its own word
+    is not used: no 'recommends', even in an attribution). The document is named from the cited reference item;
+    recorded: the product gases that have a value in the mapped tests (tests.csv), named in words."""
+    return (f"{area}: Monitoring ranges for these gases are listed in the {standard_title} ({standard_id}); "
+            f"the mapped PSI tables record {join_and(recorded)} only.")
 
 
 GAP_NOT_COVERED_NEEDED = "measurements of this kind in the PSI experimental tables"

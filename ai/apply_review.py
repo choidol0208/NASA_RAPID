@@ -1,14 +1,20 @@
 # AI-generated code: written with an AI assistant (Claude) during the NASA Space Apps Challenge 2026 hackathon.
 """Component E tools: the review sheet, applying the verdicts, and data/insights/quality.json.
 
-write_sheet(cards) writes ai/review/review_sheet.csv (called by ai/apply_cards.py after it writes
-cards.json). One row per shown sentence:
+refresh_sheet() writes ai/review/review_sheet.csv (called by ai/apply_cards.py after it writes cards.json,
+and by this script after it applies the verdicts). It builds the cards with the sheet's own verdicts
+applied, so the sheet lists what the reviewed cards show: a review removal changes which key points the
+pick rule chooses, and a sheet written from the unreviewed cards (before 14 Nov 17:10) listed quotes the
+page did not show and missed some it did. One row per shown sentence (column shown = yes):
   - every model-written summary sentence (origin 'model'), lowest lexical support first: all of
     them are reviewed, not a sample;
   - every quoted key point and quoted summary (origin 'quote'): checked for relevance only;
   - every template statement of data/insights/scenarios.json (origin 'template'): read once for wording.
-Verdicts already filled in are kept when the sheet is rewritten, as long as the sentence text is
-unchanged (matched by item id and sentence_sha).
+and one row (shown = no) for each sentence that is not shown because of a verdict in the sheet (a model
+sentence marked not, partly or modality no; a quote marked not_relevant) or of --final, so that its
+verdict is kept and the next build removes it again. Verdicts already filled in are kept when the sheet
+is rewritten, as long as the sentence text is unchanged (matched by item id and sentence_sha); a row
+that is new, or whose text changed, has no verdict and goes back to the reviewer.
 
 Verdict values
   model     verdict supported | partly | not; modality_kept yes | no (an objective, hypothesis or plan
@@ -27,13 +33,15 @@ sentence (pre-freeze sync). It then writes data/insights/quality.json, reproduce
 the gate results. Rows read by an AI session are never counted as read by a person. The support rate
 is the rate before removal, with its n.
 
-Quote and template verdicts are counted and listed; this script never changes NASA quotes or
-template text (a 'not_relevant' or 'wording_issue' row is a request to the A2 build).
+A quote marked 'not_relevant' is not shown on its card (ai/apply_cards.py; counted under
+quotes_not_shown_by_review, apart from the model-sentence counts). Nothing is reworded: a quote is shown
+or not shown. A 'wording_issue' template row is counted and listed; it is a request to the code that
+builds the text (ai/templates.py, ai/build_baseline.py).
 
     python3 ai/apply_review.py                # apply the sheet as it is, write quality.json
     python3 ai/apply_review.py --final        # also revert cards with an unreviewed model sentence
     python3 ai/apply_review.py --dry-run      # print what would change; write nothing
-    python3 ai/apply_review.py --sheet-only   # rewrite the sheet from cards.json and scenarios.json
+    python3 ai/apply_review.py --sheet-only   # rewrite the sheet (cards built with the sheet's verdicts)
 """
 import argparse
 import csv
@@ -59,7 +67,7 @@ SCENARIOS = config.INSIGHTS_DIR / "scenarios.json"
 
 COLUMNS = ["item", "role", "origin", "sentence", "cited_ids", "cited_text", "checks", "lexical_support",
            "verdict", "modality_kept", "reviewer_kind", "reviewer_role", "note", "second_opinion_score",
-           "sentence_sha", "repaired"]
+           "sentence_sha", "repaired", "shown"]
 REVIEW_COLUMNS = ["verdict", "modality_kept", "reviewer_kind", "reviewer_role", "note", "second_opinion_score"]
 VERDICTS = {"model": ("supported", "partly", "not"), "quote": ("relevant", "not_relevant"),
             "template": ("wording_ok", "wording_issue")}
@@ -97,7 +105,8 @@ def _cited_text(inv, ids, ev):
     return " | ".join(out)
 
 
-def card_rows(cards, ev):
+def card_rows(cards, ev, shown="yes"):
+    from ai import apply_cards  # quote_item: the one place the row id of a quote is made
     model, quotes = [], []
     for c in cards:
         inv = c["investigation_id"]
@@ -111,15 +120,16 @@ def card_rows(cards, ev):
                     "sentence": s["text"], "cited_ids": " ".join(ids), "cited_text": _cited_text(inv, ids, ev),
                     "checks": "all 10 gates passed" if ch and not bad else ("failed: " + ", ".join(bad)),
                     "lexical_support": "" if s.get("lexical_support") is None else f"{s['lexical_support']:.3f}",
-                    "sentence_sha": _sha(s["text"]), "repaired": "yes" if s.get("repaired") else "no"})
+                    "sentence_sha": _sha(s["text"]), "repaired": "yes" if s.get("repaired") else "no",
+                    "shown": shown})
             else:
                 quotes.append({
-                    "item": f"card:{inv}:{s['role']}:{s.get('source')}:{ids[0] if ids else ''}",
+                    "item": apply_cards.quote_item(inv, s),
                     "role": s["role"], "origin": "quote",
                     "sentence": f"{s.get('field_label')} \"{s['text']}\"", "cited_ids": " ".join(ids),
                     "cited_text": f"{s.get('source')} [{s.get('char_start')}:{s.get('char_end')}]",
                     "checks": "verbatim span of the PSI field", "lexical_support": "",
-                    "sentence_sha": _sha(s["text"]), "repaired": ""})
+                    "sentence_sha": _sha(s["text"]), "repaired": "", "shown": shown})
     model.sort(key=lambda r: (float(r["lexical_support"]) if r["lexical_support"] else -1.0, r["item"]))
     return model, quotes
 
@@ -130,7 +140,7 @@ def template_rows(scenarios):
     def add(item, role, text, sources):
         out.append({"item": item, "role": role, "origin": "template", "sentence": text,
                     "cited_ids": "", "cited_text": " ; ".join(sources or []), "checks": "template checks (ai/check_all.py)",
-                    "lexical_support": "", "sentence_sha": _sha(text), "repaired": ""})
+                    "lexical_support": "", "sentence_sha": _sha(text), "repaired": "", "shown": "yes"})
 
     for sc in scenarios:
         sid = sc["id"]
@@ -155,13 +165,21 @@ def read_sheet(path=SHEET):
         return list(csv.DictReader(f))
 
 
-def write_sheet(cards=None, scenarios=None, path=SHEET, ev=None):
-    """Write the review sheet; keep verdicts already filled in for unchanged sentences."""
+def write_sheet(cards=None, scenarios=None, path=SHEET, ev=None, not_shown=()):
+    """Write the review sheet; keep verdicts already filled in for unchanged sentences.
+    cards: the cards as shown (rows with shown = yes); not_shown: the build's stats['not_shown'], the
+    sentences left out because of a verdict or of --final (rows with shown = no)."""
     ev = ev or evmod.load()
     cards = cards if cards is not None else json.loads(CARDS.read_text(encoding="utf-8"))
     scenarios = scenarios if scenarios is not None else (
         json.loads(SCENARIOS.read_text(encoding="utf-8")) if SCENARIOS.exists() else [])
     model, quotes = card_rows(cards, ev)
+    gone_m, gone_q = card_rows([{"investigation_id": x["investigation_id"], "sentences": [x["sentence"]]}
+                                for x in not_shown or []], ev, shown="no")
+    seen = {(r["item"], r["sentence_sha"]) for r in model + quotes}
+    model += [r for r in gone_m if (r["item"], r["sentence_sha"]) not in seen]
+    quotes += [r for r in gone_q if (r["item"], r["sentence_sha"]) not in seen]
+    model.sort(key=lambda r: (float(r["lexical_support"]) if r["lexical_support"] else -1.0, r["item"]))
     rows = model + quotes + template_rows(scenarios)
     old = {(r["item"], r.get("sentence_sha")): r for r in read_sheet(path)}
     kept = 0
@@ -179,7 +197,20 @@ def write_sheet(cards=None, scenarios=None, path=SHEET, ev=None):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
     Path(path).write_text(buf.getvalue(), encoding="utf-8")
     return {"path": Path(path), "rows": len(rows), "kept": kept,
-            "by_origin": dict(Counter(r["origin"] for r in rows))}
+            "by_origin": dict(Counter(r["origin"] for r in rows)),
+            "not_shown": sum(r["shown"] == "no" for r in rows),
+            "without_verdict": [r["item"] for r in rows if not r["verdict"]]}
+
+
+def refresh_sheet(path=SHEET, candidates=None, log=None):
+    """Rewrite the sheet from the cards built with the sheet's own verdicts applied (no --final)."""
+    from ai import apply_cards
+    rows = read_sheet(path)
+    validate_rows(rows)
+    kw = {"candidates": candidates} if candidates else {}
+    res = apply_cards.build(do_repair=False, log=log or (lambda *a, **k: None), reviews=model_reviews(rows),
+                            hidden_quotes=hidden_quotes(rows), **kw)
+    return write_sheet(res["cards"], path=path, not_shown=res["stats"]["not_shown"])
 
 
 # ====================================================================== verdicts
@@ -213,6 +244,17 @@ def validate_rows(rows):
             errs.append(f"line {i} ({r['item']}): reviewer_role is empty")
     if errs:
         raise SheetError("review sheet has errors:\n  " + "\n  ".join(errs))
+
+
+def hidden_quotes(rows):
+    """{(item, sentence_sha): review} of the quote rows marked not_relevant: those quotes are not shown."""
+    out = {}
+    for r in rows:
+        if r["origin"] == "quote" and (r.get("verdict") or "").strip() == "not_relevant":
+            out[(r["item"], r["sentence_sha"])] = {"verdict": "not_relevant",
+                                                   "reviewer_kind": r["reviewer_kind"].strip(),
+                                                   "reviewer_role": r["reviewer_role"].strip()}
+    return out
 
 
 def model_reviews(rows):
@@ -251,8 +293,8 @@ def quality(stats, rows, scenarios, recount):
         "description": ("Measured counts for the model-written card sentences (gpt-oss:20b) and their checks, "
                         "reproduced by ai/apply_review.py from ai/review/review_sheet.csv and the gate results of "
                         "ai/apply_cards.py. Rates are measured before removal and carry their n. Rows read by an AI "
-                        "session are never counted as read by a person. Reviewed by hackathon team members or a "
-                        "second AI session, not by NASA or a combustion expert."),
+                        "session are never counted as read by a person. The counts reviewed_person and reviewed_ai_session say who "
+                        "read the rows. Nothing was reviewed by NASA or by a combustion expert."),
         "proposed": stats["proposed"],
         "passed_gates_first_pass": stats["passed_first"],
         "rejected_first_pass": stats["rejected_first"],
@@ -294,9 +336,29 @@ def quality(stats, rows, scenarios, recount):
         "n": n,
         "support_rate_rule": "supported / reviewed model sentences, before removal; null while n is 0",
         "quote_rows": len(quotes),
+        "quote_rows_shown": sum((r.get("shown") or "yes") == "yes" for r in quotes),
         "quote_verdicts": dict(Counter(r["verdict"].strip() for r in quotes if (r.get("verdict") or "").strip())),
+        "quotes_not_shown_by_review": {
+            "n": len(stats["hidden_quotes"]),
+            "rows": stats["hidden_quotes"],
+            "kept_although_marked": stats["quotes_marked_but_kept"],
+            "marked_rows_matching_no_quote": stats["hidden_rows_matching_no_quote"],
+            "rule": ("a verbatim NASA quote whose sheet row is marked not_relevant is not shown on its card: a key "
+                     "point is dropped and the pick rule goes on to its next candidate; the quoted slot of a "
+                     "removed model sentence uses the next unit that sentence cited, or is left out; a card's last "
+                     "quoted summary sentence is never removed (listed under kept_although_marked). Nothing is "
+                     "reworded. Counted apart from the model-sentence counts (removed_by_review, verdicts, "
+                     "support_rate)."),
+        },
         "template_statements": len(tmpl),
         "template_verdicts": dict(Counter(r["verdict"].strip() for r in tmpl if (r.get("verdict") or "").strip())),
+        "rows_without_verdict": {
+            "n": sum(not (r.get("verdict") or "").strip() for r in rows),
+            "by_origin": dict(Counter(r["origin"] for r in rows if not (r.get("verdict") or "").strip())),
+            "items": [r["item"] for r in rows if not (r.get("verdict") or "").strip()],
+            "rule": ("rows that are new or whose sentence text changed (matched by item and sentence_sha) have no "
+                     "verdict and go back to the reviewer"),
+        },
         "recount_ok": ok,
         "recount_failures": fails,
         "second_opinion": None,
@@ -333,9 +395,16 @@ def run(final=False, dry_run=False, sheet_path=SHEET, out=print):
     rows = read_sheet(sheet_path)
     validate_rows(rows)
     reviews = model_reviews(rows)
-    res = apply_cards.build(do_repair=False, log=out, reviews=reviews, final=final)
+    hidden = hidden_quotes(rows)
+    res = apply_cards.build(do_repair=False, log=out, reviews=reviews, final=final, hidden_quotes=hidden)
     st = res["stats"]
     scen = json.loads(SCENARIOS.read_text(encoding="utf-8")) if SCENARIOS.exists() else []
+    sheet = None
+    if not dry_run:
+        # the sheet follows the cards as the page shows them (verdicts applied); verdicts carry over by
+        # item and sentence_sha, so a rewrite never changes one
+        sheet = write_sheet(res["cards"], scenarios=scen, path=sheet_path, not_shown=st["not_shown"])
+        rows = read_sheet(sheet_path)
     q = quality(st, rows, scen, recount_status())
     unmatched = len(reviews) - st["reviewed_shipped"]  # reviewed rows whose sentence no longer passes or changed
     q["reviewed_rows_not_matched"] = unmatched
@@ -346,13 +415,21 @@ def run(final=False, dry_run=False, sheet_path=SHEET, out=print):
         f"{q['removed_before_review']['n']}")
     out(f"removed by review {q['removed_by_review']} (modality {q['modality_removed']}); reverted by --final "
         f"{q['reverted_by_final']}; shipped model sentences {q['shipped_model_sentences']}")
+    out(f"quotes not shown (marked not_relevant): {q['quotes_not_shown_by_review']['n']}"
+        + (f"; marked but kept as a card's last summary quote: {len(q['quotes_not_shown_by_review']['kept_although_marked'])}"
+           if q['quotes_not_shown_by_review']['kept_although_marked'] else "")
+        + (f"; marked rows matching no quote: {q['quotes_not_shown_by_review']['marked_rows_matching_no_quote']}"
+           if q['quotes_not_shown_by_review']['marked_rows_matching_no_quote'] else ""))
     out(f"cards by status {q['cards_by_status']}")
     out(f"recount_ok {q['recount_ok']}" + (f": {q['recount_failures']}" if q["recount_failures"] else ""))
     if unmatched:
         out(f"note: {unmatched} reviewed model row(s) match no sentence that passed the gates (text changed)")
     if dry_run:
         return q, res
-    changed = bool(reviews) or final
+    if sheet:
+        out(f"wrote {_rel(sheet_path)}: {sheet['rows']} rows ({sheet['not_shown']} not shown), "
+            f"{sheet['kept']} verdicts kept, {len(sheet['without_verdict'])} rows without a verdict")
+    changed = bool(reviews) or bool(hidden) or final
     if changed:
         apply_cards.write_cards(res, built_by=BUILT_BY, extra_inputs=[_rel(sheet_path)],
                                 extra_meta={"review_applied": True, "final": final})
@@ -372,7 +449,7 @@ def main(argv=None):
     ap.add_argument("--sheet-only", action="store_true", help="rewrite the review sheet and stop")
     a = ap.parse_args(argv)
     if a.sheet_only:
-        r = write_sheet(path=Path(a.sheet))
+        r = refresh_sheet(path=Path(a.sheet))
         print(f"wrote {_rel(r['path'])}: {r['rows']} rows {r['by_origin']}, {r['kept']} verdicts kept")
         return 0
     try:
