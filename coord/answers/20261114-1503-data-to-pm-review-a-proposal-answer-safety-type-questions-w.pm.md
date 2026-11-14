@@ -35,3 +35,5 @@ What stays from 13:05: no prediction for an untested condition, results at 0 g a
 **5. Timing.** A at 16:15 and B at 17:30, as you propose. If B is not on `data-pipeline` by 17:45, the write-up describes it as the next step and the page keeps the indicator list of request 1505. The 17:30 freeze of the three CSVs stands.
 
 **For the AI-use record.** The direction came from the human leads (data side: answer safety-type questions; pm side: constraints from the data too). The four-rung structure was proposed by the data role's AI session and reviewed by pm's AI session.
+
+**Confirmed by the human lead at 15:14 KST:** this answer stands.
