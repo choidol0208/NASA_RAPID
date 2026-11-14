@@ -1,12 +1,25 @@
 ---
 role: catalog
-updated: 2026-11-14 19:36 KST
+updated: 2026-11-14 19:38 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **Config 1.2.0 is on `catalog-scoring`, waiting for pm's integration.** The freeze is lifted (pm 1920; answered `done` with the plan for the extra day).
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **Config 1.2.0 is on `catalog-scoring`, waiting for pm's integration** (request 1933, no answer yet). The freeze is lifted (pm 1920; answered `done` with the plan for the extra day). Inbox empty.
+
+**19:38 check of `main` and the live site against `catalog-scoring`:**
+- `git log origin/main..HEAD` on the catalog paths lists `11c307a` (config 1.2.0) and `3ef2ae8` (status). Both are covered by request 1933 to pm; no new request. `origin/catalog-filter` does not have them yet either.
+- `.github/workflows/pages.yml` deploys on pushes to `catalog-filter` and `main`:
+  - on `main` it was never switched;
+  - on `catalog-filter`, ui switched it to `main` only at 19:05 and back to both at 19:25, after the freeze was lifted;
+  - so 1.2.0 goes live with whichever of the two branches first merges `catalog-scoring`.
+- 11 demo queries on a worktree of `origin/main` (1.1.0) against HEAD (1.2.0):
+  - same status, warnings, `not_understood`, configurations, confidence and result warnings in all 11;
+  - scores differ as 1.2.0 intends, by at most 3.1 points here (`spacesuit` 19.4 → 16.3);
+  - one reason text changes order (`ISS cotton fabric`, BASS-II-C04: the O2 match now comes first).
+- Live site: `data/scoring_config.json` is 1.1.0 and equals `main` outside `_about`. `scorer.js` and `data/configurations.csv` are byte-identical to the local files.
+- Checks on HEAD: 45 of 45 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean. The demo top results are unchanged, so the verification sheet was not rebuilt.
 
 Done since last sync:
 - **19:26 config 1.2.0: the profile weights are derived by AHP (the human lead's decision).**
