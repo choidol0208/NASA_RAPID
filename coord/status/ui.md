@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 14:33 KST
+updated: 2026-11-14 14:36 KST
 state: working
 blocked_on: none
 ---
@@ -30,6 +30,16 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - A Playwright reading of the live page matched the data in 70 of 70 result cards and needs rows.
   - All 1,824 test links point at an existing NASA table row; the 1,050 whose table has a test-number column match it.
   - It replaces the catalog-vs-pipeline step in pages.yml (catalog request 1429, done).
+
+- 14:36, from a judge-view review (live as f0ef011):
+  - The first screen (1280x800) ends with an at-a-glance line: the top 3 with team scores and, for the demo queries, "ISS cabin 3 of 6 · Lunar habitat 1 of 6" needs with counted tests.
+  - "All 24 investigations" and the method text are folded by default; the AI-use paragraph stays visible.
+  - build.json lists the optional files the build has, and the page fetches only those (no 404s).
+- U5 retake list, after pm's 15:00 push. og.png and web/media/* are the 11:28 drafts from before catalog config 1.1.0 (14:24), which changed "ISS cotton fabric" and "lunar habitat cotton fabric". Retake:
+  - shots 01 to 06;
+  - the GIF, which runs both cotton queries;
+  - og.png.
+  - Add the comparison strip and the evidence map.
 
 Done since last sync (pushed 13:54, asked by the human lead):
 - **ISS against lunar habitat, side by side** at the top of the needs section, for either demo query:
