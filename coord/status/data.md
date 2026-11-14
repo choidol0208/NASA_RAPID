@@ -1,16 +1,18 @@
 ---
 role: data
-updated: 2026-11-14 11:35 KST
+updated: 2026-11-14 11:45 KST
 state: working
 blocked_on: none
 ---
-Now: checking the indicator rows against the source tables; then the D6 pass.
+Now: D6 pass on `compliance/SOURCES.md`; waiting for `data/insights/cards.json` to start D5.
 
 Done since last sync:
 - Merged `origin/main` into `data-pipeline` (fast-forward).
 - Indicators: `indicators.csv`, `indicator_tests.csv`, spec `pipeline/spec/indicators.json` (20 indicators over 7 needs, three fixed templates).
 - Material vocabulary: `pipeline/spec/materials.json`; new column `material_id` in `tests.csv` (the same fabric was written three ways in BASS, Saffire-I/III and Saffire-II). `fuel_material` is unchanged.
 - Need D2 now also requires `aging_time_s`, so flame tests are no longer counted as smoke tests. In `capability_matrix.csv` the D2 rows for PSI-25, PSI-26, PSI-98, PSI-99, PSI-100 changed from `conditions_only` to `none`. No id or status value changed.
+- `flow_event` can now also be `no_ignition` or `not_sustained` (one BASS-II test each, as written in the source). Existing values unchanged.
+- Spot-checked six indicator values back to the NASA cells through `values_long.csv`; all matched.
 - Scenario matching: `scenario_needs.csv`, `scenario_tests.csv` (request 20261114-1116-data-to-all).
 - D3: confirmed pm's coverage counts and published `data/pipeline/coverage_grid.csv` with its bin spec `pipeline/spec/coverage.json` (answer to request 20261114-1056-pm-to-data).
 - Reference spec: `pipeline/spec/references.json` (21 documents, 56 items) and `data/pipeline/need_references.csv`.
