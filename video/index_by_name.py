@@ -56,11 +56,11 @@ def read_csv_skipping_comments(path):
 
 
 def sha256(path):
-    h = hashlib.sha256()
+    """SHA-256 of a text input with line endings normalised to LF, so that the value is the same
+    in a working copy with CRLF line endings and in a fresh clone (git stores these files with LF)."""
     with open(path, "rb") as fh:
-        for chunk in iter(lambda: fh.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest()
+        data = fh.read()
+    return hashlib.sha256(data.replace(b"\r\n", b"\n")).hexdigest()
 
 
 def load_rules(path):
