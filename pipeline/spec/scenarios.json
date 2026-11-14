@@ -72,9 +72,10 @@
     "EAWG.atmospheres",
     "EA.8.2-34",
     "TB14639.worstcase",
-    "TB008.gaps"
+    "TB008.gaps",
+    "CH.partial_gravity"
    ],
-   "note": "The challenge text gives 30% oxygen or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement, which was read from a copy and not checked on the official page; NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
+   "note": "The challenge text gives oxygen likely 30% or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement (CH.moonbase: oxygen likely 30% or more, pressure 10.2 psi or less; checked on the official page by another session of the team on 2026-11-14); NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
    "see_also": [
     {
      "investigation_id": "PSI-20",
@@ -107,7 +108,8 @@
    "ranges": {},
    "gravity_level": "martian",
    "basis": [
-    "TB008.gaps"
+    "TB008.gaps",
+    "CH.partial_gravity"
    ],
    "note": "The challenge text gives no Mars atmosphere, and the team did not use the working-group recommendation for surface habitats (8.0 psia or 7.6 psia with 32% oxygen, EAWG.atmospheres), so no oxygen or pressure range is set. Only the gravity gap can be reported."
   },
@@ -131,10 +133,11 @@
    },
    "gravity_level": null,
    "basis": [
+    "CH.spacesuit",
     "SMAC.atmospheres",
     "EAWG.atmospheres"
    ],
-   "note": "4.3 psia (29.6 kPa), 100% oxygen. These two values are not in the cited reference items (SMAC.atmospheres lists 14.7, 10.2 and 8.2 psia; EAWG.atmospheres lists cabin atmospheres), so they have no checked source in references.json. The oxygen range 95 to 100% and the pressure bin below 62.8 kPa are the team's choice: any recorded pressure below 62.8 kPa is inside the range. No gravity level is set."
+   "note": "4.3 psi (29.6 kPa), 100% oxygen, as given in the challenge statement (CH.spacesuit). The oxygen range 95 to 100% and the pressure bin below 62.8 kPa are the team's choice: any recorded pressure below 62.8 kPa is inside the range. No gravity level is set."
   },
   {
    "id": "exploration_8_2_34",

@@ -6,7 +6,8 @@
    "full_text_read": "the cited passage was read in the document",
    "abstract_only": "only the public abstract or catalogue page was read",
    "cited_not_read": "known only through a citation in another listed document",
-   "read_from_copy": "read from an unofficial copy"
+   "read_from_copy": "read from an unofficial copy",
+   "read_by_teammate": "the passage was read in the document by another session of the team, which reported the wording; not read by the session that wrote this file"
   },
   "item_types": [
    "requirement",
@@ -23,7 +24,7 @@
    "published_result"
   ],
   "quote_note": "'quote' is the sentence as it appears in the document. All 12 quotes were checked a second time against the documents on 2026-11-14 by a separate AI pass and found verbatim; for NASA-STD-6001B, TASKBOOK-14639, ICES-2019-BASS2, SAFFIRE-2017, FSJ-2018-SAME and FLEX-EIRD the check used a text extraction of the PDF, not the PDF pages. Not checked by a human.",
-  "unverified": "CHALLENGE-2026: the official page could not be opened from the work environment; its items were read from a copy. ISO 14624-1, ISO/TS 16697, ASTM D2863 and SAE 2008-01-2055 were not read in full (see 'access')."
+  "unverified": "ISO 14624-1, ISO/TS 16697, ASTM D2863 and SAE 2008-01-2055 were not read in full (see 'access'). CHALLENGE-2026 was checked on the official page by another session of the team (access 'read_by_teammate')."
  },
  "references": [
   {
@@ -465,23 +466,24 @@
   {
    "id": "CHALLENGE-2026",
    "kind": "challenge",
-   "title": "Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
+   "title": "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
    "issuer": "NASA Space Apps Challenge",
    "version": "2026",
-   "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall-ai-powered-fire-safety-insights-from-microgravity-combustion-data/",
-   "access": "read_from_copy",
+   "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/",
+   "access": "read_by_teammate",
    "items": [
     {
      "id": "CH.pillars",
      "type": "framework",
      "text": "Fire safety is framed as prevention (ignition-source control and material selection), detection and suppression.",
-     "where": "Background"
+     "where": "Background",
+     "note": "Not among the passages re-checked on the official page on 2026-11-14; wording from the copy read earlier."
     },
     {
      "id": "CH.moonbase",
      "type": "design_value",
-     "text": "Moon Base atmosphere expected at 30% oxygen or more and 10.2 psi or less.",
-     "where": "Background",
+     "text": "Moon Base and pressurized-rover atmosphere expected between spacesuit and Earth conditions: oxygen likely 30% or more, pressure 10.2 psi or less.",
+     "where": "Potential considerations: Spacesuits and oxygen concentration",
      "variables": [
       "o2_pct",
       "pressure_kpa"
@@ -490,9 +492,42 @@
       "o2_pct_min": 30,
       "pressure_psia_max": 10.2
      }
+    },
+    {
+     "id": "CH.spacesuit",
+     "type": "design_value",
+     "text": "Spacesuits run at 100% oxygen and 4.3 psi, against 14.7 psi at sea level.",
+     "where": "Potential considerations: Spacesuits and oxygen concentration",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "o2_pct": 100,
+      "pressure_psia": 4.3
+     }
+    },
+    {
+     "id": "CH.partial_gravity",
+     "type": "knowledge_gap",
+     "text": "PSI holds no partial-gravity combustion data yet; the page names LUCI as a future source.",
+     "where": "Potential considerations: Partial-gravity data",
+     "variables": [
+      "gravity_level"
+     ]
+    },
+    {
+     "id": "CH.hardware",
+     "type": "limitation",
+     "text": "CFI-G burner streams reached up to 85% oxygen.",
+     "where": "Potential considerations: Hardware",
+     "variables": [
+      "o2_pct",
+      "o2_basis"
+     ]
     }
    ],
-   "note": "The official page could not be opened from the work environment; text was read from a third-party copy and must be checked against the official page."
+   "note": "Checked on the official page by the ui session of the team on 2026-11-14 at about 13:05 KST, from the team lead's computer. The page cannot be opened from the work environment of the session that maintains this file; the items give the wording as reported, not a verbatim quote."
   },
   {
    "id": "TASKBOOK-14639",

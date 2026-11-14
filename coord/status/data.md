@@ -1,6 +1,6 @@
 ---
 role: data
-updated: 2026-11-14 13:07 KST
+updated: 2026-11-14 13:09 KST
 state: working
 blocked_on: none
 ---
@@ -20,7 +20,11 @@ Done since last sync (details and before/after numbers: request 20261114-1242-da
 
 Next: D5 (my half of the review sheet, verdicts by 18:15); D6 final pass on `compliance/SOURCES.md` (21:00); `reports/spot_check.csv` for a human.
 
-Still not verified, for the human review: the challenge statement was read from a copy (the official page is not reachable from this session), so the lunar-habitat bound of 30% oxygen and 10.2 psi is unchecked; the needs, their readings and the objective links are an AI draft not seen by a combustion specialist.
+Counts pm asked for (after the 43 repeated or non-test rows were left out): tests with a recorded oxygen of the surrounding atmosphere (`o2_basis = ambient`): 879 = solid 140, liquid 353, gas 386. (Liquid was 361 before; 8 CFI rows repeated earlier rows.) A further 263 gas tests record the oxygen of an oxidizer stream, not of the atmosphere.
+
+Challenge statement: ui checked it on the official page (request 1305); `CHALLENGE-2026` now has the official URL and title, `CH.moonbase` says "oxygen likely 30% or more", and there are new items `CH.spacesuit`, `CH.partial_gravity`, `CH.hardware`. `access` is `read_by_teammate`.
+
+Still open for the human review: the needs, their readings and the objective links are an AI draft not seen by a combustion specialist; whether pressure should be required for P1 (all 136 counted tests have no pressure in the table); whether the SAME "weight loss rate" is a result or a setting (it is the only outcome behind the 4 counted D2 tests); the three oxygen midpoints.
 
 Published for others (all written by `python3 pipeline/run.py`; shapes below are stable, I will only add columns):
 - NEW `data/pipeline/evidence/index.json`, `scenario_<id>.json`, `cell_<o2_bin>__<pressure_bin>.json` — shape in `pipeline/README.md` "Evidence packages". Per need: `status`, `counts`, `reading`, `objective`, `investigations`, `matched_tests` (values with unit and source column, source file and row), `matched_by_fuel_phase`, `usable_elsewhere`, `documented_elsewhere`, `indicators`, `gaps`, `statements`, `references`. Field names stable; fields may be added.

@@ -32,12 +32,12 @@
    {
     "item_id": "CH.moonbase",
     "type": "design_value",
-    "text": "Moon Base atmosphere expected at 30% oxygen or more and 10.2 psi or less.",
-    "where": "Background",
-    "title": "Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
+    "text": "Moon Base and pressurized-rover atmosphere expected between spacesuit and Earth conditions: oxygen likely 30% or more, pressure 10.2 psi or less.",
+    "where": "Potential considerations: Spacesuits and oxygen concentration",
+    "title": "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
     "version": "2026",
-    "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall-ai-powered-fire-safety-insights-from-microgravity-combustion-data/",
-    "access": "read_from_copy",
+    "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/",
+    "access": "read_by_teammate",
     "quote": null
    },
    {
@@ -83,9 +83,20 @@
     "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
     "access": "full_text_read",
     "quote": "Material flammability in partial gravity remains a major gap for exploration missions."
+   },
+   {
+    "item_id": "CH.partial_gravity",
+    "type": "knowledge_gap",
+    "text": "PSI holds no partial-gravity combustion data yet; the page names LUCI as a future source.",
+    "where": "Potential considerations: Partial-gravity data",
+    "title": "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
+    "version": "2026",
+    "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/",
+    "access": "read_by_teammate",
+    "quote": null
    }
   ],
-  "note": "The challenge text gives 30% oxygen or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement, which was read from a copy and not checked on the official page; NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
+  "note": "The challenge text gives oxygen likely 30% or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement (CH.moonbase: oxygen likely 30% or more, pressure 10.2 psi or less; checked on the official page by another session of the team on 2026-11-14); NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
   "see_also": [
    {
     "investigation_id": "PSI-20",
