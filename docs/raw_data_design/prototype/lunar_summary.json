@@ -1,0 +1,94 @@
+{
+ "scenario": "lunar_habitat",
+ "source": "computed read-only from data/pipeline/{tests,scenario_tests,need_tests,gap_states,retrieval_queue}.csv, pipeline/spec/needs.json, and the name joins in ../out/join.csv (PSI-69) and ../listings/PSI-159.json; no PSI request made in this step",
+ "archive": {
+  "files": 60866,
+  "bytes": 13471850126356
+ },
+ "tests_inside_o2_and_pressure": {
+  "all": 26,
+  "PSI-69_counted_for_S1": 17,
+  "PSI-159_not_counted": 9
+ },
+ "files_naming_inside_tests": {
+  "PSI-69": {
+   "tests": 17,
+   "files": 299,
+   "bytes": 24954842492,
+   "zip_files": 47,
+   "zip_bytes": 24923186032,
+   "other_files": 252,
+   "other_bytes": 31656460
+  },
+  "PSI-159": {
+   "tests": 9,
+   "files": 99,
+   "bytes": 79403613858,
+   "zip_or_ts_files": 35,
+   "zip_or_ts_bytes": 79348416686,
+   "other_files": 64,
+   "other_bytes": 55197172
+  },
+  "total": {
+   "files": 398,
+   "bytes": 104358456350,
+   "share_of_archive_bytes": 0.007746408649977159,
+   "small_files": 316,
+   "small_bytes": 86853632
+  }
+ },
+ "S1": {
+  "in_scope": 1824,
+  "inside": 26,
+  "cannot_be_placed": 676,
+  "oxygen_of_oxidizer_stream": 63,
+  "outside_by_table_value": 1059,
+  "counted_inside": 17,
+  "of_17": {
+   "test_end": 17,
+   "disruption": 15,
+   "completion": 2,
+   "burn_time": 16,
+   "extinction_diameter_in_table": 6,
+   "extinction_diameter_raw_column": 11,
+   "flow": 0
+  },
+  "summary_pdfs_of_11": {
+   "files": 11,
+   "bytes": 2451356
+  },
+  "cannot_be_placed_by_investigation": {
+   "PSI-107": 435,
+   "PSI-26": 121,
+   "PSI-101": 109,
+   "PSI-102": 4,
+   "PSI-10": 4,
+   "PSI-100": 2,
+   "PSI-99": 1
+  }
+ },
+ "solid_fuel_needs_P1_P2_P3_D1_D2": {
+  "in_scope": 376,
+  "inside": 0,
+  "outside_by_table_oxygen": 139,
+  "recorded_o2_range_pct": [
+   13.6,
+   22.2
+  ],
+  "cannot_be_placed": 237,
+  "cannot_be_placed_with_raw_o2_and_pressure_column": 124,
+  "of_which_PSI-26_as_run_matrix": {
+   "tests": 121,
+   "files": 1,
+   "bytes": 111886
+  },
+  "not_found_in_sampled_files": 113
+ },
+ "masked_cell_check_PSI-69": {
+  "tests_with_table_Dext": 197,
+  "of_which_with_summary_pdf": 67,
+  "bytes": 76499589,
+  "tests_lacking_Dext": 77,
+  "bytes_lacking": 22233518
+ }
+}

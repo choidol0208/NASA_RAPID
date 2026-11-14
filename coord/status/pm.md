@@ -1,12 +1,12 @@
 ---
 role: pm
-updated: 2026-11-14 23:49 KST
+updated: 2026-11-15 00:35 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
 
-Now: the human lead is back and set the direction for the remaining day (23:49; `coord/decisions.md`): let a user find which unprocessed raw data they need, video included, without processing all of it. pm is running two design jobs (the general question-to-files design; a video ladder) and sends one plan with work per role at about 01:00. No freeze today; submission on 15 November.
+Now: **the plan for the remaining day is out** (00:35, `docs/raw_data_design/design.md`; requests to data, catalog and ui). pm does: the fixed sentences for the third pile and the claims text, the 24 PSI metadata archives, the video part of the design (a second design job is still running), then the submission drafts. No freeze yet; submission today, 15 November (deadline 23:59 KST).
 
 Done since last sync:
 - **23:35: integration.** `catalog-scoring` (config 1.4.0, the weighting build-up, the JANAF tables removed), `data-pipeline` (raw-file layer) and `catalog-filter` are in `main`; AI layer rebuilt; all checks pass. The pm session was offline from about 20:20 to 22:50. Still to do when the human lead is back: `docs/submission/` to config 1.4.0 (scores, weights, method text), and requests to ui for three errors an analysis found on the page (the environment text cut at decimal points; the "not in the archive" list shown for four inputs only; the "4 of 6" line that reads wider than it is).
