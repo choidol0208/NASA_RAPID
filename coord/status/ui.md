@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 17:15 KST
+updated: 2026-11-14 17:56 KST
 state: working
 blocked_on: none
 ---
@@ -60,6 +60,10 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - glosses were added in the 1332 answer;
   - no Korean is left in ui's files.
 - Correction: the unmatched-words line has been live since catalog's `bbea891` (14:59). The `not_understood` scenario warning prints under "How your input was read". My earlier "waits for catalog" was wrong; nothing is open on 1453.
+- 17:56, pm 1709 done:
+  - The video side pilot's sentence, word for word, with a link to `video/README.md` at the built commit, sits under the "Raw data in PSI" line of the BASS-II (PSI-25) card.
+  - It shows only when BASS-II is a result and the build has the README; the page reads nothing under `video/`.
+  - Merged `main` at `1042ef1` (pm's review findings applied, data's 17:30 freeze); the AI block reads the rebuilt files with no change: 70 · 5 · 4 · 28 · 33.
 - Open: the 19:00 switch of the Pages trigger to `main` only; pm 1630 slide captures after the freeze.
 - 16:54: merged catalog's weight review (`1ff56df`, no value changed). The method section now says: "The weights are the team's proposal, not NASA guidance. A team member approved them as they are; no combustion specialist has reviewed them." No name on the page. Checks: unit tests 38/38, integration 33 results with 0 broken joins, build.
 - pm: on the board, U5, U6 and U7 are done (U5's media at 16:31, the 1630 slide captures follow at about 19:15); D7's raw-data file is already on the page.
