@@ -48,6 +48,13 @@ def _f(v):
         return None
 
 
+def _r(x, n):
+    """Round half up after snapping to 9 decimals, so the JavaScript port (web/scorer.js)
+    rounds identically despite last-bit differences between math libraries."""
+    m = 10 ** n
+    return math.floor(round(x, 9) * m + 0.5) / m
+
+
 def _split(v):
     return [p.strip().lower() for p in re.split(r"[;,]", v or "") if p.strip()]
 
@@ -143,7 +150,7 @@ def interpret(query, cfg):
         put("o2_pct", float(m.group(1)), "text")
     m = re.search(r"(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)\b", t)
     if m:
-        put("pressure_kpa", round(float(m.group(1)) * UNITS_TO_KPA[m.group(2)], 1), "text")
+        put("pressure_kpa", _r(float(m.group(1)) * UNITS_TO_KPA[m.group(2)], 1), "text")
     m = re.search(r"(\d+(?:\.\d+)?)\s*(cm/s|mm/s|m/s)", t)
     if m:
         v = float(m.group(1)) * {"cm/s": 1.0, "mm/s": 0.1, "m/s": 100.0}[m.group(2)]
@@ -477,11 +484,11 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
         why, gap, warns = explain(sc, c_eff, s, cfg, fallback, speed)
         scored.append(dict(
             config_id=c["config_id"], investigation_id=c["investigation_id"], psi_accession=c["psi_accession"],
-            config_label=c["config_label"], score=round(s["score"], 1), raw=round(s["raw"], 3), gate=round(s["gate"], 3),
-            evidence=round(s["evidence"], 3), similarity={k: round(v, 3) for k, v in s["similarity"].items()},
-            contributions={k: round(v, 3) for k, v in s["contributions"].items()},
-            weights_used={k: round(v, 3) for k, v in s["weights"].items()}, unknown_dims=s["unknown"],
-            assumed_dims=fallback, coverage=round(s["coverage"], 2), why=why, main_gap=gap, warnings=warns,
+            config_label=c["config_label"], score=_r(s["score"], 1), raw=_r(s["raw"], 3), gate=_r(s["gate"], 3),
+            evidence=_r(s["evidence"], 3), similarity={k: _r(v, 3) for k, v in s["similarity"].items()},
+            contributions={k: _r(v, 3) for k, v in s["contributions"].items()},
+            weights_used={k: _r(v, 3) for k, v in s["weights"].items()}, unknown_dims=s["unknown"],
+            assumed_dims=fallback, coverage=_r(s["coverage"], 2), why=why, main_gap=gap, warnings=warns,
             psi_url=c["_inv"]["psi_url"], dataset_doi=c["_inv"]["dataset_doi"],
             key_findings=c.get("key_findings") or c["_inv"].get("key_findings"),
             has_1g_comparison=c["_inv"].get("has_1g_comparison") == "Y",

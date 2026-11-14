@@ -1,21 +1,29 @@
 ---
 role: ui
-updated: 2026-11-14 11:13 KST
+updated: 2026-11-14 11:26 KST
 state: working
 blocked_on: none
 ---
-Now: U1, static dashboard skeleton in `web/` with a GitHub Pages workflow.
+Now: waiting for `scenario_tests.csv`, `scenario_needs.csv` and `pipeline/spec/scenarios.json` to reach `main`; the view that reads them is already pushed and switches on by itself after my next merge of `main`. Meanwhile: preparing U5 (screenshots, GIF).
 
 Done since last sync:
-- Merged `origin/main` into `catalog-filter` (fast-forward, no conflicts).
-- Answered pm's request 20261114-1056: stack, settings to switch on, shape of the model-written text.
+- U2 done: assumptions listed with the preset and its stated source, catalog and investigation links to the exact CSV row, DOI column in the full ranking.
+- U3 done: needs view from `capability_matrix.csv` (top 3 or all 24, status per need, usable tests, missing conditions, link to the exact row; need definitions and basis documents) and coverage view from `coverage_grid.csv` (oxygen x pressure per fuel phase, ambient basis only, the input's cell marked, every count linked to its row).
+- U4 done: labels (team computation, not safety guidance, AI-generated with review status) and narrow screens (checked at 375 px, no page-level sideways scroll).
+- The page reads `data/insights/cards.json` and `scenarios.json` in the agreed shape. Tested with a throwaway fixture that was never committed.
+- `web/README.md` (how it works, AI-generated note).
+- Accepted data request 1116 and built its view: a row per need for "your atmosphere" (status, tests per tier, gap codes in words) above the per-investigation matrix, and "Recorded tests in your atmosphere" (tests by tier and investigation, fuel-phase filter, each test id linked to its row in the NASA PSI table). Tested locally with the files from `origin/data-pipeline`; hidden until they are on `main`.
 
-Next: push the skeleton and workflow (target 12:15), then U2 (query box wired to the ranking).
+Next: scenario tests and scenario needs (by 14:30 after they reach `main`), then U5 screenshots and GIF once pm's insight files are in (target 21:00, earlier if possible).
 
 Published for others:
-- `data/catalog/investigations.csv` (24 rows), `configurations.csv` (41 rows), `data_dictionary.csv` — stable shape.
-- `scoring.scorer.rank` output — stable shape (fields listed in `contracts/README.md`).
-- Public URL: not yet. Expected https://choidol0208.github.io/NASA_RAPID/ once pm turns on Pages (see the answer to 20261114-1056).
+- Public URL: https://choidol0208.github.io/NASA_RAPID/ . Demo links: `?q=ISS` and `?q=lunar%20habitat`.
+- For the slides and the project text, what the page shows for solid fuels, from `coverage_grid.csv`: at 19 to 23% oxygen, 62 recorded tests, all with no pressure recorded; at 30 to 36% oxygen, 0 recorded tests at any pressure.
+- `data/catalog/*.csv` and the `scoring.scorer.rank` output — stable shape.
 
 Notes for other roles:
-- The dashboard is a static site (no server, no paid calls, does not sleep). The ranking runs in the browser as a JavaScript port of `scoring/scorer.py`, checked against the Python scorer on every deploy; any change to the scorer must keep that check green.
+- pm: please merge `data-pipeline` into `main` at your next sync; the scenario view goes live with my following merge.
+- pm: scenario text appears only when the query equals the entry's `query` exactly (case and spaces ignored) and the preset matches, so write `"ISS"` and `"lunar habitat"` as agreed. `result_notes[].investigation_id` may be the PSI accession or the catalog id.
+- pm: links to repository files use the commit the site was built from, so they keep working after later changes.
+- pm: nobody has opened the live URL logged out yet; this session's proxy blocks github.io.
+- Any change to `scoring/scorer.py` or `scoring_config.json` must keep `python3 web/parity_check.py` green, or the deploy stops.
