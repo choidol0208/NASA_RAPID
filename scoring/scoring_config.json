@@ -203,6 +203,104 @@
     "high": 0.75,
     "medium": 0.45
   },
+  "requirements": {
+    "why": "Systems-engineering view of a query (NASA Systems Engineering Handbook, NASA/SP-2016-6105 Rev2: stakeholder expectations become technical requirements, each verifiable and traceable). Each condition the scorer reads becomes one requirement with its source (stated by the user, implied by a preset, derived, or assumed by default) and the catalog columns that verify it. Each result gets a compliance line per requirement: met (the configuration's recorded conditions cover it), near (similarity at or above outside_range_threshold), not_met, unverified (no recorded value, or an assumed atmosphere), or not_scored. The requirements do not change any score.",
+    "groups": [
+      {
+        "dimension": "gravity",
+        "fields": [
+          "gravity"
+        ],
+        "kind": "environment",
+        "label": "Gravity",
+        "verified_by": "configurations.gravity_level; investigations.has_1g_comparison. Every PSI test in the catalog ran in microgravity"
+      },
+      {
+        "dimension": "o2",
+        "fields": [
+          "o2_pct"
+        ],
+        "units": {
+          "o2_pct": "%"
+        },
+        "kind": "environment",
+        "label": "Oxygen mole fraction",
+        "verified_by": "configurations.o2_min_pct, o2_max_pct, o2_source, o2_reference"
+      },
+      {
+        "dimension": "pressure",
+        "fields": [
+          "pressure_kpa"
+        ],
+        "units": {
+          "pressure_kpa": " kPa"
+        },
+        "kind": "environment",
+        "label": "Total pressure",
+        "verified_by": "configurations.pressure_min_kpa, pressure_max_kpa, pressure_source"
+      },
+      {
+        "dimension": "flow",
+        "fields": [
+          "flow_state",
+          "flow_cms"
+        ],
+        "units": {
+          "flow_cms": " cm/s"
+        },
+        "kind": "scenario",
+        "label": "Flow around the fuel",
+        "verified_by": "configurations.flow_config, flow_min_cms, flow_max_cms, flow_source"
+      },
+      {
+        "dimension": "fuel",
+        "fields": [
+          "fuel_material",
+          "fuel_class",
+          "fuel_phase",
+          "melt_behavior"
+        ],
+        "kind": "material",
+        "label": "Fuel",
+        "verified_by": "configurations.fuel_material, fuel_class, fuel_phase, melt_behavior"
+      },
+      {
+        "dimension": "geometry",
+        "fields": [
+          "sample_geometry",
+          "thermal_regime"
+        ],
+        "kind": "material",
+        "label": "Sample shape and thickness",
+        "verified_by": "configurations.sample_geometry, thermal_regime"
+      },
+      {
+        "dimension": "diluent",
+        "fields": [
+          "diluent"
+        ],
+        "kind": "environment",
+        "label": "Diluent or suppressant gas",
+        "verified_by": "configurations.diluent, diluent_max_pct (scored in suppression questions only)"
+      },
+      {
+        "dimension": "role",
+        "fields": [
+          "concern"
+        ],
+        "kind": "purpose",
+        "label": "Purpose of the question",
+        "verified_by": "investigations.fire_safety_role, research_focus (team classification of the PSI record)"
+      }
+    ],
+    "source_class": {
+      "text": "stated",
+      "input": "stated",
+      "preset": "implied",
+      "derived": "derived",
+      "default": "assumed"
+    }
+  },
   "presets": {
     "iss": {
       "label_en": "ISS cabin",

@@ -402,6 +402,55 @@ class CatalogIntegrity(unittest.TestCase):
             self.assertAlmostEqual(sum(p["weights"].values()), 1.0, places=6, msg=name)
 
 
+class Requirements(unittest.TestCase):
+    """Systems-engineering layer: one requirement per dimension the query sets, with its source; a compliance line per result."""
+
+    def test_iss_cotton_fabric_requirements(self):
+        out = scorer.rank("ISS cotton fabric")
+        reqs = {q["dimension"]: q for q in out["requirements"]}
+        self.assertEqual(list(reqs), ["gravity", "o2", "pressure", "flow", "fuel", "geometry", "role"])
+        self.assertEqual(reqs["o2"]["source"], "implied by preset iss")
+        self.assertEqual(reqs["o2"]["value"], "21%")
+        self.assertEqual(reqs["fuel"]["source_class"], "stated")
+        self.assertEqual(reqs["role"]["source_class"], "assumed")  # no purpose word: prevention by default
+        self.assertEqual([q["id"] for q in out["requirements"]], [f"R{i}" for i in range(1, 8)])
+
+    def test_compliance_follows_the_similarities(self):
+        out = scorer.rank("ISS cotton fabric")
+        rid = {q["dimension"]: q["id"] for q in out["requirements"]}
+        for r in out["results"]:
+            st = {c["id"]: c["status"] for c in r["compliance"]}
+            self.assertEqual(len(st), len(out["requirements"]))
+            if "O2" in r["assumed_dims"]:
+                self.assertEqual(st[rid["o2"]], "unverified")  # an assumed atmosphere never counts as met
+            self.assertEqual(st[rid["gravity"]], "met")
+            for d in ("fuel", "geometry"):
+                expect = "met" if r["similarity"][d] >= 0.999 else None
+                if expect:
+                    self.assertEqual(st[rid[d]], expect)
+
+    def test_partial_gravity_is_not_met(self):
+        out = scorer.rank("lunar habitat cotton fabric")
+        rid = {q["dimension"]: q["id"] for q in out["requirements"]}
+        for r in out["results"]:
+            self.assertEqual({c["id"]: c["status"] for c in r["compliance"]}[rid["gravity"]], "not_met")
+
+    def test_diluent_not_scored_outside_suppression(self):
+        out = scorer.rank("ISS cotton fabric in CO2")
+        reqs = {q["dimension"]: q["id"] for q in out["requirements"]}
+        if "diluent" in reqs:
+            for r in out["results"]:
+                self.assertEqual({c["id"]: c["status"] for c in r["compliance"]}[reqs["diluent"]], "not_scored")
+
+    def test_requirements_change_no_score(self):
+        cfg = copy.deepcopy(CFG)
+        cfg.pop("requirements")
+        for q in ("ISS", "lunar habitat cotton fabric", "CO2 suppression of heptane fire"):
+            a = [(r["config_id"], r["score"]) for r in scorer.rank(q)["results"]]
+            b = [(r["config_id"], r["score"]) for r in scorer.rank(q, config=cfg)["results"]]
+            self.assertEqual(a, b, q)
+
+
 class AhpWeights(unittest.TestCase):
     """Config 1.2.0: the profile weights are the AHP derivation of scoring/ahp_judgements.json."""
 

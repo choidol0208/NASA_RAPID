@@ -48,9 +48,11 @@ def key_view(o):
         return dict(id=r["investigation_id"], cfg=r["config_id"], score=r["score"], gate=r["gate"],
                     evidence=r["evidence"], warnings=[w["code"] for w in r["warnings"]],
                     why=r["why"], gap=r["main_gap"], complementary=r.get("complementary"),
-                    confidence=r.get("confidence"), unknown=r["unknown_dims"], assumed=r.get("assumed_dims", []))
+                    confidence=r.get("confidence"), unknown=r["unknown_dims"], assumed=r.get("assumed_dims", []),
+                    compliance=[(c["id"], c["status"]) for c in r.get("compliance", [])])
     return dict(
         status=o["status"], scenario=o["scenario"], not_understood=o.get("not_understood"),
+        requirements=[(q["id"], q["dimension"], q["value"], q["source_class"], q["source"]) for q in o.get("requirements", [])],
         assumptions=[(a["field"], a["source"]) for a in o["assumptions"]],
         warnings=[(w["code"], w["message"]) for w in o["warnings"]],
         results=[res(r) for r in o["results"]],
