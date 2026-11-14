@@ -2,15 +2,18 @@
   "_about": {
     "what": "Which evidence streams make the weights the scorer uses (read by scoring/derive_weights.py).",
     "streams": {
-      "judgement": "AHP pairwise judgements: the team members' group judgements (scoring/expert_weights.json) where they exist and are consistent, otherwise the AI session's judgements (scoring/ahp_judgements.json).",
+      "judgement": "AHP pairwise judgements, tried in order: the team members' group judgements (scoring/expert_weights.json) where they exist and are consistent; else the literature-based judgements (scoring/literature_weights.json, classes from cited textbooks, papers and NASA records in scoring/literature_evidence.json); else the AI session's judgements from the NASA records (scoring/ahp_judgements.json).",
       "data": "Relative importance of conditions in NASA measurements (scoring/data_weights.json), pooled into the judgement weights of the dimensions it covers."
     },
     "generated_by": "AI-generated (Claude Code, catalog role), 2026-11-14.",
-    "status": "apply true since config 1.3.0 (2026-11-14 20:06 KST, the human lead's decision): the suppression weights pool the AI session's AHP judgements with the NASA FLEX data stream; prevention and detection keep the AHP weights, because no NASA table records a response for them. When team members' judgements arrive (scoring/expert_weights.json), rerun derive_weights.py --write; that also needs the human lead's decision."
+    "status": "Config 1.4.0 (2026-11-14 20:19 KST, the human lead's decision): the judgement stream is the literature-based one for all three question types; suppression is pooled with the NASA FLEX data stream as in 1.3.0. Team members' judgements, if they arrive, come first; using them needs the human lead's decision and derive_weights.py --write."
   },
   "apply": true,
   "judgement": {
-    "prefer": "expert"
+    "prefer": [
+      "expert",
+      "literature"
+    ]
   },
   "data": {
     "suppression": {

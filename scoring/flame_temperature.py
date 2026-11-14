@@ -11,9 +11,14 @@ The stoichiometric adiabatic flame temperature of an atmosphere, for a generic o
   CH2 + 1.5 O2 -> CO2 + H2O, so each mol of O2 consumed adds 2/3 mol CO2 and 2/3 mol H2O.
   The inert part (N2, CO2, He) is carried through.
 - Temperature: the products are heated from 298.15 K until their enthalpy rise equals Q, with the
-  enthalpies H(T) - H(298.15 K) of the NIST-JANAF tables (scoring/reference/janaf/, public US government
-  data), linear between table rows. No dissociation (so values above about 2200 K are upper bounds),
-  no radiation, no fuel-specific chemistry.
+  enthalpies H(T) - H(298.15 K) of the NIST-JANAF tables, linear between table rows. No dissociation
+  (so values above about 2200 K are upper bounds), no radiation, no fuel-specific chemistry.
+
+The NIST-JANAF tables are NIST Standard Reference Database 13, copyrighted by the U.S. Secretary of
+Commerce under the Standard Reference Data Act. They are NOT in this repository and must not be
+committed (.gitignore). To rerun, download N-023, O-029, C-095, H-064 and He-001 (.txt) from
+https://janaf.nist.gov/ into scoring/reference/janaf/ yourself. The team's plan is to switch to the NASA
+Glenn coefficients (McBride, Zehe and Gordon 2002, NASA/TP-2002-211556), a NASA publication.
 
 Flame temperature joins in one physical number what the scorer now treats as two dimensions, the O2
 fraction and the diluent: a diluent with a higher heat capacity (CO2) lowers it, helium (lower molar
@@ -42,6 +47,9 @@ T0 = 298.15
 
 
 def load_janaf():
+    missing = [fn for fn in TABLES.values() if not os.path.exists(os.path.join(JANAF_DIR, fn))]
+    if missing:
+        raise SystemExit(f"NIST-JANAF tables not found in {JANAF_DIR} ({', '.join(missing)}); they are not redistributed, see the module docstring")
     out = {}
     for sp, fn in TABLES.items():
         rows = []
@@ -114,7 +122,7 @@ def check_on_flex():
                    method="Stoichiometric adiabatic flame temperature of the atmosphere for a generic CH2 fuel; 13.1 kJ per g O2 (Huggett 1980); "
                           "NIST-JANAF enthalpies; no dissociation. Check: OLS of the FLEX extinction diameter ratio on the flame temperature "
                           "against O2 and diluent fractions, each with fuel, ln d0 and ln P as controls.",
-                   sources=["Huggett 1980, Fire and Materials 4(2), 61-65", "NIST-JANAF Thermochemical Tables (Chase 1998), janaf.nist.gov",
+                   sources=["Huggett 1980, Fire and Materials 4(2), 61-65", "NIST-JANAF Thermochemical Tables (Chase 1998), janaf.nist.gov; NIST SRD 13, copyright U.S. Secretary of Commerce; read locally, not redistributed",
                             "NASA PSI-69 FLEX experimental table (CC0-1.0)"]),
         examples_K=examples,
         flex_check=dict(n=len(use), o2_and_diluent=two, flame_temperature_only=one, o2_only=o2_only,

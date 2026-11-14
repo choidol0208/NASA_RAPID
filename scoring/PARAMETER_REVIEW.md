@@ -62,4 +62,4 @@ These are the points the rules rest on that need an answer from combustion resea
 5. Across 56 to 101 kPa, does a symmetric rule, where a factor of 2 in pressure gives 0.61, make sense for solid flammability?
 6. For extinguishment by inert dilution, is molar heat capacity the right way to compare CO2, N2 and He? Should helium's high diffusivity count separately?
 7. Where the record gives no atmosphere for an ISS-cabin or Cygnus experiment, is assuming 21% O2 and 101.3 kPa acceptable? Should such a value rank below a recorded near value (finding 2)?
-8. Are the pairwise judgements behind the weights reasonable (`scoring/ahp_judgements.json`, 51 pairs with their basis)? With them, the prevention weights are O2 0.285, fuel 0.267, flow 0.166, sample shape 0.111, pressure 0.090 and research purpose 0.081.
+8. Are the evidence classes behind the weights reasonable (`scoring/literature_evidence.json`: decisive, strong modifier, or weak, per dimension and question type, with the sources)? With them, the prevention weights are O2 0.251, flow 0.250, fuel 0.250, and pressure, sample shape and research purpose 0.083 each.

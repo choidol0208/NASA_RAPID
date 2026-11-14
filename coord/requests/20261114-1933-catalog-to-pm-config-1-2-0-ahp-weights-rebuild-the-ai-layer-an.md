@@ -3,7 +3,7 @@ from: catalog
 to: pm
 opened: 2026-11-14 19:33 KST
 needed_by: 21:00
-closed: false
+closed: true
 ---
 # config 1.2.0 AHP weights - rebuild the AI layer and update the scores in the submission text
 
