@@ -116,13 +116,57 @@ def report_lines(res):
     return lines
 
 
+STREAMS = os.path.join(HERE, "weight_streams.json")
+EXPERT = os.path.join(HERE, "expert_weights.json")
+DATA = os.path.join(HERE, "data_weights.json")
+
+
+def final_weights(res, streams_path=STREAMS):
+    """Combine the streams named in scoring/weight_streams.json into the weights the scorer uses.
+
+    - Judgement stream: the group weights of the team's experts (scoring/expert_weights.json) for a profile
+      whose group matrix is consistent, if "judgement.prefer" is "expert"; otherwise the AHP derivation above
+      (the AI session's judgements).
+    - Data stream: for a profile listed under "data", the weights of the listed dimensions are pooled with
+      the data shares of scoring/data_weights.json by a log-linear (geometric) opinion pool,
+      s_d proportional to s_judgement_d^(1 - lambda) * s_data_d^lambda, inside the subset; the subset keeps the
+      total weight the judgement gave it, and the other dimensions keep theirs.
+    Nothing is combined unless "apply" is true.
+    """
+    st = json.load(open(streams_path, encoding="utf-8")) if os.path.exists(streams_path) else {}
+    expert = json.load(open(EXPERT, encoding="utf-8")).get("group", {}) if os.path.exists(EXPERT) else {}
+    data = json.load(open(DATA, encoding="utf-8")).get("responses", {}) if os.path.exists(DATA) else {}
+    out = {}
+    for prof, r in res.items():
+        w, sources = dict(r["weights"]), ["AHP, AI-session judgements (scoring/ahp_judgements.json)"]
+        if st.get("apply"):
+            g = expert.get(prof)
+            if st.get("judgement", {}).get("prefer") == "expert" and g and g.get("consistent"):
+                w, sources = dict(g["weights"]), [f"AHP, judgements of {len(g['people'])} team members (scoring/expert_weights.json)"]
+            spec = st.get("data", {}).get(prof)
+            if spec and spec["response"] in data:
+                dims = [d for d in spec["dimensions"] if w.get(d, 0) > 0]
+                imp = data[spec["response"]]["importance"]
+                m = sum(w[d] for d in dims)
+                sd_tot = sum(imp[d]["normalised"] for d in dims)
+                lam = spec["lambda"]
+                pooled = {d: (w[d] / m) ** (1 - lam) * (imp[d]["normalised"] / sd_tot) ** lam for d in dims}
+                z = sum(pooled.values())
+                exact = {d: w.get(d, 0.0) for d in ALL_DIMS}
+                exact.update({d: m * pooled[d] / z for d in dims})
+                w = round_to_one(exact)
+                sources.append(f"pooled with NASA FLEX data ({spec['response']}, lambda {lam}) over {', '.join(dims)}")
+        out[prof] = dict(weights={d: w.get(d, 0.0) for d in ALL_DIMS}, sources=sources)
+    return out
+
+
 def config_differences(res, cfg):
     diffs = []
-    for prof, r in res.items():
+    for prof, r in final_weights(res).items():
         have = cfg["profiles"][prof]["weights"]
         for d in ALL_DIMS:
             if abs(have.get(d, 0.0) - r["weights"][d]) > 1e-9:
-                diffs.append(f"{prof}.{d}: config {have.get(d, 0.0)}, AHP {r['weights'][d]}")
+                diffs.append(f"{prof}.{d}: config {have.get(d, 0.0)}, derived {r['weights'][d]}")
     return diffs
 
 
@@ -137,14 +181,17 @@ def main():
     for prof, r in res.items():
         print(f"\n{prof}: eigenvector " + ", ".join(f"{d} {r['exact'][d]:.4f}" for d in r["dims"])
               + "; geometric mean " + ", ".join(f"{d} {r['geometric_mean'][d]:.4f}" for d in r["dims"]))
+    fin = final_weights(res)
+    for prof, r in fin.items():
+        print(f"\nfinal {prof}: " + ", ".join(f"{d} {r['weights'][d]:.3f}" for d in ALL_DIMS) + " | " + "; ".join(r["sources"]))
     text = open(CONFIG, encoding="utf-8").read()
     cfg = json.loads(text)
     diffs = config_differences(res, cfg)
     if args.check:
-        print("\nconfig matches the AHP derivation" if not diffs else "\nconfig differs:\n  " + "\n  ".join(diffs))
+        print("\nconfig matches the derivation" if not diffs else "\nconfig differs:\n  " + "\n  ".join(diffs))
         return 1 if diffs else 0
     if args.write:
-        for prof, r in res.items():
+        for prof, r in final_weights(res).items():
             cfg["profiles"][prof]["weights"] = {d: r["weights"][d] for d in ALL_DIMS}
         end = "\n" if text.endswith("\n") else ""
         with open(CONFIG, "w", encoding="utf-8", newline="") as fh:

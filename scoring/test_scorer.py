@@ -495,5 +495,59 @@ class AhpWeights(unittest.TestCase):
             self.assertAlmostEqual(sum(r["weights"].values()), 1.0, places=9, msg=prof)
 
 
+class WeightStreams(unittest.TestCase):
+    """Pooling of the judgement and data streams (scoring/weight_streams.json, scoring/data_weights.json)."""
+
+    @classmethod
+    def setUpClass(cls):
+        import json
+        import os
+        import tempfile
+        from scoring import derive_weights
+        cls.dw = derive_weights
+        cls.res = derive_weights.derive()
+        st = json.load(open(derive_weights.STREAMS, encoding="utf-8"))
+        st["apply"] = True
+        fd, cls.tmp = tempfile.mkstemp(suffix=".json")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            json.dump(st, fh)
+        cls.spec = st["data"]
+        cls.on = derive_weights.final_weights(cls.res, cls.tmp)
+
+    @classmethod
+    def tearDownClass(cls):
+        import os
+        os.remove(cls.tmp)
+
+    def test_off_means_ahp(self):
+        off = self.dw.final_weights(self.res)
+        for prof, r in self.res.items():
+            self.assertEqual(off[prof]["weights"], {d: r["weights"][d] for d in self.dw.ALL_DIMS})
+
+    def test_pooling_keeps_mass_and_other_dimensions(self):
+        for prof, spec in self.spec.items():
+            before, after = self.res[prof]["weights"], self.on[prof]["weights"]
+            dims = spec["dimensions"]
+            self.assertAlmostEqual(sum(after[d] for d in dims), sum(before[d] for d in dims), delta=0.002)
+            for d in self.dw.ALL_DIMS:
+                if d not in dims:
+                    self.assertAlmostEqual(after[d], before[d], delta=0.0015, msg=(prof, d))
+            self.assertAlmostEqual(sum(after.values()), 1.0, places=9)
+
+    def test_profiles_without_data_are_unchanged(self):
+        for prof in self.res:
+            if prof not in self.spec:
+                self.assertEqual(self.on[prof]["weights"], {d: self.res[prof]["weights"][d] for d in self.dw.ALL_DIMS})
+
+    def test_group_of_identical_experts_equals_each(self):
+        # Aggregation of individual judgements by the geometric mean: identical matrices give the same matrix.
+        A = [[1.0, 3.0, 5.0], [1 / 3, 1.0, 2.0], [1 / 5, 1 / 2, 1.0]]
+        G = [[(A[i][j] * A[i][j]) ** 0.5 for j in range(3)] for i in range(3)]
+        w1, _ = self.dw.eigen_weights(A)
+        w2, _ = self.dw.eigen_weights(G)
+        for x, y in zip(w1, w2):
+            self.assertAlmostEqual(x, y, places=12)
+
+
 if __name__ == "__main__":
     unittest.main()
