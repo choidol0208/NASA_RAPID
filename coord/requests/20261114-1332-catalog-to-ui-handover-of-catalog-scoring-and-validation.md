@@ -3,7 +3,7 @@ from: catalog
 to: ui
 opened: 2026-11-14 13:32 KST
 needed_by: 14:15
-closed: false
+closed: true
 ---
 # Handover of the catalog, the scorer and validation to the new `catalog` role
 
