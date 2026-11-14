@@ -32,5 +32,5 @@ How the textbook was used:
   - Near air the scales equal the earlier ones.
   - Effect on the demo: `ISS` and `lunar habitat` keep their top 3; scores move by less than 2 points.
   - `ISS cotton fabric` swaps ranks 2 and 3.
-  - `lunar habitat cotton fabric` and `달 기지 면직물` now rank SAFFIRE-I second, where BASS-II-C05 was.
+  - `lunar habitat cotton fabric` and its Korean form `달 기지 면직물` (lunar base cotton fabric) now rank SAFFIRE-I second, where BASS-II-C05 was.
 - **B. Diluent similarity by molar heat capacity.** CO2 has a higher molar heat capacity than N2, and helium a lower one. Helium's high thermal diffusivity is a further effect, which this rule does not capture. Only suppression queries that name a diluent change; no top 3 of the validation scenarios changed.

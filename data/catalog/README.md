@@ -1,28 +1,38 @@
-# 실험 카탈로그
+# Experiment catalog
 
-> AI 생성 데이터: Claude(AI 도우미)가 2026-11-14에 `data/psi/`의 PSI 기록과 시험 표에서 뽑았습니다. 모든 행은 `verification_status = ai_extracted`이며, 사람이 원문과 대조한 행만 `human_verified`로 바꿉니다.
+> AI-generated data: extracted by Claude (an AI assistant) on 2026-11-14 from the PSI records and experimental tables in `data/psi/`. Every row has `verification_status = ai_extracted`. Only a row that a person has compared with the original becomes `human_verified`, and that changes no score.
 
-- `investigations.csv`: PSI 연소과학 조사 24개 (1행 = 조사 1개, 26열)
-- `configurations.csv`: 시험 구성 41개 (1행 = 같은 조건 범위를 공유하는 시험 묶음, 40열). 순위 점수는 이 표에서 계산합니다.
-- `catalog.xlsx`: 사람이 검토하는 사본. 1행 묶음 띠, 2행 열 이름(음영), 3행 한국어 뜻, 4행부터 데이터.
-- `data_dictionary.csv`: 열마다 한국어 뜻, 허용값, 쓰이는 곳.
+- `investigations.csv`: 24 PSI combustion-science investigations (one row per investigation, 26 columns).
+- `configurations.csv`: 41 test configurations (one row per group of tests that share a range of conditions, 43 columns). The ranking scores this table.
+- `catalog.xlsx`: a copy for people to review. Row 1 is the column group band, row 2 the column name (shaded), row 3 its meaning; data start at row 4.
+- `data_dictionary.csv`: for each column, its meaning, allowed values and where it is used.
 
-## 원칙
+## Rules
 
-- 숫자는 PSI 시험 표(`table`)나 PSI 기록 본문(`record`)에서만 가져왔고, `atmosphere_basis` 열에 출처를 적었습니다. 기록에 없는 값은 빈칸입니다. 0으로 채우지 않습니다.
-- `tier`, `fire_safety_role`, `research_focus`, `fire_scenario_tags`, `fuel_class`, `thermal_regime`, `sooting_tendency`는 팀의 분류입니다.
-- 가이드라인 문서 대비 추가 열: 조사표 `psi_accession`, `license` / 구성표 `psi_accession`, `o2_reference`(ambient 또는 oxidizer_stream), `atmosphere_basis`.
-- 원문과 다른 점, 기록끼리 맞지 않는 점은 `source_notes`에 적었습니다 (예: Saffire-I 기록의 날짜, Saffire 표의 두께 단위).
+- **Where numbers come from:**
+  - A number is taken only from a PSI experimental table (`table`) or the PSI record text (`record`), and `atmosphere_basis` says which.
+  - `o2_source`, `pressure_source` and `flow_source` give the source of each range: `table`, `record`, `test_matrix` (a planned matrix, not individual tests) or `team` (the team's reading).
+  - A value not in the record stays empty and is never filled with 0.
+- **Team classification:** `tier`, `fire_safety_role`, `research_focus`, `fire_scenario_tags`, `fuel_class`, `thermal_regime` and `sooting_tendency` are the team's classification, not NASA's.
+- **Columns added to the original design:**
+  - investigations: `psi_accession`, `license`;
+  - configurations: `psi_accession`, `o2_reference` (`ambient` or `oxidizer_stream`), `atmosphere_basis`, and the three source columns.
+- **Disagreements:** where the catalog differs from an original, or two records disagree, `source_notes` says so (for example the Saffire-I record's dates, or the thickness units in the Saffire tables).
+- **Independent check:** `python3 validation/check_catalog_sources.py` compares the catalog with the NASA records and tables directly and writes `validation/catalog_source_check.md`.
 
-## Human verification (added 2026-11-14 by the catalog role, AI-generated)
+## Human verification
 
-`validation/verification_sheet.csv` lists the catalog values behind the demo rankings (`ISS`, `lunar habitat`, `ISS cotton fabric`, `lunar habitat cotton fabric`): fuel, oxygen, pressure and flow ranges, and test counts. Each value comes with the NASA table rows and raw cells, or the PSI record text, where a person can check it. Rebuild it with `python3 validation/build_verification_sheet.py` after any catalog or scorer change. A person fills in `checked_by`, `matches_source` and `comment`. A row becomes `human_verified` only through `scripts/build_catalog.py`. Row numbers are CSV row numbers (header = row 1), the same numbers that `source_notes` and `data/pipeline/*.csv` use.
+`validation/verification_sheet.csv` lists the catalog values behind the demo rankings (`ISS`, `lunar habitat`, `ISS cotton fabric`, `lunar habitat cotton fabric`): fuel, oxygen, pressure and flow ranges, and test counts. Each value comes with the NASA table rows and raw cells, or the PSI record text, where a person can check it.
+- Rebuild it with `python3 validation/build_verification_sheet.py` after any catalog or scorer change.
+- A person fills in `checked_by`, `matches_source` and `comment`.
+- A row becomes `human_verified` only through `scripts/build_catalog.py`.
+- Row numbers are CSV row numbers (header = row 1), the same numbers that `source_notes` and `data/pipeline/*.csv` use.
 
-## 다시 만들기
+## Rebuilding
 
 ```bash
-python3 scripts/build_catalog.py        # CSV 2개
-python3 scripts/export_catalog_xlsx.py  # catalog.xlsx, data_dictionary.csv
+python3 scripts/build_catalog.py        # the two CSV files
+python3 scripts/export_catalog_xlsx.py  # catalog.xlsx and data_dictionary.csv
 ```
 
-출처: NASA Physical Sciences Informatics (https://psi.nasa.gov/). 실험별 DOI는 `dataset_doi` 열, 라이선스는 `license` 열 (PSI-10은 기록에 라이선스가 없음).
+Source: NASA Physical Sciences Informatics (https://psi.nasa.gov/). Each experiment's DOI is in the `dataset_doi` column and its license in the `license` column (the PSI-10 record states no license).
