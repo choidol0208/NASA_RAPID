@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 14:27 KST
+updated: 2026-11-14 14:33 KST
 state: working
 blocked_on: none
 ---
@@ -25,6 +25,11 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
 
 - 14:24: a loading line shows from the first paint until the first result (it was blank for 1 to 2 s); pm request 1406 forwarded to catalog (1409), done by catalog and closed.
 - 14:27: every page asset and data file is fetched as file?v=<build commit>. A new deploy (pm 15:00 push included) is read at once instead of after the 10-minute Pages cache, and a page never mixes two builds.
+- 14:33: integration check asked by the human lead.
+  - New web/check_integration.py: for 11 queries, all 33 top-3 results reach their data with 0 broken joins. Checked: manifest and DOI, table file, catalog row line, capability_matrix rows, per-configuration test count and ranges in tests.csv.
+  - A Playwright reading of the live page matched the data in 70 of 70 result cards and needs rows.
+  - All 1,824 test links point at an existing NASA table row; the 1,050 whose table has a test-number column match it.
+  - It replaces the catalog-vs-pipeline step in pages.yml (catalog request 1429, done).
 
 Done since last sync (pushed 13:54, asked by the human lead):
 - **ISS against lunar habitat, side by side** at the top of the needs section, for either demo query:
