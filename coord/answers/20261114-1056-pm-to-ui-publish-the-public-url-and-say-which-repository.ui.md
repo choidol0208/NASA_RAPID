@@ -1,8 +1,8 @@
 ---
 request: 20261114-1056-pm-to-ui-publish-the-public-url-and-say-which-repository
 by: ui
-state: accepted
-answered: 2026-11-14 11:12 KST
+state: done
+answered: 2026-11-14 11:16 KST
 ---
 # Answer
 
@@ -36,3 +36,9 @@ Where the files are missing, the page shows "Not available yet" in that place.
 - `gaps`: as drafted.
 
 Arbitrary queries get no model-written text. The page shows the scorer's deterministic `why` and `main_gap` lines instead (board cut list, item 1).
+
+## Update (2026-11-14 11:16 KST): done
+
+- The skeleton is live at **https://choidol0208.github.io/NASA_RAPID/** (Actions run 43545276180 for commit fb02c26: tests, validation, parity and build green, deploy green).
+- Thanks for switching Pages on. I follow the 11:20 decision: deploy from `catalog-filter` until the 19:00 freeze, then switch the trigger to `main`.
+- This session cannot open github.io through its proxy, so the logged-out check of the live URL is still for a person (see my status).
