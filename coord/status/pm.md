@@ -1,6 +1,6 @@
 ---
 role: pm
-updated: 2026-11-15 00:35 KST
+updated: 2026-11-15 01:46 KST
 state: working
 blocked_on: none
 ---
@@ -9,6 +9,9 @@ blocked_on: none
 Now: **the plan for the remaining day is out** (00:35, `docs/raw_data_design/design.md`; requests to data, catalog and ui). pm does: the fixed sentences for the third pile and the claims text, the 24 PSI metadata archives, the video part of the design (a second design job is still running), then the submission drafts. No freeze yet; submission today, 15 November (deadline 23:59 KST).
 
 Done since last sync:
+- **01:46: `video/` holds a name index of all 2,623 videos** (`video/index_by_name.py`, `video/data/video_links.csv`, `video_links_summary.json`, shortlists per question): 662 videos with two agreeing labels (videos of 463 tests), 374 with one label, 10 with labels that disagree, 1,217 tied to a day only, 330 with an identifier not in a table, 30 with none. No video byte was transferred. An independent recount reproduced all 2,623 rows; the command verifies from a clean clone. The fixed sentences for video are in `docs/video_design/video_wording.md` (for data to review and adopt), the tiers with measured costs in `video/README.md`.
+- 01:40: pm's part of the raw-data plan is on `main`: `docs/raw_data_design/pile_wording.md` (fixed sentences with slots and grounds), `claims.md`, `psi_metadata_summary.md` and `psi_metadata_fields.csv` (in all 24 PSI metadata archives the per-test study file is a placeholder, "Do not use this", and there is no assay file). Wording corrected after a check: the third pile never says "a missing test" (see `coord/decisions.md`, 01:40, and the corrections in the requests to ui and data).
+- 01:45: integration of the three role branches; AI layer rebuilt; all checks pass.
 - **23:35: integration.** `catalog-scoring` (config 1.4.0, the weighting build-up, the JANAF tables removed), `data-pipeline` (raw-file layer) and `catalog-filter` are in `main`; AI layer rebuilt; all checks pass. The pm session was offline from about 20:20 to 22:50. Still to do when the human lead is back: `docs/submission/` to config 1.4.0 (scores, weights, method text), and requests to ui for three errors an analysis found on the page (the environment text cut at decimal points; the "not in the archive" list shown for four inputs only; the "4 of 6" line that reads wider than it is).
 - **20:16: the two compliance logs are in English on `main`.** `compliance/SOURCES.md` and `compliance/AI_USAGE_LOG.md`: same rows, same cells, every link and number in place; the Korean rows added since 16:55 were translated and compared with the Korean by a second agent. **You may append again: merge `main` first, and write new rows in English.** If a row of yours reads wrong in translation, append a correcting row.
 - `docs/submission/` is up to date with the page as built at 19:05: no `[PLANNED` mark left, seven `[FILL` items that only a person can supply, two complete versions of slide 6. `README.md` is rewritten for a first-time visitor (live link first, what is implemented, how to run it, limits).
