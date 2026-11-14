@@ -1,0 +1,65 @@
+{
+  "_meta": {
+    "label": "AI-generated data file: computed by code written with an AI assistant (Claude Code). No language model ran to build it. The team's calculation, not a NASA result.",
+    "method": "Stoichiometric adiabatic flame temperature of the atmosphere for a generic CH2 fuel; 13.1 kJ per g O2 (Huggett 1980); NIST-JANAF enthalpies; no dissociation. Check: OLS of the FLEX extinction diameter ratio on the flame temperature against O2 and diluent fractions, each with fuel, ln d0 and ln P as controls.",
+    "sources": [
+      "Huggett 1980, Fire and Materials 4(2), 61-65",
+      "NIST-JANAF Thermochemical Tables (Chase 1998), janaf.nist.gov; NIST SRD 13, copyright U.S. Secretary of Commerce; read locally, not redistributed",
+      "NASA PSI-69 FLEX experimental table (CC0-1.0)"
+    ]
+  },
+  "examples_K": {
+    "air (21% O2 in N2)": 2464,
+    "ISS-like 21% O2, N2": 2464,
+    "lunar habitat 30% O2 in N2": 3100,
+    "34% O2 in N2 (exploration atmosphere)": 3350,
+    "15% O2 in N2": 1970,
+    "21% O2, 30% CO2, rest N2": 2196,
+    "21% O2, 30% He, rest N2": 2672
+  },
+  "flex_check": {
+    "n": 158,
+    "o2_and_diluent": {
+      "r2": 0.6193,
+      "aic": -634.54,
+      "k": 7,
+      "beta": [
+        -0.41291,
+        -0.64624,
+        0.40826,
+        0.20002,
+        0.22468,
+        0.27372,
+        -0.09841
+      ]
+    },
+    "flame_temperature_only": {
+      "r2": 0.5535,
+      "aic": -613.34,
+      "k": 5,
+      "beta": [
+        2.08621,
+        -0.38559,
+        0.21737,
+        0.20217,
+        -0.18837
+      ]
+    },
+    "o2_only": {
+      "r2": 0.5342,
+      "aic": -606.63,
+      "k": 5,
+      "beta": [
+        0.08082,
+        -0.63878,
+        0.21631,
+        0.27018,
+        -0.18907
+      ]
+    },
+    "flame_temperature_range_K": [
+      1644,
+      3100
+    ]
+  }
+}

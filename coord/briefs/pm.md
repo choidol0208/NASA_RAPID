@@ -25,4 +25,4 @@ Listed in `coord/roles.json` under `pm`. Your branch is `main`.
 
 - A model writes text; it never produces a number, a score or a level.
 - A statement without a source is dropped, not softened.
-- Which model writes the text, and through which provider, is the human lead's choice (`AGENTS.md` sections 4 and 8). Record it in `compliance/AI_USAGE_LOG.md` under "제품 안에서 동작하는 AI" before the first run.
+- Which model writes the text, and through which provider, is the human lead's choice (`AGENTS.md` sections 4 and 8). Record it in `compliance/AI_USAGE_LOG.md` under "AI that runs inside the product" before the first run.

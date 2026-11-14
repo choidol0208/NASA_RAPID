@@ -3,12 +3,12 @@
   "built_by": "ai/robustness.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T19:03:22+09:00",
+  "generated_at": "2026-11-14T23:35:06+09:00",
   "inputs_sha256": {
    "data/catalog/configurations.csv": "8b03b6d1403c3bbfe7d392ea0622038f7128243905ff9ee40e98d6c1aa67efb8",
    "data/catalog/investigations.csv": "840e0266945d73b2482b74338c9924adc1d5c8a17696804b83c71d95ce1b10e2",
-   "scoring/scorer.py": "18eed1f3ea5a371f641335fb99c2a47cd40e2f47758a43034876cf512f14008f",
-   "scoring/scoring_config.json": "f102970057f63bd9b6295fef264d3a7c3c2acfb431cd92efaaefd700065f92bc"
+   "scoring/scorer.py": "052666956fac887eaff838d565f785c8b7271bf887f72b0c3d4d9b12c62476bd",
+   "scoring/scoring_config.json": "83f3cff13cc4aa232574ae84500ca281483cae8129330c2dea2ffa7e176cf2f5"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). No language model ran to build it. Shares are computed by code from the team's ranking (scoring.scorer) under sampled weights. Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
   "params": {
@@ -19,7 +19,7 @@
    "tie_tolerance": 1e-09,
    "numpy": "2.1.3"
   },
-  "content_sha256": "85cfb730dcb85e37c8dc0d5f5798ae93fa64b19906d320ebff47e27bbed81a5b"
+  "content_sha256": "6247efde39da55cef318781f8ee3a1b2031ce5c6f9ac05118e7b039397627376"
  },
  "description": "Rank stability of the team's ranking (scoring.scorer.rank) for the four preset queries under sampled weights, tie-aware. Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
  "label": "Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
@@ -44,7 +44,7 @@
    "scenario_id": "iss",
    "query": "ISS",
    "profile": "prevention",
-   "config_version": "1.1.0",
+   "config_version": "1.4.0",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -52,12 +52,12 @@
    "tie_tolerance": 1e-09,
    "rng": "numpy.random.default_rng([42, 0]) local, default_rng([42, 1]) uniform",
    "profile_weights": {
-    "o2": 0.25,
-    "pressure": 0.1,
-    "flow": 0.2,
+    "o2": 0.251,
+    "pressure": 0.083,
+    "flow": 0.25,
     "fuel": 0.25,
-    "geometry": 0.1,
-    "role": 0.1,
+    "geometry": 0.083,
+    "role": 0.083,
     "diluent": 0.0
    },
    "sampled_dims": [
@@ -250,7 +250,7 @@
       "pressure"
      ],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.9996,
+     "shown_in_results_share_local": 0.9978,
      "listed_first_share_local": 0.0,
      "listing_note": "Listed by the scorer's near-tie rule (scoring_config.json selection.tie_points), which orders close scores by evidence quality; BASS-II, BASS and SAFFIRE-III score more at the profile weights.",
      "display_line": "Level with SAFFIRE-I in every one of the team's 16,000 sampled weightings (a tie, not an order); the rank uses an assumed atmosphere for values the team's catalog does not report (pressure).",
@@ -317,7 +317,7 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 15.1
+    "rank_seconds": 21.9
    },
    "seed_check": {
     "seed": 43,
@@ -337,7 +337,7 @@
    "scenario_id": "lunar_habitat",
    "query": "lunar habitat",
    "profile": "prevention",
-   "config_version": "1.1.0",
+   "config_version": "1.4.0",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -345,12 +345,12 @@
    "tie_tolerance": 1e-09,
    "rng": "numpy.random.default_rng([42, 0]) local, default_rng([42, 1]) uniform",
    "profile_weights": {
-    "o2": 0.25,
-    "pressure": 0.1,
-    "flow": 0.2,
+    "o2": 0.251,
+    "pressure": 0.083,
+    "flow": 0.25,
     "fuel": 0.25,
-    "geometry": 0.1,
-    "role": 0.1,
+    "geometry": 0.083,
+    "role": 0.083,
     "diluent": 0.0
    },
    "sampled_dims": [
@@ -404,16 +404,16 @@
      "live_rank": 1,
      "live_position_in_ranking": 1,
      "live_config_id": "ACME-BRE-C01",
-     "first_or_tied_share_local": 0.9604,
-     "top3_share_local": 0.9655,
+     "first_or_tied_share_local": 0.8845,
+     "top3_share_local": 0.8974,
      "first_or_tied_share_uniform": 0.6927,
      "top3_share_uniform": 0.6969,
      "first_alone_share_local": 0.0,
-     "first_or_tied_share_local_at_displayed_precision": 0.9606,
+     "first_or_tied_share_local_at_displayed_precision": 0.8852,
      "tied_for_first_with": [
       {
        "investigation_id": "FLEX",
-       "share": 0.9604,
+       "share": 0.8845,
        "share_uniform": 0.6927
       }
      ],
@@ -424,8 +424,8 @@
      "assumed_dims_scored": [],
      "unknown_dims": [],
      "shown_in_results_share_local": 1.0,
-     "listed_first_share_local": 0.9606,
-     "display_line": "Level with FLEX in every one of the team's 16,000 sampled weightings (a tie, not an order); the two are first together in 96% of the 8,000 drawn close to the team's default weights.",
+     "listed_first_share_local": 0.8852,
+     "display_line": "Level with FLEX in every one of the team's 16,000 sampled weightings (a tie, not an order); the two are first together in 88.4% of the 8,000 drawn close to the team's default weights.",
      "display_rule": "tie_in_every_draw",
      "display_text_origin": "template",
      "display_facts": {
@@ -434,12 +434,12 @@
       "top_k": 3,
       "group_size": 2,
       "shares_pct": [
-       96.0,
-       96.5,
+       88.4,
+       89.7,
        69.3,
        69.7,
        0.0,
-       96.0
+       88.4
       ]
      }
     },
@@ -448,16 +448,16 @@
      "live_rank": 2,
      "live_position_in_ranking": 2,
      "live_config_id": "FLEX-C01",
-     "first_or_tied_share_local": 0.9604,
-     "top3_share_local": 0.9655,
+     "first_or_tied_share_local": 0.8845,
+     "top3_share_local": 0.8974,
      "first_or_tied_share_uniform": 0.6927,
      "top3_share_uniform": 0.6969,
      "first_alone_share_local": 0.0,
-     "first_or_tied_share_local_at_displayed_precision": 0.9606,
+     "first_or_tied_share_local_at_displayed_precision": 0.8852,
      "tied_for_first_with": [
       {
        "investigation_id": "ACME-BRE",
-       "share": 0.9604,
+       "share": 0.8845,
        "share_uniform": 0.6927
       }
      ],
@@ -467,9 +467,9 @@
      "assumed_dims": [],
      "assumed_dims_scored": [],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.9619,
+     "shown_in_results_share_local": 0.8884,
      "listed_first_share_local": 0.0,
-     "display_line": "Level with ACME-BRE in every one of the team's 16,000 sampled weightings (a tie, not an order); the two are first together in 96% of the 8,000 drawn close to the team's default weights.",
+     "display_line": "Level with ACME-BRE in every one of the team's 16,000 sampled weightings (a tie, not an order); the two are first together in 88.4% of the 8,000 drawn close to the team's default weights.",
      "display_rule": "tie_in_every_draw",
      "display_text_origin": "template",
      "display_facts": {
@@ -478,12 +478,12 @@
       "top_k": 3,
       "group_size": 2,
       "shares_pct": [
-       96.0,
-       96.5,
+       88.4,
+       89.7,
        69.3,
        69.7,
        0.0,
-       96.0
+       88.4
       ]
      }
     },
@@ -493,7 +493,7 @@
      "live_position_in_ranking": 3,
      "live_config_id": "ACME-CFI-G-C01",
      "first_or_tied_share_local": 0.0,
-     "top3_share_local": 0.8561,
+     "top3_share_local": 0.6358,
      "first_or_tied_share_uniform": 0.0,
      "top3_share_uniform": 0.6091,
      "first_alone_share_local": 0.0,
@@ -503,9 +503,9 @@
      "assumed_dims": [],
      "assumed_dims_scored": [],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.8592,
+     "shown_in_results_share_local": 0.7309,
      "listed_first_share_local": 0.0,
-     "display_line": "Among the first three in 85.6% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
+     "display_line": "Among the first three in 63.6% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
      "display_rule": "top3_share",
      "display_text_origin": "template",
      "display_facts": {
@@ -515,7 +515,7 @@
       "group_size": 1,
       "shares_pct": [
        0.0,
-       85.6,
+       63.6,
        0.0,
        60.9,
        0.0
@@ -525,14 +525,14 @@
     {
      "investigation_id": "BASS-II",
      "live_rank": null,
-     "live_position_in_ranking": 7,
+     "live_position_in_ranking": 6,
      "live_config_id": "BASS-II-C01",
-     "first_or_tied_share_local": 0.0396,
-     "top3_share_local": 0.0976,
+     "first_or_tied_share_local": 0.1155,
+     "top3_share_local": 0.22,
      "first_or_tied_share_uniform": 0.3073,
      "top3_share_uniform": 0.3526,
-     "first_alone_share_local": 0.0396,
-     "first_or_tied_share_local_at_displayed_precision": 0.0401,
+     "first_alone_share_local": 0.1155,
+     "first_or_tied_share_local_at_displayed_precision": 0.1168,
      "tied_for_first_with": [],
      "tied_in_every_draw_with": [],
      "assumed_dims": [
@@ -542,8 +542,8 @@
       "pressure"
      ],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.1407,
-     "listed_first_share_local": 0.0394,
+     "shown_in_results_share_local": 0.2691,
+     "listed_first_share_local": 0.1148,
      "display_line": null,
      "display_rule": null
     }
@@ -552,14 +552,14 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 16.1
+    "rank_seconds": 23.5
    },
    "seed_check": {
     "seed": 43,
     "max_abs_diff_points": 1.19,
     "largest_at": "ACME-CFI-G.top3_share_uniform",
-    "max_abs_diff_points_local": 0.68,
-    "largest_at_local": "ACME-CFI-G.top3_share_local",
+    "max_abs_diff_points_local": 0.96,
+    "largest_at_local": "BASS-II.top3_share_local",
     "max_abs_diff_points_uniform": 1.19,
     "largest_at_uniform": "ACME-CFI-G.top3_share_uniform",
     "limit_points": 2.0,
@@ -572,7 +572,7 @@
    "scenario_id": "spacesuit",
    "query": "spacesuit",
    "profile": "prevention",
-   "config_version": "1.1.0",
+   "config_version": "1.4.0",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -580,12 +580,12 @@
    "tie_tolerance": 1e-09,
    "rng": "numpy.random.default_rng([42, 0]) local, default_rng([42, 1]) uniform",
    "profile_weights": {
-    "o2": 0.25,
-    "pressure": 0.1,
-    "flow": 0.2,
+    "o2": 0.251,
+    "pressure": 0.083,
+    "flow": 0.25,
     "fuel": 0.25,
-    "geometry": 0.1,
-    "role": 0.1,
+    "geometry": 0.083,
+    "role": 0.083,
     "diluent": 0.0
    },
    "sampled_dims": [
@@ -627,20 +627,20 @@
      "live_position_in_ranking": 1,
      "live_config_id": "ACME-BRE-C01",
      "first_or_tied_share_local": 0.0,
-     "top3_share_local": 0.9998,
+     "top3_share_local": 0.9994,
      "first_or_tied_share_uniform": 0.0,
      "top3_share_uniform": 0.9131,
      "first_alone_share_local": 0.0,
-     "first_or_tied_share_local_at_displayed_precision": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 0.0001,
      "tied_for_first_with": [],
      "tied_in_every_draw_with": [],
      "assumed_dims": [],
      "assumed_dims_scored": [],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.9999,
-     "listed_first_share_local": 0.7091,
+     "shown_in_results_share_local": 0.9998,
+     "listed_first_share_local": 0.6859,
      "listing_note": "Listed by the scorer's near-tie rule (scoring_config.json selection.tie_points), which orders close scores by evidence quality; ACME-CFI-G score more at the profile weights.",
-     "display_line": "Among the first three in more than 99.9% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
+     "display_line": "Among the first three in 99.9% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
      "display_rule": "top3_share",
      "display_text_origin": "template",
      "display_facts": {
@@ -650,13 +650,10 @@
       "group_size": 1,
       "shares_pct": [
        0.0,
-       100.0,
+       99.9,
        0.0,
        91.3,
        0.0
-      ],
-      "display_bounds_pct": [
-       99.9
       ]
      }
     },
@@ -665,12 +662,12 @@
      "live_rank": 2,
      "live_position_in_ranking": 2,
      "live_config_id": "ACME-CFI-G-C02",
-     "first_or_tied_share_local": 0.942,
+     "first_or_tied_share_local": 0.9275,
      "top3_share_local": 1.0,
      "first_or_tied_share_uniform": 0.747,
      "top3_share_uniform": 1.0,
-     "first_alone_share_local": 0.942,
-     "first_or_tied_share_local_at_displayed_precision": 0.9456,
+     "first_alone_share_local": 0.9275,
+     "first_or_tied_share_local_at_displayed_precision": 0.9327,
      "tied_for_first_with": [],
      "tied_in_every_draw_with": [],
      "assumed_dims": [],
@@ -678,9 +675,9 @@
      "unknown_dims": [
       "o2"
      ],
-     "shown_in_results_share_local": 0.9935,
-     "listed_first_share_local": 0.2365,
-     "display_line": "First in 94.2% of the 8,000 sampled weightings drawn close to the team's default weights, and among the first three in 100%.",
+     "shown_in_results_share_local": 0.9855,
+     "listed_first_share_local": 0.2469,
+     "display_line": "First in 92.8% of the 8,000 sampled weightings drawn close to the team's default weights, and among the first three in 100%.",
      "display_rule": "first_share",
      "display_text_origin": "template",
      "display_facts": {
@@ -689,11 +686,11 @@
       "top_k": 3,
       "group_size": 1,
       "shares_pct": [
-       94.2,
+       92.8,
        100.0,
        74.7,
        100.0,
-       94.2
+       92.8
       ]
      }
     },
@@ -703,7 +700,7 @@
      "live_position_in_ranking": 3,
      "live_config_id": "FLEX-C01",
      "first_or_tied_share_local": 0.0,
-     "top3_share_local": 0.2196,
+     "top3_share_local": 0.2285,
      "first_or_tied_share_uniform": 0.0,
      "top3_share_uniform": 0.3767,
      "first_alone_share_local": 0.0,
@@ -713,10 +710,10 @@
      "assumed_dims": [],
      "assumed_dims_scored": [],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.6532,
+     "shown_in_results_share_local": 0.6466,
      "listed_first_share_local": 0.0,
      "listing_note": "Listed by the scorer's near-tie rule (scoring_config.json selection.tie_points), which orders close scores by evidence quality; ACME-FLAME-DESIGN, ACME-BRE and ACME-CFI-G score more at the profile weights.",
-     "display_line": "Among the first three in 22% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
+     "display_line": "Among the first three in 22.9% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
      "display_rule": "top3_share",
      "display_text_origin": "template",
      "display_facts": {
@@ -726,7 +723,7 @@
       "group_size": 1,
       "shares_pct": [
        0.0,
-       22.0,
+       22.9,
        0.0,
        37.7,
        0.0
@@ -738,12 +735,12 @@
      "live_rank": null,
      "live_position_in_ranking": 4,
      "live_config_id": "ACME-FLAME-DESIGN-C02",
-     "first_or_tied_share_local": 0.058,
-     "top3_share_local": 0.7804,
+     "first_or_tied_share_local": 0.0725,
+     "top3_share_local": 0.7715,
      "first_or_tied_share_uniform": 0.253,
      "top3_share_uniform": 0.6232,
-     "first_alone_share_local": 0.058,
-     "first_or_tied_share_local_at_displayed_precision": 0.0634,
+     "first_alone_share_local": 0.0725,
+     "first_or_tied_share_local_at_displayed_precision": 0.0791,
      "tied_for_first_with": [],
      "tied_in_every_draw_with": [],
      "assumed_dims": [],
@@ -751,8 +748,8 @@
      "unknown_dims": [
       "o2"
      ],
-     "shown_in_results_share_local": 0.3468,
-     "listed_first_share_local": 0.0544,
+     "shown_in_results_share_local": 0.3534,
+     "listed_first_share_local": 0.0673,
      "display_line": null,
      "display_rule": null
     }
@@ -761,14 +758,14 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 15.2
+    "rank_seconds": 22.6
    },
    "seed_check": {
     "seed": 43,
     "max_abs_diff_points": 0.82,
     "largest_at": "FLEX.top3_share_uniform",
-    "max_abs_diff_points_local": 0.46,
-    "largest_at_local": "ACME-CFI-G.first_or_tied_share_local",
+    "max_abs_diff_points_local": 0.31,
+    "largest_at_local": "FLEX.top3_share_local",
     "max_abs_diff_points_uniform": 0.82,
     "largest_at_uniform": "FLEX.top3_share_uniform",
     "limit_points": 2.0,
@@ -781,7 +778,7 @@
    "scenario_id": "mars_habitat",
    "query": "Mars base",
    "profile": "prevention",
-   "config_version": "1.1.0",
+   "config_version": "1.4.0",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -789,12 +786,12 @@
    "tie_tolerance": 1e-09,
    "rng": "numpy.random.default_rng([42, 0]) local, default_rng([42, 1]) uniform",
    "profile_weights": {
-    "o2": 0.25,
-    "pressure": 0.1,
-    "flow": 0.2,
+    "o2": 0.251,
+    "pressure": 0.083,
+    "flow": 0.25,
     "fuel": 0.25,
-    "geometry": 0.1,
-    "role": 0.1,
+    "geometry": 0.083,
+    "role": 0.083,
     "diluent": 0.0
    },
    "sampled_dims": [
@@ -1150,7 +1147,7 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 12.6
+    "rank_seconds": 20.6
    },
    "seed_check": {
     "seed": 43,

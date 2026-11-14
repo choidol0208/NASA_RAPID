@@ -14,7 +14,8 @@ numbers.
 This module computes nothing that the engine does not compute. Status and
 counts are the rows returned by run.match_environments (the same rows that are
 written to scenario_needs.csv and atmosphere_cells.csv), indicators come from
-run.indicators, values and source columns from the tests in memory. It holds
+run.indicators, values and source columns from the tests in memory, and the
+'raw_state' fields from raw_gaps.States (spec/raw_columns.json). It holds
 no sentence and no experiment knowledge: every text is a template in
 spec/statements.json, and a template that names a field the block does not
 have stops the run.
@@ -34,6 +35,8 @@ import re
 
 import pandas as pd
 
+import raw_gaps
+
 MATCHED = ("atmosphere", "oxygen_only", "pressure_only")
 TIERS = MATCHED + ("other",)
 RANGE_VARS = {"o2_pct": "o2", "pressure_kpa": "pressure", "flow_cms": "flow"}
@@ -45,6 +48,8 @@ COUNTS = {"usable_tests": "usable_tests", "atmosphere": "tests_atmosphere",
           "matched_flow_not_recorded": "matched_tests_flow_not_recorded",
           "matched_same_gravity": "matched_tests_same_gravity",
           "matched_added_gas": "matched_tests_co2_or_helium_added"}
+# gap code prefix -> variable of tests.csv
+GAP_VARIABLE = {"oxygen": "o2_pct", "pressure": "pressure_kpa", "flow": "flow_cms", "gravity": "gravity_level"}
 TOKEN = re.compile(r"\{([a-z0-9_]+)\}|\[([a-z0-9_]+)\|([^|\[\]{}]*)\|([^|\[\]{}]*)\]")
 
 
@@ -218,6 +223,8 @@ class Builder:
         self.texts = engine.spec("statements.json")
         self.statements = Statements(self.texts, engine.OPS)
         self.titles = {}
+        # states of the raw files per variable (raw_gaps.py); added fields only
+        self.raw = raw_gaps.States(raw_gaps.load(out_dir=engine.OUT), tests, engine.empty)
 
     def test_key(self, test_id):
         return inv_number(self.by_id[test_id]["investigation_id"]), test_id
@@ -492,6 +499,15 @@ class Builder:
                           exactly_one=True,
                           values=[{**v, "unit": entry["unit"]} for v in entry["values"]])
             sentences.append({**s[0], "indicator_id": entry["indicator_id"], "group": entry["group"]})
+        scope = [t for t in self.tests if all(t.get(k) in allowed for k, allowed in need.get("scope", {}).items())]
+        counted = [self.by_id[i] for i in ids]
+        block["raw_state"] = {v: self.raw_state(v, counted, scope, marks) for v in need["conditions_required"]}
+        for g in gaps:
+            head = g["code"].split(":")[0]
+            names = need["outcomes_any"] if head == "need" else [GAP_VARIABLE[head]]
+            g["raw_state"] = [{"variable": v, **self.raw_state(v, counted, scope, marks)[
+                "counted" if counted else "in_scope"], "population": "counted" if counted else "in_scope"}
+                for v in names]
         block["gaps"] = gaps
         block["statements"] = sentences
         block["references"] = self.references(need.get("references", []), f"need {need['id']}")
@@ -509,6 +525,18 @@ class Builder:
             raise SystemExit(f"evidence: {where}: the tests listed in the package give {recount}, "
                              f"the csv row gives {counts}")
         return block
+
+    def raw_state(self, var, counted, scope, marks):
+        """States of the raw files for one variable: over the counted tests of
+        the need (with the counted tests that this environment's matching
+        leaves unmatched because the variable is empty) and over the tests in
+        the need's scope. Sentences from spec/statements.json 'raw_state'."""
+        lack = sum(raw_gaps.unmatched_for_lack(var, marks[t["test_id"]]["o2_pct"],
+                                               marks[t["test_id"]]["pressure_kpa"], marks[t["test_id"]]["tier"])
+                   for t in counted)
+        return {"counted": {"tests": len(counted), "states": self.raw.summary(var, counted),
+                            "unmatched_for_lack_of_this_variable": lack},
+                "in_scope": {"tests": len(scope), "states": self.raw.summary(var, scope)}}
 
     def package(self, env, rows, marks):
         env_out = self.environment(env)

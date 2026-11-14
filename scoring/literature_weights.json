@@ -1,0 +1,80 @@
+{
+  "_meta": {
+    "what": "Literature stream for the weights: for each question type, an evidence class for each dimension, taken from textbooks, papers and NASA records. scoring/derive_literature_weights.py turns the classes into the 51 AHP pairwise judgements (scoring/literature_judgements.csv) and their weights (scoring/literature_weights.json).",
+    "classes": {
+      "1": "decisive: the cited sources show that this condition alone can decide the outcome of the question type (burns or not, detected or not, extinguished or not) within habitat ranges",
+      "2": "strong modifier: the sources report a quantified or clearly documented change in the outcome, but not an on-off effect within habitat ranges",
+      "3": "weak or not documented: no source in this list documents an effect of this condition on the outcome of the question type"
+    },
+    "rule": "Pairwise judgement from the class difference, on Saaty's verbal scale: same class 1 (equal), one class apart 3 (moderately more important), two classes apart 5 (strongly more important).",
+    "generated_by": "AI-generated (Claude Code, catalog role), 2026-11-14 20:17 KST, at the human lead's request to fill the expert form from textbooks and papers instead of asking team members. The classes were assigned by an AI session from the cited findings. They are not judgements of people; review by combustion researchers is the next step.",
+    "source_ids": "References are listed in scoring/BUILDUP.md section 7. A dagger in 'checked' means the finding was checked only in an abstract or a secondary source.",
+    "outputs": "Weights by the AHP eigenvector method from the class-derived judgements; see scoring/BUILDUP.md B3."
+  },
+  "group": {
+    "prevention": {
+      "classes": {
+        "o2": 1,
+        "flow": 1,
+        "fuel": 1,
+        "pressure": 2,
+        "geometry": 2,
+        "role": 2
+      },
+      "cr": 0.0,
+      "consistent": true,
+      "weights": {
+        "o2": 0.251,
+        "pressure": 0.083,
+        "flow": 0.25,
+        "fuel": 0.25,
+        "geometry": 0.083,
+        "role": 0.083,
+        "diluent": 0.0
+      }
+    },
+    "detection": {
+      "classes": {
+        "role": 1,
+        "fuel": 1,
+        "flow": 2,
+        "o2": 3,
+        "pressure": 3,
+        "geometry": 3
+      },
+      "cr": 0.0094,
+      "consistent": true,
+      "weights": {
+        "o2": 0.06,
+        "pressure": 0.06,
+        "flow": 0.151,
+        "fuel": 0.335,
+        "geometry": 0.06,
+        "role": 0.334,
+        "diluent": 0.0
+      }
+    },
+    "suppression": {
+      "classes": {
+        "role": 1,
+        "fuel": 1,
+        "o2": 1,
+        "diluent": 2,
+        "flow": 2,
+        "pressure": 2,
+        "geometry": 3
+      },
+      "cr": 0.0081,
+      "consistent": true,
+      "weights": {
+        "o2": 0.235,
+        "pressure": 0.086,
+        "flow": 0.086,
+        "fuel": 0.235,
+        "geometry": 0.037,
+        "role": 0.235,
+        "diluent": 0.086
+      }
+    }
+  }
+}

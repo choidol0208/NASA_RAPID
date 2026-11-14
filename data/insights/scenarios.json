@@ -968,12 +968,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T19:01:46+09:00",
+  "updated": "2026-11-14T23:33:34+09:00",
   "fresh": {
-   "ranker_config_version": "1.1.0",
-   "scoring_config_sha256": "f102970057f63bd9b6295fef264d3a7c3c2acfb431cd92efaaefd700065f92bc",
+   "ranker_config_version": "1.4.0",
+   "scoring_config_sha256": "83f3cff13cc4aa232574ae84500ca281483cae8129330c2dea2ffa7e176cf2f5",
    "catalog_sha256": "da58f2c7febd4dc01a82a0acefb4b0ff1c284bf4eafd142fdf3e9b8912996c82",
-   "scenario_inputs_sha256": "c34ad557d001482bd32a422c58e32c64d83900461263293c222885cce3e4d1b9",
+   "scenario_inputs_sha256": "8f2cb8091136a91b7669d3393ccdf887dfaa10495940ef0305df0c9f8729220d",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  },
@@ -1209,6 +1209,26 @@
      "row_unit:test"
     ],
     "config_id": "ACME-CFI-G-C01"
+   },
+   {
+    "investigation_id": "PSI-68",
+    "text": "Liquid-fuel configuration; not a test of solid cabin materials (team catalog classification). PSI's table for this investigation lists planned ranges of conditions per fuel (8 rows), not individual tests, so it cannot be matched test by test. The team pipeline links none of the needs to an objective stated for this investigation. Listed because its team score is level with or close to the results shown, under the team's current weights.",
+    "sources": [
+     "data/catalog/configurations.csv#FLEX-2-C01",
+     "pipeline/spec/sources.json#flex2"
+    ],
+    "facts": {
+     "table_rows": 8,
+     "needs_stated": []
+    },
+    "text_origin": "template",
+    "status": "near_tie",
+    "rule": [
+     "phase:liquid",
+     "row_unit:planned_matrix",
+     "near_tie"
+    ],
+    "config_id": "FLEX-2-C01"
    }
   ],
   "needs": [
@@ -1980,12 +2000,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T19:01:46+09:00",
+  "updated": "2026-11-14T23:33:34+09:00",
   "fresh": {
-   "ranker_config_version": "1.1.0",
-   "scoring_config_sha256": "f102970057f63bd9b6295fef264d3a7c3c2acfb431cd92efaaefd700065f92bc",
+   "ranker_config_version": "1.4.0",
+   "scoring_config_sha256": "83f3cff13cc4aa232574ae84500ca281483cae8129330c2dea2ffa7e176cf2f5",
    "catalog_sha256": "da58f2c7febd4dc01a82a0acefb4b0ff1c284bf4eafd142fdf3e9b8912996c82",
-   "scenario_inputs_sha256": "c34ad557d001482bd32a422c58e32c64d83900461263293c222885cce3e4d1b9",
+   "scenario_inputs_sha256": "8f2cb8091136a91b7669d3393ccdf887dfaa10495940ef0305df0c9f8729220d",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  },
@@ -2896,12 +2916,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T19:01:46+09:00",
+  "updated": "2026-11-14T23:33:34+09:00",
   "fresh": {
-   "ranker_config_version": "1.1.0",
-   "scoring_config_sha256": "f102970057f63bd9b6295fef264d3a7c3c2acfb431cd92efaaefd700065f92bc",
+   "ranker_config_version": "1.4.0",
+   "scoring_config_sha256": "83f3cff13cc4aa232574ae84500ca281483cae8129330c2dea2ffa7e176cf2f5",
    "catalog_sha256": "da58f2c7febd4dc01a82a0acefb4b0ff1c284bf4eafd142fdf3e9b8912996c82",
-   "scenario_inputs_sha256": "c34ad557d001482bd32a422c58e32c64d83900461263293c222885cce3e4d1b9",
+   "scenario_inputs_sha256": "8f2cb8091136a91b7669d3393ccdf887dfaa10495940ef0305df0c9f8729220d",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  },
@@ -3612,12 +3632,12 @@
   "built_by": "ai/build_baseline.py",
   "reviewed_by": null,
   "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
-  "updated": "2026-11-14T19:01:46+09:00",
+  "updated": "2026-11-14T23:33:34+09:00",
   "fresh": {
-   "ranker_config_version": "1.1.0",
-   "scoring_config_sha256": "f102970057f63bd9b6295fef264d3a7c3c2acfb431cd92efaaefd700065f92bc",
+   "ranker_config_version": "1.4.0",
+   "scoring_config_sha256": "83f3cff13cc4aa232574ae84500ca281483cae8129330c2dea2ffa7e176cf2f5",
    "catalog_sha256": "da58f2c7febd4dc01a82a0acefb4b0ff1c284bf4eafd142fdf3e9b8912996c82",
-   "scenario_inputs_sha256": "c34ad557d001482bd32a422c58e32c64d83900461263293c222885cce3e4d1b9",
+   "scenario_inputs_sha256": "8f2cb8091136a91b7669d3393ccdf887dfaa10495940ef0305df0c9f8729220d",
    "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
   }
  }

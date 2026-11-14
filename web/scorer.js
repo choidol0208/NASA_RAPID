@@ -446,6 +446,49 @@ function explain(sc, c, s, cfg, fallback, speed) {
 }
 function roundMap(m, n) { const o = {}; for (const [k, v] of Object.entries(m)) o[k] = pyRound(v, n); return o; }
 
+// ---------------------------------------------------------------- requirements (mirrors scorer.py)
+const SOURCE_RANK = ["stated", "implied", "derived", "assumed"];
+function reqSource(s, classes) {
+  if (s.startsWith("preset:")) return ["implied", "implied by preset " + s.split(":").slice(1).join(":")];
+  const k = get(classes, s, "assumed");
+  return [k, k];
+}
+export function requirements(sc, src, cfg) {
+  const spec = cfg.requirements || {};
+  const classes = spec.source_class || {};
+  const out = [];
+  for (const g of spec.groups || []) {
+    const present = g.fields.filter((fld) => sc[fld] !== undefined && sc[fld] !== null && sc[fld] !== "");
+    if (!present.length) continue;
+    const units = g.units || {};
+    const vals = present.map((fld) => (typeof sc[fld] === "number" ? fmtG(sc[fld]) + get(units, fld, "") : String(sc[fld])));
+    const cls = present.map((fld) => reqSource(get(src, fld, ""), classes));
+    let best = 0;
+    for (let i = 1; i < cls.length; i++) if (SOURCE_RANK.indexOf(cls[i][0]) < SOURCE_RANK.indexOf(cls[best][0])) best = i;
+    out.push({ id: `R${out.length + 1}`, dimension: g.dimension, kind: g.kind, label: g.label, value: vals.join(", "),
+      source_class: cls[best][0], source: cls[best][1], verified_by: g.verified_by });
+  }
+  return out;
+}
+function compliance(reqs, r, sc, cfg) {
+  const thr = get(cfg, "outside_range_threshold", 0.9);
+  const assumed = new Set((r.assumed_dims || []).map((x) => ({ O2: "o2", pressure: "pressure" })[x] || x));
+  return reqs.map((q) => {
+    const d = q.dimension;
+    let st;
+    if (d === "gravity") {
+      const g = sc.gravity;
+      st = g === "microgravity" ? "met" : g === "earth" && r.has_1g_comparison ? "near" : "not_met";
+    } else if (!(d in r.similarity)) st = "not_scored";
+    else if (r.unknown_dims.includes(d) || assumed.has(d)) st = "unverified";
+    else {
+      const v = r.similarity[d];
+      st = v >= 0.999 ? "met" : v >= thr ? "near" : "not_met";
+    }
+    return { id: q.id, status: st };
+  });
+}
+
 export function createScorer({ config, investigationsCsv, configurationsCsv }) {
   const invRows = parseCSV(investigationsCsv);
   const inv = {};
@@ -457,7 +500,8 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
     const { sc, src, assumptions, outOfScope, informative } = interpret(query, cfg);
     const W = cfg.warnings;
     const unread = notUnderstood(query, cfg);
-    const base = { scenario: { ...sc }, sources: src, assumptions, config_version: cfg.version, not_understood: unread };
+    const reqs = requirements(sc, src, cfg);
+    const base = { scenario: { ...sc }, sources: src, assumptions, config_version: cfg.version, not_understood: unread, requirements: reqs };
     const unreadW = unread.length ? [{ code: "not_understood", message: fill(W.not_understood, { words: unread.map((p) => `'${p}'`).join(", ") }) }] : [];
     if (outOfScope) return { ...base, status: "out_of_scope", warnings: [{ code: "out_of_scope", message: W.out_of_scope }], results: [], ranking: [] };
     if (!informative.length) return { ...base, status: "need_input", warnings: [{ code: "need_input", message: W.need_input }, ...unreadW], results: [], ranking: [] };
@@ -543,6 +587,7 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
       if (!o.complementary) o.other_configs = others[o.investigation_id] || [];
       else if (!o.other_configs) o.other_configs = others[o.investigation_id] || [];
       o.confidence = o.coverage >= conf.high ? "high" : o.coverage >= conf.medium ? "medium" : "low";
+      o.compliance = compliance(reqs, o, sc, cfg);
       return o;
     });
     if (sc.fuel_phase === "solid" && results.length && results.every((x) => x.gate < 1 || x.warnings.some((w) => w.code === "gas_for_solid"))) {

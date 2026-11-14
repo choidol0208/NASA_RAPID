@@ -3,7 +3,7 @@
 """Independent validator of the pipeline outputs.
 
 It does not import run.py, rules.py, evidence.py, facts.py, findings.py,
-answers.py or raw_inventory.py. Every check recomputes its result from the raw
+answers.py, raw_inventory.py or raw_gaps.py. Every check recomputes its result from the raw
 NASA PSI tables (and, for the raw inventory, the saved PSI file listings) and
 from the rules as they are written in pipeline/spec/*.json ('_meta' blocks)
 and pipeline/README.md, then compares with the files in data/pipeline/.
@@ -4570,6 +4570,548 @@ def plain_byte_counts(obj):
         for v in obj:
             out += plain_byte_counts(v)
     return out
+
+
+# ----------------------------------------------------------------------------
+# O. raw-file states (raw_gaps.py outputs), raw values and their effect
+#    own code path: nothing of raw_gaps.py is imported
+# ----------------------------------------------------------------------------
+
+# sha256 of the four files whose bytes the raw-file layer must not change: a
+# snapshot of 2026-11-14 17:30 KST (the files were last changed in commit
+# a5a9e87, 14:41 KST); see pipeline/README.md, "What is in the raw files".
+FROZEN_SHA256 = {
+    "tests.csv": "b8acc1073fbc33a37563eb7f7cd12811e602fb7363ee69982d97860f05522211",
+    "need_tests.csv": "8f2cf847728016c6669a95931c89d06286ce7030214cece1d65d66a93d119a77",
+    "scenario_needs.csv": "ad7fcfeba56661d448b8c8bef9fb66667e749d58a2e5d84a450988725e535796",
+    "scenario_tests.csv": "6581e840553a2d4197d90ecc2ad94b5b307747112f81b4d418a2e357ae45eaab",
+}
+FROZEN_COUNTED = {"P1": 133, "P2": 0, "P3": 2, "S1": 298, "D1": 122, "D2": 0}
+O_STATES = ("in_table", "column_in_sampled_raw_file", "documented_only", "not_in_sampled_files", "no_test_table")
+O_ONE_FILE = "one file of the group was opened"
+O_READABLE = ("sensor_reading_series", "value_per_test_in_a_results_file")
+
+
+def o_blank(v):
+    return v is None or str(v).strip() == ""
+
+
+def o_vars(ctx):
+    out = []
+    for n in ctx.needs:
+        for k in ("conditions_required", "conditions_useful", "outcomes_any"):
+            for v in n[k]:
+                if v not in out:
+                    out.append(v)
+    return out
+
+
+def o_listing(inv):
+    """{file id: (name, bytes)} of the saved PSI listing of an investigation."""
+    path = os.path.join(LISTINGS, "%s.json" % inv)
+    if not os.path.exists(path):
+        raise Skip("data/psi/file_listings/%s.json is absent (git-ignored)" % inv)
+    out = {}
+    for f in listing_records(read_json(path)):
+        if f.get("id") and f.get("key") and f.get("bytes_size") is not None:
+            out.setdefault(f["id"], (f["key"].rsplit("/", 1)[-1], int(f["bytes_size"])))
+    return out
+
+
+def o_spec(ctx):
+    return ctx._get("o_spec", lambda: {i["investigation_id"]: i for i in ctx.spec("raw_columns")["investigations"]})
+
+
+def o_cells(ctx):
+    """(investigation, variable) -> the rows of gap_states.csv as this check
+    derives them from tests.csv, raw_columns.json, sources.json and the raw
+    inventory, by the rule of the README (no_test_table; then n tests
+    in_table; the other N-n tests in the first of column, documented, not
+    in sampled files)."""
+    def load():
+        spec = o_spec(ctx)
+        by_inv = {}
+        for t in ctx.tests:
+            by_inv.setdefault(t["investigation_id"], []).append(t)
+        docs = {}
+        for s in ctx.sources:
+            for d in s.get("documented_elsewhere", []) or []:
+                docs.setdefault((s["investigation_id"], d["variable"]), []).append(
+                    d.get("reference_item") or ("record field " + d.get("record_field", "")))
+        invs = sorted({x["investigation_id"] for x in ctx.json("raw_inventory.json")["investigations"]}, key=psi_key)
+        out = {}
+        for inv in invs:
+            sp = spec.get(inv, {"entries": [], "unopened_groups": []})
+            rows = by_inv.get(inv, [])
+            for var in o_vars(ctx):
+                key = (inv, var)
+                if not rows:
+                    out[key] = [{"state": "no_test_table", "tests_in_state": 0, "n": 0, "N": 0}]
+                    continue
+                n = sum(1 for t in rows if not o_blank(t.get(var)))
+                cell = []
+                if n:
+                    cell.append({"state": "in_table", "tests_in_state": n, "n": n, "N": len(rows)})
+                if n < len(rows):
+                    es = [e for e in sp["entries"] if e["standard_variable"] == var]
+                    r = {"tests_in_state": len(rows) - n, "n": n, "N": len(rows)}
+                    if es:
+                        gs = list(dict.fromkeys(e["group"] for e in es))
+                        byg = {e["group"]: e for e in es}
+                        r.update(state="column_in_sampled_raw_file",
+                                 column_is="+".join(dict.fromkeys(e["column_is"] for e in es)),
+                                 link_kind=" | ".join(dict.fromkeys(e["link_kind"] for e in es)),
+                                 differs=o_codes(ctx, es),
+                                 groups=gs, files=sum(byg[g]["files_in_listing"] for g in gs),
+                                 bytes=sum(byg[g]["bytes_in_listing"] or 0 for g in gs), entries=len(es),
+                                 all_files=all(e["sampling"] != O_ONE_FILE for e in es))
+                    elif key in docs:
+                        r.update(state="documented_only", groups=[], documented_by=docs[key])
+                    else:
+                        us = sp.get("unopened_groups", [])
+                        r.update(state="not_in_sampled_files", groups=[u["group"] for u in us],
+                                 files=sum(u["files_in_listing"] for u in us), bytes=sum(u["bytes_in_listing"] for u in us))
+                    cell.append(r)
+                out[key] = cell
+        return out
+    return ctx._get("o_cells", load)
+
+
+def o_codes(ctx, entries):
+    """differs_from_definition of a set of entries as the CSV files write it: the codes in the order of
+    _meta.differs_from_definition joined by ';', or 'none'."""
+    order = list(ctx.spec("raw_columns")["_meta"]["differs_from_definition"])
+    have = {c for e in entries for c in e["differs_from_definition"]}
+    return ";".join(c for c in order if c in have) or "none"
+
+
+def o_qualifies(e):
+    return (e["column_is"] in O_READABLE and not e["differs_from_definition"]
+            and e["link_kind"] == "literal_key_or_label")
+
+
+def o_test_state(ctx, test, var):
+    if not o_blank(test.get(var)):
+        return "in_table", ""
+    rem = o_cells(ctx)[(test["investigation_id"], var)][-1]
+    return rem["state"], rem.get("column_is", "")
+
+
+@check("O1_gap_states",
+       "gap_states.csv recounted from tests.csv: one row per investigation x need variable and state; n of N and the "
+       "split of a mixed row as the README states it; the state of the other tests follows the fixed order (entry in "
+       "raw_columns.json, then documented_elsewhere of sources.json, then not_in_sampled_files); file groups, files and "
+       "bytes are those of the spec.")
+def check_o1(ctx):
+    res = Result()
+    if not ctx.has("gap_states.csv"):
+        raise Skip("gap_states.csv not written (python3 pipeline/raw_gaps.py)")
+    rows = ctx.table("gap_states.csv")
+    got = {}
+    for r in rows:
+        got.setdefault((r["investigation_id"], r["variable"]), []).append(r)
+    cells = o_cells(ctx)
+    if set(got) != set(cells):
+        res.fail(problem="investigation x variable pairs differ", missing=sorted(set(cells) - set(got))[:5],
+                 extra=sorted(set(got) - set(cells))[:5])
+    states = {}
+    for key, want in cells.items():
+        have = got.get(key, [])
+        res.checked += 1
+        if [h["state"] for h in have] != [w["state"] for w in want]:
+            res.fail(problem="states differ", pair=key, file=[h["state"] for h in have], expected=[w["state"] for w in want])
+            continue
+        for h, w in zip(have, want):
+            states[w["state"]] = states.get(w["state"], 0) + 1
+            for col, val in (("tests_in_state", w["tests_in_state"]), ("tests_in_table", w["n"]), ("tests_mapped", w["N"])):
+                if int(h[col]) != val:
+                    res.fail(problem="%s differs" % col, pair=key, state=w["state"], file=h[col], expected=val)
+            if w["state"] in ("column_in_sampled_raw_file", "not_in_sampled_files"):
+                if h["file_groups"] != " | ".join(w["groups"]) or (w["groups"] and (int(h["files"]) != w["files"] or int(h["bytes"]) != w["bytes"])):
+                    res.fail(problem="file groups, files or bytes differ", pair=key, state=w["state"])
+            if w["state"] == "column_in_sampled_raw_file" and (h["column_is"] != w["column_is"] or int(h["entries"]) != w["entries"]
+                                                               or h["link_kind"] != w["link_kind"] or h["differs_from_definition"] != w["differs"]):
+                res.fail(problem="column_is, entries, link_kind or differs_from_definition differ", pair=key,
+                         file=(h["column_is"], h["link_kind"], h["differs_from_definition"]),
+                         expected=(w["column_is"], w["link_kind"], w["differs"]))
+            if w["state"] == "documented_only" and h["documented_by"] != " | ".join(w["documented_by"]):
+                res.fail(problem="documented_by differs", pair=key)
+        if sum(int(h["tests_in_state"]) for h in have) != (want[0]["N"]):
+            res.fail(problem="tests of the rows do not add up to N", pair=key)
+    res.numbers = {"pairs": res.checked, "rows": len(rows), "rows_by_state": {s: states.get(s, 0) for s in O_STATES}}
+    return res
+
+
+@check("O2_need_gap_states",
+       "need_gap_states.csv: for every scenario, need and required or outcome variable, the in-scope and counted tests "
+       "equal capability_matrix.csv (tests, and usable_tests of the stated rows) and need_tests.csv; the states of the "
+       "tests and the counted tests left unmatched because the variable is empty are recounted from tests.csv and "
+       "scenario_tests.csv; the counted tests per need are the frozen numbers.")
+def check_o2(ctx):
+    res = Result()
+    if not ctx.has("need_gap_states.csv"):
+        raise Skip("need_gap_states.csv not written")
+    rows = ctx.table("need_gap_states.csv")
+    cap = ctx.table("capability_matrix.csv")
+    counted = {}
+    for r in ctx.table("need_tests.csv"):
+        if r["objective_link"] == "stated":
+            counted.setdefault(r["need_id"], set()).add(r["test_id"])
+    for nid, n in FROZEN_COUNTED.items():
+        if len(counted.get(nid, ())) != n:
+            res.fail(problem="counted tests of a need changed", need_id=nid, now=len(counted.get(nid, ())), frozen=n)
+    marks = {(r["scenario_id"], r["test_id"]): r for r in ctx.table("scenario_tests.csv")}
+    want = []
+    for sc in ctx.spec("scenarios")["scenarios"]:
+        for nd in ctx.needs:
+            phases = (nd.get("scope") or {}).get("fuel_phase")
+            scope = [t for t in ctx.tests if not phases or t["fuel_phase"] in phases]
+            in_scope_cap = sum(int(r["tests"]) for r in cap if r["need_id"] == nd["id"])
+            counted_cap = sum(int(r["usable_tests"]) for r in cap if r["need_id"] == nd["id"] and r["objective_link"] == "stated")
+            if (len(scope), len(counted.get(nd["id"], ()))) != (in_scope_cap, counted_cap):
+                res.fail(problem="in-scope or counted tests differ from capability_matrix.csv", need_id=nd["id"],
+                         recount=(len(scope), len(counted.get(nd["id"], ()))), capability_matrix=(in_scope_cap, counted_cap))
+            ids = counted.get(nd["id"], set())
+            for role, var in [("required", v) for v in nd["conditions_required"]] + [("outcome", v) for v in nd["outcomes_any"]]:
+                g = {}
+                for t in scope:
+                    k = o_test_state(ctx, t, var)
+                    x = g.setdefault(k, [0, 0, 0])
+                    x[0] += 1
+                    if t["test_id"] in ids:
+                        x[1] += 1
+                        m = marks[(sc["id"], t["test_id"])]
+                        o, p = m["o2_match"], m["pressure_match"]
+                        if var in ("o2_pct", "pressure_kpa") and m["tier"] == "other" and o == "not_recorded" and p == "not_recorded":
+                            x[2] += 1
+                for (st, kind) in sorted(g, key=lambda k: (O_STATES.index(k[0]), k[1])):
+                    a, b, u = g[(st, kind)]
+                    want.append({"scenario_id": sc["id"], "need_id": nd["id"], "role": role, "variable": var, "state": st,
+                                 "column_is": kind, "in_scope_tests": str(in_scope_cap), "counted_tests": str(counted_cap),
+                                 "in_scope_tests_in_state": str(a), "counted_tests_in_state": str(b),
+                                 "counted_unmatched_for_lack_of_this_variable": str(u)})
+    res.checked = len(want)
+    if len(rows) != len(want):
+        res.fail(problem="row count differs", file=len(rows), expected=len(want))
+    for h, w in zip(rows, want):
+        if {k: h.get(k) for k in w} != w:
+            res.fail(problem="row differs", file={k: h.get(k) for k in w}, expected=w)
+    res.numbers = {"rows": len(rows), "unmatched_for_lack": sum(int(r["counted_unmatched_for_lack_of_this_variable"]) for r in rows),
+                   "counted_per_need": {k: len(v) for k, v in sorted(counted.items())}}
+    return res
+
+
+@check("O3_retrieval_queue",
+       "retrieval_queue.csv: one row per investigation, variable and file group for the variables in state column (one "
+       "row per group with an entry) or not_in_sampled_files (one row per unopened group of the spec), only where a test "
+       "of an investigation linked as supported to a need that uses the variable lacks the value; the numbers are "
+       "recounted; retrievable_by_reading is yes only where an entry of the group is a sensor series or a value per test "
+       "in a results file, carries no code of differs_from_definition and has link_kind literal_key_or_label; the "
+       "rows are sorted by the stated rule and ranked 1..n.")
+def check_o3(ctx):
+    res = Result()
+    if not ctx.has("retrieval_queue.csv"):
+        raise Skip("retrieval_queue.csv not written")
+    rows = ctx.table("retrieval_queue.csv")
+    spec = o_spec(ctx)
+    counted = {}
+    for r in ctx.table("need_tests.csv"):
+        if r["objective_link"] == "stated":
+            counted.setdefault(r["test_id"], set()).add(r["need_id"])
+    supported = {n["id"]: {l["investigation_id"] for l in n.get("stated_by", []) if l["verdict"] == "supported"} for n in ctx.needs}
+    uses = {v: [n for n in ctx.needs if v in n["conditions_required"] + n["conditions_useful"] + n["outcomes_any"]] for v in o_vars(ctx)}
+    by_inv = {}
+    for t in ctx.tests:
+        by_inv.setdefault(t["investigation_id"], []).append(t)
+    want = {}
+    for (inv, var), cell in o_cells(ctx).items():
+        rem = cell[-1]
+        if rem["state"] not in ("column_in_sampled_raw_file", "not_in_sampled_files") or not rem["groups"]:
+            continue
+        empty = [t for t in by_inv.get(inv, []) if o_blank(t.get(var))]
+        lack = [t for t in empty if any((not (n.get("scope") or {}).get("fuel_phase") or t["fuel_phase"] in n["scope"]["fuel_phase"])
+                                        and inv in supported[n["id"]] for n in uses[var])]
+        if not lack:
+            continue
+        ids_uses = {n["id"] for n in uses[var]}
+        cnt = [t for t in lack if counted.get(t["test_id"], set()) & ids_uses]
+        for gid in rem["groups"]:
+            if rem["state"] == "column_in_sampled_raw_file":
+                es = [e for e in spec[inv]["entries"] if e["standard_variable"] == var and e["group"] == gid]
+                kinds = list(dict.fromkeys(e["column_is"] for e in es))
+                kind, files, byts = "+".join(kinds), es[0]["files_in_listing"], es[0]["bytes_in_listing"]
+                yes = "yes" if any(o_qualifies(e) for e in es) else "no"
+                differs, lk = o_codes(ctx, es), " | ".join(dict.fromkeys(e["link_kind"] for e in es))
+            else:
+                u = next(u for u in spec[inv]["unopened_groups"] if u["group"] == gid)
+                kind, files, byts, yes = u["kind"], u["files_in_listing"], u["bytes_in_listing"], "no"
+                differs, lk = "", ""
+            want[(inv, var, gid)] = {"state": rem["state"], "kind": kind, "retrievable_by_reading": yes,
+                                     "differs_from_definition": differs, "link_kind": lk,
+                                     "tests_without_value": str(len(empty)), "tests_lacking_value": str(len(lack)),
+                                     "counted_tests_lacking_value": str(len(cnt)), "files": str(files),
+                                     "bytes": "" if byts is None else str(byts)}
+    got = {(r["investigation_id"], r["variable"], r["file_group"]): r for r in rows}
+    if set(got) != set(want):
+        res.fail(problem="rows differ", missing=sorted(set(want) - set(got))[:5], extra=sorted(set(got) - set(want))[:5])
+    for k, w in want.items():
+        res.checked += 1
+        h = got.get(k)
+        if h and {c: h[c] for c in w} != w:
+            res.fail(problem="row values differ", row=k, file={c: h[c] for c in w}, expected=w)
+    key = lambda r: (-int(r["tests_lacking_value"]), (1, 0) if r["bytes"] == "" else (0, int(r["bytes"])),
+                     psi_key(r["investigation_id"]), r["variable"], r["file_group"])
+    if rows != sorted(rows, key=key):
+        res.fail(problem="rows are not in the order of the stated rule")
+    if [r["rank"] for r in rows] != [str(i) for i in range(1, len(rows) + 1)]:
+        res.fail(problem="rank is not 1..n")
+    res.numbers = {"rows": len(rows), "retrievable_by_reading": sum(r["retrievable_by_reading"] == "yes" for r in rows)}
+    return res
+
+
+@check("O4_raw_values",
+       "raw_values.csv: every row names a PSI file id of the listing of its investigation with the listed name and "
+       "bytes; a test_id is given only with literal link evidence and exists in tests.csv for the same investigation; "
+       "a series row has n_readings >= 1, min <= first, last <= max as stored numbers, and the rows of the lowest and "
+       "the highest reading inside its first and last row.")
+def check_o4(ctx):
+    res = Result()
+    if not ctx.has("raw_values.csv"):
+        raise Skip("raw_values.csv absent")
+    rows = ctx.table("raw_values.csv")
+    listings, tests = {}, ctx.tests_by_id
+    by = {}
+    for r in rows:
+        res.checked += 1
+        inv = r["investigation_id"]
+        if inv not in listings:
+            listings[inv] = o_listing(inv)
+        rec = listings[inv].get(r["psi_file_id"])
+        if rec is None or rec[0] != r["psi_file_name"] or rec[1] != int(r["bytes"]):
+            res.fail(problem="file id, name or bytes not as in the listing", file_id=r["psi_file_id"], name=r["psi_file_name"])
+        if r["test_id"]:
+            t = tests.get(r["test_id"])
+            if t is None or t["investigation_id"] != inv:
+                res.fail(problem="test_id not in tests.csv for this investigation", test_id=r["test_id"])
+            if "tests.csv" not in r["link_evidence"]:
+                res.fail(problem="test_id without literal link evidence", test_id=r["test_id"])
+        if r["extraction"] == "saffire_ambient_pressure":
+            lo, hi = float(r["min"]), float(r["max"])
+            if int(r["n_readings"]) < 1 or not (lo <= float(r["first_value"]) <= hi and lo <= float(r["last_value"]) <= hi):
+                res.fail(problem="series numbers inconsistent", test_id=r["test_id"])
+            first, last = int(r["first_row"]), int(r["last_row"])
+            if not (first <= int(r["min_row"]) <= last and first <= int(r["max_row"]) <= last):
+                res.fail(problem="row of the lowest or highest reading outside the series", test_id=r["test_id"])
+        elif r["min_row"] or r["max_row"]:
+            res.fail(problem="min_row or max_row on a row that is not a series", cell=r["cell_or_range"])
+        by[r["extraction"]] = by.get(r["extraction"], 0) + 1
+    res.numbers = {"rows": len(rows), "by_extraction": by, "files": len({r["psi_file_id"] for r in rows}),
+                   "rows_with_test_id": sum(1 for r in rows if r["test_id"]),
+                   "tests_named": len({r["test_id"] for r in rows if r["test_id"]})}
+    return res
+
+
+@check("O5_raw_columns_spec",
+       "spec/raw_columns.json: every group with a name_regex has the files and bytes that the regex gives on the saved "
+       "listing (less exclude_ids); every sample and entry file id is in the listing with the listed name and bytes; "
+       "every entry carries the name pattern, files and bytes of its group, a standard variable of a need, a column_is "
+       "and header_kind of _meta, has_values true, a link_to_table_row, a link_kind of _meta and a list of codes of "
+       "_meta.differs_from_definition.")
+def check_o5(ctx):
+    res = Result()
+    raw = ctx.spec("raw_columns")
+    meta, need_vars = raw["_meta"], set(o_vars(ctx))
+    groups_n = entries_n = 0
+    for inv in raw["investigations"]:
+        iid = inv["investigation_id"]
+        if not (inv["groups"] or inv.get("unopened_groups")):
+            continue
+        L = o_listing(iid)
+        for u in inv.get("unopened_groups", []):
+            if u["kind"] not in meta["unread_kinds"]:
+                res.fail(problem="unopened group kind not in _meta.unread_kinds", investigation_id=iid, group=u["group"])
+        for g in inv["groups"] + inv.get("unopened_groups", []):
+            if not g.get("name_regex"):
+                continue
+            groups_n += 1
+            c = re.compile(g["name_regex"])
+            hit = [(k, v) for k, v in L.items() if c.search(v[0]) and k not in set(g.get("exclude_ids", []))]
+            if (len(hit), sum(v[1] for k, v in hit)) != (g["files_in_listing"], g["bytes_in_listing"]):
+                res.fail(problem="files or bytes differ from the listing recount", investigation_id=iid, group=g["group"],
+                         spec=(g["files_in_listing"], g["bytes_in_listing"]), recount=(len(hit), sum(v[1] for k, v in hit)))
+            for s in g.get("samples", []):
+                rec = L.get(s["psi_file_id"])
+                if rec is None or rec[1] != int(s["bytes_listing"]) or (g.get("round") == 2 and rec[0] != s["psi_name"]):
+                    res.fail(problem="sample not in the listing", investigation_id=iid, group=g["group"], file_id=s["psi_file_id"])
+        gby = {g["group"]: g for g in inv["groups"]}
+        for e in inv["entries"]:
+            entries_n += 1
+            g = gby.get(e["group"])
+            k = {"investigation_id": iid, "group": e["group"], "header": e["header_as_written"]}
+            if g is None:
+                res.fail(problem="entry of an unknown group", **k)
+                continue
+            if any(e[x] != g[x] for x in ("name_pattern", "files_in_listing", "bytes_in_listing")):
+                res.fail(problem="entry and group differ", **k)
+            rec = L.get(e["sample_file_id"])
+            if rec is None or rec[0] != e["sample_file"] or rec[1] != int(e["sample_bytes"]):
+                res.fail(problem="entry sample not as in the listing", **k)
+            if e["standard_variable"] not in need_vars or e["column_is"] not in meta["column_is"] \
+                    or e["header_kind"] not in meta["header_kinds"] or e["has_values"] is not True \
+                    or not e.get("link_to_table_row") or e.get("mapping_by") != meta["mapping_by"] \
+                    or e.get("link_kind") not in meta["link_kind"] or not isinstance(e.get("differs_from_definition"), list) \
+                    or any(c not in meta["differs_from_definition"] for c in e["differs_from_definition"]):
+                res.fail(problem="entry field outside the vocabulary or missing", **k)
+    res.checked = groups_n + entries_n
+    res.numbers = {"groups_recounted": groups_n, "entries": entries_n,
+                   "entries_round_2": sum(1 for i in raw["investigations"] for e in i["entries"] if e["round"] == 2)}
+    return res
+
+
+@check("O6_frozen_files",
+       "tests.csv, need_tests.csv, scenario_needs.csv and scenario_tests.csv have the sha256 of the snapshot of "
+       "2026-11-14 17:30 KST that the README names.")
+def check_o6(ctx):
+    res = Result()
+    for name, want in FROZEN_SHA256.items():
+        res.checked += 1
+        with open(ctx.out_path(name), "rb") as f:
+            got = hashlib.sha256(f.read()).hexdigest()
+        if got != want:
+            res.fail(problem="file changed", file=name, sha256=got, snapshot=want)
+    res.numbers = {"files": res.checked}
+    return res
+
+
+@check("O7_raw_values_effect",
+       "raw_values_effect.json: the Saffire lowest and highest readings times the psi factor of spec/findings.json, "
+       "their pressure bins and scenario ranges, and the SAME-R counts per size statistic are recounted from "
+       "raw_values.csv, tests.csv and the specs; the file states that nothing is adopted.")
+def check_o7(ctx):
+    res = Result()
+    if not ctx.has("raw_values_effect.json"):
+        raise Skip("raw_values_effect.json not written")
+    eff = ctx.json("raw_values_effect.json")
+    E = ctx.spec("raw_columns")["_meta"]["effect"]
+    factor = ctx.spec("findings")["_meta"]["units"]["psi_to_kpa"]
+    bins = ctx.spec("coverage")["dimensions"]["pressure_kpa"]["bins"]
+    rows = ctx.table("raw_values.csv")
+    if eff.get("not_adopted") != E["not_adopted"] or eff["saffire_pressure"]["factor_kpa_per_psi"] != factor:
+        res.fail(problem="not_adopted sentence or factor differs")
+    sa = {t["test_id"]: t for t in eff["saffire_pressure"]["tests"]}
+    for r in rows:
+        if r["extraction"] != "saffire_ambient_pressure" or not r["test_id"]:
+            continue
+        res.checked += 1
+        t = sa.get(r["test_id"])
+        lo, hi = round(float(r["min"]) * factor, 4), round(float(r["max"]) * factor, 4)
+        bl = next((b["id"] for b in bins if in_range(lo, b)), None)
+        bh = next((b["id"] for b in bins if in_range(hi, b)), None)
+        if t is None or (t["min_kpa"], t["max_kpa"], t["bin_of_min"], t["bin_of_max"], t["same_bin"], t["min_row"], t["max_row"]) \
+                != (lo, hi, bl, bh, bl == bh, int(r["min_row"]), int(r["max_row"])):
+            res.fail(problem="Saffire conversion or bin differs", test_id=r["test_id"])
+            continue
+        for sc in ctx.spec("scenarios")["scenarios"]:
+            rng = sc["ranges"].get("pressure_kpa")
+            if rng is not None and t["scenario_pressure_ranges"].get(sc["id"]) != {"min_in_range": in_range(lo, rng), "max_in_range": in_range(hi, rng)}:
+                res.fail(problem="scenario range mark differs", test_id=r["test_id"], scenario=sc["id"])
+    d2 = next(n for n in ctx.needs if n["id"] == "D2")
+    sup = {l["investigation_id"] for l in d2["stated_by"] if l["verdict"] == "supported"}
+    scope = {t["test_id"]: t for t in ctx.tests if t["fuel_phase"] in d2["scope"]["fuel_phase"] and t["investigation_id"] in sup}
+    req = {i for i, t in scope.items() if all(not o_blank(t.get(v)) for v in d2["conditions_required"])}
+    stats = {s["statistic"]: s for s in eff["same_r_particle_size"]["statistics"]}
+    same = [r for r in rows if r["extraction"] == "same_particle_size_statistics"]
+    every = {h for hs in E["same_statistic_classes"].values() for h in hs}
+    tied = {r["test_id"] for r in same if r["test_id"]}
+    pos = set()
+    for r in same:
+        if r["test_id"] and r["header_as_written"] in every:
+            try:
+                if float(r["value"]) > 0:
+                    pos.add(r["test_id"])
+            except ValueError:
+                pass
+    sr = eff["same_r_particle_size"]
+    if (sr.get("tied_tests"), sr.get("tied_tests_without_a_positive_value")) != (len(tied), sorted(tied - pos)):
+        res.fail(problem="tied tests or tied tests without a positive value differ")
+    for name, headers in E["same_statistic_classes"].items():
+        res.checked += 1
+        vals = {}
+        for r in same:
+            if r["test_id"] in scope and r["header_as_written"] in headers:
+                try:
+                    if float(r["value"]) != 0:
+                        vals.setdefault(r["test_id"], {}).setdefault(r["psi_file_id"], set()).add(r["value"])
+                except ValueError:
+                    pass
+        tid = set(vals)
+        differ = sorted(t for t, pf in vals.items() if len(pf) > 1 and len({frozenset(v) for v in pf.values()}) > 1)
+        within = sum(1 for pf in vals.values() if any(len(v) > 1 for v in pf.values()))
+        s = stats.get(name, {})
+        got = (s.get("tests_with_a_stored_nonzero_value"), s.get("of_which_meet_every_required_condition"),
+               s.get("tests_whose_files_hold_different_values_ids"), s.get("tests_with_more_than_one_value_in_one_file"))
+        if got != (len(tid), len(tid & req), differ, within):
+            res.fail(problem="SAME-R count differs", statistic=name, file=got, recount=(len(tid), len(tid & req), differ, within))
+    counted_d2 = sum(1 for r in ctx.table("need_tests.csv") if r["need_id"] == "D2" and r["objective_link"] == "stated")
+    if eff["same_r_particle_size"]["d2_counted_tests_now"] != counted_d2:
+        res.fail(problem="D2 counted tests differ")
+    res.numbers = {"saffire_tests": len(sa), "same_bin": sum(1 for t in sa.values() if t["same_bin"]),
+                   "same_r": {k: v["tests_with_a_stored_nonzero_value"] for k, v in stats.items()}, "d2_counted": counted_d2}
+    return res
+
+
+@check("O8_evidence_raw_state",
+       "Every need block of every evidence package has raw_state for each required variable: the counted and in-scope "
+       "test numbers equal need_tests.csv and the need's scope, and the tests per state (summed over investigations) "
+       "equal this check's recount; every gap entry has raw_state for its variable.")
+def check_o8(ctx):
+    res = Result()
+    counted = {}
+    for r in ctx.table("need_tests.csv"):
+        if r["objective_link"] == "stated":
+            counted.setdefault(r["need_id"], []).append(r["test_id"])
+    need = {n["id"]: n for n in ctx.needs}
+    cache = {}
+
+    def want(nid, var, pop):
+        if (nid, var, pop) not in cache:
+            nd = need[nid]
+            phases = (nd.get("scope") or {}).get("fuel_phase")
+            ts = ([ctx.tests_by_id[i] for i in counted.get(nid, [])] if pop == "counted"
+                  else [t for t in ctx.tests if not phases or t["fuel_phase"] in phases])
+            c = {}
+            for t in ts:
+                st = o_test_state(ctx, t, var)[0]
+                c[st] = c.get(st, 0) + 1
+            cache[(nid, var, pop)] = (len(ts), c)
+        return cache[(nid, var, pop)]
+    gaps_n = 0
+    for env, pack in packages(ctx):
+        for b in (pack or {}).get("needs", []):
+            res.checked += 1
+            rs = b.get("raw_state")
+            if not isinstance(rs, dict) or list(rs) != need[b["need_id"]]["conditions_required"]:
+                res.fail(problem="raw_state missing or not the required variables", package=env["id"], need_id=b["need_id"])
+                continue
+            for var, v in rs.items():
+                for pop in ("counted", "in_scope"):
+                    c = {}
+                    for item in v[pop]["states"]:
+                        c[item["state"]] = c.get(item["state"], 0) + item["tests"]
+                    if (v[pop]["tests"], c) != want(b["need_id"], var, pop):
+                        res.fail(problem="raw_state numbers differ", package=env["id"], need_id=b["need_id"], variable=var, population=pop)
+            for g in b["gaps"]:
+                gaps_n += 1
+                if not g.get("raw_state"):
+                    res.fail(problem="gap without raw_state", package=env["id"], need_id=b["need_id"], code=g["code"])
+                for x in g.get("raw_state", []):
+                    c = {}
+                    for item in x["states"]:
+                        c[item["state"]] = c.get(item["state"], 0) + item["tests"]
+                    if (x["tests"], c) != want(b["need_id"], x["variable"], x["population"]):
+                        res.fail(problem="gap raw_state numbers differ", package=env["id"], code=g["code"])
+    res.numbers = {"need_blocks": res.checked, "gaps": gaps_n}
+    return res
 
 
 # ----------------------------------------------------------------------------

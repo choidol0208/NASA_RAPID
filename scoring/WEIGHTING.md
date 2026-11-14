@@ -2,6 +2,10 @@
 
 *AI-generated (Claude Code, catalog role), 2026-11-14, config 1.2.0. Written for the team, in answer to the questions "how are the weights set for each purpose, by which technique, and on what basis?"*
 
+> **Update, config 1.4.0 (20:19):** the scorer's judgement stream is now the literature-based one (`scoring/BUILDUP.md` B3): prevention o2 0.251, flow 0.250, fuel 0.250, pressure, geometry and role 0.083 each; detection role 0.334, fuel 0.335, flow 0.151, the others 0.060; suppression, after pooling with FLEX, o2 0.256, fuel 0.253, role 0.235, diluent 0.094, flow 0.086, pressure 0.039, geometry 0.037. The AI judgements and weights below are the earlier stream (configs 1.2.0 and 1.3.0), kept for comparison.
+>
+> **Update, config 1.3.0 (20:06):** the AHP weights below became the *judgement stream*. For suppression the scorer pools them with the NASA FLEX measurements, and uses o2 0.204, fuel 0.202, diluent 0.124, pressure 0.036, role 0.286, flow 0.089, geometry 0.059. Prevention and detection are unchanged. The checks in section 5 were run with 1.2.0; with 1.3.0 every top 3 of the 38 scenarios is the same, and suppression's one-at-a-time check gives 54 of 56. See `scoring/BUILDUP.md`.
+
 Scores and rankings are the team's computation, not NASA's conclusion, and not safety guidance. The weights are in `scoring/scoring_config.json` (`profiles`). They are derived from `scoring/ahp_judgements.json` by `scoring/derive_weights.py`. The ranking code is `scoring/scorer.py` and its port `web/scorer.js`. `scoring/METHOD.md` gives the whole ranking in short; this file goes deeper into the weights.
 
 ---

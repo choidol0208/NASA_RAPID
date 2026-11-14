@@ -1,0 +1,64 @@
+{
+  "_about": {
+    "what": "Literature stream for the weights: for each question type, an evidence class for each dimension, taken from textbooks, papers and NASA records. scoring/derive_literature_weights.py turns the classes into the 51 AHP pairwise judgements (scoring/literature_judgements.csv) and their weights (scoring/literature_weights.json).",
+    "classes": {
+      "1": "decisive: the cited sources show that this condition alone can decide the outcome of the question type (burns or not, detected or not, extinguished or not) within habitat ranges",
+      "2": "strong modifier: the sources report a quantified or clearly documented change in the outcome, but not an on-off effect within habitat ranges",
+      "3": "weak or not documented: no source in this list documents an effect of this condition on the outcome of the question type"
+    },
+    "rule": "Pairwise judgement from the class difference, on Saaty's verbal scale: same class 1 (equal), one class apart 3 (moderately more important), two classes apart 5 (strongly more important).",
+    "generated_by": "AI-generated (Claude Code, catalog role), 2026-11-14 20:17 KST, at the human lead's request to fill the expert form from textbooks and papers instead of asking team members. The classes were assigned by an AI session from the cited findings. They are not judgements of people; review by combustion researchers is the next step.",
+    "source_ids": "References are listed in scoring/BUILDUP.md section 7. A dagger in 'checked' means the finding was checked only in an abstract or a secondary source."
+  },
+  "prevention": {
+    "outcome": "whether a solid material ignites and spreads a flame, and how fast",
+    "dimensions": {
+      "o2": {"class": 1, "sources": ["C17", "C15", "C7"], "checked": "C17, C15 yes; C7 abstract (dagger)",
+             "finding": "A solid burns only above a limiting oxygen concentration (the oxygen index; NASA's maximum oxygen concentration). In microgravity the flammability map in oxygen against flow has a low-oxygen limit. Oxygen can therefore decide whether a material burns at all."},
+      "flow": {"class": 1, "sources": ["C7", "C8", "PSI-25"], "checked": "C7 abstract (dagger); C8 yes; PSI-25 record",
+               "finding": "In microgravity, flow decides burning near the limits: flames quench at low flow (radiative loss) and blow off at high flow, with a flow of maximum flammability between. BASS-II names airflow speed and oxygen as its main variables."},
+      "fuel": {"class": 1, "sources": ["C18F", "C17"], "checked": "C18F text; C17 yes",
+               "finding": "Materials differ by an order of magnitude in flammability: heat release capacity about 460 to 510 J/(g K) for PMMA against 35 for PTFE, 52 for Nomex and 25 for a polyimide."},
+      "pressure": {"class": 2, "sources": ["C16"], "checked": "C16 yes",
+                   "finding": "Lower total pressure raises the oxygen threshold of solids: for PTFE from about 42% at 101.3 kPa to about 53% at 48.2 kPa. The shift is quantified, and smaller than the range of oxygen fractions habitats use."},
+      "geometry": {"class": 2, "sources": ["C4", "C6", "C19"], "checked": "citations yes; content not checked in the text (dagger)",
+                   "finding": "Thermally thin and thick fuels spread in different regimes (theory of opposed-flow flame spread), and large samples burn differently from the small samples of standard tests."},
+      "role": {"class": 2, "sources": ["G1", "catalog"], "checked": "G1 abstract (dagger); catalog count",
+               "finding": "Evidence on a different outcome is indirect evidence (outcome indirectness). 16 of the 24 catalog investigations measured a flammability-related outcome (flame spread, ignition, extinction limit, burning rate), so a purpose mismatch is a real but not decisive gap for prevention."}
+    }
+  },
+  "detection": {
+    "outcome": "how much smoke a fire or an overheated material makes, its particle size, and whether detectors respond",
+    "dimensions": {
+      "role": {"class": 1, "sources": ["G1", "PSI-102"], "checked": "G1 abstract (dagger); PSI-102 record",
+               "finding": "Only a study that measured smoke or detector response gives direct detection evidence; another outcome is indirect evidence. 10 of the 24 catalog investigations measured smoke, soot or detection."},
+      "fuel": {"class": 1, "sources": ["C13"], "checked": "abstract (dagger)",
+               "finding": "Detector response depends on the material: in the SAME flights the ionization detector often missed the small smoke particles of Teflon and Kapton."},
+      "flow": {"class": 2, "sources": ["C13", "PSI-102"], "checked": "C13 abstract (dagger); PSI-102 record",
+               "finding": "Smoke transport and particle growth depend on flow and residence time: low velocities and little mixing in microgravity favour larger particles."},
+      "o2": {"class": 3, "sources": ["PSI-102"], "checked": "PSI-102 record",
+             "finding": "No source in this list documents an oxygen effect on the smoke of overheated materials. SAME made its smoke by heating samples, not by burning them."},
+      "pressure": {"class": 3, "sources": [], "checked": "-", "finding": "No source in this list documents a pressure effect on smoke or detector response."},
+      "geometry": {"class": 3, "sources": [], "checked": "-", "finding": "No source in this list documents an effect of sample shape on smoke or detector response."}
+    }
+  },
+  "suppression": {
+    "outcome": "whether a flame is extinguished, and at which oxygen or agent level",
+    "dimensions": {
+      "role": {"class": 1, "sources": ["G1", "PSI-26", "PSI-69"], "checked": "G1 abstract (dagger); records",
+               "finding": "Only a study that tested extinguishment gives direct suppression evidence (outcome indirectness). BASS and FLEX state the effectiveness of gaseous agents as an objective."},
+      "o2": {"class": 1, "sources": ["C3", "C11"], "checked": "abstracts (dagger)",
+             "finding": "A flame exists only above its limiting oxygen index: about 0.12 for methanol and 0.15 for heptane droplets in O2/N2 on the ISS. CO2 extinguishes methane flames when their maximum temperature falls to about 1600 K."},
+      "fuel": {"class": 1, "sources": ["C3"], "checked": "abstract (dagger)",
+               "finding": "The limiting oxygen index differs by fuel: about 0.12 for methanol against 0.15 for heptane."},
+      "diluent": {"class": 2, "sources": ["C3", "C3H"], "checked": "abstracts (dagger)",
+                  "finding": "The agent shifts the limit moderately: methanol's limiting oxygen index goes from about 0.12 in N2 to about 0.14 with CO2 added, and at 21% O2 more CO2 slightly lowered the extinction diameter."},
+      "flow": {"class": 2, "sources": ["C7", "C8"], "checked": "C7 abstract (dagger); C8 yes",
+               "finding": "Flow changes extinction in microgravity: radiative extinction at low flow, blowoff at high flow."},
+      "pressure": {"class": 2, "sources": ["C16"], "checked": "C16 yes",
+                   "finding": "Lower total pressure raises the oxygen threshold of solids (PTFE about 42% to 53% from 101.3 to 48.2 kPa)."},
+      "geometry": {"class": 3, "sources": ["PSI-26"], "checked": "PSI-26 record",
+                   "finding": "BASS assessed the agent over different geometries, but no source in this list gives the size of the effect."}
+    }
+  }
+}

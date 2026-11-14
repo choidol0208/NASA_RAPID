@@ -96,11 +96,11 @@ class HandCalculation(unittest.TestCase):
                  flow_min_cms="5", flow_max_cms="20", o2_min_pct="17", o2_max_pct="30",
                  pressure_min_kpa="50", pressure_max_kpa="101.3", _inv=fake_inv())
         s = self.run_one(x)
-        # AHP weights (config 1.2.0): 0.285*1 + 0.090*1 + 0.166*0.9 + 0.267*0.8 + 0.111*1 + 0.081*1
-        self.assertAlmostEqual(s["raw"], 0.93, places=3)
+        # Config 1.4.0 weights: 0.251*1 + 0.083*1 + 0.250*0.9 + 0.250*0.8 + 0.083*1 + 0.083*1
+        self.assertAlmostEqual(s["raw"], 0.925, places=3)
         self.assertEqual(s["gate"], 1.0)
         self.assertAlmostEqual(s["evidence"], 0.97, places=3)
-        self.assertAlmostEqual(s["score"], 90.2, places=1)
+        self.assertAlmostEqual(s["score"], 89.7, places=1)
 
     def test_y_gas_jet(self):
         y = dict(investigation_id="Y", fuel_phase="gas", fuel_material="propane", fuel_class="gaseous_hydrocarbon",
@@ -109,8 +109,8 @@ class HandCalculation(unittest.TestCase):
                  _inv=fake_inv(fire_safety_role="fundamental", research_focus="flame_structure",
                                data_availability="processed_table"))
         s = self.run_one(y)
-        # 0.285*1 + 0.090*0.8703 + 0.166*0.5 + 0.267*0.1 + 0.111*0.2 + 0.081*0.4
-        self.assertAlmostEqual(s["raw"], 0.528, places=3)
+        # 0.251*1 + 0.083*0.8703 + 0.250*0.5 + 0.250*0.1 + 0.083*0.2 + 0.083*0.4
+        self.assertAlmostEqual(s["raw"], 0.523, places=3)
         self.assertAlmostEqual(s["gate"], 0.75, places=3)  # ramp: 0.5 + 0.5 * (0.1 / 0.2)
         self.assertLess(s["score"], 45)
 
@@ -272,10 +272,12 @@ class SourceWording(unittest.TestCase):
                 self.assertIn(c[f"{var}_source"], ("", "table", "record", "test_matrix", "team"))
 
     def test_record_pressure_of_bre_is_not_tested(self):
-        rows = {r["config_id"]: r for r in scorer.rank("lunar habitat")["ranking"]}
-        text = rows["ACME-BRE-C01"]["why"] + " " + rows["ACME-BRE-C01"]["main_gap"]
+        # The wording of the value itself, and the reasons the page shows (pressure need not be among the top reasons).
+        c = {x["config_id"]: x for x in CFGS}["ACME-BRE-C01"]
+        text = scorer._fmt_value(c, "pressure", "pressure", "pressure_min_kpa", "pressure_max_kpa", " kPa", False)
         self.assertIn("named in the PSI record, not a test value", text)
-        self.assertNotIn("pressure tested", text)
+        rows = {r["config_id"]: r for r in scorer.rank("lunar habitat")["ranking"]}
+        self.assertNotIn("pressure tested", rows["ACME-BRE-C01"]["why"] + " " + rows["ACME-BRE-C01"]["main_gap"])
 
     def test_no_non_table_value_worded_as_tested(self):
         src = {c["config_id"]: c for c in CFGS}
@@ -402,6 +404,55 @@ class CatalogIntegrity(unittest.TestCase):
             self.assertAlmostEqual(sum(p["weights"].values()), 1.0, places=6, msg=name)
 
 
+class Requirements(unittest.TestCase):
+    """Systems-engineering layer: one requirement per dimension the query sets, with its source; a compliance line per result."""
+
+    def test_iss_cotton_fabric_requirements(self):
+        out = scorer.rank("ISS cotton fabric")
+        reqs = {q["dimension"]: q for q in out["requirements"]}
+        self.assertEqual(list(reqs), ["gravity", "o2", "pressure", "flow", "fuel", "geometry", "role"])
+        self.assertEqual(reqs["o2"]["source"], "implied by preset iss")
+        self.assertEqual(reqs["o2"]["value"], "21%")
+        self.assertEqual(reqs["fuel"]["source_class"], "stated")
+        self.assertEqual(reqs["role"]["source_class"], "assumed")  # no purpose word: prevention by default
+        self.assertEqual([q["id"] for q in out["requirements"]], [f"R{i}" for i in range(1, 8)])
+
+    def test_compliance_follows_the_similarities(self):
+        out = scorer.rank("ISS cotton fabric")
+        rid = {q["dimension"]: q["id"] for q in out["requirements"]}
+        for r in out["results"]:
+            st = {c["id"]: c["status"] for c in r["compliance"]}
+            self.assertEqual(len(st), len(out["requirements"]))
+            if "O2" in r["assumed_dims"]:
+                self.assertEqual(st[rid["o2"]], "unverified")  # an assumed atmosphere never counts as met
+            self.assertEqual(st[rid["gravity"]], "met")
+            for d in ("fuel", "geometry"):
+                expect = "met" if r["similarity"][d] >= 0.999 else None
+                if expect:
+                    self.assertEqual(st[rid[d]], expect)
+
+    def test_partial_gravity_is_not_met(self):
+        out = scorer.rank("lunar habitat cotton fabric")
+        rid = {q["dimension"]: q["id"] for q in out["requirements"]}
+        for r in out["results"]:
+            self.assertEqual({c["id"]: c["status"] for c in r["compliance"]}[rid["gravity"]], "not_met")
+
+    def test_diluent_not_scored_outside_suppression(self):
+        out = scorer.rank("ISS cotton fabric in CO2")
+        reqs = {q["dimension"]: q["id"] for q in out["requirements"]}
+        if "diluent" in reqs:
+            for r in out["results"]:
+                self.assertEqual({c["id"]: c["status"] for c in r["compliance"]}[reqs["diluent"]], "not_scored")
+
+    def test_requirements_change_no_score(self):
+        cfg = copy.deepcopy(CFG)
+        cfg.pop("requirements")
+        for q in ("ISS", "lunar habitat cotton fabric", "CO2 suppression of heptane fire"):
+            a = [(r["config_id"], r["score"]) for r in scorer.rank(q)["results"]]
+            b = [(r["config_id"], r["score"]) for r in scorer.rank(q, config=cfg)["results"]]
+            self.assertEqual(a, b, q)
+
+
 class AhpWeights(unittest.TestCase):
     """Config 1.2.0: the profile weights are the AHP derivation of scoring/ahp_judgements.json."""
 
@@ -444,6 +495,89 @@ class AhpWeights(unittest.TestCase):
     def test_rounded_weights_sum_to_one(self):
         for prof, r in self.res.items():
             self.assertAlmostEqual(sum(r["weights"].values()), 1.0, places=9, msg=prof)
+
+
+class WeightStreams(unittest.TestCase):
+    """Pooling of the judgement and data streams (scoring/weight_streams.json, scoring/data_weights.json)."""
+
+    @classmethod
+    def setUpClass(cls):
+        import json
+        import os
+        import tempfile
+        from scoring import derive_weights
+        cls.dw = derive_weights
+        cls.res = derive_weights.derive()
+        st = json.load(open(derive_weights.STREAMS, encoding="utf-8"))
+        st["apply"] = True
+        fd, cls.tmp = tempfile.mkstemp(suffix=".json")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            json.dump(st, fh)
+        cls.spec = st["data"]
+        cls.on = derive_weights.final_weights(cls.res, cls.tmp)
+        st2 = dict(st, data={})  # the same judgement stream without the data stream
+        fd2, cls.tmp2 = tempfile.mkstemp(suffix=".json")
+        with os.fdopen(fd2, "w", encoding="utf-8") as fh:
+            json.dump(st2, fh)
+        cls.judgement = derive_weights.final_weights(cls.res, cls.tmp2)
+
+    @classmethod
+    def tearDownClass(cls):
+        import os
+        os.remove(cls.tmp)
+        os.remove(cls.tmp2)
+
+    def test_off_means_ahp(self):
+        import json
+        import os
+        import tempfile
+        st = json.load(open(self.dw.STREAMS, encoding="utf-8"))
+        st["apply"] = False
+        fd, path = tempfile.mkstemp(suffix=".json")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            json.dump(st, fh)
+        try:
+            off = self.dw.final_weights(self.res, path)
+        finally:
+            os.remove(path)
+        for prof, r in self.res.items():
+            self.assertEqual(off[prof]["weights"], {d: r["weights"][d] for d in self.dw.ALL_DIMS})
+
+    def test_config_uses_the_streams(self):
+        # Config 1.3.0: pooling is applied, so the config's suppression weights are the pooled ones.
+        self.assertEqual({d: CFG["profiles"]["suppression"]["weights"][d] for d in self.dw.ALL_DIMS}, self.on["suppression"]["weights"])
+
+    def test_pooling_keeps_mass_and_other_dimensions(self):
+        for prof, spec in self.spec.items():
+            before, after = self.judgement[prof]["weights"], self.on[prof]["weights"]
+            dims = spec["dimensions"]
+            self.assertAlmostEqual(sum(after[d] for d in dims), sum(before[d] for d in dims), delta=0.002)
+            for d in self.dw.ALL_DIMS:
+                if d not in dims:
+                    self.assertAlmostEqual(after[d], before[d], delta=0.0015, msg=(prof, d))
+            self.assertAlmostEqual(sum(after.values()), 1.0, places=9)
+
+    def test_profiles_without_data_are_unchanged(self):
+        for prof in self.res:
+            if prof not in self.spec:
+                self.assertEqual(self.on[prof]["weights"], self.judgement[prof]["weights"])
+
+    def test_judgement_stream_is_the_literature_one(self):
+        # Config 1.4.0: no team member's form yet, so the literature-based judgements are used for every profile.
+        import json
+        lit = json.load(open(self.dw.LITERATURE, encoding="utf-8"))["group"]
+        for prof in self.res:
+            self.assertEqual(self.judgement[prof]["weights"], lit[prof]["weights"], prof)
+            self.assertIn("literature", self.judgement[prof]["sources"][0])
+
+    def test_group_of_identical_experts_equals_each(self):
+        # Aggregation of individual judgements by the geometric mean: identical matrices give the same matrix.
+        A = [[1.0, 3.0, 5.0], [1 / 3, 1.0, 2.0], [1 / 5, 1 / 2, 1.0]]
+        G = [[(A[i][j] * A[i][j]) ** 0.5 for j in range(3)] for i in range(3)]
+        w1, _ = self.dw.eigen_weights(A)
+        w2, _ = self.dw.eigen_weights(G)
+        for x, y in zip(w1, w2):
+            self.assertAlmostEqual(x, y, places=12)
 
 
 if __name__ == "__main__":
