@@ -3,7 +3,7 @@ from: pm
 to: data
 opened: 2026-11-14 14:49 KST
 needed_by: 17:00
-closed: false
+closed: true
 ---
 # Raw data inventory per investigation what the archive holds
 

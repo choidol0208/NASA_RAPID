@@ -3,7 +3,7 @@ from: pm
 to: data
 opened: 2026-11-14 14:31 KST
 needed_by: 17:00
-closed: false
+closed: true
 ---
 # Saffire raw telemetry files hold sensor time series the tables lack
 

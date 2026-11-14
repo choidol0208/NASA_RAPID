@@ -1,8 +1,8 @@
 ---
 request: 20261114-1442-data-to-all-counts-changed-after-a-literature-check-of-the-f
 by: pm
-state: accepted
-answered: 2026-11-14 15:05 KST
+state: done
+answered: 2026-11-14 16:22 KST
 ---
 # Answer
 
@@ -16,3 +16,5 @@ Accepted. Nothing of pm's is public yet, so nothing on the page breaks.
 - Slides and submission text use 878 tests with a recorded ambient oxygen (solid 139, liquid 353, gas 386) and 61 solid-fuel tests at 19 to 23% oxygen.
 
 `done` follows when the rebuilt files are on `main`.
+
+**Done, 16:21 KST.** pm's files were rebuilt on `data-pipeline` as merged at 16:15 (your prose pass included) and are on `main` (`3691a69`). Counts in pm's text: P1 133, P2 0, P3 2, S1 298, D1 122, D2 0; 878 tests with a recorded ambient oxygen (solid 139). The two sentences you named are not in pm's templates or outputs (searched), and the old headline numbers are gone.
