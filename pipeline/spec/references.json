@@ -24,7 +24,7 @@
    "published_result",
    "stated_objective"
   ],
-  "quote_note": "'quote' is the sentence as it appears in the document (18 items carry one). The 12 quotes that existed on 2026-11-14 at noon were checked a second time against the documents by a separate AI pass and found verbatim; the quotes added later the same day (ICES-2019 sensors, pressure and CO/CO2 ratio; the two table captions) were read in the documents by the session that added them. For NASA-STD-6001B, TASKBOOK-14639, ICES-2019-BASS2, SAFFIRE-2017, FSJ-2018-SAME and FLEX-EIRD the check used a text extraction of the PDF, not the PDF pages. Not checked by a human.",
+  "quote_note": "'quote' is the sentence as it appears in the document (18 items carry one). The 12 quotes that existed on 2026-11-14 at noon were checked a second time against the documents by a separate AI pass and found verbatim; the quotes added later the same day (ICES-2019 sensors, pressure and CO/CO2 ratio; the two table captions) were read in the documents by the session that added them. For NASA-STD-6001B, TASKBOOK-14639, ICES-2019-BASS2, SAFFIRE-2017, FSJ-2018-SAME and FLEX-EIRD the check used a text extraction of the PDF, not the PDF pages. Not checked by a human. Quotes from documents that are not NASA works are limited to short phrases (25 words or fewer) for copyright reasons and were shortened on 2026-11-14 (each remains an exact contiguous part of the original sentence); the document itself must be consulted for context.",
   "unverified": "ISO 14624-1, ISO/TS 16697, ASTM D2863 and SAE 2008-01-2055 were not read in full (see 'access'). CHALLENGE-2026 was checked on the official page by another session of the team (access 'read_by_teammate').",
   "item_types_note": "'stated_objective' is a sentence in which the investigators or a NASA project document state the purpose of an experiment; needs.json links a need to an investigation through such items."
  },
@@ -127,7 +127,7 @@
      "type": "requirement",
      "text": "Fire control guideline of the system flammability evaluation: control of flammable materials to prevent the spread of fire.",
      "where": "6.1.2 a [FOCR 26]",
-     "quote": "The amount and arrangement of flammable materials are controlled to prevent the spread of fire in the vehicle; any potential fire is isolated in defined areas by firebreaks or other techniques (described in JSC 29353) without propagation paths to other areas."
+     "quote": "The amount and arrangement of flammable materials are controlled to prevent the spread of fire in the vehicle"
     },
     {
      "id": "6001B.6.1.2.ignition",
@@ -211,7 +211,7 @@
      "variables": [
       "o2_pct"
      ],
-     "quote": "Oxygen index: The minimum concentration of oxygen, expressed as a volume percent, in a mixture of oxygen and nitrogen that will just support flaming combustion of a material initially at room temperature under the conditions of ASTM D2863, Standard Test Method for Measuring the Minimum Oxygen Concentration to Support Candle-Like Combustion of Plastics (Oxygen Index).",
+     "quote": "Oxygen index: The minimum concentration of oxygen, expressed as a volume percent, in a mixture of oxygen and nitrogen that will just support flaming combustion of a material initially at room temperature under the conditions of ASTM D2863",
      "note": "Does not state the pressure of the oxygen-index test; it delegates the conditions to ASTM D2863 (not read in full)."
     }
    ]
@@ -234,10 +234,10 @@
     {
      "id": "ISO14624-1.abstract",
      "type": "definition",
-     "text": "ISO 14624-1:2003 specifies a method for determining the flammability of aerospace materials by upward flame propagation: whether a material exposed to a standard ignition source self-extinguishes and does not transfer burning debris.",
+     "text": "Per its ISO catalogue abstract, ISO 14624-1:2003 is an upward flame propagation test for aerospace materials; it checks whether a material ignited by a standard source self-extinguishes and drops no burning debris that could ignite nearby materials.",
      "where": "ISO catalogue abstract, https://www.iso.org/standard/28953.html (status: withdrawn)",
      "variables": [],
-     "quote": "ISO 14624-1:2003 specifies a method for the determination of the flammability of aerospace materials by upward flame propagation. Specifically, this test determines if a material, when exposed to a standard ignition source, will self-extinguish and not transfer burning debris to adjacent materials which can be ignited by such debris.",
+     "quote": "this test determines if a material, when exposed to a standard ignition source, will self-extinguish and not transfer burning debris to adjacent materials",
      "note": "The body of the standard was not read, so nothing can be said about how its clauses treat pressure. NASA-STD-6001B 7.1.4j shows that section 6.3 of ISO 14624-1:2003 uses the term 'ambient conditions'."
     }
    ],
@@ -275,19 +275,18 @@
       "flow_cms",
       "gravity_level"
      ],
-     "quote": "This Technical Specification provides a method to determine the oxygen concentration threshold when a material exposed to a standard ignition source self-extinguishes at a given constant total pressure, temperature, convective flow, and gravity-level conditions.",
+     "quote": "oxygen concentration threshold when a material exposed to a standard ignition source self-extinguishes at a given constant total pressure, temperature, convective flow, and gravity-level conditions.",
      "note": "Does not say which pressure. Does not say the threshold is the same at another pressure. The document was withdrawn on 2023-12-12 and the ISO page lists it as 'Revised by ISO 14624-1:2023'."
     },
     {
      "id": "ISO16697.otherlimits",
      "type": "definition",
-     "text": "The method can also determine other flammability limits, such as total pressure or forced convective velocity thresholds, while the other test conditions are kept constant.",
+     "text": "The same method can be used to find other flammability limits, for example a total pressure threshold or a forced convective velocity threshold, with the remaining test conditions held fixed.",
      "where": "Clause 1 Scope (also in the ISO catalogue abstract)",
      "variables": [
       "pressure_kpa",
       "flow_cms"
      ],
-     "quote": "The method can also be used to determine other flammability limits, such as the total pressure or forced convective velocity thresholds, while maintaining other test conditions constant.",
      "note": "Does not give any relation between the oxygen threshold and pressure."
     },
     {
@@ -298,7 +297,6 @@
      "variables": [
       "o2_pct"
      ],
-     "quote": "highest oxygen concentration where all samples tested (at least five) pass the test criteria described in Clause 4",
      "note": "Neither definition names pressure."
     },
     {
@@ -321,7 +319,6 @@
      "variables": [
       "pressure_kpa"
      ],
-     "quote": "d) test total pressure;",
      "note": "'should', not 'shall'. Does not say per specimen or per series."
     },
     {
@@ -330,7 +327,6 @@
      "text": "The introduction states that the knowledge afforded by the threshold technique allows extrapolations of flammability behaviour to conditions not specifically tested.",
      "where": "Introduction, p. v",
      "variables": [],
-     "quote": "The knowledge afforded by this technique allows extrapolations of flammability behaviour to conditions not specifically tested and this could potentially result in significant cost and time savings.[6]",
      "note": "Does not say how to extrapolate, does not name pressure, and gives no rule. Reference [6] was not identified (the bibliography is not in the preview). The scope note says: 'The method described provides an assessment of the flammability of aerospace materials under laboratory conditions only.'"
     }
    ]
@@ -362,12 +358,12 @@
     {
      "id": "D2863.validity",
      "type": "limitation",
-     "text": "If test conditions are substituted or end-use conditions change, the test cannot always predict the change in the measured characteristics; the results are valid only for the fire-test-exposure conditions described in the method.",
+     "text": "The public page warns that the test may not predict how the measured fire-test responses change under other test or end-use conditions; its results hold only for the fire-test-exposure conditions of the method.",
      "where": "Significance and Use 5.2, as printed on the public page https://www.astm.org/d2863-23e01.html",
      "variables": [
       "o2_pct"
      ],
-     "quote": "If different test conditions are substituted or the end-use conditions are changed, it is not always possible by or from this test to predict changes in the fire-test-response characteristics measured. Therefore, the results are valid only for the fire-test-exposure conditions described in this test method.",
+     "quote": "Therefore, the results are valid only for the fire-test-exposure conditions described in this test method.",
      "note": "The public text (1.1-1.11, 5.1, 5.2) contains no statement of the test pressure. The standard itself was not read, so 'no mention of pressure' holds for the public text only."
     }
    ]
@@ -1009,7 +1005,7 @@
       "o2_pct",
       "sample_geometry"
      ],
-     "quote": "The overall goal of BASS -II is to study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low velocity forced convective flows in microgravity."
+     "quote": "The overall goal of BASS -II is to study the ignition, flame growth, flame spread, and extinction limits for solid fuels"
     },
     {
      "id": "ICES19.minimum",
@@ -1020,39 +1016,39 @@
       "o2_pct",
       "flow_cms"
      ],
-     "quote": "Many of the tests focused on finding a minimum oxygen concentration or flow velocity where a material will burn in space, to compare with the Earth-based limits."
+     "quote": "Many of the tests focused on finding a minimum oxygen concentration or flow velocity where a material will burn in space"
     },
     {
      "id": "ICES19.growth",
      "type": "stated_objective",
      "text": "Flame growth rates as a stated interest.",
      "where": "Introduction",
-     "quote": "Flame growth rates were also of interest, to determine how quickly a fire in space can grow and if the flames reach a finite size or continue to grow."
+     "quote": "Flame growth rates were also of interest, to determine how quickly a fire in space can grow"
     },
     {
      "id": "ICES19.test1conditions",
      "type": "definition",
-     "text": "If the flame spreads more than 15 cm in NASA Test 1, the material is considered flammable under the oxygen and pressure conditions of the test.",
+     "text": "A flame spread of more than 15 cm in NASA Test 1 makes the material count as flammable at the oxygen and pressure of that test.",
      "where": "Introduction",
      "variables": [
       "o2_pct",
       "pressure_kpa",
       "burn_length_cm"
      ],
-     "quote": "If the flame spreads more than 15 cm in NASA Test 1, the material is considered flammable under the oxygen and pressure conditions of the test.",
+     "quote": "If the flame spreads more than 15 cm in NASA Test 1, the material is considered flammable under the oxygen and pressure conditions",
      "note": "About NASA Test 1 in normal gravity, not about the BASS-II tests."
     },
     {
      "id": "ICES19.lowpressure",
      "type": "limitation",
-     "text": "Deactivating the ventilation, as is currently done on the ISS, may not be sufficient to extinguish a flame in high oxygen, lower pressure atmospheres for some materials used in future exploration missions.",
-     "where": "Section 'Flammability Boundary Data Summary' (the doubled 'in in' is in the source). The abstract says the same of the mitigation strategy (existing item ICES19.fanoff).",
+     "text": "Turning off the ventilation, the current ISS practice, may fail to put out a flame for some materials planned for future exploration missions in high oxygen, lower pressure atmospheres.",
+     "where": "Section 'Flammability Boundary Data Summary'. The abstract says the same of the mitigation strategy (existing item ICES19.fanoff).",
      "variables": [
       "flow_cms",
       "o2_pct",
       "pressure_kpa"
      ],
-     "quote": "This suggests that deactivating the ventilation, as is currently done on the ISS, may not be sufficient to extinguish a flame in high oxygen lower pressure atmospheres for some materials used in in future exploration missions.",
+     "quote": "deactivating the ventilation, as is currently done on the ISS, may not be sufficient to extinguish a flame in high oxygen lower pressure atmospheres",
      "note": "About the fan-off mitigation and about narrow-channel results at up to 40% oxygen; it gives no flammability limit at another pressure."
     }
    ],
@@ -1158,18 +1154,18 @@
       "o2_pct": 30,
       "pressure_psia": 10.2
      },
-     "quote": "The method is a pass/fail upward flame propagation test conducted in the most severe flaming combustion environment (oxygen concentration, pressure) expected in the spacecraft (e.g. currently 30% oxygen at 10.2 psia which is the pre-breath environment on the ISS for spacewalks).",
+     "quote": "The method is a pass/fail upward flame propagation test conducted in the most severe flaming combustion environment (oxygen concentration, pressure) expected in the spacecraft",
      "note": "A description by researchers, not the text of the standard."
     },
     {
      "id": "OF2012.uloi",
      "type": "definition",
      "text": "1g ULOI: the oxygen concentration at which a material passes the NASA-STD-6001 Test 1 burn length criterion approximately half the time. 1g MOC: the oxygen concentration where at least five samples passed and at least one sample failed at 1 percent more oxygen by volume.",
-     "where": "p. 2 (the next sentence defines 1g MOC: 'the oxygen concentration where at least five samples passed the burning criterion (according to the NASA STD 6001 Test 1 definition) and where at least one sample failed in the environment that contained 1 percent more oxygen by volume')",
+     "where": "p. 2 (the next sentence defines 1g MOC; its content is summarized in 'text')",
      "variables": [
       "o2_pct"
      ],
-     "quote": "The 1g ULOI is defined as the oxygen concentration at which a material passes the NASA STD 6001 Test 1 burn length criterion approximately half the time.",
+     "quote": "ULOI is defined as the oxygen concentration at which a material passes the NASA STD 6001 Test 1 burn length criterion approximately half the time.",
      "note": "Pressure is absent from the two definitions. The same paper prints the pressure of each limit in the column headings of Table I (existing item OF2012.table1: 10.2 psia, 10.2 psia, 14.7 psia)."
     },
     {
@@ -1181,7 +1177,7 @@
       "o2_pct",
       "pressure_kpa"
      ],
-     "quote": "Keeping oxygen partial pressure constant while reducing total pressure has the effect of increasing the concentration of oxygen which in turn leads to increased flammability of materials."
+     "quote": "partial pressure constant while reducing total pressure has the effect of increasing the concentration of oxygen which in turn leads to increased flammability of materials."
     }
    ],
    "note": "The NTRS copy lists the meeting as the 42nd International Conference on Environmental Systems, San Diego, 15-19 July 2012; the number AIAA 2012-3492 is not printed in that copy and is not verified."
@@ -1220,14 +1216,13 @@
     {
      "id": "SAE2008.mocpressure",
      "type": "published_result",
-     "text": "The Test 1 flammability data published by White Sands show that the 1g MOCs are not generally a strong function of pressure but vary primarily with oxygen concentration; a few fuels, which appear to have halogen species in common, have a stronger dependence on pressure.",
+     "text": "The White Sands Test 1 data show that the 1g MOCs depend mainly on oxygen concentration and generally only weakly on pressure; a few fuels, which appear to share halogen species, depend more strongly on pressure.",
      "where": "Discussion, p. 6 of NASA/TM-2008-215260 (the NASA edition of SAE 2008-01-2055)",
      "variables": [
       "o2_pct",
       "pressure_kpa",
       "gravity_level"
      ],
-     "quote": "The Test 1 materials flammability data published by WSTF (ref. 7) demonstrate that the 1g MOCs are not generally a strong function of pressure but instead vary primarily with oxygen concentration.",
      "note": "'not generally a strong function' is not 'independent'. The same paragraph names exceptions: 'So these fuels have a stronger dependence on pressure, where at low pressure the increased diffusive mixing results in increased scavenging.' (fuels with halogen species). The statement is about 1g MOC, not about microgravity limits."
     },
     {
@@ -1240,8 +1235,7 @@
       "pressure_kpa",
       "flow_cms",
       "gravity_level"
-     ],
-     "quote": "TABLE 1.—COMPARISON OF 1G AND 0G FLAMMABILITY LIMITS FOR THREE FUELS"
+     ]
     }
    ]
   },
@@ -1618,7 +1612,7 @@
      "variables": [
       "heating_ratio"
      ],
-     "quote": "As current was applied to the wire, its resistivity was monitored with a feedback control system to maintain constant resistance throughout the heating duration. These resistances were correlated to wire temperatures and were maintained within a few degrees Celsius of target values, which varied according to the fuel sample material."
+     "quote": "resistances were correlated to wire temperatures and were maintained within a few degrees Celsius of target values, which varied according to the fuel sample material."
     },
     {
      "id": "SAME.baseline",
@@ -1636,7 +1630,7 @@
       ],
       "heating_time_s": 60
      },
-     "quote": "The sample baseline temperatures for each material were selected to produce 1 to 2 mg of sample mass loss in 60 sec of heating and have reasonable signal on each of the moment instruments."
+     "quote": "The sample baseline temperatures for each material were selected to produce 1 to 2 mg of sample mass loss in 60 sec of heating"
     },
     {
      "id": "SAME.instruments",
@@ -1644,7 +1638,7 @@
      "text": "Instruments: a thermal precipitator for microscopy samples, three real-time instruments for particle mass and number concentration, an ionization detector calibrated to estimate the first moment, and two spacecraft smoke detectors.",
      "where": "Abstract",
      "variables": [],
-     "quote": "Additional equipment in the experiment included a thermal precipitator to sample particles for microscopic analysis upon return to Earth, and three commercial-off-the-shelf real-time instruments to measure particle mass and number concentration, and an ionization detector calibrated to estimate the first moment of the size distribution."
+     "quote": "three commercial-off-the-shelf real-time instruments to measure particle mass and number concentration, and an ionization detector calibrated to estimate the first moment of the size distribution."
     },
     {
      "id": "SAME.devised",
@@ -1671,7 +1665,7 @@
       "aging_time_s",
       "gravity_level"
      ],
-     "quote": "Key parameters affecting the properties of the smoke produced here are the convective flow past the heated wire, the wire temperature, the aging time and the low-gravity condition."
+     "quote": "the convective flow past the heated wire, the wire temperature, the aging time and the low-gravity condition."
     },
     {
      "id": "SAME.massloss",
@@ -1682,7 +1676,7 @@
       "mass_loss_rate_mg_min",
       "heating_ratio"
      ],
-     "quote": "The sample baseline temperatures for each material were selected to produce 1 to 2 mg of sample mass loss in 60 sec of heating and have reasonable signal on each of the moment instruments."
+     "quote": "The sample baseline temperatures for each material were selected to produce 1 to 2 mg of sample mass loss in 60 sec of heating"
     }
    ],
    "note": "Particle sizes are not in the PSI experimental tables; the pipeline maps only the test conditions."
@@ -1848,7 +1842,7 @@
       "co2_pct",
       "he_pct"
      ],
-     "quote": "The goal of the research is to examine how the addition of an inert gas suppressant influences the flammability limit of the two fuels. The application is an improved quantitative understanding of how flammability limits change in reduced gravity as it relates to fire safety."
+     "quote": "The goal of the research is to examine how the addition of an inert gas suppressant influences the flammability limit of the two fuels. The application is an improved quantitative understanding of how flammability limits change in reduced gravity"
     },
     {
      "id": "RG.flex2",
@@ -2060,7 +2054,7 @@
       "o2_pct_initial_iss_reported": 21.7,
       "flow_cms": 20
      },
-     "quote": "The initial flight experiment (Saffire-I) was performed at a flow speed of 20 cm/s and the initial oxygen concentration as reported by the ISS at the time the vehicle departed was 21.7% O2.",
+     "quote": "a flow speed of 20 cm/s and the initial oxygen concentration as reported by the ISS at the time the vehicle departed was 21.7% O2.",
      "note": "The value is the ISS report at vehicle departure, not a reading at ignition. The paper does not state mole or volume basis."
     },
     {
@@ -2074,7 +2068,7 @@
      "values": {
       "o2_pct_initial_iss_reported": 22.1
      },
-     "quote": "In the second flight experiment (Saffire-II), the initial oxygen concentration as reported by the ISS at the time the vehicle departed was 22.1% O2, slightly higher than the first flight (21.7%).",
+     "quote": "In the second flight experiment (Saffire-II), the initial oxygen concentration as reported by the ISS at the time the vehicle departed was 22.1% O2",
      "note": "Flight-level value; no per-sample sentence."
     },
     {
@@ -2691,7 +2685,7 @@
       "heating_ratio",
       "mass_loss_rate_mg_min"
      ],
-     "quote": "due to the loss of buoyant cooling of the heater wire, the weight loss in low-gravity cannot be predicted by controlling the heater power, instead, the wire temperature must be controlled; this can be accomplished by measuring the change in the wire resistance."
+     "quote": "the weight loss in low-gravity cannot be predicted by controlling the heater power, instead, the wire temperature must be controlled; this can be accomplished by measuring the change in the wire resistance."
     },
     {
      "id": "SAMEEIRD.massmeas",
@@ -2821,7 +2815,7 @@
        8
       ]
      },
-     "quote": "Overall 30 sample materials were tested. These were comprised of six samples each of 5 materials: Teflon™, Kapton™, silicone rubber, cellulose, and dibutyl-phthalate deposited on a porous wick. These samples were tested at different airflow rates, pyrolysis temperatures, and smoke aging durations."
+     "quote": "These were comprised of six samples each of 5 materials: Teflon™, Kapton™, silicone rubber, cellulose, and dibutyl-phthalate deposited on a porous wick. These samples were tested at different airflow rates, pyrolysis temperatures, and smoke aging durations."
     },
     {
      "id": "SAMEFSR.results",
@@ -2865,7 +2859,7 @@
      "variables": [
       "heating_ratio"
      ],
-     "quote": "Traditionally, test conditions are specified by Rt/R0, the ratio between the resistance of heated wire over the resistance of the wire at room temperature. Thus, before each run, the sample wire resistance is measured, then multiplied by this parameter to get the target resistance for the control circuitry."
+     "quote": "test conditions are specified by Rt/R0, the ratio between the resistance of heated wire over the resistance of the wire at room temperature. Thus, before each run, the sample wire resistance is measured, then multiplied by this parameter"
     },
     {
      "id": "SAMER.rtr0.limit",
@@ -2923,7 +2917,7 @@
       ],
       "heating_time_s": 60
      },
-     "quote": "The sample temperatures were based on the pyrolysis properties of the material and were thus material specific. The baseline temperature was selected to produce 1 to 2 mg of weight loss in 60 seconds and have reasonable signal on each of the moment instruments."
+     "quote": "The baseline temperature was selected to produce 1 to 2 mg of weight loss in 60 seconds and have reasonable signal on each of the moment instruments."
     }
    ],
    "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; PDF pages 26, 31 and 51 were also viewed as page images. A comparison of the text extraction of Appendix A with the PSI-101 table (by an AI session, not checked by a human) found test 112 (Kapton, 2 cm/s, Rt/R0 1.480) in Appendix A and not in the PSI table, and test 57 once in Appendix A (Lampwick) but twice in the PSI table (Lampwick and Teflon)."
@@ -3008,7 +3002,7 @@
       ],
       "heating_time_s": 60
      },
-     "quote": "The sample temperatures were based on the pyrolysis properties of the material and were thus material specific. The baseline temperature was selected to produce 1 to 2 mg of weight loss in 60 seconds and have reasonable signal on each of the moment instruments."
+     "quote": "The baseline temperature was selected to produce 1 to 2 mg of weight loss in 60 seconds"
     },
     {
      "id": "ICES12.measured",
@@ -3016,7 +3010,7 @@
      "text": "Measured quantities: particle number concentration (zeroth moment), diameter concentration (first moment) and mass concentration (third moment); from them the diameter of average mass and the count mean diameter, and with a log-normal assumption the geometric mean diameter and geometric standard deviation.",
      "where": "Abstract, PDF page 1",
      "variables": [],
-     "quote": "These moment diagnostics were used to determine the particle number concentration (zeroth moment), the diameter concentration (first moment), and the mass concentration (third moment). These statistics were combined to determine the diameter of average mass and the count mean diameter and, by assuming a log-normal distribution, the geometric mean diameter and the geometric standard deviations can also be calculated."
+     "quote": "These moment diagnostics were used to determine the particle number concentration (zeroth moment), the diameter concentration (first moment), and the mass concentration (third moment)."
     }
    ],
    "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the NTRS PDF; not viewed as page images."
@@ -3039,7 +3033,7 @@
       "heating_ratio",
       "mass_loss_rate_mg_min"
      ],
-     "quote": "In the current study, the temperature is fixed for both flow and no-flow conditions and for normal gravity and low-gravity conditions, and the pyrolysis rate is measured."
+     "quote": "the temperature is fixed for both flow and no-flow conditions and for normal gravity and low-gravity conditions, and the pyrolysis rate is measured."
     },
     {
      "id": "AST15P.balance",
@@ -3059,7 +3053,7 @@
      "variables": [
       "heating_ratio"
      ],
-     "quote": "A constant resistance was maintained over the 60 s heating period by adjusting the duty cycle of the pulsating power. The temperature was obtained from the resistance measurement based on calibration data for resistance versus temperature."
+     "quote": "A constant resistance was maintained over the 60 s heating period by adjusting the duty cycle of the pulsating power."
     }
    ],
    "note": "Read on 2026-11-14 as a text extraction of the publisher's full-text page (https://www.tandfonline.com/doi/full/10.1080/02786826.2015.1025125) obtained through the Exa fetch tool; the PDF pages, figures, tables and supplement were not seen. Copyright 2015 American Association for Aerosol Research: cited and quoted in single sentences only."
@@ -3091,7 +3085,7 @@
       "gravity_level",
       "fuel_material"
      ],
-     "quote": "However, the oxygen threshold has been shown to be lower in reduced-gravity and is a function of the local convective velocity. Therefore, the objective of this task was to determine the oxygen flammability threshold in reduced-gravity for materials identified by NASA Materials and Processes personnel and quantify the difference from thresholds determined in normal gravity."
+     "quote": "the oxygen threshold has been shown to be lower in reduced-gravity and is a function of the local convective velocity. Therefore, the objective of this task was to determine the oxygen flammability threshold in reduced-gravity"
     },
     {
      "id": "TM217036.signatures",
@@ -3289,7 +3283,7 @@
      "type": "stated_objective",
      "text": "Objectives of Saffire-I, -II and -III together.",
      "where": "Abstract, p. 1",
-     "quote": "The specific objectives of these three experiments are to (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test."
+     "quote": "objectives of these three experiments are to (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits"
     },
     {
      "id": "SAF16.saffire1",
@@ -3299,7 +3293,7 @@
      "variables": [
       "spread_rate_mm_s"
      ],
-     "quote": "The objective of the Saffire-I experiment is to investigate flame spread and growth in low-gravity. Specifically, the experiment will determine if there is a limiting flame size when burning over a large surface and quantify the size and growth rate of the flames."
+     "quote": "The objective of the Saffire-I experiment is to investigate flame spread and growth in low-gravity."
     },
     {
      "id": "SAF16.saffire2",
@@ -3388,7 +3382,7 @@
      "type": "stated_objective",
      "text": "Objectives of the three experiments together; the wording is that of the objective field of PSI-98.",
      "where": "Abstract, p. 1",
-     "quote": "The objectives of these experiments are to (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test."
+     "quote": "The objectives of these experiments are to (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits"
     },
     {
      "id": "SAF16b.saffire13",
@@ -3398,7 +3392,7 @@
      "variables": [
       "spread_rate_mm_s"
      ],
-     "quote": "The objective of the Saffire-I and III tests will be to determine how rapidly a large-scale fire grows in low-gravity and whether it reaches a steady-state spread rate."
+     "quote": "The objective of the Saffire-I and III tests will be to determine how rapidly a large-scale fire grows in low-gravity"
     },
     {
      "id": "SAF16b.saffire2",
@@ -3441,7 +3435,7 @@
      "type": "knowledge_gap",
      "text": "Research topics named for fire detection.",
      "where": "Introduction, p. 3",
-     "quote": "Research topics to be investigated include the identification of realistic fire scenarios, characterization of gravity and exploration impacts on fire signatures, and the development of novel detectors to selectively detect a greater range of spacecraft fires."
+     "quote": "Research topics to be investigated include the identification of realistic fire scenarios, characterization of gravity and exploration impacts on fire signatures"
     },
     {
      "id": "WP21.heating",
@@ -3510,7 +3504,7 @@
       "o2_pct",
       "pressure_kpa"
      ],
-     "quote": "At these conditions, materials that are non-flammable become flammable, and flammable materials require lower ignition energy and burn faster with greater temperature and heat release rates than in normal atmosphere."
+     "quote": "materials that are non-flammable become flammable, and flammable materials require lower ignition energy and burn faster with greater temperature and heat release rates"
     },
     {
      "id": "WP21X.research",
@@ -3586,7 +3580,7 @@
       "co2_produced_pct_points",
       "o2_consumed_pct_points"
      ],
-     "quote": "To evaluate the levels of combustion products produced during microgravity fires, BASS-II requested the use of the on-board sensors to measure the O2 (oxygen) depletion and the completeness of combustion (CO, CO2) for microgravity combustion tests under spacecraft ventilation flow rates to provide scientific data on the stoichiometry of the diffusion flame reactions and heat release rates."
+     "quote": "BASS-II requested the use of the on-board sensors to measure the O2 (oxygen) depletion and the completeness of combustion (CO, CO2) for microgravity combustion tests"
     },
     {
      "id": "ICES15.first",
@@ -3779,7 +3773,7 @@
      "values": {
       "pressure_atm": 1
      },
-     "quote": "Using the ideal gas law, the free volume of the MSG V = 250,000 cc, ideal gas constant R = 82.05 cc∙atm/gmol K, pressure P = 1 atm, the change of O2 percent volume, and temperature T = 300 K, the gmol of O2 consumed is calculated as",
+     "quote": "the free volume of the MSG V = 250,000 cc, ideal gas constant R = 82.05 cc∙atm/gmol K, pressure P = 1 atm, the change of O2 percent volume, and temperature T = 300 K",
      "note": "A value used in a calculation (with T = 300 K, also a round value), not a reported measurement."
     },
     {
@@ -3872,7 +3866,7 @@
      "type": "framework",
      "text": "Stated focus of the ACME experiments: energy and environment, with fire prevention as a secondary emphasis through BRE.",
      "where": "2. Science, p. 4",
-     "quote": "The current ACME experiments are primarily focused on energy and environmental concerns, but there is a secondary emphasis (with the BRE experiment) on fire prevention, especially for spacecraft."
+     "quote": "The current ACME experiments are primarily focused on energy and environmental concerns, but there is a secondary emphasis (with the BRE experiment) on fire prevention"
     },
     {
      "id": "ACME14.bre",
@@ -3886,7 +3880,7 @@
      "type": "stated_objective",
      "text": "Primary goal of Flame Design.",
      "where": "2. Science, p. 5",
-     "quote": "The primary goal of the Flame Design experiment is to improve our understanding of soot inception and control in order to enable the optimization of oxygen enriched combustion and the “design” of non-premixed flames that are both robust and soot free."
+     "quote": "The primary goal of the Flame Design experiment is to improve our understanding of soot inception and control"
     },
     {
      "id": "ACME14.past",
@@ -4023,7 +4017,7 @@
       "o2_pct",
       "pressure_kpa"
      ],
-     "quote": "Typical NASA Test 1 test conditions are selected at a fixed pressure, and oxygen concentration is decreased for each set of five tests until the desired failure rate is observed (one in five tests burns more than 15.2 cm) [1, 3, 15].",
+     "quote": "Typical NASA Test 1 test conditions are selected at a fixed pressure, and oxygen concentration is decreased for each set of five tests",
      "note": "'Typical', not a requirement."
     },
     {
@@ -4054,7 +4048,7 @@
      "id": "ICES14.trend",
      "type": "published_result",
      "text": "For tests at constant oxygen partial pressure, the general trend is for flammability to be worst at the lower total pressures; if the material passes at the lowest expected total pressure, it is safe for all higher pressure atmospheres as well.",
-     "where": "IV, p. 9, after 'The general trend for all these materials shown in Figures 7-8 is for flammability to be worst at the lower total pressures for fixed partial pressure of O2, which corresponds to the highest % O2. So it makes sense to start at the lowest expected total pressure for a spacecraft (8.2 psia exploration atmosphere, excluding EVA environments which are a special case), and run constant partial pressure of oxygen Test 1 tests there.'",
+     "where": "IV, p. 9, after two sentences that state the general trend of Figures 7-8 (flammability worst at the lower total pressures for fixed partial pressure of O2) and propose to start constant-partial-pressure Test 1 tests at the lowest expected total pressure for a spacecraft (8.2 psia exploration atmosphere, EVA environments excluded)",
      "variables": [
       "o2_pct",
       "pressure_kpa"
@@ -4253,7 +4247,7 @@
       "o2_pct",
       "pressure_kpa"
      ],
-     "quote": "The test methodology used was similar to that previously used to determine the maximum oxygen concentration (MOC) at which self-extinguishment occurs under constant total pressure conditions.",
+     "quote": "to determine the maximum oxygen concentration (MOC) at which self-extinguishment occurs under constant total pressure conditions.",
      "note": "The paper itself measures pressure thresholds in 99.8 percent oxygen, not oxygen thresholds."
     }
    ],
@@ -4279,14 +4273,14 @@
       "pressure_kpa",
       "o2_pct"
      ],
-     "quote": "The method is a pass/fail upward flame propagation test conducted in the worst case configuration, which is defined as a combination of a material’s thickness, test pressure, oxygen concentration, and temperature that make the material most flammable.",
+     "quote": "worst case configuration, which is defined as a combination of a material’s thickness, test pressure, oxygen concentration, and temperature that make the material most flammable.",
      "note": "A description by researchers of NASA-STD-(I)-6001B, not the text of the standard."
     },
     {
      "id": "H2011.linear",
      "type": "published_result",
      "text": "For materials with MOC in the range 25-35% oxygen the data indicate an approximately linear dependence of MOC on total pressure; slope between -0.975 and -0.251 % oxygen per psia, average -0.607.",
-     "where": "I. Introduction, p. 2, after 'For materials with maximum oxygen concentrations (MOCs) at which extinguishment occurs in the range of 25-35% oxygen, the data indicate there is an approximately linear dependence of MOCs on total pressure Pt having the form: MOC = m Pt + b (1)'",
+     "where": "I. Introduction, p. 2, after the sentence that gives, for materials with MOCs in the range of 25-35% oxygen, an approximately linear dependence of MOC on total pressure Pt of the form MOC = m Pt + b (1)",
      "variables": [
       "o2_pct",
       "pressure_kpa"
@@ -4314,7 +4308,7 @@
       "fail_o2_pct": 25.9,
       "fail_pressure_psia": 14.7
      },
-     "quote": "For at least one of the materials tested, the data indicate that a material with an MOC of 30% oxygen at 10.2 psia would fail NASA-STD-(I)-6001B Test 1 at 25.9% oxygen and 14.7 psia.",
+     "quote": "a material with an MOC of 30% oxygen at 10.2 psia would fail NASA-STD-(I)-6001B Test 1 at 25.9% oxygen and 14.7 psia.",
      "note": "'at least one of the materials tested'; normal gravity; the material is not named in the sentence."
     }
    ],
@@ -4427,14 +4421,14 @@
      "values": {
       "pressure_kpa": 100
      },
-     "quote": "Microgravity experiments were conducted during NASA’s Spacecraft Fire Experiment (Saffire), on board of the Orbital Corporation Cygnus spacecraft at 100 kPa and an air flow velocity of 20 cm/s.",
+     "quote": "NASA’s Spacecraft Fire Experiment (Saffire), on board of the Orbital Corporation Cygnus spacecraft at 100 kPa and an air flow velocity of 20 cm/s.",
      "note": "Nominal statement; for the Saffire details the paper refers the reader to ICES-2017-224."
     },
     {
      "id": "THOMSEN18.care",
      "type": "limitation",
      "text": "Care should be taken interpreting and applying results obtained at reduced pressure, because eventually low pressure will affect the chemical kinetics of the process.",
-     "where": "5. Conclusion. Earlier in the same paragraph: 'For a constant oxygen concentration, as total ambient pressure is reduced there is a subsequent reduction in the partial pressure of oxygen and flame temperature [31].'",
+     "where": "5. Conclusion. Earlier in the same paragraph, for a constant oxygen concentration: 'as total ambient pressure is reduced there is a subsequent reduction in the partial pressure of oxygen and flame temperature [31].'",
      "variables": [
       "pressure_kpa",
       "spread_rate_mm_s"
@@ -4468,7 +4462,7 @@
       "pressure_atm": 1,
       "o2_pct": 21
      },
-     "quote": "Silicone was chosen because its flammability limit is close to the expected test atmosphere (air; 21% O2, 1 atm), and different thicknesses were available to enable producing a variety of burn lengths in upward 1-g testing.",
+     "quote": "Silicone was chosen because its flammability limit is close to the expected test atmosphere (air; 21% O2, 1 atm)",
      "note": "An expectation stated in 2015, before the flights. The ground tests of the paper 'were at atmospheric pressure' (p. 4)."
     }
    ],
@@ -4488,7 +4482,7 @@
      "id": "URBAN14.loc",
      "type": "published_result",
      "text": "Tests with Nomex HT90-40 found the limiting oxygen concentration for flame spread as a function of ambient pressure in a quiescent environment; the authors report a strong dependence on pressure.",
-     "where": "Poster panel on Nomex HT90-40, after 'Tests have been conducted with Nomex HT90-40 to find the limiting oxygen concentration (LOC) for flame spread as a function of ambient pressure in a quiescent environment.'",
+     "where": "Poster panel on Nomex HT90-40, after 'Tests have been conducted with Nomex HT90-40 to find the limiting oxygen concentration (LOC) for flame spread as a function of ambient pressure'",
      "variables": [
       "o2_pct",
       "pressure_kpa"
@@ -4499,13 +4493,13 @@
     {
      "id": "URBAN14.normoxic",
      "type": "published_result",
-     "text": "For a constant oxygen partial pressure, such as in normoxic equivalent atmospheres, it is possible that a fire resistant material can become flammable depending on the ambient pressure.",
+     "text": "The poster states that at constant oxygen partial pressure, such as in normoxic equivalent atmospheres, the ambient pressure can decide whether a fire resistant material becomes flammable.",
      "where": "Poster panel on Nomex HT90-40",
      "variables": [
       "o2_pct",
       "pressure_kpa"
      ],
-     "quote": "For a constant oxygen partial pressure, such as in normoxic equivalent atmospheres, it is possible that a fire resistant material can become flammable depending on the ambient pressure.",
+     "quote": "oxygen partial pressure, such as in normoxic equivalent atmospheres, it is possible that a fire resistant material can become flammable depending on the ambient pressure.",
      "note": "'it is possible'; one material; normal gravity."
     }
    ],
@@ -4523,22 +4517,20 @@
     {
      "id": "G125.scope",
      "type": "definition",
-     "text": "The method measures threshold-limit conditions for combustion of materials in oxidant gases under specific test conditions of pressure, temperature, flow condition, fire-propagation direction and geometry.",
+     "text": "Per the public scope text, the method measures the threshold-limit conditions for combustion of materials in oxidant gases, for set values of pressure, temperature, flow, fire-propagation direction and system geometry.",
      "where": "Scope 1.1, as printed on the public page https://www.astm.org/g0125-00r23.html",
      "variables": [
       "pressure_kpa",
       "o2_pct"
      ],
-     "quote": "This test method covers a procedure for measuring the threshold-limit conditions to allow equilibrium of combustion of materials in various oxidant gases under specific test conditions of pressure, temperature, flow condition, fire-propagation directions, and various other geometrical features of common systems.",
      "note": "Only the public scope and significance text was read."
     },
     {
      "id": "G125.conditions",
      "type": "limitation",
-     "text": "Results of the fire-limit test do not necessarily apply to any condition that does not faithfully reproduce the conditions during test; limits measured at one set of conditions are not necessarily the lowest thresholds at which combustion can occur.",
+     "text": "The public page cautions that fire-limit results may not hold for conditions that differ from those of the test, and that limits measured under one set of conditions need not be the lowest thresholds for combustion.",
      "where": "Scope 1.3, public page https://www.astm.org/g0125-00r23.html. Significance and Use 5.1 adds: 'Flammability limits measured at one set of conditions are not necessarily the lowest thresholds at which combustion can occur.'",
      "variables": [],
-     "quote": "However, its results do not necessarily apply to any condition that does not faithfully reproduce the conditions during test.",
      "note": "'not necessarily'. Only the public text was read."
     }
    ],
