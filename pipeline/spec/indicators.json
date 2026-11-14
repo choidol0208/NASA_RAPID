@@ -135,6 +135,10 @@
      "flow_event",
      "==",
      "extinction"
+    ],
+    [
+     "o2_consumed_pct_points",
+     "notnull"
     ]
    ],
    "group_by": [
@@ -148,7 +152,7 @@
    "compare_with": [
     "ICES19.limits"
    ],
-   "reading": "Final oxygen reading of the tests in which the table notes an extinction. The BASS-II investigators use the post-test oxygen as the extinction oxygen (ICES19.sensors). A few final readings in the table are implausible as oxygen values and are kept as written; see the flags of the tests."
+   "reading": "Final oxygen reading of the tests in which the table notes an extinction. The BASS-II investigators use the post-test oxygen as the extinction oxygen (ICES19.sensors). Tests whose final reading is above the initial reading or implausibly low are left out; they carry a flag."
   },
   {
    "id": "P1.lowest_flow_listed_at_extinction",
