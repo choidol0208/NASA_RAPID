@@ -164,6 +164,21 @@ function sPressure(x, c, p) {
   const r = range(c, "pressure_min_kpa", "pressure_max_kpa");
   return r ? logGauss(x, r[0], r[1], p.sigma_ln) : null;
 }
+function speedSim(v, c, sim) { // mirrors _speed: [similarity, in-range signal for outside_range]
+  // With one end not recorded ("up to 40 cm/s", a limit, not a test value), a speed on the open side scores
+  // unknown_value and raises no warning; beyond the end it decays from unknown_value, with no jump.
+  const a = f(c.flow_min_cms), b = f(c.flow_max_cms);
+  if (a === null && b === null) return [null, null];
+  const p = sim.flow_speed;
+  if (a === null || b === null) {
+    const end = a === null ? b : a;
+    if ((a === null && v <= end) || (b === null && v >= end)) return [sim.unknown_value, null];
+    const g = logGauss(v, end, end, p.sigma_ln, p.offset_cms);
+    return [sim.unknown_value * g, g];
+  }
+  const s = logGauss(v, a, b, p.sigma_ln, p.offset_cms);
+  return [s, s];
+}
 function sFlow(state, v, c, sim) {
   const cfgs = split(c.flow_config);
   let sCfg = null;
@@ -171,11 +186,7 @@ function sFlow(state, v, c, sim) {
     const row = sim.flow_config_matrix[state];
     sCfg = Math.max(...cfgs.map((k) => get(row, k, 0.3)));
   }
-  let sV = null;
-  if (v !== null && v !== undefined) {
-    const r = range(c, "flow_min_cms", "flow_max_cms");
-    if (r) sV = logGauss(v, r[0], r[1], sim.flow_speed.sigma_ln, sim.flow_speed.offset_cms);
-  }
+  const sV = v !== null && v !== undefined ? speedSim(v, c, sim)[0] : null;
   const parts = [sCfg, sV].filter((x) => x !== null);
   if (!parts.length) return null;
   return parts.length === 2 ? parts[0] * parts[1] : parts[0];
@@ -259,8 +270,7 @@ function similarities(sc, c, cfg) {
   const hasV = sc.flow_cms !== undefined && sc.flow_cms !== null;
   if (sc.flow_state || hasV) {
     S.flow = sFlow(sc.flow_state, hasV ? sc.flow_cms : null, ce, sim);
-    const r = range(ce, "flow_min_cms", "flow_max_cms");
-    if (hasV && r) speed = logGauss(sc.flow_cms, r[0], r[1], sim.flow_speed.sigma_ln, sim.flow_speed.offset_cms);
+    if (hasV) speed = speedSim(sc.flow_cms, ce, sim)[1];
   }
   if (sc.fuel_phase || sc.fuel_class || sc.fuel_material) S.fuel = sFuel(sc, ce, sim.fuel);
   if (sc.sample_geometry || sc.thermal_regime) S.geometry = sGeometry(sc, ce, sim.geometry);

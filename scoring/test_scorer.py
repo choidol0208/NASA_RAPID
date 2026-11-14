@@ -245,8 +245,22 @@ class OpenRangeWording(unittest.TestCase):
                 self.assertNotIn("at 40 cm/s", text, (q, r["config_id"]))
                 shown += "up to 40 cm/s" in text
         self.assertGreater(shown, 0, "no BASS reason mentions its flow; pick another query")
-        # The range used for similarity is unchanged: 40 cm/s is still a full match at 40.
-        self.assertEqual(scorer._range(bass[0], "flow_min_cms", "flow_max_cms"), (40.0, 40.0))
+
+    def test_open_range_speed_is_unknown_not_a_miss(self):
+        sim = CFG["similarity"]
+        c = {"flow_min_cms": "", "flow_max_cms": "40"}
+        u = sim["unknown_value"]
+        self.assertEqual(scorer._speed(10, c, sim), (u, None))   # below "up to 40": not recorded, no warning
+        self.assertEqual(scorer._speed(40, c, sim), (u, None))   # 40 is the tunnel's limit, not a test value
+        self.assertAlmostEqual(scorer._speed(40.01, c, sim)[0], u, places=3)  # no jump at the end
+        s, signal = scorer._speed(80, c, sim)                     # beyond it: decays from unknown_value
+        self.assertLess(s, u)
+        self.assertLess(signal, 0.9)                              # and raises outside_range
+        closed = {"flow_min_cms": "20", "flow_max_cms": "20"}
+        self.assertLess(scorer._speed(10, closed, sim)[0], 0.9)                     # a closed range still misses
+        rows = {r["config_id"]: r for r in scorer.rank("SIBAL 10 cm/s")["ranking"]}
+        if "BASS-C01" in rows:
+            self.assertNotIn("flow speed", " ".join(w["message"] for w in rows["BASS-C01"]["warnings"]))
 
 
 class CatalogIntegrity(unittest.TestCase):

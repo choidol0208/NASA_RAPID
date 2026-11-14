@@ -233,18 +233,32 @@ def s_pressure(x, c, p):
     return None if r is None else _log_gauss(x, r[0], r[1], p["sigma_ln"])
 
 
+def _speed(v, c, sim):
+    """Flow-speed similarity and the in-range signal for the outside_range warning.
+    With one end not recorded (PSI-26: "up to 40 cm/s", the tunnel's limit, not a test value), a
+    speed on the open side of that end is neither a match nor a miss: it scores unknown_value and
+    raises no warning. Beyond the end it decays from unknown_value, so the score has no jump there."""
+    a, b = _f(c.get("flow_min_cms")), _f(c.get("flow_max_cms"))
+    if a is None and b is None:
+        return None, None
+    p = sim["flow_speed"]
+    if a is None or b is None:
+        end = b if a is None else a
+        if (a is None and v <= end) or (b is None and v >= end):
+            return sim["unknown_value"], None
+        g = _log_gauss(v, end, end, p["sigma_ln"], p["offset_cms"])
+        return sim["unknown_value"] * g, g
+    s = _log_gauss(v, a, b, p["sigma_ln"], p["offset_cms"])
+    return s, s
+
+
 def s_flow(state, v, c, sim):
     cfgs = _split(c.get("flow_config"))
     s_cfg = None
     if state and cfgs:
         row = sim["flow_config_matrix"][state]
         s_cfg = max(row.get(k, 0.3) for k in cfgs)
-    s_v = None
-    if v is not None:
-        r = _range(c, "flow_min_cms", "flow_max_cms")
-        if r is not None:
-            p = sim["flow_speed"]
-            s_v = _log_gauss(v, r[0], r[1], p["sigma_ln"], p["offset_cms"])
+    s_v = _speed(v, c, sim)[0] if v is not None else None
     parts = [x for x in (s_cfg, s_v) if x is not None]
     if not parts:
         return None
@@ -351,9 +365,8 @@ def similarities(sc, c, cfg):
     speed_in_range = None
     if sc.get("flow_state") or sc.get("flow_cms") is not None:
         S["flow"] = s_flow(sc.get("flow_state"), sc.get("flow_cms"), c, sim)
-        r = _range(c, "flow_min_cms", "flow_max_cms")
-        if sc.get("flow_cms") is not None and r is not None:
-            speed_in_range = _log_gauss(sc["flow_cms"], r[0], r[1], sim["flow_speed"]["sigma_ln"], sim["flow_speed"]["offset_cms"])
+        if sc.get("flow_cms") is not None:
+            speed_in_range = _speed(sc["flow_cms"], c, sim)[1]
     if any(sc.get(k) for k in ("fuel_phase", "fuel_class", "fuel_material")):
         S["fuel"] = s_fuel(sc, c, sim["fuel"])
     if sc.get("sample_geometry") or sc.get("thermal_regime"):

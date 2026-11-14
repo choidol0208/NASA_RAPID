@@ -1,6 +1,6 @@
 # Catalog filter validation report
 
-- Run: 2026-11-14 14:05 · target `scoring.scorer:rank`
+- Run: 2026-11-14 14:07 · target `scoring.scorer:rank`
 - Result: **29/29 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
@@ -15,7 +15,7 @@
 | P01 | prevention | ISS cotton fabric | BASS, BASS-II, SAFFIRE-III |  | PASS |
 | P02 | prevention | lunar habitat cotton fabric | SAFFIRE-II, BASS-II, ACME-BRE | partial_gravity | PASS |
 | P03 | prevention | 달 기지 면직물 | SAFFIRE-II, BASS-II, ACME-BRE | partial_gravity | PASS |
-| P04 | prevention | stagnant PMMA | BASS-II, ACME-BRE, BASS-FGM-MODEL |  | PASS |
+| P04 | prevention | stagnant PMMA | BASS-II, ACME-BRE, BASS |  | PASS |
 | P05 | prevention | 달 기지 아크릴 정체 구역 | ACME-BRE, BASS-II, FLEX | partial_gravity | PASS |
 | P06 | prevention | propane 40% oxygen | ACME-CFI-G, ACME-BRE, ACME-FLAME-DESIGN |  | PASS |
 | D01 | detection | smoke detector on ISS | SAME, SAME-R, DAFT |  | PASS |
