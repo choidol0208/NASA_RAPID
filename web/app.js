@@ -881,7 +881,7 @@ async function loadJSON(path, fallback) {
 async function loadText(path) { const r = await fetch(path); if (!r.ok) throw new Error(`${path}: ${r.status}`); return r.text(); }
 
 async function main() {
-  setStatus("Loading the catalog…");
+  setStatus("Loading the catalog and the NASA test tables…");
   let config, scorer, invOrder = [], insights = { cards: {} };
   try {
     const [cfg, invCsv, cfgCsv, cards, build] = await Promise.all([
@@ -898,7 +898,7 @@ async function main() {
     setStatus("The catalog could not be loaded. Reload the page; if it persists, the site files are incomplete.", "error");
     return;
   }
-  setStatus("");
+  // The loading line stays until the first result is drawn (run() clears it).
   const cat = scorer.catalog;
   const optText = (p) => loadText(p).catch(() => null);
   const [mx, nd, gr, cv, rf] = await Promise.all([optText("data/capability_matrix.csv"), loadJSON("data/needs.json", null),
