@@ -32,12 +32,12 @@
    {
     "item_id": "CH.moonbase",
     "type": "design_value",
-    "text": "Moon Base atmosphere expected at 30% oxygen or more and 10.2 psi or less.",
-    "where": "Background",
-    "title": "Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
+    "text": "Moon Base and pressurized-rover atmosphere expected between spacesuit and Earth conditions: oxygen likely 30% or more, pressure 10.2 psi or less.",
+    "where": "Potential considerations: Spacesuits and oxygen concentration",
+    "title": "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
     "version": "2026",
-    "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall-ai-powered-fire-safety-insights-from-microgravity-combustion-data/",
-    "access": "read_from_copy",
+    "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/",
+    "access": "read_by_teammate",
     "quote": null
    },
    {
@@ -83,9 +83,21 @@
     "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
     "access": "full_text_read",
     "quote": "Material flammability in partial gravity remains a major gap for exploration missions."
+   },
+   {
+    "item_id": "CH.partial_gravity",
+    "type": "knowledge_gap",
+    "text": "PSI holds no partial-gravity combustion data yet; the page names LUCI as a future source.",
+    "where": "Potential considerations: Partial-gravity data",
+    "title": "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
+    "version": "2026",
+    "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/",
+    "access": "read_by_teammate",
+    "quote": null
    }
   ],
-  "note": "The challenge text gives 30% oxygen or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement, which was read from a copy and not checked on the official page; NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
+  "note": "The challenge text gives oxygen likely 30% or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement (CH.moonbase: oxygen likely 30% or more, pressure 10.2 psi or less; checked on the official page by another session of the team on 2026-11-14); NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
+  "caveat": "The pressure range of this scenario reaches up to 85.8 kPa, above the 70.3 kPa (10.2 psi) of the challenge statement, so that tests set to 0.7 atm are inside it. Read the recorded pressure of the matched tests in each need block before calling a test 'at or below 10.2 psi'.",
   "see_also": [
    {
     "investigation_id": "PSI-20",
@@ -97,8 +109,8 @@
    {
     "investigation_id": "PSI-20",
     "record_field": "researchImpacts",
-    "quote": "The ongoing combustion without air flow was notably seen in elevated-oxygen atmospheres which are being considered for use in future spacecraft",
-    "note": "A result stated in the PSI record, not a value of a mapped table.",
+    "quote": "The ongoing combustion without air flow was notably seen in elevated-oxygen atmospheres which are being considered for use in future spacecraft, whereas such flames in a normal atmosphere of 21% oxygen self-extinguished in a short time.",
+    "note": "A result stated in the PSI record, not a value of a mapped table. The record calls these results preliminary.",
     "title": "Advanced Combustion via Microgravity Experiments - Burning Rate Emulator"
    },
    {
@@ -120,7 +132,8 @@
     "fuel_phase": "gas",
     "atmosphere": 0,
     "oxygen_only": 0,
-    "pressure_only": 4
+    "pressure_only": 4,
+    "counted_for": []
    },
    {
     "investigation_id": "PSI-69",
@@ -128,7 +141,10 @@
     "fuel_phase": "liquid",
     "atmosphere": 17,
     "oxygen_only": 0,
-    "pressure_only": 0
+    "pressure_only": 0,
+    "counted_for": [
+     "S1"
+    ]
    },
    {
     "investigation_id": "PSI-159",
@@ -136,7 +152,28 @@
     "fuel_phase": "gas",
     "atmosphere": 9,
     "oxygen_only": 0,
-    "pressure_only": 0
+    "pressure_only": 0,
+    "counted_for": []
+   }
+  ],
+  "statements": [
+   {
+    "id": "recorded.not_counted",
+    "text": "PSI-10 (gas): 0 tests recorded with oxygen and pressure both inside the ranges, 0 with oxygen inside the range and no pressure in the table, 4 with pressure inside the range and no oxygen in the table. None of these tests is counted for a need.",
+    "investigation_id": "PSI-10",
+    "fuel_phase": "gas"
+   },
+   {
+    "id": "recorded.counted",
+    "text": "PSI-69 (liquid): 17 tests recorded with oxygen and pressure both inside the ranges, 0 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: S1.",
+    "investigation_id": "PSI-69",
+    "fuel_phase": "liquid"
+   },
+   {
+    "id": "recorded.not_counted",
+    "text": "PSI-159 (gas): 9 tests recorded with oxygen and pressure both inside the ranges, 0 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. None of these tests is counted for a need.",
+    "investigation_id": "PSI-159",
+    "fuel_phase": "gas"
    }
   ]
  },
@@ -161,11 +198,26 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [
     {
      "source_id": "bass2",
      "investigation_id": "PSI-25",
      "variable": "pressure_kpa",
+     "variable_label": "pressure",
      "quote": "Pressure was not varied from 1 atmosphere.",
      "said_in": "ICES19.pressure"
     },
@@ -173,14 +225,16 @@
      "source_id": "saffire1",
      "investigation_id": "PSI-98",
      "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
+     "variable_label": "pressure",
+     "quote": "solid state sensors were used to measure pressure",
      "said_in": "PSI-98.approach"
     },
     {
      "source_id": "saffire2",
      "investigation_id": "PSI-99",
      "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
+     "variable_label": "pressure",
+     "quote": "solid state sensors were used to measure pressure",
      "said_in": "PSI-99.approach"
     }
    ],
@@ -318,19 +372,19 @@
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-25 holds no value of pressure_kpa; ICES19.pressure says \"Pressure was not varied from 1 atmosphere.\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-25 holds no pressure. A NASA record or a paper of the investigators says: \"Pressure was not varied from 1 atmosphere.\" (source: ICES19.pressure). The sentence is not used as a value of any test.",
      "source_id": "bass2",
      "variable": "pressure_kpa"
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-98 holds no value of pressure_kpa; PSI-98.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-98 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-98.approach). The sentence is not used as a value of any test.",
      "source_id": "saffire1",
      "variable": "pressure_kpa"
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-99 holds no value of pressure_kpa; PSI-99.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-99 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-99.approach). The sentence is not used as a value of any test.",
      "source_id": "saffire2",
      "variable": "pressure_kpa"
     }
@@ -534,6 +588,20 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [],
    "objective": [
     {
@@ -565,7 +633,7 @@
    "gaps": [
     {
      "code": "need:no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "statements": [
@@ -583,7 +651,7 @@
     },
     {
      "id": "gap.need.no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "references": [
@@ -642,19 +710,35 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [
     {
      "source_id": "saffire1",
      "investigation_id": "PSI-98",
      "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
+     "variable_label": "pressure",
+     "quote": "solid state sensors were used to measure pressure",
      "said_in": "PSI-98.approach"
     },
     {
      "source_id": "saffire2",
      "investigation_id": "PSI-99",
      "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
+     "variable_label": "pressure",
+     "quote": "solid state sensors were used to measure pressure",
      "said_in": "PSI-99.approach"
     }
    ],
@@ -773,13 +857,13 @@
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-98 holds no value of pressure_kpa; PSI-98.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-98 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-98.approach). The sentence is not used as a value of any test.",
      "source_id": "saffire1",
      "variable": "pressure_kpa"
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-99 holds no value of pressure_kpa; PSI-99.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-99 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-99.approach). The sentence is not used as a value of any test.",
      "source_id": "saffire2",
      "variable": "pressure_kpa"
     }
@@ -853,11 +937,26 @@
    "matched_by_fuel_phase": {
     "liquid": 17
    },
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 17,
+     "min": 30.0,
+     "max": 34.0,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 17,
+     "min": 71.2341,
+     "max": 72.3674,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [
     {
      "source_id": "bass2",
      "investigation_id": "PSI-25",
      "variable": "pressure_kpa",
+     "variable_label": "pressure",
      "quote": "Pressure was not varied from 1 atmosphere.",
      "said_in": "ICES19.pressure"
     }
@@ -2027,6 +2126,14 @@
      "text": "The 17 matched tests by fuel phase: liquid 17."
     },
     {
+     "id": "matched.oxygen",
+     "text": "Oxygen of the 17 matched tests: recorded in 17, from 30 to 34 % by volume."
+    },
+    {
+     "id": "matched.pressure",
+     "text": "Pressure of the 17 matched tests: recorded in 17, from 71.2341 to 72.3674 kPa."
+    },
+    {
      "id": "flow.not_specified",
      "text": "This environment sets no flow range, so the flow speed of the tests was not compared with one."
     },
@@ -2056,37 +2163,37 @@
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-25 holds no value of pressure_kpa; ICES19.pressure says \"Pressure was not varied from 1 atmosphere.\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-25 holds no pressure. A NASA record or a paper of the investigators says: \"Pressure was not varied from 1 atmosphere.\" (source: ICES19.pressure). The sentence is not used as a value of any test.",
      "source_id": "bass2",
      "variable": "pressure_kpa"
     },
     {
      "id": "indicator.count_by",
-     "text": "How the tests ended (fuel_phase = liquid, material_id = heptane): disruption in 8 tests, over 8 tests with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need. Number of tests by the word in the \"Test end\" column of the FLEX table: extinction, disruption or completion. The table does not define the words. \"Extinction\" is how a droplet burn ended, with or without carbon dioxide or helium added; it is not a count of flames put out by an agent.",
+     "text": "How the tests ended (fuel phase liquid, material heptane): disruption in 8 tests, over 8 tests with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "S1.test_end",
      "group": "fuel_phase=liquid;material_id=heptane"
     },
     {
      "id": "indicator.count_by",
-     "text": "How the tests ended (fuel_phase = liquid, material_id = methanol): completion in 2 tests, disruption in 7 tests, over 9 tests with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need. Number of tests by the word in the \"Test end\" column of the FLEX table: extinction, disruption or completion. The table does not define the words. \"Extinction\" is how a droplet burn ended, with or without carbon dioxide or helium added; it is not a count of flames put out by an agent.",
+     "text": "How the tests ended (fuel phase liquid, material methanol): completion in 2 tests, disruption in 7 tests, over 9 tests with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "S1.test_end",
      "group": "fuel_phase=liquid;material_id=methanol"
     },
     {
      "id": "indicator.summary",
-     "text": "Initial oxygen by how the test ended (fuel_phase = liquid, material_id = heptane, test_end = disruption): min 30 % by volume, max 34 % by volume, over 8 tests with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need. Range of ambient oxygen of the tests that ended in each way. Tests with carbon dioxide or helium added and tests with neither are in the same group, while the published values (MST14.loi) are given separately for oxygen/nitrogen and for carbon dioxide added: a minimum here is not one of those values. Not the limiting oxygen index: the LOI is found from extinction diameters, which this indicator does not use.",
+     "text": "Initial oxygen by how the test ended (fuel phase liquid, material heptane, test end disruption): min 30 % by volume, max 34 % by volume, over 8 tests with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "S1.o2_by_test_end",
      "group": "fuel_phase=liquid;material_id=heptane;test_end=disruption"
     },
     {
      "id": "indicator.summary",
-     "text": "Initial oxygen by how the test ended (fuel_phase = liquid, material_id = methanol, test_end = completion): min 30 % by volume, max 34 % by volume, over 2 tests with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need. Range of ambient oxygen of the tests that ended in each way. Tests with carbon dioxide or helium added and tests with neither are in the same group, while the published values (MST14.loi) are given separately for oxygen/nitrogen and for carbon dioxide added: a minimum here is not one of those values. Not the limiting oxygen index: the LOI is found from extinction diameters, which this indicator does not use.",
+     "text": "Initial oxygen by how the test ended (fuel phase liquid, material methanol, test end completion): min 30 % by volume, max 34 % by volume, over 2 tests with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "S1.o2_by_test_end",
      "group": "fuel_phase=liquid;material_id=methanol;test_end=completion"
     },
     {
      "id": "indicator.summary",
-     "text": "Initial oxygen by how the test ended (fuel_phase = liquid, material_id = methanol, test_end = disruption): min 30 % by volume, max 34 % by volume, over 7 tests with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need. Range of ambient oxygen of the tests that ended in each way. Tests with carbon dioxide or helium added and tests with neither are in the same group, while the published values (MST14.loi) are given separately for oxygen/nitrogen and for carbon dioxide added: a minimum here is not one of those values. Not the limiting oxygen index: the LOI is found from extinction diameters, which this indicator does not use.",
+     "text": "Initial oxygen by how the test ended (fuel phase liquid, material methanol, test end disruption): min 30 % by volume, max 34 % by volume, over 7 tests with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "S1.o2_by_test_end",
      "group": "fuel_phase=liquid;material_id=methanol;test_end=disruption"
     }
@@ -2235,6 +2342,20 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [],
    "objective": [],
    "investigations": [],
@@ -2260,7 +2381,7 @@
    "gaps": [
     {
      "code": "need:no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "statements": [
@@ -2282,7 +2403,7 @@
     },
     {
      "id": "gap.need.no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "references": [
@@ -2396,22 +2517,21 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
-   "documented_elsewhere": [
-    {
-     "source_id": "same",
-     "investigation_id": "PSI-102",
-     "variable": "o2_pct",
-     "quote": "The crew installed the near field hardware in the Glovebox",
-     "said_in": "PSI-102.approach"
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
     },
-    {
-     "source_id": "same",
-     "investigation_id": "PSI-102",
-     "variable": "pressure_kpa",
-     "quote": "The crew installed the near field hardware in the Glovebox",
-     "said_in": "PSI-102.approach"
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
     }
-   ],
+   },
+   "documented_elsewhere": [],
    "objective": [
     {
      "investigation_id": "PSI-102",
@@ -2471,8 +2591,8 @@
    ],
    "statements": [
     {
-     "id": "status.other_atmosphere",
-     "text": "None of the 4 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
+     "id": "status.other_atmosphere.nothing_in_table",
+     "text": "The experimental tables of the 4 tests counted for this need hold no oxygen value and no pressure value, so none of them could be compared with the ranges of this environment."
     },
     {
      "id": "need.reading",
@@ -2505,18 +2625,6 @@
     {
      "id": "gap.gravity.no_usable_test_at_level",
      "text": "Gravity gap: none of the 4 tests counted for this need is recorded at the gravity level of this environment (lunar)."
-    },
-    {
-     "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-102 holds no value of o2_pct; PSI-102.approach says \"The crew installed the near field hardware in the Glovebox\" (a sentence of a document, not a value of any test).",
-     "source_id": "same",
-     "variable": "o2_pct"
-    },
-    {
-     "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-102 holds no value of pressure_kpa; PSI-102.approach says \"The crew installed the near field hardware in the Glovebox\" (a sentence of a document, not a value of any test).",
-     "source_id": "same",
-     "variable": "pressure_kpa"
     }
    ],
    "references": [

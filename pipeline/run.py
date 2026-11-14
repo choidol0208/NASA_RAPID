@@ -162,7 +162,9 @@ def standardize(source, variables, report):
 
 
 # ---------------------------------------------------------------- 3 validate
-def validate(tests, ranges):
+def validate(tests, ranges, consistency=()):
+    """Range checks, then the consistency rules of variables.json: a value
+    that cannot be a reading of its variable is emptied and flagged."""
     for t in tests:
         for var, (low, high) in ranges.items():
             v = t.get(var)
@@ -171,6 +173,14 @@ def validate(tests, ranges):
             if (low is not None and v < low) or (high is not None and v > high):
                 t["_flags"].append(f"{var}:out_of_range")
                 t[var] = None
+        for rule in consistency:
+            inputs = set(re.findall(r"[a-z][a-z0-9_]*", rule["expr"])) - {"e"}
+            env = {k: t.get(k) for k in inputs}
+            if any(empty(v) for v in env.values()):
+                continue
+            if eval(rule["expr"], {"__builtins__": {}}, env):
+                t["_flags"].append(f"{rule['variable']}:{rule['flag']}")
+                t[rule["variable"]] = None
 
 
 # ------------------------------------------------------------------ 4 derive
@@ -564,8 +574,9 @@ def main():
             report["sources"][s["id"]] = {"file": s["file"], "not_standardized": s["not_standardized"]}
             continue
         tests += standardize(s, variables, report)
-    validate(tests, ranges)
+    validate(tests, ranges, var_spec.get("consistency", {}).get("rules", []))
     derive(tests, derived)
+    os.makedirs(OUT, exist_ok=True)
     stated, obj_links = objective_links(needs["needs"], needs["_meta"].get("stated_by_fields"))
     obj_links.to_csv(os.path.join(OUT, "objective_links.csv"), index=False)
     matrix, links = assess(tests, needs["needs"], src_spec["sources"], stated)

@@ -21,12 +21,12 @@
    "verifies": "Every value with a real source column is found in its raw NASA cell and is explained by a rule that the spec states (exact copy, declared factor, number in the cell text, spec vocabulary), or is one of the exceptions README declares, exactly as declared and with its flag on the test.",
    "status": "PASS",
    "numbers": {
-    "values_checked": 9231,
-    "exact": 5378,
+    "values_checked": 9224,
+    "exact": 5373,
     "declared_factor": 2629,
-    "number_in_text": 225,
+    "number_in_text": 224,
     "vocabulary": 687,
-    "one_of_several_numbers": 204,
+    "one_of_several_numbers": 203,
     "unit_in_cell": 16,
     "declared_exception_flagged": 92,
     "unexplained": 0,
@@ -122,8 +122,8 @@
      },
      "flow_min_cms": {
       "exact": 25,
-      "number_in_text": 18,
-      "one_of_several_numbers": 62
+      "number_in_text": 17,
+      "one_of_several_numbers": 61
      },
      "fuel_material": {
       "declared_exception_flagged": 89,
@@ -156,7 +156,7 @@
      },
      "o2_final_pct": {
       "declared_factor": 366,
-      "exact": 127
+      "exact": 122
      },
      "o2_pct": {
       "declared_exception_flagged": 3,
@@ -775,8 +775,8 @@
    "verifies": "Every non-empty variable cell of tests.csv has exactly one row in values_long.csv with the same value, unit, file and row, and every values_long row has its cell in tests.csv.",
    "status": "PASS",
    "numbers": {
-    "non_empty_cells": 18450,
-    "values_long_rows": 18450
+    "non_empty_cells": 18443,
+    "values_long_rows": 18443
    },
    "failures": 0,
    "failing_examples": []
@@ -849,7 +849,7 @@
    "status": "PASS",
    "numbers": {
     "cell_x_variable": 246,
-    "differs_with_flag": 6,
+    "differs_with_flag": 8,
     "differs_without_flag": 0
    },
    "failures": 0,
@@ -857,7 +857,7 @@
    "details": {
     "meanings_applied": {
      "flow_cms": "Imposed flow speed at the start of the test (the number the flow cell starts with)",
-     "flow_min_cms": "Lowest flow speed written in the cell that lists the settings of the test. Not read where the cell also holds fan potentiometer settings or anything in brackets"
+     "flow_min_cms": "Lowest flow speed written in the cell that lists the settings of the test. Not read where the cell also holds fan potentiometer settings or anything in brackets, or where the cell does not start with a flow speed"
     },
     "note": "How the engine chooses among the numbers of a cell is written in pipeline/rules.py, which this check does not read. It applies the two meanings literally."
    }
@@ -917,7 +917,7 @@
    "verifies": "No value in tests.csv lies outside the 'ranges' of variables.json.",
    "status": "PASS",
    "numbers": {
-    "values_checked": 5094
+    "values_checked": 5087
    },
    "failures": 0,
    "failing_examples": []
@@ -979,7 +979,7 @@
    "verifies": "Every 'see_also' entry of scenarios.json and every 'documented_elsewhere' entry of sources.json is literally in the named PSI record field, raw table cell or references.json item, and a variable documented elsewhere has no value in the tests of that table.",
    "status": "PASS",
    "numbers": {
-    "entries": 12
+    "entries": 10
    },
    "failures": 0,
    "failing_examples": []
@@ -1111,9 +1111,9 @@
    "verifies": "Every reference item id used in needs.json, indicators.json and scenarios.json exists in references.json.",
    "status": "PASS",
    "numbers": {
-    "uses": 95,
-    "distinct_items_used": 51,
-    "items_defined": 60
+    "uses": 98,
+    "distinct_items_used": 53,
+    "items_defined": 63
    },
    "failures": 0,
    "failing_examples": []
@@ -1137,7 +1137,7 @@
     "packages": 26,
     "listed_in_index": 26,
     "extra_files": 0,
-    "need_block_fields_not_in_contract": 5
+    "need_block_fields_not_in_contract": 6
    },
    "failures": 0,
    "failing_examples": [],
@@ -1146,6 +1146,7 @@
      "counts.matched_added_gas",
      "documented_elsewhere",
      "matched_by_fuel_phase",
+     "matched_ranges",
      "note",
      "reading"
     ]
@@ -1219,9 +1220,9 @@
    "verifies": "Every number written in a statement of an evidence package is a field of the same need block (for an indicator sentence: of its indicator entry), or one of the two sums that statements.json declares.",
    "status": "PASS",
    "numbers": {
-    "numbers_in_statements": 5886,
-    "statements": 1812,
-    "numbers_that_are_a_declared_sum_not_a_stored_field": 15,
+    "numbers_in_statements": 4647,
+    "statements": 1818,
+    "numbers_that_are_a_declared_sum_not_a_stored_field": 0,
     "numbers_found_only_in_matched_tests_indicators_or_references": 0
    },
    "failures": 0,
@@ -1235,7 +1236,7 @@
    "verifies": "No statement of an evidence package contains the words safe, unsafe, flammable, sufficient, representative, proves or confirms (outside a need name or an indicator reading copied from the spec).",
    "status": "PASS",
    "numbers": {
-    "sentences": 2020
+    "sentences": 2026
    },
    "failures": 0,
    "failing_examples": []

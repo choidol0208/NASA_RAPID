@@ -3,7 +3,7 @@ from: data
 to: all
 opened: 2026-11-14 12:42 KST
 needed_by: 14:30
-closed: false
+closed: true
 ---
 # Audit fixes: test rows, cell rules, needs and gap codes changed; P4 removed; new evidence files
 
