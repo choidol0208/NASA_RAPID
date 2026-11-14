@@ -1,0 +1,3968 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "purpose": "Name rules that tie each file of a NASA PSI file listing to rows of an experimental table by the identifier its name carries, for pipeline/raw_names.py; the suffix codes of the names with their meanings as quoted from NASA documents; and what the opened videos of each investigation showed as text on screen.",
+  "source_of_rules": "The rules were written from a name-only survey of the 2026-11-14 listings (one AI agent per investigation, checked against the experimental tables) and re-applied by raw_names.py; differences from that survey are listed in _meta.differences_from_survey.",
+  "name_rule": "The name of a file is the last part of its listing key with the PSI prefix ('PSI-25_Raw Data_', 'PSI-25_metadata_') removed, as spec/raw_kinds.json removes it; the extension is kept. 'where': 'folder' rules read the PSI subcategory path of the listing instead of the name.",
+  "rule_order": "Rules of an investigation are tried in the order listed; within a rule every match of 'pattern' is tried from left to right; the first match that ties at least one row decides. A file that no rule ties is not tied (link level none).",
+  "tie": "A match ties the rows of the rule's tables (all tables of the investigation if 'tables' is not given) at which, for every named group of the pattern that matched, the key transform of the group text is one of the values the cell transform gives for the row's cells of the field's columns. 'row_filter' keeps only rows whose cell matches a regex; 'mode' 'each_field_ties_union' ties the union of the rows that each group ties, and only if each group ties a row. 'level' is the link level of the tie; 'level_if_several_rows' replaces it when more than one row is tied.",
+  "transforms": {
+   "text": "the text, stripped",
+   "upper": "upper case",
+   "nospace_upper": "spaces removed, upper case",
+   "int": "the digits read as an integer (leading zeros dropped)",
+   "first5": "the first five characters (cell: spaces removed first)",
+   "digits_prefix": "the leading digits of the cell as an integer ('145m' -> 145)",
+   "cir": "upper case, with an F put in front when the text begins with a digit",
+   "yyddd_date": "five digits read as two-digit year (20YY) and day of year, as a calendar date",
+   "ymd_date": "eight digits (separators dropped) read as year, month, day",
+   "ymd_yyddd": "a calendar date written as two-digit year and three-digit day of year",
+   "ymd_dmon": "a calendar date written as day and abbreviated month, without the year ('7-sep')",
+   "dmony_date": "DDMonYYYY read as a calendar date",
+   "upper_prefix6": "letters only, upper case, first six letters",
+   "ymd_cols": "cells Year, Month (number or English month name, a final dot dropped) and Date as a calendar date",
+   "date": "a cell written m/d/yyyy, d-Mon-yy, yyyy-MON-dd (words may follow) or yyyy-mm-dd as a calendar date",
+   "doy": "the day of the year of such a date",
+   "dmon": "a cell written day-Mon, as '21-jul'",
+   "gmt_int": "the number after GMT in the cell",
+   "slash_parts_upper": "the parts of the cell split at '/', upper case",
+   "each_upper": "every cell of the field's columns, upper case",
+   "after_hyphen": "the part of the cell after the first hyphen"
+  },
+  "levels": {
+   "test": "the name carries the identifier of one test (one row of the table; two rows where the table repeats an identifier)",
+   "day_or_session": "the name carries a day, session or set key that several rows share, or a row key that is not a test of tests.csv",
+   "none": "no rule ties the file"
+  },
+  "suffix_rule": "The suffix code of a file is the first entry of 'suffix_codes' whose pattern is found in the name (case as the entry says); a file that no entry matches has '(no suffix code)'. A meaning is a quote of 25 words or fewer from a NASA document of the investigation, confirmed in the document text on 2026-11-14 (document, PSI file id, place); 'meaning': null means that no stated meaning was found in the documents read.",
+  "video_rule": "'videos.on_screen_text' is the class that the earlier video survey gave after opening a few videos per investigation and re-viewing the frames; 'labels_seen' are the labels read on screen; 'opened' and 'with_text' count the videos opened and those that showed readings. It says what the opened videos showed, not what the other videos show.",
+  "quote_check": "Every quote under 'meaning' (suffix codes and identifier meanings) was searched for in the text of its document (pdftotext, or the XML text of docx, pptx and xlsx files) after folding white space, case and typographic quotes, on 2026-11-14; all 139 quotes were found, in 38 documents of 19 investigations. Quotes not found would have been dropped.",
+  "differences_from_survey": [
+   "PSI-69: 6 files that the survey tied through an identifier stated inside the opened file (FLEX-073_ResultsSummary.pdf and five others) are not tied here: the rules read names only.",
+   "PSI-101: 43 HKPData_gmt<day> files that the survey tied to days by reading the day number as a day of 2010 are not tied here (no year in the name or the cell); 2 files whose only number is a test number in running text ('more 54.zip', 'SPV of 54-7L_21 ...') are not tied here.",
+   "PSI-107: 41 'TP <number>' files that the survey tied to one test through the master sheet column 'No.' are tied to their day here (the master sheet is not in the repository).",
+   "The other 60,706 of the 60,798 files of the 19 investigations with a survey links file have the same link level, and the test-level files the same tests, as the survey."
+  ]
+ },
+ "summary": {
+  "layers": {
+   "names": "every file of the 24 listings, by its name only; nothing opened",
+   "structure": "sample files opened for their headers, keys or labels (spec/raw_columns.json)",
+   "archive_directories": "central directories of a sample of zip archives read by byte ranges (pipeline/zip_directory.py); no archive downloaded",
+   "values": "values read in full from two groups of files (data/pipeline/raw_values.csv)"
+  },
+  "levels": {
+   "test": "tied to a test by name",
+   "day_or_session": "tied to a day or session by name",
+   "none": "not tied"
+  },
+  "units": "bytes as the PSI listing reports them",
+  "tie_by_name": "A tie by name means that the name carries the identifier of that test (or day), equal to a cell of the experimental table; the content of the file was not checked.",
+  "names": "Of {files} listed files, {t} are tied to a test by name, {d} to a day or session, and {n} are not tied.",
+  "structure": "{files} sample files were opened for their headers, keys or labels; one file of a group does not show what the other files of the group hold.",
+  "values": "{files} files were read in full for values (raw_values.csv); no value of a raw file is used by the pipeline.",
+  "archives": "The directory of {a} of {all} archives was read by byte ranges without downloading them ({f} bytes fetched for {b} bytes of archives); the member names are a sample.",
+  "rank": "The rank of data/pipeline/retrieval_queue.csv is a fixed ordering rule (tests lacking the value, descending, then bytes of the group, ascending); it is not a priority set by the team or by NASA.",
+  "not_content": "None of these layers says that a file holds a quantity, nor whether its values are complete or calibrated."
+ },
+ "raw_state_sentences": {
+  "_note": "Fixed sentences added by pipeline/raw_gaps.py to need_gap_states.csv and to the raw_state items of the evidence packages, where videos are tied by name to tests that lack the variable. {n}: videos tied by name to these tests (a file tied to two tests counts once per test); {m}: tests with at least one such video.",
+  "videos_tied": "{n} videos are tied by name to {m} of these tests; whether the quantity can be read from them was not checked.",
+  "videos_on_screen": "Opened videos of this investigation show readings as on-screen text: {labels} ({seen})."
+ },
+ "archive_sample_note": "A sample: directories of 23 archives chosen by size class and name pattern (3 by size, then the median-size archive of the 20 largest name-pattern groups); member names were read, members were not opened.",
+ "investigations": {
+  "PSI-10": {
+   "tables": [
+    "PSI-10_Experimental table_Flame Design_Normal Flame.csv",
+    "PSI-10_Experimental table_Flame Design_Inverse Flame.csv"
+   ],
+   "rules": [
+    {
+     "id": "R1N",
+     "level": "test",
+     "tables": [
+      "PSI-10_Experimental table_Flame Design_Normal Flame.csv"
+     ],
+     "pattern": "(?<![0-9])(?P<t>\\d{5}[A-Z]{1,2}\\d{1,2})(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test"
+       ],
+       "cell": "nospace_upper",
+       "key": "upper"
+      }
+     },
+     "text": "A token of five digits, one or two capital letters and one or two digits in the name equals a cell of column 'Test' of the Normal Flame table (spaces of the cell removed).",
+     "where": "name"
+    },
+    {
+     "id": "R1I",
+     "level": "test",
+     "tables": [
+      "PSI-10_Experimental table_Flame Design_Inverse Flame.csv"
+     ],
+     "pattern": "(?<![0-9])(?P<t>\\d{5}[A-Z]{1,2}\\d{1,2})(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test"
+       ],
+       "cell": "nospace_upper",
+       "key": "upper"
+      }
+     },
+     "text": "The same token equals a cell of column 'Test' of the Inverse Flame table.",
+     "where": "name"
+    },
+    {
+     "id": "R2",
+     "level": "day_or_session",
+     "pattern": "(?<![0-9A-Za-z])(?P<t>\\d{5})(?![0-9A-Za-z])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test"
+       ],
+       "cell": "first5",
+       "key": "text"
+      }
+     },
+     "text": "A five-digit token standing alone in the name equals the first five characters of cells of column 'Test' (both tables); ties to the set of tests that share them, not to one test.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "vlc-record (operations camera video)",
+     "pattern": "vl[ci]-record",
+     "meaning": {
+      "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+      "file_id": "691f7eef17f78b371b2705e0",
+      "where": "PDF page 93; the document does not mention vlc-record",
+      "quote": "the analog operations (ops) video was recorded on the ground in a Transport Stream (ts) format"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "as run (parameter file)",
+     "pattern": "^as run",
+     "meaning": null
+    },
+    {
+     "code": "ACME_<test>.mdipsug / .metadata (DataCam metadata)",
+     "pattern": "^ACME_.*\\.(mdipsug|metadata)|_ACME_.*\\.metadata$",
+     "meaning": null
+    },
+    {
+     "code": "INTNS_<test>.mdipsug / .metadata (intensified camera metadata)",
+     "pattern": "^INTNS_.*\\.(mdipsug|metadata)|_INTNS_.*\\.metadata$",
+     "meaning": null
+    },
+    {
+     "code": ".next",
+     "pattern": "\\.next$",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_Converted (archive)",
+     "pattern": "ACME_?Converted|Images[ _]?Converted",
+     "meaning": {
+      "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+      "file_id": "691f7eef17f78b371b2705e0",
+      "where": "PDF page 39, status of data analysis; the document does not name the archives",
+      "quote": "All of the raw (hobj) images obtained from the ACME camera have been successfully converted to tiff files for further analysis."
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS_ALL (archive)",
+     "pattern": "INTNS_?ALL",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS (archive)",
+     "pattern": "_INTNS",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_Intensifier (archive)",
+     "pattern": "_Inten\\w*",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_HiBMS (archive)",
+     "pattern": "HiBM",
+     "meaning": {
+      "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+      "file_id": "691f7eef17f78b371b2705e0",
+      "where": "PDF page 29, glossary; the document does not say what a _HiBMS archive holds",
+      "quote": "High Bit-depth Multi-spectral camera"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_LLL-UV (archive)",
+     "pattern": "LLL-UV",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_IPSUG (archive or log)",
+     "pattern": "IPSU",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_ACME.zip (archive)",
+     "pattern": "ACME\\d?_?\\.zip$|ACMEzip|_ACME\\.zip",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_data.csv",
+     "pattern": "_data[ _(]*\\d*\\)?\\.csv",
+     "meaning": {
+      "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+      "file_id": "691f7eef17f78b371b2705e0",
+      "where": "PDF page 93; the document does not name the file pattern",
+      "quote": "The key non-imaging data from a test is a comma-delimited file"
+     }
+    },
+    {
+     "code": "_mfcSetpoints.csv",
+     "pattern": "mfcSetpoints",
+     "meaning": {
+      "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+      "file_id": "691f7eef17f78b371b2705e0",
+      "where": "PDF page 29, glossary (MFC); nothing is said about setpoint files",
+      "quote": "Mass Flow Controller"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_TP.txt (timing file)",
+     "pattern": "[_-]TP\\.txt$",
+     "meaning": null
+    },
+    {
+     "code": "_Comments.txt",
+     "pattern": "_Comments?\\.txt$",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_VoltageSweep.txt",
+     "pattern": "VoltageSweep",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_CAM3_Exposures",
+     "pattern": "CAM3|CM3",
+     "meaning": null
+    },
+    {
+     "code": "moduleDataACD (GCIP data)",
+     "pattern": "moduleDataACD",
+     "meaning": null
+    },
+    {
+     "code": "GC (archive or converter)",
+     "pattern": "_GC\\.zip$|GC_Co",
+     "meaning": {
+      "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+      "file_id": "691f7eef17f78b371b2705e0",
+      "where": "PDF page 28, glossary; the document does not mention GC_Coverter files",
+      "quote": "Gas Chromatograph"
+     }
+    },
+    {
+     "code": "ACME.log / log file",
+     "pattern": "\\.log$",
+     "meaning": null
+    },
+    {
+     "code": "_Logs.zip",
+     "pattern": "_Logs\\.zip$",
+     "meaning": null
+    },
+    {
+     "code": "test sheets",
+     "pattern": "test sheets",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "daily test point log",
+     "pattern": "daily test point log|Daily Test Point Log",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "flow traces",
+     "pattern": "flow traces",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "test parameter notes",
+     "pattern": "test parameter notes",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Chamber Calculator",
+     "pattern": "Chamber Calculator",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "AcmeCameraConfigure",
+     "pattern": "AcmeCameraConfigure",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Fiber",
+     "pattern": "Fiber",
+     "meaning": null
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "five-digit prefix of a test identifier",
+     "meaning": {
+      "document": "PSI-10_Reports_FinalRpt_ACMEFlameDesign.pdf",
+      "file_id": "691f7eef17f78b371b2705e0",
+      "where": "PDF page 24, Table 1, footnote 1; the document does not mention file names",
+      "quote": "Test day includes the year as the first two digits followed by the 3-digit day of the year."
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [],
+    "on_screen_text": "no text seen",
+    "opened": 1,
+    "opened_file_ids": [
+     "691f7ef117f78b371b270e4f"
+    ],
+    "opened_with_readings_on_screen": 0,
+    "seen_in": "no readings seen in the 1 opened videos; 317 videos in the listing",
+    "videos_in_listing": 317
+   }
+  },
+  "PSI-20": {
+   "tables": [
+    "PSI-20_Experimental table_ACME BRE.csv"
+   ],
+   "rules": [
+    {
+     "id": "R1",
+     "level": "day_or_session",
+     "pattern": "(?<![0-9])(?P<t>\\d{5})(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Year",
+        "Month",
+        "Date"
+       ],
+       "cell": "ymd_cols",
+       "key": "yyddd_date"
+      }
+     },
+     "text": "A five-digit token in the name, read as two-digit year and day of year (Readme: 'YYDDDX#', 'DDD identifies day of year (GMT)'), gives a calendar date equal to the Year, Month and Date cells of a row; rows are test days.",
+     "where": "name"
+    },
+    {
+     "id": "R3",
+     "level": "day_or_session",
+     "categories": [
+      "Raw Data"
+     ],
+     "pattern": "^(?!.*(?<![0-9])\\d{5}[A-Z]\\d).*?(?<![0-9])(?P<d>20\\d{2}-\\d{2}-\\d{2}|20\\d{6})(?![0-9])",
+     "fields": {
+      "d": {
+       "columns": [
+        "Year",
+        "Month",
+        "Date"
+       ],
+       "cell": "ymd_cols",
+       "key": "ymd_date"
+      }
+     },
+     "text": "A Raw Data file with no test token (five digits, a capital letter, a digit) in its name; a calendar date written yyyy-mm-dd or yyyymmdd in the name equals the Year, Month and Date cells of a row.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "vlc-record (operations camera video)",
+     "pattern": "vl[ci]-record",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "as run (parameter file)",
+     "pattern": "^as run",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 16, section 4.B.2",
+      "quote": "The parameter files, with names like 'as run21028C1.txt,' control the DataCam exposures and much more."
+     }
+    },
+    {
+     "code": "ACME_<test>.mdipsug / .metadata (DataCam metadata)",
+     "pattern": "^ACME_.*\\.(mdipsug|metadata)|_ACME_.*\\.metadata$",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 15, section 4.B.2",
+      "quote": "This is an example of the metadata format from ACME_21028C1.mdipsug."
+     }
+    },
+    {
+     "code": "INTNS_<test>.mdipsug / .metadata (intensified camera metadata)",
+     "pattern": "^INTNS_.*\\.(mdipsug|metadata)|_INTNS_.*\\.metadata$",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 17, section 4.B.3",
+      "quote": "where INTNS designates the CFI intensified camera"
+     }
+    },
+    {
+     "code": ".next",
+     "pattern": "\\.next$",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_Converted (archive)",
+     "pattern": "ACME_?Converted|Images[ _]?Converted",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS_ALL (archive)",
+     "pattern": "INTNS_?ALL",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS (archive)",
+     "pattern": "_INTNS",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_Intensifier (archive)",
+     "pattern": "_Inten\\w*",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_HiBMS (archive)",
+     "pattern": "HiBM",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 11, section 4.B; the content of the archives is not stated",
+      "quote": "High Bit-depth Multi-spectral (HiBMs) camera"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_LLL-UV (archive)",
+     "pattern": "LLL-UV",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_IPSUG (archive or log)",
+     "pattern": "IPSU",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 22, section 4.C.5 Logs",
+      "quote": "the IPSU-G is the processing and storage unit for the images from the ACME DataCam and CFI intensified camera."
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_ACME.zip (archive)",
+     "pattern": "ACME\\d?_?\\.zip$|ACMEzip|_ACME\\.zip",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_data.csv",
+     "pattern": "_data[ _(]*\\d*\\)?\\.csv",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 7, section 4.A.1",
+      "quote": "The basic ACME non-imaging measurements for each test are together in a file"
+     }
+    },
+    {
+     "code": "_mfcSetpoints.csv",
+     "pattern": "mfcSetpoints",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 9, section 4.A.2",
+      "quote": "a separate file for each test with a name like 19039A1_mfcSetpoints.csv"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_TP.txt (timing file)",
+     "pattern": "[_-]TP\\.txt$",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 21, section 4.C.4",
+      "quote": "Timing files with names such as 19039C1_TP.txt can be a convenient way to determine the phases of the test"
+     }
+    },
+    {
+     "code": "_Comments.txt",
+     "pattern": "_Comments?\\.txt$",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_VoltageSweep.txt",
+     "pattern": "VoltageSweep",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_CAM3_Exposures",
+     "pattern": "CAM3|CM3",
+     "meaning": null
+    },
+    {
+     "code": "moduleDataACD (GCIP data)",
+     "pattern": "moduleDataACD",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 9, section 4.A.3 GCIP data",
+      "quote": "The raw data files are in a text (i.e.., ASCII) format"
+     }
+    },
+    {
+     "code": "GC (archive or converter)",
+     "pattern": "_GC\\.zip$|GC_Co",
+     "meaning": null
+    },
+    {
+     "code": "ACME.log / log file",
+     "pattern": "\\.log$",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 22, section 4.C.5 Logs",
+      "quote": "created for each day of testing, rather than for each test"
+     }
+    },
+    {
+     "code": "_Logs.zip",
+     "pattern": "_Logs\\.zip$",
+     "meaning": null
+    },
+    {
+     "code": "test sheets",
+     "pattern": "test sheets",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 21, section 4.C.3 Notes",
+      "quote": "are summary notes about the conduct of each tests conducted that day"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "daily test point log",
+     "pattern": "daily test point log|Daily Test Point Log",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 21, section 4.C.3 Notes",
+      "quote": "chronologically list the tests and the image data acquired which was to be downlinked"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "flow traces",
+     "pattern": "flow traces",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 21, section 4.C.3 Notes",
+      "quote": "include preliminary plots of the flow rates"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "test parameter notes",
+     "pattern": "test parameter notes",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 21, section 4.C.3 Notes",
+      "quote": "show the parameter values which were planned in advance of the test day and the changes made during the test day"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "Chamber Calculator",
+     "pattern": "Chamber Calculator",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 19, section 4.C.1",
+      "quote": "provide estimates of the composition of the combustion chamber before and after each BRE test"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "AcmeCameraConfigure",
+     "pattern": "AcmeCameraConfigure",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Fiber",
+     "pattern": "Fiber",
+     "meaning": null
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "YYDDDX# (test name)",
+     "meaning": {
+      "document": "PSI-20_Science Documents_ACME_BRE_Readme.docx",
+      "file_id": "6841d82b1b4820d736ceccd6",
+      "where": "first paragraph",
+      "quote": "Test names are formatted YYDDDX# where YY identifies year, DDD identifies day of year (GMT)"
+     }
+    },
+    {
+     "code": "day part of a test name",
+     "meaning": {
+      "document": "PSI-20_Science Documents_BRE_data_interpretation_20220804.pdf",
+      "file_id": "6841d8151b4820d736cecc0e",
+      "where": "PDF page 7, section 4.A.1",
+      "quote": "the day portion of ACME test numbers is not changed when operations continue past midnight"
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [],
+    "on_screen_text": "no text seen",
+    "opened": 2,
+    "opened_file_ids": [
+     "6841d7961b4820d736cec734",
+     "6841d7c21b4820d736cec8f4"
+    ],
+    "opened_with_readings_on_screen": 0,
+    "seen_in": "no readings seen in the 2 opened videos; 199 videos in the listing",
+    "videos_in_listing": 199
+   }
+  },
+  "PSI-21": {
+   "tables": [
+    "PSI-21_Experimental table_CLD Flame.csv"
+   ],
+   "rules": [
+    {
+     "id": "R1",
+     "level": "day_or_session",
+     "pattern": "(?<![0-9])(?P<t>\\d{5})(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test Day"
+       ],
+       "cell": "text",
+       "key": "text"
+      }
+     },
+     "text": "A five-digit token in the name (alone or followed by letters and digits, as in 17319C1) equals a cell of column 'Test Day'; one table row is one test day.",
+     "where": "name"
+    },
+    {
+     "id": "R3",
+     "level": "day_or_session",
+     "categories": [
+      "Raw Data"
+     ],
+     "pattern": "^(?!.*(?<![0-9])\\d{5}[A-Z]\\d).*?(?<![0-9])(?P<d>20\\d{2}-\\d{2}-\\d{2}|20\\d{6})(?![0-9])",
+     "fields": {
+      "d": {
+       "columns": [
+        "Test Day"
+       ],
+       "cell": "text",
+       "key": "ymd_yyddd"
+      }
+     },
+     "text": "A Raw Data file with no test token in its name; a calendar date in the name, written as two-digit year and day of year as the Test Day cell note states, equals a cell of column 'Test Day'.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "vlc-record (operations camera video)",
+     "pattern": "vl[ci]-record",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 10, section 4.B.1; the text does not mention the file name vlc-record",
+      "quote": "in a Transport Stream (TS) format using VLC Media Player"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "as run (parameter file)",
+     "pattern": "^as run",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 15, section 4.B.2",
+      "quote": "control the DataCam exposures and much more."
+     }
+    },
+    {
+     "code": "ACME_<test>.mdipsug / .metadata (DataCam metadata)",
+     "pattern": "^ACME_.*\\.(mdipsug|metadata)|_ACME_.*\\.metadata$",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 14, section 4.B.2",
+      "quote": "This is an example of the metadata format from ACME_21062M1.mdipsug."
+     }
+    },
+    {
+     "code": "INTNS_<test>.mdipsug / .metadata (intensified camera metadata)",
+     "pattern": "^INTNS_.*\\.(mdipsug|metadata)|_INTNS_.*\\.metadata$",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 15, section 4.B.3",
+      "quote": "where INTNS designates the CFI intensified camera"
+     }
+    },
+    {
+     "code": ".next",
+     "pattern": "\\.next$",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_Converted (archive)",
+     "pattern": "ACME_?Converted|Images[ _]?Converted",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS_ALL (archive)",
+     "pattern": "INTNS_?ALL",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS (archive)",
+     "pattern": "_INTNS",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_Intensifier (archive)",
+     "pattern": "_Inten\\w*",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_HiBMS (archive)",
+     "pattern": "HiBM",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 28, Appendix A; the text does not say what a _HiBMS archive holds",
+      "quote": "High Bit-depth Multi-spectral camera"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_LLL-UV (archive)",
+     "pattern": "LLL-UV",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_IPSUG (archive or log)",
+     "pattern": "IPSU",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_ACME.zip (archive)",
+     "pattern": "ACME\\d?_?\\.zip$|ACMEzip|_ACME\\.zip",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_data.csv",
+     "pattern": "_data[ _(]*\\d*\\)?\\.csv",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 2, section 1",
+      "quote": "a sample data file be opened, named for example 21050R1_data.csv, which has comma-separated values"
+     }
+    },
+    {
+     "code": "_mfcSetpoints.csv",
+     "pattern": "mfcSetpoints",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 9, section 4.A.2",
+      "quote": "a separate file for each test with a name like 21050R1_mfcSetpoints.csv"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_TP.txt (timing file)",
+     "pattern": "[_-]TP\\.txt$",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 20, section 4.C.4",
+      "quote": "Timing files with names such as 21062M1_TP.txt can be a convenient way to determine the phases of the test"
+     }
+    },
+    {
+     "code": "_Comments.txt",
+     "pattern": "_Comments?\\.txt$",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_VoltageSweep.txt",
+     "pattern": "VoltageSweep",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_CAM3_Exposures",
+     "pattern": "CAM3|CM3",
+     "meaning": null
+    },
+    {
+     "code": "moduleDataACD (GCIP data)",
+     "pattern": "moduleDataACD",
+     "meaning": null
+    },
+    {
+     "code": "GC (archive or converter)",
+     "pattern": "_GC\\.zip$|GC_Co",
+     "meaning": null
+    },
+    {
+     "code": "ACME.log / log file",
+     "pattern": "\\.log$",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 21, section 4.C.5 Logs",
+      "quote": "These log files are created for each day of testing, rather than for each test"
+     }
+    },
+    {
+     "code": "_Logs.zip",
+     "pattern": "_Logs\\.zip$",
+     "meaning": null
+    },
+    {
+     "code": "test sheets",
+     "pattern": "test sheets",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 20, section 4.C.3 Notes",
+      "quote": "are summary notes about the conduct of each tests conducted that day"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "daily test point log",
+     "pattern": "daily test point log|Daily Test Point Log",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "flow traces",
+     "pattern": "flow traces",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "test parameter notes",
+     "pattern": "test parameter notes",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Chamber Calculator",
+     "pattern": "Chamber Calculator",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 18, section 4.C.1",
+      "quote": "These files provide estimates of the composition of the combustion chamber before and after each test"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "AcmeCameraConfigure",
+     "pattern": "AcmeCameraConfigure",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Fiber",
+     "pattern": "Fiber",
+     "meaning": null
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "test number",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 6, section 4.A.1",
+      "quote": "The test number is made up of the year (2-digts), day of year (3 digits), and test (a letter and single-digit number)."
+     }
+    },
+    {
+     "code": "day part of a test number",
+     "meaning": {
+      "document": "CLD_Flame_data_interpretation_20230825.pdf",
+      "file_id": "66eb9297c6ad4bdc12fa0981",
+      "where": "page 6, section 4.A.1",
+      "quote": "the day portion of ACME test numbers is not changed when operations continue past midnight"
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [],
+    "note": "One opened file is a promotional video with titles and signs only; it shows no readings.",
+    "on_screen_text": "no text seen",
+    "opened": 2,
+    "opened_file_ids": [
+     "66eb9296c6ad4bdc12fa0668",
+     "66eb9297c6ad4bdc12fa0996"
+    ],
+    "opened_with_readings_on_screen": 0,
+    "seen_in": "no readings seen in the 2 opened videos; 363 videos in the listing",
+    "videos_in_listing": 363
+   }
+  },
+  "PSI-22": {
+   "tables": [
+    "PSI-22_Experimental table_ACME E-FIELD Flames.csv"
+   ],
+   "rules": [
+    {
+     "id": "R1",
+     "level": "day_or_session",
+     "pattern": "(?<![0-9])(?P<t>\\d{5})(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test Day"
+       ],
+       "cell": "text",
+       "key": "text"
+      }
+     },
+     "text": "A five-digit token in the name equals a cell of column 'Test Day' (one row per test day; Test Day 18319 is in two rows, both are named).",
+     "where": "name"
+    },
+    {
+     "id": "R3",
+     "level": "day_or_session",
+     "categories": [
+      "Raw Data"
+     ],
+     "pattern": "^(?!.*(?<![0-9])\\d{5}[A-Z]\\d).*?(?<![0-9])(?P<d>20\\d{2}-\\d{2}-\\d{2}|20\\d{6})(?![0-9])",
+     "fields": {
+      "d": {
+       "columns": [
+        "Year",
+        "Month",
+        "Date"
+       ],
+       "cell": "ymd_cols",
+       "key": "ymd_date"
+      }
+     },
+     "text": "A Raw Data file with no test token (five digits, a capital letter, a digit) in its name; a calendar date in the name equals the Year, Month and Date cells of a row.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "vlc-record (operations camera video)",
+     "pattern": "vl[ci]-record",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 13, section 4.B.1; the document does not name the vlc-record files",
+      "quote": "in a Transport Stream (TS) format using VLC Media Player"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "as run (parameter file)",
+     "pattern": "^as run",
+     "meaning": null
+    },
+    {
+     "code": "ACME_<test>.mdipsug / .metadata (DataCam metadata)",
+     "pattern": "^ACME_.*\\.(mdipsug|metadata)|_ACME_.*\\.metadata$",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 16, section 4.B.2",
+      "quote": "where ACME designates the DataCam"
+     }
+    },
+    {
+     "code": "INTNS_<test>.mdipsug / .metadata (intensified camera metadata)",
+     "pattern": "^INTNS_.*\\.(mdipsug|metadata)|_INTNS_.*\\.metadata$",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 21, section 4.B.3",
+      "quote": "where INTNS designates the CFI intensified camera."
+     }
+    },
+    {
+     "code": ".next",
+     "pattern": "\\.next$",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_Converted (archive)",
+     "pattern": "ACME_?Converted|Images[ _]?Converted",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS_ALL (archive)",
+     "pattern": "INTNS_?ALL",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS (archive)",
+     "pattern": "_INTNS",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_Intensifier (archive)",
+     "pattern": "_Inten\\w*",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_HiBMS (archive)",
+     "pattern": "HiBM",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 37, Appendix A; the archive content is not stated",
+      "quote": "High Bit-depth Multi-spectral camera"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_LLL-UV (archive)",
+     "pattern": "LLL-UV",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_IPSUG (archive or log)",
+     "pattern": "IPSU",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 26, section 4.C.4 Logs",
+      "quote": "the IPSU-G is the processing and storage unit for the images from the ACME DataCam and CFI intensified camera"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_ACME.zip (archive)",
+     "pattern": "ACME\\d?_?\\.zip$|ACMEzip|_ACME\\.zip",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_data.csv",
+     "pattern": "_data[ _(]*\\d*\\)?\\.csv",
+     "meaning": {
+      "document": "PSI-22_Science Documents_ACME non-imaging data file description.pdf",
+      "file_id": "6851e75a0eb4c08676005567",
+      "where": "PDF page 2, section 8.1 Data Output File",
+      "quote": "where testpointName is the parameter received in the SystemOpenTestPoint command"
+     }
+    },
+    {
+     "code": "_mfcSetpoints.csv",
+     "pattern": "mfcSetpoints",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 9, section 4.A.2",
+      "quote": "a separate file for each test with a name like 18073A3_mfcSetpoints.csv"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_TP.txt (timing file)",
+     "pattern": "[_-]TP\\.txt$",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 25, section 4.C.3",
+      "quote": "Timing files with names such as 18073A3_TP.txt can be a convenient way to determine the phases of the test"
+     }
+    },
+    {
+     "code": "_Comments.txt",
+     "pattern": "_Comments?\\.txt$",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_VoltageSweep.txt",
+     "pattern": "VoltageSweep",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 24, section 4.C.1",
+      "quote": "specifying settings for imaging, ignition, gas flow, and more"
+     }
+    },
+    {
+     "code": "_ACME_CAM3_Exposures",
+     "pattern": "CAM3|CM3",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 18, section 4.B.2",
+      "quote": "(despite the file naming) they primarily include pressures, flow rates, and temperatures"
+     }
+    },
+    {
+     "code": "moduleDataACD (GCIP data)",
+     "pattern": "moduleDataACD",
+     "meaning": null
+    },
+    {
+     "code": "GC (archive or converter)",
+     "pattern": "_GC\\.zip$|GC_Co",
+     "meaning": null
+    },
+    {
+     "code": "ACME.log / log file",
+     "pattern": "\\.log$",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 26, section 4.C.4 Logs",
+      "quote": "Each of the four log files are created for each day of testing, rather than for each test."
+     }
+    },
+    {
+     "code": "_Logs.zip",
+     "pattern": "_Logs\\.zip$",
+     "meaning": null
+    },
+    {
+     "code": "test sheets",
+     "pattern": "test sheets",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "daily test point log",
+     "pattern": "daily test point log|Daily Test Point Log",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "flow traces",
+     "pattern": "flow traces",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "test parameter notes",
+     "pattern": "test parameter notes",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Chamber Calculator",
+     "pattern": "Chamber Calculator",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "AcmeCameraConfigure",
+     "pattern": "AcmeCameraConfigure",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Fiber",
+     "pattern": "Fiber",
+     "meaning": null
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "test identifier",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 6, section 4.A.1",
+      "quote": "The test number is made up of the year (2-digts), day of year (3 digits), and test (a letter and single-digit number)."
+     }
+    },
+    {
+     "code": "letter E in test identifiers",
+     "meaning": {
+      "document": "PSI-22_Science Documents_E-FIELD Flames data interpretation document.pdf",
+      "file_id": "6851e75b0eb4c08676005568",
+      "where": "PDF page 6, section 4.A.1",
+      "quote": "the letter E ceased to be used because Excel software (for example) by default interpreted it as representing an exponential"
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [],
+    "note": "One opened file is a promotional video with titles and signs only; it shows no readings.",
+    "on_screen_text": "no text seen",
+    "opened": 2,
+    "opened_file_ids": [
+     "6851e6400eb4c08676004ba7",
+     "6851e6f70eb4c086760051fc"
+    ],
+    "opened_with_readings_on_screen": 0,
+    "seen_in": "no readings seen in the 2 opened videos; 221 videos in the listing",
+    "videos_in_listing": 221
+   }
+  },
+  "PSI-23": {
+   "tables": [
+    "PSI-23_Experimental table_ACME s-Flame.csv"
+   ],
+   "rules": [
+    {
+     "id": "R1",
+     "level": "day_or_session",
+     "pattern": "(?<![0-9])(?P<t>\\d{5})(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test Day*"
+       ],
+       "cell": "text",
+       "key": "text"
+      }
+     },
+     "text": "A five-digit token in the name equals a cell of column 'Test Day*' (one row per test day).",
+     "where": "name"
+    },
+    {
+     "id": "R3",
+     "level": "day_or_session",
+     "categories": [
+      "Raw Data"
+     ],
+     "pattern": "^(?!.*(?<![0-9])\\d{5}[A-Z]\\d).*?(?<![0-9])(?P<d>20\\d{2}-\\d{2}-\\d{2}|20\\d{6})(?![0-9])",
+     "fields": {
+      "d": {
+       "columns": [
+        "Year",
+        "Month",
+        "Date"
+       ],
+       "cell": "ymd_cols",
+       "key": "ymd_date"
+      }
+     },
+     "text": "A Raw Data file with no test token (five digits, a capital letter, a digit) in its name; a calendar date in the name equals the Year, Month and Date cells of a row.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "vlc-record (operations camera video)",
+     "pattern": "vl[ci]-record",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 10, Section 4.B.1; the passage does not name the files",
+      "quote": "in a Transport Stream (TS) format using VLC Media Player"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "as run (parameter file)",
+     "pattern": "^as run",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 15, Section 4.B.2",
+      "quote": "control the DataCam exposures and much more."
+     }
+    },
+    {
+     "code": "ACME_<test>.mdipsug / .metadata (DataCam metadata)",
+     "pattern": "^ACME_.*\\.(mdipsug|metadata)|_ACME_.*\\.metadata$",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 14, Section 4.B.2",
+      "quote": "This is an example of the metadata format from ACME_20190A1.mdipsug."
+     }
+    },
+    {
+     "code": "INTNS_<test>.mdipsug / .metadata (intensified camera metadata)",
+     "pattern": "^INTNS_.*\\.(mdipsug|metadata)|_INTNS_.*\\.metadata$",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 16, Section 4.B.3",
+      "quote": "where INTNS designates the CFI intensified camera."
+     }
+    },
+    {
+     "code": ".next",
+     "pattern": "\\.next$",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_Converted (archive)",
+     "pattern": "ACME_?Converted|Images[ _]?Converted",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS_ALL (archive)",
+     "pattern": "INTNS_?ALL",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS (archive)",
+     "pattern": "_INTNS",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_Intensifier (archive)",
+     "pattern": "_Inten\\w*",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_HiBMS (archive)",
+     "pattern": "HiBM",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 21, Section 4.C.4; the archives are not named",
+      "quote": "IPSU1 and IPSU2 were respectively used to archive the HiBMs and LLL-UV images"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_LLL-UV (archive)",
+     "pattern": "LLL-UV",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 31, Appendix A Nomenclature",
+      "quote": "Low Light Level Ultraviolet camera"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_IPSUG (archive or log)",
+     "pattern": "IPSU",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_ACME.zip (archive)",
+     "pattern": "ACME\\d?_?\\.zip$|ACMEzip|_ACME\\.zip",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_data.csv",
+     "pattern": "_data[ _(]*\\d*\\)?\\.csv",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 6, Section 4.A.1",
+      "quote": "The basic ACME non-imaging measurements for each test are together in a file"
+     }
+    },
+    {
+     "code": "_mfcSetpoints.csv",
+     "pattern": "mfcSetpoints",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 8, Section 4.A.2",
+      "quote": "a separate file for each test with a name like 20190A1_mfcSetpoints.csv"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_TP.txt (timing file)",
+     "pattern": "[_-]TP\\.txt$",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 21, Section 4.C.4",
+      "quote": "Timing files with names such as 20190A1_TP.txt can be a convenient way to determine the phases of the test"
+     }
+    },
+    {
+     "code": "_Comments.txt",
+     "pattern": "_Comments?\\.txt$",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_VoltageSweep.txt",
+     "pattern": "VoltageSweep",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_CAM3_Exposures",
+     "pattern": "CAM3|CM3",
+     "meaning": null
+    },
+    {
+     "code": "moduleDataACD (GCIP data)",
+     "pattern": "moduleDataACD",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 8, Section 4.A.3",
+      "quote": "The raw data files are in a text (i.e.., ASCII) format"
+     }
+    },
+    {
+     "code": "GC (archive or converter)",
+     "pattern": "_GC\\.zip$|GC_Co",
+     "meaning": null
+    },
+    {
+     "code": "ACME.log / log file",
+     "pattern": "\\.log$",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 22, Section 4.C.5 Logs",
+      "quote": "created for each day of testing, rather than for each test"
+     }
+    },
+    {
+     "code": "_Logs.zip",
+     "pattern": "_Logs\\.zip$",
+     "meaning": null
+    },
+    {
+     "code": "test sheets",
+     "pattern": "test sheets",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "daily test point log",
+     "pattern": "daily test point log|Daily Test Point Log",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 20, Section 4.C.3 Notes; the passage names .pdf files",
+      "quote": "chronologically list the tests and the image data acquired which was to be downlinked"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "flow traces",
+     "pattern": "flow traces",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "test parameter notes",
+     "pattern": "test parameter notes",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Chamber Calculator",
+     "pattern": "Chamber Calculator",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "AcmeCameraConfigure",
+     "pattern": "AcmeCameraConfigure",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Fiber",
+     "pattern": "Fiber",
+     "meaning": null
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "test point id",
+     "meaning": {
+      "document": "PSI-23_Science Documents_ACME s-Flame  DoD.pdf",
+      "file_id": "6841ce426daf91e274cecd4f",
+      "where": "PDF page 1",
+      "quote": "Test names are formatted YYDDDX# where YY identifies year, DDD identifies day of year (GMT)"
+     }
+    },
+    {
+     "code": "first five digits of a test point id",
+     "meaning": {
+      "document": "PSI-23_Engineering Documents_s-Flame_data_interpretation_20210920.pdf",
+      "file_id": "6841ce426daf91e274cecd50",
+      "where": "PDF page 5, Table 1 footnote 1",
+      "quote": "Test Day includes the year as the first two digits followed by the 3-digit day of the year."
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [],
+    "on_screen_text": "no text seen",
+    "opened": 2,
+    "opened_file_ids": [
+     "6841cd586daf91e274cec3b7",
+     "6841cd6a6daf91e274cec476"
+    ],
+    "opened_with_readings_on_screen": 0,
+    "seen_in": "no readings seen in the 2 opened videos; 290 videos in the listing",
+    "videos_in_listing": 290
+   }
+  },
+  "PSI-25": {
+   "tables": [
+    "PSI-25_Experimental table_BASS-II.csv"
+   ],
+   "rules": [
+    {
+     "id": "R1",
+     "level": "test",
+     "ignore_case": true,
+     "pattern": "GMT_?(?:2014_)?(?P<g>\\d{1,3})(?![0-9]).*?SAMPLE[ _]?(?P<s>\\d+).*?TEST[ _\\-]?(?P<t>[A-Z]\\d{1,2}[ab]?)(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test #"
+       ],
+       "cell": "text",
+       "key": "text"
+      },
+      "g": {
+       "columns": [
+        "GMT"
+       ],
+       "cell": "int",
+       "key": "int"
+      },
+      "s": {
+       "columns": [
+        "Sample #"
+       ],
+       "cell": "digits_prefix",
+       "key": "int"
+      }
+     },
+     "text": "The test token after TEST (a letter, one or two digits, optional a or b), the number after GMT and the number after SAMPLE equal the cells 'Test #', 'GMT' and the digits of 'Sample #' of one row.",
+     "where": "name"
+    },
+    {
+     "id": "R1p",
+     "level": "test",
+     "pattern": "GMT2014_(?P<g>\\d{3})_BASS_S(?P<s>\\d+)[A-Za-z]?_TP(?P<t>[A-Z]\\d{1,2}[ab]?)(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test #"
+       ],
+       "cell": "text",
+       "key": "text"
+      },
+      "g": {
+       "columns": [
+        "GMT"
+       ],
+       "cell": "int",
+       "key": "int"
+      },
+      "s": {
+       "columns": [
+        "Sample #"
+       ],
+       "cell": "digits_prefix",
+       "key": "int"
+      }
+     },
+     "text": "Proof-sheet names: the token after TP, the number after GMT2014_ and the number after S equal 'Test #', 'GMT' and the digits of 'Sample #' of one row.",
+     "where": "name"
+    },
+    {
+     "id": "R1g",
+     "level": "test",
+     "pattern": "GMT(?P<g>\\d{1,3})-Test-(?P<t>[A-Z]\\d{1,2}[ab]?)(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test #"
+       ],
+       "cell": "text",
+       "key": "text"
+      },
+      "g": {
+       "columns": [
+        "GMT"
+       ],
+       "cell": "int",
+       "key": "int"
+      }
+     },
+     "text": "The token after 'Test-' and the number after GMT equal 'Test #' and 'GMT' of one row.",
+     "where": "name"
+    },
+    {
+     "id": "R1d",
+     "level": "test",
+     "ignore_case": true,
+     "pattern": "GMT_?(?P<g>\\d{1,3})(?![0-9]).*?SAMPLE[ _]?(?P<s>\\d+).*?TEST[ _\\-]?(?P<t>[A-Z]\\d{1,2}[ab]?)(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test #"
+       ],
+       "cell": "text",
+       "key": "text"
+      },
+      "g": {
+       "columns": [
+        "Date"
+       ],
+       "cell": "doy",
+       "key": "int"
+      },
+      "s": {
+       "columns": [
+        "Sample #"
+       ],
+       "cell": "digits_prefix",
+       "key": "int"
+      }
+     },
+     "text": "As R1, with the number after GMT equal to the day of the year of the row's 'Date' cell instead of its 'GMT' cell.",
+     "where": "name"
+    },
+    {
+     "id": "R1pd",
+     "level": "test",
+     "pattern": "GMT2014_(?P<g>\\d{3})_BASS_S(?P<s>\\d+)[A-Za-z]?_TP(?P<t>[A-Z]\\d{1,2}[ab]?)(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test #"
+       ],
+       "cell": "text",
+       "key": "text"
+      },
+      "g": {
+       "columns": [
+        "Date"
+       ],
+       "cell": "doy",
+       "key": "int"
+      },
+      "s": {
+       "columns": [
+        "Sample #"
+       ],
+       "cell": "digits_prefix",
+       "key": "int"
+      }
+     },
+     "text": "As R1p, with the number after GMT2014_ equal to the day of the year of the row's 'Date' cell.",
+     "where": "name"
+    },
+    {
+     "id": "R1b",
+     "level": "test",
+     "pattern": "^(?P<t>[A-Z]\\d{1,2}[ab]?)(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test #"
+       ],
+       "cell": "text",
+       "key": "text"
+      }
+     },
+     "text": "A name that begins with a test token (a letter, one or two digits, optional a or b) equal to a cell of 'Test #'; the name carries no GMT or sample number.",
+     "where": "name"
+    },
+    {
+     "id": "R2",
+     "level": "test",
+     "level_if_several_rows": "day_or_session",
+     "pattern": "^(?!.*(?:TEST_?|TP)[A-Z]\\d).*?GMT(?:2014_)?(?P<g>\\d{1,3})_(?:SAMPLE_|BASS_S)(?P<s>\\d+)",
+     "fields": {
+      "g": {
+       "columns": [
+        "GMT"
+       ],
+       "cell": "int",
+       "key": "int"
+      },
+      "s": {
+       "columns": [
+        "Sample #"
+       ],
+       "cell": "digits_prefix",
+       "key": "int"
+      }
+     },
+     "text": "No test token with a letter for the PI after TEST or TP: the number after GMT and the sample number equal 'GMT' and the digits of 'Sample #' of exactly one row (test) or of several rows (day or session).",
+     "where": "name"
+    },
+    {
+     "id": "R2c",
+     "level": "test",
+     "level_if_several_rows": "day_or_session",
+     "pattern": "GMT2014_(?P<g>\\d{3})_BASS_S(?P<s>\\d+)[A-Za-z]?_TP[A-Z]0\\d",
+     "fields": {
+      "g": {
+       "columns": [
+        "GMT"
+       ],
+       "cell": "int",
+       "key": "int"
+      },
+      "s": {
+       "columns": [
+        "Sample #"
+       ],
+       "cell": "digits_prefix",
+       "key": "int"
+      }
+     },
+     "text": "Proof-sheet names whose token after TP is zero-padded (TPT09, TPF04; equal to no 'Test #' cell): the number after GMT2014_ and the sample number equal 'GMT' and the digits of 'Sample #' of exactly one row.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [
+    "Names whose test token equals a 'Test #' cell while their GMT or sample number differs from that row are not tied (no rule ties them)."
+   ],
+   "suffix_codes": [
+    {
+     "code": "ProofSheet",
+     "pattern": "ProofSheet",
+     "meaning": null
+    },
+    {
+     "code": "_Still_Sequence (video)",
+     "pattern": "Still_Sequence",
+     "meaning": null
+    },
+    {
+     "code": "_2ND_VIEW (video)",
+     "pattern": "2ND_VIEW",
+     "meaning": null
+    },
+    {
+     "code": "post-burn",
+     "pattern": "post-burn",
+     "meaning": {
+      "document": "PSI-25_Engineering Documents_BASS-II_Ops.docx",
+      "file_id": "6924805f7f6aa6a83021067e",
+      "where": "step 9.12; the document does not name these videos",
+      "quote": "Photographing the Sample Post-Burn using the BASS Still Camera"
+     }
+    },
+    {
+     "code": "original videos (archive)",
+     "pattern": "or[ig]+[a-z]*l? vid|original_NEF|vidoes",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "D300s",
+     "pattern": "D300s",
+     "meaning": {
+      "document": "PSI-25_Engineering Documents_BASS-II_Engineering Requirements.pptx",
+      "file_id": "6924803a7f6aa6a8302103cb",
+      "where": "slide 1, Imaging Requirements; the file names are not mentioned",
+      "quote": "Nikon model D300s digital still camera"
+     }
+    },
+    {
+     "code": "iss0<nn>e<number> (archive)",
+     "pattern": "^iss0\\d\\de\\d+",
+     "meaning": null
+    },
+    {
+     "code": "BASS (test video or archive)",
+     "pattern": "^BASS|BASS_GMT",
+     "meaning": {
+      "document": "PSI-25_Engineering Documents_BASS-II_Engineering Requirements.pptx",
+      "file_id": "6924803a7f6aa6a8302103cb",
+      "where": "slide 1, General Requirements",
+      "quote": "Burning And Suppression of Solids-2 (BASS-2)"
+     }
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "number after GMT",
+     "meaning": {
+      "document": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
+      "file_id": "692480587f6aa6a830210602",
+      "where": "section 'Columns in test matrix', line GMT; the document does not mention file names",
+      "quote": "GMT- number is day of the year."
+     }
+    },
+    {
+     "code": "test identifier",
+     "meaning": {
+      "document": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
+      "file_id": "692480587f6aa6a830210602",
+      "where": "section 'Columns in test matrix', line Test number",
+      "quote": "Initial of PI name followed by test number from the initial matrix."
+     }
+    },
+    {
+     "code": "letter a or b after a test number",
+     "meaning": {
+      "document": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
+      "file_id": "692480587f6aa6a830210602",
+      "where": "section 'Columns in test matrix', line Test number",
+      "quote": "If multiple runs with same sample on same day, a and b are used to designate."
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [
+     "FUEL",
+     "AIR",
+     "FAN",
+     "RAD",
+     "date and clock"
+    ],
+    "note": "The second opened video could not be decoded.",
+    "on_screen_text": "numeric readings shown as text",
+    "opened": 2,
+    "opened_file_ids": [
+     "6924804e7f6aa6a83021053b",
+     "692480597f6aa6a83021060e"
+    ],
+    "opened_with_readings_on_screen": 1,
+    "seen_in": "seen in 1 of 2 opened videos; 296 videos in the listing",
+    "videos_in_listing": 296
+   }
+  },
+  "PSI-26": {
+   "tables": [
+    "PSI-26_Experimental table_BASS.csv"
+   ],
+   "rules": [
+    {
+     "id": "V1",
+     "level": "day_or_session",
+     "pattern": "iss03\\dm\\d{2}(?P<g>\\d{3})\\d{4}",
+     "row_filter": [
+      {
+       "column": "Date",
+       "regex": "/(2013|2103)$"
+      }
+     ],
+     "fields": {
+      "g": {
+       "columns": [
+        "GMT"
+       ],
+       "cell": "int",
+       "key": "int"
+      }
+     },
+     "text": "Video names 'iss03Xm<2 digits><3 digits><4 digits>': the 3-digit number equals the 'GMT' cell of rows whose 'Date' cell reads year 2013 (one cell reads 2103).",
+     "where": "name"
+    },
+    {
+     "id": "A1",
+     "level": "day_or_session",
+     "pattern": "^(?P<d>\\d{4}_\\d{2}_\\d{2})(?![0-9])",
+     "fields": {
+      "d": {
+       "columns": [
+        "Date"
+       ],
+       "cell": "date",
+       "key": "ymd_date"
+      }
+     },
+     "text": "Archive names 'yyyy_mm_dd...': the date equals the 'Date' cell (m/d/yyyy) of rows.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "iss03<n>m (video)",
+     "pattern": "iss03\\dm",
+     "meaning": null
+    },
+    {
+     "code": "_orig (archive)",
+     "pattern": "_orig\\.zip$",
+     "meaning": null
+    },
+    {
+     "code": "_xmp (archive)",
+     "pattern": "_xmp\\.zip$",
+     "meaning": null
+    },
+    {
+     "code": "_txt (archive)",
+     "pattern": "_txt\\.zip$",
+     "meaning": null
+    },
+    {
+     "code": "yyyy_mm_dd (archive)",
+     "pattern": "^\\d{4}_\\d{2}_\\d{2}",
+     "meaning": {
+      "document": "PSI-26_Science Documents_DLD_BASS.pdf",
+      "file_id": "67dafcfac3501a37c2c60ddf",
+      "where": "page 1; the document does not say that the zip files are these collections",
+      "quote": "are both organized by date formatted yyyy_mm_dd"
+     }
+    },
+    {
+     "code": "BASS",
+     "pattern": "BASS",
+     "meaning": {
+      "document": "PSI-26_Presentations_Crew Training 2011.pdf",
+      "file_id": "67dafce9c3501a37c2c60d17",
+      "where": "page 26, slide Acronyms",
+      "quote": "Burning and Suppression of Solids"
+     }
+    },
+    {
+     "code": "SPICE",
+     "pattern": "SPICE",
+     "meaning": {
+      "document": "PSI-26_Presentations_Crew Training 2011.pdf",
+      "file_id": "67dafce9c3501a37c2c60d17",
+      "where": "page 26, slide Acronyms",
+      "quote": "Smoke Point in Coflow Experiment"
+     }
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "date in video and archive names",
+     "meaning": {
+      "document": "PSI-26_Science Documents_As Run_Test Matrix.xlsx",
+      "file_id": "67dafcfac3501a37c2c60de0",
+      "where": "sheet '2012', cells A3 and B3",
+      "quote": "Date on videos and images"
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [
+     "FUEL",
+     "AIR",
+     "FAN",
+     "RAD",
+     "date and clock"
+    ],
+    "on_screen_text": "numeric readings shown as text",
+    "opened": 2,
+    "opened_file_ids": [
+     "67dafcedc3501a37c2c60d44",
+     "67dafcefc3501a37c2c60d56"
+    ],
+    "opened_with_readings_on_screen": 2,
+    "seen_in": "seen in 2 of 2 opened videos; 114 videos in the listing",
+    "videos_in_listing": 114
+   }
+  },
+  "PSI-39": {
+   "tables": [
+    "PSI-39_Experimental table_CFI.csv"
+   ],
+   "rules": [
+    {
+     "id": "CF",
+     "level": "test",
+     "ignore_case": true,
+     "pattern": "FLEX-(?P<f>\\d{4}).*?(?<![0-9A-Za-z])(?P<c>F?\\d{3}[A-Z]\\d{2})(?![0-9])",
+     "fields": {
+      "f": {
+       "columns": [
+        "Flex Number"
+       ],
+       "cell": "text",
+       "key": "text"
+      },
+      "c": {
+       "columns": [
+        "CIR"
+       ],
+       "cell": "cir",
+       "key": "cir"
+      }
+     },
+     "text": "A FLEX number (FLEX- and four digits) and a CIR id (F, three digits, a letter, two digits; the F may be absent; case ignored) in the name equal the cells 'Flex Number' and 'CIR' of the same row.",
+     "where": "name"
+    },
+    {
+     "id": "C",
+     "level": "test",
+     "ignore_case": true,
+     "pattern": "(?<![0-9A-Za-z])(?P<c>F?\\d{3}[A-Z]\\d{2})(?![0-9])",
+     "fields": {
+      "c": {
+       "columns": [
+        "CIR"
+       ],
+       "cell": "cir",
+       "key": "cir"
+      }
+     },
+     "text": "A CIR id in the name equals the 'CIR' cell of a row.",
+     "where": "name"
+    },
+    {
+     "id": "F",
+     "level": "test",
+     "pattern": "FLEX[-_](?P<f>\\d{4})(?![0-9])",
+     "fields": {
+      "f": {
+       "columns": [
+        "Flex Number"
+       ],
+       "cell": "text",
+       "key": "text"
+      }
+     },
+     "text": "FLEX- and four digits in the name equal the 'Flex Number' cell of a row (no CIR id of the name equals a CIR cell).",
+     "where": "name"
+    },
+    {
+     "id": "D",
+     "level": "day_or_session",
+     "pattern": "(?<![0-9])(?P<d>20\\d{2}-\\d{2}-\\d{2}|20\\d{6})(?![0-9])",
+     "fields": {
+      "d": {
+       "columns": [
+        "Test Date"
+       ],
+       "cell": "date",
+       "key": "ymd_date"
+      }
+     },
+     "text": "No identifier ties; a date (yyyy-mm-dd or yyyymmdd) in the name equals a 'Test Date' cell; ties to a day only.",
+     "where": "name"
+    },
+    {
+     "id": "DM",
+     "level": "day_or_session",
+     "pattern": "(?<![0-9])(?P<d>\\d{2}[A-Z][a-z]{2}\\d{4})(?![0-9])",
+     "fields": {
+      "d": {
+       "columns": [
+        "Test Date"
+       ],
+       "cell": "date",
+       "key": "dmony_date"
+      }
+     },
+     "text": "No identifier ties; a date written DDMonYYYY in the name equals a 'Test Date' cell; ties to a day only.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "vlc-record (video)",
+     "pattern": "vlc-record",
+     "meaning": null
+    },
+    {
+     "code": "DOWNLINK VIDEO",
+     "pattern": "DOWNLINK",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": ".meta / .metadata",
+     "pattern": "\\.meta(data)?$",
+     "meaning": null
+    },
+    {
+     "code": "_IPSUG (archive)",
+     "pattern": "IPSU",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_TestSheet",
+     "pattern": "TestSheet",
+     "meaning": {
+      "document": "PSI-39_Raw Data_FLEX-1223_TestSheet.txt",
+      "file_id": "683f4b58da33c6f4c4cec481",
+      "where": "lines 1-7 of the file",
+      "quote": "CIR Test Number"
+     }
+    },
+    {
+     "code": "_Comments",
+     "pattern": "_Comments",
+     "meaning": null
+    },
+    {
+     "code": "_Chamber_Readings",
+     "pattern": "Chamber_Readings",
+     "meaning": null
+    },
+    {
+     "code": "_Radiometer_Readings",
+     "pattern": "Radiometer_Readings",
+     "meaning": null
+    },
+    {
+     "code": "_Testpoint_Settings",
+     "pattern": "Testpoint_Settings",
+     "meaning": null
+    },
+    {
+     "code": "_Camera_Settings",
+     "pattern": "Camera_Settings",
+     "meaning": null
+    },
+    {
+     "code": "_Filter_Positions",
+     "pattern": "Filter_Positions",
+     "meaning": null
+    },
+    {
+     "code": "_Summary",
+     "pattern": "Summary",
+     "meaning": null
+    },
+    {
+     "code": "FLEX-<number>",
+     "pattern": "FLEX[-_]\\d{4}",
+     "meaning": {
+      "document": "PSI-39_Reports_CFI Science Final Report.pdf",
+      "file_id": "683f4b7bda33c6f4c4cec613",
+      "where": "PDF page 3, section 0 Nomenclature",
+      "quote": "Flame Extinguishment Experiment"
+     }
+    },
+    {
+     "code": "MDCA",
+     "pattern": "MDCA",
+     "meaning": {
+      "document": "PSI-39_Reports_CFI Science Final Report.pdf",
+      "file_id": "683f4b7bda33c6f4c4cec613",
+      "where": "PDF page 3, section 0 Nomenclature",
+      "quote": "Multi-used Droplet Combustion Apparatus"
+     }
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "CIR test id with a FLEX number",
+     "meaning": {
+      "document": "PSI-39_Raw Data_FLEX-1223_TestSheet.txt",
+      "file_id": "683f4b58da33c6f4c4cec481",
+      "where": "lines 1-7 of the file",
+      "quote": "CIR Test Number: F090A08"
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [],
+    "on_screen_text": "no text seen",
+    "opened": 2,
+    "opened_file_ids": [
+     "683f4b0bda33c6f4c4cec13c",
+     "683f4b34da33c6f4c4cec2f3"
+    ],
+    "opened_with_readings_on_screen": 0,
+    "seen_in": "no readings seen in the 2 opened videos; 246 videos in the listing",
+    "videos_in_listing": 246
+   }
+  },
+  "PSI-47": {
+   "tables": [
+    "PSI-47_Experimental table_DAFT.csv"
+   ],
+   "rules": [
+    {
+     "id": "G",
+     "level": "day_or_session",
+     "pattern": "(?:flight data |GMT)(?P<g>\\d{3})(?![0-9])",
+     "ignore_case": true,
+     "fields": {
+      "g": {
+       "columns": [
+        "Actual Day"
+       ],
+       "cell": "gmt_int",
+       "key": "int"
+      }
+     },
+     "text": "The number after 'flight data ' or 'GMT' in the name (leading zeros dropped) equals the number after GMT in an 'Actual Day' cell; one row per sampling session.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "PTrk<run>",
+     "pattern": "PTrk\\d{4}",
+     "meaning": null
+    },
+    {
+     "code": "DTrk<run>",
+     "pattern": "DTrk\\d{4}",
+     "meaning": null
+    },
+    {
+     "code": "flight data <day>",
+     "pattern": "flight data",
+     "meaning": null,
+     "ignore_case": true
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "GMT day",
+     "meaning": {
+      "document": "PSI-47_Reports_DAFT_30Day.PostFlightReport.pdf",
+      "file_id": "683dbb3df91ab4427dbf4563",
+      "where": "PDF page 4, Appendix D sessions table",
+      "quote": "The first test point for DAFT was performed on February 22, 2005"
+     }
+    }
+   ],
+   "videos": null
+  },
+  "PSI-60": {
+   "tables": [],
+   "rules": [],
+   "rules_not_applied": [],
+   "suffix_codes": [],
+   "identifier_meanings": [],
+   "videos": null
+  },
+  "PSI-62": {
+   "tables": [],
+   "rules": [],
+   "rules_not_applied": [],
+   "suffix_codes": [],
+   "identifier_meanings": [],
+   "videos": null
+  },
+  "PSI-68": {
+   "tables": [],
+   "rules": [],
+   "rules_not_applied": [
+    "The table has 8 rows, one per fuel, with ranges of conditions and no test, run, sample, FLEX, date or GMT column; no identifier of a name equals a cell, so no rule is listed. Digit groups equal to number tokens of range cells, and the word Mixture equal to a word of three Sample cells, were tried and not accepted: they name no single row."
+   ],
+   "suffix_codes": [
+    {
+     "code": "_MDCA_Testpoint_Settings",
+     "pattern": "MDCA_Testpoint_Settings",
+     "meaning": {
+      "document": "PSI-68_Engineering Documents_FLEX-2 Engineering Requirments Document.pdf",
+      "file_id": "685da233ee20136af540136e",
+      "where": "PDF page 36, acronym list (MDCA)",
+      "quote": "Multi-user Droplet Combustion Apparatus"
+     }
+    },
+    {
+     "code": "_LCTF_Camera_Settings / LCTF",
+     "pattern": "LCTF",
+     "meaning": {
+      "document": "PSI-68_Science Documents_FLEX-2 SRD Final.pdf",
+      "file_id": "685da233ee20136af540136b",
+      "where": "PDF page 50, section 5.2.6",
+      "quote": "the CIR HiBMS camera with the Liquid Crystal Tunable Filter (LCTF)"
+     }
+    },
+    {
+     "code": "_Radiometer_Readings",
+     "pattern": "Radiometer_Readings",
+     "meaning": null
+    },
+    {
+     "code": "_Chamber_Readings",
+     "pattern": "Chamber_Readings",
+     "meaning": null
+    },
+    {
+     "code": "_Camera_Settings",
+     "pattern": "Camera_Settings",
+     "meaning": null
+    },
+    {
+     "code": "_Comments",
+     "pattern": "_Comments",
+     "meaning": null
+    },
+    {
+     "code": "_Mixture",
+     "pattern": "Mixture",
+     "meaning": null
+    },
+    {
+     "code": "_Cool_Flames",
+     "pattern": "Cool_Flames",
+     "meaning": null
+    },
+    {
+     "code": "_Event_Log_entry",
+     "pattern": "Event_Log",
+     "meaning": null
+    },
+    {
+     "code": "IPSU (archive)",
+     "pattern": "IPSU",
+     "meaning": null
+    },
+    {
+     "code": ".zip (archive)",
+     "pattern": "\\.zip$",
+     "meaning": {
+      "document": "PSI-68_Science Documents_FLEX-2 DoD.docx",
+      "file_id": "685da422ee20136af5402524",
+      "where": "paragraph 3; does not say which zip names",
+      "quote": "a .zip file provides the original images"
+     }
+    },
+    {
+     "code": ".txt",
+     "pattern": "\\.txt$",
+     "meaning": {
+      "document": "PSI-68_Science Documents_FLEX-2 DoD.docx",
+      "file_id": "685da422ee20136af5402524",
+      "where": "paragraph 3",
+      "quote": "will contain .txt files of the experiment's raw data"
+     }
+    }
+   ],
+   "identifier_meanings": [],
+   "videos": null
+  },
+  "PSI-69": {
+   "tables": [
+    "PSI-69_Experimental table_FLEX.csv"
+   ],
+   "rules": [
+    {
+     "id": "ID",
+     "level": "test",
+     "ignore_case": true,
+     "pattern": "(?<![0-9A-Za-z])(?P<t>\\d{3}[FR]\\d{3}|\\d{2}CAL\\d{2}|[CHN]\\d{2}[HM]\\d{3})(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "FLEX Identifier"
+       ],
+       "cell": "upper",
+       "key": "upper"
+      }
+     },
+     "text": "A test point identifier in the name (shapes ###F###, ###R###, ##CAL##, C##H###, C##M###, H##H###, H##M###, N##H###, N##M###; case ignored) equals a cell of column 'FLEX Identifier'.",
+     "where": "name"
+    },
+    {
+     "id": "TN",
+     "level": "test",
+     "pattern": "Test[ _]?(?P<n>\\d{3})(?![0-9])",
+     "fields": {
+      "n": {
+       "columns": [
+        "FLEX Test #"
+       ],
+       "cell": "int",
+       "key": "int"
+      }
+     },
+     "text": "Three digits after 'Test' in the name ('Test 002 Results', 'Readme-Test_009') equal a cell of column 'FLEX Test #'.",
+     "where": "name"
+    },
+    {
+     "id": "DT",
+     "level": "day_or_session",
+     "pattern": "(?<![0-9])(?P<d>\\d{2}[A-Z][a-z]{2}\\d{4})(?![0-9])",
+     "fields": {
+      "d": {
+       "columns": [
+        "Test Date"
+       ],
+       "cell": "date",
+       "key": "dmony_date"
+      }
+     },
+     "text": "A date written DDMonYYYY in the name equals the date of 'Test Date' cells; ties to a day only. The FLEX numbers in such names are not used.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [
+    "The FLEX number in a name (FLEX-<nnn>) is not used: it equals the 'FLEX Test #' cell for low numbers, and opened files of higher numbers state an identifier of another row.",
+    "Identifiers stated inside opened files are not used; the rules read names only."
+   ],
+   "suffix_codes": [
+    {
+     "code": "vlc-record / _ISS_ (video)",
+     "pattern": "vlc-record|_ISS_",
+     "meaning": {
+      "document": "PSI-69_Raw Data_256R002_Readme.txt",
+      "file_id": "684345af9e44646b740279de",
+      "where": "line 6 of the file (about _ISS_ videos only)",
+      "quote": "Included on the DVD is the video image captured from ISS video using the color camera."
+     }
+    },
+    {
+     "code": "_MDCA_Testpoint_Settings",
+     "pattern": "MDCA_Testpoint_Settings",
+     "meaning": {
+      "document": "PSI-69_Engineering Documents_FLEX Engineering Requirements Document.pdf",
+      "file_id": "684347449e44646b740289fe",
+      "where": "PDF page 2",
+      "quote": "Multi-user Droplet Combustion Apparatus (MDCA)"
+     }
+    },
+    {
+     "code": "_HIBMS_Camera_Settings",
+     "pattern": "HIBMS",
+     "meaning": {
+      "document": "PSI-69_Engineering Documents_FLEX Overall Ext File-2.pdf",
+      "file_id": "684347449e44646b740289fd",
+      "where": "PDF page 4",
+      "quote": "High Bit Depth Multispectral Package (HiBMs)"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_LLLUV_Camera_Settings",
+     "pattern": "LLLUV|LLUV",
+     "meaning": null
+    },
+    {
+     "code": "_LCTF",
+     "pattern": "LCTF",
+     "meaning": {
+      "document": "PSI-69_Engineering Documents_FLEX Overall Ext File-2.pdf",
+      "file_id": "684347449e44646b740289fd",
+      "where": "PDF page 8",
+      "quote": "The liquid crystal tunable filter is (LCTF) 10 nm bandpass"
+     }
+    },
+    {
+     "code": "_Radiometer_Readings",
+     "pattern": "Radiometer_Readings",
+     "meaning": null
+    },
+    {
+     "code": "_Chamber_Readings",
+     "pattern": "Chamber_Readings",
+     "meaning": null
+    },
+    {
+     "code": "_Camera_Settings",
+     "pattern": "Camera_Settings",
+     "meaning": null
+    },
+    {
+     "code": "_Comments",
+     "pattern": "_Comments",
+     "meaning": null
+    },
+    {
+     "code": "_Readme",
+     "pattern": "Readme",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_TestSheet",
+     "pattern": "TestSheet",
+     "meaning": null
+    },
+    {
+     "code": "_Summary / _Results",
+     "pattern": "Summary|Results",
+     "meaning": null
+    },
+    {
+     "code": "_DropletData / _ColorCamData",
+     "pattern": "DropletData|ColorCamData|DropletHistory",
+     "meaning": null
+    },
+    {
+     "code": "_Mixture",
+     "pattern": "Mixture",
+     "meaning": null
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "test point identifier",
+     "meaning": {
+      "document": "PSI-69_Raw Data_256R002_Readme.txt",
+      "file_id": "684345af9e44646b740279de",
+      "where": "line 1 of the file",
+      "quote": "Readme for testpoint: 256R002"
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [],
+    "on_screen_text": "no text seen",
+    "opened": 2,
+    "opened_file_ids": [
+     "684347349e44646b7402895a",
+     "6843473f9e44646b740289cd"
+    ],
+    "opened_with_readings_on_screen": 0,
+    "seen_in": "no readings seen in the 2 opened videos; 183 videos in the listing",
+    "videos_in_listing": 183
+   }
+  },
+  "PSI-98": {
+   "tables": [
+    "PSI-98_Experimental table_SAFFIRE-1.csv"
+   ],
+   "rules": [
+    {
+     "id": "A",
+     "level": "test",
+     "pattern": "(?P<c>S[12]C[12])",
+     "fields": {
+      "c": {
+       "columns": [
+        "Camera 1",
+        "Camera 2"
+       ],
+       "cell": "each_upper",
+       "key": "upper"
+      }
+     },
+     "text": "A code S1C1, S1C2, S2C1 or S2C2 in the name equals a whole cell of column 'Camera 1' or 'Camera 2'.",
+     "where": "name"
+    },
+    {
+     "id": "B",
+     "level": "day_or_session",
+     "pattern": "(?P<c>F[12]C[12])",
+     "fields": {
+      "c": {
+       "columns": [
+        "Sample Number"
+       ],
+       "cell": "slash_parts_upper",
+       "key": "upper"
+      }
+     },
+     "text": "A code F1C1, F1C2, F2C1 or F2C2 in the name equals one part (split at '/') of a 'Sample Number' cell; those rows describe pre-test flow visualization data for a sample and are not tests of tests.csv.",
+     "where": "name"
+    },
+    {
+     "id": "C",
+     "level": "test",
+     "where": "folder",
+     "pattern": "(?:^|/)(?P<s>S[12]) ",
+     "fields": {
+      "s": {
+       "columns": [
+        "Sample Number"
+       ],
+       "cell": "upper",
+       "key": "upper"
+      }
+     },
+     "text": "Listing folder (PSI subcategory) 'S1 ...' or 'S2 ...' equals a 'Sample Number' cell; a tie by the location in the listing, not by the file name."
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "Raw2TIFF_icmad",
+     "pattern": "Raw2TIFF.*icmad|icmad.*Raw2TIFF",
+     "meaning": {
+      "document": "PSI-98_Science Documents_SAFFIRE-I Image Directory Nomenclature.pdf",
+      "file_id": "683f4a54746db1c87dcebebd",
+      "where": "fourth entry",
+      "quote": "Raw2TIFF files annotated with ICMAD 'Exposure' and 'Gain' information."
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "jpeg2png_icmad",
+     "pattern": "jpeg2png",
+     "meaning": {
+      "document": "PSI-98_Science Documents_SAFFIRE-I Image Directory Nomenclature.pdf",
+      "file_id": "683f4a54746db1c87dcebebd",
+      "where": "last entry",
+      "quote": "re-saved as .png format to prevent additional compression artifacts"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "Raw_DistroMaster",
+     "pattern": "DistroMaster",
+     "meaning": {
+      "document": "PSI-98_Science Documents_SAFFIRE-I Image Directory Nomenclature.pdf",
+      "file_id": "683f4a54746db1c87dcebebd",
+      "where": "second entry",
+      "quote": "RAW Distribution Master - 8 byte offset corrected using ImageJ."
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "Mapped",
+     "pattern": "Mapped",
+     "meaning": {
+      "document": "PSI-98_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "683f4a58746db1c87dcebee9",
+      "where": "Table 3, row Jpeg_Mapped",
+      "quote": "where the distortion of the camera system is corrected, or mapped, to a flat grid"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "Raw2TIFF",
+     "pattern": "Raw2TIFF",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "DistortionGrid",
+     "pattern": "DistortionGrid",
+     "meaning": {
+      "document": "PSI-98_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "683f4a58746db1c87dcebee9",
+      "where": "Table 3, row DistortionGrids_Sample_ROI",
+      "quote": "Image sets characterize the camera distortion of the system (pre-flight) using a checkerboard pattern grid"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "jpeg",
+     "pattern": "jpe?g",
+     "meaning": {
+      "document": "PSI-98_Science Documents_SAFFIRE-I Image Directory Nomenclature.pdf",
+      "file_id": "683f4a54746db1c87dcebebd",
+      "where": "fifth entry",
+      "quote": "Flight hardware generated jpeg images, created on-board from the RAW Camera Original."
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "Sensor Data / Telemetry (workbook)",
+     "pattern": "Sensor|Telemetry",
+     "meaning": {
+      "document": "PSI-98_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "683f4a58746db1c87dcebee9",
+      "where": "paragraph after Table 1",
+      "quote": "The raw data is captured from each experimental sensor and presented in excel files."
+     },
+     "ignore_case": true
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "C1, C2",
+     "meaning": {
+      "document": "PSI-98_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "683f4a58746db1c87dcebee9",
+      "where": "paragraph 2",
+      "quote": "denoted as C1 for camera 1 and C2 for camera 2"
+     }
+    },
+    {
+     "code": "F1, F2",
+     "meaning": {
+      "document": "PSI-98_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "683f4a58746db1c87dcebee9",
+      "where": "paragraph 1",
+      "quote": "These image sets are denoted as F1 for pre-flow and F2 for post-flow."
+     }
+    }
+   ],
+   "videos": null
+  },
+  "PSI-99": {
+   "tables": [
+    "PSI-99_Experimental table_SAFFIRE-2.csv"
+   ],
+   "rules": [
+    {
+     "id": "A",
+     "level": "test",
+     "pattern": "(?P<c>S\\dC\\d)",
+     "fields": {
+      "c": {
+       "columns": [
+        "Camera 1",
+        "Camera 2"
+       ],
+       "cell": "each_upper",
+       "key": "upper"
+      }
+     },
+     "text": "A code S<digit>C<digit> in the name equals a whole cell of column 'Camera 1' or 'Camera 2'.",
+     "where": "name"
+    },
+    {
+     "id": "B",
+     "level": "day_or_session",
+     "pattern": "(?P<c>F[12]C[12])",
+     "fields": {
+      "c": {
+       "columns": [
+        "Sample Number"
+       ],
+       "cell": "slash_parts_upper",
+       "key": "upper"
+      }
+     },
+     "text": "A code F1C1 to F2C2 in the name equals one part of a 'Sample Number' cell (rows of pre-test flow visualization data, not tests).",
+     "where": "name"
+    },
+    {
+     "id": "C",
+     "level": "test",
+     "pattern": "Sample (?P<n>\\d)(?![0-9])",
+     "fields": {
+      "n": {
+       "columns": [
+        "Sample Number"
+       ],
+       "cell": "after_hyphen",
+       "key": "text"
+      }
+     },
+     "text": "The words 'Sample' and a digit N in the name equal the part after the hyphen of a 'Sample Number' cell 2-N (part of a cell).",
+     "where": "name"
+    },
+    {
+     "id": "D",
+     "level": "test",
+     "pattern": "S(?P<n>\\d)C\\d",
+     "fields": {
+      "n": {
+       "columns": [
+        "Sample Number"
+       ],
+       "cell": "after_hyphen",
+       "key": "text"
+      }
+     },
+     "text": "A code S<N>C<digit> that equals no Camera cell: the digit N equals the part after the hyphen of a 'Sample Number' cell 2-N (part of a cell and part of a code).",
+     "where": "name"
+    },
+    {
+     "id": "E",
+     "level": "test",
+     "where": "folder",
+     "pattern": "(?P<c>S\\dC\\d)",
+     "fields": {
+      "c": {
+       "columns": [
+        "Camera 1",
+        "Camera 2"
+       ],
+       "cell": "each_upper",
+       "key": "upper"
+      }
+     },
+     "text": "Listing folder (PSI subcategory) carries a code equal to a Camera cell; a tie by the location in the listing, not by the file name."
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "Raw2TIFF_icmad",
+     "pattern": "RAW2TIFF.*icmad|icmad.*RAW2TIFF",
+     "meaning": {
+      "document": "PSI-99_Science Documents_SAFFIRE-II_Image_Directory_Nomenclature v3.0.pdf",
+      "file_id": "6840cdd64a0e24d624cebd81",
+      "where": "page 1, entry Xn_Raw2TIFF_icmad",
+      "quote": "Raw2TIFF files annotated with ICMAD 'Exposure' and 'Gain' information."
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "jpeg2png_icmad",
+     "pattern": "jpegs?2pn",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Mapped",
+     "pattern": "Mapp?ed",
+     "meaning": {
+      "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
+      "file_id": "6840cdd84a0e24d624cebd95",
+      "where": "Table 4, row Jpeg_Mapped",
+      "quote": "where the distortion of the camera system is corrected, or mapped, to a flat grid"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "Raw2TIFF",
+     "pattern": "RAW2TIFF",
+     "meaning": {
+      "document": "PSI-99_Science Documents_SAFFIRE-II_Image_Directory_Nomenclature v3.0.pdf",
+      "file_id": "6840cdd64a0e24d624cebd81",
+      "where": "page 1, entry Xn_Raw2TIFF",
+      "quote": "color interpolated (demosaiced) using IrfanView Batch Conversion process"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "DistortionGrid",
+     "pattern": "DistortionGrid",
+     "meaning": {
+      "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
+      "file_id": "6840cdd84a0e24d624cebd95",
+      "where": "Table 4, row DistortionGrids_Sample_ROI",
+      "quote": "Image sets characterize the camera distortion of the system (pre-flight) using a checkerboard pattern grid"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "BIT",
+     "pattern": "BIT",
+     "meaning": {
+      "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
+      "file_id": "6840cdd84a0e24d624cebd95",
+      "where": "Table 4, row BIT",
+      "quote": "Built-In Test images were captured immediately after the payload was powered on"
+     }
+    },
+    {
+     "code": "jpeg",
+     "pattern": "jpe?g",
+     "meaning": {
+      "document": "PSI-99_Science Documents_SAFFIRE-II_Image_Directory_Nomenclature v3.0.pdf",
+      "file_id": "6840cdd64a0e24d624cebd81",
+      "where": "page 1, entry Xn_jpeg",
+      "quote": "Jpeg images created on-board SAFFIRE payload and downlinked by command"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "Sensor Data / Telemetry (workbook)",
+     "pattern": "Sensor|Telemetry",
+     "meaning": {
+      "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
+      "file_id": "6840cdd84a0e24d624cebd95",
+      "where": "paragraph after Table 2",
+      "quote": "The raw data is captured from each experimental sensor and presented in excel files."
+     },
+     "ignore_case": true
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "C1, C2",
+     "meaning": {
+      "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
+      "file_id": "6840cdd84a0e24d624cebd95",
+      "where": "paragraph 2",
+      "quote": "denoted as C1 for camera 1 and C2 for camera 2"
+     }
+    },
+    {
+     "code": "S<n>C<n>",
+     "meaning": {
+      "document": "PSI-99_Science Documents_SAFFIRE-II Readme.docx",
+      "file_id": "6840cdd84a0e24d624cebd95",
+      "where": "paragraph 2",
+      "quote": "The experiment data is organized in PSI by sample number and camera number."
+     }
+    }
+   ],
+   "videos": null
+  },
+  "PSI-100": {
+   "tables": [
+    "PSI-100_Experimental table_SAFFIRE-3.csv"
+   ],
+   "rules": [
+    {
+     "id": "A",
+     "level": "test",
+     "pattern": "(?P<c>S[12]C[12])",
+     "fields": {
+      "c": {
+       "columns": [
+        "Camera 1",
+        "Camera 2"
+       ],
+       "cell": "each_upper",
+       "key": "upper"
+      }
+     },
+     "text": "A code S1C1, S1C2, S2C1 or S2C2 in the name equals a whole cell of column 'Camera 1' or 'Camera 2'.",
+     "where": "name"
+    },
+    {
+     "id": "C",
+     "level": "test",
+     "where": "folder",
+     "pattern": "/(?P<s>S[12])/?$",
+     "fields": {
+      "s": {
+       "columns": [
+        "Sample Number"
+       ],
+       "cell": "upper",
+       "key": "upper"
+      }
+     },
+     "text": "The last listing folder 'S1' or 'S2' equals a 'Sample Number' cell; a tie by the location in the listing, not by the file name."
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "Raw2TIFF_icmad / Raw2TIFF_Map_icmad",
+     "pattern": "RAW2TIFF.*icmad",
+     "meaning": {
+      "document": "PSI-100_Science Documents_SAFFIRE-III Image Directory Nomenclature_v3.0.pdf",
+      "file_id": "6841ac428970fb41b9cebb9d",
+      "where": "rows Xn_Raw2TIFF_icmad and Xn_jpeg2png_icmad",
+      "quote": "annotated with ICMAD 'Exposure' and 'Gain' information."
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "jpeg2png",
+     "pattern": "jpeg2png",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Mapped",
+     "pattern": "Map",
+     "meaning": {
+      "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "6841ac428970fb41b9cebba1",
+      "where": "Table 3, row Jpeg_Mapped",
+      "quote": "where the distortion of the camera system is corrected, or mapped, to a flat grid"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "Raw2TIFF",
+     "pattern": "RAW2TIFF",
+     "meaning": {
+      "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "6841ac428970fb41b9cebba1",
+      "where": "Table 3, row Raw2TIFF",
+      "quote": "color interpolated (demosaiced) using IrfanView Batch Conversion process"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "Distortion Grid",
+     "pattern": "Distortion ?Grid",
+     "meaning": {
+      "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "6841ac428970fb41b9cebba1",
+      "where": "Table 3, row DistortionGrids_Sample_ROI",
+      "quote": "Image sets characterize the camera distortion of the system (pre-flight) using a checkerboard pattern grid"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "BIT",
+     "pattern": "BIT",
+     "meaning": {
+      "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "6841ac428970fb41b9cebba1",
+      "where": "Table 3, row BIT",
+      "quote": "Built-In Test images were captured immediately after the payload was powered on"
+     }
+    },
+    {
+     "code": "jpeg",
+     "pattern": "jpe?g",
+     "meaning": {
+      "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "6841ac428970fb41b9cebba1",
+      "where": "Table 3, row Jpeg",
+      "quote": "Jpeg images created on-board SAFFIRE payload and downlinked by command"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "Sensors / Telemetry",
+     "pattern": "Sensor|Telemetry",
+     "meaning": {
+      "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "6841ac428970fb41b9cebba1",
+      "where": "paragraph 4",
+      "quote": "The raw data is captured from each experimental sensor and presented in excel files."
+     },
+     "ignore_case": true
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "F1, F2",
+     "meaning": {
+      "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "6841ac428970fb41b9cebba1",
+      "where": "paragraph 2",
+      "quote": "These image sets are denoted as F1 for pre-flow and F2 for post-flow."
+     }
+    },
+    {
+     "code": "C1, C2",
+     "meaning": {
+      "document": "PSI-100_Science Documents_SAFFIRE-I and SAFFIRE-III Readme.docx",
+      "file_id": "6841ac428970fb41b9cebba1",
+      "where": "paragraph 3",
+      "quote": "denoted as C1 for camera 1 and C2 for camera 2"
+     }
+    }
+   ],
+   "videos": null
+  },
+  "PSI-101": {
+   "tables": [
+    "PSI-101_Experimental table_SAME-R.csv"
+   ],
+   "rules": [
+    {
+     "id": "RUN",
+     "level": "test",
+     "ignore_case": true,
+     "pattern": "(?:(?P<m>kapton|lampwick|lamp wick|teflon|pyrell|silicone|silicon)[ _]+)?run[ _]?0?(?P<t>[1-9]\\d{1,2}(?: ?a)?)(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "SAME Test #"
+       ],
+       "cell": "nospace_upper",
+       "key": "nospace_upper"
+      },
+      "m": {
+       "columns": [
+        "Sample Type"
+       ],
+       "cell": "upper_prefix6",
+       "key": "upper_prefix6"
+      }
+     },
+     "text": "The number after 'run' in the name (leading zero dropped, optional letter a) equals a cell of column 'SAME Test #' and, where a material word stands just before 'run', the material equals the 'Sample Type' cell of the same row (first six letters, case ignored).",
+     "where": "name"
+    },
+    {
+     "id": "LEAD",
+     "level": "test",
+     "ignore_case": true,
+     "pattern": "^(?!.*vlc-record)(?:# ?)?(?P<t>\\d{2,3}a?)(?![0-9])[ _\\-]*(?:[0-9]{1,2}[A-Za-z][ _\\-]+)?(?:[A-Za-z]{1,2}[0-9]{2}[ _\\-]+)?(?P<m>kapton|lampwick|lamp wick|teflon|pyrell|silicone|silicon)?",
+     "fields": {
+      "t": {
+       "columns": [
+        "SAME Test #"
+       ],
+       "cell": "text",
+       "key": "text"
+      },
+      "m": {
+       "columns": [
+        "Sample Type"
+       ],
+       "cell": "upper_prefix6",
+       "key": "upper_prefix6"
+      }
+     },
+     "text": "A name that begins with a number (two or three digits, optional a) equal to a 'SAME Test #' cell, and, where a material word follows, the material equal to the 'Sample Type' cell of the same row (first six letters, case ignored).",
+     "where": "name"
+    },
+    {
+     "id": "VLC",
+     "level": "day_or_session",
+     "ignore_case": true,
+     "pattern": "(?P<m>kapton|lampwick|teflon|pyrell|silicone|silicon)?\\s*vlc-record-(?P<d>\\d{4}-\\d{2}-\\d{2})",
+     "fields": {
+      "d": {
+       "columns": [
+        "Date"
+       ],
+       "cell": "dmon",
+       "key": "ymd_dmon"
+      },
+      "m": {
+       "columns": [
+        "Sample Type"
+       ],
+       "cell": "upper_prefix6",
+       "key": "upper_prefix6"
+      }
+     },
+     "text": "vlc-record names: day and month of the date in the name equal the 'Date' cell (written day-Mon, no year) and, where a material word precedes, the 'Sample Type' cell; several tests per day.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [
+    "HKPData_gmt<day> names carry a day of the year without a year, and the 'Date' cells carry day and month without a year; a day of the year is not compared with them.",
+    "Names that carry a sample id (K01, L13, T01) and no run number are not tied."
+   ],
+   "suffix_codes": [
+    {
+     "code": "vlc-record (video or archive)",
+     "pattern": "vlc-record",
+     "meaning": null
+    },
+    {
+     "code": "HKPData",
+     "pattern": "HKPData",
+     "meaning": {
+      "document": "PSI-101_Science Documents_SAME_Operations Manual_007.pdf",
+      "file_id": "683dc54db8656d2315bf51de",
+      "where": "page 13, section 6.1; describes .hkp files, not these csv files",
+      "quote": "Housekeeping files (.hkp) are transferred on the hour and upon shutdown"
+     }
+    },
+    {
+     "code": "preage / postage",
+     "pattern": "pre-?age|post-?age|post age",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "aged / unaged",
+     "pattern": "aged",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "run<number>",
+     "pattern": "run",
+     "meaning": {
+      "document": "PSI-101_Reports_SAME-R_Final Report.pdf",
+      "file_id": "683dc530b8656d2315bf508c",
+      "where": "page 3, test-operations paragraph",
+      "quote": "The test conditions of each run can be found in Appendix A"
+     },
+     "ignore_case": true
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "year and day in 2010_<day>_...",
+     "meaning": {
+      "document": "PSI-101_Science Documents_SAME_Operations Manual_007.pdf",
+      "file_id": "683dc54db8656d2315bf51de",
+      "where": "page 13, section 6.1.1",
+      "quote": "Files are stored in a directory named according to GMT year and day."
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [],
+    "on_screen_text": "no text seen",
+    "opened": 0,
+    "opened_file_ids": [],
+    "opened_with_readings_on_screen": 0,
+    "seen_in": "no readings seen in the 0 opened videos; 8 videos in the listing",
+    "videos_in_listing": 8
+   }
+  },
+  "PSI-102": {
+   "tables": [],
+   "rules": [],
+   "rules_not_applied": [
+    "The table (8 rows) has no run, test, GMT or date column; a run number equal to 'Sample #' was tried and rejected (the material differs in 7 of 8 rows), and material words name a set of rows, not one; no rule is listed."
+   ],
+   "suffix_codes": [
+    {
+     "code": "hkp",
+     "pattern": "hkp",
+     "meaning": {
+      "document": "PSI-102_Science Documents_SAME_Operations Manual_007.pdf",
+      "file_id": "683d9d56f91ab4427dbf445b",
+      "where": "section 6.1, PDF page 13 (instrument files, not the Analyzed Data xls files)",
+      "quote": "Housekeeping files (.hkp) are transferred on the hour and upon shutdown"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "TN001 / TN002 (video)",
+     "pattern": "TN00\\d",
+     "meaning": null
+    },
+    {
+     "code": "zgy",
+     "pattern": "zgy",
+     "meaning": null,
+     "ignore_case": true
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "GMT",
+     "meaning": {
+      "document": "PSI-102_Science Documents_SAME_Operations Manual_007.pdf",
+      "file_id": "683d9d56f91ab4427dbf445b",
+      "where": "section 6.1.1, PDF page 13 (instrument directories only)",
+      "quote": "Files are stored in a directory named according to GMT year and day."
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [],
+    "on_screen_text": "no text seen",
+    "opened": 2,
+    "opened_file_ids": [
+     "683d9d4df91ab4427dbf43f9",
+     "683d9d4df91ab4427dbf43fa"
+    ],
+    "opened_with_readings_on_screen": 0,
+    "seen_in": "no readings seen in the 2 opened videos; 2 videos in the listing",
+    "videos_in_listing": 2
+   }
+  },
+  "PSI-106": {
+   "tables": [
+    "PSI-106_Experimental table_Slice.csv"
+   ],
+   "rules": [
+    {
+     "id": "R1",
+     "level": "day_or_session",
+     "pattern": "GMT2012_(?P<g>\\d{3})(?![0-9])",
+     "fields": {
+      "g": {
+       "columns": [
+        "Test Date"
+       ],
+       "cell": "doy",
+       "key": "int"
+      }
+     },
+     "text": "A day token ddd written GMT2012_<ddd> in the name equals the day of the year of the date of a 'Test Date' cell.",
+     "where": "name"
+    },
+    {
+     "id": "R2",
+     "level": "day_or_session",
+     "pattern": "(?:OT_|RoomT_|OT |pic_info_|100CH4_\\d+_)(?P<g>0\\d{2})(?![0-9])",
+     "fields": {
+      "g": {
+       "columns": [
+        "Test Date"
+       ],
+       "cell": "doy",
+       "key": "int"
+      }
+     },
+     "text": "A three-digit day token with a leading 0 after OT_, RoomT_, 'OT ', pic_info_ or 100CH4_<n>_ in the name equals the day of the year of a 'Test Date' cell.",
+     "where": "name"
+    },
+    {
+     "id": "R2r",
+     "level": "day_or_session",
+     "mode": "each_field_ties_union",
+     "pattern": "UT_(?P<a>\\d{3})_(?P<b>\\d{3})(?![0-9])",
+     "fields": {
+      "a": {
+       "columns": [
+        "Test Date"
+       ],
+       "cell": "doy",
+       "key": "int"
+      },
+      "b": {
+       "columns": [
+        "Test Date"
+       ],
+       "cell": "doy",
+       "key": "int"
+      }
+     },
+     "text": "UT_<ddd>_<ddd> in the name: both tokens equal days of the year of 'Test Date' cells; ties to the rows of both days.",
+     "where": "name"
+    },
+    {
+     "id": "R3",
+     "level": "day_or_session",
+     "pattern": "(?<![0-9])(?P<d>20\\d{6})(?![0-9])",
+     "fields": {
+      "d": {
+       "columns": [
+        "Test Date"
+       ],
+       "cell": "date",
+       "key": "ymd_date"
+      }
+     },
+     "text": "A date written as eight digits in the name equals the date of a 'Test Date' cell.",
+     "where": "name"
+    },
+    {
+     "id": "R4",
+     "level": "day_or_session",
+     "where": "folder",
+     "exclude_kinds": [
+      "video"
+     ],
+     "pattern": "(?<![0-9])(?P<g>0\\d{2})(?![0-9])",
+     "fields": {
+      "g": {
+       "columns": [
+        "Test Date"
+       ],
+       "cell": "doy",
+       "key": "int"
+      }
+     },
+     "text": "No day token in the name: the first three-digit day token with a leading 0 in the listing folder (PSI subcategory) that equals the day of the year of a 'Test Date' cell; a tie by the location in the listing. Not applied to videos (their links stay by name)."
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "color_<n>_<k>.dat",
+     "pattern": "^color_",
+     "meaning": null
+    },
+    {
+     "code": "T_<n>_ave / bg / br.dat",
+     "pattern": "^T_\\d+_(ave|bg|br)",
+     "meaning": null
+    },
+    {
+     "code": "fv_<n>.dat",
+     "pattern": "^fv_",
+     "meaning": null
+    },
+    {
+     "code": "CH_<n>.dat",
+     "pattern": "^CH[_-]",
+     "meaning": null
+    },
+    {
+     "code": "<n>.dat",
+     "pattern": "^\\d+\\.dat$",
+     "meaning": {
+      "document": "SLICE Engineering Documents and Data Overview_Sept 2005.pdf",
+      "file_id": "66eb982ec6ad4bdc12fc2b32",
+      "where": "p. 7, section E a.ii; stated for the file 2492.dat only",
+      "quote": "This file is a processed OMA image that has been cropped around the thermocouple junction."
+     }
+    },
+    {
+     "code": "NEF",
+     "pattern": "NEF",
+     "meaning": {
+      "document": "SLICE Engineering Documents and Data Overview_Sept 2005.pdf",
+      "file_id": "66eb982ec6ad4bdc12fc2b32",
+      "where": "p. 7, section D",
+      "quote": "The raw images (in a Nikon Electronic Format, i.e., NEF)"
+     }
+    },
+    {
+     "code": "pic_info",
+     "pattern": "pic_info",
+     "meaning": null
+    },
+    {
+     "code": "Flame BC scans",
+     "pattern": "Flame BC",
+     "meaning": {
+      "document": "InfoTxt.doc.docx",
+      "file_id": "66eb9841c6ad4bdc12fc8561",
+      "where": "item 4",
+      "quote": "Scan the velocity vertically along the Z axis."
+     }
+    },
+    {
+     "code": "UT / OT / RoomT",
+     "pattern": "^(UT|OT|RoomT)[_ ]",
+     "meaning": null
+    },
+    {
+     "code": "SLICE ED-<n>",
+     "pattern": "SLICE ED",
+     "meaning": {
+      "document": "SLICE Engineering Documents and Data Overview_Sept 2005.pdf",
+      "file_id": "66eb982ec6ad4bdc12fc2b32",
+      "where": "p. 1, section Documents",
+      "quote": "where ED indicates Engineering Document"
+     }
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "GMT <ddd>",
+     "meaning": {
+      "document": "SLICE DoD.docx",
+      "file_id": "6734174d81e6de7532ea1eb7",
+      "where": "paragraph 1",
+      "quote": "The experiments are organized by GMT date, sample, or topic."
+     }
+    },
+    {
+     "code": "GMT 083",
+     "meaning": {
+      "document": "SLICE Engineering Documents and Data Overview_Sept 2005.pdf",
+      "file_id": "66eb982ec6ad4bdc12fc2b32",
+      "where": "p. 5, section C",
+      "quote": "GMT 083 (i.e., March 23, 2012)"
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [
+     "FUEL",
+     "AIR",
+     "FAN",
+     "RAD",
+     "date and clock",
+     "camera playback screen: NIKON D300S, exposure, file name, date/time"
+    ],
+    "on_screen_text": "numeric readings shown as text",
+    "opened": 2,
+    "opened_file_ids": [
+     "66eb9841c6ad4bdc12fc854c",
+     "6734174f81e6de7532ea1ec4"
+    ],
+    "opened_with_readings_on_screen": 2,
+    "seen_in": "seen in 2 of 2 opened videos; 28 videos in the listing",
+    "videos_in_listing": 28
+   }
+  },
+  "PSI-107": {
+   "tables": [
+    "PSI-107_Experimental table_Spice.csv"
+   ],
+   "rules": [
+    {
+     "id": "R1",
+     "level": "day_or_session",
+     "pattern": "(?:GMT ?(?:20\\d{2}_)?|SPICE Day )(?P<g>\\d{2,3})(?![0-9])|^(?P<h>\\d{3})(?=_SPICE| TP)",
+     "fields": {
+      "g": {
+       "columns": [
+        "GMT date"
+       ],
+       "cell": "int",
+       "key": "int"
+      },
+      "h": {
+       "columns": [
+        "GMT date"
+       ],
+       "cell": "int",
+       "key": "int"
+      }
+     },
+     "text": "A day number in the name (after GMT or GMT<year>_, after 'SPICE Day ', or three digits at the start before _SPICE or ' TP') equals a cell of column 'GMT date'.",
+     "where": "name"
+    },
+    {
+     "id": "R2",
+     "level": "day_or_session",
+     "where": "folder",
+     "name_must_match": "TP ?\\d|Frame Grab",
+     "ignore_case": true,
+     "pattern": "SPICE Day (?P<g>\\d{2,3})(?![0-9])",
+     "fields": {
+      "g": {
+       "columns": [
+        "GMT date"
+       ],
+       "cell": "int",
+       "key": "int"
+      }
+     },
+     "text": "Names with 'TP <number>' or 'Frame Grab': the day of the listing folder 'SPICE Day <day>' equals a 'GMT date' cell; a tie by the location in the listing."
+    }
+   ],
+   "rules_not_applied": [
+    "Test points ('TP <number>') are not tied to a test: the column 'No.' that holds them is in the master sheet 'Spice Flight Test Data II modified.xls', not in the experimental table, and the sheet is not in the repository. Such names reach a day only (R1, R2)."
+   ],
+   "suffix_codes": [
+    {
+     "code": "Downlink Frame Grabs TP",
+     "pattern": "Frame Grabs",
+     "meaning": {
+      "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
+      "file_id": "683da128b8656d2315bf44ad",
+      "where": "paragraph 4",
+      "quote": "has images pulled directly from the operations live feed"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "vlcsnap",
+     "pattern": "vlcsnap",
+     "meaning": null
+    },
+    {
+     "code": "_jpegs",
+     "pattern": "_jpeg",
+     "meaning": {
+      "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
+      "file_id": "683da128b8656d2315bf44ad",
+      "where": "paragraph 8",
+      "quote": "contains the color still jpeg images identified by the names in column AD"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_NEF",
+     "pattern": "_NEF",
+     "meaning": {
+      "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
+      "file_id": "683da128b8656d2315bf44ad",
+      "where": "paragraph 9",
+      "quote": "contains color still Nikon raw file images identified by the names in column AD"
+     }
+    },
+    {
+     "code": "Contact Sheet",
+     "pattern": "Contact[ _]?Sheet",
+     "meaning": {
+      "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
+      "file_id": "683da128b8656d2315bf44ad",
+      "where": "paragraph 7",
+      "quote": "contact sheets of the image together with the name from column AD"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "PictureBook",
+     "pattern": "PictureBook",
+     "meaning": null
+    },
+    {
+     "code": "Ign<n> (video)",
+     "pattern": "_Ign\\d",
+     "meaning": null
+    },
+    {
+     "code": "Flow Duct Cal ... INSIDE / OUTSIDE / CENTER",
+     "pattern": "Flow Duct Cal",
+     "meaning": {
+      "document": "PSI-107_Engineering Documents_SPICE-MEM-010.pdf",
+      "file_id": "683da129b8656d2315bf44bb",
+      "where": "PDF page 1",
+      "quote": "three heights: 19, 36, and 57 mm off the floor of the duct"
+     }
+    },
+    {
+     "code": "TP <number>",
+     "pattern": "TP ?\\d",
+     "meaning": null
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "GMT date (day of year)",
+     "meaning": {
+      "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
+      "file_id": "683da128b8656d2315bf44ad",
+      "where": "paragraph 3",
+      "quote": "xxx is the number of the day of the year"
+     }
+    },
+    {
+     "code": "TP <number>",
+     "meaning": {
+      "document": "PSI-107_Raw Data_SPICE Image Organization Guide.docx",
+      "file_id": "683da128b8656d2315bf44ad",
+      "where": "paragraph 4",
+      "quote": "where xxx is the GMT date (column A), yy is the test number (column H)"
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [
+     "FUEL",
+     "AIR",
+     "FAN",
+     "RAD",
+     "date and clock"
+    ],
+    "on_screen_text": "numeric readings shown as text",
+    "opened": 2,
+    "opened_file_ids": [
+     "683da127b8656d2315bf44a0",
+     "683da12cb8656d2315bf44d8"
+    ],
+    "opened_with_readings_on_screen": 2,
+    "seen_in": "seen in 2 of 2 opened videos; 19 videos in the listing",
+    "videos_in_listing": 19
+   }
+  },
+  "PSI-115": {
+   "tables": [],
+   "rules": [],
+   "rules_not_applied": [],
+   "suffix_codes": [],
+   "identifier_meanings": [],
+   "videos": null
+  },
+  "PSI-117": {
+   "tables": [],
+   "rules": [],
+   "rules_not_applied": [],
+   "suffix_codes": [],
+   "identifier_meanings": [],
+   "videos": null
+  },
+  "PSI-142": {
+   "tables": [],
+   "rules": [],
+   "rules_not_applied": [],
+   "suffix_codes": [],
+   "identifier_meanings": [],
+   "videos": null
+  },
+  "PSI-159": {
+   "tables": [
+    "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+    "PSI-159_Experimental table_CFI-G_Inverse Flames.csv"
+   ],
+   "rules": [
+    {
+     "id": "R1x",
+     "level": "test",
+     "pattern": "(?<![0-9])(?P<t>\\d{5}[A-Z]\\d{1,2}_\\d)(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test"
+       ],
+       "cell": "nospace_upper",
+       "key": "upper"
+      }
+     },
+     "text": "A token of five digits, a capital letter, one or two digits and _<digit> in the name equals a cell of column 'Test' with its space removed (cell '21196 M2_1').",
+     "where": "name"
+    },
+    {
+     "id": "R1",
+     "level": "test",
+     "pattern": "(?<![0-9])(?P<t>\\d{5}[A-Z]\\d{1,2})(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test"
+       ],
+       "cell": "nospace_upper",
+       "key": "upper"
+      }
+     },
+     "text": "A token of five digits, a capital letter and one or two digits in the name equals a cell of column 'Test' with its space removed (cell '21088 B1', name 21088B1).",
+     "where": "name"
+    },
+    {
+     "id": "R3",
+     "level": "day_or_session",
+     "pattern": "(?<![0-9])(?P<t>\\d{5})(?![0-9])",
+     "fields": {
+      "t": {
+       "columns": [
+        "Test"
+       ],
+       "cell": "first5",
+       "key": "text"
+      }
+     },
+     "text": "No token equals a Test cell: five digits in the name (alone or as the start of a token) equal the first five characters of Test cells; the Final Report reads them as year and day of year, so the tie is to a day.",
+     "where": "name"
+    }
+   ],
+   "rules_not_applied": [],
+   "suffix_codes": [
+    {
+     "code": "vlc-record (operations camera video)",
+     "pattern": "vl[ci]-record",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "as run (parameter file)",
+     "pattern": "^as run",
+     "meaning": null
+    },
+    {
+     "code": "ACME_<test>.mdipsug / .metadata (DataCam metadata)",
+     "pattern": "^ACME_.*\\.(mdipsug|metadata)|_ACME_.*\\.metadata$",
+     "meaning": null
+    },
+    {
+     "code": "INTNS_<test>.mdipsug / .metadata (intensified camera metadata)",
+     "pattern": "^INTNS_.*\\.(mdipsug|metadata)|_INTNS_.*\\.metadata$",
+     "meaning": null
+    },
+    {
+     "code": ".next",
+     "pattern": "\\.next$",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_Converted (archive)",
+     "pattern": "ACME_?Converted|Images[ _]?Converted",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS_ALL (archive)",
+     "pattern": "INTNS_?ALL",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_INTNS (archive)",
+     "pattern": "_INTNS",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_Intensifier (archive)",
+     "pattern": "_Inten\\w*",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_HiBMS (archive)",
+     "pattern": "HiBM",
+     "meaning": {
+      "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+      "file_id": "691f7ea117f78b371b26f6f8",
+      "where": "PDF page 26, Appendix A; the archive content is not stated",
+      "quote": "High Bit-depth Multi-spectral camera"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_LLL-UV (archive)",
+     "pattern": "LLL-UV",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_IPSUG (archive or log)",
+     "pattern": "IPSU",
+     "meaning": {
+      "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+      "file_id": "691f7ea117f78b371b26f6f8",
+      "where": "PDF page 26, Appendix A",
+      "quote": "IPSU for GigE cameras (including the DataCam and CFI intensified camera)"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_ACME.zip (archive)",
+     "pattern": "ACME\\d?_?\\.zip$|ACMEzip|_ACME\\.zip",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_data.csv",
+     "pattern": "_data[ _(]*\\d*\\)?\\.csv",
+     "meaning": {
+      "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+      "file_id": "691f7ea117f78b371b26f6f8",
+      "where": "PDF page 33, section D; the report does not name the file",
+      "quote": "were saved in a csv file format per each test"
+     }
+    },
+    {
+     "code": "_mfcSetpoints.csv",
+     "pattern": "mfcSetpoints",
+     "meaning": {
+      "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+      "file_id": "691f7ea117f78b371b26f6f8",
+      "where": "PDF page 26, Appendix A (MFC)",
+      "quote": "Mass Flow Controller"
+     },
+     "ignore_case": true
+    },
+    {
+     "code": "_TP.txt (timing file)",
+     "pattern": "[_-]TP\\.txt$",
+     "meaning": null
+    },
+    {
+     "code": "_Comments.txt",
+     "pattern": "_Comments?\\.txt$",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "_VoltageSweep.txt",
+     "pattern": "VoltageSweep",
+     "meaning": null
+    },
+    {
+     "code": "_ACME_CAM3_Exposures",
+     "pattern": "CAM3|CM3",
+     "meaning": null
+    },
+    {
+     "code": "moduleDataACD (GCIP data)",
+     "pattern": "moduleDataACD",
+     "meaning": null
+    },
+    {
+     "code": "GC (archive or converter)",
+     "pattern": "_GC\\.zip$|GC_Co",
+     "meaning": null
+    },
+    {
+     "code": "ACME.log / log file",
+     "pattern": "\\.log$",
+     "meaning": null
+    },
+    {
+     "code": "_Logs.zip",
+     "pattern": "_Logs\\.zip$",
+     "meaning": null
+    },
+    {
+     "code": "test sheets",
+     "pattern": "test sheets",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "daily test point log",
+     "pattern": "daily test point log|Daily Test Point Log",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "flow traces",
+     "pattern": "flow traces",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "test parameter notes",
+     "pattern": "test parameter notes",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Chamber Calculator",
+     "pattern": "Chamber Calculator",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "AcmeCameraConfigure",
+     "pattern": "AcmeCameraConfigure",
+     "meaning": null,
+     "ignore_case": true
+    },
+    {
+     "code": "Fiber",
+     "pattern": "Fiber",
+     "meaning": null
+    }
+   ],
+   "identifier_meanings": [
+    {
+     "code": "five digits of a test id",
+     "meaning": {
+      "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+      "file_id": "691f7ea117f78b371b26f6f8",
+      "where": "PDF page 25, Appendix A, entry #####",
+      "quote": "ACME days are identified by year (2 digits) and the day of the year (3 digits, 001-366)"
+     }
+    },
+    {
+     "code": "test id",
+     "meaning": {
+      "document": "PSI-159_Reports_FinalRpt_ACME.CFI-G.pdf",
+      "file_id": "691f7ea117f78b371b26f6f8",
+      "where": "PDF page 25, Appendix A, entry #####x#",
+      "quote": "ACME tests are identified by day (5 digits; see above), a letter, and a 1-digit number"
+     }
+    }
+   ],
+   "videos": {
+    "labels_seen": [],
+    "on_screen_text": "no text seen",
+    "opened": 2,
+    "opened_file_ids": [
+     "691f7ea117f78b371b26f723",
+     "691f7ea317f78b371b270050"
+    ],
+    "opened_with_readings_on_screen": 0,
+    "seen_in": "no readings seen in the 2 opened videos; 337 videos in the listing",
+    "videos_in_listing": 337
+   }
+  }
+ }
+}

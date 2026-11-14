@@ -9,6 +9,7 @@
   "factor_kpa_per_psi": 6.894757,
   "factor_source": "spec/findings.json _meta.units.psi_to_kpa (1 psi = 6.894757 kPa); the rules for the experimental tables (spec/sources.json) hold no psia factor",
   "arithmetic": "The conversion of the lowest and the highest reading (reading x factor, rounded to 4 decimals) is the only arithmetic. No mean, no value at ignition and no interpolation is computed.",
+  "what_min_kpa_and_max_kpa_are": "min_kpa and max_kpa are a unit conversion of the lowest and the highest stored reading of a whole logging window of one workbook (one per sample); they are not a test pressure, not the pressure at ignition, and no column states when the flame ignited.",
   "bins": [
    "p_lt62_8",
    "p_62_8_85_8",
