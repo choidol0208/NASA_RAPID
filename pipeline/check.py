@@ -276,6 +276,11 @@ FAIL_CLASSES = {
                                    "raw number without it",
     "unit_ignored": "the number is copied although the unit written after it in the cell is not the unit of "
                     "the variable",
+    "declared_exception_without_flag": "a value of a kind that README declares as 'not literally in a NASA cell' "
+                                       "(oxygen midpoint, material from the BASS-II ReadMe, cell of the row "
+                                       "above) but the test does not carry the flag README names for it",
+    "spec_rule_gives_other_value": "the rule written in the spec for this column (sources.json "
+                                   "'_meta.sample_keywords') leads from the cell to a different value, or to none",
 }
 PASS_CLASSES = {
     "exact": "same text (ignoring case) or the same number as the raw cell",
@@ -289,7 +294,56 @@ PASS_CLASSES = {
     "text_in_cell": "the value is written inside a longer cell",
     "material_alias_in_cell": "the cell names a material of materials.json (id or alias) and the value is "
                               "another alias of the same material",
+    "declared_exception_flagged": "a value that is not literally in the cell, of a kind README declares (table "
+                                  "'Values that are not literally in a NASA cell'): it is exactly what the "
+                                  "declared rule gives and the test carries the named flag",
 }
+# kind of declared exception -> flag suffix that the test must carry on the variable
+EXCEPTION_FLAGS = {
+    "oxygen_midpoint": "range_in_source_midpoint_used",
+    "material_from_readme": "not_written_in_cell_named_in_readme",
+    "cell_of_row_above": "blank_in_source_value_of_row_above_used",
+}
+THICKNESS_UNITS = ("micron", "microns", "um", "µm", "mm")
+
+
+def sample_keywords_reading(cell, params):
+    """The validator's reading of sources.json '_meta.sample_keywords': material, shape and rod diameter that
+    the keyword entries give for a sample cell, and whether the material is written in the cell."""
+    low = cell.lower()
+    thick = [t["v"] * LENGTH_TO_MM[t["unit"]] for t in number_tokens(cell) if t["unit"] in THICKNESS_UNITS]
+    thickness = thick[0] if thick else None
+    out = {"fuel_material": None, "sample_geometry": None, "rod_diameter_mm": None, "basis": "no entry applies",
+           "not_in_cell": False}
+    entry = None
+    for e in params.get("entries", []):
+        if e.get("after_thickness") and thickness is not None:
+            continue
+        if all(str(w).lower() in low for w in e.get("words", [])):
+            entry = e
+            break
+    if entry is not None:
+        out.update(fuel_material=entry.get("fuel_material"), sample_geometry=entry.get("sample_geometry"),
+                   not_in_cell=bool(entry.get("not_in_cell")), basis="entry '%s'" % "' + '".join(entry.get("words", [])))
+        if entry.get("rod"):
+            for pattern, inches in (params.get("rod_inches") or {}).items():
+                if re.search(pattern, cell):
+                    out["rod_diameter_mm"] = float(inches) * 25.4
+                    out["rod_basis"] = "rod_inches '%s' = %s in" % (pattern, inches)
+                    break
+    elif thickness is not None and params.get("thickness"):
+        th = params["thickness"]
+        out.update(fuel_material=th.get("fuel_material"), basis="thickness rule (%g mm)" % thickness,
+                   sample_geometry=th.get("below") if thickness < th.get("limit_mm", 0) else th.get("from"),
+                   not_in_cell=str(th.get("fuel_material", "")).lower() not in low)
+    if out["sample_geometry"] is None:
+        for word, shape in (params.get("shape_words") or {}).items():
+            if str(word).lower() in low:
+                out["sample_geometry"] = shape
+                out["shape_basis"] = "shape word '%s'" % word
+                break
+    return out
+
 
 
 def number_tokens(cell):
@@ -353,6 +407,19 @@ def classify(cell, value, variable, col, ctx):
     c = fnum(cell)
     if cell.lower() == value.lower():
         return "exact", ""
+    if col.get("rule") == "sample_keywords" and variable in ("fuel_material", "sample_geometry", "rod_diameter_mm"):
+        reading = sample_keywords_reading(cell, params)
+        want = reading[variable]
+        if variable == "rod_diameter_mm":
+            if want is not None and near(want, v, ROUND_TOL):
+                return "declared_factor", reading["rod_basis"] + " x 25.4"
+        elif want is not None and str(want).lower() == value.lower():
+            if variable == "fuel_material" and reading["not_in_cell"]:
+                return "declared_exception", "material_from_readme|sample_keywords " + reading["basis"]
+            basis = reading["basis"] if variable == "fuel_material" or "shape_basis" not in reading else reading["shape_basis"]
+            return "vocabulary", "sample_keywords " + basis
+        return "spec_rule_gives_other_value", "sample_keywords (%s) gives %s" % (
+            reading["basis"], "no value" if want is None else repr(want))
     if v is not None:
         if c is not None and close(c, v):
             return "exact", ""
@@ -468,16 +535,29 @@ def trace_rows(ctx):
                     idx = header.index(col_name)
                     item["cell"] = raw_row[idx] if idx < len(raw_row) else ""
                     item["cls"], item["note"] = classify(item["cell"], r["value"], r["variable"], col, ctx)
-                    if item["cell"] == "" and col_name in [c.strip() for c in source.get("fill_down", [])]:
+                    kind = None
+                    if item["cls"] == "declared_exception":
+                        kind, _, item["note"] = item["note"].partition("|")
+                    elif item["cls"] == "computed_midpoint" and r["variable"] == "o2_pct" and \
+                            len(number_tokens(item["cell"])) == 2:
+                        kind = "oxygen_midpoint"      # README: midpoint of an oxygen range written in the cell
+                    elif item["cell"] == "" and col_name in [c.strip() for c in source.get("fill_down", [])]:
                         above = int(row_no) - 1
                         while above >= 2 and (idx >= len(table[above - 1]) or table[above - 1][idx] == ""):
                             above -= 1
                         if above >= 2:
                             cls_above, _ = classify(table[above - 1][idx], r["value"], r["variable"], col, ctx)
-                            flags = split_list((ctx.tests_by_id.get(r["test_id"]) or {}).get("flags", ""))
-                            item["note"] = "sources.json fill_down: row %d holds '%s' (%s); flag %s" % (
-                                above, table[above - 1][idx], cls_above,
-                                "present" if r["variable"] + ":blank_in_source_value_of_row_above_used" in flags else "MISSING")
+                            item["note"] = "sources.json fill_down: row %d holds '%s' (%s)" % (
+                                above, table[above - 1][idx], cls_above)
+                            if cls_above == "exact":
+                                kind = "cell_of_row_above"
+                    if kind:
+                        flags = split_list((ctx.tests_by_id.get(r["test_id"]) or {}).get("flags", ""))
+                        flag = "%s:%s" % (r["variable"], EXCEPTION_FLAGS[kind])
+                        item["kind"] = kind
+                        item["cls"] = "declared_exception_flagged" if flag in flags else "declared_exception_without_flag"
+                        item["note"] = "%s; %s; flag %s %s" % (kind, item["note"], flag,
+                                                              "present" if flag in flags else "MISSING")
             out.append(item)
         return out
     return ctx._get("trace_rows", load)
@@ -485,7 +565,8 @@ def trace_rows(ctx):
 
 @check("A1_trace_source_cells",
        "Every value with a real source column is found in its raw NASA cell and is explained by a rule that "
-       "the spec states (exact copy, declared factor, number in the cell text, spec vocabulary).")
+       "the spec states (exact copy, declared factor, number in the cell text, spec vocabulary), or is one of "
+       "the exceptions README declares, exactly as declared and with its flag on the test.")
 def check_a1(ctx):
     res = Result()
     per_class = {}
@@ -493,6 +574,7 @@ def check_a1(ctx):
     examples = {}
     leading = []
     flagged = 0
+    kinds = {}
     for item in trace_rows(ctx):
         r = item["row"]
         res.checked += 1
@@ -506,6 +588,8 @@ def check_a1(ctx):
         per_class[cls] = per_class.get(cls, 0) + 1
         per_var.setdefault(r["variable"], {})
         per_var[r["variable"]][cls] = per_var[r["variable"]].get(cls, 0) + 1
+        if cls == "declared_exception_flagged":
+            kinds[item["kind"]] = kinds.get(item["kind"], 0) + 1
         if cls != "exact":
             ex = examples.setdefault(cls, [])
             if len(ex) < 10 and not any(e["raw_cell"] == item["cell"] and e["variable"] == r["variable"] for e in ex):
@@ -537,6 +621,7 @@ def check_a1(ctx):
         "note": "Copied as written (for example '037 mm' read as 37). Not a failure of the trace; a human "
                 "should look at the NASA page, because the source cell may be a typing error.",
         "rows": leading}
+    res.numbers["declared_exception_flagged_per_kind"] = dict(sorted(kinds.items()))
     res.numbers["numbers_written_with_a_leading_zero"] = len(leading)
     res.numbers["failing_values_that_the_pipeline_flags"] = flagged
     return res
@@ -813,6 +898,50 @@ def check_a6(ctx):
     res.details = {"meanings_applied": meanings,
                    "note": "How the engine chooses among the numbers of a cell is written in pipeline/rules.py, "
                            "which this check does not read. It applies the two meanings literally."}
+    return res
+
+
+@check("A7_sample_keywords",
+       "For every test of a column read with rule 'sample_keywords', fuel_material, sample_geometry and "
+       "rod_diameter_mm in tests.csv are what the entries of sources.json give for the cell (also where they "
+       "give no value), and the flag 'not_written_in_cell_named_in_readme' is on exactly the tests whose "
+       "material is not written in the cell.")
+def check_a7(ctx):
+    res = Result()
+    seen = False
+    per = {}
+    for t in ctx.tests:
+        source = ctx.source_by_file.get(t["source_file"]) or {}
+        for col in source.get("columns", []):
+            if col.get("rule") != "sample_keywords":
+                continue
+            seen = True
+            table = ctx.raw(t["source_file"])
+            header = table[0]
+            name = col["from"].strip()
+            n = int(fnum(t["source_row"]) or 0)
+            if name not in header or not 2 <= n <= len(table) or header.index(name) >= len(table[n - 1]):
+                continue
+            cell = table[n - 1][header.index(name)]
+            reading = sample_keywords_reading(cell, col.get("params") or {})
+            key = {"file": t["source_file"], "row": t["source_row"], "test_id": t["test_id"], "raw_cell": cell}
+            for var in ("fuel_material", "sample_geometry", "rod_diameter_mm"):
+                res.checked += 1
+                got, want = t.get(var, ""), reading[var]
+                same = (got == "" and want is None) or (want is not None and (
+                    near(fnum(got), want, ROUND_TOL) if var == "rod_diameter_mm" else got.lower() == str(want).lower()))
+                if not same:
+                    res.fail(variable=var, value=got, spec_gives="" if want is None else want, basis=reading["basis"], **key)
+                elif got != "":
+                    per[var] = per.get(var, 0) + 1
+            flag = "fuel_material:" + EXCEPTION_FLAGS["material_from_readme"] in split_list(t["flags"])
+            expect = bool(reading["not_in_cell"] and reading["fuel_material"])
+            if flag != expect:
+                res.fail(variable="fuel_material", problem="flag %s although the material %s written in the cell" % (
+                    "present" if flag else "missing", "is" if not expect else "is not"), basis=reading["basis"], **key)
+    if not seen:
+        raise Skip("no column of sources.json uses rule 'sample_keywords'")
+    res.numbers = {"cell_x_variable": res.checked, "values_that_follow_from_the_spec": dict(sorted(per.items()))}
     return res
 
 

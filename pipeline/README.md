@@ -66,7 +66,7 @@ Values that are not literally in a NASA cell, all flagged on the test:
 | Midpoint of an oxygen range written in the cell ("21.5 - 21.7") | 3 Saffire tests | `o2_pct:range_in_source_midpoint_used` |
 | Material name PMMA where the cell gives only a shape or a thickness (BASS-II ReadMe) | 87 BASS and BASS-II tests | `fuel_material:not_written_in_cell_named_in_readme` |
 | Material of the row above where the cell is blank | 2 Saffire-II tests | `fuel_material:blank_in_source_value_of_row_above_used` |
-| Shape words ("film", "slab", "rod") chosen by keyword from the sample cell | BASS and BASS-II | none; the rule is `bass_material` in `rules.py` |
+| Shape words ("film", "slab", "rod", "fabric sheet") chosen by keyword from the sample cell | BASS and BASS-II | none; the keywords are in `sources.json` (`sample_keywords`) |
 | Constants of a whole table (gravity level, fuel phase, oxygen basis) | `sources.json` `constants` | source column reads "(constant in sources.json)" |
 
 Rows that are not read: a row with a required cell empty, a row named in `sources.json` as not a test (one maintenance entry in PSI-26), and a row that repeats an earlier row cell for cell (8 in PSI-39, 34 in PSI-107). `run_report.json` lists them.
