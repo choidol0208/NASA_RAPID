@@ -21,6 +21,9 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import cardlib as cl  # noqa: E402
+import governance  # noqa: E402
+
+GATE_POINTS = ["L02", "L03", "L04", "L05", "L06", "L07", "D51"]
 
 SCENARIO_KEYS = {"oxygen": "o2_pct", "pressure": "pressure_kpa", "flow": "flow_cms"}
 
@@ -52,8 +55,8 @@ def compare_axis(axis, card, scenario, units):
         level = scenario.get("gravity_level")
         out["scenario"] = level
         out["card"] = norm
-        if norm == "unstated":
-            out["result"] = "card_unstated"
+        if not isinstance(norm, list):
+            out["result"] = "card_unstated" if level is None else "domain_not_defined"
         elif level is None:
             out["result"] = "scenario_unstated"
         elif level in norm:
@@ -68,7 +71,7 @@ def compare_axis(axis, card, scenario, units):
         out["scenario"] = cl.render_range(cl.full_range(sr), unit) if sr else None
         out["card"] = card_render(norm, unit) if isinstance(norm, dict) else norm
         if not isinstance(norm, dict):
-            out["result"] = "card_unstated"
+            out["result"] = "card_unstated" if sr is None else "domain_not_defined"
         elif sr is None:
             out["result"] = "scenario_unstated"
         else:
@@ -115,6 +118,10 @@ def gate_card(spec, card, scenario):
         overall, reason = "outside_stated_range", "axis_outside"
         details = " ".join(fill(S["outside_axis"], axis=a["axis"], scenario_range=a["scenario"], words=a["card_words"], items=", ".join(a["card_items"]), card_range=a["card"] if isinstance(a["card"], str) else ", ".join(a["card"]), overlap=a["overlap"]) for a in outside)
         sentence = fill(S["outside_stated_range"], outside_details=details, **common)
+    elif any(a["result"] == "domain_not_defined" for a in axes):
+        overall, reason = "domain_not_defined", "axis_domain_not_defined"
+        sentence = fill(S["domain_not_defined"], axes_summary=summary,
+                        undefined_axes=", ".join(a["axis"] for a in axes if a["result"] == "domain_not_defined"), **common)
     elif by["gravity"]["result"] != "inside":
         overall = "not_applicable"
         reason = "gravity_" + by["gravity"]["result"]
@@ -203,12 +210,13 @@ def main():
         quotable = [c["card_id"] for c in cards if c["overall"] == "may_be_quoted_here"]
         n_out = sum(c["overall"] == "outside_stated_range" for c in cards)
         n_na = sum(c["overall"] == "not_applicable" for c in cards)
+        n_dnd = sum(c["overall"] == "domain_not_defined" for c in cards)
         if quotable:
             result = "some_cards_may_be_quoted"
-            sentence = fill(S["headline_some"], n_cards=len(cards), n_quotable=len(quotable), scenario_label=sc["label"], quotable_ids=", ".join(quotable), n_outside=n_out, n_not_applicable=n_na)
+            sentence = fill(S["headline_some"], n_cards=len(cards), n_quotable=len(quotable), scenario_label=sc["label"], quotable_ids=", ".join(quotable), n_outside=n_out, n_domain_not_defined=n_dnd, n_not_applicable=n_na)
         else:
             result = "no_held_relation_covers_this_condition"
-            sentence = fill(S["headline_none"], n_cards=len(cards), scenario_label=sc["label"], n_outside=n_out, n_not_applicable=n_na)
+            sentence = fill(S["headline_none"], n_cards=len(cards), scenario_label=sc["label"], n_outside=n_out, n_domain_not_defined=n_dnd, n_not_applicable=n_na)
         cl.forbidden_check(spec, sentence, "headline " + sc["id"])
         out = {
             "_meta": {
@@ -219,9 +227,11 @@ def main():
                 "overall": spec["_meta"]["gate"]["overall"],
                 "overall_note": spec["_meta"]["gate"]["overall_note"],
                 "range_notation": "[a, b] includes both ends, (a, b) neither; -inf or +inf marks an end the range does not set.",
+                "domain_rule_source": spec["_meta"]["gate"]["domain_rule_source"],
             },
+            "governed_by": governance.block(GATE_POINTS),
             "scenario": {"id": sc["id"], "label": sc["label"], "ranges": sc.get("ranges", {}), "gravity_level": sc.get("gravity_level")},
-            "headline": {"result": result, "may_be_quoted_here": quotable, "outside_stated_range": n_out, "not_applicable": n_na, "sentence": sentence},
+            "headline": {"result": result, "may_be_quoted_here": quotable, "outside_stated_range": n_out, "domain_not_defined": n_dnd, "not_applicable": n_na, "sentence": sentence},
             "cards": cards,
             "coverage": coverage(spec, sc, cov, grid),
         }

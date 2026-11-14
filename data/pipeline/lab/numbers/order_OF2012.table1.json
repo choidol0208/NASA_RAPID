@@ -6,14 +6,59 @@
   "spec": "pipeline/spec/lab_numbers.json"
  },
  "choices": {
-  "classes": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0",
+  "classes": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); concordant if s1 = s2 != 0; discordant if s1 = -s2 != 0; tied_first_column_only if s1 = 0 and s2 != 0 (T_x); tied_second_column_only if s2 = 0 and s1 != 0 (T_y); tied_both_columns if both are 0. Concordant, discordant, tie, T_x and T_y as defined on the NIST Dataplot KENDALLS TAU page; tied_both_columns is the remaining class and enters neither T_x nor T_y",
   "column_pairs": "every unordered pair of condition columns, in the column order of the spec",
   "criterion": "each condition column carries the criterion named in the spec; a column pair is marked same criterion yes or no; pairs with different criteria are counted like all others and marked",
   "held": "where the item holds a per-material condition (OF2012: test pressure), each class count is also given for the pairs whose held values differ",
-  "kendall_tau_b": "tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0",
+  "kendall_tau_b": "tau_b = (N_c - N_d) / sqrt((N_c + N_d + T_x)(N_c + N_d + T_y)) as defined on the NIST Dataplot KENDALLS TAU page (https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm); N_c = concordant pairs, N_d = discordant pairs, T_x, T_y = pairs tied in one column only; the script stops if the denominator differs from (n_0 - n_1)(n_0 - n_2); given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0",
   "material_pairs": "every unordered pair of materials, in the row order of the item",
   "tau_b_digits": 6,
   "values": "values are read as printed in the reference item's 'values' (exact decimals; JSON numbers read as decimal strings), no tolerance"
+ },
+ "governed_by": {
+  "map": "pipeline/lab/model_map.json",
+  "points": [
+   {
+    "classification": "established",
+    "model_key": "KENDALL_B",
+    "opened_by": "ranking scout (via Exa); verifier (via Exa web fetch, 2026-11-14); lab session (via Exa, 2026-11-14)",
+    "point": "M06a",
+    "source_title": "NIST Dataplot Reference Manual, KENDALLS TAU",
+    "url": "https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm"
+   },
+   {
+    "classification": "established",
+    "model_key": "KENDALL_B",
+    "opened_by": "ranking scout (via Exa); verifier (via Exa web fetch, 2026-11-14); lab session (via Exa, 2026-11-14)",
+    "point": "M06b",
+    "source_title": "NIST Dataplot Reference Manual, KENDALLS TAU",
+    "url": "https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm"
+   },
+   {
+    "candidate_model_not_governing": "SP811_ROUND",
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M06c"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M06d"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M06e"
+   },
+   {
+    "classification": "established",
+    "model_key": "ELEM",
+    "opened_by": null,
+    "point": "M08",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null
+   }
+  ]
  },
  "notes": [
   "Values are shown with the digits held in the item's 'values' (for example 18.0); comparisons read them as exact decimals.",
@@ -33,33 +78,28 @@
      "column_1": "1g",
      "column_2": "martian",
      "counts": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 1,
+      "tied_second_column_only": 0
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 1,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 1,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 1,
+      "tied_second_column_only": 0
      },
      "criterion_1": "1g criterion (ULOI, MOC)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
-     "kendall_tau_b": {
-      "numerator": 2,
-      "under_sqrt": 6,
-      "value": "0.816497",
-      "value_exact": "irrational (integer under the square root is not a square)"
-     },
-     "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [
+     "discordant_and_tied_one_column_pairs": [
       {
        "a_col1": "23.5",
        "a_col2": "22.0",
        "b_col1": "23.5",
        "b_col2": "19.9",
-       "class": "tie_in_one",
+       "class": "tied_first_column_only",
        "held_a": "10.2",
        "held_b": "14.7",
        "held_same": false,
@@ -67,6 +107,20 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
      "same_criterion": false,
      "ties_in_column_1": 1,
      "ties_in_column_2": 0
@@ -75,19 +129,29 @@
      "column_1": "1g",
      "column_2": "lunar",
      "counts": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 1,
-      "tie_in_one": 0
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 1,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 0
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 1,
-      "tie_in_both": 1,
-      "tie_in_one": 0
+      "concordant": 1,
+      "discordant": 0,
+      "tied_both_columns": 1,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 0
      },
      "criterion_1": "1g criterion (ULOI, MOC)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
+     "discordant_and_tied_one_column_pairs": [],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
      "kendall_tau_b": {
       "numerator": 2,
       "under_sqrt": 4,
@@ -95,7 +159,6 @@
       "value_exact": "1"
      },
      "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [],
      "same_criterion": false,
      "ties_in_column_1": 1,
      "ties_in_column_2": 1
@@ -104,33 +167,28 @@
      "column_1": "1g",
      "column_2": "0g",
      "counts": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 1,
+      "tied_second_column_only": 0
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 1,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 1,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 1,
+      "tied_second_column_only": 0
      },
      "criterion_1": "1g criterion (ULOI, MOC)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
-     "kendall_tau_b": {
-      "numerator": 2,
-      "under_sqrt": 6,
-      "value": "0.816497",
-      "value_exact": "irrational (integer under the square root is not a square)"
-     },
-     "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [
+     "discordant_and_tied_one_column_pairs": [
       {
        "a_col1": "23.5",
        "a_col2": "24.0",
        "b_col1": "23.5",
        "b_col2": "23.0",
-       "class": "tie_in_one",
+       "class": "tied_first_column_only",
        "held_a": "10.2",
        "held_b": "14.7",
        "held_same": false,
@@ -138,6 +196,20 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
      "same_criterion": false,
      "ties_in_column_1": 1,
      "ties_in_column_2": 0
@@ -146,33 +218,28 @@
      "column_1": "martian",
      "column_2": "lunar",
      "counts": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 1
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 1,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 1,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 1
      },
      "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
-     "kendall_tau_b": {
-      "numerator": 2,
-      "under_sqrt": 6,
-      "value": "0.816497",
-      "value_exact": "irrational (integer under the square root is not a square)"
-     },
-     "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [
+     "discordant_and_tied_one_column_pairs": [
       {
        "a_col1": "22.0",
        "a_col2": "21.0",
        "b_col1": "19.9",
        "b_col2": "21.0",
-       "class": "tie_in_one",
+       "class": "tied_second_column_only",
        "held_a": "10.2",
        "held_b": "14.7",
        "held_same": false,
@@ -180,6 +247,20 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
      "same_criterion": true,
      "ties_in_column_1": 0,
      "ties_in_column_2": 1
@@ -188,19 +269,29 @@
      "column_1": "martian",
      "column_2": "0g",
      "counts": {
-      "reversed": 0,
-      "same_order": 3,
-      "tie_in_both": 0,
-      "tie_in_one": 0
+      "concordant": 3,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 0
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 0
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 0
      },
      "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
+     "discordant_and_tied_one_column_pairs": [],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
      "kendall_tau_b": {
       "numerator": 3,
       "under_sqrt": 9,
@@ -208,7 +299,6 @@
       "value_exact": "1"
      },
      "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [],
      "same_criterion": true,
      "ties_in_column_1": 0,
      "ties_in_column_2": 0
@@ -217,33 +307,28 @@
      "column_1": "lunar",
      "column_2": "0g",
      "counts": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 1,
+      "tied_second_column_only": 0
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 1,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 1,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 1,
+      "tied_second_column_only": 0
      },
      "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
-     "kendall_tau_b": {
-      "numerator": 2,
-      "under_sqrt": 6,
-      "value": "0.816497",
-      "value_exact": "irrational (integer under the square root is not a square)"
-     },
-     "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [
+     "discordant_and_tied_one_column_pairs": [
       {
        "a_col1": "21.0",
        "a_col2": "24.0",
        "b_col1": "21.0",
        "b_col2": "23.0",
-       "class": "tie_in_one",
+       "class": "tied_first_column_only",
        "held_a": "10.2",
        "held_b": "14.7",
        "held_same": false,
@@ -251,6 +336,20 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
      "same_criterion": true,
      "ties_in_column_1": 1,
      "ties_in_column_2": 0
@@ -304,19 +403,29 @@
      "column_1": "1g",
      "column_2": "martian",
      "counts": {
-      "reversed": 0,
-      "same_order": 3,
-      "tie_in_both": 0,
-      "tie_in_one": 0
+      "concordant": 3,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 0
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 0
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 0
      },
      "criterion_1": "1g criterion (ULOI, MOC)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
+     "discordant_and_tied_one_column_pairs": [],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
      "kendall_tau_b": {
       "numerator": 3,
       "under_sqrt": 9,
@@ -324,7 +433,6 @@
       "value_exact": "1"
      },
      "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [],
      "same_criterion": false,
      "ties_in_column_1": 0,
      "ties_in_column_2": 0
@@ -333,33 +441,28 @@
      "column_1": "1g",
      "column_2": "lunar",
      "counts": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 1
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 1,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 1,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 1
      },
      "criterion_1": "1g criterion (ULOI, MOC)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
-     "kendall_tau_b": {
-      "numerator": 2,
-      "under_sqrt": 6,
-      "value": "0.816497",
-      "value_exact": "irrational (integer under the square root is not a square)"
-     },
-     "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [
+     "discordant_and_tied_one_column_pairs": [
       {
        "a_col1": "23.0",
        "a_col2": "19.9",
        "b_col1": "22.1",
        "b_col2": "19.9",
-       "class": "tie_in_one",
+       "class": "tied_second_column_only",
        "held_a": "10.2",
        "held_b": "14.7",
        "held_same": false,
@@ -367,6 +470,20 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
      "same_criterion": false,
      "ties_in_column_1": 0,
      "ties_in_column_2": 1
@@ -375,19 +492,29 @@
      "column_1": "1g",
      "column_2": "0g",
      "counts": {
-      "reversed": 0,
-      "same_order": 3,
-      "tie_in_both": 0,
-      "tie_in_one": 0
+      "concordant": 3,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 0
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 0
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 0
      },
      "criterion_1": "1g criterion (ULOI, MOC)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
+     "discordant_and_tied_one_column_pairs": [],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
      "kendall_tau_b": {
       "numerator": 3,
       "under_sqrt": 9,
@@ -395,7 +522,6 @@
       "value_exact": "1"
      },
      "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [],
      "same_criterion": false,
      "ties_in_column_1": 0,
      "ties_in_column_2": 0
@@ -404,33 +530,28 @@
      "column_1": "martian",
      "column_2": "lunar",
      "counts": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 1
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 1,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 1,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 1
      },
      "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
-     "kendall_tau_b": {
-      "numerator": 2,
-      "under_sqrt": 6,
-      "value": "0.816497",
-      "value_exact": "irrational (integer under the square root is not a square)"
-     },
-     "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [
+     "discordant_and_tied_one_column_pairs": [
       {
        "a_col1": "21.1",
        "a_col2": "19.9",
        "b_col1": "19.0",
        "b_col2": "19.9",
-       "class": "tie_in_one",
+       "class": "tied_second_column_only",
        "held_a": "10.2",
        "held_b": "14.7",
        "held_same": false,
@@ -438,6 +559,20 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
      "same_criterion": true,
      "ties_in_column_1": 0,
      "ties_in_column_2": 1
@@ -446,19 +581,29 @@
      "column_1": "martian",
      "column_2": "0g",
      "counts": {
-      "reversed": 0,
-      "same_order": 3,
-      "tie_in_both": 0,
-      "tie_in_one": 0
+      "concordant": 3,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 0
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 0
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 0,
+      "tied_second_column_only": 0
      },
      "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
+     "discordant_and_tied_one_column_pairs": [],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
      "kendall_tau_b": {
       "numerator": 3,
       "under_sqrt": 9,
@@ -466,7 +611,6 @@
       "value_exact": "1"
      },
      "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [],
      "same_criterion": true,
      "ties_in_column_1": 0,
      "ties_in_column_2": 0
@@ -475,33 +619,28 @@
      "column_1": "lunar",
      "column_2": "0g",
      "counts": {
-      "reversed": 0,
-      "same_order": 2,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 2,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 1,
+      "tied_second_column_only": 0
      },
      "counts_held_differs": {
-      "reversed": 0,
-      "same_order": 1,
-      "tie_in_both": 0,
-      "tie_in_one": 1
+      "concordant": 1,
+      "discordant": 0,
+      "tied_both_columns": 0,
+      "tied_first_column_only": 1,
+      "tied_second_column_only": 0
      },
      "criterion_1": "drop-tower criterion (ULOI*, MOC*)",
      "criterion_2": "drop-tower criterion (ULOI*, MOC*)",
-     "kendall_tau_b": {
-      "numerator": 2,
-      "under_sqrt": 6,
-      "value": "0.816497",
-      "value_exact": "irrational (integer under the square root is not a square)"
-     },
-     "material_pairs": 3,
-     "reversed_and_tie_in_one_pairs": [
+     "discordant_and_tied_one_column_pairs": [
       {
        "a_col1": "19.9",
        "a_col2": "23.0",
        "b_col1": "19.9",
        "b_col2": "22.0",
-       "class": "tie_in_one",
+       "class": "tied_first_column_only",
        "held_a": "10.2",
        "held_b": "14.7",
        "held_same": false,
@@ -509,6 +648,20 @@
        "material_b": "Nomex HT90-40"
       }
      ],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "counts_held_differs": "M06e: team rule",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule",
+      "same_criterion": "M06d: team rule"
+     },
+     "kendall_tau_b": {
+      "numerator": 2,
+      "under_sqrt": 6,
+      "value": "0.816497",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 3,
      "same_criterion": true,
      "ties_in_column_1": 1,
      "ties_in_column_2": 0

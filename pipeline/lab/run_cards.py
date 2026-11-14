@@ -17,6 +17,21 @@ import pandas as pd
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent))
 import cardlib as cl  # noqa: E402
+import governance  # noqa: E402
+
+# decision points of pipeline/lab/model_map.json behind each card's numbers
+CARD_POINTS = {
+    "bass2_co_co2_ratio": ["D31", "L08", "L03"],
+    "of2012_gravity_margin": ["L09"],
+    "h2006_moc_vs_pressure": ["L10"],
+    "h2007_fixed_pressure": ["L14"],
+    "h2011_linear_moc": ["L11", "L03"],
+    "bass2_flammability_boundary": ["L13"],
+    "flex_loi": ["L13"],
+    "droplet_d_squared": ["L12", "M07"],
+    "cfi_droplet": ["L14"],
+}
+RUN_POINTS = ["L15", "L01"]
 
 ID_COLS = ["test_id", "source_file", "source_row"]
 
@@ -162,7 +177,42 @@ def pair_order_agreement(card, chk, df, items, variables):
     }
 
 
+def moc_domain(chk, items):
+    """Per material: are all held MOC values inside the range for which the source states the form?"""
+    d = chk["moc_domain"]
+    words = cl.check_words(items, d["words"], ("text", "quote"))
+    for v in (d["min"], d["max"]):
+        if cl.fmt(v) not in words:
+            cl.fail("moc_domain bound %s not in the words %r" % (v, words))
+    rng = {k: d[k] for k in ("min", "max", "min_inclusive", "max_inclusive")}
+    ex = [cl.value_at(items, r) for r in d["example_values"]]
+    example = {"material": d["example_label"], "values_of": d["example_values"], "values": ex,
+               "inside_stated_moc_range": all(cl.value_in(rng, v) for v in ex)}
+    tab = cl.value_at(items, "%s:%s" % (d["table"]["item"], d["table"]["key"]))
+    mats = []
+    for name in [k for k in tab if k != d["table"]["columns_key"]]:
+        vals = tab[name]
+        inside = all(cl.value_in(rng, v) for v in vals)
+        mats.append({"material": name, "item": d["table"]["item"], "moc_by_column": dict(zip([cl.fmt(c) for c in tab[d["table"]["columns_key"]]], vals)),
+                     "inside_stated_moc_range": inside,
+                     "form_applied": "domain only (no slope compared)" if inside else "refused: an MOC value lies outside the stated range"})
+    return example, {
+        "words": d["words"], "range": rng, "reading": d["reading"],
+        "example": example,
+        "materials": mats,
+        "materials_refused": sum(1 for x in mats if not x["inside_stated_moc_range"]),
+        "materials_inside": sum(1 for x in mats if x["inside_stated_moc_range"]),
+        "table_note": d["table_note"],
+    }
+
+
 def value_in_published_range(card, chk, df, items, variables):
+    domain = None
+    if "moc_domain" in chk:
+        example, domain = moc_domain(chk, items)
+        if not example["inside_stated_moc_range"]:
+            return None, {"computation_label": "team arithmetic on values of the reference items", "moc_domain": domain,
+                          "refused": "the example values lie outside the stated MOC range; no slope is formed"}
     b = bind_values(items, chk["bind"])
     val = float(pd.DataFrame([b]).eval(chk["expression"]).iloc[0])
     bounds = [cl.value_at(items, r) for r in chk["range_bounds"]]
@@ -178,6 +228,7 @@ def value_in_published_range(card, chk, df, items, variables):
         "published_range": {"bounds_of": chk["range_bounds"], "min": rng["min"], "max": rng["max"]},
         "computed_inside": inside,
         "also_inside": also,
+        **({"moc_domain": domain} if domain is not None else {}),
     }
 
 
@@ -238,51 +289,50 @@ def columns_present(card, chk, df, items, variables):
     }
 
 
-def ratio_stats(r, bands, crit):
-    n = int(len(r))
-    med = float(r.median()) if n else float("nan")
-    band_counts = []
-    for b in bands:
-        k = int(((r - 1).abs() <= b).sum())
-        band_counts.append({"within": b, "rows": k, "share": cl.num(k / n, 4) if n else None})
-    share = float(((r - 1).abs() <= crit["share_band"]).sum()) / n if n else 0.0
-    met = abs(med - 1) <= crit["median_band"] and share >= crit["min_share"]
-    return met, {
+def quantile_r6(values, p):
+    """NIST e-Handbook 7.2.6.2 percentile (method R6 of Hyndman and Fan): position p(N+1)."""
+    x = sorted(values)
+    n = len(x)
+    pos = p * (n + 1)
+    k = int(pos)
+    if k < 1:
+        return x[0]
+    if k >= n:
+        return x[-1]
+    return x[k - 1] + (pos - k) * (x[k] - x[k - 1])
+
+
+def ratio_stats(r):
+    vals = [float(v) for v in r]
+    n = len(vals)
+    if not n:
+        return {"rows": 0}
+    return {
         "rows": n,
-        "median": cl.num(med, 4),
-        "quartile_1": cl.num(r.quantile(0.25), 4),
-        "quartile_3": cl.num(r.quantile(0.75), 4),
-        "min": cl.num(r.min(), 4),
-        "max": cl.num(r.max(), 4),
-        "bands": band_counts,
-        "meets_criterion": met,
+        "min": cl.num(min(vals), 4),
+        "quartile_1": cl.num(quantile_r6(vals, 0.25), 4),
+        "median": cl.num(quantile_r6(vals, 0.5), 4),
+        "quartile_3": cl.num(quantile_r6(vals, 0.75), 4),
+        "max": cl.num(max(vals), 4),
+        "quantile_method": "NIST 7.2.6.2, method R6",
     }
 
 
 def expression_ratio(card, chk, df, items, variables):
     rows = query(df, chk["filter"]).copy()
-    pl = chk["placebo"]
-    rows = rows.sort_values([pl["group"]] + pl["order_by"], kind="mergesort")
+    rows = rows.sort_values(chk["order_by"], kind="mergesort")
     rows["_ratio"] = rows.eval(chk["expression"])
-    crit = chk["criterion"]
-    met, stats = ratio_stats(rows["_ratio"], chk["bands"], crit)
+    stats = ratio_stats(rows["_ratio"])
     groups = []
     for keys, sub in rows.groupby(chk["group_by"], sort=True):
-        groups.append(dict(zip(chk["group_by"], keys), rows=int(len(sub)), median=cl.num(sub["_ratio"].median(), 4)))
+        groups.append(dict(zip(chk["group_by"], keys), **ratio_stats(sub["_ratio"])))
     srt = rows.sort_values(["_ratio", "source_row"], kind="mergesort")
     k = chk["extremes"]
     carry = ["fuel_material", "test_end", "initial_diameter_mm", "extinction_diameter_mm", "burning_rate_mm2_s", "burn_time_s"]
     lowest = [dict(row_ref(r, carry), ratio=cl.num(r["_ratio"], 4)) for _, r in srt.head(k).iterrows()]
     highest = [dict(row_ref(r, carry), ratio=cl.num(r["_ratio"], 4)) for _, r in srt.tail(k).iloc[::-1].iterrows()]
-    if pl["permutation"] != "reverse_within_group":
-        cl.fail("unknown permutation " + pl["permutation"])
-    perm = rows.copy()
-    donor = rows.groupby(pl["group"], sort=False)["test_id"].transform(lambda s: list(s)[::-1])
-    perm[pl["column"]] = rows.groupby(pl["group"], sort=False)[pl["column"]].transform(lambda s: list(s)[::-1])
-    perm["_ratio"] = perm.eval(chk["expression"])
-    pmet, pstats = ratio_stats(perm["_ratio"], chk["bands"], crit)
     out_rows = rows.sort_values(["source_file", "source_row"], kind="mergesort")
-    return met, {
+    return None, {
         "computation_label": "team computation over NASA cells",
         "expression": chk["expression_label"],
         "filter": chk["filter"],
@@ -290,12 +340,8 @@ def expression_ratio(card, chk, df, items, variables):
         "by_group": groups,
         "lowest": lowest,
         "highest": highest,
-        "placebo": {
-            "description": pl["description"],
-            "permutation": {"column": pl["column"], "kind": pl["permutation"], "group": pl["group"], "order_by": pl["order_by"]},
-            "result": pstats,
-            "pairs": [{"test_id": t, "burning_rate_from": d} for t, d in sorted(zip(rows["test_id"], donor), key=lambda p: (p[0].split("-")[0], int(p[0].split("-")[-1]) if p[0].split("-")[-1].isdigit() else 0, p[0]))],
-        },
+        "quantile_method": chk["quantile_method"],
+        "removed": chk["removed_on_2026_11_14"],
         "rows": [dict(row_ref(r, ["fuel_material", "test_end"]), ratio=cl.num(r["_ratio"], 4)) for _, r in out_rows.iterrows()],
     }
 
@@ -324,7 +370,7 @@ def main():
         met, res = KINDS[chk["kind"]](card, chk, df, items, variables)
         crit = chk.get("criterion", {})
         if met is None:
-            outcome = chk["status"]
+            outcome = crit["status_if_refused"] if "status_if_refused" in crit else chk["status"]
         elif "status_if_none" in crit:
             if not met:
                 cl.fail(card["id"] + ": rows hold the columns; this card has no check for them")
@@ -346,6 +392,9 @@ def main():
             entry["check"]["criterion"] = crit
         entry["result"] = res
         entry["caption"] = card["caption"]
+        if card["id"] not in CARD_POINTS:
+            cl.fail("card %s has no decision points in CARD_POINTS" % card["id"])
+        entry["governed_by"] = governance.block(CARD_POINTS[card["id"]])
         results.append(entry)
     out = {
         "_meta": {
@@ -355,6 +404,7 @@ def main():
             "numbers": "Every number is a NASA cell of tests.csv, a value of a reference item, or arithmetic named by the card and labelled under computation_label. Criterion parameters are team choices.",
             "criteria_timing": spec["_meta"]["rules"]["criteria_timing"],
         },
+        "governed_by": governance.block(RUN_POINTS),
         "summary": [{"card_id": e["card_id"], "status": e["status"], **({"check_outcome": e["check_outcome"]} if "check_outcome" in e else {})} for e in results],
         "cards": results,
     }

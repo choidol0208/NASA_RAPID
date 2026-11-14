@@ -42,9 +42,27 @@ Conversions by the pipeline (pipeline/spec/sources.json): o2_pct of bass2: 'Cali
 - `ranges_not_on_axes`: a scenario range of a variable that is not one of 'axes' (flow_cms for the ISS) is printed with 'not applied' and enters no count
 - `scenarios_without_nominal`: a scenario whose nominal is empty gets no nominal-point numbers; its ranges are reported where set
 
+## Governed by (pipeline/lab/model_map.json)
+
+Labels in brackets next to the column names below name the decision point and its governing model key, or 'team rule'.
+
+- M01a: OECD_HULL, OECD ENV/JM/MONO(2007)2, Guidance Document on the Validation of (Q)SAR Models, Chapter 4, para 110 (https://www.oecd.org/content/dam/oecd/en/publications/reports/2014/09/guidance-document-on-the-validation-of-quantitative-structure-activity-relationship-q-sar-models_g1ghcc68/9789264085442-en.pdf; opened by applicability scout (via Exa); verifier (via Exa web fetch, 2026-11-14); para 110 text re-read by the lab session from the saved Exa copy)
+- M01b: team rule, no established model found
+- M01c: team rule, no established model found
+- M02a: team rule, no established model found
+- M02b: ELEM, elementary mathematics (the definition is the model)
+- M03: team rule, no established model found
+- M04: team rule, no established model found
+- M05a: team rule, no established model found
+- M05b: team rule, no established model found
+- M05c: ELEM, elementary mathematics (the definition is the model)
+- M05d: team rule, no established model found
+- M05e: team rule, no established model found
+- M08: ELEM, elementary mathematics (the definition is the model)
+
 ## Summary per need
 
-| Need | counted tests | with ambient O2 | with O2 and pressure | pooled tests (investigation, phase, geometry: tests) | hull | nominal position | O2 in range | pressure in range | both in range | gravity_level string equal to scenario's (table constant, not a match in data) |
+| Need | counted tests [M05a: team rule] | with ambient O2 [M05b: team rule] | with O2 and pressure [M03: team rule] | pooled tests (investigation, phase, geometry: tests) | hull [M01a: OECD_HULL; M01c: team rule] | nominal position [M01a: OECD_HULL; M01b: team rule] | O2 in range [M05e: team rule] | pressure in range | both in range | gravity_level string equal to scenario's (table constant, not a match in data) [M05c: ELEM] |
 |---|---|---|---|---|---|---|---|---|---|---|
 | P1 Flammability limit | 133 | 133 | - | - | - | - | not set | not set | not set | 0 |
 | P2 Ignition | 0 | 0 | - | - | - | - | not set | not set | not set | 0 |

@@ -18,6 +18,11 @@ from itertools import combinations
 from math import isqrt
 
 from numlib import ROOT, META, fail, frac, dec, load_json, spec, scan_words, write_json, write_text
+import governance
+
+# decision points of pipeline/lab/model_map.json behind each field (spec: order_changes.governed_by_fields)
+FIELD_POINTS = spec()["order_changes"]["governed_by_fields"]
+CLASSES = ("concordant", "discordant", "tied_first_column_only", "tied_second_column_only", "tied_both_columns")
 
 
 def sign(x):
@@ -64,8 +69,11 @@ def matrix(tab, item):
     return out
 
 
-def tau_b(nc, nd, n0, n1, n2, digits):
-    den = (n0 - n1) * (n0 - n2)
+def tau_b(nc, nd, tx, ty, n0, n1, n2, digits):
+    """Kendall tau-b as on the NIST Dataplot page: (N_c - N_d) / sqrt((N_c + N_d + T_x)(N_c + N_d + T_y))."""
+    den = (nc + nd + tx) * (nc + nd + ty)
+    if den != (n0 - n1) * (n0 - n2):
+        fail("tau-b denominator differs between the Dataplot form and (n0 - n1)(n0 - n2)")
     if den == 0:
         return {"numerator": nc - nd, "under_sqrt": den, "value": "undefined"}
     getcontext().prec = 50
@@ -86,7 +94,7 @@ def analyse(tab, qid, qlabel, cols, crit, rows, digits):
     pairs_out = []
     has_held = rows[0][3] is not None
     for (i, c1), (j, c2) in combinations(list(enumerate(cols)), 2):
-        counts = {"same_order": 0, "reversed": 0, "tie_in_one": 0, "tie_in_both": 0}
+        counts = {c: 0 for c in CLASSES}
         counts_hd = dict(counts)
         n1 = n2 = 0
         listed = []
@@ -95,12 +103,12 @@ def analyse(tab, qid, qlabel, cols, crit, rows, digits):
             s2 = sign(a[1][j] - b[1][j])
             n1 += s1 == 0
             n2 += s2 == 0
-            cls = ("tie_in_both" if s1 == 0 and s2 == 0 else "tie_in_one" if s1 == 0 or s2 == 0
-                   else "same_order" if s1 == s2 else "reversed")
+            cls = ("tied_both_columns" if s1 == 0 and s2 == 0 else "tied_first_column_only" if s1 == 0
+                   else "tied_second_column_only" if s2 == 0 else "concordant" if s1 == s2 else "discordant")
             counts[cls] += 1
             if has_held and a[3] != b[3]:
                 counts_hd[cls] += 1
-            if cls in ("reversed", "tie_in_one"):
+            if cls in ("discordant", "tied_first_column_only", "tied_second_column_only"):
                 e = {"class": cls, "material_a": a[0], "material_b": b[0],
                      "a_col1": a[2][i], "b_col1": b[2][i],
                      "a_col2": a[2][j], "b_col2": b[2][j]}
@@ -114,9 +122,14 @@ def analyse(tab, qid, qlabel, cols, crit, rows, digits):
         if crit[i] is not None:
             extra["criterion_1"], extra["criterion_2"], extra["same_criterion"] = crit[i], crit[j], crit[i] == crit[j]
         pairs_out.append({"column_1": c1, "column_2": c2, "material_pairs": n0, "counts": counts, **extra,
-                          "kendall_tau_b": tau_b(counts["same_order"], counts["reversed"], n0, n1, n2, digits),
+                          "kendall_tau_b": tau_b(counts["concordant"], counts["discordant"],
+                                                 counts["tied_first_column_only"], counts["tied_second_column_only"],
+                                                 n0, n1, n2, digits),
                           "ties_in_column_1": n1, "ties_in_column_2": n2,
-                          "reversed_and_tie_in_one_pairs": listed})
+                          "governed_by": {k: governance.short(v) for k, v in FIELD_POINTS.items()
+                                          if k.split(".")[0] in ("counts", "kendall_tau_b")
+                                          or (k in extra)},
+                          "discordant_and_tied_one_column_pairs": listed})
     return {"quantity": qid, "label": qlabel, "columns": cols, "materials": n,
             "values": [{"material": m, "values": hs, **({"held": h} if h is not None else {})}
                        for m, v, hs, h in rows],
@@ -131,6 +144,7 @@ def render_md(doc):
          f"Printed title: \"{t['quote']}\"", f"Condition columns: {t['column_label']}.", "", "## Notes", ""]
     L += [f"- {n}" for n in doc["notes"]]
     L += ["", "## Choices (spec parameters)", ""] + [f"- `{k}`: {v}" for k, v in sorted(doc["choices"].items())]
+    L += ["", "## Governed by (pipeline/lab/model_map.json)", ""] + governance.md_lines(doc["governed_by"])
     for q in doc["quantities"]:
         L += ["", f"## {q['quantity']}: {q['label']}", "", "Values as held:", "",
               "| material | " + " | ".join(q["columns"]) + (f" | held: {t.get('held_label')} |" if "held" in q["values"][0] else " |"),
@@ -139,28 +153,31 @@ def render_md(doc):
             L.append(f"| {r['material']} | " + " | ".join(r["values"]) + (f" | {r['held']} |" if "held" in r else " |"))
         hd = "counts_held_differs" in q["column_pairs"][0]
         cr = "same_criterion" in q["column_pairs"][0]
-        L += ["", "| columns | pairs | same order | reversed | tie in one | tie in both | tau-b | tau-b exact form |"
-              + (" same criterion |" if cr else "")
-              + (f" of these, pairs at different {t.get('held_label')} (same / rev / tie1 / tie2) |" if hd else ""),
-              "|---" * (8 + cr + hd) + "|"]
+        L += ["", f"| columns | pairs | concordant [{governance.short('M06a')}] | discordant | tied in first column only (T_x) | "
+              f"tied in second column only (T_y) | tied in both | tau-b [{governance.short('M06b')}; digits {governance.short('M06c')}] | tau-b exact form |"
+              + (f" same criterion [{governance.short('M06d')}] |" if cr else "")
+              + (f" of these, pairs at different {t.get('held_label')} (conc / disc / T_x / T_y / both) [{governance.short('M06e')}] |" if hd else ""),
+              "|---" * (9 + cr + hd) + "|"]
         for p in q["column_pairs"]:
             c, k = p["counts"], p["kendall_tau_b"]
-            row = (f"| {p['column_1']} vs {p['column_2']} | {p['material_pairs']} | {c['same_order']} | {c['reversed']} | "
-                   f"{c['tie_in_one']} | {c['tie_in_both']} | {k['value']} | {k['numerator']} / sqrt({k['under_sqrt']}) |")
+            row = (f"| {p['column_1']} vs {p['column_2']} | {p['material_pairs']} | {c['concordant']} | {c['discordant']} | "
+                   f"{c['tied_first_column_only']} | {c['tied_second_column_only']} | {c['tied_both_columns']} | {k['value']} | "
+                   f"{k['numerator']} / sqrt({k['under_sqrt']}) |")
             if cr:
                 row += f" {'yes' if p['same_criterion'] else 'no'} |"
             if hd:
                 h = p["counts_held_differs"]
-                row += f" {h['same_order']} / {h['reversed']} / {h['tie_in_one']} / {h['tie_in_both']} |"
+                row += (f" {h['concordant']} / {h['discordant']} / {h['tied_first_column_only']} / "
+                        f"{h['tied_second_column_only']} / {h['tied_both_columns']} |")
             L.append(row)
         for p in q["column_pairs"]:
-            if not p["reversed_and_tie_in_one_pairs"]:
+            if not p["discordant_and_tied_one_column_pairs"]:
                 continue
             L += ["", f"{p['column_1']} vs {p['column_2']}:", "",
                   f"| class | a | b | a at {p['column_1']} | b at {p['column_1']} | a at {p['column_2']} | b at {p['column_2']} |"
-                  + (" held a | held b |" if "held_a" in p["reversed_and_tie_in_one_pairs"][0] else ""),
-                  "|---" * (7 + 2 * ("held_a" in p["reversed_and_tie_in_one_pairs"][0])) + "|"]
-            for e in p["reversed_and_tie_in_one_pairs"]:
+                  + (" held a | held b |" if "held_a" in p["discordant_and_tied_one_column_pairs"][0] else ""),
+                  "|---" * (7 + 2 * ("held_a" in p["discordant_and_tied_one_column_pairs"][0])) + "|"]
+            for e in p["discordant_and_tied_one_column_pairs"]:
                 L.append(f"| {e['class']} | {e['material_a']} | {e['material_b']} | {e['a_col1']} | {e['b_col1']} | "
                          f"{e['a_col2']} | {e['b_col2']} |" + (f" {e['held_a']} | {e['held_b']} |" if "held_a" in e else ""))
     return "\n".join(L) + "\n"
@@ -205,6 +222,7 @@ def main():
                       "where": item.get("where"), "quote": item.get("quote"), "column_label": tab["column_label"],
                       **({"held_label": tab["held_label"]} if tab.get("held_label") else {})},
             "choices": {k: v["value"] for k, v in O["choices"].items()},
+            "governed_by": governance.block(sorted(set(FIELD_POINTS.values()))),
             "notes": notes,
             "quantities": qs,
         }

@@ -6,14 +6,59 @@
   "spec": "pipeline/spec/lab_numbers.json"
  },
  "choices": {
-  "classes": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0",
+  "classes": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); concordant if s1 = s2 != 0; discordant if s1 = -s2 != 0; tied_first_column_only if s1 = 0 and s2 != 0 (T_x); tied_second_column_only if s2 = 0 and s1 != 0 (T_y); tied_both_columns if both are 0. Concordant, discordant, tie, T_x and T_y as defined on the NIST Dataplot KENDALLS TAU page; tied_both_columns is the remaining class and enters neither T_x nor T_y",
   "column_pairs": "every unordered pair of condition columns, in the column order of the spec",
   "criterion": "each condition column carries the criterion named in the spec; a column pair is marked same criterion yes or no; pairs with different criteria are counted like all others and marked",
   "held": "where the item holds a per-material condition (OF2012: test pressure), each class count is also given for the pairs whose held values differ",
-  "kendall_tau_b": "tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0",
+  "kendall_tau_b": "tau_b = (N_c - N_d) / sqrt((N_c + N_d + T_x)(N_c + N_d + T_y)) as defined on the NIST Dataplot KENDALLS TAU page (https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm); N_c = concordant pairs, N_d = discordant pairs, T_x, T_y = pairs tied in one column only; the script stops if the denominator differs from (n_0 - n_1)(n_0 - n_2); given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0",
   "material_pairs": "every unordered pair of materials, in the row order of the item",
   "tau_b_digits": 6,
   "values": "values are read as printed in the reference item's 'values' (exact decimals; JSON numbers read as decimal strings), no tolerance"
+ },
+ "governed_by": {
+  "map": "pipeline/lab/model_map.json",
+  "points": [
+   {
+    "classification": "established",
+    "model_key": "KENDALL_B",
+    "opened_by": "ranking scout (via Exa); verifier (via Exa web fetch, 2026-11-14); lab session (via Exa, 2026-11-14)",
+    "point": "M06a",
+    "source_title": "NIST Dataplot Reference Manual, KENDALLS TAU",
+    "url": "https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm"
+   },
+   {
+    "classification": "established",
+    "model_key": "KENDALL_B",
+    "opened_by": "ranking scout (via Exa); verifier (via Exa web fetch, 2026-11-14); lab session (via Exa, 2026-11-14)",
+    "point": "M06b",
+    "source_title": "NIST Dataplot Reference Manual, KENDALLS TAU",
+    "url": "https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm"
+   },
+   {
+    "candidate_model_not_governing": "SP811_ROUND",
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M06c"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M06d"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M06e"
+   },
+   {
+    "classification": "established",
+    "model_key": "ELEM",
+    "opened_by": null,
+    "point": "M08",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null
+   }
+  ]
  },
  "notes": [
   "Values are shown with the digits held in the item's 'values' (for example 18.0); comparisons read them as exact decimals.",
@@ -28,10 +73,117 @@
      "column_1": "48.2",
      "column_2": "85.3",
      "counts": {
-      "reversed": 2,
-      "same_order": 42,
-      "tie_in_both": 2,
-      "tie_in_one": 9
+      "concordant": 42,
+      "discordant": 2,
+      "tied_both_columns": 2,
+      "tied_first_column_only": 8,
+      "tied_second_column_only": 1
+     },
+     "discordant_and_tied_one_column_pairs": [
+      {
+       "a_col1": "28",
+       "a_col2": "23",
+       "b_col1": "25",
+       "b_col2": "23",
+       "class": "tied_second_column_only",
+       "material_a": "Silicone",
+       "material_b": "Zytel 42"
+      },
+      {
+       "a_col1": "28",
+       "a_col2": "23",
+       "b_col1": "29",
+       "b_col2": "21",
+       "class": "discordant",
+       "material_a": "Silicone",
+       "material_b": "Viton A"
+      },
+      {
+       "a_col1": "25",
+       "a_col2": "23",
+       "b_col1": "29",
+       "b_col2": "21",
+       "class": "discordant",
+       "material_a": "Zytel 42",
+       "material_b": "Viton A"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "17",
+       "b_col1": "18",
+       "b_col2": "16",
+       "class": "tied_first_column_only",
+       "material_a": "Buna S",
+       "material_b": "Buna N"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "17",
+       "b_col1": "18",
+       "b_col2": "16",
+       "class": "tied_first_column_only",
+       "material_a": "Buna S",
+       "material_b": "EPDM Rubber"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "17",
+       "b_col1": "18",
+       "b_col2": "18",
+       "class": "tied_first_column_only",
+       "material_a": "Buna S",
+       "material_b": "Polyethylene"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "17",
+       "b_col1": "18",
+       "b_col2": "16",
+       "class": "tied_first_column_only",
+       "material_a": "Neoprene",
+       "material_b": "Buna N"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "17",
+       "b_col1": "18",
+       "b_col2": "16",
+       "class": "tied_first_column_only",
+       "material_a": "Neoprene",
+       "material_b": "EPDM Rubber"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "17",
+       "b_col1": "18",
+       "b_col2": "18",
+       "class": "tied_first_column_only",
+       "material_a": "Neoprene",
+       "material_b": "Polyethylene"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "16",
+       "b_col1": "18",
+       "b_col2": "18",
+       "class": "tied_first_column_only",
+       "material_a": "Buna N",
+       "material_b": "Polyethylene"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "16",
+       "b_col1": "18",
+       "b_col2": "18",
+       "class": "tied_first_column_only",
+       "material_a": "EPDM Rubber",
+       "material_b": "Polyethylene"
+      }
+     ],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule"
      },
      "kendall_tau_b": {
       "numerator": 40,
@@ -40,22 +192,35 @@
       "value_exact": "irrational (integer under the square root is not a square)"
      },
      "material_pairs": 55,
-     "reversed_and_tie_in_one_pairs": [
+     "ties_in_column_1": 10,
+     "ties_in_column_2": 3
+    },
+    {
+     "column_1": "48.2",
+     "column_2": "101.3",
+     "counts": {
+      "concordant": 42,
+      "discordant": 2,
+      "tied_both_columns": 3,
+      "tied_first_column_only": 7,
+      "tied_second_column_only": 1
+     },
+     "discordant_and_tied_one_column_pairs": [
       {
        "a_col1": "28",
-       "a_col2": "23",
+       "a_col2": "21",
        "b_col1": "25",
        "b_col2": "23",
-       "class": "tie_in_one",
+       "class": "discordant",
        "material_a": "Silicone",
        "material_b": "Zytel 42"
       },
       {
        "a_col1": "28",
-       "a_col2": "23",
+       "a_col2": "21",
        "b_col1": "29",
        "b_col2": "21",
-       "class": "reversed",
+       "class": "tied_second_column_only",
        "material_a": "Silicone",
        "material_b": "Viton A"
       },
@@ -64,70 +229,61 @@
        "a_col2": "23",
        "b_col1": "29",
        "b_col2": "21",
-       "class": "reversed",
+       "class": "discordant",
        "material_a": "Zytel 42",
        "material_b": "Viton A"
       },
       {
        "a_col1": "18",
-       "a_col2": "17",
+       "a_col2": "16",
        "b_col1": "18",
-       "b_col2": "16",
-       "class": "tie_in_one",
+       "b_col2": "15",
+       "class": "tied_first_column_only",
        "material_a": "Buna S",
        "material_b": "Buna N"
       },
       {
        "a_col1": "18",
-       "a_col2": "17",
+       "a_col2": "16",
        "b_col1": "18",
-       "b_col2": "16",
-       "class": "tie_in_one",
+       "b_col2": "17",
+       "class": "tied_first_column_only",
        "material_a": "Buna S",
-       "material_b": "EPDM Rubber"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "17",
-       "b_col1": "18",
-       "b_col2": "18",
-       "class": "tie_in_one",
-       "material_a": "Buna S",
-       "material_b": "Polyethylene"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "17",
-       "b_col1": "18",
-       "b_col2": "16",
-       "class": "tie_in_one",
-       "material_a": "Neoprene",
-       "material_b": "Buna N"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "17",
-       "b_col1": "18",
-       "b_col2": "16",
-       "class": "tie_in_one",
-       "material_a": "Neoprene",
-       "material_b": "EPDM Rubber"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "17",
-       "b_col1": "18",
-       "b_col2": "18",
-       "class": "tie_in_one",
-       "material_a": "Neoprene",
        "material_b": "Polyethylene"
       },
       {
        "a_col1": "18",
        "a_col2": "16",
        "b_col1": "18",
-       "b_col2": "18",
-       "class": "tie_in_one",
+       "b_col2": "15",
+       "class": "tied_first_column_only",
+       "material_a": "Neoprene",
+       "material_b": "Buna N"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "16",
+       "b_col1": "18",
+       "b_col2": "17",
+       "class": "tied_first_column_only",
+       "material_a": "Neoprene",
+       "material_b": "Polyethylene"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "15",
+       "b_col1": "18",
+       "b_col2": "16",
+       "class": "tied_first_column_only",
+       "material_a": "Buna N",
+       "material_b": "EPDM Rubber"
+      },
+      {
+       "a_col1": "18",
+       "a_col2": "15",
+       "b_col1": "18",
+       "b_col2": "17",
+       "class": "tied_first_column_only",
        "material_a": "Buna N",
        "material_b": "Polyethylene"
       },
@@ -135,23 +291,16 @@
        "a_col1": "18",
        "a_col2": "16",
        "b_col1": "18",
-       "b_col2": "18",
-       "class": "tie_in_one",
+       "b_col2": "17",
+       "class": "tied_first_column_only",
        "material_a": "EPDM Rubber",
        "material_b": "Polyethylene"
       }
      ],
-     "ties_in_column_1": 10,
-     "ties_in_column_2": 3
-    },
-    {
-     "column_1": "48.2",
-     "column_2": "101.3",
-     "counts": {
-      "reversed": 2,
-      "same_order": 42,
-      "tie_in_both": 3,
-      "tie_in_one": 8
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule"
      },
      "kendall_tau_b": {
       "numerator": 40,
@@ -160,98 +309,6 @@
       "value_exact": "irrational (integer under the square root is not a square)"
      },
      "material_pairs": 55,
-     "reversed_and_tie_in_one_pairs": [
-      {
-       "a_col1": "28",
-       "a_col2": "21",
-       "b_col1": "25",
-       "b_col2": "23",
-       "class": "reversed",
-       "material_a": "Silicone",
-       "material_b": "Zytel 42"
-      },
-      {
-       "a_col1": "28",
-       "a_col2": "21",
-       "b_col1": "29",
-       "b_col2": "21",
-       "class": "tie_in_one",
-       "material_a": "Silicone",
-       "material_b": "Viton A"
-      },
-      {
-       "a_col1": "25",
-       "a_col2": "23",
-       "b_col1": "29",
-       "b_col2": "21",
-       "class": "reversed",
-       "material_a": "Zytel 42",
-       "material_b": "Viton A"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "16",
-       "b_col1": "18",
-       "b_col2": "15",
-       "class": "tie_in_one",
-       "material_a": "Buna S",
-       "material_b": "Buna N"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "16",
-       "b_col1": "18",
-       "b_col2": "17",
-       "class": "tie_in_one",
-       "material_a": "Buna S",
-       "material_b": "Polyethylene"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "16",
-       "b_col1": "18",
-       "b_col2": "15",
-       "class": "tie_in_one",
-       "material_a": "Neoprene",
-       "material_b": "Buna N"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "16",
-       "b_col1": "18",
-       "b_col2": "17",
-       "class": "tie_in_one",
-       "material_a": "Neoprene",
-       "material_b": "Polyethylene"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "15",
-       "b_col1": "18",
-       "b_col2": "16",
-       "class": "tie_in_one",
-       "material_a": "Buna N",
-       "material_b": "EPDM Rubber"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "15",
-       "b_col1": "18",
-       "b_col2": "17",
-       "class": "tie_in_one",
-       "material_a": "Buna N",
-       "material_b": "Polyethylene"
-      },
-      {
-       "a_col1": "18",
-       "a_col2": "16",
-       "b_col1": "18",
-       "b_col2": "17",
-       "class": "tie_in_one",
-       "material_a": "EPDM Rubber",
-       "material_b": "Polyethylene"
-      }
-     ],
      "ties_in_column_1": 10,
      "ties_in_column_2": 4
     },
@@ -259,25 +316,19 @@
      "column_1": "85.3",
      "column_2": "101.3",
      "counts": {
-      "reversed": 0,
-      "same_order": 49,
-      "tie_in_both": 1,
-      "tie_in_one": 5
+      "concordant": 49,
+      "discordant": 0,
+      "tied_both_columns": 1,
+      "tied_first_column_only": 2,
+      "tied_second_column_only": 3
      },
-     "kendall_tau_b": {
-      "numerator": 49,
-      "under_sqrt": 2652,
-      "value": "0.951501",
-      "value_exact": "irrational (integer under the square root is not a square)"
-     },
-     "material_pairs": 55,
-     "reversed_and_tie_in_one_pairs": [
+     "discordant_and_tied_one_column_pairs": [
       {
        "a_col1": "23",
        "a_col2": "21",
        "b_col1": "23",
        "b_col2": "23",
-       "class": "tie_in_one",
+       "class": "tied_first_column_only",
        "material_a": "Silicone",
        "material_b": "Zytel 42"
       },
@@ -286,7 +337,7 @@
        "a_col2": "21",
        "b_col1": "21",
        "b_col2": "21",
-       "class": "tie_in_one",
+       "class": "tied_second_column_only",
        "material_a": "Silicone",
        "material_b": "Viton A"
       },
@@ -295,7 +346,7 @@
        "a_col2": "16",
        "b_col1": "16",
        "b_col2": "16",
-       "class": "tie_in_one",
+       "class": "tied_second_column_only",
        "material_a": "Buna S",
        "material_b": "EPDM Rubber"
       },
@@ -304,7 +355,7 @@
        "a_col2": "16",
        "b_col1": "16",
        "b_col2": "16",
-       "class": "tie_in_one",
+       "class": "tied_second_column_only",
        "material_a": "Neoprene",
        "material_b": "EPDM Rubber"
       },
@@ -313,11 +364,23 @@
        "a_col2": "15",
        "b_col1": "16",
        "b_col2": "16",
-       "class": "tie_in_one",
+       "class": "tied_first_column_only",
        "material_a": "Buna N",
        "material_b": "EPDM Rubber"
       }
      ],
+     "governed_by": {
+      "counts": "M06a: KENDALL_B",
+      "kendall_tau_b": "M06b: KENDALL_B",
+      "kendall_tau_b.value": "M06c: team rule"
+     },
+     "kendall_tau_b": {
+      "numerator": 49,
+      "under_sqrt": 2652,
+      "value": "0.951501",
+      "value_exact": "irrational (integer under the square root is not a square)"
+     },
+     "material_pairs": 55,
      "ties_in_column_1": 3,
      "ties_in_column_2": 4
     }

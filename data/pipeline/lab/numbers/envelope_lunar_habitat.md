@@ -43,9 +43,27 @@ Conversions by the pipeline (pipeline/spec/sources.json): o2_pct of bass2: 'Cali
 - `ranges_not_on_axes`: a scenario range of a variable that is not one of 'axes' (flow_cms for the ISS) is printed with 'not applied' and enters no count
 - `scenarios_without_nominal`: a scenario whose nominal is empty gets no nominal-point numbers; its ranges are reported where set
 
+## Governed by (pipeline/lab/model_map.json)
+
+Labels in brackets next to the column names below name the decision point and its governing model key, or 'team rule'.
+
+- M01a: OECD_HULL, OECD ENV/JM/MONO(2007)2, Guidance Document on the Validation of (Q)SAR Models, Chapter 4, para 110 (https://www.oecd.org/content/dam/oecd/en/publications/reports/2014/09/guidance-document-on-the-validation-of-quantitative-structure-activity-relationship-q-sar-models_g1ghcc68/9789264085442-en.pdf; opened by applicability scout (via Exa); verifier (via Exa web fetch, 2026-11-14); para 110 text re-read by the lab session from the saved Exa copy)
+- M01b: team rule, no established model found
+- M01c: team rule, no established model found
+- M02a: team rule, no established model found
+- M02b: ELEM, elementary mathematics (the definition is the model)
+- M03: team rule, no established model found
+- M04: team rule, no established model found
+- M05a: team rule, no established model found
+- M05b: team rule, no established model found
+- M05c: ELEM, elementary mathematics (the definition is the model)
+- M05d: team rule, no established model found
+- M05e: team rule, no established model found
+- M08: ELEM, elementary mathematics (the definition is the model)
+
 ## Summary per need
 
-| Need | counted tests | with ambient O2 | with O2 and pressure | pooled tests (investigation, phase, geometry: tests) | hull | nominal position | O2 in range | pressure in range | both in range | gravity_level string equal to scenario's (table constant, not a match in data) |
+| Need | counted tests [M05a: team rule] | with ambient O2 [M05b: team rule] | with O2 and pressure [M03: team rule] | pooled tests (investigation, phase, geometry: tests) | hull [M01a: OECD_HULL; M01c: team rule] | nominal position [M01a: OECD_HULL; M01b: team rule] | O2 in range [M05e: team rule] | pressure in range | both in range | gravity_level string equal to scenario's (table constant, not a match in data) [M05c: ELEM] |
 |---|---|---|---|---|---|---|---|---|---|---|
 | P1 Flammability limit | 133 | 133 | 0 | - | none | no hull | 0 of 133 | 0 of 0 | 0 | 0 |
 | P2 Ignition | 0 | 0 | - | - | - | - | 0 of 0 | 0 of 0 | 0 | 0 |
@@ -60,7 +78,7 @@ gravity_level in tests.csv is not a column of any PSI table: it is a constant th
 
 Counted tests left out: 0 without o2_pct, 0 with o2_basis not ambient.
 
-| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value |
+| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value [M02b: ELEM; rounding mark M04: team rule] |
 |---|---|---|---|---|---|
 | o2_pct | 133 | 13.6 (0 flagged) | 22.2 (0 flagged) | no | 22.2 (gap -7.8, 13 tests, 0 flagged) |
 | pressure_kpa | 0 | - | - | - | - |
@@ -88,7 +106,7 @@ No counted test of this need has a recorded ambient oxygen.
 
 Counted tests left out: 0 without o2_pct, 0 with o2_basis not ambient.
 
-| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value |
+| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value [M02b: ELEM; rounding mark M04: team rule] |
 |---|---|---|---|---|---|
 | o2_pct | 2 | 21.5 (1 flagged) | 21.7 (1 flagged) | no | 21.7 (gap -8.3, 1 tests, 1 flagged) |
 | pressure_kpa | 0 | - | - | - | - |
@@ -104,14 +122,14 @@ No hull: no counted test of this need records both an ambient oxygen and a press
 
 Counted tests left out: 0 without o2_pct, 0 with o2_basis not ambient.
 
-| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value |
+| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value [M02b: ELEM; rounding mark M04: team rule] |
 |---|---|---|---|---|---|
 | o2_pct | 298 | 12 (0 flagged) | 34 (0 flagged) | yes | 30 (gap 0, below nominal rounding, 15 tests, 0 flagged) |
 | pressure_kpa | 273 | 70.1676 (0 flagged) | 309.2946 (0 flagged) | yes | 70.3409 (gap 0.0409, below nominal rounding, 1 tests, 0 flagged) |
 
-Tests with both recorded: 273 (250 distinct points; PSI-69). Hull: area. Nominal point: outside, inside = false. Rounding box (nominal +- 0.05 o2_pct, +- 0.05 pressure_kpa): 0 of 4 corners inside.
+Tests with both recorded: 273 (250 distinct points; PSI-69). Hull: area. Nominal point: outside, inside = false. Rounding box (nominal +- 0.05 o2_pct, +- 0.05 pressure_kpa): 0 of 4 corners inside. [hull M01a: OECD_HULL; position M01a: OECD_HULL; M01b: team rule; rounding box M04: team rule]
 
-Nearest tests (Pareto set in |delta o2_pct|, |delta pressure_kpa|):
+Nearest tests (Pareto set in |delta o2_pct|, |delta pressure_kpa|) [M02a: team rule]:
 
 | test | investigation | o2_pct | pressure_kpa | delta o2_pct | delta pressure_kpa | flags on axes | source |
 |---|---|---|---|---|---|---|---|
@@ -124,7 +142,7 @@ Nearest tests (Pareto set in |delta o2_pct|, |delta pressure_kpa|):
 
 Counted tests left out: 0 without o2_pct, 0 with o2_basis not ambient.
 
-| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value |
+| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value [M02b: ELEM; rounding mark M04: team rule] |
 |---|---|---|---|---|---|
 | o2_pct | 122 | 13.6 (0 flagged) | 22.2 (0 flagged) | no | 22.2 (gap -7.8, 13 tests, 0 flagged) |
 | pressure_kpa | 0 | - | - | - | - |

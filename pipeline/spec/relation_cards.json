@@ -7,7 +7,7 @@
    "unstated": "A validity field that the card's items do not state in their text, quote or values is the string 'unstated'. The item's note and where are not used for validity; where a note names a condition, it is shown under 'not_used' with the reason.",
    "results_are_not_conditions": "An oxygen number that is a reported limit (LOI, ULOI, MOC, a minimum in a boundary) is not the oxygen of an atmosphere and is not normalized as oxygen validity.",
    "words_only": "Words without a comparable value ('quiescent', 'reduced gravity') are kept as words and are not normalized.",
-   "criteria_timing": "The criteria below were written on 2026-11-14 after the scouts of the decision brief had computed the d-squared, CO/CO2, OF2012 and H2011 numbers and after a first run of the d-squared placebo. They are fixed in this file before the outputs were written; this is not a pre-registration."
+   "criteria_timing": "The criteria below were written on 2026-11-14 after the scouts of the decision brief had computed the d-squared, CO/CO2, OF2012 and H2011 numbers and after a first run of the d-squared placebo. They are fixed in this file before the outputs were written; this is not a pre-registration. On 2026-11-14 (model map, pipeline/lab/model_map.json) the d-squared criterion, its bands and its placebo were removed: they were chosen after the numbers were seen and no held or opened source defines them."
   },
   "status_values": {
    "columns_consistent_with_form": "the recorded columns of tests.csv agree with each other in the way the card's form or range says, by the card's criterion; this is not an independent test of a physical law",
@@ -15,7 +15,8 @@
    "not_testable_here": "tests.csv or the item's values hold nothing the check could compare; recorded facts may be listed beside it",
    "matches_published_table": "team arithmetic on values of the items agrees with the values or the statement the same document prints, by the card's criterion",
    "differs_from_published_table": "team arithmetic on values of the items does not agree with what the same document prints",
-   "not_in_our_references": "no document of references.json states the relation; the card is shown with this badge whatever its check gives"
+   "not_in_our_references": "no document of references.json states the relation; the card is shown with this badge whatever its check gives",
+   "described_without_criterion": "a team computation over recorded columns is described (count, minimum, quartiles, median, maximum); no criterion is applied and no agreement status is given"
   },
   "units": {
    "pressure_to_kpa": {"kPa": 1, "psia": 6.894757, "psi": 6.894757, "atm": 101.325},
@@ -34,28 +35,32 @@
    "axis_values": {
     "inside": "the scenario sets a range (or a gravity level) and every value of it lies inside what the card states",
     "outside": "the scenario's range is not contained in what the card states (overlap 'partial' or 'none' is given); the card's verbatim words are shown",
-    "card_unstated": "the card's items state nothing on this axis",
+    "card_unstated": "neither the card's items nor the scenario state anything on this axis",
+    "domain_not_defined": "the scenario sets a range or a level on this axis and the card's items state no comparable domain on it (nothing, or words without a comparable value); following OECD Principle 3 (para 92), inside cannot be claimed on an axis whose domain is not defined",
     "scenario_unstated": "the card states the axis and the scenario sets no range or level for it"
    },
+   "domain_rule_source": {"model_key": "OECD_AD", "map": "pipeline/lab/model_map.json (point L05)", "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2014/09/guidance-document-on-the-validation-of-quantitative-structure-activity-relationship-q-sar-models_g1ghcc68/9789264085442-en.pdf", "where": "ENV/JM/MONO(2007)2, para 92", "quote": "it is important to know whether its AD is known, and whether it is being used inside or outside of this boundary", "note": "The source states this for a (Q)SAR model's applicability domain; applying it to the stated validity of a published relation is the lab's reading (team rule using the OECD principle). The order of the decision list is a team rule."},
    "containment_rule": "A range of the scenario is inside a range of the card only if both of its ends lie inside, with the inclusive flags (scenario ranges: a minimum is included and a maximum is not unless the scenario says otherwise; an open end lies inside only an open end). A card that states single values (points) contains no scenario range, because no scenario range is a single value. Gravity is inside if the scenario's level is one of the card's levels.",
    "overall": [
     ["not_applicable", "the card is not in our references"],
     ["outside_stated_range", "at least one compared axis is outside"],
+    ["domain_not_defined", "no axis is outside and at least one compared axis is domain_not_defined"],
     ["not_applicable", "gravity is card_unstated or scenario_unstated"],
     ["may_be_quoted_here", "no compared axis is outside and gravity is inside"]
    ],
-   "overall_note": "may_be_quoted_here says only that no range stated by the card excludes the scenario. Axes that the card does not state do not block it and are named in the sentence. It is not a judgement of the condition.",
+   "overall_note": "may_be_quoted_here says only that the card states a domain on every axis the scenario sets and that no such domain excludes the scenario. An axis on which the scenario sets a value and the card states none gives domain_not_defined, which blocks may_be_quoted_here. Neither is a judgement of the condition.",
    "cells_rule": "The scenario's cells are the cells of coverage.json (oxygen bin x pressure bin) that its oxygen and pressure ranges both intersect, with the inclusive flags. Counts are copied from coverage_grid.csv, rows with o2_basis 'ambient'. A scenario without both ranges has no cells. Counts of cells are listed one by one and not summed; the two phase totals are team sums over coverage_grid.csv rows of that phase.",
    "sentences": {
-    "may_be_quoted_here": "{title} ({card_id}) may be quoted for the {scenario_label} scenario: the scenario's gravity level is among the levels the card states{inside_clause}. Not stated by the card: {card_unstated_axes}. Not set by the scenario: {scenario_unstated_axes}. This means only that no range stated by the card excludes the scenario; it is not a judgement of the condition.",
+    "may_be_quoted_here": "{title} ({card_id}) may be quoted for the {scenario_label} scenario: the scenario's gravity level is among the levels the card states{inside_clause}. Not stated by the card: {card_unstated_axes}. Not set by the scenario: {scenario_unstated_axes}. This means only that the card states a domain on every axis the scenario sets and that none of them excludes the scenario; it is not a judgement of the condition.",
     "inside_clause": ", and so are its {inside_axes}",
     "outside_stated_range": "{title} ({card_id}) is outside its stated range for the {scenario_label} scenario. {outside_details} The card's values are not carried to this condition.",
     "outside_axis": "{axis}: the scenario sets {scenario_range}; the card states \"{words}\" ({items}), read as {card_range}, overlap {overlap}.",
+    "domain_not_defined": "{title} ({card_id}) is not placed for the {scenario_label} scenario: the scenario sets {undefined_axes} and the card's items state no comparable domain there, so inside cannot be claimed and the card may not be quoted. Axes: {axes_summary}.",
     "not_applicable__not_in_our_references": "{title} ({card_id}) is not compared with the {scenario_label} scenario: no document of our reference list states this relation.",
     "not_applicable__gravity_card_unstated": "{title} ({card_id}) is not placed for the {scenario_label} scenario: the card's items state no gravity level, so the gate does not let it be quoted. Axes: {axes_summary}.",
     "not_applicable__gravity_scenario_unstated": "{title} ({card_id}) is not placed for the {scenario_label} scenario: the scenario sets no gravity level, so the gate does not let the card be quoted. Axes: {axes_summary}.",
-    "headline_none": "No held relation covers this condition. Of the {n_cards} cards, none may be quoted for the {scenario_label} scenario: {n_outside} outside a stated range, {n_not_applicable} not comparable.",
-    "headline_some": "Of the {n_cards} cards, {n_quotable} may be quoted for the {scenario_label} scenario ({quotable_ids}); {n_outside} are outside a stated range and {n_not_applicable} are not comparable. May be quoted means only that no range stated by the card excludes the scenario.",
+    "headline_none": "No held relation covers this condition. Of the {n_cards} cards, none may be quoted for the {scenario_label} scenario: {n_outside} outside a stated range, {n_domain_not_defined} with no domain stated on an axis the scenario sets, {n_not_applicable} not comparable.",
+    "headline_some": "Of the {n_cards} cards, {n_quotable} may be quoted for the {scenario_label} scenario ({quotable_ids}); {n_outside} are outside a stated range, {n_domain_not_defined} state no domain on an axis the scenario sets, and {n_not_applicable} are not comparable. May be quoted means only that the card states a domain on every axis the scenario sets and none excludes the scenario.",
     "coverage_phase": "{fuel_phase} fuel, ambient oxygen, in the scenario's cells: {cells_text}. Tests in the scenario's oxygen bins with no recorded pressure: {n_oxygen_no_pressure}. Rows of this phase with a recorded pressure: {n_with_pressure} of {n_phase} (team sums over coverage_grid.csv).",
     "coverage_cell": "{oxygen_label} x {pressure_label}, recorded tests: {tests}",
     "coverage_no_cells": "The scenario does not set both an oxygen and a pressure range, so it has no cell of the coverage grid. Rows of the {fuel_phase} phase with a recorded pressure: {n_with_pressure} of {n_phase} (team sums over coverage_grid.csv).",
@@ -247,16 +252,26 @@
     },
     "expression": "(o2_b - o2_a) / (p_b - p_a)",
     "unit": "% oxygen per psia",
+    "moc_domain": {
+     "words": {"item": "H2011.linear", "field": "text", "words": "For materials with MOC in the range 25-35% oxygen"},
+     "min": 25, "max": 35, "min_inclusive": true, "max_inclusive": true,
+     "reading": "Both ends included is the lab's reading of 'in the range 25-35%'. Every held MOC value of a material must lie inside before the form is applied to it; outside, the form is refused for that material.",
+     "example_values": ["H2011.cannot:moc_o2_pct", "H2011.cannot:fail_o2_pct"],
+     "example_label": "the example material of H2011.cannot (not named in the item)",
+     "table": {"item": "H2006.table2", "key": "moc_vol_pct_by_total_pressure_kpa", "columns_key": "columns_kpa"},
+     "table_note": "For H2006.table2 materials only the domain is reported: no slope is compared with the published slope range, because the source reports that range for the materials of its ref. 2 and does not state it as bounds for other materials (model map L11)."
+    },
     "range_bounds": ["H2011.linear:moc_slope_pct_o2_per_psia_max", "H2011.linear:moc_slope_pct_o2_per_psia_min"],
     "also_inside": ["H2011.linear:moc_slope_pct_o2_per_psia_avg"],
     "criterion": {
-     "text": "matches_published_table if the computed slope and the published average both lie inside the range spanned by the two published slope bounds, ends included; otherwise differs_from_published_table.",
+     "text": "matches_published_table if the computed slope and the published average both lie inside the range spanned by the two published slope bounds, ends included; otherwise differs_from_published_table. If the example values lie outside the stated MOC range, no slope is formed and the status is not_testable_here.",
      "status_if_met": "matches_published_table",
-     "status_if_not_met": "differs_from_published_table"
+     "status_if_not_met": "differs_from_published_table",
+     "status_if_refused": "not_testable_here"
     }
    },
    "caption": {
-    "means": "The example pair of the paper is consistent with the slope range the same paper prints. Team arithmetic on published values.",
+    "means": "The example pair of the paper is consistent with the slope range the same paper prints. Team arithmetic on published values. Per material, the card says whether every held MOC lies in the range 25-35 % for which the paper states the form; the form is refused for every material that does not.",
     "does_not_mean": "25.9% at 14.7 psia is where the material would fail Test 1, not a second MOC, so the pair is not two MOCs of one material. The material is not named. The intercept b and the pressure range of the form are not held; no MOC is computed for any other pressure. The slopes are a summary of an earlier paper that was not reached. The decision brief wrote 0.911 %/psia as a magnitude; the signed value is negative."
    }
   },
@@ -370,33 +385,21 @@
    "needs": ["source_id", "fuel_material", "initial_diameter_mm", "extinction_diameter_mm", "burning_rate_mm2_s", "burn_time_s", "test_end"],
    "check": {
     "kind": "expression_ratio",
-    "description": "For every FLEX row with an initial diameter, an extinction diameter above zero and below the initial one, a burning rate above zero and a burn time above zero, compute burn_time_s / ((d0^2 - d_ext^2) / K) (team computation; K read as mm2/s, as the team reads the column). Under the d-squared form with a constant K the ratio is 1.",
+    "description": "For every FLEX row with an initial diameter, an extinction diameter above zero and below the initial one, a burning rate above zero and a burn time above zero, compute burn_time_s / ((d0^2 - d_ext^2) / K) (team computation; K read as mm2/s, as the team reads the column) and describe its distribution (count, minimum, quartiles and median by NIST e-Handbook 7.2.6.2, method R6, maximum), overall and per fuel and test end. No criterion: the held K is fitted from shortly after ignition to extinction (NASA/TP-2015-216046 Appendix, not yet an item of references.json) and d0 is the diameter when the igniters are turned on, so the ratio is not a test of any law.",
+    "status": "described_without_criterion",
     "absence_search": ["squared", "d^2", "d2-law", "d2 law", "d-squared"],
     "filter": "source_id == 'flex' and initial_diameter_mm > 0 and extinction_diameter_mm > 0 and extinction_diameter_mm < initial_diameter_mm and burning_rate_mm2_s > 0 and burn_time_s > 0",
     "expression": "burn_time_s / ((initial_diameter_mm ** 2 - extinction_diameter_mm ** 2) / burning_rate_mm2_s)",
     "expression_label": "burn_time_s / ((initial_diameter_mm^2 - extinction_diameter_mm^2) / burning_rate_mm2_s)",
-    "bands": [0.1, 0.2, 0.5],
     "group_by": ["fuel_material", "test_end"],
+    "order_by": ["fuel_material", "source_row"],
     "extremes": 3,
-    "criterion": {
-     "text": "columns_consistent_with_form if the median ratio lies within the median band of 1 and at least the given share of rows lies within the share band of 1; otherwise inconsistent. Both are team parameters, written after the scouts' numbers were seen.",
-     "median_band": 0.1,
-     "share_band": 0.2,
-     "min_share": 0.75,
-     "status_if_met": "columns_consistent_with_form",
-     "status_if_not_met": "inconsistent"
-    },
-    "placebo": {
-     "column": "burning_rate_mm2_s",
-     "permutation": "reverse_within_group",
-     "group": "fuel_material",
-     "order_by": ["source_row"],
-     "description": "The same computation on the same rows, with the burning-rate values reversed in order within each fuel (rows ordered by source_row). Every row keeps its own diameters and burn time and gets the burning rate of another test of the same fuel. If the check discriminates, the placebo should fall short of the criterion."
-    }
+    "quantile_method": "NIST e-Handbook 7.2.6.2 percentiles (method R6 of Hyndman and Fan): position p(N+1) in the ordered values, linear between neighbours, ends clamped",
+    "removed_on_2026_11_14": "criterion (median band, share band, minimum share), bands and the reversal placebo: chosen after the numbers were seen; no held or opened source defines them (model map L12, M07)"
    },
    "caption": {
-    "means": "Consistent with the table means the recorded columns agree with each other under the d-squared form. Team computation, not a NASA conclusion.",
-    "does_not_mean": "This is not a test of a physical law: K is itself a reported value of the same experiment, and the form is not stated by any document we hold. The placebo shows how much of the agreement disappears when K is taken from another test of the same fuel."
+    "means": "The distribution of a team ratio over recorded FLEX columns. Team computation, not a NASA conclusion.",
+    "does_not_mean": "This is not a test of a physical law and gives no agreement status: K is itself a reported value of the same experiment, fitted over part of the burn, and the form is not stated by any document we hold. No threshold is applied."
    }
   },
   {

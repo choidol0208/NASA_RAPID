@@ -1,7 +1,7 @@
 {
  "_meta": {
   "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
-  "purpose": "Parameters and fixed sentences of the lab numbers (pipeline/lab/envelope.py, pipeline/lab/order_changes.py, branch data-lab). Every choice the two scripts make is a parameter of this file; the outputs copy the parameters they used under 'choices'. No model, fitted relation, weight, interpolation or probability is used. Every number of the outputs is a standardized value of data/pipeline/tests.csv (unit factors of sources.json applied by the pipeline, listed under 'conversions') or from a reference item's 'values', or a count, minimum, maximum, difference or the stated rank statistic of such values.",
+  "purpose": "Parameters and fixed sentences of the lab numbers (pipeline/lab/envelope.py, pipeline/lab/order_changes.py, branch data-lab). Every choice the two scripts make is a parameter of this file; the outputs copy the parameters they used under 'choices'. No fitted relation, weight, interpolation or probability is used; the established models that govern a step (convex hull per OECD para 110, Kendall tau-b per NIST Dataplot) are named in the map. Every number of the outputs is a standardized value of data/pipeline/tests.csv (unit factors of sources.json applied by the pipeline, listed under 'conversions') or from a reference item's 'values', or a count, minimum, maximum, difference or the stated rank statistic of such values. Every decision behind a number is a point of pipeline/lab/model_map.json; the outputs name it under 'governed_by'.",
   "status": "Experiment on branch data-lab, not merged into the pipeline."
  },
  "inputs": {
@@ -110,6 +110,32 @@
    "nominal_rounding": "The nominal values are rounded figures as written in scenarios.json; a gap smaller than half a unit of their last written digit is marked, and the rounding box corners show whether the position depends on that rounding.",
    "pooled": "The hull and the Pareto set pool all counted tests that record both values, whatever the fuel, geometry, flow or investigation; the summary table names what was pooled.",
    "ranges_not_applied": "A range marked 'not applied' is printed as written in scenarios.json and enters no count: it is not one of the axes."
+  },
+  "governed_by_fields": {
+   "counted_tests": "M05a",
+   "counted_tests_with_ambient_oxygen": "M05b",
+   "excluded_o2_not_recorded": "M05b",
+   "excluded_basis_not_ambient": "M05b",
+   "ranges": "M05e",
+   "gravity": "M05c",
+   "axes.tests_recorded": "M02b",
+   "axes.min": "M02b",
+   "axes.max": "M02b",
+   "axes.nominal_within_min_max": "M02b",
+   "axes.nearest": "M02b",
+   "axes.flagged_tests": "M05d",
+   "axes.nearest.below_nominal_rounding": "M04",
+   "joint.tests_with_both_recorded": "M03",
+   "joint.distinct_points": "M03",
+   "joint.composition": "M03",
+   "joint.hull_kind": "M01a",
+   "joint.hull_vertices_ccw": "M01a",
+   "joint.degenerate_hull": "M01c",
+   "joint.nominal_position": "M01a",
+   "joint.boundary_counted_inside": "M01b",
+   "joint.rounding_box_corners_inside": "M04",
+   "joint.nearest_tests_pareto": "M02a",
+   "values": "M08"
   }
  },
  "order_changes": {
@@ -118,10 +144,10 @@
     "value": "values are read as printed in the reference item's 'values' (exact decimals; JSON numbers read as decimal strings), no tolerance"
    },
    "classes": {
-    "value": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0"
+    "value": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); concordant if s1 = s2 != 0; discordant if s1 = -s2 != 0; tied_first_column_only if s1 = 0 and s2 != 0 (T_x); tied_second_column_only if s2 = 0 and s1 != 0 (T_y); tied_both_columns if both are 0. Concordant, discordant, tie, T_x and T_y as defined on the NIST Dataplot KENDALLS TAU page; tied_both_columns is the remaining class and enters neither T_x nor T_y"
    },
    "kendall_tau_b": {
-    "value": "tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0"
+    "value": "tau_b = (N_c - N_d) / sqrt((N_c + N_d + T_x)(N_c + N_d + T_y)) as defined on the NIST Dataplot KENDALLS TAU page (https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm); N_c = concordant pairs, N_d = discordant pairs, T_x, T_y = pairs tied in one column only; the script stops if the denominator differs from (n_0 - n_1)(n_0 - n_2); given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0"
    },
    "tau_b_digits": {
     "value": 6
@@ -461,6 +487,14 @@
      "reason": "one atmosphere; no materials"
     }
    ]
+  },
+  "governed_by_fields": {
+   "counts": "M06a",
+   "kendall_tau_b": "M06b",
+   "kendall_tau_b.value": "M06c",
+   "counts_held_differs": "M06e",
+   "same_criterion": "M06d",
+   "values": "M08"
   }
  },
  "readme": {
@@ -485,9 +519,9 @@
    "joint.nearest_tests_pareto": "Tests not dominated in (|delta o2_pct|, |delta pressure_kpa|), each with both deltas and its source file and row.",
    "gravity.*": "Number of tests whose gravity_level equals the scenario's, and where gravity_level in tests.csv comes from.",
    "ranges.*": "Number of tests inside the scenario's oxygen range, inside its pressure range, and inside both; the last equals tests_atmosphere of scenario_needs.csv (checked).",
-   "order.counts": "For one table, one quantity and one pair of condition columns: the number of material pairs in each class (same_order, reversed, tie_in_one, tie_in_both).",
-   "order.kendall_tau_b": "Kendall tau-b of the two columns over all material pairs, as numerator, integer under the square root and rounded decimal.",
-   "order.reversed_and_tie_in_one_pairs": "Every material pair that is reversed or tied in one column only, with the four printed values.",
+   "order.counts": "For one table, one quantity and one pair of condition columns: the number of material pairs in each class (concordant, discordant, tied_first_column_only, tied_second_column_only, tied_both_columns; terms of the NIST Dataplot KENDALLS TAU page, the last is the remaining class).",
+   "order.kendall_tau_b": "Kendall tau-b of the two columns over all material pairs as defined on the NIST Dataplot KENDALLS TAU page, as numerator, integer under the square root and rounded decimal.",
+   "order.discordant_and_tied_one_column_pairs": "Every material pair that is discordant or tied in one column only, with the four printed values.",
    "excluded_o2_not_recorded, excluded_basis_not_ambient": "Counted tests left out because o2_pct is empty, and because o2_basis is not 'ambient'.",
    "axes.flagged_tests": "Counted tests with a flag on the axis in tests.csv, with the flags and o2_range_as_written; min, max and nearest carry flagged_tests_at_value.",
    "axes.nearest.below_nominal_rounding": "Whether |gap| is smaller than half a unit of the last digit written for the nominal value.",
@@ -495,7 +529,8 @@
    "joint.rounding_box_corners_inside": "Of the 4 corners nominal +- h (h = half a unit of the last written digit, per axis), the number inside the hull.",
    "conversions": "Per axis and source of the counted tests: the source column, the pipeline rule and its parameters (unit factor) from sources.json.",
    "order.counts_held_differs": "The same class counts restricted to material pairs whose held condition (test pressure) differs.",
-   "order.same_criterion": "Whether the two condition columns carry the same criterion (spec)."
+   "order.same_criterion": "Whether the two condition columns carry the same criterion (spec).",
+   "governed_by": "Every output carries a 'governed_by' block: per decision point of pipeline/lab/model_map.json, the governing model key, source title, URL and opened_by, or 'team rule, no established model found'. Envelope and order fields carry the short label (point: model key or 'team rule') next to the number."
   }
  }
 }

@@ -16,11 +16,18 @@ import sys
 from fractions import Fraction
 
 from numlib import ROOT, META, fail, frac, dec, load_json, spec, scan_words, write_json, write_text
+import governance
 
 sys.path.insert(0, str(ROOT / "pipeline"))
 from run import in_range  # noqa: E402  the pipeline's own range rule
 
 AXES = ("o2_pct", "pressure_kpa")
+GF = spec()["envelope"]["governed_by_fields"]
+
+
+def g(*keys):
+    """Label(s) of the decision points behind a field: 'M01a: OECD_HULL; M01b: team rule'."""
+    return "; ".join(governance.short(GF[k]) for k in keys)
 
 
 def read_csv(path):
@@ -101,10 +108,13 @@ def axis_numbers(tests, axis, nominal, h, prefix):
         "max_flagged_tests_at_value": at(hi)["flagged_tests_at_value"],
         "nominal_within_min_max": lo <= nominal <= hi,
         "nearest": [{"value": dec(v), "gap": dec(v - nominal), "below_nominal_rounding": abs(v - nominal) < h,
-                     **at(v)} for v in nearest],
+                     **at(v), "governed_by": {"value": g("axes.nearest"), "gap": g("axes.nearest"),
+                                              "below_nominal_rounding": g("axes.nearest.below_nominal_rounding")}}
+                    for v in nearest],
         "flagged_tests": [{"test_id": t["test_id"], "value": t[axis], "flags": axis_flags(t, prefix),
                            "o2_range_as_written": t["o2_range_as_written"]}
                           for t, f in zip(tests, flagged) if f],
+        "governed_by": {k: g("axes." + k) for k in ("tests_recorded", "min", "max", "nominal_within_min_max", "flagged_tests")},
     }
 
 
@@ -190,6 +200,8 @@ def main():
                  "excluded_o2_not_recorded": sum(1 for i in ids if tests[i]["o2_pct"] == ""),
                  "excluded_basis_not_ambient": sum(1 for i in ids if tests[i]["o2_pct"] != ""
                                                    and tests[i][basis_col] != basis_val)}
+            b["governed_by"] = {k: g(k) for k in ("counted_tests", "counted_tests_with_ambient_oxygen",
+                                                  "excluded_o2_not_recorded", "excluded_basis_not_ambient")}
             for t in amb:
                 for a in AXES:
                     if t[a] != "":
@@ -217,6 +229,7 @@ def main():
                 "both_inside": len(both) if rng.get("o2_pct") and rng.get("pressure_kpa") else "not set",
                 "both_inside_equals_scenario_needs_tests_atmosphere": True,
                 "both_inside_test_ids": sorted(t["test_id"] for t in both),
+                "governed_by": g("ranges"),
             }
             joint = [t for t in amb if t["pressure_kpa"] != ""]
             gl = sc["gravity_level"]
@@ -229,6 +242,7 @@ def main():
                                                             if gl is not None else "not set"),
                 "tests_same_level_of_joint_tests": (sum(t["gravity_level"] == gl for t in joint)
                                                    if gl is not None else "not set"),
+                "governed_by": g("gravity"),
             }
             if has_nominal and amb:
                 b["nominal"] = {
@@ -280,6 +294,18 @@ def main():
                         "delta_pressure_below_nominal_rounding": abs(p[1] - nom[1]) < hp,
                         "flags_on_axes": [f for a in AXES for f in axis_flags(t, prefix[a])],
                         "source_file": t["source_file"], "source_row": t["source_row"]} for d, t, p in pareto],
+                    "governed_by": {
+                        "tests_with_both_recorded": g("joint.tests_with_both_recorded"),
+                        "distinct_points": g("joint.distinct_points"),
+                        "composition": g("joint.composition"),
+                        "hull_kind": g("joint.hull_kind", "joint.degenerate_hull"),
+                        "hull_vertices_ccw": g("joint.hull_vertices_ccw"),
+                        "nominal_position": g("joint.nominal_position", "joint.boundary_counted_inside", "joint.degenerate_hull"),
+                        "nominal_inside_hull": g("joint.nominal_position", "joint.boundary_counted_inside", "joint.degenerate_hull"),
+                        "rounding_box_corners_inside": g("joint.rounding_box_corners_inside", "joint.nominal_position"),
+                        "nearest_tests_pareto": g("joint.nearest_tests_pareto"),
+                        "deltas": g("axes.nearest"),
+                    },
                 }
                 if kind == "none":
                     b["nominal"]["notes"] = [sentences["no_hull"]]
@@ -314,6 +340,7 @@ def main():
             "conversions": {a: {sid: cols for sid, cols in sorted(by.items())}
                             for a, by in sorted(conversions(sources, used).items())},
             "choices": {k: v["value"] for k, v in E["choices"].items()},
+            "governed_by": governance.block(sorted(set(GF.values()))),
             "notes": notes,
             "gravity_note": gravity_note,
             "needs": blocks,
@@ -376,8 +403,15 @@ def render_md(doc):
             for a, by in doc["conversions"].items() for sid, cols in by.items()) + ".")
     L += ["", "## Notes", ""] + [f"- {n}" for n in doc["notes"]]
     L += ["", "## Choices (spec parameters)", ""] + [f"- `{k}`: {v}" for k, v in sorted(doc["choices"].items())]
+    L += ["", "## Governed by (pipeline/lab/model_map.json)", "",
+          "Labels in brackets next to the column names below name the decision point and its governing model key, "
+          "or 'team rule'.", ""] + governance.md_lines(doc["governed_by"])
     L += ["", "## Summary per need", "",
-          "| Need | counted tests | with ambient O2 | with O2 and pressure | pooled tests (investigation, phase, geometry: tests) | hull | nominal position | O2 in range | pressure in range | both in range | gravity_level string equal to scenario's (table constant, not a match in data) |",
+          f"| Need | counted tests [{g('counted_tests')}] | with ambient O2 [{g('counted_tests_with_ambient_oxygen')}] | "
+          f"with O2 and pressure [{g('joint.tests_with_both_recorded')}] | pooled tests (investigation, phase, geometry: tests) | "
+          f"hull [{g('joint.hull_kind', 'joint.degenerate_hull')}] | nominal position "
+          f"[{g('joint.nominal_position', 'joint.boundary_counted_inside')}] | O2 in range [{g('ranges')}] | pressure in range | "
+          f"both in range | gravity_level string equal to scenario's (table constant, not a match in data) [{g('gravity')}] |",
           "|---|---|---|---|---|---|---|---|---|---|---|"]
     for b in doc["needs"]:
         j = b.get("nominal", {}).get("joint", {})
@@ -400,7 +434,8 @@ def render_md(doc):
         if "axes" not in n:
             L += [x for note in n.get("notes", []) for x in (note, "")][:-1]
             continue
-        L += ["| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value |",
+        L += [f"| Axis | tests recorded | min | max | nominal within [min, max] | nearest recorded value "
+              f"[{g('axes.nearest')}; rounding mark {g('axes.nearest.below_nominal_rounding')}] |",
               "|---|---|---|---|---|---|"]
         for a in AXES:
             L.append(f"| {a} | {fmt_axis(n['axes'][a])} |")
@@ -420,9 +455,10 @@ def render_md(doc):
               f"{'' if j['hull_has_area'] else ' (no area)'}. Nominal point: {j['nominal_position']}, inside = "
               f"{'true' if j['nominal_inside_hull'] else 'false'}. Rounding box (nominal +- "
               f"{j['rounding_half_unit']['o2_pct']} o2_pct, +- {j['rounding_half_unit']['pressure_kpa']} pressure_kpa): "
-              f"{j['rounding_box_corners_inside']} of 4 corners inside.", ""]
+              f"{j['rounding_box_corners_inside']} of 4 corners inside. [hull {g('joint.hull_kind')}; position "
+              f"{g('joint.nominal_position', 'joint.boundary_counted_inside')}; rounding box {g('joint.rounding_box_corners_inside')}]", ""]
         if j["nearest_tests_pareto"]:
-            L += ["Nearest tests (Pareto set in |delta o2_pct|, |delta pressure_kpa|):", "",
+            L += [f"Nearest tests (Pareto set in |delta o2_pct|, |delta pressure_kpa|) [{g('joint.nearest_tests_pareto')}]:", "",
                   "| test | investigation | o2_pct | pressure_kpa | delta o2_pct | delta pressure_kpa | flags on axes | source |",
                   "|---|---|---|---|---|---|---|---|"]
             for t in j["nearest_tests_pareto"]:

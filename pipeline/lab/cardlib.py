@@ -161,7 +161,7 @@ def verify_cards(spec, items):
                     if sorted({aw["value"] for aw in norm["as_written"]}) != sorted({norm["min"], norm["max"]}):
                         fail("%s.%s: range ends are not the as-written values" % (cid, axis))
         st = card["check"].get("status")
-        for key in ("status_if_met", "status_if_not_met", "status_if_none"):
+        for key in ("status_if_met", "status_if_not_met", "status_if_none", "status_if_refused"):
             if key in card["check"].get("criterion", {}):
                 if card["check"]["criterion"][key] not in statuses:
                     fail("%s: unknown status %s" % (cid, card["check"]["criterion"][key]))

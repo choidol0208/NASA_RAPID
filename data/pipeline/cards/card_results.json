@@ -13,10 +13,30 @@
    "not_testable_here": "tests.csv or the item's values hold nothing the check could compare; recorded facts may be listed beside it",
    "matches_published_table": "team arithmetic on values of the items agrees with the values or the statement the same document prints, by the card's criterion",
    "differs_from_published_table": "team arithmetic on values of the items does not agree with what the same document prints",
-   "not_in_our_references": "no document of references.json states the relation; the card is shown with this badge whatever its check gives"
+   "not_in_our_references": "no document of references.json states the relation; the card is shown with this badge whatever its check gives",
+   "described_without_criterion": "a team computation over recorded columns is described (count, minimum, quartiles, median, maximum); no criterion is applied and no agreement status is given"
   },
   "numbers": "Every number is a NASA cell of tests.csv, a value of a reference item, or arithmetic named by the card and labelled under computation_label. Criterion parameters are team choices.",
-  "criteria_timing": "The criteria below were written on 2026-11-14 after the scouts of the decision brief had computed the d-squared, CO/CO2, OF2012 and H2011 numbers and after a first run of the d-squared placebo. They are fixed in this file before the outputs were written; this is not a pre-registration."
+  "criteria_timing": "The criteria below were written on 2026-11-14 after the scouts of the decision brief had computed the d-squared, CO/CO2, OF2012 and H2011 numbers and after a first run of the d-squared placebo. They are fixed in this file before the outputs were written; this is not a pre-registration. On 2026-11-14 (model map, pipeline/lab/model_map.json) the d-squared criterion, its bands and its placebo were removed: they were chosen after the numbers were seen and no held or opened source defines them."
+ },
+ "governed_by": {
+  "map": "pipeline/lab/model_map.json",
+  "points": [
+   {
+    "point": "L15",
+    "classification": "established",
+    "model_key": "ELEM",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null,
+    "opened_by": null
+   },
+   {
+    "point": "L01",
+    "classification": "spec_judgement",
+    "model": "spec-time judgement, no established model found",
+    "candidate_model_not_governing": "OECD_AD"
+   }
+  ]
  },
  "summary": [
   {
@@ -50,7 +70,7 @@
   {
    "card_id": "droplet_d_squared",
    "status": "not_in_our_references",
-   "check_outcome": "columns_consistent_with_form"
+   "check_outcome": "described_without_criterion"
   },
   {
    "card_id": "cfi_droplet",
@@ -238,6 +258,30 @@
    "caption": {
     "means": "The team's ratio of two glovebox sensor differences (CO and CO2, final minus initial) lies inside the range the investigators report for the stated count of BASS-II rows. Team computation, not a NASA conclusion.",
     "does_not_mean": "It is not an emission ratio of one burn, not a yield and not a statement on crew exposure. The rows are a filtered subset: rows with a CO difference of zero or less, or a CO2 difference below 0.05 points, have no ratio by the rule of variables.json. How the investigators derived their range was not read."
+   },
+   "governed_by": {
+    "map": "pipeline/lab/model_map.json",
+    "points": [
+     {
+      "point": "D31",
+      "classification": "team_rule",
+      "model": "team rule, no established model found",
+      "candidate_model_not_governing": "GUM_PROP"
+     },
+     {
+      "point": "L08",
+      "classification": "team_rule",
+      "model": "team rule, no established model found"
+     },
+     {
+      "point": "L03",
+      "classification": "established",
+      "model_key": "ELEM",
+      "source_title": "elementary mathematics (the definition is the model)",
+      "url": null,
+      "opened_by": null
+     }
+    ]
    }
   },
   {
@@ -388,6 +432,17 @@
    "caption": {
     "means": "The printed margins of Table I follow from the printed limits by Eq. 1 as the paper states it. Team arithmetic on published values.",
     "does_not_mean": "It does not check the limits themselves. Each material was tested at one pressure, so the margins say nothing about another pressure. The low-gravity limits come from 5.18 s drop-tower tests whose criteria differ from the 1g criteria. The paper's Conclusions give 5.75 for Martian gravity while Table I gives it for Lunar; the card uses the table."
+   },
+   "governed_by": {
+    "map": "pipeline/lab/model_map.json",
+    "points": [
+     {
+      "point": "L09",
+      "classification": "team_rule",
+      "model": "team rule, no established model found",
+      "candidate_model_not_governing": "SP811_DIGITS"
+     }
+    ]
    }
   },
   {
@@ -535,6 +590,17 @@
    "caption": {
     "means": "Whether the paper's own Table 2 orders the materials as its sentence says. Team arithmetic on published values.",
     "does_not_mean": "It is not a slope, not a fit and not a pressure law: three pressures per material, normal gravity, quiescent. PMMA and the cotton-fiberglass fabric are not in the table. Nothing in tests.csv can be compared with it: no solid-fuel row has a recorded pressure and every row is microgravity."
+   },
+   "governed_by": {
+    "map": "pipeline/lab/model_map.json",
+    "points": [
+     {
+      "point": "L10",
+      "classification": "team_rule",
+      "model": "team rule, no established model found",
+      "candidate_model_not_governing": "KENDALL_B"
+     }
+    ]
    }
   },
   {
@@ -558,6 +624,19 @@
    "caption": {
     "means": "The paper's thresholds stand at one pressure, 70.1 kPa.",
     "does_not_mean": "The table of values of the paper is not transcribed in references.json, so no threshold of it is shown. One pressure gives no pressure dependence."
+   },
+   "governed_by": {
+    "map": "pipeline/lab/model_map.json",
+    "points": [
+     {
+      "point": "L14",
+      "classification": "established",
+      "model_key": "ELEM",
+      "source_title": "elementary mathematics (the definition is the model)",
+      "url": null,
+      "opened_by": null
+     }
+    ]
    }
   },
   {
@@ -573,9 +652,10 @@
     "kind": "value_in_published_range",
     "description": "Compute the slope between the two points of the published example pair (team computation) and check whether it lies inside the published slope range, ends included; also check that the published average lies inside.",
     "criterion": {
-     "text": "matches_published_table if the computed slope and the published average both lie inside the range spanned by the two published slope bounds, ends included; otherwise differs_from_published_table.",
+     "text": "matches_published_table if the computed slope and the published average both lie inside the range spanned by the two published slope bounds, ends included; otherwise differs_from_published_table. If the example values lie outside the stated MOC range, no slope is formed and the status is not_testable_here.",
      "status_if_met": "matches_published_table",
-     "status_if_not_met": "differs_from_published_table"
+     "status_if_not_met": "differs_from_published_table",
+     "status_if_refused": "not_testable_here"
     }
    },
    "result": {
@@ -616,11 +696,182 @@
       "value": -0.607,
       "inside": true
      }
-    ]
+    ],
+    "moc_domain": {
+     "words": {
+      "item": "H2011.linear",
+      "field": "text",
+      "words": "For materials with MOC in the range 25-35% oxygen"
+     },
+     "range": {
+      "min": 25,
+      "max": 35,
+      "min_inclusive": true,
+      "max_inclusive": true
+     },
+     "reading": "Both ends included is the lab's reading of 'in the range 25-35%'. Every held MOC value of a material must lie inside before the form is applied to it; outside, the form is refused for that material.",
+     "example": {
+      "material": "the example material of H2011.cannot (not named in the item)",
+      "values_of": [
+       "H2011.cannot:moc_o2_pct",
+       "H2011.cannot:fail_o2_pct"
+      ],
+      "values": [
+       30,
+       25.9
+      ],
+      "inside_stated_moc_range": true
+     },
+     "materials": [
+      {
+       "material": "PTFE",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 53,
+        "85.3": 46,
+        "101.3": 42
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      },
+      {
+       "material": "Kel-F 81",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 76,
+        "85.3": 56,
+        "101.3": 53
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      },
+      {
+       "material": "Silicone",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 28,
+        "85.3": 23,
+        "101.3": 21
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      },
+      {
+       "material": "Zytel 42",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 25,
+        "85.3": 23,
+        "101.3": 23
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      },
+      {
+       "material": "Viton A",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 29,
+        "85.3": 21,
+        "101.3": 21
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      },
+      {
+       "material": "Buna S",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 18,
+        "85.3": 17,
+        "101.3": 16
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      },
+      {
+       "material": "Neoprene",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 18,
+        "85.3": 17,
+        "101.3": 16
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      },
+      {
+       "material": "Buna N",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 18,
+        "85.3": 16,
+        "101.3": 15
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      },
+      {
+       "material": "EPDM Rubber",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 18,
+        "85.3": 16,
+        "101.3": 16
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      },
+      {
+       "material": "Polyethylene",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 18,
+        "85.3": 18,
+        "101.3": 17
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      },
+      {
+       "material": "Delrin",
+       "item": "H2006.table2",
+       "moc_by_column": {
+        "48.2": 13,
+        "85.3": 12,
+        "101.3": 11
+       },
+       "inside_stated_moc_range": false,
+       "form_applied": "refused: an MOC value lies outside the stated range"
+      }
+     ],
+     "materials_refused": 11,
+     "materials_inside": 0,
+     "table_note": "For H2006.table2 materials only the domain is reported: no slope is compared with the published slope range, because the source reports that range for the materials of its ref. 2 and does not state it as bounds for other materials (model map L11)."
+    }
    },
    "caption": {
-    "means": "The example pair of the paper is consistent with the slope range the same paper prints. Team arithmetic on published values.",
+    "means": "The example pair of the paper is consistent with the slope range the same paper prints. Team arithmetic on published values. Per material, the card says whether every held MOC lies in the range 25-35 % for which the paper states the form; the form is refused for every material that does not.",
     "does_not_mean": "25.9% at 14.7 psia is where the material would fail Test 1, not a second MOC, so the pair is not two MOCs of one material. The material is not named. The intercept b and the pressure range of the form are not held; no MOC is computed for any other pressure. The slopes are a summary of an earlier paper that was not reached. The decision brief wrote 0.911 %/psia as a magnitude; the signed value is negative."
+   },
+   "governed_by": {
+    "map": "pipeline/lab/model_map.json",
+    "points": [
+     {
+      "point": "L11",
+      "classification": "team_rule",
+      "model": "team rule, no established model found",
+      "candidate_model_not_governing": "H2011"
+     },
+     {
+      "point": "L03",
+      "classification": "established",
+      "model_key": "ELEM",
+      "source_title": "elementary mathematics (the definition is the model)",
+      "url": null,
+      "opened_by": null
+     }
+    ]
    }
   },
   {
@@ -910,6 +1161,19 @@
    "caption": {
     "means": "What the recorded BASS-II rows hold on the oxygen and flow axes of the published boundary, and which rows share the published minimum values. Team counts over NASA cells.",
     "does_not_mean": "No boundary is drawn or fitted and no row is assigned to the concurrent or the opposed value: that mapping is the paper's, not the team's. A row without an event word is not a row that burned steadily. The published values stand at 1 atm, in microgravity, for PMMA rods; the 1g values of ICES19.limits (17 and 15.4) are normal-gravity statements of the same item and are outside this card's gravity axis."
+   },
+   "governed_by": {
+    "map": "pipeline/lab/model_map.json",
+    "points": [
+     {
+      "point": "L13",
+      "classification": "established",
+      "model_key": "ELEM",
+      "source_title": "elementary mathematics (the definition is the model)",
+      "url": null,
+      "opened_by": null
+     }
+    ]
    }
   },
   {
@@ -1153,6 +1417,19 @@
    "caption": {
     "means": "The published LOI values and the lowest oxygen in the FLEX table, side by side, each with its source. Scaling a mole fraction by 100 to a percentage is team arithmetic.",
     "does_not_mean": "The lowest oxygen tested is not an LOI. No lower oxygen was run. The criterion behind the published values was not read (abstract only). No LOI is estimated from the table and no boundary is fitted."
+   },
+   "governed_by": {
+    "map": "pipeline/lab/model_map.json",
+    "points": [
+     {
+      "point": "L13",
+      "classification": "established",
+      "model_key": "ELEM",
+      "source_title": "elementary mathematics (the definition is the model)",
+      "url": null,
+      "opened_by": null
+     }
+    ]
    }
   },
   {
@@ -1163,19 +1440,11 @@
    ],
    "in_our_references": false,
    "status": "not_in_our_references",
-   "check_outcome": "columns_consistent_with_form",
+   "check_outcome": "described_without_criterion",
    "not_in_our_references_note": "No item of references.json states the d-squared form (d^2 = d0^2 - K t). The team wrote it from general knowledge of combustion. TP216046.columns is held only as the pointer to the column definitions of the FLEX table and does not state the form. The script searches every item for the words listed under 'absence_search' and stops if one is found.",
    "check": {
     "kind": "expression_ratio",
-    "description": "For every FLEX row with an initial diameter, an extinction diameter above zero and below the initial one, a burning rate above zero and a burn time above zero, compute burn_time_s / ((d0^2 - d_ext^2) / K) (team computation; K read as mm2/s, as the team reads the column). Under the d-squared form with a constant K the ratio is 1.",
-    "criterion": {
-     "text": "columns_consistent_with_form if the median ratio lies within the median band of 1 and at least the given share of rows lies within the share band of 1; otherwise inconsistent. Both are team parameters, written after the scouts' numbers were seen.",
-     "median_band": 0.1,
-     "share_band": 0.2,
-     "min_share": 0.75,
-     "status_if_met": "columns_consistent_with_form",
-     "status_if_not_met": "inconsistent"
-    }
+    "description": "For every FLEX row with an initial diameter, an extinction diameter above zero and below the initial one, a burning rate above zero and a burn time above zero, compute burn_time_s / ((d0^2 - d_ext^2) / K) (team computation; K read as mm2/s, as the team reads the column) and describe its distribution (count, minimum, quartiles and median by NIST e-Handbook 7.2.6.2, method R6, maximum), overall and per fuel and test end. No criterion: the held K is fitted from shortly after ignition to extinction (NASA/TP-2015-216046 Appendix, not yet an item of references.json) and d0 is the diameter when the igniters are turned on, so the ratio is not a test of any law."
    },
    "result": {
     "computation_label": "team computation over NASA cells",
@@ -1183,66 +1452,79 @@
     "filter": "source_id == 'flex' and initial_diameter_mm > 0 and extinction_diameter_mm > 0 and extinction_diameter_mm < initial_diameter_mm and burning_rate_mm2_s > 0 and burn_time_s > 0",
     "result": {
      "rows": 187,
-     "median": 1.0529,
-     "quartile_1": 1.0298,
-     "quartile_3": 1.0929,
      "min": 0.2586,
+     "quartile_1": 1.0297,
+     "median": 1.0529,
+     "quartile_3": 1.0929,
      "max": 4.6209,
-     "bands": [
-      {
-       "within": 0.1,
-       "rows": 139,
-       "share": 0.7433
-      },
-      {
-       "within": 0.2,
-       "rows": 172,
-       "share": 0.9198
-      },
-      {
-       "within": 0.5,
-       "rows": 179,
-       "share": 0.9572
-      }
-     ],
-     "meets_criterion": true
+     "quantile_method": "NIST 7.2.6.2, method R6"
     },
     "by_group": [
      {
       "fuel_material": "heptane",
       "test_end": "completion",
       "rows": 5,
-      "median": 1.0128
+      "min": 0.8413,
+      "quartile_1": 0.9027,
+      "median": 1.0128,
+      "quartile_3": 1.0244,
+      "max": 1.0343,
+      "quantile_method": "NIST 7.2.6.2, method R6"
      },
      {
       "fuel_material": "heptane",
       "test_end": "disruption",
       "rows": 11,
-      "median": 1.112
+      "min": 1.0011,
+      "quartile_1": 1.0298,
+      "median": 1.112,
+      "quartile_3": 1.1239,
+      "max": 1.1946,
+      "quantile_method": "NIST 7.2.6.2, method R6"
      },
      {
       "fuel_material": "heptane",
       "test_end": "extinction",
       "rows": 55,
-      "median": 1.055
+      "min": 0.2586,
+      "quartile_1": 1.0109,
+      "median": 1.055,
+      "quartile_3": 1.1263,
+      "max": 4.6209,
+      "quantile_method": "NIST 7.2.6.2, method R6"
      },
      {
       "fuel_material": "methanol",
       "test_end": "completion",
       "rows": 5,
-      "median": 1.0442
+      "min": 1.0105,
+      "quartile_1": 1.0263,
+      "median": 1.0442,
+      "quartile_3": 1.0587,
+      "max": 1.0623,
+      "quantile_method": "NIST 7.2.6.2, method R6"
      },
      {
       "fuel_material": "methanol",
       "test_end": "disruption",
       "rows": 9,
-      "median": 1.078
+      "min": 1.0417,
+      "quartile_1": 1.0496,
+      "median": 1.078,
+      "quartile_3": 1.1172,
+      "max": 1.6706,
+      "quantile_method": "NIST 7.2.6.2, method R6"
      },
      {
       "fuel_material": "methanol",
       "test_end": "extinction",
       "rows": 102,
-      "median": 1.0513
+      "min": 0.841,
+      "quartile_1": 1.0321,
+      "median": 1.0513,
+      "quartile_3": 1.0767,
+      "max": 1.2785,
+      "quantile_method": "NIST 7.2.6.2, method R6"
      }
     ],
     "lowest": [
@@ -1321,793 +1603,8 @@
       "ratio": 1.8712
      }
     ],
-    "placebo": {
-     "description": "The same computation on the same rows, with the burning-rate values reversed in order within each fuel (rows ordered by source_row). Every row keeps its own diameters and burn time and gets the burning rate of another test of the same fuel. If the check discriminates, the placebo should fall short of the criterion.",
-     "permutation": {
-      "column": "burning_rate_mm2_s",
-      "kind": "reverse_within_group",
-      "group": "fuel_material",
-      "order_by": [
-       "source_row"
-      ]
-     },
-     "result": {
-      "rows": 187,
-      "median": 1.0532,
-      "quartile_1": 0.8917,
-      "quartile_3": 1.2399,
-      "min": 0.163,
-      "max": 7.3165,
-      "bands": [
-       {
-        "within": 0.1,
-        "rows": 55,
-        "share": 0.2941
-       },
-       {
-        "within": 0.2,
-        "rows": 99,
-        "share": 0.5294
-       },
-       {
-        "within": 0.5,
-        "rows": 159,
-        "share": 0.8503
-       }
-      ],
-      "meets_criterion": false
-     },
-     "pairs": [
-      {
-       "test_id": "FLEX-1",
-       "burning_rate_from": "FLEX-272"
-      },
-      {
-       "test_id": "FLEX-2",
-       "burning_rate_from": "FLEX-271"
-      },
-      {
-       "test_id": "FLEX-3",
-       "burning_rate_from": "FLEX-266"
-      },
-      {
-       "test_id": "FLEX-5",
-       "burning_rate_from": "FLEX-265"
-      },
-      {
-       "test_id": "FLEX-6",
-       "burning_rate_from": "FLEX-264"
-      },
-      {
-       "test_id": "FLEX-16",
-       "burning_rate_from": "FLEX-263"
-      },
-      {
-       "test_id": "FLEX-18",
-       "burning_rate_from": "FLEX-274"
-      },
-      {
-       "test_id": "FLEX-20",
-       "burning_rate_from": "FLEX-262"
-      },
-      {
-       "test_id": "FLEX-21",
-       "burning_rate_from": "FLEX-257"
-      },
-      {
-       "test_id": "FLEX-25",
-       "burning_rate_from": "FLEX-256"
-      },
-      {
-       "test_id": "FLEX-26",
-       "burning_rate_from": "FLEX-253"
-      },
-      {
-       "test_id": "FLEX-30",
-       "burning_rate_from": "FLEX-252"
-      },
-      {
-       "test_id": "FLEX-33",
-       "burning_rate_from": "FLEX-251"
-      },
-      {
-       "test_id": "FLEX-34",
-       "burning_rate_from": "FLEX-248"
-      },
-      {
-       "test_id": "FLEX-35",
-       "burning_rate_from": "FLEX-273"
-      },
-      {
-       "test_id": "FLEX-36",
-       "burning_rate_from": "FLEX-247"
-      },
-      {
-       "test_id": "FLEX-45",
-       "burning_rate_from": "FLEX-246"
-      },
-      {
-       "test_id": "FLEX-46",
-       "burning_rate_from": "FLEX-245"
-      },
-      {
-       "test_id": "FLEX-49",
-       "burning_rate_from": "FLEX-270"
-      },
-      {
-       "test_id": "FLEX-50",
-       "burning_rate_from": "FLEX-269"
-      },
-      {
-       "test_id": "FLEX-55",
-       "burning_rate_from": "FLEX-244"
-      },
-      {
-       "test_id": "FLEX-56",
-       "burning_rate_from": "FLEX-268"
-      },
-      {
-       "test_id": "FLEX-57",
-       "burning_rate_from": "FLEX-267"
-      },
-      {
-       "test_id": "FLEX-59",
-       "burning_rate_from": "FLEX-241"
-      },
-      {
-       "test_id": "FLEX-61",
-       "burning_rate_from": "FLEX-240"
-      },
-      {
-       "test_id": "FLEX-62",
-       "burning_rate_from": "FLEX-261"
-      },
-      {
-       "test_id": "FLEX-64",
-       "burning_rate_from": "FLEX-260"
-      },
-      {
-       "test_id": "FLEX-66",
-       "burning_rate_from": "FLEX-227"
-      },
-      {
-       "test_id": "FLEX-67",
-       "burning_rate_from": "FLEX-226"
-      },
-      {
-       "test_id": "FLEX-68",
-       "burning_rate_from": "FLEX-222"
-      },
-      {
-       "test_id": "FLEX-70",
-       "burning_rate_from": "FLEX-259"
-      },
-      {
-       "test_id": "FLEX-73",
-       "burning_rate_from": "FLEX-258"
-      },
-      {
-       "test_id": "FLEX-75",
-       "burning_rate_from": "FLEX-221"
-      },
-      {
-       "test_id": "FLEX-76",
-       "burning_rate_from": "FLEX-220"
-      },
-      {
-       "test_id": "FLEX-77",
-       "burning_rate_from": "FLEX-219"
-      },
-      {
-       "test_id": "FLEX-78",
-       "burning_rate_from": "FLEX-218"
-      },
-      {
-       "test_id": "FLEX-79",
-       "burning_rate_from": "FLEX-250"
-      },
-      {
-       "test_id": "FLEX-82",
-       "burning_rate_from": "FLEX-217"
-      },
-      {
-       "test_id": "FLEX-84",
-       "burning_rate_from": "FLEX-216"
-      },
-      {
-       "test_id": "FLEX-85",
-       "burning_rate_from": "FLEX-203"
-      },
-      {
-       "test_id": "FLEX-86",
-       "burning_rate_from": "FLEX-202"
-      },
-      {
-       "test_id": "FLEX-87",
-       "burning_rate_from": "FLEX-201"
-      },
-      {
-       "test_id": "FLEX-94",
-       "burning_rate_from": "FLEX-249"
-      },
-      {
-       "test_id": "FLEX-95",
-       "burning_rate_from": "FLEX-243"
-      },
-      {
-       "test_id": "FLEX-97",
-       "burning_rate_from": "FLEX-200"
-      },
-      {
-       "test_id": "FLEX-98",
-       "burning_rate_from": "FLEX-199"
-      },
-      {
-       "test_id": "FLEX-99",
-       "burning_rate_from": "FLEX-193"
-      },
-      {
-       "test_id": "FLEX-100",
-       "burning_rate_from": "FLEX-236"
-      },
-      {
-       "test_id": "FLEX-101",
-       "burning_rate_from": "FLEX-235"
-      },
-      {
-       "test_id": "FLEX-102",
-       "burning_rate_from": "FLEX-232"
-      },
-      {
-       "test_id": "FLEX-103",
-       "burning_rate_from": "FLEX-230"
-      },
-      {
-       "test_id": "FLEX-104",
-       "burning_rate_from": "FLEX-191"
-      },
-      {
-       "test_id": "FLEX-105",
-       "burning_rate_from": "FLEX-190"
-      },
-      {
-       "test_id": "FLEX-106",
-       "burning_rate_from": "FLEX-189"
-      },
-      {
-       "test_id": "FLEX-110",
-       "burning_rate_from": "FLEX-188"
-      },
-      {
-       "test_id": "FLEX-111",
-       "burning_rate_from": "FLEX-187"
-      },
-      {
-       "test_id": "FLEX-112",
-       "burning_rate_from": "FLEX-186"
-      },
-      {
-       "test_id": "FLEX-113",
-       "burning_rate_from": "FLEX-185"
-      },
-      {
-       "test_id": "FLEX-114",
-       "burning_rate_from": "FLEX-177"
-      },
-      {
-       "test_id": "FLEX-115",
-       "burning_rate_from": "FLEX-170"
-      },
-      {
-       "test_id": "FLEX-116",
-       "burning_rate_from": "FLEX-169"
-      },
-      {
-       "test_id": "FLEX-117",
-       "burning_rate_from": "FLEX-228"
-      },
-      {
-       "test_id": "FLEX-118",
-       "burning_rate_from": "FLEX-213"
-      },
-      {
-       "test_id": "FLEX-119",
-       "burning_rate_from": "FLEX-212"
-      },
-      {
-       "test_id": "FLEX-120",
-       "burning_rate_from": "FLEX-211"
-      },
-      {
-       "test_id": "FLEX-121",
-       "burning_rate_from": "FLEX-168"
-      },
-      {
-       "test_id": "FLEX-122",
-       "burning_rate_from": "FLEX-167"
-      },
-      {
-       "test_id": "FLEX-123",
-       "burning_rate_from": "FLEX-166"
-      },
-      {
-       "test_id": "FLEX-124",
-       "burning_rate_from": "FLEX-164"
-      },
-      {
-       "test_id": "FLEX-125",
-       "burning_rate_from": "FLEX-163"
-      },
-      {
-       "test_id": "FLEX-126",
-       "burning_rate_from": "FLEX-162"
-      },
-      {
-       "test_id": "FLEX-127",
-       "burning_rate_from": "FLEX-161"
-      },
-      {
-       "test_id": "FLEX-130",
-       "burning_rate_from": "FLEX-209"
-      },
-      {
-       "test_id": "FLEX-131",
-       "burning_rate_from": "FLEX-207"
-      },
-      {
-       "test_id": "FLEX-132",
-       "burning_rate_from": "FLEX-206"
-      },
-      {
-       "test_id": "FLEX-133",
-       "burning_rate_from": "FLEX-198"
-      },
-      {
-       "test_id": "FLEX-134",
-       "burning_rate_from": "FLEX-197"
-      },
-      {
-       "test_id": "FLEX-140",
-       "burning_rate_from": "FLEX-160"
-      },
-      {
-       "test_id": "FLEX-141",
-       "burning_rate_from": "FLEX-159"
-      },
-      {
-       "test_id": "FLEX-142",
-       "burning_rate_from": "FLEX-158"
-      },
-      {
-       "test_id": "FLEX-143",
-       "burning_rate_from": "FLEX-157"
-      },
-      {
-       "test_id": "FLEX-144",
-       "burning_rate_from": "FLEX-153"
-      },
-      {
-       "test_id": "FLEX-145",
-       "burning_rate_from": "FLEX-152"
-      },
-      {
-       "test_id": "FLEX-146",
-       "burning_rate_from": "FLEX-147"
-      },
-      {
-       "test_id": "FLEX-147",
-       "burning_rate_from": "FLEX-146"
-      },
-      {
-       "test_id": "FLEX-148",
-       "burning_rate_from": "FLEX-196"
-      },
-      {
-       "test_id": "FLEX-149",
-       "burning_rate_from": "FLEX-195"
-      },
-      {
-       "test_id": "FLEX-150",
-       "burning_rate_from": "FLEX-194"
-      },
-      {
-       "test_id": "FLEX-152",
-       "burning_rate_from": "FLEX-145"
-      },
-      {
-       "test_id": "FLEX-153",
-       "burning_rate_from": "FLEX-144"
-      },
-      {
-       "test_id": "FLEX-154",
-       "burning_rate_from": "FLEX-182"
-      },
-      {
-       "test_id": "FLEX-155",
-       "burning_rate_from": "FLEX-181"
-      },
-      {
-       "test_id": "FLEX-156",
-       "burning_rate_from": "FLEX-180"
-      },
-      {
-       "test_id": "FLEX-157",
-       "burning_rate_from": "FLEX-143"
-      },
-      {
-       "test_id": "FLEX-158",
-       "burning_rate_from": "FLEX-142"
-      },
-      {
-       "test_id": "FLEX-159",
-       "burning_rate_from": "FLEX-141"
-      },
-      {
-       "test_id": "FLEX-160",
-       "burning_rate_from": "FLEX-140"
-      },
-      {
-       "test_id": "FLEX-161",
-       "burning_rate_from": "FLEX-127"
-      },
-      {
-       "test_id": "FLEX-162",
-       "burning_rate_from": "FLEX-126"
-      },
-      {
-       "test_id": "FLEX-163",
-       "burning_rate_from": "FLEX-125"
-      },
-      {
-       "test_id": "FLEX-164",
-       "burning_rate_from": "FLEX-124"
-      },
-      {
-       "test_id": "FLEX-165",
-       "burning_rate_from": "FLEX-179"
-      },
-      {
-       "test_id": "FLEX-166",
-       "burning_rate_from": "FLEX-123"
-      },
-      {
-       "test_id": "FLEX-167",
-       "burning_rate_from": "FLEX-122"
-      },
-      {
-       "test_id": "FLEX-168",
-       "burning_rate_from": "FLEX-121"
-      },
-      {
-       "test_id": "FLEX-169",
-       "burning_rate_from": "FLEX-116"
-      },
-      {
-       "test_id": "FLEX-170",
-       "burning_rate_from": "FLEX-115"
-      },
-      {
-       "test_id": "FLEX-171",
-       "burning_rate_from": "FLEX-178"
-      },
-      {
-       "test_id": "FLEX-172",
-       "burning_rate_from": "FLEX-174"
-      },
-      {
-       "test_id": "FLEX-173",
-       "burning_rate_from": "FLEX-173"
-      },
-      {
-       "test_id": "FLEX-174",
-       "burning_rate_from": "FLEX-172"
-      },
-      {
-       "test_id": "FLEX-177",
-       "burning_rate_from": "FLEX-114"
-      },
-      {
-       "test_id": "FLEX-178",
-       "burning_rate_from": "FLEX-171"
-      },
-      {
-       "test_id": "FLEX-179",
-       "burning_rate_from": "FLEX-165"
-      },
-      {
-       "test_id": "FLEX-180",
-       "burning_rate_from": "FLEX-156"
-      },
-      {
-       "test_id": "FLEX-181",
-       "burning_rate_from": "FLEX-155"
-      },
-      {
-       "test_id": "FLEX-182",
-       "burning_rate_from": "FLEX-154"
-      },
-      {
-       "test_id": "FLEX-185",
-       "burning_rate_from": "FLEX-113"
-      },
-      {
-       "test_id": "FLEX-186",
-       "burning_rate_from": "FLEX-112"
-      },
-      {
-       "test_id": "FLEX-187",
-       "burning_rate_from": "FLEX-111"
-      },
-      {
-       "test_id": "FLEX-188",
-       "burning_rate_from": "FLEX-110"
-      },
-      {
-       "test_id": "FLEX-189",
-       "burning_rate_from": "FLEX-106"
-      },
-      {
-       "test_id": "FLEX-190",
-       "burning_rate_from": "FLEX-105"
-      },
-      {
-       "test_id": "FLEX-191",
-       "burning_rate_from": "FLEX-104"
-      },
-      {
-       "test_id": "FLEX-193",
-       "burning_rate_from": "FLEX-99"
-      },
-      {
-       "test_id": "FLEX-194",
-       "burning_rate_from": "FLEX-150"
-      },
-      {
-       "test_id": "FLEX-195",
-       "burning_rate_from": "FLEX-149"
-      },
-      {
-       "test_id": "FLEX-196",
-       "burning_rate_from": "FLEX-148"
-      },
-      {
-       "test_id": "FLEX-197",
-       "burning_rate_from": "FLEX-134"
-      },
-      {
-       "test_id": "FLEX-198",
-       "burning_rate_from": "FLEX-133"
-      },
-      {
-       "test_id": "FLEX-199",
-       "burning_rate_from": "FLEX-98"
-      },
-      {
-       "test_id": "FLEX-200",
-       "burning_rate_from": "FLEX-97"
-      },
-      {
-       "test_id": "FLEX-201",
-       "burning_rate_from": "FLEX-87"
-      },
-      {
-       "test_id": "FLEX-202",
-       "burning_rate_from": "FLEX-86"
-      },
-      {
-       "test_id": "FLEX-203",
-       "burning_rate_from": "FLEX-85"
-      },
-      {
-       "test_id": "FLEX-206",
-       "burning_rate_from": "FLEX-132"
-      },
-      {
-       "test_id": "FLEX-207",
-       "burning_rate_from": "FLEX-131"
-      },
-      {
-       "test_id": "FLEX-209",
-       "burning_rate_from": "FLEX-130"
-      },
-      {
-       "test_id": "FLEX-211",
-       "burning_rate_from": "FLEX-120"
-      },
-      {
-       "test_id": "FLEX-212",
-       "burning_rate_from": "FLEX-119"
-      },
-      {
-       "test_id": "FLEX-213",
-       "burning_rate_from": "FLEX-118"
-      },
-      {
-       "test_id": "FLEX-216",
-       "burning_rate_from": "FLEX-84"
-      },
-      {
-       "test_id": "FLEX-217",
-       "burning_rate_from": "FLEX-82"
-      },
-      {
-       "test_id": "FLEX-218",
-       "burning_rate_from": "FLEX-78"
-      },
-      {
-       "test_id": "FLEX-219",
-       "burning_rate_from": "FLEX-77"
-      },
-      {
-       "test_id": "FLEX-220",
-       "burning_rate_from": "FLEX-76"
-      },
-      {
-       "test_id": "FLEX-221",
-       "burning_rate_from": "FLEX-75"
-      },
-      {
-       "test_id": "FLEX-222",
-       "burning_rate_from": "FLEX-68"
-      },
-      {
-       "test_id": "FLEX-226",
-       "burning_rate_from": "FLEX-67"
-      },
-      {
-       "test_id": "FLEX-227",
-       "burning_rate_from": "FLEX-66"
-      },
-      {
-       "test_id": "FLEX-228",
-       "burning_rate_from": "FLEX-117"
-      },
-      {
-       "test_id": "FLEX-230",
-       "burning_rate_from": "FLEX-103"
-      },
-      {
-       "test_id": "FLEX-232",
-       "burning_rate_from": "FLEX-102"
-      },
-      {
-       "test_id": "FLEX-235",
-       "burning_rate_from": "FLEX-101"
-      },
-      {
-       "test_id": "FLEX-236",
-       "burning_rate_from": "FLEX-100"
-      },
-      {
-       "test_id": "FLEX-240",
-       "burning_rate_from": "FLEX-61"
-      },
-      {
-       "test_id": "FLEX-241",
-       "burning_rate_from": "FLEX-59"
-      },
-      {
-       "test_id": "FLEX-243",
-       "burning_rate_from": "FLEX-95"
-      },
-      {
-       "test_id": "FLEX-244",
-       "burning_rate_from": "FLEX-55"
-      },
-      {
-       "test_id": "FLEX-245",
-       "burning_rate_from": "FLEX-46"
-      },
-      {
-       "test_id": "FLEX-246",
-       "burning_rate_from": "FLEX-45"
-      },
-      {
-       "test_id": "FLEX-247",
-       "burning_rate_from": "FLEX-36"
-      },
-      {
-       "test_id": "FLEX-248",
-       "burning_rate_from": "FLEX-34"
-      },
-      {
-       "test_id": "FLEX-249",
-       "burning_rate_from": "FLEX-94"
-      },
-      {
-       "test_id": "FLEX-250",
-       "burning_rate_from": "FLEX-79"
-      },
-      {
-       "test_id": "FLEX-251",
-       "burning_rate_from": "FLEX-33"
-      },
-      {
-       "test_id": "FLEX-252",
-       "burning_rate_from": "FLEX-30"
-      },
-      {
-       "test_id": "FLEX-253",
-       "burning_rate_from": "FLEX-26"
-      },
-      {
-       "test_id": "FLEX-256",
-       "burning_rate_from": "FLEX-25"
-      },
-      {
-       "test_id": "FLEX-257",
-       "burning_rate_from": "FLEX-21"
-      },
-      {
-       "test_id": "FLEX-258",
-       "burning_rate_from": "FLEX-73"
-      },
-      {
-       "test_id": "FLEX-259",
-       "burning_rate_from": "FLEX-70"
-      },
-      {
-       "test_id": "FLEX-260",
-       "burning_rate_from": "FLEX-64"
-      },
-      {
-       "test_id": "FLEX-261",
-       "burning_rate_from": "FLEX-62"
-      },
-      {
-       "test_id": "FLEX-262",
-       "burning_rate_from": "FLEX-20"
-      },
-      {
-       "test_id": "FLEX-263",
-       "burning_rate_from": "FLEX-16"
-      },
-      {
-       "test_id": "FLEX-264",
-       "burning_rate_from": "FLEX-6"
-      },
-      {
-       "test_id": "FLEX-265",
-       "burning_rate_from": "FLEX-5"
-      },
-      {
-       "test_id": "FLEX-266",
-       "burning_rate_from": "FLEX-3"
-      },
-      {
-       "test_id": "FLEX-267",
-       "burning_rate_from": "FLEX-57"
-      },
-      {
-       "test_id": "FLEX-268",
-       "burning_rate_from": "FLEX-56"
-      },
-      {
-       "test_id": "FLEX-269",
-       "burning_rate_from": "FLEX-50"
-      },
-      {
-       "test_id": "FLEX-270",
-       "burning_rate_from": "FLEX-49"
-      },
-      {
-       "test_id": "FLEX-271",
-       "burning_rate_from": "FLEX-2"
-      },
-      {
-       "test_id": "FLEX-272",
-       "burning_rate_from": "FLEX-1"
-      },
-      {
-       "test_id": "FLEX-273",
-       "burning_rate_from": "FLEX-35"
-      },
-      {
-       "test_id": "FLEX-274",
-       "burning_rate_from": "FLEX-18"
-      }
-     ]
-    },
+    "quantile_method": "NIST e-Handbook 7.2.6.2 percentiles (method R6 of Hyndman and Fan): position p(N+1) in the ordered values, linear between neighbours, ends clamped",
+    "removed": "criterion (median band, share band, minimum share), bands and the reversal placebo: chosen after the numbers were seen; no held or opened source defines them (model map L12, M07)",
     "rows": [
      {
       "test_id": "FLEX-1",
@@ -3608,8 +3105,27 @@
     ]
    },
    "caption": {
-    "means": "Consistent with the table means the recorded columns agree with each other under the d-squared form. Team computation, not a NASA conclusion.",
-    "does_not_mean": "This is not a test of a physical law: K is itself a reported value of the same experiment, and the form is not stated by any document we hold. The placebo shows how much of the agreement disappears when K is taken from another test of the same fuel."
+    "means": "The distribution of a team ratio over recorded FLEX columns. Team computation, not a NASA conclusion.",
+    "does_not_mean": "This is not a test of a physical law and gives no agreement status: K is itself a reported value of the same experiment, fitted over part of the burn, and the form is not stated by any document we hold. No threshold is applied."
+   },
+   "governed_by": {
+    "map": "pipeline/lab/model_map.json",
+    "points": [
+     {
+      "point": "L12",
+      "classification": "team_rule",
+      "model": "team rule, no established model found",
+      "candidate_model_not_governing": "DSQ"
+     },
+     {
+      "point": "M07",
+      "classification": "established",
+      "model_key": "NIST_PCTL",
+      "source_title": "NIST/SEMATECH e-Handbook of Statistical Methods, 7.2.6.2 Percentiles",
+      "url": "https://www.itl.nist.gov/div898/handbook/prc/section2/prc262.htm",
+      "opened_by": "measurement scout (via Exa); verifier (via Exa web fetch, 2026-11-14)"
+     }
+    ]
    }
   },
   {
@@ -3644,6 +3160,19 @@
    "caption": {
     "means": "The CFI table in tests.csv holds conditions only (fuel, pressure, oxygen, helium).",
     "does_not_mean": "It says nothing about the experiment's raw data, which PSI lists by file name and which was not read. The stated motivation of the paper is liquid-fuel combustion, not fire safety."
+   },
+   "governed_by": {
+    "map": "pipeline/lab/model_map.json",
+    "points": [
+     {
+      "point": "L14",
+      "classification": "established",
+      "model_key": "ELEM",
+      "source_title": "elementary mathematics (the definition is the model)",
+      "url": null,
+      "opened_by": null
+     }
+    ]
    }
   }
  ]

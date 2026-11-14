@@ -8,6 +8,7 @@ Run: python3 pipeline/lab/run_numbers.py   (after pipeline/run.py)
 import envelope
 import order_changes
 from numlib import ROOT, META, spec, scan_words, write_json
+import governance
 
 
 def main():
@@ -17,6 +18,8 @@ def main():
     index = {
         "_meta": {"generated_by": META, "script": "pipeline/lab/run_numbers.py", "spec": "pipeline/spec/lab_numbers.json",
                   "status": S["_meta"]["status"]},
+        "governed_by": governance.block(["M09"] + sorted(set(S["envelope"]["governed_by_fields"].values())
+                                                          | set(S["order_changes"]["governed_by_fields"].values()))),
         "what_each_number_is": S["readme"]["numbers"],
         "choices": {"envelope": {k: v["value"] for k, v in S["envelope"]["choices"].items()},
                     "order_changes": {k: v["value"] for k, v in S["order_changes"]["choices"].items()}},

@@ -12,10 +12,14 @@ The idea it tries: fire-safety information is judged by published mathematical o
 | `pipeline/lab/cardlib.py` | Shared code: loading, the verbatim checks, the forbidden-word scan, range arithmetic, JSON output |
 | `pipeline/lab/run_cards.py` | Runs each card's check; writes `data/pipeline/cards/card_results.json` |
 | `pipeline/lab/range_gate.py` | Compares each scenario of `scenarios.json` with each card; writes `data/pipeline/cards/gate_<scenario_id>.json` |
+| `pipeline/lab/model_map.json` | The model map: every decision point of the pipeline and the lab, its class and the model that governs it (see "Model map" below) |
+| `pipeline/lab/model_map_md.py` | Recounts and checks the map and writes `pipeline/lab/model_map.md` from the JSON |
+| `pipeline/lab/governance.py` | Builds the `governed_by` block that every lab output carries, from the map |
 
 Run (needs `data/pipeline/tests.csv` and `data/pipeline/coverage_grid.csv`, which `pipeline/run.py` writes):
 
 ```
+python3 pipeline/lab/model_map_md.py
 python3 pipeline/lab/run_cards.py
 python3 pipeline/lab/range_gate.py
 ```
@@ -44,6 +48,7 @@ The scripts stop if a word string is not verbatim in its item, if a normalized p
 | `matches_published_table` | Team arithmetic on the item's values agrees with what the same document prints |
 | `differs_from_published_table` | It does not |
 | `not_in_our_references` | No document of `references.json` states the relation. The card carries this badge whatever its check gives; the check result is in `check_outcome` |
+| `described_without_criterion` | A team computation over recorded columns is described (count, minimum, quartiles, median, maximum); no criterion is applied and no agreement status is given (the d-squared card) |
 
 Every number in the outputs is a NASA cell of `tests.csv`, a value of a reference item, or arithmetic that the card names; arithmetic carries `computation_label` ("team computation", "team arithmetic"). Criterion parameters (shares, bands) are team choices. The criteria were written after the scouts of the decision brief had computed the main numbers and after a first placebo run; they are fixed in the spec but this is not a pre-registration.
 
@@ -55,18 +60,20 @@ For each scenario and each card, four axes are compared: oxygen, pressure, gravi
 |---|---|
 | `inside` | The scenario's whole range (or its gravity level) lies inside what the card states |
 | `outside` | It does not; `overlap` is `partial` or `none`, and the card's verbatim words are given |
-| `card_unstated` | The card's items state nothing on this axis |
+| `domain_not_defined` | The scenario sets a range or a level on this axis and the card's items state no comparable domain there |
+| `card_unstated` | Neither the card nor the scenario states anything on this axis |
 | `scenario_unstated` | The scenario sets nothing on this axis |
 
-A card that states single values (one pressure, "1 atmosphere") contains no scenario range, because every scenario sets a range. Overall: `not_applicable` for a card not in our references; else `outside_stated_range` if any axis is outside; else `not_applicable` if gravity is not `inside`; else `may_be_quoted_here`. If no card may be quoted, the headline is "No held relation covers this condition", a result of its own.
+A card that states single values (one pressure, "1 atmosphere") contains no scenario range, because every scenario sets a range. Overall: `not_applicable` for a card not in our references; else `outside_stated_range` if any axis is outside; else `domain_not_defined` if any axis is `domain_not_defined`; else `not_applicable` if gravity is not `inside`; else `may_be_quoted_here`. The `domain_not_defined` step follows OECD Principle 3 as cited in the model map (ENV/JM/MONO(2007)2 para 92: "it is important to know whether its AD is known, and whether it is being used inside or outside of this boundary"); applying it to the stated validity of a published relation, and the order of the list, are team rules. If no card may be quoted, the headline is "No held relation covers this condition", a result of its own.
 
 Each gate file also lists, per fuel phase, the recorded tests of the scenario's cells of the coverage grid (copied from `coverage_grid.csv`, ambient oxygen), the tests in the scenario's oxygen bins with no recorded pressure, and how many rows of the phase have a recorded pressure. There is no distance score, no hull and no nearest neighbour.
 
 ## Limits
 
-- A consistency check between recorded columns is not validation of a law. In the d-squared card the burning rate K is a reported value of the same experiment, and no document we hold states the d-squared form. The placebo (K reversed in order within each fuel) shows how much of the agreement depends on each test's own K.
-- In range means only that the relation may be quoted for the condition. It does not mean that the condition is acceptable, and the gate gives no verdict on any condition.
-- An axis the card does not state does not block a card. A card can therefore be "may be quoted" while stating only its gravity level (the CO/CO2 card for the ISS cabin; the OF2012 card for the Mars habitat, which sets no atmosphere). The sentence names the unstated axes; read them.
+- The d-squared card describes a team ratio over recorded FLEX columns and gives no agreement status. Its earlier criterion, bands and reversal placebo were removed on 2026-11-14: they were chosen after the numbers were seen and no held or opened source defines them. The held K is defined by NASA/TP-2015-216046 (Appendix) as a fit "from shortly after ignition to extinction"; that sentence is not yet an item of `references.json`, so the card stays `not_in_our_references`.
+- The Hirsch 2011 card applies the linear form only to materials whose every held MOC lies in the range 25-35 % the paper states (both ends included is the lab's reading). All eleven `H2006.table2` materials are refused; only the paper's own unnamed example pair is inside.
+- In range means only that the relation may be quoted for the condition. It is not a judgement of the condition, and the gate gives no verdict on any condition.
+- An axis the card does not state blocks the card when the scenario sets that axis (`domain_not_defined`). Since 2026-11-14 the CO/CO2 card is no longer "may be quoted" for the ISS cabin (it states only its gravity level). The OF2012 card is still "may be quoted" for the Mars habitat, because that scenario sets no atmosphere; the sentence names the axes neither side states.
 - The containment rule is strict. The ISS cabin oxygen range is the team's bin up to 23 %, so the BASS-II boundary (13 to 22 %) is outside it; a different bin would change the result.
 - Material names must match exactly. Nomex III (BASS-II) is not Nomex HT90-40 (OF2012); PSI "silicone" is not Hirsch's "Silicone". The gate does not substitute names; no scenario names a material, so materials are shown and not compared.
 - No fitted boundary, no LOI estimate, no interpolation, no extrapolation, no prediction for any scenario. The FLEX card shows the lowest oxygen recorded beside the published LOI; the lowest oxygen tested is not an LOI. FLEX.mec is not applied.
@@ -153,7 +160,7 @@ The summary counts claims, undeveloped claims, evidence leaves, inferences by ba
 
 *AI-generated (Claude Code) during the NASA Space Apps Challenge 2026 hackathon, 2026-11-14. Not human-reviewed. Experiment on the branch `data-lab`, not merged into the pipeline.*
 
-Numbers that follow from the data by arithmetic alone: no model, no fitted relation, no weight, no interpolation, no probability, and no sentence written by a language model at run time. Every number is a standardized value of `data/pipeline/tests.csv` or a value of a reference item's `values`, or a count, minimum, maximum, difference or the stated rank statistic (Kendall tau-b) of such values. The standardized values are themselves the pipeline's arithmetic: where a source column has another unit, `pipeline/rules.py` (rule `number`) multiplied the cell by the unit factor of `pipeline/spec/sources.json` (for example mmHg x 0.133322368, mole fraction x 100) and rounded the product to 4 decimals; every envelope output lists the factors used under `conversions`. Every choice is a parameter of `pipeline/spec/lab_numbers.json`, and every output copies the choices it used under `choices`. The outputs contain only fixed sentences of that spec and fixed templates of the two scripts (table headers, labels such as 'Nominal point: interior, inside = true', filled with the computed numbers); no text is composed at run time beyond filling those templates.
+Numbers that follow from the data by arithmetic and the two established models named in the model map (convex hull, OECD ENV/JM/MONO(2007)2 para 110; Kendall tau-b, NIST Dataplot): no fitted relation, no weight, no interpolation, no probability, and no sentence written by a language model at run time. Next to every number the outputs name the decision point of `pipeline/lab/model_map.json` and its governing model key, or "team rule". Every number is a standardized value of `data/pipeline/tests.csv` or a value of a reference item's `values`, or a count, minimum, maximum, difference or the stated rank statistic (Kendall tau-b) of such values. The standardized values are themselves the pipeline's arithmetic: where a source column has another unit, `pipeline/rules.py` (rule `number`) multiplied the cell by the unit factor of `pipeline/spec/sources.json` (for example mmHg x 0.133322368, mole fraction x 100) and rounded the product to 4 decimals; every envelope output lists the factors used under `conversions`. Every choice is a parameter of `pipeline/spec/lab_numbers.json`, and every output copies the choices it used under `choices`. The outputs contain only fixed sentences of that spec and fixed templates of the two scripts (table headers, labels such as 'Nominal point: interior, inside = true', filled with the computed numbers); no text is composed at run time beyond filling those templates.
 
 ## Files
 
@@ -183,9 +190,9 @@ The script stops if: the joint range count of a scenario and need differs from `
 - `joint.nearest_tests_pareto`: Tests not dominated in (|delta o2_pct|, |delta pressure_kpa|), each with both deltas and its source file and row.
 - `gravity.*`: Number of tests whose gravity_level equals the scenario's, and where gravity_level in tests.csv comes from.
 - `ranges.*`: Number of tests inside the scenario's oxygen range, inside its pressure range, and inside both; the last equals tests_atmosphere of scenario_needs.csv (checked).
-- `order.counts`: For one table, one quantity and one pair of condition columns: the number of material pairs in each class (same_order, reversed, tie_in_one, tie_in_both).
-- `order.kendall_tau_b`: Kendall tau-b of the two columns over all material pairs, as numerator, integer under the square root and rounded decimal.
-- `order.reversed_and_tie_in_one_pairs`: Every material pair that is reversed or tied in one column only, with the four printed values.
+- `order.counts`: For one table, one quantity and one pair of condition columns: the number of material pairs in each class (concordant, discordant, tied_first_column_only, tied_second_column_only, tied_both_columns; terms of the NIST Dataplot KENDALLS TAU page, the last is the remaining class).
+- `order.kendall_tau_b`: Kendall tau-b of the two columns over all material pairs as defined on the NIST Dataplot KENDALLS TAU page, as numerator, integer under the square root and rounded decimal.
+- `order.discordant_and_tied_one_column_pairs`: Every material pair that is discordant or tied in one column only, with the four printed values.
 - `excluded_o2_not_recorded, excluded_basis_not_ambient`: Counted tests left out because o2_pct is empty, and because o2_basis is not 'ambient'.
 - `axes.flagged_tests`: Counted tests with a flag on the axis in tests.csv, with the flags and o2_range_as_written; min, max and nearest carry flagged_tests_at_value.
 - `axes.nearest.below_nominal_rounding`: Whether |gap| is smaller than half a unit of the last digit written for the nominal value.
@@ -194,6 +201,7 @@ The script stops if: the joint range count of a scenario and need differs from `
 - `conversions`: Per axis and source of the counted tests: the source column, the pipeline rule and its parameters (unit factor) from sources.json.
 - `order.counts_held_differs`: The same class counts restricted to material pairs whose held condition (test pressure) differs.
 - `order.same_criterion`: Whether the two condition columns carry the same criterion (spec).
+- `governed_by`: Every output carries a 'governed_by' block: per decision point of pipeline/lab/model_map.json, the governing model key, source title, URL and opened_by, or 'team rule, no established model found'. Envelope and order fields carry the short label (point: model key or 'team rule') next to the number.
 
 ## Choices made (each a parameter of `lab_numbers.json`)
 
@@ -217,8 +225,8 @@ The script stops if: the joint range count of a scenario and need differs from `
 - `envelope.choices.no_hull`: where no counted test records both values, hull kind is 'none', position is 'no hull' and inside is null (no position is defined)
 - `envelope.choices.notes_per_need`: every per-need sentence that applies is shown (no_tests where no counted test has ambient oxygen, no_nominal where the scenario has no nominal point); there is no precedence
 - `order_changes.choices.values`: values are read as printed in the reference item's 'values' (exact decimals; JSON numbers read as decimal strings), no tolerance
-- `order_changes.choices.classes`: for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0
-- `order_changes.choices.kendall_tau_b`: tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0
+- `order_changes.choices.classes`: for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); concordant if s1 = s2 != 0; discordant if s1 = -s2 != 0; tied_first_column_only if s1 = 0 and s2 != 0 (T_x); tied_second_column_only if s2 = 0 and s1 != 0 (T_y); tied_both_columns if both are 0. Concordant, discordant, tie, T_x and T_y as defined on the NIST Dataplot KENDALLS TAU page; tied_both_columns is the remaining class and enters neither T_x nor T_y
+- `order_changes.choices.kendall_tau_b`: tau_b = (N_c - N_d) / sqrt((N_c + N_d + T_x)(N_c + N_d + T_y)) as defined on the NIST Dataplot KENDALLS TAU page (https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm); N_c = concordant pairs, N_d = discordant pairs, T_x, T_y = pairs tied in one column only; the script stops if the denominator differs from (n_0 - n_1)(n_0 - n_2); given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0
 - `order_changes.choices.tau_b_digits`: 6
 - `order_changes.choices.column_pairs`: every unordered pair of condition columns, in the column order of the spec
 - `order_changes.choices.material_pairs`: every unordered pair of materials, in the row order of the item
@@ -260,3 +268,33 @@ Fixed sentences shown with the envelope numbers (`envelope.sentences`):
 
 No numerical disagreement was found. Changes made after the review: flagged values are a named choice and listed per need; the unit factors of the pipeline are listed; a need without joint data reports 'no hull' instead of 'outside'; the inside and outside sentences state the convex-hull definition; the pooled investigations, phases and geometries are shown in the summary; the gravity column says it counts a table constant; ranges that are not axes are marked 'not applied'; the nominal rounding is reported; every applicable per-need note is shown (no precedence); OF2012 column pairs carry 'same criterion' and the class counts at different test pressure; held digits are shown as held (18.0, not 18); the item's note on the 0g flow (30 cm/s) and on ref. 8 is quoted.
 Left open: the 0g and drop-tower columns of OF2012 still enter the counts with the 1g column (marked, not removed); `SAE2008.table1` is not computable until its cells are entered; the ambient-oxygen rule has no effect on the present counted tests (all 408 distinct counted tests are ambient), so it is untested by the data.
+
+# Model map (experiment, branch `data-lab`)
+
+*AI-generated (Claude Code), 2026-11-14. Not human-reviewed.*
+
+`pipeline/lab/model_map.json` lists every decision point of the main pipeline and of this lab (130 points) with its class and governing model; `pipeline/lab/model_map.md` is written from it by `pipeline/lab/model_map_md.py`. It is the mapper's map after the independent verifier's findings were applied (stretched mappings downgraded, citation details fixed, missing lab points M01-M09 added). A mapping is "established" only if an opened source defines exactly that operation (or it is elementary mathematics whose definition is the model).
+
+Counts: established 53 (elementary mathematics 45, named external model 8), team rule 52 (of which 20 name a candidate model that defines a related but different operation), spec-time judgement 25.
+
+Named external models that govern a lab or pipeline step: NIST SP 811 B.8 factors (inch, atm, bar, psi conversions: D14, D16, D73); NIST e-Handbook 7.2.6.2 percentiles, method R6 (median D63; d-squared quartiles M07); OECD ENV/JM/MONO(2007)2 para 110, smallest convex area containing the points (envelope hull, M01a); NIST Dataplot Kendall tau-b (order classes and tau-b, M06a, M06b). Each lab output names them under `governed_by`.
+
+Finding D15: the pipeline's FLEX factor 0.133322368 kPa per mmHg equals 101325/760 Pa (1 torr); the conventional millimetre of mercury is 133.322387 Pa; SP 811 B.8 prints 1.333 224 E+02 Pa for both. With the conventional value, 31 of the 273 FLEX pressures of `tests.csv` would differ in the 4th decimal (by 0.0001 kPa). Nothing in the main pipeline was changed.
+
+What mathematics cannot remove (each a choice someone made):
+
+- Which established model governs each decision point (this map): AI mapper (Claude Code), not reviewed by a person.
+- Which candidate models were searched and opened: AI scout sessions; their search terms bound what could be found.
+- Axes compared in the gate (O2, pressure, flow, gravity) and axes shown but not compared (material, criterion, geometry): AI lab session (relation_cards.json/README), team rule.
+- Scenario ranges and coverage bins (D45, D48): AI sessions at spec time from EAWG/CH nominal values; team rule.
+- Variables of the hull (o2_pct, pressure_kpa) and their units; per-axis linear scaling does not change hull membership, but the choice of variables does: AI lab session (lab_numbers.json), team rule.
+- Thresholds: 0.5 share (CO/CO2 card), 5 % O2 floor, 0.5-point tolerance, 0.05-point denominator, 40 cm/s, 0.001 kPa (the d-squared bands were removed on 2026-11-14): AI sessions; some set after seeing the numbers.
+- Need taxonomy, required/outcome variables, objective-link verdicts, findings tags, relation cards, inference map, argument: AI readings of documents at spec time; not reviewed by a person.
+- Treating documented validity words as the domain instead of the source data's min/max: AI lab session; OECD defines the domain from data.
+- Treating a publication's single tested pressure as a point that contains no scenario range: AI lab session; consistent with the range method but makes most cards refuse.
+- Which tests form the hull and the Pareto set (pooled across investigations, counted by the pipeline's linking rule, flagged values kept): AI lab session (lab_numbers.json), team rule.
+- Boundary counted inside; degenerate hulls; nominal rounding band: AI lab session, team rule.
+- Reading 'in the range 25-35% oxygen' (Hirsch 2011) with both ends included: AI lab session, 2026-11-14.
+- Order of the gate decision list (outside before domain_not_defined before gravity): AI lab session, 2026-11-14, team rule.
+- Which verifier findings to apply and how to classify each point (this corrected map): AI lab session (Claude Code), from verify.json; not reviewed by a person.
+- Which verifier findings exist at all: the verifier and the scouts opened what the session proxy let them reach; sources they did not open are listed in the map under `not_rechecked`.

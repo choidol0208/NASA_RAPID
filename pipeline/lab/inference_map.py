@@ -25,6 +25,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import governance  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[2]
 SPEC = ROOT / "pipeline" / "spec"
 DATA = ROOT / "data" / "pipeline"
@@ -582,6 +585,7 @@ def main():
             "spec": "pipeline/spec/inference_map.json",
             "script": "pipeline/lab/inference_map.py",
         },
+        "governed_by": governance.block(["L16", "L17", "L18"]),
         "question": spec["_meta"]["question"],
         "environment": env,
         "document_years_cited": years_cited,

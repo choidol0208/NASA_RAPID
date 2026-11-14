@@ -20,14 +20,23 @@ Condition columns: gravity level.
 
 ## Choices (spec parameters)
 
-- `classes`: for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0
+- `classes`: for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); concordant if s1 = s2 != 0; discordant if s1 = -s2 != 0; tied_first_column_only if s1 = 0 and s2 != 0 (T_x); tied_second_column_only if s2 = 0 and s1 != 0 (T_y); tied_both_columns if both are 0. Concordant, discordant, tie, T_x and T_y as defined on the NIST Dataplot KENDALLS TAU page; tied_both_columns is the remaining class and enters neither T_x nor T_y
 - `column_pairs`: every unordered pair of condition columns, in the column order of the spec
 - `criterion`: each condition column carries the criterion named in the spec; a column pair is marked same criterion yes or no; pairs with different criteria are counted like all others and marked
 - `held`: where the item holds a per-material condition (OF2012: test pressure), each class count is also given for the pairs whose held values differ
-- `kendall_tau_b`: tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0
+- `kendall_tau_b`: tau_b = (N_c - N_d) / sqrt((N_c + N_d + T_x)(N_c + N_d + T_y)) as defined on the NIST Dataplot KENDALLS TAU page (https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm); N_c = concordant pairs, N_d = discordant pairs, T_x, T_y = pairs tied in one column only; the script stops if the denominator differs from (n_0 - n_1)(n_0 - n_2); given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0
 - `material_pairs`: every unordered pair of materials, in the row order of the item
 - `tau_b_digits`: 6
 - `values`: values are read as printed in the reference item's 'values' (exact decimals; JSON numbers read as decimal strings), no tolerance
+
+## Governed by (pipeline/lab/model_map.json)
+
+- M06a: KENDALL_B, NIST Dataplot Reference Manual, KENDALLS TAU (https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm; opened by ranking scout (via Exa); verifier (via Exa web fetch, 2026-11-14); lab session (via Exa, 2026-11-14))
+- M06b: KENDALL_B, NIST Dataplot Reference Manual, KENDALLS TAU (https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm; opened by ranking scout (via Exa); verifier (via Exa web fetch, 2026-11-14); lab session (via Exa, 2026-11-14))
+- M06c: team rule, no established model found
+- M06d: team rule, no established model found
+- M06e: team rule, no established model found
+- M08: ELEM, elementary mathematics (the definition is the model)
 
 ## ULOI: upward limiting oxygen index (1g) and ULOI* (low gravity), % O2
 
@@ -39,38 +48,38 @@ Values as held:
 | Ultem 1000 | 23.5 | 22.0 | 21.0 | 24.0 | 10.2 |
 | Nomex HT90-40 | 23.5 | 19.9 | 21.0 | 23.0 | 14.7 |
 
-| columns | pairs | same order | reversed | tie in one | tie in both | tau-b | tau-b exact form | same criterion | of these, pairs at different test pressure (psia, as printed) (same / rev / tie1 / tie2) |
-|---|---|---|---|---|---|---|---|---|---|
-| 1g vs martian | 3 | 2 | 0 | 1 | 0 | 0.816497 | 2 / sqrt(6) | no | 1 / 0 / 1 / 0 |
-| 1g vs lunar | 3 | 2 | 0 | 0 | 1 | 1.000000 | 2 / sqrt(4) | no | 1 / 0 / 0 / 1 |
-| 1g vs 0g | 3 | 2 | 0 | 1 | 0 | 0.816497 | 2 / sqrt(6) | no | 1 / 0 / 1 / 0 |
-| martian vs lunar | 3 | 2 | 0 | 1 | 0 | 0.816497 | 2 / sqrt(6) | yes | 1 / 0 / 1 / 0 |
-| martian vs 0g | 3 | 3 | 0 | 0 | 0 | 1.000000 | 3 / sqrt(9) | yes | 2 / 0 / 0 / 0 |
-| lunar vs 0g | 3 | 2 | 0 | 1 | 0 | 0.816497 | 2 / sqrt(6) | yes | 1 / 0 / 1 / 0 |
+| columns | pairs | concordant [M06a: KENDALL_B] | discordant | tied in first column only (T_x) | tied in second column only (T_y) | tied in both | tau-b [M06b: KENDALL_B; digits M06c: team rule] | tau-b exact form | same criterion [M06d: team rule] | of these, pairs at different test pressure (psia, as printed) (conc / disc / T_x / T_y / both) [M06e: team rule] |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1g vs martian | 3 | 2 | 0 | 1 | 0 | 0 | 0.816497 | 2 / sqrt(6) | no | 1 / 0 / 1 / 0 / 0 |
+| 1g vs lunar | 3 | 2 | 0 | 0 | 0 | 1 | 1.000000 | 2 / sqrt(4) | no | 1 / 0 / 0 / 0 / 1 |
+| 1g vs 0g | 3 | 2 | 0 | 1 | 0 | 0 | 0.816497 | 2 / sqrt(6) | no | 1 / 0 / 1 / 0 / 0 |
+| martian vs lunar | 3 | 2 | 0 | 0 | 1 | 0 | 0.816497 | 2 / sqrt(6) | yes | 1 / 0 / 0 / 1 / 0 |
+| martian vs 0g | 3 | 3 | 0 | 0 | 0 | 0 | 1.000000 | 3 / sqrt(9) | yes | 2 / 0 / 0 / 0 / 0 |
+| lunar vs 0g | 3 | 2 | 0 | 1 | 0 | 0 | 0.816497 | 2 / sqrt(6) | yes | 1 / 0 / 1 / 0 / 0 |
 
 1g vs martian:
 
 | class | a | b | a at 1g | b at 1g | a at martian | b at martian | held a | held b |
 |---|---|---|---|---|---|---|---|---|
-| tie_in_one | Ultem 1000 | Nomex HT90-40 | 23.5 | 23.5 | 22.0 | 19.9 | 10.2 | 14.7 |
+| tied_first_column_only | Ultem 1000 | Nomex HT90-40 | 23.5 | 23.5 | 22.0 | 19.9 | 10.2 | 14.7 |
 
 1g vs 0g:
 
 | class | a | b | a at 1g | b at 1g | a at 0g | b at 0g | held a | held b |
 |---|---|---|---|---|---|---|---|---|
-| tie_in_one | Ultem 1000 | Nomex HT90-40 | 23.5 | 23.5 | 24.0 | 23.0 | 10.2 | 14.7 |
+| tied_first_column_only | Ultem 1000 | Nomex HT90-40 | 23.5 | 23.5 | 24.0 | 23.0 | 10.2 | 14.7 |
 
 martian vs lunar:
 
 | class | a | b | a at martian | b at martian | a at lunar | b at lunar | held a | held b |
 |---|---|---|---|---|---|---|---|---|
-| tie_in_one | Ultem 1000 | Nomex HT90-40 | 22.0 | 19.9 | 21.0 | 21.0 | 10.2 | 14.7 |
+| tied_second_column_only | Ultem 1000 | Nomex HT90-40 | 22.0 | 19.9 | 21.0 | 21.0 | 10.2 | 14.7 |
 
 lunar vs 0g:
 
 | class | a | b | a at lunar | b at lunar | a at 0g | b at 0g | held a | held b |
 |---|---|---|---|---|---|---|---|---|
-| tie_in_one | Ultem 1000 | Nomex HT90-40 | 21.0 | 21.0 | 24.0 | 23.0 | 10.2 | 14.7 |
+| tied_first_column_only | Ultem 1000 | Nomex HT90-40 | 21.0 | 21.0 | 24.0 | 23.0 | 10.2 | 14.7 |
 
 ## MOC: maximum oxygen concentration (1g) and MOC* (low gravity), % O2
 
@@ -82,29 +91,29 @@ Values as held:
 | Ultem 1000 | 23.0 | 21.1 | 19.9 | 23.0 | 10.2 |
 | Nomex HT90-40 | 22.1 | 19.0 | 19.9 | 22.0 | 14.7 |
 
-| columns | pairs | same order | reversed | tie in one | tie in both | tau-b | tau-b exact form | same criterion | of these, pairs at different test pressure (psia, as printed) (same / rev / tie1 / tie2) |
-|---|---|---|---|---|---|---|---|---|---|
-| 1g vs martian | 3 | 3 | 0 | 0 | 0 | 1.000000 | 3 / sqrt(9) | no | 2 / 0 / 0 / 0 |
-| 1g vs lunar | 3 | 2 | 0 | 1 | 0 | 0.816497 | 2 / sqrt(6) | no | 1 / 0 / 1 / 0 |
-| 1g vs 0g | 3 | 3 | 0 | 0 | 0 | 1.000000 | 3 / sqrt(9) | no | 2 / 0 / 0 / 0 |
-| martian vs lunar | 3 | 2 | 0 | 1 | 0 | 0.816497 | 2 / sqrt(6) | yes | 1 / 0 / 1 / 0 |
-| martian vs 0g | 3 | 3 | 0 | 0 | 0 | 1.000000 | 3 / sqrt(9) | yes | 2 / 0 / 0 / 0 |
-| lunar vs 0g | 3 | 2 | 0 | 1 | 0 | 0.816497 | 2 / sqrt(6) | yes | 1 / 0 / 1 / 0 |
+| columns | pairs | concordant [M06a: KENDALL_B] | discordant | tied in first column only (T_x) | tied in second column only (T_y) | tied in both | tau-b [M06b: KENDALL_B; digits M06c: team rule] | tau-b exact form | same criterion [M06d: team rule] | of these, pairs at different test pressure (psia, as printed) (conc / disc / T_x / T_y / both) [M06e: team rule] |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1g vs martian | 3 | 3 | 0 | 0 | 0 | 0 | 1.000000 | 3 / sqrt(9) | no | 2 / 0 / 0 / 0 / 0 |
+| 1g vs lunar | 3 | 2 | 0 | 0 | 1 | 0 | 0.816497 | 2 / sqrt(6) | no | 1 / 0 / 0 / 1 / 0 |
+| 1g vs 0g | 3 | 3 | 0 | 0 | 0 | 0 | 1.000000 | 3 / sqrt(9) | no | 2 / 0 / 0 / 0 / 0 |
+| martian vs lunar | 3 | 2 | 0 | 0 | 1 | 0 | 0.816497 | 2 / sqrt(6) | yes | 1 / 0 / 0 / 1 / 0 |
+| martian vs 0g | 3 | 3 | 0 | 0 | 0 | 0 | 1.000000 | 3 / sqrt(9) | yes | 2 / 0 / 0 / 0 / 0 |
+| lunar vs 0g | 3 | 2 | 0 | 1 | 0 | 0 | 0.816497 | 2 / sqrt(6) | yes | 1 / 0 / 1 / 0 / 0 |
 
 1g vs lunar:
 
 | class | a | b | a at 1g | b at 1g | a at lunar | b at lunar | held a | held b |
 |---|---|---|---|---|---|---|---|---|
-| tie_in_one | Ultem 1000 | Nomex HT90-40 | 23.0 | 22.1 | 19.9 | 19.9 | 10.2 | 14.7 |
+| tied_second_column_only | Ultem 1000 | Nomex HT90-40 | 23.0 | 22.1 | 19.9 | 19.9 | 10.2 | 14.7 |
 
 martian vs lunar:
 
 | class | a | b | a at martian | b at martian | a at lunar | b at lunar | held a | held b |
 |---|---|---|---|---|---|---|---|---|
-| tie_in_one | Ultem 1000 | Nomex HT90-40 | 21.1 | 19.0 | 19.9 | 19.9 | 10.2 | 14.7 |
+| tied_second_column_only | Ultem 1000 | Nomex HT90-40 | 21.1 | 19.0 | 19.9 | 19.9 | 10.2 | 14.7 |
 
 lunar vs 0g:
 
 | class | a | b | a at lunar | b at lunar | a at 0g | b at 0g | held a | held b |
 |---|---|---|---|---|---|---|---|---|
-| tie_in_one | Ultem 1000 | Nomex HT90-40 | 19.9 | 19.9 | 23.0 | 22.0 | 10.2 | 14.7 |
+| tied_first_column_only | Ultem 1000 | Nomex HT90-40 | 19.9 | 19.9 | 23.0 | 22.0 | 10.2 | 14.7 |

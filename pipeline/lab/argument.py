@@ -37,6 +37,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import governance  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[2]
 SPEC_PATH = ROOT / "pipeline" / "spec" / "argument_lunar_habitat.json"
 REFS_PATH = ROOT / "pipeline" / "spec" / "references.json"
@@ -541,6 +544,7 @@ def build(spec, nodes, resolved, items, cited):
             "spec": "pipeline/spec/argument_lunar_habitat.json",
             "script": "pipeline/lab/argument.py",
         },
+        "governed_by": governance.block(["L19", "L20", "L21"]),
         "top": spec["top"],
         "summary": summary,
         "nodes": out_nodes,

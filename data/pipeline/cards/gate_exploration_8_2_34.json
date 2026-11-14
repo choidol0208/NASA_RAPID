@@ -11,7 +11,8 @@
   "axis_values": {
    "inside": "the scenario sets a range (or a gravity level) and every value of it lies inside what the card states",
    "outside": "the scenario's range is not contained in what the card states (overlap 'partial' or 'none' is given); the card's verbatim words are shown",
-   "card_unstated": "the card's items state nothing on this axis",
+   "card_unstated": "neither the card's items nor the scenario state anything on this axis",
+   "domain_not_defined": "the scenario sets a range or a level on this axis and the card's items state no comparable domain on it (nothing, or words without a comparable value); following OECD Principle 3 (para 92), inside cannot be claimed on an axis whose domain is not defined",
    "scenario_unstated": "the card states the axis and the scenario sets no range or level for it"
   },
   "containment_rule": "A range of the scenario is inside a range of the card only if both of its ends lie inside, with the inclusive flags (scenario ranges: a minimum is included and a maximum is not unless the scenario says otherwise; an open end lies inside only an open end). A card that states single values (points) contains no scenario range, because no scenario range is a single value. Gravity is inside if the scenario's level is one of the card's levels.",
@@ -25,6 +26,10 @@
     "at least one compared axis is outside"
    ],
    [
+    "domain_not_defined",
+    "no axis is outside and at least one compared axis is domain_not_defined"
+   ],
+   [
     "not_applicable",
     "gravity is card_unstated or scenario_unstated"
    ],
@@ -33,8 +38,73 @@
     "no compared axis is outside and gravity is inside"
    ]
   ],
-  "overall_note": "may_be_quoted_here says only that no range stated by the card excludes the scenario. Axes that the card does not state do not block it and are named in the sentence. It is not a judgement of the condition.",
-  "range_notation": "[a, b] includes both ends, (a, b) neither; -inf or +inf marks an end the range does not set."
+  "overall_note": "may_be_quoted_here says only that the card states a domain on every axis the scenario sets and that no such domain excludes the scenario. An axis on which the scenario sets a value and the card states none gives domain_not_defined, which blocks may_be_quoted_here. Neither is a judgement of the condition.",
+  "range_notation": "[a, b] includes both ends, (a, b) neither; -inf or +inf marks an end the range does not set.",
+  "domain_rule_source": {
+   "model_key": "OECD_AD",
+   "map": "pipeline/lab/model_map.json (point L05)",
+   "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2014/09/guidance-document-on-the-validation-of-quantitative-structure-activity-relationship-q-sar-models_g1ghcc68/9789264085442-en.pdf",
+   "where": "ENV/JM/MONO(2007)2, para 92",
+   "quote": "it is important to know whether its AD is known, and whether it is being used inside or outside of this boundary",
+   "note": "The source states this for a (Q)SAR model's applicability domain; applying it to the stated validity of a published relation is the lab's reading (team rule using the OECD principle). The order of the decision list is a team rule."
+  }
+ },
+ "governed_by": {
+  "map": "pipeline/lab/model_map.json",
+  "points": [
+   {
+    "point": "L02",
+    "classification": "established",
+    "model_key": "ELEM",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null,
+    "opened_by": null
+   },
+   {
+    "point": "L03",
+    "classification": "established",
+    "model_key": "ELEM",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null,
+    "opened_by": null
+   },
+   {
+    "point": "L04",
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "candidate_model_not_governing": "OECD_AD"
+   },
+   {
+    "point": "L05",
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "candidate_model_not_governing": "OECD_AD"
+   },
+   {
+    "point": "L06",
+    "classification": "established",
+    "model_key": "ELEM",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null,
+    "opened_by": null
+   },
+   {
+    "point": "L07",
+    "classification": "established",
+    "model_key": "ELEM",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null,
+    "opened_by": null
+   },
+   {
+    "point": "D51",
+    "classification": "established",
+    "model_key": "ELEM",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null,
+    "opened_by": null
+   }
+  ]
  },
  "scenario": {
   "id": "exploration_8_2_34",
@@ -56,8 +126,9 @@
   "result": "no_held_relation_covers_this_condition",
   "may_be_quoted_here": [],
   "outside_stated_range": 5,
-  "not_applicable": 4,
-  "sentence": "No held relation covers this condition. Of the 9 cards, none may be quoted for the Exploration atmosphere 8.2 psia / 34% O2 scenario: 5 outside a stated range, 4 not comparable."
+  "domain_not_defined": 3,
+  "not_applicable": 1,
+  "sentence": "No held relation covers this condition. Of the 9 cards, none may be quoted for the Exploration atmosphere 8.2 psia / 34% O2 scenario: 5 outside a stated range, 3 with no domain stated on an axis the scenario sets, 1 not comparable."
  },
  "cards": [
   {
@@ -69,13 +140,13 @@
      "axis": "oxygen",
      "scenario": "[32, 36] %",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "pressure",
      "scenario": "(-inf, 62.8) kPa",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "gravity",
@@ -113,9 +184,9 @@
      "normalized": "unstated"
     }
    },
-   "overall": "not_applicable",
-   "reason": "gravity_scenario_unstated",
-   "sentence": "CO/CO2 molar ratio range of BASS-II microgravity flames (bass2_co_co2_ratio) is not placed for the Exploration atmosphere 8.2 psia / 34% O2 scenario: the scenario sets no gravity level, so the gate does not let the card be quoted. Axes: oxygen card_unstated; pressure card_unstated; gravity scenario_unstated; flow card_unstated."
+   "overall": "domain_not_defined",
+   "reason": "axis_domain_not_defined",
+   "sentence": "CO/CO2 molar ratio range of BASS-II microgravity flames (bass2_co_co2_ratio) is not placed for the Exploration atmosphere 8.2 psia / 34% O2 scenario: the scenario sets oxygen, pressure and the card's items state no comparable domain there, so inside cannot be claimed and the card may not be quoted. Axes: oxygen domain_not_defined; pressure domain_not_defined; gravity scenario_unstated; flow card_unstated."
   },
   {
    "card_id": "of2012_gravity_margin",
@@ -126,7 +197,7 @@
      "axis": "oxygen",
      "scenario": "[32, 36] %",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "pressure",
@@ -200,7 +271,7 @@
      "axis": "oxygen",
      "scenario": "[32, 36] %",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "pressure",
@@ -283,7 +354,7 @@
      "axis": "oxygen",
      "scenario": "[32, 36] %",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "pressure",
@@ -339,13 +410,13 @@
      "axis": "oxygen",
      "scenario": "[32, 36] %",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "pressure",
      "scenario": "(-inf, 62.8) kPa",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "gravity",
@@ -379,9 +450,9 @@
      "normalized": "unstated"
     }
    },
-   "overall": "not_applicable",
-   "reason": "gravity_card_unstated",
-   "sentence": "Hirsch et al. 2011, approximately linear MOC versus total pressure (slope range) (h2011_linear_moc) is not placed for the Exploration atmosphere 8.2 psia / 34% O2 scenario: the card's items state no gravity level, so the gate does not let it be quoted. Axes: oxygen card_unstated; pressure card_unstated; gravity card_unstated; flow card_unstated."
+   "overall": "domain_not_defined",
+   "reason": "axis_domain_not_defined",
+   "sentence": "Hirsch et al. 2011, approximately linear MOC versus total pressure (slope range) (h2011_linear_moc) is not placed for the Exploration atmosphere 8.2 psia / 34% O2 scenario: the scenario sets oxygen, pressure and the card's items state no comparable domain there, so inside cannot be claimed and the card may not be quoted. Axes: oxygen domain_not_defined; pressure domain_not_defined; gravity card_unstated; flow card_unstated."
   },
   {
    "card_id": "bass2_flammability_boundary",
@@ -467,7 +538,7 @@
      "axis": "oxygen",
      "scenario": "[32, 36] %",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "pressure",
@@ -530,13 +601,13 @@
      "axis": "oxygen",
      "scenario": "[32, 36] %",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "pressure",
      "scenario": "(-inf, 62.8) kPa",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "gravity",
@@ -581,13 +652,13 @@
      "axis": "oxygen",
      "scenario": "[32, 36] %",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "pressure",
      "scenario": "(-inf, 62.8) kPa",
      "card": "unstated",
-     "result": "card_unstated"
+     "result": "domain_not_defined"
     },
     {
      "axis": "gravity",
@@ -621,9 +692,9 @@
      "normalized": "as_written"
     }
    },
-   "overall": "not_applicable",
-   "reason": "gravity_card_unstated",
-   "sentence": "Cool-flame droplet extinction (CFI): extinction diameter as a measure of kinetic times (cfi_droplet) is not placed for the Exploration atmosphere 8.2 psia / 34% O2 scenario: the card's items state no gravity level, so the gate does not let it be quoted. Axes: oxygen card_unstated; pressure card_unstated; gravity card_unstated; flow card_unstated."
+   "overall": "domain_not_defined",
+   "reason": "axis_domain_not_defined",
+   "sentence": "Cool-flame droplet extinction (CFI): extinction diameter as a measure of kinetic times (cfi_droplet) is not placed for the Exploration atmosphere 8.2 psia / 34% O2 scenario: the scenario sets oxygen, pressure and the card's items state no comparable domain there, so inside cannot be claimed and the card may not be quoted. Axes: oxygen domain_not_defined; pressure domain_not_defined; gravity card_unstated; flow card_unstated."
   }
  ],
  "coverage": {

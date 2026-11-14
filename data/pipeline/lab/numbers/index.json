@@ -31,11 +31,11 @@
    "scenarios_without_nominal": "a scenario whose nominal is empty gets no nominal-point numbers; its ranges are reported where set"
   },
   "order_changes": {
-   "classes": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); same_order if s1 = s2 != 0; reversed if s1 = -s2 != 0; tie_in_one if exactly one of s1, s2 is 0; tie_in_both if both are 0",
+   "classes": "for materials a, b and condition columns c1, c2: s1 = sign(a[c1] - b[c1]), s2 = sign(a[c2] - b[c2]); concordant if s1 = s2 != 0; discordant if s1 = -s2 != 0; tied_first_column_only if s1 = 0 and s2 != 0 (T_x); tied_second_column_only if s2 = 0 and s1 != 0 (T_y); tied_both_columns if both are 0. Concordant, discordant, tie, T_x and T_y as defined on the NIST Dataplot KENDALLS TAU page; tied_both_columns is the remaining class and enters neither T_x nor T_y",
    "column_pairs": "every unordered pair of condition columns, in the column order of the spec",
    "criterion": "each condition column carries the criterion named in the spec; a column pair is marked same criterion yes or no; pairs with different criteria are counted like all others and marked",
    "held": "where the item holds a per-material condition (OF2012: test pressure), each class count is also given for the pairs whose held values differ",
-   "kendall_tau_b": "tau_b = (n_c - n_d) / sqrt((n_0 - n_1)(n_0 - n_2)), n_0 = n(n-1)/2 material pairs, n_c = same_order pairs, n_d = reversed pairs, n_1 = pairs tied in c1 (tie_in_both included), n_2 = pairs tied in c2; given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0",
+   "kendall_tau_b": "tau_b = (N_c - N_d) / sqrt((N_c + N_d + T_x)(N_c + N_d + T_y)) as defined on the NIST Dataplot KENDALLS TAU page (https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm); N_c = concordant pairs, N_d = discordant pairs, T_x, T_y = pairs tied in one column only; the script stops if the denominator differs from (n_0 - n_1)(n_0 - n_2); given exactly as numerator and the integer under the square root, and as a decimal rounded half-even to 'tau_b_digits' digits; undefined where the square root is 0",
    "material_pairs": "every unordered pair of materials, in the row order of the item",
    "tau_b_digits": 6,
    "values": "values are read as printed in the reference item's 'values' (exact decimals; JSON numbers read as decimal strings), no tolerance"
@@ -301,6 +301,126 @@
    "scenario_id": "exploration_10_2_26_5"
   }
  ],
+ "governed_by": {
+  "map": "pipeline/lab/model_map.json",
+  "points": [
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M09"
+   },
+   {
+    "classification": "established",
+    "model_key": "OECD_HULL",
+    "opened_by": "applicability scout (via Exa); verifier (via Exa web fetch, 2026-11-14); para 110 text re-read by the lab session from the saved Exa copy",
+    "point": "M01a",
+    "source_title": "OECD ENV/JM/MONO(2007)2, Guidance Document on the Validation of (Q)SAR Models, Chapter 4, para 110",
+    "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2014/09/guidance-document-on-the-validation-of-quantitative-structure-activity-relationship-q-sar-models_g1ghcc68/9789264085442-en.pdf"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M01b"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M01c"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M02a"
+   },
+   {
+    "classification": "established",
+    "model_key": "ELEM",
+    "opened_by": null,
+    "point": "M02b",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M03"
+   },
+   {
+    "candidate_model_not_governing": "SP811_DIGITS",
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M04"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M05a"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M05b"
+   },
+   {
+    "classification": "established",
+    "model_key": "ELEM",
+    "opened_by": null,
+    "point": "M05c",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M05d"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M05e"
+   },
+   {
+    "classification": "established",
+    "model_key": "KENDALL_B",
+    "opened_by": "ranking scout (via Exa); verifier (via Exa web fetch, 2026-11-14); lab session (via Exa, 2026-11-14)",
+    "point": "M06a",
+    "source_title": "NIST Dataplot Reference Manual, KENDALLS TAU",
+    "url": "https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm"
+   },
+   {
+    "classification": "established",
+    "model_key": "KENDALL_B",
+    "opened_by": "ranking scout (via Exa); verifier (via Exa web fetch, 2026-11-14); lab session (via Exa, 2026-11-14)",
+    "point": "M06b",
+    "source_title": "NIST Dataplot Reference Manual, KENDALLS TAU",
+    "url": "https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/kendell.htm"
+   },
+   {
+    "candidate_model_not_governing": "SP811_ROUND",
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M06c"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M06d"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M06e"
+   },
+   {
+    "classification": "established",
+    "model_key": "ELEM",
+    "opened_by": null,
+    "point": "M08",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null
+   }
+  ]
+ },
  "order_changes": {
   "search": {
    "items_with_values_looked_at": 55,
@@ -535,33 +655,36 @@
         "48.2",
         "85.3"
        ],
+       "concordant": 42,
+       "discordant": 2,
        "kendall_tau_b": "0.826898",
-       "reversed": 2,
-       "same_order": 42,
-       "tie_in_both": 2,
-       "tie_in_one": 9
+       "tied_both_columns": 2,
+       "tied_first_column_only": 8,
+       "tied_second_column_only": 1
       },
       {
        "columns": [
         "48.2",
         "101.3"
        ],
+       "concordant": 42,
+       "discordant": 2,
        "kendall_tau_b": "0.834966",
-       "reversed": 2,
-       "same_order": 42,
-       "tie_in_both": 3,
-       "tie_in_one": 8
+       "tied_both_columns": 3,
+       "tied_first_column_only": 7,
+       "tied_second_column_only": 1
       },
       {
        "columns": [
         "85.3",
         "101.3"
        ],
+       "concordant": 49,
+       "discordant": 0,
        "kendall_tau_b": "0.951501",
-       "reversed": 0,
-       "same_order": 49,
-       "tie_in_both": 1,
-       "tie_in_one": 5
+       "tied_both_columns": 1,
+       "tied_first_column_only": 2,
+       "tied_second_column_only": 3
       }
      ]
     },
@@ -577,108 +700,120 @@
         "1g",
         "martian"
        ],
+       "concordant": 3,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 2,
-        "tie_in_both": 0,
-        "tie_in_one": 0
+        "concordant": 2,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 0,
+        "tied_second_column_only": 0
        },
        "kendall_tau_b": "1.000000",
-       "reversed": 0,
        "same_criterion": false,
-       "same_order": 3,
-       "tie_in_both": 0,
-       "tie_in_one": 0
+       "tied_both_columns": 0,
+       "tied_first_column_only": 0,
+       "tied_second_column_only": 0
       },
       {
        "columns": [
         "1g",
         "lunar"
        ],
+       "concordant": 2,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 1,
-        "tie_in_both": 0,
-        "tie_in_one": 1
+        "concordant": 1,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 0,
+        "tied_second_column_only": 1
        },
        "kendall_tau_b": "0.816497",
-       "reversed": 0,
        "same_criterion": false,
-       "same_order": 2,
-       "tie_in_both": 0,
-       "tie_in_one": 1
+       "tied_both_columns": 0,
+       "tied_first_column_only": 0,
+       "tied_second_column_only": 1
       },
       {
        "columns": [
         "1g",
         "0g"
        ],
+       "concordant": 3,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 2,
-        "tie_in_both": 0,
-        "tie_in_one": 0
+        "concordant": 2,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 0,
+        "tied_second_column_only": 0
        },
        "kendall_tau_b": "1.000000",
-       "reversed": 0,
        "same_criterion": false,
-       "same_order": 3,
-       "tie_in_both": 0,
-       "tie_in_one": 0
+       "tied_both_columns": 0,
+       "tied_first_column_only": 0,
+       "tied_second_column_only": 0
       },
       {
        "columns": [
         "martian",
         "lunar"
        ],
+       "concordant": 2,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 1,
-        "tie_in_both": 0,
-        "tie_in_one": 1
+        "concordant": 1,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 0,
+        "tied_second_column_only": 1
        },
        "kendall_tau_b": "0.816497",
-       "reversed": 0,
        "same_criterion": true,
-       "same_order": 2,
-       "tie_in_both": 0,
-       "tie_in_one": 1
+       "tied_both_columns": 0,
+       "tied_first_column_only": 0,
+       "tied_second_column_only": 1
       },
       {
        "columns": [
         "martian",
         "0g"
        ],
+       "concordant": 3,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 2,
-        "tie_in_both": 0,
-        "tie_in_one": 0
+        "concordant": 2,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 0,
+        "tied_second_column_only": 0
        },
        "kendall_tau_b": "1.000000",
-       "reversed": 0,
        "same_criterion": true,
-       "same_order": 3,
-       "tie_in_both": 0,
-       "tie_in_one": 0
+       "tied_both_columns": 0,
+       "tied_first_column_only": 0,
+       "tied_second_column_only": 0
       },
       {
        "columns": [
         "lunar",
         "0g"
        ],
+       "concordant": 2,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 1,
-        "tie_in_both": 0,
-        "tie_in_one": 1
+        "concordant": 1,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 1,
+        "tied_second_column_only": 0
        },
        "kendall_tau_b": "0.816497",
-       "reversed": 0,
        "same_criterion": true,
-       "same_order": 2,
-       "tie_in_both": 0,
-       "tie_in_one": 1
+       "tied_both_columns": 0,
+       "tied_first_column_only": 1,
+       "tied_second_column_only": 0
       }
      ],
      "ULOI": [
@@ -687,108 +822,120 @@
         "1g",
         "martian"
        ],
+       "concordant": 2,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 1,
-        "tie_in_both": 0,
-        "tie_in_one": 1
+        "concordant": 1,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 1,
+        "tied_second_column_only": 0
        },
        "kendall_tau_b": "0.816497",
-       "reversed": 0,
        "same_criterion": false,
-       "same_order": 2,
-       "tie_in_both": 0,
-       "tie_in_one": 1
+       "tied_both_columns": 0,
+       "tied_first_column_only": 1,
+       "tied_second_column_only": 0
       },
       {
        "columns": [
         "1g",
         "lunar"
        ],
+       "concordant": 2,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 1,
-        "tie_in_both": 1,
-        "tie_in_one": 0
+        "concordant": 1,
+        "discordant": 0,
+        "tied_both_columns": 1,
+        "tied_first_column_only": 0,
+        "tied_second_column_only": 0
        },
        "kendall_tau_b": "1.000000",
-       "reversed": 0,
        "same_criterion": false,
-       "same_order": 2,
-       "tie_in_both": 1,
-       "tie_in_one": 0
+       "tied_both_columns": 1,
+       "tied_first_column_only": 0,
+       "tied_second_column_only": 0
       },
       {
        "columns": [
         "1g",
         "0g"
        ],
+       "concordant": 2,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 1,
-        "tie_in_both": 0,
-        "tie_in_one": 1
+        "concordant": 1,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 1,
+        "tied_second_column_only": 0
        },
        "kendall_tau_b": "0.816497",
-       "reversed": 0,
        "same_criterion": false,
-       "same_order": 2,
-       "tie_in_both": 0,
-       "tie_in_one": 1
+       "tied_both_columns": 0,
+       "tied_first_column_only": 1,
+       "tied_second_column_only": 0
       },
       {
        "columns": [
         "martian",
         "lunar"
        ],
+       "concordant": 2,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 1,
-        "tie_in_both": 0,
-        "tie_in_one": 1
+        "concordant": 1,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 0,
+        "tied_second_column_only": 1
        },
        "kendall_tau_b": "0.816497",
-       "reversed": 0,
        "same_criterion": true,
-       "same_order": 2,
-       "tie_in_both": 0,
-       "tie_in_one": 1
+       "tied_both_columns": 0,
+       "tied_first_column_only": 0,
+       "tied_second_column_only": 1
       },
       {
        "columns": [
         "martian",
         "0g"
        ],
+       "concordant": 3,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 2,
-        "tie_in_both": 0,
-        "tie_in_one": 0
+        "concordant": 2,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 0,
+        "tied_second_column_only": 0
        },
        "kendall_tau_b": "1.000000",
-       "reversed": 0,
        "same_criterion": true,
-       "same_order": 3,
-       "tie_in_both": 0,
-       "tie_in_one": 0
+       "tied_both_columns": 0,
+       "tied_first_column_only": 0,
+       "tied_second_column_only": 0
       },
       {
        "columns": [
         "lunar",
         "0g"
        ],
+       "concordant": 2,
+       "discordant": 0,
        "held_differs": {
-        "reversed": 0,
-        "same_order": 1,
-        "tie_in_both": 0,
-        "tie_in_one": 1
+        "concordant": 1,
+        "discordant": 0,
+        "tied_both_columns": 0,
+        "tied_first_column_only": 1,
+        "tied_second_column_only": 0
        },
        "kendall_tau_b": "0.816497",
-       "reversed": 0,
        "same_criterion": true,
-       "same_order": 2,
-       "tie_in_both": 0,
-       "tie_in_one": 1
+       "tied_both_columns": 0,
+       "tied_first_column_only": 1,
+       "tied_second_column_only": 0
       }
      ]
     },
@@ -807,6 +954,7 @@
   "counted_tests": "Number of tests of need_tests.csv with objective_link 'stated' for the need.",
   "counted_tests_with_ambient_oxygen": "Of those, the tests with o2_pct recorded and o2_basis 'ambient'.",
   "excluded_o2_not_recorded, excluded_basis_not_ambient": "Counted tests left out because o2_pct is empty, and because o2_basis is not 'ambient'.",
+  "governed_by": "Every output carries a 'governed_by' block: per decision point of pipeline/lab/model_map.json, the governing model key, source title, URL and opened_by, or 'team rule, no established model found'. Envelope and order fields carry the short label (point: model key or 'team rule') next to the number.",
   "gravity.*": "Number of tests whose gravity_level equals the scenario's, and where gravity_level in tests.csv comes from.",
   "joint.composition": "Number of pooled tests per investigation_id, fuel_phase and sample_geometry.",
   "joint.hull_kind, joint.hull_vertices_ccw": "Convex hull of those points: 'area', 'segment', 'point' or 'none', with its vertices counter-clockwise.",
@@ -814,10 +962,10 @@
   "joint.nominal_position, joint.nominal_inside_hull": "'interior', 'boundary', 'outside' or 'no hull' of the nominal point relative to the hull; boundary counts as inside; inside is null where there is no hull.",
   "joint.rounding_box_corners_inside": "Of the 4 corners nominal +- h (h = half a unit of the last written digit, per axis), the number inside the hull.",
   "joint.tests_with_both_recorded, joint.distinct_points": "Tests with ambient oxygen and pressure both recorded, and the number of distinct (o2_pct, pressure_kpa) points among them.",
-  "order.counts": "For one table, one quantity and one pair of condition columns: the number of material pairs in each class (same_order, reversed, tie_in_one, tie_in_both).",
+  "order.counts": "For one table, one quantity and one pair of condition columns: the number of material pairs in each class (concordant, discordant, tied_first_column_only, tied_second_column_only, tied_both_columns; terms of the NIST Dataplot KENDALLS TAU page, the last is the remaining class).",
   "order.counts_held_differs": "The same class counts restricted to material pairs whose held condition (test pressure) differs.",
-  "order.kendall_tau_b": "Kendall tau-b of the two columns over all material pairs, as numerator, integer under the square root and rounded decimal.",
-  "order.reversed_and_tie_in_one_pairs": "Every material pair that is reversed or tied in one column only, with the four printed values.",
+  "order.discordant_and_tied_one_column_pairs": "Every material pair that is discordant or tied in one column only, with the four printed values.",
+  "order.kendall_tau_b": "Kendall tau-b of the two columns over all material pairs as defined on the NIST Dataplot KENDALLS TAU page, as numerator, integer under the square root and rounded decimal.",
   "order.same_criterion": "Whether the two condition columns carry the same criterion (spec).",
   "ranges.*": "Number of tests inside the scenario's oxygen range, inside its pressure range, and inside both; the last equals tests_atmosphere of scenario_needs.csv (checked)."
  },

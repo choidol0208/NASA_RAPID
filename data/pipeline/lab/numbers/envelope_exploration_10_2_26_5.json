@@ -97,6 +97,89 @@
    ]
   }
  },
+ "governed_by": {
+  "map": "pipeline/lab/model_map.json",
+  "points": [
+   {
+    "classification": "established",
+    "model_key": "OECD_HULL",
+    "opened_by": "applicability scout (via Exa); verifier (via Exa web fetch, 2026-11-14); para 110 text re-read by the lab session from the saved Exa copy",
+    "point": "M01a",
+    "source_title": "OECD ENV/JM/MONO(2007)2, Guidance Document on the Validation of (Q)SAR Models, Chapter 4, para 110",
+    "url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2014/09/guidance-document-on-the-validation-of-quantitative-structure-activity-relationship-q-sar-models_g1ghcc68/9789264085442-en.pdf"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M01b"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M01c"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M02a"
+   },
+   {
+    "classification": "established",
+    "model_key": "ELEM",
+    "opened_by": null,
+    "point": "M02b",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M03"
+   },
+   {
+    "candidate_model_not_governing": "SP811_DIGITS",
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M04"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M05a"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M05b"
+   },
+   {
+    "classification": "established",
+    "model_key": "ELEM",
+    "opened_by": null,
+    "point": "M05c",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M05d"
+   },
+   {
+    "classification": "team_rule",
+    "model": "team rule, no established model found",
+    "point": "M05e"
+   },
+   {
+    "classification": "established",
+    "model_key": "ELEM",
+    "opened_by": null,
+    "point": "M08",
+    "source_title": "elementary mathematics (the definition is the model)",
+    "url": null
+   }
+  ]
+ },
  "gravity_note": "gravity_level in tests.csv is not a column of any PSI table: it is a constant that the team's source mapping (pipeline/spec/sources.json, 'constants') sets for the whole table. The gravity count therefore equals the number of tests of tables the team mapped to the scenario's level and is not a match found in the data. The scenario sets no gravity level.",
  "needs": [
   {
@@ -104,7 +187,14 @@
    "counted_tests_with_ambient_oxygen": 133,
    "excluded_basis_not_ambient": 0,
    "excluded_o2_not_recorded": 0,
+   "governed_by": {
+    "counted_tests": "M05a: team rule",
+    "counted_tests_with_ambient_oxygen": "M05b: team rule",
+    "excluded_basis_not_ambient": "M05b: team rule",
+    "excluded_o2_not_recorded": "M05b: team rule"
+   },
    "gravity": {
+    "governed_by": "M05c: ELEM",
     "levels_recorded": [
      "microgravity"
     ],
@@ -186,6 +276,13 @@
         "value": "22.1"
        }
       ],
+      "governed_by": {
+       "flagged_tests": "M05d: team rule",
+       "max": "M02b: ELEM",
+       "min": "M02b: ELEM",
+       "nominal_within_min_max": "M02b: ELEM",
+       "tests_recorded": "M02b: ELEM"
+      },
       "max": "22.2",
       "max_flagged_tests_at_value": 0,
       "min": "13.6",
@@ -195,6 +292,11 @@
         "below_nominal_rounding": false,
         "flagged_tests_at_value": 0,
         "gap": "-4.3",
+        "governed_by": {
+         "below_nominal_rounding": "M04: team rule",
+         "gap": "M02b: ELEM",
+         "value": "M02b: ELEM"
+        },
         "tests_at_value": 13,
         "value": "22.2"
        }
@@ -209,6 +311,18 @@
     "joint": {
      "composition": [],
      "distinct_points": 0,
+     "governed_by": {
+      "composition": "M03: team rule",
+      "deltas": "M02b: ELEM",
+      "distinct_points": "M03: team rule",
+      "hull_kind": "M01a: OECD_HULL; M01c: team rule",
+      "hull_vertices_ccw": "M01a: OECD_HULL",
+      "nearest_tests_pareto": "M02a: team rule",
+      "nominal_inside_hull": "M01a: OECD_HULL; M01b: team rule; M01c: team rule",
+      "nominal_position": "M01a: OECD_HULL; M01b: team rule; M01c: team rule",
+      "rounding_box_corners_inside": "M04: team rule; M01a: OECD_HULL",
+      "tests_with_both_recorded": "M03: team rule"
+     },
      "hull_has_area": false,
      "hull_kind": "none",
      "hull_vertices_ccw": [],
@@ -231,6 +345,7 @@
     "both_inside": 0,
     "both_inside_equals_scenario_needs_tests_atmosphere": true,
     "both_inside_test_ids": [],
+    "governed_by": "M05e: team rule",
     "o2_pct": {
      "of_tests": 133,
      "set": true,
@@ -248,7 +363,14 @@
    "counted_tests_with_ambient_oxygen": 0,
    "excluded_basis_not_ambient": 0,
    "excluded_o2_not_recorded": 0,
+   "governed_by": {
+    "counted_tests": "M05a: team rule",
+    "counted_tests_with_ambient_oxygen": "M05b: team rule",
+    "excluded_basis_not_ambient": "M05b: team rule",
+    "excluded_o2_not_recorded": "M05b: team rule"
+   },
    "gravity": {
+    "governed_by": "M05c: ELEM",
     "levels_recorded": [],
     "origin_of_gravity_level": [],
     "scenario_gravity_level": null,
@@ -266,6 +388,7 @@
     "both_inside": 0,
     "both_inside_equals_scenario_needs_tests_atmosphere": true,
     "both_inside_test_ids": [],
+    "governed_by": "M05e: team rule",
     "o2_pct": {
      "of_tests": 0,
      "set": true,
@@ -283,7 +406,14 @@
    "counted_tests_with_ambient_oxygen": 2,
    "excluded_basis_not_ambient": 0,
    "excluded_o2_not_recorded": 0,
+   "governed_by": {
+    "counted_tests": "M05a: team rule",
+    "counted_tests_with_ambient_oxygen": "M05b: team rule",
+    "excluded_basis_not_ambient": "M05b: team rule",
+    "excluded_o2_not_recorded": "M05b: team rule"
+   },
    "gravity": {
+    "governed_by": "M05c: ELEM",
     "levels_recorded": [
      "microgravity"
     ],
@@ -317,6 +447,13 @@
         "value": "21.5"
        }
       ],
+      "governed_by": {
+       "flagged_tests": "M05d: team rule",
+       "max": "M02b: ELEM",
+       "min": "M02b: ELEM",
+       "nominal_within_min_max": "M02b: ELEM",
+       "tests_recorded": "M02b: ELEM"
+      },
       "max": "21.7",
       "max_flagged_tests_at_value": 1,
       "min": "21.5",
@@ -326,6 +463,11 @@
         "below_nominal_rounding": false,
         "flagged_tests_at_value": 1,
         "gap": "-4.8",
+        "governed_by": {
+         "below_nominal_rounding": "M04: team rule",
+         "gap": "M02b: ELEM",
+         "value": "M02b: ELEM"
+        },
         "tests_at_value": 1,
         "value": "21.7"
        }
@@ -340,6 +482,18 @@
     "joint": {
      "composition": [],
      "distinct_points": 0,
+     "governed_by": {
+      "composition": "M03: team rule",
+      "deltas": "M02b: ELEM",
+      "distinct_points": "M03: team rule",
+      "hull_kind": "M01a: OECD_HULL; M01c: team rule",
+      "hull_vertices_ccw": "M01a: OECD_HULL",
+      "nearest_tests_pareto": "M02a: team rule",
+      "nominal_inside_hull": "M01a: OECD_HULL; M01b: team rule; M01c: team rule",
+      "nominal_position": "M01a: OECD_HULL; M01b: team rule; M01c: team rule",
+      "rounding_box_corners_inside": "M04: team rule; M01a: OECD_HULL",
+      "tests_with_both_recorded": "M03: team rule"
+     },
      "hull_has_area": false,
      "hull_kind": "none",
      "hull_vertices_ccw": [],
@@ -362,6 +516,7 @@
     "both_inside": 0,
     "both_inside_equals_scenario_needs_tests_atmosphere": true,
     "both_inside_test_ids": [],
+    "governed_by": "M05e: team rule",
     "o2_pct": {
      "of_tests": 2,
      "set": true,
@@ -379,7 +534,14 @@
    "counted_tests_with_ambient_oxygen": 298,
    "excluded_basis_not_ambient": 0,
    "excluded_o2_not_recorded": 0,
+   "governed_by": {
+    "counted_tests": "M05a: team rule",
+    "counted_tests_with_ambient_oxygen": "M05b: team rule",
+    "excluded_basis_not_ambient": "M05b: team rule",
+    "excluded_o2_not_recorded": "M05b: team rule"
+   },
    "gravity": {
+    "governed_by": "M05c: ELEM",
     "levels_recorded": [
      "microgravity"
     ],
@@ -396,6 +558,13 @@
     "axes": {
      "o2_pct": {
       "flagged_tests": [],
+      "governed_by": {
+       "flagged_tests": "M05d: team rule",
+       "max": "M02b: ELEM",
+       "min": "M02b: ELEM",
+       "nominal_within_min_max": "M02b: ELEM",
+       "tests_recorded": "M02b: ELEM"
+      },
       "max": "34",
       "max_flagged_tests_at_value": 0,
       "min": "12",
@@ -405,6 +574,11 @@
         "below_nominal_rounding": false,
         "flagged_tests_at_value": 0,
         "gap": "-1.5",
+        "governed_by": {
+         "below_nominal_rounding": "M04: team rule",
+         "gap": "M02b: ELEM",
+         "value": "M02b: ELEM"
+        },
         "tests_at_value": 6,
         "value": "25"
        }
@@ -414,6 +588,13 @@
      },
      "pressure_kpa": {
       "flagged_tests": [],
+      "governed_by": {
+       "flagged_tests": "M05d: team rule",
+       "max": "M02b: ELEM",
+       "min": "M02b: ELEM",
+       "nominal_within_min_max": "M02b: ELEM",
+       "tests_recorded": "M02b: ELEM"
+      },
       "max": "309.2946",
       "max_flagged_tests_at_value": 0,
       "min": "70.1676",
@@ -423,6 +604,11 @@
         "below_nominal_rounding": true,
         "flagged_tests_at_value": 0,
         "gap": "0.0409",
+        "governed_by": {
+         "below_nominal_rounding": "M04: team rule",
+         "gap": "M02b: ELEM",
+         "value": "M02b: ELEM"
+        },
         "tests_at_value": 1,
         "value": "70.3409"
        }
@@ -441,6 +627,18 @@
       }
      ],
      "distinct_points": 250,
+     "governed_by": {
+      "composition": "M03: team rule",
+      "deltas": "M02b: ELEM",
+      "distinct_points": "M03: team rule",
+      "hull_kind": "M01a: OECD_HULL; M01c: team rule",
+      "hull_vertices_ccw": "M01a: OECD_HULL",
+      "nearest_tests_pareto": "M02a: team rule",
+      "nominal_inside_hull": "M01a: OECD_HULL; M01b: team rule; M01c: team rule",
+      "nominal_position": "M01a: OECD_HULL; M01b: team rule; M01c: team rule",
+      "rounding_box_corners_inside": "M04: team rule; M01a: OECD_HULL",
+      "tests_with_both_recorded": "M03: team rule"
+     },
      "hull_has_area": true,
      "hull_kind": "area",
      "hull_vertices_ccw": [
@@ -551,6 +749,7 @@
      "FLEX-92",
      "FLEX-93"
     ],
+    "governed_by": "M05e: team rule",
     "o2_pct": {
      "of_tests": 298,
      "set": true,
@@ -568,7 +767,14 @@
    "counted_tests_with_ambient_oxygen": 122,
    "excluded_basis_not_ambient": 0,
    "excluded_o2_not_recorded": 0,
+   "governed_by": {
+    "counted_tests": "M05a: team rule",
+    "counted_tests_with_ambient_oxygen": "M05b: team rule",
+    "excluded_basis_not_ambient": "M05b: team rule",
+    "excluded_o2_not_recorded": "M05b: team rule"
+   },
    "gravity": {
+    "governed_by": "M05c: ELEM",
     "levels_recorded": [
      "microgravity"
     ],
@@ -585,6 +791,13 @@
     "axes": {
      "o2_pct": {
       "flagged_tests": [],
+      "governed_by": {
+       "flagged_tests": "M05d: team rule",
+       "max": "M02b: ELEM",
+       "min": "M02b: ELEM",
+       "nominal_within_min_max": "M02b: ELEM",
+       "tests_recorded": "M02b: ELEM"
+      },
       "max": "22.2",
       "max_flagged_tests_at_value": 0,
       "min": "13.6",
@@ -594,6 +807,11 @@
         "below_nominal_rounding": false,
         "flagged_tests_at_value": 0,
         "gap": "-4.3",
+        "governed_by": {
+         "below_nominal_rounding": "M04: team rule",
+         "gap": "M02b: ELEM",
+         "value": "M02b: ELEM"
+        },
         "tests_at_value": 13,
         "value": "22.2"
        }
@@ -608,6 +826,18 @@
     "joint": {
      "composition": [],
      "distinct_points": 0,
+     "governed_by": {
+      "composition": "M03: team rule",
+      "deltas": "M02b: ELEM",
+      "distinct_points": "M03: team rule",
+      "hull_kind": "M01a: OECD_HULL; M01c: team rule",
+      "hull_vertices_ccw": "M01a: OECD_HULL",
+      "nearest_tests_pareto": "M02a: team rule",
+      "nominal_inside_hull": "M01a: OECD_HULL; M01b: team rule; M01c: team rule",
+      "nominal_position": "M01a: OECD_HULL; M01b: team rule; M01c: team rule",
+      "rounding_box_corners_inside": "M04: team rule; M01a: OECD_HULL",
+      "tests_with_both_recorded": "M03: team rule"
+     },
      "hull_has_area": false,
      "hull_kind": "none",
      "hull_vertices_ccw": [],
@@ -630,6 +860,7 @@
     "both_inside": 0,
     "both_inside_equals_scenario_needs_tests_atmosphere": true,
     "both_inside_test_ids": [],
+    "governed_by": "M05e: team rule",
     "o2_pct": {
      "of_tests": 122,
      "set": true,
@@ -647,7 +878,14 @@
    "counted_tests_with_ambient_oxygen": 0,
    "excluded_basis_not_ambient": 0,
    "excluded_o2_not_recorded": 0,
+   "governed_by": {
+    "counted_tests": "M05a: team rule",
+    "counted_tests_with_ambient_oxygen": "M05b: team rule",
+    "excluded_basis_not_ambient": "M05b: team rule",
+    "excluded_o2_not_recorded": "M05b: team rule"
+   },
    "gravity": {
+    "governed_by": "M05c: ELEM",
     "levels_recorded": [],
     "origin_of_gravity_level": [],
     "scenario_gravity_level": null,
@@ -665,6 +903,7 @@
     "both_inside": 0,
     "both_inside_equals_scenario_needs_tests_atmosphere": true,
     "both_inside_test_ids": [],
+    "governed_by": "M05e: team rule",
     "o2_pct": {
      "of_tests": 0,
      "set": true,
