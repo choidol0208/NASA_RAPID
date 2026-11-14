@@ -121,9 +121,9 @@ Run: `python3 pipeline/lab/argument.py` (reads `references.json` and `data/pipel
 | Kind | What it holds |
 |---|---|
 | `claim` | A sentence that can be true or false, with `children` (claims, evidence, undeveloped claims) and one `inference`. No numbers |
-| `inference` | Why the children would support the claim: `text`, `assumptions`, `authorship` ("team reasoning (AI-drafted), not a NASA statement"), `basis` (`documented` with the item that states the step, or `team`), `defeaters` |
+| `inference` | Why the children would support the claim: `text`, `assumptions`, `authorship` ("team reasoning (AI-drafted), not a NASA statement"), `basis` (`documented` with the item that states the step, or `team`), `defeaters`. Each assumption is an object: `text`, and `added_by` ("review pass") when a later review added it |
 | `evidence` | Only a reference item id (text, quote, where, url and access are copied) or a count pointer (file + path; the number is copied). `covers` records materials, gravity, facility, oxygen, pressure and flow as verbatim words of the item, or "not stated in the item" |
-| `defeater` | A way an inference, or one of its numbered assumptions, could fail: `basis` `documented` (item id) or `logical` |
+| `defeater` | A way an inference, or one of its numbered assumptions, could fail: `basis` `documented` (item id) or `logical`. Optional: `item_words` (the words of the item that carry the doubt, verbatim from its text, quote or where; required for a documented defeater of the review pass), `cites` (pointers into the item's `values` or into a data file; the values are copied into the output, so the sentence holds no hand-typed number), `added_by` ("review pass") |
 | `undeveloped` | A claim with no evidence held, with the items that ask for the study, or "no item held" |
 
 ## The script stops if
@@ -133,16 +133,18 @@ Run: `python3 pipeline/lab/argument.py` (reads `references.json` and `data/pipel
 - a `covers` entry is not verbatim in the item field it names;
 - an inference (text or assumptions) contains a numeric token that is not in an evidence child of its claim; a documented defeater contains a number that is not in its item; a logical defeater, a claim or an undeveloped claim contains any number (item ids, node ids and the listed identifiers such as "Test 1" are removed first);
 - a `documented` basis has no item id or an unknown one;
+- an assumption is not an object with `text`; a defeater's `item_words` are not verbatim in its item, or one of its `cites` does not resolve;
 - a claim has no children (it must be written as `undeveloped`), or has children but no inference;
 - a word of `_meta.forbidden_words` (safe, acceptable, sufficient, representative, ...) appears in a team-written string.
 
-The summary counts claims, undeveloped claims, evidence leaves, inferences by basis, assumptions, defeaters by basis and the access levels of the evidence. It computes no verdict, and none should be read into the counts.
+The summary counts claims, undeveloped claims, evidence leaves, inferences by basis, assumptions, defeaters by basis and the access levels of the evidence, and, per inference, the assumptions, the defeaters by basis, those added by the review pass, and the assumptions with no recorded defeater. An assumption with no recorded defeater has not been shown to hold. It computes no verdict, and none should be read into the counts.
 
 ## Limits
 
 - Seven of the eight inferences have basis `team`: no held document states the step. These are the weakest joints, and their assumptions are listed so that they can be attacked.
 - The split of the top claim (atmosphere, pressure, gravity with flow, combination) is the team's. Temperature, thickness, sample size and the ignition source are not developed; defeaters D0a to D0d say so.
-- A defeater with basis `documented` cites an item that supports the doubt; its sentence is still the team's wording. The defeater list is open: a later review is expected to add more.
+- A defeater with basis `documented` cites an item that supports the doubt; its sentence is still the team's wording. The defeater list is open.
+- Review pass (2026-11-14, AI): reviewer sessions (model output) proposed defeaters, missing assumptions and evidence misuse per inference; one editing session checked each against `references.json` and added those it could verify, marked `added_by: "review pass"`. Evidence leaves were kept; where an item is used beyond its own words, a defeater on the inference says so. Fact checks of held values added defeaters on I3 (`H2006.table2`: the order of some materials changes between pressure columns) and I4 (`OF2012.table1`: a strict normal-gravity order by MOC becomes a tie at lunar gravity), and one on I2 naming the two definitions of the lunar habitat (`CH.moonbase` and the scenario in `pipeline/spec/scenarios.json`, which is unchanged). The review is AI work, not a review by a person or a combustion specialist, and the added assumptions have no defeater recorded yet.
 - `covers` copies only what the item states. "not stated in the item" may mean that the paper states it elsewhere; the item was not re-read for this step.
 - The defeater kind is not defined in the three method sources that could be read; it is described in the team's own words.
 - The argument shows where the case rests on documents, on team reasoning, or on nothing held. It does not say whether the top claim is true, and it is not a criterion or a judgement on any material.

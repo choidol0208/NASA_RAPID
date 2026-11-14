@@ -15,13 +15,20 @@ Node kinds: claim, evidence, inference, defeater, undeveloped. The script stops
   - an inference (text or assumptions) contains a numeric token that is not in
     one of the evidence children of the claim it supports;
   - a defeater contains a numeric token that is not in its documented item
-    (a logical defeater may contain none); a claim or an undeveloped claim
+    (text, quote, values, or its verbatim 'item_words'; a logical defeater may
+    contain none); a claim or an undeveloped claim
     contains any numeric token;
   - a 'documented' basis lacks an item id, or names an unknown one;
+  - an assumption is not an object with 'text' (and optional 'added_by');
+  - a defeater's 'item_words' are not verbatim in its item (a defeater added
+    by the review pass with basis 'documented' must carry them), or one of its
+    'cites' pointers does not resolve;
   - a claim has no children (a claim with no evidence is written as an
     'undeveloped' node), or has children but no inference;
   - a forbidden word appears in a team-written string.
-It computes no verdict. The summary block holds counts only.
+It computes no verdict. The summary block holds counts only, per inference and
+in total; an assumption with no recorded defeater is listed as such, which does
+not mean it has been shown to hold.
 
 Run: python3 pipeline/lab/argument.py
 """
@@ -40,6 +47,8 @@ KINDS = ("claim", "evidence", "inference", "defeater", "undeveloped")
 INFERENCE_BASES = ("documented", "team")
 DEFEATER_BASES = ("documented", "logical")
 CHILD_KINDS = ("claim", "evidence", "undeveloped")
+REVIEW_TAG = "review pass"
+NO_DEFEATER_NOTE = "An assumption with no recorded defeater has not been shown to hold."
 NUM_RE = re.compile(r"(?<![A-Za-z0-9_.\-/])\d+(?:\.\d+)?(?![A-Za-z0-9_])")
 
 
@@ -175,7 +184,35 @@ def team_strings(spec):
         for k in ("text",):
             if k in n:
                 out.append(n[k])
-        out += n.get("assumptions", [])
+        out += [a["text"] for a in n.get("assumptions", []) if isinstance(a, dict) and "text" in a]
+    return out
+
+
+def check_added_by(obj, where):
+    if "added_by" in obj and obj["added_by"] != REVIEW_TAG:
+        fail("%s: 'added_by' must be %r" % (where, REVIEW_TAG))
+
+
+def resolve_cites(n, items, cache):
+    out = []
+    cites = n.get("cites", [])
+    if not isinstance(cites, list):
+        fail("defeater %s: 'cites' must be a list" % n["id"])
+    for c in cites:
+        if not isinstance(c, dict) or "path" not in c or ("item" in c) == ("file" in c):
+            fail("defeater %s: a cite needs 'path' and exactly one of 'item' or 'file'" % n["id"])
+        if "item" in c:
+            if c["item"] not in items:
+                fail("defeater %s: cite names unknown item %s" % (n["id"], c["item"]))
+            it, _ = items[c["item"]]
+            if "values" not in it:
+                fail("defeater %s: item %s holds no 'values' to cite" % (n["id"], c["item"]))
+            val = resolve_path(it["values"], c["path"], n["id"])
+            out.append({"item": c["item"], "path": c["path"], "value": val})
+        else:
+            data = load_data_file(c["file"], cache)
+            val = resolve_path(data, c["path"], n["id"])
+            out.append({"file": c["file"], "path": c["path"], "value": val})
     return out
 
 
@@ -331,11 +368,15 @@ def main():
             fail("inference %s: an item id is given with basis 'team'" % n["id"])
         if not isinstance(n.get("assumptions"), list) or not isinstance(n.get("defeaters"), list):
             fail("inference %s needs 'assumptions' and 'defeaters' lists" % n["id"])
+        for i, a in enumerate(n["assumptions"]):
+            if not isinstance(a, dict) or not isinstance(a.get("text"), str) or set(a) - {"text", "added_by"}:
+                fail("inference %s assumption %d must be an object with 'text' and optional 'added_by'" % (n["id"], i + 1))
+            check_added_by(a, "inference %s assumption %d" % (n["id"], i + 1))
         pool = set()
         for c in claim["children"]:
             if nodes[c]["kind"] == "evidence":
                 pool |= resolved[c]["_numbers"]
-        nums = numbers_in([strip(s) for s in [n["text"]] + n["assumptions"]])
+        nums = numbers_in([strip(s) for s in [n["text"]] + [a["text"] for a in n["assumptions"]]])
         bad = sorted(nums - pool)
         if bad:
             fail("inference %s contains numeric tokens not in its evidence children: %s" % (n["id"], bad))
@@ -344,6 +385,7 @@ def main():
                 fail("inference %s lists %s, which is not a defeater attacking it" % (n["id"], d))
 
     # ---- defeaters
+    cited = {}
     for n in nodes.values():
         if n["kind"] != "defeater":
             continue
@@ -356,6 +398,18 @@ def main():
             fail("defeater %s: assumption index %r out of range" % (n["id"], a))
         if n.get("basis") not in DEFEATER_BASES:
             fail("defeater %s: basis must be one of %s" % (n["id"], DEFEATER_BASES))
+        check_added_by(n, "defeater " + n["id"])
+        cited[n["id"]] = resolve_cites(n, items, cache)
+        if "item_words" in n:
+            if n["basis"] != "documented":
+                fail("defeater %s: 'item_words' given with basis 'logical'" % n["id"])
+            if n.get("item") not in items:
+                fail("defeater %s: unknown item id %s" % (n["id"], n.get("item")))
+            it, _ = items[n["item"]]
+            if not any(n["item_words"] in (it.get(f) or "") for f in meta["covers_fields"]):
+                fail("defeater %s: item_words are not verbatim in %s: %r" % (n["id"], n["item"], n["item_words"][:90]))
+        elif n.get("added_by") == REVIEW_TAG and n["basis"] == "documented":
+            fail("defeater %s: a documented defeater of the review pass must carry 'item_words'" % n["id"])
         nums = numbers_in([strip(n["text"])])
         if n["basis"] == "documented":
             if not n.get("item"):
@@ -363,7 +417,8 @@ def main():
             if n["item"] not in items:
                 fail("defeater %s: unknown item id %s" % (n["id"], n["item"]))
             it, _ = items[n["item"]]
-            pool = numbers_in([it["text"], it.get("quote", "")] + flatten_strings(it.get("values", {})))
+            pool = numbers_in([it["text"], it.get("quote", ""), n.get("item_words", "")]
+                              + flatten_strings(it.get("values", {})))
             if nums - pool:
                 fail("defeater %s contains numeric tokens not in its item: %s" % (n["id"], sorted(nums - pool)))
         else:
@@ -384,7 +439,7 @@ def main():
                 if i not in items:
                     fail("undeveloped %s: unknown item id %s" % (n["id"], i))
 
-    result = build(spec, nodes, resolved, items)
+    result = build(spec, nodes, resolved, items, cited)
     md = render_md(result)
     text = json.dumps(result, indent=1, ensure_ascii=False, sort_keys=True, allow_nan=False) + "\n"
     write_text(OUT_DIR / (OUT_NAME + ".json"), text)
@@ -397,7 +452,7 @@ def main():
 
 # ---------------------------------------------------------------- output
 
-def build(spec, nodes, resolved, items):
+def build(spec, nodes, resolved, items, cited):
     meta = spec["_meta"]
     out_nodes = {}
     for nid in sorted(nodes):
@@ -410,7 +465,7 @@ def build(spec, nodes, resolved, items):
             r = {"id": nid, "kind": k, "text": n["text"], "inference": n["inference"], "children": n["children"]}
         elif k == "inference":
             r = {"id": nid, "kind": k, "supports": n["supports"], "text": n["text"],
-                 "assumptions": [{"n": i + 1, "text": a} for i, a in enumerate(n["assumptions"])],
+                 "assumptions": [dict({"n": i + 1}, **a) for i, a in enumerate(n["assumptions"])],
                  "authorship": n["authorship"], "basis": n["basis"], "defeaters": n["defeaters"]}
             if n["basis"] == "documented":
                 r["basis_item"] = item_copy(n["item"], items)
@@ -419,6 +474,11 @@ def build(spec, nodes, resolved, items):
                  "authorship": meta["authorship"]}
             if n["basis"] == "documented":
                 r["basis_item"] = item_copy(n["item"], items)
+            for key in ("added_by", "item_words"):
+                if key in n:
+                    r[key] = n[key]
+            if cited[nid]:
+                r["cited_values"] = cited[nid]
         else:
             sa = n["study_asked"]
             r = {"id": nid, "kind": k, "text": n["text"], "evidence": meta["no_item"],
@@ -441,9 +501,31 @@ def build(spec, nodes, resolved, items):
         "defeaters_by_basis": {b: count("defeater", "basis", b) for b in DEFEATER_BASES},
         "inferences_with_no_defeater_yet": sorted(n["id"] for n in nodes.values()
                                                   if n["kind"] == "inference" and not n["defeaters"]),
+        "assumptions_added_by_review_pass": sum(1 for n in nodes.values() if n["kind"] == "inference"
+                                                for a in n["assumptions"] if a.get("added_by") == REVIEW_TAG),
+        "defeaters_added_by_review_pass": sum(1 for n in nodes.values() if n["kind"] == "defeater"
+                                              and n.get("added_by") == REVIEW_TAG),
+        "assumptions_with_no_recorded_defeater": 0,
+        "per_inference": {},
+        "assumption_note": NO_DEFEATER_NOTE,
         "evidence_access_levels": {},
         "note": "Counts only. No overall verdict is computed or implied.",
     }
+    for iid in sorted(n["id"] for n in nodes.values() if n["kind"] == "inference"):
+        inf = nodes[iid]
+        ds = [nodes[d] for d in inf["defeaters"]]
+        attacked = {d["attacks"].get("assumption") for d in ds}
+        bare = [i + 1 for i in range(len(inf["assumptions"])) if i + 1 not in attacked]
+        summary["per_inference"][iid] = {
+            "assumptions": len(inf["assumptions"]),
+            "assumptions_added_by_review_pass": sum(1 for a in inf["assumptions"] if a.get("added_by") == REVIEW_TAG),
+            "defeaters_by_basis": {b: sum(1 for d in ds if d["basis"] == b) for b in DEFEATER_BASES},
+            "defeaters_added_by_review_pass": sum(1 for d in ds if d.get("added_by") == REVIEW_TAG),
+            "defeaters_of_the_inference_as_a_whole": sum(1 for d in ds if d["attacks"].get("assumption") is None),
+            "assumptions_with_no_recorded_defeater": len(bare),
+            "assumption_numbers_with_no_recorded_defeater": bare,
+        }
+        summary["assumptions_with_no_recorded_defeater"] += len(bare)
     for n in nodes.values():
         if n["kind"] == "evidence" and "item" in n:
             acc = items[n["item"]][1]["access"]
@@ -524,7 +606,25 @@ def render_md(res):
     L.append("- assumptions stated: %d" % s["assumptions"])
     L.append("- defeaters by basis: " + ", ".join("%s %d" % kv for kv in s["defeaters_by_basis"].items()))
     L.append("- inferences with no defeater yet: " + (", ".join(s["inferences_with_no_defeater_yet"]) or "none"))
+    L.append("- added by the review pass: %d assumptions, %d defeaters"
+             % (s["assumptions_added_by_review_pass"], s["defeaters_added_by_review_pass"]))
+    L.append("- assumptions with no recorded defeater: %d. %s" % (s["assumptions_with_no_recorded_defeater"], s["assumption_note"]))
     L.append("- " + s["note"])
+    L.append("")
+    L.append("Per inference (counts only):")
+    L.append("")
+    L.append("| Inference | Assumptions (review pass) | Defeaters documented | Defeaters logical | Of the inference as a whole | "
+             "Defeaters added by review pass | Assumptions with no recorded defeater |")
+    L.append("|---|---|---|---|---|---|---|")
+    for iid, p in s["per_inference"].items():
+        bare = ", ".join(str(x) for x in p["assumption_numbers_with_no_recorded_defeater"])
+        L.append("| %s | %d (%d) | %d | %d | %d | %d | %d%s |" % (
+            iid, p["assumptions"], p["assumptions_added_by_review_pass"], p["defeaters_by_basis"]["documented"],
+            p["defeaters_by_basis"]["logical"], p["defeaters_of_the_inference_as_a_whole"],
+            p["defeaters_added_by_review_pass"], p["assumptions_with_no_recorded_defeater"],
+            " (numbers " + bare + ")" if bare else ""))
+    L.append("")
+    L.append(s["assumption_note"])
     L.append("")
     L.append("## Tree")
     L.append("")
@@ -542,15 +642,24 @@ def render_md(res):
             if inf["basis"] == "documented":
                 L.extend(item_lines(inf["basis_item"], ip + "    basis "))
             for a in inf["assumptions"]:
-                L.append("%s    assumption %d: %s" % (ip, a["n"], a["text"]))
+                tag = " [added by %s]" % a["added_by"] if "added_by" in a else ""
+                L.append("%s    assumption %d%s: %s" % (ip, a["n"], tag, a["text"]))
             for d in inf["defeaters"]:
                 dn = nodes[d]
                 tgt = "assumption %d" % dn["attacks"]["assumption"] if dn["attacks"]["assumption"] else "the inference"
                 b = dn["basis"] + (" (" + dn["basis_item"]["item"] + ")" if dn["basis"] == "documented" else "")
-                L.append("%s    %s DEFEATER of %s [basis: %s]: %s" % (ip, d, tgt, b, dn["text"]))
+                tag = "; added by %s" % dn["added_by"] if "added_by" in dn else ""
+                L.append("%s    %s DEFEATER of %s [basis: %s%s]: %s" % (ip, d, tgt, b, tag, dn["text"]))
                 if dn["basis"] == "documented":
                     it = dn["basis_item"]
-                    L.append("%s        %s: %s" % (ip, "quote" if "quote" in it else "text", one_line(it.get("quote", it["text"]))))
+                    if "item_words" in dn:
+                        L.append('%s        item words (verbatim): "%s"' % (ip, one_line(dn["item_words"])))
+                    else:
+                        L.append("%s        %s: %s" % (ip, "quote" if "quote" in it else "text", one_line(it.get("quote", it["text"]))))
+                for cv in dn.get("cited_values", []):
+                    src = cv["item"] if "item" in cv else cv["file"]
+                    L.append("%s        cited value %s %s = %s" % (ip, src, json.dumps(cv["path"], ensure_ascii=False),
+                                                              json.dumps(cv["value"], sort_keys=True, ensure_ascii=False)))
             if not inf["defeaters"]:
                 L.append("%s    defeaters: none recorded yet" % ip)
             for c in n["children"]:
