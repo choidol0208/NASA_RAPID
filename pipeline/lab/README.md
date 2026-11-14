@@ -298,3 +298,36 @@ What mathematics cannot remove (each a choice someone made):
 - Order of the gate decision list (outside before domain_not_defined before gravity): AI lab session, 2026-11-14, team rule.
 - Which verifier findings to apply and how to classify each point (this corrected map): AI lab session (Claude Code), from verify.json; not reviewed by a person.
 - Which verifier findings exist at all: the verifier and the scouts opened what the session proxy let them reach; sources they did not open are listed in the map under `not_rechecked`.
+
+# Raw-file gaps (experiment, branch `data-lab`)
+
+*AI-generated (Claude Code) on 2026-11-14. Not reviewed by a person. The survey of the raw files and the mapping of headers to standard variables were done by AI agents.*
+
+The question it answers: for each PSI investigation and each standard variable that the six needs use, is the quantity in the experimental table, in a raw file that the table does not summarise, only in a document sentence, possibly only in videos or archives, or nowhere in what was sampled?
+
+## Files
+
+| File | What |
+|---|---|
+| `pipeline/spec/raw_columns.json` | The survey as a spec: per investigation the file groups, the sample file with its PSI file id and listing size, the headers as written (re-opened on 2026-11-14 where `header_check` says so), what one file is per, the link to the experimental table, and the header-to-variable mappings (`mapping_by`: AI reading of the header, not confirmed by a document). Also the fixed sentences of the outputs |
+| `pipeline/lab/raw_gaps.py` | Decides one state per investigation and variable by rule; writes the two outputs |
+| `data/pipeline/lab/raw_gaps.json`, `raw_gaps.md` | States per investigation and variable; per need, the states of the required variables over the counted or recorded tests (`need_tests.csv`) and over all tests in scope, and the states of the outcome variables over all tests in scope |
+
+Run: `python3 pipeline/lab/raw_gaps.py` (needs `data/pipeline/tests.csv`, `need_tests.csv` and `raw_inventory.json`). Standard library only; the same inputs give the same bytes.
+
+## What was opened
+
+- The survey (AI agents, 2026-11-14) downloaded 159 PSI files, 180,483,501 bytes in all, from 19 investigations, and read one sample file per group of files (the smallest in most groups). The list with PSI file ids and sizes is `_meta.downloaded_files` of `raw_columns.json`. The total is above the 150 MB that the task allowed; the largest single files were 24.9 MB (Saffire-I Sample 2) and 21.3 MB (Saffire-III 1 Hz telemetry).
+- This step re-opened the header lines (not the values) of 58 of those files to check the headers of the spec. Every mapped header of a re-opened group was found in the re-read text.
+- No `.zip` archive and no video was downloaded or opened. PDFs, Word and PowerPoint files were not opened.
+- Five investigations were not surveyed: PSI-60, PSI-62, PSI-115 and PSI-117 have no experimental table; PSI-142 is an index of figures. The survey result for PSI-39 and PSI-107 was empty; their entries were written from the agents' `reading.json` files and the header re-check.
+
+## Limits
+
+- One file per group. Other files of a group may have other columns (two header variants were seen in PSI-68 Chamber_Readings; the three smallest PSI-20 data files have no header row).
+- A mapping is a judgement on header text. Headers of a related but different quantity (a voltage for a power, a volume flow for a velocity, a total mass for a rate) are listed under `related_not_mapped` and are not counted.
+- `measured_not_summarised` says that a column exists. A column in a raw file says the quantity was logged; it does not say the log is complete, calibrated or usable. Many columns are time series, settings, event timestamps or free text (`column_is`), and turning them into one value per test would be a team computation.
+- `video_or_archive_only` is decided from counts in `raw_inventory.json`. It does not say that a video or an archive holds the quantity.
+- Links of raw files to table rows are those the survey reported; several are by day or by time only, and some are unsettled (PSI-69 FLEX numbers, PSI-98/99/100 sample labels).
+- No file read states why a quantity is not in the experimental table.
+- The PSI-26 planned test matrix holds a note cell that appears to contain account names and passwords. Its text is not reproduced anywhere, and the file should not be published.
