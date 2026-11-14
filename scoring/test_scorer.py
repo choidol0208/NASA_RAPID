@@ -170,6 +170,33 @@ class AssumedAtmosphereWording(unittest.TestCase):
                 self.assertNotRegex(r["why"].split(";")[0], r"^(O2|pressure) match", r["config_id"])
 
 
+class OxidizerStream(unittest.TestCase):
+    """The O2 of an inverse flame is its burner stream, not an atmosphere: never matched with the user's O2."""
+
+    def test_stream_o2_is_unknown(self):
+        p = CFG["similarity"]["o2"]
+        self.assertIsNone(scorer.s_o2(21, {"o2_min_pct": "18", "o2_max_pct": "85", "o2_reference": "oxidizer_stream"}, p))
+        self.assertEqual(scorer.s_o2(21, {"o2_min_pct": "18", "o2_max_pct": "85", "o2_reference": "ambient"}, p), 1.0)
+
+    def test_stream_configs_not_matched_on_o2(self):
+        streams = {c["config_id"] for c in CFGS if c["o2_reference"] == "oxidizer_stream"}
+        self.assertTrue(streams)
+        for r in scorer.rank("50% O2")["ranking"]:
+            if r["config_id"] in streams:
+                self.assertIn("o2", r["unknown_dims"])
+                codes = [w["code"] for w in r["warnings"]]
+                self.assertIn("oxidizer_stream", codes)
+                self.assertNotIn("o2_above_result", codes)
+
+    def test_o2_above_all_uses_ambient_maximum(self):
+        ambient_max = max(float(c["o2_max_pct"]) for c in CFGS if c["o2_max_pct"] and c["o2_reference"] != "oxidizer_stream")
+        self.assertEqual(ambient_max, 40.0)
+        w = [x for x in scorer.rank("50% O2")["warnings"] if x["code"] == "o2_above_all"]
+        self.assertEqual(len(w), 1)
+        self.assertIn("40%", w[0]["message"])
+        self.assertFalse([x for x in scorer.rank("39% O2")["warnings"] if x["code"] == "o2_above_all"])
+
+
 class CatalogIntegrity(unittest.TestCase):
     def test_counts_and_links(self):
         self.assertEqual(len(INV), 24)

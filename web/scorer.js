@@ -143,6 +143,9 @@ function range(c, lo, hi) {
   return [a !== null ? a : b, b !== null ? b : a];
 }
 function sO2(x, c, p) {
+  // An inverse flame's O2 is the burner's oxidizer stream; the surrounding atmosphere is fuel and
+  // inert gas. It is not an atmosphere a crew breathes, so it is never matched with the user's O2.
+  if ((c.o2_reference || "") === "oxidizer_stream") return null;
   const r = range(c, "o2_min_pct", "o2_max_pct");
   if (!r) return null;
   const [lo, hi] = r;
@@ -327,7 +330,8 @@ function explain(sc, c, s, cfg, fallback, speed) {
   const why = best.map((d) => `${labels[d]} match ${sim[d].toFixed(2)} (${detail[d]})`).join("; ");
   const gap = gaps.filter((d) => sim[d] < 0.9).map((d) => `${labels[d]} ${sim[d].toFixed(2)} (${detail[d]})`).join("; ");
   const warns = [];
-  const o2max = f(c.o2_max_pct);
+  const stream = (c.o2_reference || "") === "oxidizer_stream";
+  const o2max = stream ? null : f(c.o2_max_pct);
   if (sc.o2_pct !== undefined && sc.o2_pct !== null && o2max !== null && sc.o2_pct > o2max) {
     warns.push({ code: "o2_above_result", message: fill(W.o2_above_result, { user: fmtG(sc.o2_pct), max: fmtG(o2max) }) });
   }
@@ -336,8 +340,9 @@ function explain(sc, c, s, cfg, fallback, speed) {
   if (speed !== null && speed < thr) out.push("flow speed");
   if (out.length) warns.push({ code: "outside_range", message: fill(W.outside_range, { dims: out.join(", ") }) });
   if (sc.fuel_phase === "solid" && (c.fuel_phase || "").toLowerCase() === "gas") warns.push({ code: "gas_for_solid", message: W.gas_for_solid });
-  if ((c.o2_reference || "") === "oxidizer_stream" && "o2" in sim) warns.push({ code: "oxidizer_stream", message: W.oxidizer_stream });
-  if (s.unknown.length) warns.push({ code: "not_reported", message: fill(W.not_reported, { dims: s.unknown.map((d) => labels[d]).join(", ") }) });
+  if (stream && "o2" in sim) warns.push({ code: "oxidizer_stream", message: W.oxidizer_stream });
+  const missing = s.unknown.filter((d) => !(stream && d === "o2")); // O2 of a stream is recorded, just not comparable
+  if (missing.length) warns.push({ code: "not_reported", message: fill(W.not_reported, { dims: missing.map((d) => labels[d]).join(", ") }) });
   if (fallback.length) warns.push({ code: "fallback", message: fill(W.fallback, { dims: fallback.join(" and ") }) });
   if (c._inv.platform === "ground") warns.push({ code: "ground_analysis", message: W.ground_analysis });
   return [why, gap, warns];
@@ -364,7 +369,12 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
     if (g === "lunar" || g === "martian") warnings.push({ code: "partial_gravity", message: W.partial_gravity });
     else if (g === "earth") warnings.push({ code: "earth_gravity", message: W.earth_gravity });
     let maxO2 = null, maxC = null;
-    for (const c of cfgs) { const v = f(c.o2_max_pct); if (v !== null && (maxO2 === null || v > maxO2)) { maxO2 = v; maxC = c; } }
+    // Highest O2 of any surrounding atmosphere tested (oxidizer streams of inverse flames excluded).
+    for (const c of cfgs) {
+      if ((c.o2_reference || "") === "oxidizer_stream") continue;
+      const v = f(c.o2_max_pct);
+      if (v !== null && (maxO2 === null || v > maxO2)) { maxO2 = v; maxC = c; }
+    }
     if (sc.o2_pct !== undefined && sc.o2_pct !== null && sc.o2_pct > maxO2) {
       warnings.push({ code: "o2_above_all", message: fill(W.o2_above_all, { max_o2: fmtG(maxO2), max_cfg: maxC.config_id, ref: maxC.o2_reference || "ambient" }) });
     }
