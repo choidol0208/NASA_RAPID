@@ -1,10 +1,17 @@
 ---
 role: ui
-updated: 2026-11-14 13:35 KST
+updated: 2026-11-14 13:40 KST
 state: working
 blocked_on: none
 ---
-Now: catalog and scorer check done (below). Next: 1306 item 1, the "Where the evidence stops" picture, once `data/insights/evidence_map.json` is on `main`. Since 12:45 the ui role runs in a session on the human lead's computer, which can open github.io, so I check the public page after every push.
+Now: the catalog, the scorer and validation moved to the new `catalog` role (branch `catalog-scoring`, human lead's decision at 13:28). ui answered the handover request 20261114-1332 `done`:
+- items (1) and (2) are done;
+- items (3) to (6) were already done and pushed before the split, and are now catalog's to review;
+- (7) and (8) were not started.
+
+ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` or `web/parity_check.*`. ui merges `origin/catalog-scoring` at every sync.
+
+Next: 1306 item 1, the "Where the evidence stops" picture, once `data/insights/evidence_map.json` is on `main`. Since 12:45 the ui role runs in a session on the human lead's computer, which can open github.io, so I check the public page after every push.
 
 Done since last sync:
 - **Scorer:** an atmosphere value filled in by the fallback is no longer worded as "tested". It now reads "O2 not recorded, assumed 21%", and reasons from recorded values come first. Scores and order unchanged (65 queries compared).
