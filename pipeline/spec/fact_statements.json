@@ -51,17 +51,29 @@
  "groups": {
   "table.oxygen": {
    "exactly_one_when": [
-    {"field": "table.table_status", "op": "eq", "value": "test_level"}
+    {
+     "field": "table.table_status",
+     "op": "eq",
+     "value": "test_level"
+    }
    ]
   },
   "table.pressure": {
    "exactly_one_when": [
-    {"field": "table.table_status", "op": "eq", "value": "test_level"}
+    {
+     "field": "table.table_status",
+     "op": "eq",
+     "value": "test_level"
+    }
    ]
   },
   "table.flow": {
    "exactly_one_when": [
-    {"field": "table.table_status", "op": "eq", "value": "test_level"}
+    {
+     "field": "table.table_status",
+     "op": "eq",
+     "value": "test_level"
+    }
    ]
   }
  },
@@ -72,58 +84,96 @@
     {
      "id": "inv.no_table",
      "when": [
-      {"field": "investigation.table_status", "op": "eq", "value": "no_experimental_table"}
+      {
+       "field": "investigation.table_status",
+       "op": "eq",
+       "value": "no_experimental_table"
+      }
      ],
      "text": "The PSI record of {investigation.investigation_id} lists no experimental table. The pipeline holds no test rows, recorded values or need counts for it."
     },
     {
      "id": "inv.not_test_level",
      "when": [
-      {"field": "investigation.table_status", "op": "eq", "value": "not_test_level"}
+      {
+       "field": "investigation.table_status",
+       "op": "eq",
+       "value": "not_test_level"
+      }
      ],
      "text": "{investigation.investigation_id} has {investigation.n_tables with experimental table|experimental tables}, and none is read as one row per test. The pipeline holds no test rows, recorded values or need counts for it."
     },
     {
      "id": "inv.tests",
      "when": [
-      {"field": "investigation.table_status", "op": "in", "value": ["test_level", "mixed"]}
+      {
+       "field": "investigation.table_status",
+       "op": "in",
+       "value": [
+        "test_level",
+        "mixed"
+       ]
+      }
      ],
      "text": "The pipeline holds {investigation.tests with test row|test rows} for {investigation.investigation_id}, read from {investigation.n_tables_test_level with experimental table|experimental tables}."
     },
     {
      "id": "inv.license.given",
      "when": [
-      {"field": "investigation.license.identifier", "op": "exists"}
+      {
+       "field": "investigation.license.identifier",
+       "op": "exists"
+      }
      ],
      "text": "The PSI record of {investigation.investigation_id} gives the license identifier {investigation.license.identifier}."
     },
     {
      "id": "inv.license.empty",
      "when": [
-      {"field": "investigation.license.identifier", "op": "missing"}
+      {
+       "field": "investigation.license.identifier",
+       "op": "missing"
+      }
      ],
      "text": "The license field of the PSI record of {investigation.investigation_id} is empty."
     },
     {
      "id": "inv.fuels",
      "when": [
-      {"field": "investigation.variables.fuel_material", "op": "exists"},
-      {"field": "investigation.variables.fuel_material.values_truncated", "op": "eq", "value": false}
+      {
+       "field": "investigation.variables.fuel_material",
+       "op": "exists"
+      },
+      {
+       "field": "investigation.variables.fuel_material.values_truncated",
+       "op": "eq",
+       "value": false
+      }
      ],
      "text": "Fuel or material names as written in the pipeline, with the number of test rows: {investigation.variables.fuel_material.values as counts}."
     },
     {
      "id": "inv.fuels.truncated",
      "when": [
-      {"field": "investigation.variables.fuel_material", "op": "exists"},
-      {"field": "investigation.variables.fuel_material.values_truncated", "op": "eq", "value": true}
+      {
+       "field": "investigation.variables.fuel_material",
+       "op": "exists"
+      },
+      {
+       "field": "investigation.variables.fuel_material.values_truncated",
+       "op": "eq",
+       "value": true
+      }
      ],
      "text": "{investigation.variables.fuel_material.distinct} different fuel or material names are recorded. The {investigation.variables.fuel_material.values_shown} most frequent, with the number of test rows: {investigation.variables.fuel_material.values as counts}."
     },
     {
      "id": "inv.variables",
      "when": [
-      {"field": "investigation.variables", "op": "nonempty"}
+      {
+       "field": "investigation.variables",
+       "op": "nonempty"
+      }
      ],
      "text": "Variables with at least one value in the test rows of {investigation.investigation_id}, with the number of test rows that have a value: {investigation.variables as counts}."
     }
@@ -135,44 +185,81 @@
     {
      "id": "table.not_test_level",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "not_test_level"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "not_test_level"
+      }
      ],
      "text": "The experimental table \"{table.file}\" is not read as one row per test and is not standardized. Reason given in the team's source mapping: \"{table.not_test_level_reason}\"."
     },
     {
      "id": "table.rows",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      }
      ],
-     "text": "Table \"{table.file}\" (source id {table.source_id}): {table.rows_read} non-empty data rows read, {table.tests} kept as test rows, {table.rows_skipped} left out."
+     "text": "Table \"{table.file}\" (source id {table.source_id}): {table.rows_read} non-empty data rows read, {table.tests} kept as test rows. Left out: {table.rows_skipped} with a required cell empty, {table.rows_excluded} named in the source mapping as not a test, {table.rows_repeated} repeating an earlier row cell for cell."
+    },
+    {
+     "id": "table.row_note",
+     "when": [
+      {
+       "field": "table.row_note",
+       "op": "nonempty"
+      }
+     ],
+     "text": "What a row of \"{table.file}\" is: {table.row_note}"
     },
     {
      "id": "table.rows_left_out",
      "when": [
-      {"field": "table.rows_skipped", "op": "gt", "value": 0},
-      {"field": "table.require", "op": "nonempty"}
+      {
+       "field": "table.rows_skipped",
+       "op": "gt",
+       "value": 0
+      },
+      {
+       "field": "table.require",
+       "op": "nonempty"
+      }
      ],
      "text": "A row of \"{table.file}\" is left out when one of these columns is empty: {table.require as list}."
     },
     {
      "id": "table.phase.constant",
      "when": [
-      {"field": "table.constants.fuel_phase", "op": "exists"}
+      {
+       "field": "table.constants.fuel_phase",
+       "op": "exists"
+      }
      ],
      "text": "The team's source mapping sets the fuel phase of all {table.tests with test row|test rows} of \"{table.file}\" to {table.constants.fuel_phase}; the phase is not read from a table column."
     },
     {
      "id": "table.phase.recorded",
      "when": [
-      {"field": "table.constants.fuel_phase", "op": "missing"},
-      {"field": "table.variables.fuel_phase", "op": "exists"}
+      {
+       "field": "table.constants.fuel_phase",
+       "op": "missing"
+      },
+      {
+       "field": "table.variables.fuel_phase",
+       "op": "exists"
+      }
      ],
      "text": "Fuel phase recorded in \"{table.file}\", with the number of test rows: {table.variables.fuel_phase.values as counts}."
     },
     {
      "id": "table.gravity.constant",
      "when": [
-      {"field": "table.constants.gravity_level", "op": "exists"}
+      {
+       "field": "table.constants.gravity_level",
+       "op": "exists"
+      }
      ],
      "text": "The team's source mapping sets the gravity level of all {table.tests with test row|test rows} of \"{table.file}\" to {table.constants.gravity_level}; the gravity level is not read from a table column."
     },
@@ -180,9 +267,20 @@
      "id": "table.oxygen.ambient",
      "group": "table.oxygen",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.variables.o2_pct", "op": "exists"},
-      {"field": "table.constants.o2_basis", "op": "eq", "value": "ambient"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.variables.o2_pct",
+       "op": "exists"
+      },
+      {
+       "field": "table.constants.o2_basis",
+       "op": "eq",
+       "value": "ambient"
+      }
      ],
      "text": "In \"{table.file}\", the oxygen concentration of the surrounding atmosphere at the start of the test is recorded for {table.variables.o2_pct.n} of {table.tests with test row|test rows}, from {table.variables.o2_pct.min} to {table.variables.o2_pct.max} {table.variables.o2_pct.unit} (source column: {table.column_map.o2_pct as list})."
     },
@@ -190,9 +288,20 @@
      "id": "table.oxygen.oxidizer_stream",
      "group": "table.oxygen",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.variables.o2_pct", "op": "exists"},
-      {"field": "table.constants.o2_basis", "op": "eq", "value": "oxidizer_stream"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.variables.o2_pct",
+       "op": "exists"
+      },
+      {
+       "field": "table.constants.o2_basis",
+       "op": "eq",
+       "value": "oxidizer_stream"
+      }
      ],
      "text": "In \"{table.file}\", the oxygen value is the concentration in the gas issuing from the burner (oxidizer stream), not in the surrounding atmosphere. It is recorded for {table.variables.o2_pct.n} of {table.tests with test row|test rows}, from {table.variables.o2_pct.min} to {table.variables.o2_pct.max} {table.variables.o2_pct.unit} (source column: {table.column_map.o2_pct as list}). The pipeline holds no oxygen concentration of the surrounding atmosphere for these test rows."
     },
@@ -200,9 +309,19 @@
      "id": "table.oxygen.basis_not_set",
      "group": "table.oxygen",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.variables.o2_pct", "op": "exists"},
-      {"field": "table.constants.o2_basis", "op": "missing"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.variables.o2_pct",
+       "op": "exists"
+      },
+      {
+       "field": "table.constants.o2_basis",
+       "op": "missing"
+      }
      ],
      "text": "In \"{table.file}\", an oxygen concentration is recorded for {table.variables.o2_pct.n} of {table.tests with test row|test rows}, from {table.variables.o2_pct.min} to {table.variables.o2_pct.max} {table.variables.o2_pct.unit} (source column: {table.column_map.o2_pct as list}). The team's source mapping does not say whether it is the surrounding atmosphere or the gas issuing from the burner."
     },
@@ -210,8 +329,15 @@
      "id": "table.oxygen.not_mapped",
      "group": "table.oxygen",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.column_map.o2_pct", "op": "missing"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.o2_pct",
+       "op": "missing"
+      }
      ],
      "text": "No column of \"{table.file}\" is mapped to an oxygen concentration. The pipeline does not record oxygen for its {table.tests with test row|test rows}."
     },
@@ -219,16 +345,29 @@
      "id": "table.oxygen.no_value",
      "group": "table.oxygen",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.column_map.o2_pct", "op": "exists"},
-      {"field": "table.variables.o2_pct", "op": "missing"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.o2_pct",
+       "op": "exists"
+      },
+      {
+       "field": "table.variables.o2_pct",
+       "op": "missing"
+      }
      ],
      "text": "A column of \"{table.file}\" is mapped to the oxygen concentration ({table.column_map.o2_pct as list}), but no test row has a value the pipeline could read."
     },
     {
      "id": "table.oxygen.flags",
      "when": [
-      {"field": "table.flags_by_variable.o2_pct", "op": "exists"}
+      {
+       "field": "table.flags_by_variable.o2_pct",
+       "op": "exists"
+      }
      ],
      "text": "Flags on the oxygen cells of \"{table.file}\" (reason, with the number of occurrences): {table.flags_by_variable.o2_pct as counts}. Where a flagged cell still gave a value, that value is part of the lowest and highest values above."
     },
@@ -236,8 +375,15 @@
      "id": "table.pressure.recorded",
      "group": "table.pressure",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.variables.pressure_kpa", "op": "exists"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.variables.pressure_kpa",
+       "op": "exists"
+      }
      ],
      "text": "In \"{table.file}\", the ambient pressure is recorded for {table.variables.pressure_kpa.n} of {table.tests with test row|test rows}, from {table.variables.pressure_kpa.min} to {table.variables.pressure_kpa.max} {table.variables.pressure_kpa.unit} (source column: {table.column_map.pressure_kpa as list})."
     },
@@ -245,8 +391,15 @@
      "id": "table.pressure.not_mapped",
      "group": "table.pressure",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.column_map.pressure_kpa", "op": "missing"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.pressure_kpa",
+       "op": "missing"
+      }
      ],
      "text": "No column of \"{table.file}\" is mapped to the ambient pressure. The pipeline does not record pressure for its {table.tests with test row|test rows}."
     },
@@ -254,16 +407,29 @@
      "id": "table.pressure.no_value",
      "group": "table.pressure",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.column_map.pressure_kpa", "op": "exists"},
-      {"field": "table.variables.pressure_kpa", "op": "missing"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.pressure_kpa",
+       "op": "exists"
+      },
+      {
+       "field": "table.variables.pressure_kpa",
+       "op": "missing"
+      }
      ],
      "text": "A column of \"{table.file}\" is mapped to the ambient pressure ({table.column_map.pressure_kpa as list}), but no test row has a value the pipeline could read."
     },
     {
      "id": "table.pressure.flags",
      "when": [
-      {"field": "table.flags_by_variable.pressure_kpa", "op": "exists"}
+      {
+       "field": "table.flags_by_variable.pressure_kpa",
+       "op": "exists"
+      }
      ],
      "text": "Flags on the pressure cells of \"{table.file}\" (reason, with the number of occurrences): {table.flags_by_variable.pressure_kpa as counts}. Where a flagged cell still gave a value, that value is part of the lowest and highest values above."
     },
@@ -271,8 +437,15 @@
      "id": "table.flow.recorded",
      "group": "table.flow",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.variables.flow_cms", "op": "exists"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.variables.flow_cms",
+       "op": "exists"
+      }
      ],
      "text": "In \"{table.file}\", the imposed flow speed at the start of the test is recorded for {table.variables.flow_cms.n} of {table.tests with test row|test rows}, from {table.variables.flow_cms.min} to {table.variables.flow_cms.max} {table.variables.flow_cms.unit} (source column: {table.column_map.flow_cms as list})."
     },
@@ -280,8 +453,15 @@
      "id": "table.flow.not_mapped",
      "group": "table.flow",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.column_map.flow_cms", "op": "missing"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.flow_cms",
+       "op": "missing"
+      }
      ],
      "text": "No column of \"{table.file}\" is mapped to an imposed flow speed in cm/s. The pipeline does not record a flow speed for its {table.tests with test row|test rows}."
     },
@@ -289,30 +469,49 @@
      "id": "table.flow.no_value",
      "group": "table.flow",
      "when": [
-      {"field": "table.table_status", "op": "eq", "value": "test_level"},
-      {"field": "table.column_map.flow_cms", "op": "exists"},
-      {"field": "table.variables.flow_cms", "op": "missing"}
+      {
+       "field": "table.table_status",
+       "op": "eq",
+       "value": "test_level"
+      },
+      {
+       "field": "table.column_map.flow_cms",
+       "op": "exists"
+      },
+      {
+       "field": "table.variables.flow_cms",
+       "op": "missing"
+      }
      ],
      "text": "A column of \"{table.file}\" is mapped to the imposed flow speed ({table.column_map.flow_cms as list}), but no test row has a value the pipeline could read."
     },
     {
      "id": "table.flow.flags",
      "when": [
-      {"field": "table.flags_by_variable.flow_cms", "op": "exists"}
+      {
+       "field": "table.flags_by_variable.flow_cms",
+       "op": "exists"
+      }
      ],
      "text": "Flags on the flow speed cells of \"{table.file}\" (reason, with the number of occurrences): {table.flags_by_variable.flow_cms as counts}. Where a flagged cell still gave a value, that value is part of the lowest and highest values above."
     },
     {
      "id": "table.unit_factors",
      "when": [
-      {"field": "table.unit_factors", "op": "nonempty"}
+      {
+       "field": "table.unit_factors",
+       "op": "nonempty"
+      }
      ],
      "text": "In \"{table.file}\", the values of these variables are the source cell multiplied by a fixed unit factor set in the team's source mapping: {table.unit_factors as pairs}."
     },
     {
      "id": "table.columns_not_mapped",
      "when": [
-      {"field": "table.source_columns_not_mapped", "op": "nonempty"}
+      {
+       "field": "table.source_columns_not_mapped",
+       "op": "nonempty"
+      }
      ],
      "text": "Columns of \"{table.file}\" that are not mapped to a standard variable: {table.source_columns_not_mapped as list}."
     }
@@ -334,8 +533,15 @@
     {
      "id": "inv.no_stated_need",
      "when": [
-      {"field": "investigation.tests", "op": "gt", "value": 0},
-      {"field": "investigation.stated_needs", "op": "empty"}
+      {
+       "field": "investigation.tests",
+       "op": "gt",
+       "value": 0
+      },
+      {
+       "field": "investigation.stated_needs",
+       "op": "empty"
+      }
      ],
      "text": "The team's needs list links no sentence of the PSI record of {investigation.investigation_id} to an information need, so none of its test rows is counted for a need."
     }
@@ -347,24 +553,48 @@
     {
      "id": "need.stated.with_tests",
      "when": [
-      {"field": "need.objective_link", "op": "eq", "value": "stated"},
-      {"field": "need.usable_tests", "op": "gt", "value": 0}
+      {
+       "field": "need.objective_link",
+       "op": "eq",
+       "value": "stated"
+      },
+      {
+       "field": "need.usable_tests",
+       "op": "gt",
+       "value": 0
+      }
      ],
      "text": "Need {need.need_id} ({need.need}) is stated as an objective in the PSI record. {need.usable_tests} of the {need.tests_in_scope with test row|test rows} within the scope of this need record every required condition variable and at least one outcome variable of the need."
     },
     {
      "id": "need.stated.no_tests",
      "when": [
-      {"field": "need.objective_link", "op": "eq", "value": "stated"},
-      {"field": "need.usable_tests", "op": "eq", "value": 0}
+      {
+       "field": "need.objective_link",
+       "op": "eq",
+       "value": "stated"
+      },
+      {
+       "field": "need.usable_tests",
+       "op": "eq",
+       "value": 0
+      }
      ],
      "text": "Need {need.need_id} ({need.need}) is stated as an objective in the PSI record. No test row of {investigation.investigation_id} records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: {need.statuses as pairs})."
     },
     {
      "id": "need.not_stated.recorded",
      "when": [
-      {"field": "need.objective_link", "op": "eq", "value": "not_stated"},
-      {"field": "need.usable_tests", "op": "gt", "value": 0}
+      {
+       "field": "need.objective_link",
+       "op": "eq",
+       "value": "not_stated"
+      },
+      {
+       "field": "need.usable_tests",
+       "op": "gt",
+       "value": 0
+      }
      ],
      "text": "{need.usable_tests with test row|test rows} of {investigation.investigation_id} record every required condition variable and at least one outcome variable of need {need.need_id} ({need.need}), but the team's needs list has no sentence of the PSI record that states this need as an objective. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
     }
@@ -376,24 +606,47 @@
     {
      "id": "need_table.oxidizer_stream",
      "when": [
-      {"field": "table.constants.o2_basis", "op": "eq", "value": "oxidizer_stream"},
-      {"field": "row.usable_tests", "op": "gt", "value": 0}
+      {
+       "field": "table.constants.o2_basis",
+       "op": "eq",
+       "value": "oxidizer_stream"
+      },
+      {
+       "field": "row.usable_tests",
+       "op": "gt",
+       "value": 0
+      }
      ],
      "text": "{row.usable_tests} of the test rows that record the variables of need {need.need_id} ({need.need}) come from \"{table.file}\", where the oxygen value is the concentration in the gas issuing from the burner (oxidizer stream), not in the surrounding atmosphere."
     },
     {
      "id": "need_table.required_missing",
      "when": [
-      {"field": "need.objective_link", "op": "eq", "value": "stated"},
-      {"field": "row.required_missing", "op": "nonempty"}
+      {
+       "field": "need.objective_link",
+       "op": "eq",
+       "value": "stated"
+      },
+      {
+       "field": "row.required_missing",
+       "op": "nonempty"
+      }
      ],
      "text": "In \"{table.file}\", these required condition variables of need {need.need_id} ({need.need}) have no value in any test row: {row.required_missing as list}."
     },
     {
      "id": "need_table.conditions_only",
      "when": [
-      {"field": "need.objective_link", "op": "eq", "value": "stated"},
-      {"field": "row.status", "op": "eq", "value": "conditions_only"}
+      {
+       "field": "need.objective_link",
+       "op": "eq",
+       "value": "stated"
+      },
+      {
+       "field": "row.status",
+       "op": "eq",
+       "value": "conditions_only"
+      }
      ],
      "text": "In \"{table.file}\", {row.tests_with_required_conditions with test row records|test rows record} every required condition variable of need {need.need_id} ({need.need}), and no outcome variable of this need has a value in the table."
     }
@@ -405,14 +658,21 @@
     {
      "id": "inv.flags",
      "when": [
-      {"field": "investigation.flags", "op": "nonempty"}
+      {
+       "field": "investigation.flags",
+       "op": "nonempty"
+      }
      ],
      "text": "Flags the pipeline set on the test rows of {investigation.investigation_id} (variable:reason, with the number of occurrences): {investigation.flags as counts}. A flag marks a problem in a source cell or in a computed value; the pipeline does not correct it."
     },
     {
      "id": "inv.team_computation",
      "when": [
-      {"field": "investigation.tests", "op": "gt", "value": 0}
+      {
+       "field": "investigation.tests",
+       "op": "gt",
+       "value": 0
+      }
      ],
      "text": "The counts and the lowest and highest values above are computed by the team from NASA PSI experimental table data. They are not NASA conclusions."
     }

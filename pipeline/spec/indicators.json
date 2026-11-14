@@ -117,7 +117,38 @@
    "compare_with": [
     "ICES19.limits"
    ],
-   "reading": "Initial oxygen of the tests in which an extinction or blowoff was noted. The oxygen at the moment of the event is not in the table."
+   "reading": "Oxygen at the start of the tests in which the table notes an event (extinction, blowoff, no ignition, not sustained). It is the starting value, not the oxygen at the event; the oxygen after the test is in 'P1.o2_after_extinction'."
+  },
+  {
+   "id": "P1.o2_after_extinction",
+   "need_id": "P1",
+   "label": "Oxygen after the test, in tests with an extinction noted",
+   "template": "summary",
+   "population": "usable",
+   "variable": "o2_final_pct",
+   "stats": [
+    "min",
+    "max"
+   ],
+   "where": [
+    [
+     "flow_event",
+     "==",
+     "extinction"
+    ]
+   ],
+   "group_by": [
+    "material_id",
+    "sample_geometry"
+   ],
+   "definition_ref": [
+    "ICES19.sensors",
+    "ICES19.boundary"
+   ],
+   "compare_with": [
+    "ICES19.limits"
+   ],
+   "reading": "Final oxygen reading of the tests in which the table notes an extinction. The BASS-II investigators use the post-test oxygen as the extinction oxygen (ICES19.sensors). A few final readings in the table are implausible as oxygen values and are kept as written; see the flags of the tests."
   },
   {
    "id": "P1.lowest_flow_listed_at_extinction",
@@ -147,46 +178,6 @@
     "ICES19.issflow"
    ],
    "reading": "The lowest flow speed written in the cell of a test where extinction was noted. The table does not say at which setting the flame went out."
-  },
-  {
-   "id": "P2.ignition_power",
-   "need_id": "P2",
-   "label": "Igniter power",
-   "template": "summary",
-   "population": "usable",
-   "variable": "ignition_power_w",
-   "stats": [
-    "min",
-    "max"
-   ],
-   "where": [],
-   "group_by": [
-    "material_id"
-   ],
-   "definition_ref": [
-    "6001B.T1.purpose"
-   ],
-   "reading": "Power of the igniter used, as recorded. It is the setting of the experiment, not the minimum energy needed to ignite the material."
-  },
-  {
-   "id": "P2.ignition_time",
-   "need_id": "P2",
-   "label": "Igniter on-time",
-   "template": "summary",
-   "population": "usable",
-   "variable": "ignition_time_s",
-   "stats": [
-    "min",
-    "max"
-   ],
-   "where": [],
-   "group_by": [
-    "material_id"
-   ],
-   "definition_ref": [
-    "6001B.T1.purpose"
-   ],
-   "reading": "How long the igniter was on, as recorded. Not a measured ignition delay."
   },
   {
    "id": "P3.spread_rate",
@@ -387,7 +378,7 @@
     "3001.T6.2-3",
     "TB008.co"
    ],
-   "reading": "Final minus initial CO reading in the test duct. A duct reading, not a cabin concentration: it is not comparable with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. Side measurement: no investigation states combustion-product measurement as an objective."
+   "reading": "Final minus initial CO reading in the test duct. A duct reading, not a cabin concentration: it is not comparable with crew exposure limits (SMAC.scope). Tests whose reading was over range are not in this range; see D1.co_over_range. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors)."
   },
   {
    "id": "D1.co_over_range",
@@ -410,7 +401,7 @@
    "definition_ref": [
     "3001.T6.2-3"
    ],
-   "reading": "Number of tests in which the final CO reading was recorded as over range (above 1000 ppm per the BASS-II ReadMe). Side measurement: no investigation states combustion-product measurement as an objective."
+   "reading": "Number of tests in which the final CO reading was recorded as over range (above 1000 ppm per the BASS-II ReadMe). Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors)."
   },
   {
    "id": "D1.co_to_co2",
@@ -432,7 +423,10 @@
    "definition_ref": [
     "TB008.co"
    ],
-   "reading": "Molar ratio computed by the pipeline (variables.json) from the rises in CO and CO2. A team computation. Side measurement: no investigation states combustion-product measurement as an objective."
+   "reading": "Molar ratio computed by the pipeline (variables.json) from the rises in CO and CO2. A team computation. Recorded outside the stated objective: no PSI record names a gas species as something to determine; the investigators describe the sensor as measuring the completeness of combustion (ICES19.sensors).",
+   "compare_with": [
+    "ICES19.coratio"
+   ]
   },
   {
    "id": "D2.flow",

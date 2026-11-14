@@ -1,0 +1,3962 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "written_by": "pipeline/check.py",
+  "note": "Independent recomputation of the pipeline outputs from the raw NASA PSI tables and the rules written in pipeline/spec/*.json and pipeline/README.md. check.py does not import the pipeline code. A check that fails names a disagreement; it does not say which side is right.",
+  "tolerances": {
+   "converted_values": 5.1e-05,
+   "derived_formulas": 0.0001,
+   "indicator_statistics": 5.1e-06
+  }
+ },
+ "summary": {
+  "PASS": 41,
+  "FAIL": 1,
+  "SKIP": 0,
+  "checks": 42
+ },
+ "checks": [
+  {
+   "id": "A1_trace_source_cells",
+   "verifies": "Every value with a real source column is found in its raw NASA cell and is explained by a rule that the spec states (exact copy, declared factor, number in the cell text, spec vocabulary).",
+   "status": "FAIL",
+   "numbers": {
+    "values_checked": 9231,
+    "exact": 5378,
+    "declared_factor": 2575,
+    "number_in_text": 225,
+    "vocabulary": 297,
+    "one_of_several_numbers": 204,
+    "unit_in_cell": 66,
+    "text_in_cell": 258,
+    "material_alias_in_cell": 48,
+    "unexplained": 0,
+    "empty_cell": 2,
+    "category_not_in_cell": 171,
+    "computed_midpoint": 3,
+    "assumed_unit": 4,
+    "numbers_written_with_a_leading_zero": 0,
+    "failing_values_that_the_pipeline_flags": 92
+   },
+   "failures": 180,
+   "failing_examples": [
+    {
+     "file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+     "row": "7",
+     "column": "Material",
+     "variable": "fuel_material",
+     "raw_cell": "",
+     "value": "Cotton-Fiberglass (SIBAL)",
+     "class": "empty_cell",
+     "note": "sources.json fill_down: row 6 holds 'Cotton-Fiberglass (SIBAL)' (exact); flag present",
+     "test_id": "SAFFIRE-2-2-6",
+     "pipeline_flags_on_variable": "fuel_material:blank_in_source_value_of_row_above_used"
+    },
+    {
+     "file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+     "row": "10",
+     "column": "Material",
+     "variable": "fuel_material",
+     "raw_cell": "",
+     "value": "PMMA",
+     "class": "empty_cell",
+     "note": "sources.json fill_down: row 9 holds 'PMMA' (exact); flag present",
+     "test_id": "SAFFIRE-2-2-9",
+     "pipeline_flags_on_variable": "fuel_material:blank_in_source_value_of_row_above_used"
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "4",
+     "column": "Fuel Sample Material",
+     "variable": "fuel_material",
+     "raw_cell": "100 micron film   2 cm wide",
+     "value": "PMMA",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B3",
+     "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "6",
+     "column": "Fuel Sample Material",
+     "variable": "fuel_material",
+     "raw_cell": "200 micron  2 cm wide",
+     "value": "PMMA",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B5",
+     "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "6",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "200 micron  2 cm wide",
+     "value": "film",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B5",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "8",
+     "column": "Fuel Sample Material",
+     "variable": "fuel_material",
+     "raw_cell": "400 micron film   2 cm wide",
+     "value": "PMMA",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B7",
+     "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "13",
+     "column": "Fuel Sample Material",
+     "variable": "fuel_material",
+     "raw_cell": "300 micron film   2 cm wide",
+     "value": "PMMA",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B12",
+     "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "14",
+     "column": "Fuel Sample Material",
+     "variable": "fuel_material",
+     "raw_cell": "2 cm   0.4 mm thick film",
+     "value": "PMMA",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B13",
+     "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "15",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "1 cm wide 200 micron thick PMMA",
+     "value": "film",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B14",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "17",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "2 cm 100 micron thick PMMA",
+     "value": "film",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B16",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "18",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "1 cm wide 200 micron thick PMMA",
+     "value": "film",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B17",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "19",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "1 cm wide 200 micron thick PMMA",
+     "value": "film",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B18",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "20",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "2 cm 100 micron thick PMMA",
+     "value": "film",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B19",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "21",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "2 cm 100 micron thick PMMA",
+     "value": "film",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B20",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "22",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "1 cm wide 200 micron thick PMMA",
+     "value": "film",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B21",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "23",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "1 cm wide 200 micron thick PMMA",
+     "value": "film",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-B22",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "24",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "Nomex natural (nomex III)",
+     "value": "fabric sheet",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-F1",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "25",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "Nomex natural (nomex III)",
+     "value": "fabric sheet",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-F2",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "26",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "Nomex natural (nomex III)",
+     "value": "fabric sheet",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-F3",
+     "pipeline_flags_on_variable": ""
+    },
+    {
+     "file": "PSI-25_Experimental table_BASS-II.csv",
+     "row": "28",
+     "column": "Fuel Sample Material",
+     "variable": "sample_geometry",
+     "raw_cell": "1 mm thick PMMA   1 sided   2 cm",
+     "value": "slab",
+     "class": "category_not_in_cell",
+     "note": "",
+     "test_id": "BASS2-M1",
+     "pipeline_flags_on_variable": ""
+    }
+   ],
+   "details": {
+    "class_meaning": {
+     "exact": "same text (ignoring case) or the same number as the raw cell",
+     "declared_factor": "a number in the cell times the factor or unit conversion declared in sources.json",
+     "number_in_text": "the only number written in a longer cell",
+     "vocabulary": "the spec maps the cell text to this category (sources.json 'map', or the keywords listed in the variable's meaning in variables.json)",
+     "one_of_several_numbers": "one of several numbers written in the cell; which one is chosen is an engine rule that the spec does not state",
+     "unit_in_cell": "a number in the cell converted from the unit written next to it to the variable's unit",
+     "text_in_cell": "the value is written inside a longer cell",
+     "material_alias_in_cell": "the cell names a material of materials.json (id or alias) and the value is another alias of the same material",
+     "unexplained": "no rule found that leads from the raw cell to the value",
+     "empty_cell": "the raw cell is empty but a value is recorded. This includes columns that sources.json lists under 'fill_down' (the value is the cell of a row above): the rule that an empty cell means 'not recorded' and is never filled in does not allow it",
+     "category_not_in_cell": "a text value that is not written in the cell and that no spec file maps the cell text to (the mapping lives in engine code, not in the spec)",
+     "computed_midpoint": "the value is the midpoint of two numbers in the cell: computed, not copied, and not a formula of variables.json",
+     "reference_label_number": "the number is the label of a note or figure in the cell ('Note 4', 'Fig. 5'), not a measurement",
+     "assumed_unit": "the value needs a unit conversion whose unit is neither written in the cell nor declared in sources.json",
+     "declared_factor_not_applied": "sources.json declares a factor for the column but the value equals the raw number without it",
+     "unit_ignored": "the number is copied although the unit written after it in the cell is not the unit of the variable"
+    },
+    "classes_that_fail": [
+     "assumed_unit",
+     "category_not_in_cell",
+     "computed_midpoint",
+     "declared_factor_not_applied",
+     "empty_cell",
+     "reference_label_number",
+     "unexplained",
+     "unit_ignored"
+    ],
+    "per_variable": {
+     "aging_time_s": {
+      "declared_factor": 4,
+      "exact": 104
+     },
+     "burn_length_cm": {
+      "number_in_text": 6,
+      "one_of_several_numbers": 2
+     },
+     "burn_time_s": {
+      "exact": 597,
+      "number_in_text": 7
+     },
+     "burning_rate_mm2_s": {
+      "exact": 258
+     },
+     "co2_final_pct": {
+      "exact": 123
+     },
+     "co2_initial_pct": {
+      "exact": 127
+     },
+     "co2_pct": {
+      "declared_factor": 123,
+      "exact": 151
+     },
+     "co_final_ppm": {
+      "exact": 120
+     },
+     "co_initial_ppm": {
+      "exact": 126
+     },
+     "extinction_diameter_mm": {
+      "exact": 197
+     },
+     "flow_cms": {
+      "exact": 547,
+      "number_in_text": 28,
+      "one_of_several_numbers": 77
+     },
+     "flow_direction": {
+      "exact": 13
+     },
+     "flow_event": {
+      "vocabulary": 25
+     },
+     "flow_min_cms": {
+      "exact": 25,
+      "number_in_text": 18,
+      "one_of_several_numbers": 62
+     },
+     "fuel_material": {
+      "category_not_in_cell": 97,
+      "empty_cell": 2,
+      "exact": 1452,
+      "material_alias_in_cell": 48,
+      "text_in_cell": 105
+     },
+     "he_pct": {
+      "declared_factor": 64,
+      "exact": 289
+     },
+     "heating_ratio": {
+      "exact": 109
+     },
+     "hot_ignition": {
+      "exact": 333
+     },
+     "ignition_power_w": {
+      "exact": 2,
+      "number_in_text": 9
+     },
+     "ignition_time_s": {
+      "exact": 2,
+      "number_in_text": 9
+     },
+     "initial_diameter_mm": {
+      "exact": 262
+     },
+     "mass_loss_rate_mg_min": {
+      "exact": 4
+     },
+     "o2_final_pct": {
+      "declared_factor": 366,
+      "exact": 127
+     },
+     "o2_pct": {
+      "computed_midpoint": 3,
+      "declared_factor": 1002,
+      "exact": 129,
+      "number_in_text": 8
+     },
+     "pressure_kpa": {
+      "declared_factor": 1012
+     },
+     "rod_diameter_mm": {
+      "assumed_unit": 4,
+      "unit_in_cell": 50
+     },
+     "sample_geometry": {
+      "category_not_in_cell": 74,
+      "exact": 3,
+      "text_in_cell": 153
+     },
+     "sample_length_cm": {
+      "exact": 2,
+      "number_in_text": 10
+     },
+     "sample_thickness_mm": {
+      "declared_factor": 4,
+      "number_in_text": 6,
+      "one_of_several_numbers": 24,
+      "unit_in_cell": 16
+     },
+     "sample_width_cm": {
+      "exact": 2,
+      "number_in_text": 122,
+      "one_of_several_numbers": 39
+     },
+     "spread_rate_mm_s": {
+      "number_in_text": 2
+     },
+     "test_end": {
+      "exact": 274,
+      "vocabulary": 272
+     }
+    },
+    "examples_per_class": {
+     "assumed_unit": [
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "78",
+       "column": "Fuel Sample Material",
+       "variable": "rod_diameter_mm",
+       "raw_cell": "1/4 clear rod",
+       "value": "6.35",
+       "note": "inch (not written after '1/4')"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "88",
+       "column": "Fuel Sample Material",
+       "variable": "rod_diameter_mm",
+       "raw_cell": "1/4 blac rod",
+       "value": "6.35",
+       "note": "inch (not written after '1/4')"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "89",
+       "column": "Fuel Sample Material",
+       "variable": "rod_diameter_mm",
+       "raw_cell": "1/4 black rod",
+       "value": "6.35",
+       "note": "inch (not written after '1/4')"
+      }
+     ],
+     "category_not_in_cell": [
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "4",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "100 micron film   2 cm wide",
+       "value": "PMMA",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "6",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "200 micron  2 cm wide",
+       "value": "PMMA",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "6",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "200 micron  2 cm wide",
+       "value": "film",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "8",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "400 micron film   2 cm wide",
+       "value": "PMMA",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "13",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "300 micron film   2 cm wide",
+       "value": "PMMA",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "14",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "2 cm   0.4 mm thick film",
+       "value": "PMMA",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "15",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "1 cm wide 200 micron thick PMMA",
+       "value": "film",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "17",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "2 cm 100 micron thick PMMA",
+       "value": "film",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "24",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "Nomex natural (nomex III)",
+       "value": "fabric sheet",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "28",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "1 mm thick PMMA   1 sided   2 cm",
+       "value": "slab",
+       "note": ""
+      }
+     ],
+     "computed_midpoint": [
+      {
+       "file": "PSI-98_Experimental table_SAFFIRE-1.csv",
+       "row": "2",
+       "column": "Percent O2",
+       "variable": "o2_pct",
+       "raw_cell": "21.5 - 21.7",
+       "value": "21.6",
+       "note": "(21.5 + 21.7) / 2"
+      },
+      {
+       "file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+       "row": "9",
+       "column": "Percent O2 (Note 1)",
+       "variable": "o2_pct",
+       "raw_cell": "22.1 to 22.0",
+       "value": "22.05",
+       "note": "(22.1 + 22.0) / 2"
+      },
+      {
+       "file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+       "row": "10",
+       "column": "Percent O2 (Note 1)",
+       "variable": "o2_pct",
+       "raw_cell": "22.0 to 21.9",
+       "value": "21.95",
+       "note": "(22.0 + 21.9) / 2"
+      }
+     ],
+     "declared_factor": [
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "2",
+       "column": "O initial ambient composition; mole fraction",
+       "variable": "o2_pct",
+       "raw_cell": "0.21",
+       "value": "21.0",
+       "note": "factor 100"
+      },
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "2",
+       "column": "Ambient pressure; mmHg",
+       "variable": "pressure_kpa",
+       "raw_cell": "757.7",
+       "value": "101.0184",
+       "note": "factor 0.133322368"
+      },
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "3",
+       "column": "Ambient pressure; mmHg",
+       "variable": "pressure_kpa",
+       "raw_cell": "762",
+       "value": "101.5916",
+       "note": "factor 0.133322368"
+      },
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "4",
+       "column": "Ambient pressure; mmHg",
+       "variable": "pressure_kpa",
+       "raw_cell": "764.2",
+       "value": "101.885",
+       "note": "factor 0.133322368"
+      },
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "5",
+       "column": "Ambient pressure; mmHg",
+       "variable": "pressure_kpa",
+       "raw_cell": "760",
+       "value": "101.325",
+       "note": "factor 0.133322368"
+      },
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "8",
+       "column": "Ambient pressure; mmHg",
+       "variable": "pressure_kpa",
+       "raw_cell": "761.3",
+       "value": "101.4983",
+       "note": "factor 0.133322368"
+      },
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "9",
+       "column": "Ambient pressure; mmHg",
+       "variable": "pressure_kpa",
+       "raw_cell": "762.4",
+       "value": "101.645",
+       "note": "factor 0.133322368"
+      },
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "11",
+       "column": "CO initial ambient composition; mole fraction",
+       "variable": "co2_pct",
+       "raw_cell": "0.7",
+       "value": "70.0",
+       "note": "factor 100"
+      },
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "11",
+       "column": "Ambient pressure; mmHg",
+       "variable": "pressure_kpa",
+       "raw_cell": "2319.7",
+       "value": "309.2679",
+       "note": "factor 0.133322368"
+      },
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "12",
+       "column": "Ambient pressure; mmHg",
+       "variable": "pressure_kpa",
+       "raw_cell": "2318.8",
+       "value": "309.1479",
+       "note": "factor 0.133322368"
+      }
+     ],
+     "empty_cell": [
+      {
+       "file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+       "row": "7",
+       "column": "Material",
+       "variable": "fuel_material",
+       "raw_cell": "",
+       "value": "Cotton-Fiberglass (SIBAL)",
+       "note": "sources.json fill_down: row 6 holds 'Cotton-Fiberglass (SIBAL)' (exact); flag present"
+      }
+     ],
+     "material_alias_in_cell": [
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "24",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "Nomex natural (nomex III)",
+       "value": "Nomex III fabric",
+       "note": "nomex"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "102",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "2 cm SIBAL",
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "note": "sibal"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "119",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "1 cm SIBAL",
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "note": "sibal"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "123",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "2 cm Sibal   moved igniter",
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "note": "sibal"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "124",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "1 cm SIBAL   top side ign",
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "note": "sibal"
+      },
+      {
+       "file": "PSI-26_Experimental table_BASS.csv",
+       "row": "2",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "SIBAL 2 cm",
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "note": "sibal"
+      },
+      {
+       "file": "PSI-26_Experimental table_BASS.csv",
+       "row": "14",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "SIBAL 1 cm",
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "note": "sibal"
+      },
+      {
+       "file": "PSI-26_Experimental table_BASS.csv",
+       "row": "15",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "Nomex blend 2 cm",
+       "value": "Nomex blend fabric",
+       "note": "nomex"
+      },
+      {
+       "file": "PSI-26_Experimental table_BASS.csv",
+       "row": "40",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "Nomex III Natural",
+       "value": "Nomex III fabric",
+       "note": "nomex"
+      },
+      {
+       "file": "PSI-26_Experimental table_BASS.csv",
+       "row": "46",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "SIBAL 2 cm   opposed flow",
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "note": "sibal"
+      }
+     ],
+     "number_in_text": [
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "224",
+       "column": "Burn time; s",
+       "variable": "burn_time_s",
+       "raw_cell": "~6",
+       "value": "6.0",
+       "note": ""
+      },
+      {
+       "file": "PSI-69_Experimental table_FLEX.csv",
+       "row": "225",
+       "column": "Burn time; s",
+       "variable": "burn_time_s",
+       "raw_cell": "~9",
+       "value": "9.0",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "9",
+       "column": "Air display",
+       "variable": "flow_cms",
+       "raw_cell": "10   max",
+       "value": "10.0",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "9",
+       "column": "Air display",
+       "variable": "flow_min_cms",
+       "raw_cell": "10   max",
+       "value": "10.0",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "19",
+       "column": "Air display",
+       "variable": "flow_cms",
+       "raw_cell": "10   blowoff",
+       "value": "10.0",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "19",
+       "column": "Air display",
+       "variable": "flow_min_cms",
+       "raw_cell": "10   blowoff",
+       "value": "10.0",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "22",
+       "column": "Air display",
+       "variable": "flow_cms",
+       "raw_cell": "5 down to ext",
+       "value": "5.0",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "22",
+       "column": "Air display",
+       "variable": "flow_min_cms",
+       "raw_cell": "5 down to ext",
+       "value": "5.0",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "27",
+       "column": "Air display",
+       "variable": "flow_cms",
+       "raw_cell": "3 ign",
+       "value": "3.0",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "27",
+       "column": "Air display",
+       "variable": "flow_min_cms",
+       "raw_cell": "3 ign",
+       "value": "3.0",
+       "note": ""
+      }
+     ],
+     "one_of_several_numbers": [
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "2",
+       "column": "Fuel Sample Material",
+       "variable": "sample_width_cm",
+       "raw_cell": "100 micron PMMA film   2 cm wide",
+       "value": "2.0",
+       "note": "minimum+last"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "3",
+       "column": "Fuel Sample Material",
+       "variable": "sample_width_cm",
+       "raw_cell": "200 micron PMMA film   2 cm wide",
+       "value": "2.0",
+       "note": "minimum+last"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "4",
+       "column": "Fuel Sample Material",
+       "variable": "sample_width_cm",
+       "raw_cell": "100 micron film   2 cm wide",
+       "value": "2.0",
+       "note": "minimum+last"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "5",
+       "column": "Fuel Sample Material",
+       "variable": "sample_width_cm",
+       "raw_cell": "300 micron PMMA film   2 cm wide",
+       "value": "2.0",
+       "note": "minimum+last"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "6",
+       "column": "Fuel Sample Material",
+       "variable": "sample_width_cm",
+       "raw_cell": "200 micron  2 cm wide",
+       "value": "2.0",
+       "note": "minimum+last"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "7",
+       "column": "Fuel Sample Material",
+       "variable": "sample_thickness_mm",
+       "raw_cell": "2 cm 0.1 mm PMMA film",
+       "value": "0.1",
+       "note": "minimum+last"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "7",
+       "column": "Fuel Sample Material",
+       "variable": "sample_width_cm",
+       "raw_cell": "2 cm 0.1 mm PMMA film",
+       "value": "2.0",
+       "note": "first"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "7",
+       "column": "Air display",
+       "variable": "flow_cms",
+       "raw_cell": "3   5   approaching 10",
+       "value": "3.0",
+       "note": "first+minimum"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "7",
+       "column": "Air display",
+       "variable": "flow_min_cms",
+       "raw_cell": "3   5   approaching 10",
+       "value": "3.0",
+       "note": "first+minimum"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "8",
+       "column": "Fuel Sample Material",
+       "variable": "sample_width_cm",
+       "raw_cell": "400 micron film   2 cm wide",
+       "value": "2.0",
+       "note": "minimum+last"
+      }
+     ],
+     "text_in_cell": [
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "2",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "100 micron PMMA film   2 cm wide",
+       "value": "PMMA",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "2",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "100 micron PMMA film   2 cm wide",
+       "value": "film",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "3",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "200 micron PMMA film   2 cm wide",
+       "value": "PMMA",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "3",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "200 micron PMMA film   2 cm wide",
+       "value": "film",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "4",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "100 micron film   2 cm wide",
+       "value": "film",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "5",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "300 micron PMMA film   2 cm wide",
+       "value": "PMMA",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "5",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "300 micron PMMA film   2 cm wide",
+       "value": "film",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "7",
+       "column": "Fuel Sample Material",
+       "variable": "fuel_material",
+       "raw_cell": "2 cm 0.1 mm PMMA film",
+       "value": "PMMA",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "7",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "2 cm 0.1 mm PMMA film",
+       "value": "film",
+       "note": ""
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "8",
+       "column": "Fuel Sample Material",
+       "variable": "sample_geometry",
+       "raw_cell": "400 micron film   2 cm wide",
+       "value": "film",
+       "note": ""
+      }
+     ],
+     "unit_in_cell": [
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "2",
+       "column": "Fuel Sample Material",
+       "variable": "sample_thickness_mm",
+       "raw_cell": "100 micron PMMA film   2 cm wide",
+       "value": "0.1",
+       "note": "micron to mm"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "3",
+       "column": "Fuel Sample Material",
+       "variable": "sample_thickness_mm",
+       "raw_cell": "200 micron PMMA film   2 cm wide",
+       "value": "0.2",
+       "note": "micron to mm"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "4",
+       "column": "Fuel Sample Material",
+       "variable": "sample_thickness_mm",
+       "raw_cell": "100 micron film   2 cm wide",
+       "value": "0.1",
+       "note": "micron to mm"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "5",
+       "column": "Fuel Sample Material",
+       "variable": "sample_thickness_mm",
+       "raw_cell": "300 micron PMMA film   2 cm wide",
+       "value": "0.3",
+       "note": "micron to mm"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "6",
+       "column": "Fuel Sample Material",
+       "variable": "sample_thickness_mm",
+       "raw_cell": "200 micron  2 cm wide",
+       "value": "0.2",
+       "note": "micron to mm"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "8",
+       "column": "Fuel Sample Material",
+       "variable": "sample_thickness_mm",
+       "raw_cell": "400 micron film   2 cm wide",
+       "value": "0.4",
+       "note": "micron to mm"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "13",
+       "column": "Fuel Sample Material",
+       "variable": "sample_thickness_mm",
+       "raw_cell": "300 micron film   2 cm wide",
+       "value": "0.3",
+       "note": "micron to mm"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "15",
+       "column": "Fuel Sample Material",
+       "variable": "sample_thickness_mm",
+       "raw_cell": "1 cm wide 200 micron thick PMMA",
+       "value": "0.2",
+       "note": "micron to mm"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "17",
+       "column": "Fuel Sample Material",
+       "variable": "sample_thickness_mm",
+       "raw_cell": "2 cm 100 micron thick PMMA",
+       "value": "0.1",
+       "note": "micron to mm"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "48",
+       "column": "Fuel Sample Material",
+       "variable": "rod_diameter_mm",
+       "raw_cell": "1/4\" clear rod",
+       "value": "6.35",
+       "note": "\" to mm"
+      }
+     ],
+     "vocabulary": [
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "15",
+       "column": "Air display",
+       "variable": "flow_event",
+       "raw_cell": "5  3  2   ext",
+       "value": "extinction",
+       "note": "variables.json keyword 'ext'"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "19",
+       "column": "Air display",
+       "variable": "flow_event",
+       "raw_cell": "10   blowoff",
+       "value": "blowoff",
+       "note": "variables.json keyword 'blowoff'"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "22",
+       "column": "Air display",
+       "variable": "flow_event",
+       "raw_cell": "5 down to ext",
+       "value": "extinction",
+       "note": "variables.json keyword 'ext'"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "44",
+       "column": "Air display",
+       "variable": "flow_event",
+       "raw_cell": "10   5   3   0ext",
+       "value": "extinction",
+       "note": "variables.json keyword 'ext'"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "52",
+       "column": "Air display",
+       "variable": "flow_event",
+       "raw_cell": "5   down to ext",
+       "value": "extinction",
+       "note": "variables.json keyword 'ext'"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "56",
+       "column": "Fan display",
+       "variable": "flow_event",
+       "raw_cell": "5   .36  .32  ..305   blowoff fan max 10",
+       "value": "blowoff",
+       "note": "variables.json keyword 'blowoff'"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "57",
+       "column": "Fan display",
+       "variable": "flow_event",
+       "raw_cell": "5   .36  .32  .31   extinguished",
+       "value": "extinction",
+       "note": "variables.json keyword 'ext'"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "58",
+       "column": "Fan display",
+       "variable": "flow_event",
+       "raw_cell": "5  .36  .32  .31 blowoff fan pot 6.0",
+       "value": "blowoff",
+       "note": "variables.json keyword 'blowoff'"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "59",
+       "column": "Fan display",
+       "variable": "flow_event",
+       "raw_cell": "5   .36  .32 blowoff pt 4.0",
+       "value": "blowoff",
+       "note": "variables.json keyword 'blowoff'"
+      },
+      {
+       "file": "PSI-25_Experimental table_BASS-II.csv",
+       "row": "61",
+       "column": "Air display",
+       "variable": "flow_event",
+       "raw_cell": "5   down then blowoff",
+       "value": "blowoff",
+       "note": "variables.json keyword 'blowoff'"
+      }
+     ]
+    },
+    "failures_per_class": {
+     "empty_cell": 2,
+     "category_not_in_cell": 171,
+     "computed_midpoint": 3,
+     "assumed_unit": 4
+    },
+    "all_failing_rows": [
+     {
+      "file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+      "row": "7",
+      "column": "Material",
+      "variable": "fuel_material",
+      "raw_cell": "",
+      "value": "Cotton-Fiberglass (SIBAL)",
+      "class": "empty_cell",
+      "note": "sources.json fill_down: row 6 holds 'Cotton-Fiberglass (SIBAL)' (exact); flag present",
+      "test_id": "SAFFIRE-2-2-6",
+      "pipeline_flags_on_variable": "fuel_material:blank_in_source_value_of_row_above_used"
+     },
+     {
+      "file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+      "row": "10",
+      "column": "Material",
+      "variable": "fuel_material",
+      "raw_cell": "",
+      "value": "PMMA",
+      "class": "empty_cell",
+      "note": "sources.json fill_down: row 9 holds 'PMMA' (exact); flag present",
+      "test_id": "SAFFIRE-2-2-9",
+      "pipeline_flags_on_variable": "fuel_material:blank_in_source_value_of_row_above_used"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "4",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "100 micron film   2 cm wide",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B3",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "6",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "200 micron  2 cm wide",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B5",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "6",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "200 micron  2 cm wide",
+      "value": "film",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B5",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "8",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "400 micron film   2 cm wide",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B7",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "13",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "300 micron film   2 cm wide",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B12",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "14",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm   0.4 mm thick film",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B13",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "15",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm wide 200 micron thick PMMA",
+      "value": "film",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B14",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "17",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm 100 micron thick PMMA",
+      "value": "film",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B16",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "18",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm wide 200 micron thick PMMA",
+      "value": "film",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B17",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "19",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm wide 200 micron thick PMMA",
+      "value": "film",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B18",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "20",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm 100 micron thick PMMA",
+      "value": "film",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B19",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "21",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm 100 micron thick PMMA",
+      "value": "film",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B20",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "22",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm wide 200 micron thick PMMA",
+      "value": "film",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B21",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "23",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm wide 200 micron thick PMMA",
+      "value": "film",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-B22",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "24",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "Nomex natural (nomex III)",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-F1",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "25",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "Nomex natural (nomex III)",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-F2",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "26",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "Nomex natural (nomex III)",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-F3",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "28",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 mm thick PMMA   1 sided   2 cm",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M1",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "29",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "3 mm thick PMMA 1 sided    2 cm wide",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M2",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "30",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm wide   5 mm thick 1 sided PMMA",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M3",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "31",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "5 mm thick PMMA   2 cm wide",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M4",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "32",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "3 mm thick PMMA   2 sided   2 cm thick",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M5",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "33",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 mm thick PMMA   2 cm wide",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M6",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "34",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm wide PMMA 1 mm thick",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M7",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "35",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm wide PMMA 2 mm thick",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M8",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "36",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm wide PMMA 3 mm thick",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M9",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "38",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm wide PMMA 5 mm thick",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M11",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "39",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 mm thick PMMA   2 cm wide",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M12",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "40",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "4 mm thick PMMA   2 cm wide",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M13",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "41",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2mm thick PMMA   1 sided   2 cm wide",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M14",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "43",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 mm thick PMMA   2 cm wide",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M16",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "44",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm wide PMMA 2 mm thick",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M17",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "45",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm wide PMMA 3 mm thick",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M18",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "47",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "5 mm thick PMMA   2 cm wide",
+      "value": "slab",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-M20",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "48",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O1",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "49",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O2",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "50",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O3a",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "51",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O3b",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "52",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\"clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O4",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "55",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O6",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "56",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O7",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "57",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O8a",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "58",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O8b",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "59",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O9",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "60",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O10",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "61",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O11",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "62",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O12",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "65",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O14",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "66",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O15a",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "67",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O15b",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "68",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\"clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O16",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "69",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O17",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "70",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O18",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "71",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O19",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "72",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O20",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "73",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O21",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "74",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/2\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-O22",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "75",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P1",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "76",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P2",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "77",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P3a",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "78",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4 clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P3b",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "79",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P4",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "80",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "0.5\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P5",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "81",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P6",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "82",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P8",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "83",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "0.5\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P9",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "84",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P10",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "85",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P12",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "86",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "0.5\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P13a",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "87",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "0.5\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P13b",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "88",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4 blac rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P14",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "89",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4 black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P15",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "90",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P16",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "91",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\"  black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P17",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "92",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P18",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "93",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P19",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "94",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P20",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "95",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4 black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P21a",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "96",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1/4\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P21b",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "97",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P22a",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "98",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P22b",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "99",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P23",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "100",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" black rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P24",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "101",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "3/8\" clear rod",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-P25",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "102",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T1",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "103",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T2",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "104",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "4 cm spherical section",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T3",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "105",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T4",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "106",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T5",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "107",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T6",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "108",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "4 cm spherical section",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T7",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "109",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T9",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "110",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T10",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "111",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T11",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "112",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T12",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "113",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T13",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "114",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T14",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "115",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T15",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "116",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T16",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "117",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T17",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "118",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T18",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "119",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T19",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "120",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T20",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "121",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T21",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "122",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T22",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "123",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm Sibal   moved igniter",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T23",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "124",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm SIBAL   top side ign",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T24",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "125",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T25",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "126",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "2 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T26",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "127",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T27",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "128",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T28a",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "129",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T28b",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "130",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "1 cm SIBAL",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS2-T29",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "2",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-1",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "5",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-4",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "6",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-5",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "13",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-12",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "14",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 1 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-13",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "15",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "Nomex blend 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-14",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "25",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "Nomex blend 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-24",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "26",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "Nomex blend 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-24@row26",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "27",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-25",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "28",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-26",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "29",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-27",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "30",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-28",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "31",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-29",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "32",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-30",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "33",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-31",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "34",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-32",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "35",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-33",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "36",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-34",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "37",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-35",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "38",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-36",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "39",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-37",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "40",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "Nomex III Natural",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-38",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "43",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-41",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "44",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-42",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "46",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 2 cm   opposed flow",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-44",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "47",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-45",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "48",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "candle",
+      "value": "wax (kind not written in cell)",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-46",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "49",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "candle",
+      "value": "wax (kind not written in cell)",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-47",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "50",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "candle",
+      "value": "wax (kind not written in cell)",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-48",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "53",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere   wake ign",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-51",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "54",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere   wake ign",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-52",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "55",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere   wake ign",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-53",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "56",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-54",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "57",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-55",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "58",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "nomex natural III",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-56",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "59",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "Nomex blend 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-57",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "68",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 1 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-65",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "69",
+      "column": "Fuel Sample Material",
+      "variable": "sample_geometry",
+      "raw_cell": "SIBAL 2 cm",
+      "value": "fabric sheet",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-66",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "82",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "parrafin wax slab",
+      "value": "paraffin wax",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-79",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "91",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "candle    paraffin   wake",
+      "value": "paraffin wax",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-87",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "92",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "candle    paraffin   wake",
+      "value": "paraffin wax",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-88",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "97",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-90@row97",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "98",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-91@row98",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "99",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-92",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "100",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1 cm sphere   wake",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-93",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "101",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1 cm wake sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-94",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "102",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "1 cm wake sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-95",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "107",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "parrafin wax candle",
+      "value": "paraffin wax",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-100",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "112",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-105",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "113",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-106",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "114",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-107",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "115",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-108",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "116",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-109",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "117",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-110",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "118",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "2 cm sphere",
+      "value": "PMMA",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-111",
+      "pipeline_flags_on_variable": "fuel_material:not_written_in_cell_named_in_readme"
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "119",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "flat wax slab",
+      "value": "wax (kind not written in cell)",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-112",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "120",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "flat wax slab",
+      "value": "wax (kind not written in cell)",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-113",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-26_Experimental table_BASS.csv",
+      "row": "121",
+      "column": "Fuel Sample Material",
+      "variable": "fuel_material",
+      "raw_cell": "flat wax slab",
+      "value": "wax (kind not written in cell)",
+      "class": "category_not_in_cell",
+      "note": "",
+      "test_id": "BASS-114",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-98_Experimental table_SAFFIRE-1.csv",
+      "row": "2",
+      "column": "Percent O2",
+      "variable": "o2_pct",
+      "raw_cell": "21.5 - 21.7",
+      "value": "21.6",
+      "class": "computed_midpoint",
+      "note": "(21.5 + 21.7) / 2",
+      "test_id": "SAFFIRE-1-S1",
+      "pipeline_flags_on_variable": "o2_pct:range_in_source_midpoint_used"
+     },
+     {
+      "file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+      "row": "9",
+      "column": "Percent O2 (Note 1)",
+      "variable": "o2_pct",
+      "raw_cell": "22.1 to 22.0",
+      "value": "22.05",
+      "class": "computed_midpoint",
+      "note": "(22.1 + 22.0) / 2",
+      "test_id": "SAFFIRE-2-2-8",
+      "pipeline_flags_on_variable": "o2_pct:range_in_source_midpoint_used"
+     },
+     {
+      "file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+      "row": "10",
+      "column": "Percent O2 (Note 1)",
+      "variable": "o2_pct",
+      "raw_cell": "22.0 to 21.9",
+      "value": "21.95",
+      "class": "computed_midpoint",
+      "note": "(22.0 + 21.9) / 2",
+      "test_id": "SAFFIRE-2-2-9",
+      "pipeline_flags_on_variable": "o2_pct:range_in_source_midpoint_used"
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "78",
+      "column": "Fuel Sample Material",
+      "variable": "rod_diameter_mm",
+      "raw_cell": "1/4 clear rod",
+      "value": "6.35",
+      "class": "assumed_unit",
+      "note": "inch (not written after '1/4')",
+      "test_id": "BASS2-P3b",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "88",
+      "column": "Fuel Sample Material",
+      "variable": "rod_diameter_mm",
+      "raw_cell": "1/4 blac rod",
+      "value": "6.35",
+      "class": "assumed_unit",
+      "note": "inch (not written after '1/4')",
+      "test_id": "BASS2-P14",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "89",
+      "column": "Fuel Sample Material",
+      "variable": "rod_diameter_mm",
+      "raw_cell": "1/4 black rod",
+      "value": "6.35",
+      "class": "assumed_unit",
+      "note": "inch (not written after '1/4')",
+      "test_id": "BASS2-P15",
+      "pipeline_flags_on_variable": ""
+     },
+     {
+      "file": "PSI-25_Experimental table_BASS-II.csv",
+      "row": "95",
+      "column": "Fuel Sample Material",
+      "variable": "rod_diameter_mm",
+      "raw_cell": "1/4 black rod",
+      "value": "6.35",
+      "class": "assumed_unit",
+      "note": "inch (not written after '1/4')",
+      "test_id": "BASS2-P21a",
+      "pipeline_flags_on_variable": ""
+     }
+    ],
+    "numbers_written_with_a_leading_zero": {
+     "note": "Copied as written (for example '037 mm' read as 37). Not a failure of the trace; a human should look at the NASA page, because the source cell may be a typing error.",
+     "rows": []
+    }
+   }
+  },
+  {
+   "id": "A2_tests_source_rows",
+   "verifies": "Every test names an existing raw file and a row inside it, and no two tests share a raw row.",
+   "status": "PASS",
+   "numbers": {
+    "tests": 1824,
+    "distinct_raw_rows": 1824
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "A3_tests_values_consistency",
+   "verifies": "Every non-empty variable cell of tests.csv has exactly one row in values_long.csv with the same value, unit, file and row, and every values_long row has its cell in tests.csv.",
+   "status": "PASS",
+   "numbers": {
+    "non_empty_cells": 18450,
+    "values_long_rows": 18450
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "A4_raw_rows_are_tests",
+   "verifies": "In every test-level table, each raw row that sources.json keeps (all 'require' columns filled, no 'exclude' rule, not a cell-for-cell repeat of an earlier row) is exactly one test, no other row is a test, and the test id is the 'test_id' template filled from that row.",
+   "status": "PASS",
+   "numbers": {
+    "raw_rows_expected_as_tests": 1824,
+    "tests": 1824,
+    "tests_with_empty_id_cell": 0,
+    "ids_with_whitespace_removed": 324,
+    "rows_left_out_by_exclude": 1,
+    "rows_left_out_as_repeats": 42
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "tests_with_empty_id_cell": [],
+    "note": "A test whose id cell is empty in the raw table is listed here for a human to look at; it is not counted as a failure because no spec rule excludes such a row. Test ids are compared after removing whitespace inside the raw id cell; the spec does not state that step."
+   }
+  },
+  {
+   "id": "A5_unread_cells_flagged",
+   "verifies": "A non-empty raw cell of a mapped column that left its variable empty carries a flag '<variable>:<reason>' (README: a cell that a rule cannot read stays empty and gets a flag).",
+   "status": "PASS",
+   "numbers": {
+    "non_empty_mapped_cells": 8903,
+    "left_empty_without_flag": 0,
+    "no_value_markers_without_flag": 70,
+    "keyword_column_cells_without_keyword": 101
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "distinct_cells_left_empty_without_flag": [],
+    "no_value_markers_without_flag": [
+     {
+      "source": "cfig_inverse",
+      "column": "Self -ext or flow term",
+      "raw_cell": "-",
+      "tests": 15
+     },
+     {
+      "source": "cfig_normal",
+      "column": "Self-ext or flow term",
+      "raw_cell": "-",
+      "tests": 46
+     },
+     {
+      "source": "saffire2",
+      "column": "?-g Spread Length",
+      "raw_cell": "n/a",
+      "tests": 4
+     },
+     {
+      "source": "same_r",
+      "column": "Net aging time (sec)",
+      "raw_cell": "n/a",
+      "tests": 5
+     }
+    ],
+    "note": "Cells that hold no letter or digit (a dash) or only 'n/a' are counted apart and do not fail the check: they say that there is no value. The pipeline is not consistent here: the same kind of cell gets a flag in some tables and none in others."
+   }
+  },
+  {
+   "id": "A6_number_chosen_from_cell",
+   "verifies": "In a column mapped to both flow_cms and flow_min_cms, flow_cms is the number the cell starts with and flow_min_cms the lowest number written, and flow_min_cms is empty where the cell holds potentiometer settings or bracketed numbers (the meanings in variables.json), unless a flag on the variable says otherwise.",
+   "status": "PASS",
+   "numbers": {
+    "cell_x_variable": 246,
+    "differs_with_flag": 6,
+    "differs_without_flag": 0
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "meanings_applied": {
+     "flow_cms": "Imposed flow speed at the start of the test (the number the flow cell starts with)",
+     "flow_min_cms": "Lowest flow speed written in the cell that lists the settings of the test. Not read where the cell also holds fan potentiometer settings or anything in brackets"
+    },
+    "note": "How the engine chooses among the numbers of a cell is written in pipeline/rules.py, which this check does not read. It applies the two meanings literally."
+   }
+  },
+  {
+   "id": "B1_constants",
+   "verifies": "Values marked '(constant in sources.json)' equal the constant declared for the test's source, and every declared constant is recorded for every test of the source.",
+   "status": "PASS",
+   "numbers": {
+    "constant_values": 6384,
+    "declared_constants_missing": 0
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "B2_derived_values",
+   "verifies": "Every derived value equals its formula in variables.json recomputed from the test's own recorded inputs (tolerance 1e-4), is absent exactly when an input is empty or a skip_if holds, and carries the flags the spec names.",
+   "status": "PASS",
+   "numbers": {
+    "test_x_formula": 9120,
+    "derived_values": 1011,
+    "largest_deviation": 5e-06
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "B3_material_id",
+   "verifies": "material_id is the materials.json entry whose aliases contain fuel_material (ignoring case and surrounding spaces); a name that is not listed has no id and the flag material_id:not_in_vocabulary.",
+   "status": "PASS",
+   "numbers": {
+    "tests": 1824,
+    "with_material_id": 1824,
+    "aliases": 36
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "C1_ranges",
+   "verifies": "No value in tests.csv lies outside the 'ranges' of variables.json.",
+   "status": "PASS",
+   "numbers": {
+    "values_checked": 5094
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "D1_need_tests",
+   "verifies": "need_tests.csv lists exactly the in-scope tests that record every required condition and at least one outcome of each need, with objective_link 'stated' only when the investigation is in 'stated_by'.",
+   "status": "PASS",
+   "numbers": {
+    "rows_recomputed": 848,
+    "rows_in_file": 848,
+    "stated": 450,
+    "per_need_stated": {
+     "P1": 136,
+     "P2": 0,
+     "P3": 11,
+     "S1": 299,
+     "D1": 0,
+     "D2": 4
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "D2_capability_matrix",
+   "verifies": "capability_matrix.csv has one row per need and source whose counts (tests in scope, with required conditions, with an outcome, usable), status and objective_link equal the recomputation from tests.csv and needs.json.",
+   "status": "PASS",
+   "numbers": {
+    "need_x_source": 132,
+    "rows_in_file": 132
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "D3_objective_quotes",
+   "verifies": "Every 'stated_by' quote of needs.json is literally in the named field of the investigation's PSI record (HTML tags removed, whitespace collapsed).",
+   "status": "PASS",
+   "numbers": {
+    "quotes": 23
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "D4_objective_links",
+   "verifies": "objective_links.csv has exactly the (need, investigation, field, quote) entries of needs.json 'stated_by'.",
+   "status": "PASS",
+   "numbers": {
+    "links_in_spec": 23,
+    "rows_in_file": 23
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "D5_side_quotes",
+   "verifies": "Every 'see_also' entry of scenarios.json and every 'documented_elsewhere' entry of sources.json is literally in the named PSI record field, raw table cell or references.json item, and a variable documented elsewhere has no value in the tests of that table.",
+   "status": "PASS",
+   "numbers": {
+    "entries": 12
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "E1_coverage_grid",
+   "verifies": "Every count of coverage_grid.csv equals the number of tests that tests.csv puts in that fuel phase, oxygen basis, oxygen bin and pressure bin (coverage.json), and no non-empty cell is missing.",
+   "status": "PASS",
+   "numbers": {
+    "cells_compared": 109,
+    "cells_with_tests": 44,
+    "rows_in_file": 109
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "E2_coverage_total",
+   "verifies": "The counts of coverage_grid.csv add up to the number of tests.",
+   "status": "PASS",
+   "numbers": {
+    "grid_total": 1824,
+    "tests": 1824
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "F1_scenario_marks",
+   "verifies": "For every scenario and test, the oxygen, pressure, flow and gravity marks and the tier of scenario_tests.csv equal the recomputation from tests.csv and the ranges of scenarios.json.",
+   "status": "PASS",
+   "numbers": {
+    "scenario_x_test": 10944,
+    "rows_in_file": 10944,
+    "tiers_recomputed": {
+     "atmosphere": 220,
+     "other": 10644,
+     "oxygen_only": 63,
+     "pressure_only": 17
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "F2_scenario_need_counts",
+   "verifies": "Every numeric column and investigation list of scenario_needs.csv equals the recomputation from tests.csv, the recomputed usable tests and the recomputed tiers.",
+   "status": "PASS",
+   "numbers": {
+    "scenario_x_need": 36,
+    "rows_in_file": 36
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "F3_scenario_need_status",
+   "verifies": "The status of every scenario and need follows the status_rule of scenarios.json.",
+   "status": "PASS",
+   "numbers": {
+    "scenario_x_need": 36,
+    "rows_in_file": 36
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "F4_scenario_need_gaps",
+   "verifies": "The oxygen, pressure, gravity and no-usable-test gap codes of scenario_needs.csv say which variable has no usable test in range or is not in the table (README 'Scenarios').",
+   "status": "PASS",
+   "numbers": {
+    "scenario_x_need": 36,
+    "rows_in_file": 36
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "F5_scenario_flow_gap",
+   "verifies": "A scenario that sets a flow range carries a flow gap code exactly when no usable test has its flow in range (README: gap codes say which variable - oxygen, pressure, flow, gravity - has no usable test in range or is not in the table).",
+   "status": "PASS",
+   "numbers": {
+    "scenario_x_need": 36,
+    "rows_in_file": 36
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "F6_added_gas_mark",
+   "verifies": "The added_gas mark of scenario_tests.csv is 'none' only where carbon dioxide and helium are both recorded as 0, 'co2_or_helium' where either is above 0, and 'not_recorded' otherwise (scenarios.json 'added_gas').",
+   "status": "PASS",
+   "numbers": {
+    "scenario_x_test": 10944,
+    "tests_with_a_different_mark": 0
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "tests_with_a_different_mark_per_source": {}
+   }
+  },
+  {
+   "id": "G1_indicators",
+   "verifies": "Every row of indicators.csv (value, n_tests, investigations, texts) equals the recomputation of its template over its population, filter and grouping (indicators.json), and no row is missing.",
+   "status": "PASS",
+   "numbers": {
+    "rows_recomputed": 171,
+    "rows_in_file": 171,
+    "indicators_with_rows": 19,
+    "indicators_in_spec": 19
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "G2_indicator_tests",
+   "verifies": "indicator_tests.csv lists exactly the tests behind each indicator row, with the value each test contributes.",
+   "status": "PASS",
+   "numbers": {
+    "rows_recomputed": 1474,
+    "rows_in_file": 1474
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "H1_reference_ids",
+   "verifies": "Every reference item id used in needs.json, indicators.json and scenarios.json exists in references.json.",
+   "status": "PASS",
+   "numbers": {
+    "uses": 99,
+    "distinct_items_used": 51,
+    "items_defined": 58
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "H2_need_references",
+   "verifies": "need_references.csv has exactly the reference items each need lists, with the text, place, document and URL of references.json.",
+   "status": "PASS",
+   "numbers": {
+    "links_in_spec": 48,
+    "rows_in_file": 48
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "I1_evidence_schema",
+   "verifies": "index.json lists the scenarios of scenarios.json and then every oxygen bin x pressure bin of coverage.json, every package file exists and has the contract's shape: environment with ranges and basis, and one block per need of needs.json with all its fields.",
+   "status": "PASS",
+   "numbers": {
+    "packages": 26,
+    "listed_in_index": 26,
+    "extra_files": 0,
+    "need_block_fields_not_in_contract": 5
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "need_block_fields_not_in_contract": [
+     "counts.matched_added_gas",
+     "documented_elsewhere",
+     "matched_by_fuel_phase",
+     "note",
+     "reading"
+    ]
+   }
+  },
+  {
+   "id": "I2_evidence_status_counts",
+   "verifies": "status, counts and gap codes of every need block equal the environment's row in scenario_needs.csv or atmosphere_cells.csv, and index.json carries the same status.",
+   "status": "PASS",
+   "numbers": {
+    "need_blocks": 156
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "I3_atmosphere_cells",
+   "verifies": "atmosphere_cells.csv equals the recomputation of every oxygen bin x pressure bin of coverage.json as a scenario whose ranges are the bin edges, with no flow range and no gravity level.",
+   "status": "PASS",
+   "numbers": {
+    "cell_x_need": 120,
+    "rows_in_file": 120,
+    "rows_where_pressure_only_tests_would_change_flow_or_gravity_counts": 0
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "I4_evidence_matched_tests",
+   "verifies": "matched_tests of every need block is exactly the usable tests of tier atmosphere, oxygen_only or pressure_only; marks, flags, source file and row equal tests.csv; every value, unit and source column equals values_long.csv and covers the need's recorded variables.",
+   "status": "PASS",
+   "numbers": {
+    "matched_test_entries": 1121,
+    "values_compared": 7230
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "I5_evidence_need_context",
+   "verifies": "objective sentences equal objective_links.csv, the investigations list equals the usable tests per investigation and tier with the title of the PSI record, references equal the need's items in references.json, and every gap code has a sentence.",
+   "status": "PASS",
+   "numbers": {
+    "need_blocks": 156
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "I6_evidence_usable_elsewhere",
+   "verifies": "usable_elsewhere of every need block (tests of tier other: how many, lowest and highest recorded ambient oxygen and pressure, investigations) equals the recomputation from tests.csv.",
+   "status": "PASS",
+   "numbers": {
+    "need_blocks": 156
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "I7_evidence_indicators",
+   "verifies": "The indicators of every need block equal the need's indicators recomputed over the tests of their population whose tier in this environment is atmosphere, oxygen_only or pressure_only.",
+   "status": "PASS",
+   "numbers": {
+    "indicator_groups": 454
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "I8_evidence_statement_numbers",
+   "verifies": "Every number written in a statement of an evidence package is a field of the same need block (for an indicator sentence: of its indicator entry), or one of the two sums that statements.json declares.",
+   "status": "PASS",
+   "numbers": {
+    "numbers_in_statements": 4870,
+    "statements": 1782,
+    "numbers_that_are_a_declared_sum_not_a_stored_field": 15,
+    "numbers_found_only_in_matched_tests_indicators_or_references": 0
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "note": "statements.json declares two computed fields: the number of entries of matched_tests and counts.atmosphere + counts.oxygen_only. A number found only there is counted apart; it is recomputed here from the block."
+   }
+  },
+  {
+   "id": "I9_evidence_statement_words",
+   "verifies": "No statement of an evidence package contains the words safe, unsafe, flammable, sufficient, representative, proves or confirms (outside a need name or an indicator reading copied from the spec).",
+   "status": "PASS",
+   "numbers": {
+    "sentences": 1990
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "I10_evidence_recorded_tests",
+   "verifies": "environment.recorded_tests of every package lists, per investigation and fuel phase, how many tests of tests.csv (whatever the need) have tier atmosphere, oxygen_only or pressure_only in that environment.",
+   "status": "PASS",
+   "numbers": {
+    "packages": 26
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "note": "No rule text describes this field; the rule checked here is the validator's reading of its name."
+   }
+  },
+  {
+   "id": "J1_facts_entries",
+   "verifies": "investigation_facts.json has one entry per PSI record (numeric order) with title, acronym, DOI and license of the record, its tables as in sources.json, and test counts that add up to tests.csv.",
+   "status": "PASS",
+   "numbers": {
+    "entries": 24,
+    "psi_records": 24,
+    "tests_in_entries": 1824,
+    "tests_csv": 1824
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "J2_facts_variables",
+   "verifies": "For every investigation and every table, the listed variables are exactly those with a value, and each n, min, max and value count equals the recomputation from tests.csv.",
+   "status": "PASS",
+   "numbers": {
+    "variable_summaries": 297
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "J3_facts_needs",
+   "verifies": "stated_needs of every investigation equal objective_links.csv, and capability equals the rows of capability_matrix.csv (status, counts, objective_link per need and table).",
+   "status": "PASS",
+   "numbers": {
+    "entries_and_need_rows": 144
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "J4_facts_statements",
+   "verifies": "Every number written in a statement of investigation_facts.json is a field of the same entry (of the table or need the sentence is about), and no statement contains a word that judges safety or sufficiency.",
+   "status": "PASS",
+   "numbers": {
+    "numbers_in_statements": 1030,
+    "statements": 276,
+    "numbers_found_only_elsewhere_in_the_entry": 0
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "K1_raw_inputs",
+   "verifies": "Every raw table named in data/psi/manifest.json and in sources.json exists, and its size (and hash, when the manifest carries one) matches the manifest.",
+   "status": "PASS",
+   "numbers": {
+    "tables_in_manifest": 22,
+    "tables_in_sources_json": 22,
+    "files_on_disk": 22,
+    "hashes_in_manifest": 0
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "details": {
+    "note": "The manifest carries sizes only; contents are compared by size, not by hash."
+   }
+  }
+ ]
+}

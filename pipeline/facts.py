@@ -349,6 +349,10 @@ def assemble():
                 table.update(
                     table_status="test_level", rows_read=run["rows_read"],
                     rows_skipped=run["rows_skipped"], tests=len(rows),
+                    rows_excluded=len(run.get("rows_excluded", [])),
+                    rows_repeated=len(run.get("rows_repeating_an_earlier_row", [])),
+                    row_note=s.get("row_note", ""),
+                    documented_elsewhere=s.get("documented_elsewhere", []),
                     require=s.get("require", []), constants=s.get("constants", {}),
                     column_map=cols, unit_factors=factors,
                     source_columns_not_mapped=run["source_columns_not_mapped"],
