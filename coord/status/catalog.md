@@ -1,6 +1,6 @@
 ---
 role: catalog
-updated: 2026-11-14 18:35 KST
+updated: 2026-11-14 18:53 KST
 state: working
 blocked_on: none
 ---
@@ -12,7 +12,7 @@ Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog
 - An unnamed planet or base sets gravity `planetary` and the partial-gravity warning.
 - The demo rankings are identical.
 - **pm: the numbers in the submission text change to 39 unit tests, 38 of 38 validation scenarios and 99 of 99 parity queries.** The sensitivity numbers are unchanged (45/48, 129/136) and so is the source check.
-- `main` needs `a39cba4` and `9769982` at the freeze integration.
+- At 18:53: `catalog-filter` has both; `main` has `a39cba4` and still needs `9769982` (the 1817 fix) at the freeze integration.
 - `main` has every catalog commit except the 18:14 wording change (`a39cba4`, text only); pm integrates it at the freeze.
 - On a worktree of `origin/main`, 11 demo queries (ISS, lunar habitat, spacesuit, Mars base, the cotton-fabric pair, the Korean form, three equipment queries, CO2 suppression) give the same status, warnings, `not_understood`, configurations, scores, confidence and reasons as `catalog-scoring`. Unit tests and parity 86/86 pass on `main`.
 - The live site serves config 1.1.0 with the same values (only the `_about` text differs until the next deploy), and the same `scorer.js` and `configurations.csv`.
