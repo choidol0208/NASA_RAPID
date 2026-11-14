@@ -8,7 +8,7 @@ Now: catalog and scorer check done (below). Next: 1306 item 1, the "Where the ev
 
 Done since last sync:
 - **Scorer:** an atmosphere value filled in by the fallback is no longer worded as "tested". It now reads "O2 not recorded, assumed 21%", and reasons from recorded values come first. Scores and order unchanged (65 queries compared).
-- **Scorer:** the oxidizer-stream O2 of inverse flames (ACME-FLAME-DESIGN-C02, ACME-CFI-G-C02) is never matched with the user's O2. It is scored as unknown, with the `oxidizer_stream` warning. `o2_above_all` now uses the highest surrounding-atmosphere O2 tested (40%, ACME-BRE-C01), not the 85% burner stream.
+- **Scorer:** the oxidizer-stream O2 of inverse flames (ACME-FLAME-DESIGN-C02, ACME-CFI-G-C02) is never matched with the user's O2. It is scored as unknown, with the `oxidizer_stream` warning. `o2_above_all` now uses the highest surrounding-atmosphere O2 tested (40%, reached by ACME-FLAME-DESIGN-C01, ACME-BRE-C01 and ACME-CFI-G-C01; the warning names the first, ACME-FLAME-DESIGN-C01), not the 85% burner stream.
 - **Scorer:** "gas", "gas jet", "jet flame" and "gaseous fuel" are read as gas fuel; "droplet" is read as liquid. Four validation scenarios added (F01 to F04).
 - **Catalog**, checked against the PSI tables and tests.csv, with the rows in each row's `source_notes`:
   - BASS-II-C03 flow is 0 to 38.5 cm/s (row 72), C04 is 1 to 53 cm/s (rows 115, 117, 121). Both rest on the 'Air display' cells with the flow restrictor out.
