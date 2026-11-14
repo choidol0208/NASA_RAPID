@@ -1,12 +1,12 @@
 ---
 role: pm
-updated: 2026-11-14 16:25 KST
+updated: 2026-11-14 16:56 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
 
-Now: (1) packaging the one part of the video side track that passed its checks; (2) the draft of the submission text and the seven-slide outline (`docs/submission/`, lands when its checks are done).
+Now: (1) translating `AGENTS.md` and the two compliance logs into English (the human lead's decision at 16:50; request to all roles for their own Korean files, by 20:00); (2) packaging the one part of the video side track that passed its checks. Drafts of the submission text and the seven-slide outline are in `docs/submission/` (AI-written, for the human lead to rewrite; marks `[PLANNED ...]` and `[FILL ...]` are resolved at the freeze).
 
 Done since last sync:
 - **16:21: pm's files are on `main` (`3691a69`).** `data/insights/cards.json` (24 cards, 61 model-written sentences, labelled as not reviewed; 4 more were removed by a second reading and show the NASA sentence instead), `scenarios.json` (frames, need statements, gaps and result notes built by code; `text_origin` = `template`), `evidence_map.json`, `model_readiness.json`, `robustness.json`, `ai/review/review_sheet.csv`.
