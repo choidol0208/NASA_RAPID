@@ -10,16 +10,16 @@ Listed in `coord/roles.json` under `pm`. Your branch is `main`.
 
 ## On every sync
 
-`coord/README.md`, section "What pm does on every sync". In short: `python3 scripts/coord.py integrate`, push `main`, update `coord/board.md`, answer requests, decide and record, cut scope when a checkpoint is at risk.
+`coord/README.md`, section "What pm does on every sync". In short: `python3 scripts/coord.py integrate`, run the checks (`python3 pipeline/run.py`, `python3 -m unittest scoring.test_scorer`), push `main`, update `coord/board.md`, answer requests, decide and record, cut scope when a checkpoint is at risk.
 
 ## Tasks
 
 | Id | What | Due (KST) |
 |---|---|---|
-| P2 | `ai/build_cards.py` and `data/insights/cards.json`: 24 investigation cards. Conditions and counts computed from `data/pipeline/tests.csv`; summary and key points written by a model from `data/psi/catalog/` only, each key point with its source | 14:00 |
-| P3 | `ai/build_scenarios.py` and `data/insights/scenarios.json` for `iss-class` and `lunar-habitat`: rule-based score from `capability_matrix.csv`, `need_tests.csv` and `tests.csv`; evidence level per need; gaps | 16:30 |
-| P4 | Review every model-written statement against its source; set `reviewed_by`. `pressurized-rover` if time allows | 19:00 |
-| P5 | Seven slides (limit is seven including the title slide) and the English text for each field of the project page, from `compliance/` | 21:30 |
+| P2 | Agree with ui what model-written text the dashboard shows and in what shape; update `contracts/README.md` | 12:30 |
+| P3 | `ai/` and `data/insights/`: investigation summaries from `data/psi/catalog/` and explanations for the preset scenarios built on the output of `scoring.scorer.rank` and on `data/pipeline/capability_matrix.csv`. Every statement carries its source | 16:30 |
+| P4 | Review every model-written statement against its source; set `reviewed_by` | 19:00 |
+| P5 | Seven slides (the limit includes the title slide) and the English text for each field of the project page, from `compliance/` | 21:30 |
 
 ## Constraints
 

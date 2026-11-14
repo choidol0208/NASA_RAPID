@@ -7,7 +7,7 @@
   "roles": {
     "pm": {
       "branch": "main",
-      "does": "Project lead and integrator. Product-side AI outputs (investigation cards, scenarios, ranking). Demo and submission text.",
+      "does": "Project lead and integrator. Model-written text of the product (investigation summaries, explanation of results, gaps). Demo deck and submission text.",
       "owns": [
         "AGENTS.md", "CLAUDE.md", "README.md", "LICENSE", ".gitattributes", ".claude/",
         "coord/README.md", "coord/roles.json", "coord/board.md", "coord/decisions.md", "coord/briefs/",
@@ -23,9 +23,13 @@
       ]
     },
     "ui": {
-      "branch": "ui",
-      "does": "The dashboard: screens, output format, deployment to a public URL.",
-      "owns": ["web/", ".github/"]
+      "branch": "catalog-filter",
+      "does": "The experiment catalog, the rule-based ranking (catalog filter) and its validation, and the dashboard on a public URL.",
+      "owns": [
+        "data/catalog/", "scoring/", "validation/", "presentation/",
+        "scripts/build_catalog.py", "scripts/export_catalog_xlsx.py",
+        "app/", "web/", ".github/"
+      ]
     }
   },
   "single_writer_coordination_files": {

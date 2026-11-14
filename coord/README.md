@@ -10,7 +10,7 @@ Three people each run their own Claude Code session. The sessions coordinate thr
 |---|---|---|
 | `pm` | `main` | project docs, `coord/board.md`, `coord/decisions.md`, `contracts/`, `ai/`, `data/insights/`, `docs/`, integration of everything into `main` |
 | `data` | `data-pipeline` | `pipeline/`, `data/psi/`, `data/derived/`, `data/pipeline/`, `reports/`, the fetch and profile scripts |
-| `ui` | `ui` | `web/`, `.github/` |
+| `ui` | `catalog-filter` | `data/catalog/`, `scoring/`, `validation/`, `presentation/`, the catalog scripts, the dashboard (`app/` or `web/`), `.github/` |
 
 The exact lists are in `coord/roles.json`. Your role is the one word in `.role` at the repository root (not committed). If the file is missing, ask your human once and write it.
 
@@ -46,7 +46,7 @@ Run it when you start, each time you finish a unit of work, before you stop, and
 5. **Act on the outbox.** Apply answers you received and close those requests.
 6. **Unblock yourself.** If you are blocked, open a request (`python3 scripts/coord.py request <to> <title> --by HH:MM`), then move to the next task that is not blocked. Use `contracts/examples/` as stand-in data. Do not wait idle.
 7. **Publish status.** Rewrite `coord/status/<role>.md` (template below).
-8. **Check.** Run whatever proves your part still works: `python3 pipeline/run.py` for data, the build for ui.
+8. **Check.** Run whatever proves your part still works: `python3 pipeline/run.py` for data; `python3 -m unittest scoring.test_scorer` and the dashboard build for ui.
 9. **Push.** Commit `coord/` and your paths, then `git push origin HEAD`.
 10. **Report to your human only what they must know:** a decision that is theirs (see below), or one line that all is on track.
 

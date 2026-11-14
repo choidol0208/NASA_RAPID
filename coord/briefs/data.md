@@ -24,6 +24,11 @@ You already built the pipeline on `data-pipeline`. Nothing about how it works ch
 | D5 | Check the 24 investigation cards in `data/insights/cards.json` against the PSI text and report errors through a request to pm | 18:30 |
 | D6 | Make `compliance/SOURCES.md` complete for the References field of the submission | 21:00 |
 
+## Who reads your outputs
+
+- The ui role's catalog is built from `data/psi/`, and its catalog filter sends the user from a ranked investigation to the matching rows of `data/pipeline/tests.csv` (`scoring/README.md`). The dashboard's needs view reads `capability_matrix.csv` and `needs.json`.
+- pm writes model-generated summaries from `data/psi/catalog/` and explanations from `capability_matrix.csv`.
+
 ## Things only you can judge
 
 - Whether a number shown on the dashboard is traceable to a source cell. If ui or pm derive something from your files in a way that breaks your "nothing is estimated" rule, say so in a request.

@@ -21,8 +21,9 @@ It is a research exploration tool. It is not operational safety guidance. Rankin
 | `pipeline/` | Spec-driven pipeline from the PSI experimental tables to standard variables and fire-safety information needs. See `pipeline/README.md` |
 | `data/psi/` | PSI records and experimental tables as downloaded |
 | `data/pipeline/` | Pipeline outputs: one row per test, capability matrix, tests per need |
-| `data/insights/` | Investigation cards and scenarios (model-written text over rule-based numbers) |
-| `web/` | The dashboard |
+| `data/catalog/` | Catalog of the 24 investigations and 41 test configurations |
+| `scoring/`, `validation/` | Rule-based ranking (catalog filter) and its validation scenarios |
+| `data/insights/` | Model-written summaries and explanations, each statement with its source |
 | `contracts/` | Which file is produced by whom and read by whom |
 | `coord/` | How the team's three working sessions coordinate |
 | `compliance/` | Source list and AI usage log |
