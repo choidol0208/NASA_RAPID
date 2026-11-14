@@ -184,9 +184,10 @@
       "none (ground)": 0.5
     },
     "verification_status": {
-      "human_verified": 1.0,
+      "human_verified": 0.7,
       "ai_extracted": 0.7
-    }
+    },
+    "verification_why": "pm decision 2026-11-14 14:15: a human check of a catalog row does not change its score. A transcription check says the catalog copied NASA correctly; it does not make an experiment closer to the question, and checking some demo rows first must not reorder the ranking. The page shows the verification badge instead."
   },
   "selection": {
     "top_k": 3,
@@ -826,7 +827,8 @@
     "ground_analysis": "Ground analysis or modelling that reuses flight data, not a flight experiment.",
     "need_input": "Tell me at least an environment (ISS, lunar habitat, spacesuit) or a material (cotton fabric, PMMA, heptane).",
     "fallback": "{dims} not reported in the catalog; scored as ordinary cabin air (team assumption: 21% O2, 101.3 kPa).",
-    "complementary": "Included because it was tested at your O2; the closer matches above were tested at a different O2."
+    "complementary": "Included because it was tested at your O2; the closer matches above were tested at a different O2.",
+    "ranges_separate": "The O2 range and the pressure range are each taken over all tests of this configuration; they do not say that a test was run at both of your values."
   },
   "atmosphere_fallback": {
     "o2_pct": 21.0,

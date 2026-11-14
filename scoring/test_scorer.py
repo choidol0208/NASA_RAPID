@@ -195,6 +195,60 @@ class AssumedAtmosphereWording(unittest.TestCase):
                 self.assertNotRegex(r["why"].split(";")[0], r"^(O2|pressure) match", r["config_id"])
 
 
+class SourceWording(unittest.TestCase):
+    """'tested' only for numbers from an experimental table (catalog columns o2_source, pressure_source, flow_source)."""
+
+    def test_every_value_has_a_source(self):
+        for c in CFGS:
+            for var, lo, hi in (("o2", "o2_min_pct", "o2_max_pct"), ("pressure", "pressure_min_kpa", "pressure_max_kpa"),
+                                ("flow", "flow_min_cms", "flow_max_cms")):
+                has = bool(c[lo] or c[hi])
+                self.assertEqual(bool(c[f"{var}_source"]), has, (c["config_id"], var))
+                self.assertIn(c[f"{var}_source"], ("", "table", "record", "test_matrix", "team"))
+
+    def test_record_pressure_of_bre_is_not_tested(self):
+        rows = {r["config_id"]: r for r in scorer.rank("lunar habitat")["ranking"]}
+        text = rows["ACME-BRE-C01"]["why"] + " " + rows["ACME-BRE-C01"]["main_gap"]
+        self.assertIn("named in the PSI record, not a test value", text)
+        self.assertNotIn("pressure tested", text)
+
+    def test_no_non_table_value_worded_as_tested(self):
+        src = {c["config_id"]: c for c in CFGS}
+        for q in ("lunar habitat", "ISS", "spacesuit", "heptane droplet 30% O2 10.2 psi", "stagnant PMMA 34% O2"):
+            for r in scorer.rank(q)["ranking"]:
+                text = r["why"] + " " + r["main_gap"]
+                for var, label in (("o2", "O2"), ("pressure", "pressure")):
+                    if src[r["config_id"]][f"{var}_source"] not in ("table", ""):
+                        self.assertNotIn(f"{label} tested", text, (q, r["config_id"]))
+
+
+class PmDecisions1415(unittest.TestCase):
+    """coord/decisions.md 14:15: human checks do not change scores; ranges_separate on side-by-side ranges."""
+
+    def test_human_check_does_not_change_score(self):
+        v = CFG["evidence"]["verification_status"]
+        self.assertEqual(v["human_verified"], v["ai_extracted"])
+        cfgs = copy.deepcopy(CFGS)
+        invs = {k: dict(v) for k, v in INV.items()}
+        for c in cfgs:
+            c["_inv"] = invs[c["investigation_id"]]
+        invs["BASS"]["verification_status"] = "human_verified"
+        before = [(r["config_id"], r["score"]) for r in scorer.rank("ISS cotton fabric")["ranking"]]
+        after = [(r["config_id"], r["score"]) for r in scorer.rank("ISS cotton fabric", catalog=(invs, cfgs))["ranking"]]
+        self.assertEqual(before, after)
+
+    def test_ranges_separate(self):
+        rows = {r["config_id"]: r for r in scorer.rank("lunar habitat")["ranking"]}
+        codes = lambda cid: [w["code"] for w in rows[cid]["warnings"]]
+        self.assertIn("ranges_separate", codes("FLEX-C01"))         # 12-34% and 70.2-309.3 kPa
+        self.assertIn("ranges_separate", codes("ACME-BRE-C01"))     # 21-40% and 56.5-101.3 kPa
+        for r in scorer.rank("ISS")["ranking"]:                     # assumed values are points, not ranges
+            if {"O2", "pressure"} & set(r["assumed_dims"]):
+                self.assertNotIn("ranges_separate", [w["code"] for w in r["warnings"]], r["config_id"])
+        for r in scorer.rank("cotton fabric")["ranking"]:            # no O2 or pressure compared
+            self.assertNotIn("ranges_separate", [w["code"] for w in r["warnings"]], r["config_id"])
+
+
 class OxidizerStream(unittest.TestCase):
     """The O2 of an inverse flame is its burner stream, not an atmosphere: never matched with the user's O2."""
 

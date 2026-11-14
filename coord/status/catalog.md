@@ -1,44 +1,53 @@
 ---
 role: catalog
-updated: 2026-11-14 13:56 KST
+updated: 2026-11-14 14:21 KST
 state: working
 blocked_on: none
 ---
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`. ui handed them over at 13:40; it had already done items 1 to 6 of the 13:10 list. I reviewed those against the NASA tables, fixed two points, and did items 7 and 8.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*` (in `roles.json` since pm's 14:08 sync). Review fixes from the human lead's request are done; pm's two decisions are applied; ui's request 1409 is done.
+
+**pm: the scorer, its config and `data/catalog/` changed in this push. Please rerun `python3 ai/audit_catalog.py` and `python3 ai/check_all.py`.**
 
 Done since last sync (branch `catalog-scoring`):
-- Merged `catalog-filter` (ui's items 1 to 6) and reviewed them:
-  - 1, 3, 4 and 6 kept as they are.
-  - 2 and 5 corrected (below).
-- `727d271` catalog: BASS-II air speeds above 40 cm/s are not read as air.
-  - Sources: the PSI-25 record says "airflow speeds up to 40 cm/s"; the table puts fan readings in brackets; row 121's fan cell reads 52.
-  - BASS-II-C04 (SIBAL) flow is now 1–29 cm/s (row 115), not 1–53. BASS-II-C03 (rods) stays 0–38.5 (row 72, "incr to max 38.5").
-- `894a049` scorer: bare "gas" and "가스" are no longer fuel keywords; compound forms instead ("gas jet", "jet flame", "gaseous fuel", "gas fire", "가스 누출", ...).
-  - Before, "inert gas suppression ISS", "CO2 gas extinguisher ISS" and "combustion gas detection" were scored as gas-fuel questions.
-  - Validation F05, F06.
-- `9498c10` scorer: a range with one recorded end reads "up to 40 cm/s" or "at least …" (BASS, PSI-26). The text changed only; scores are the same. 2 unit tests.
-- Item 7: `validation/verification_sheet.csv` and `validation/build_verification_sheet.py`. 104 checks for the 13 configurations behind the demo queries, with NASA table rows and raw cells.
-- Answered data 1328 (to all). Closed my handover request to ui.
-- Request to pm: two scorer decisions before the freeze (whether human checks change the score; `ranges_separate` warning).
-- Checks: unit tests 26/26, validation 28/28, parity 67/67, catalog against tests.csv OK.
-- `data/catalog/catalog.xlsx` rebuilt (openpyxl 3.1.5, MIT, already in `compliance/SOURCES.md`, installed with the human lead's approval). Both sheets match the CSV files cell for cell.
-- Live: ui merged `catalog-scoring` at 6e15ead into `catalog-filter` (acf8f85). The Pages run is green.
-- data request 1319: closed by ui; the catalog needs nothing more from data.
+- 14:19 `scoring/MODEL_BASIS.md` (new, English). It checks each scoring rule against a combustion textbook the human lead supplied: Turns, *An Introduction to Combustion*, 3rd ed., McGraw-Hill 2012. The book is copyrighted, so it was read as background only; nothing from it is reproduced, and it is listed in `compliance/SOURCES.md`.
+  - Supported: the direction of the oxygen rule, the log form of the pressure rule, the gravity warnings, quiescent against forced flow, the fuel-phase gate, and the oxidizer-stream rule.
+  - Not covered by the book: flame spread over solids (thin or thick, opposed or concurrent), which rests on the PSI records.
+  - Two candidate changes, not applied: O2 distance on a log ratio (A) and diluent similarity by heat capacity (B).
+  - pm: it may help the Validity part of the write-up. No code changed.
+- Review fixes asked by the human lead (14:00):
+  - `74b206e` "CO2 30%" is no longer read as 30% oxygen; "천장" (ceiling) is no longer read as cloth.
+  - `5f1627e` Confidence counts only values compared with a recorded value. Assumed (fallback) O2 and pressure no longer count.
+    - ISS #2 BASS-C01 now shows low confidence (0.3).
+    - ISS cotton fabric #1 BASS-C01 now shows medium (0.65).
+  - `93b193a` A flow speed inside a one-sided range ("up to 40 cm/s", PSI-26) scores unknown (0.5), not a miss. There is no jump at 40.
+  - `8d39b1c` "tested" is used only for table values. New catalog columns `o2_source`, `pressure_source`, `flow_source` (table | record | test_matrix | team). The reasons word non-table values by source:
+    - ACME-BRE-C01 pressure is "named in the PSI record, not a test value". The objective names 8.2 to 14.7 psia, and the table says pressures "are not identified".
+    - FLEX-2 values are "from the test matrix".
+    - 0 cm/s for FLEX, CFI and BRE is a "team reading".
+- pm decisions 14:15, `8a352cd`:
+  - `human_verified` scores like `ai_extracted` (0.7).
+  - New result warning `ranges_separate`. It is on all three lunar-habitat results; it is not on ISS, whose atmosphere is assumed.
+- ui request 1409 (pm's audit), `1d361b2`: FLEX-2 objectives, FLEX-2-C02 and SAFFIRE-III labels, and SAFFIRE-II key findings now read as the NASA sources write them. Answered `done`.
+- Closed my requests 1332 and 1345 (pm answered both).
+- Checks: 35 unit tests, validation 29/29, parity 68/68, catalog against tests.csv OK, `catalog.xlsx` rebuilt.
 
 Next:
-- pm's answers: the new role in `roles.json` (request 1332) and the two scorer decisions (request 1345, item 1 defaults at 16:00).
-- Sync every 20 minutes (:07, :27, :47) until the 19:00 freeze; fixes only after that.
+- Sync every 20 minutes until the 19:00 freeze; fixes only after that.
+- Rerun `validation/build_verification_sheet.py` if the demo top results change.
 
 Published for others:
-- `data/catalog/configurations.csv`: BASS-II-C04 `flow_max_cms` 53 → 29, plus `source_notes` text for C03 and C04. Same columns.
-- `scoring.scorer.rank` output: same shape. Text of `why` and `main_gap` changed for open ranges ("up to 40 cm/s").
-- Demo rankings: `ISS`, `lunar habitat`, `spacesuit`, `Mars base`, `ISS cotton fabric` and `lunar habitat cotton fabric` have the same top 3 and the same scores.
-- `validation/verification_sheet.csv`: new file, for people.
+- `data/catalog/configurations.csv`: three new columns after `atmosphere_basis` (additive), `o2_source`, `pressure_source`, `flow_source`. Values: `table`, `record`, `test_matrix`, `team`, or empty. The other columns are unchanged in name and order.
+  - Text changes: `config_label` of FLEX-2-C02, SAFFIRE-III-C01 and C02.
+  - Value change: BASS-II-C04 `flow_max_cms` 29.
+- `data/catalog/investigations.csv`: text of FLEX-2 `objectives` and SAFFIRE-II `key_findings`.
+- `scoring.scorer.rank`:
+  - Same shape.
+  - New warning code `ranges_separate` (text in `scoring_config.json`).
+  - `coverage` and `confidence` now leave out assumed values.
+  - The text of `why` and `main_gap` changed: "named in the PSI record, not a test value", "from the test matrix, not individual tests", "team reading, not in the table", "up to 40 cm/s".
+- Demo rankings: the top 3 and the scores of `ISS`, `lunar habitat`, `spacesuit`, `Mars base`, `ISS cotton fabric` and `lunar habitat cotton fabric` are unchanged. Only confidence labels and warnings changed.
+- Queries with a flow speed changed, for example "SIBAL 45 cm/s" and "PMMA rod 35 cm/s": BASS's "up to 40 cm/s" is no longer treated as a test at 40.
 
 Notes for other roles:
-- pm: `catalog-scoring` needs integrating into `main` (the site already has it through `catalog-filter`, acf8f85).
-  - Sync 13:56: pm's status is from 13:10, and `main` has not moved since 13:06.
-  - My requests 1332 (role in `roles.json`, needed by 14:15) and 1345 (two scorer decisions, needed by 16:00) have no answer yet.
-  - Neither blocks me.
-- ui: thanks for the clean handover. I changed your BASS-II reading: "max(47)" and "6 53" are fan readings, so SIBAL is 1–29. Your request 1319 to data can be closed from your side. Nothing more is needed from data.
-- data: the catalog's BASS-II flow tops (38.5 rods, 29 SIBAL) are now both within the record's 40 cm/s.
+- ui: the page prints the new warning from the config. A result can now carry `ranges_separate` next to `outside_range`.
+- data: the scorer still reads catalog ranges, not test rows, so `ranges_separate` is a caveat, not a joint check. A joint check would need `tests.csv` in the browser.
