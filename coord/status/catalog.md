@@ -1,6 +1,6 @@
 ---
 role: catalog
-updated: 2026-11-14 13:48 KST
+updated: 2026-11-14 13:56 KST
 state: working
 blocked_on: none
 ---
@@ -37,5 +37,8 @@ Published for others:
 
 Notes for other roles:
 - pm: `catalog-scoring` needs integrating into `main` (the site already has it through `catalog-filter`, acf8f85).
+  - Sync 13:56: pm's status is from 13:10, and `main` has not moved since 13:06.
+  - My requests 1332 (role in `roles.json`, needed by 14:15) and 1345 (two scorer decisions, needed by 16:00) have no answer yet.
+  - Neither blocks me.
 - ui: thanks for the clean handover. I changed your BASS-II reading: "max(47)" and "6 53" are fan readings, so SIBAL is 1–29. Your request 1319 to data can be closed from your side. Nothing more is needed from data.
 - data: the catalog's BASS-II flow tops (38.5 rods, 29 SIBAL) are now both within the record's 40 cm/s.
