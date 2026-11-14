@@ -1,15 +1,16 @@
 ---
 role: data
-updated: 2026-11-14 14:43 KST
+updated: 2026-11-14 14:56 KST
 state: working
 blocked_on: none
 ---
-Now: a prose-only pass that brings the questions, notes and README in line with the quotes of the literature check (no count changes); then D5 when `ai/review/review_sheet.csv` lands.
+Now: raw-data inventory per investigation for pm (request 1449, target 16:30); the Korean labels of the internal page; then D5 when `ai/review/review_sheet.csv` lands.
 
 Done since last sync (details: request 20261114-1442-data-to-all "Counts changed after a literature check"):
 - **Literature check of four open points** (commit `a5a9e87`; 66 documents in `references.json`, quotes verbatim): (1) links between a need and an investigation now rest on a purpose sentence of the investigators or of a NASA project document, with a verdict, and only `supported` links count; (2) pressure is a required condition of P1 and S1 by definition, met by a sentence about the whole table where the table has no pressure, never by a created value; (3) the SAME "weight loss rate" is a planned target value, so D2 has no counted test; (4) oxygen cells with two numbers give the value the investigators name as the initial oxygen, or none; no midpoint.
 - Counted tests now: P1 133, P2 0, P3 2, S1 298, D1 122 (BASS-II, by the investigators' stated purpose), D2 0. Solid fuels at 19 to 23% oxygen: 61 recorded tests (was 62).
 - Checker: 46 of 46 checks pass.
+- Prose pass (commit `c05f277`): questions, reasons, notes and README say no more than the quoted sources; `needs.json` `_meta.authorship` lists twelve points that are the team's own construction and what the documents back. P2 and S1 questions reworded (S1 now names pressure). `P3.spread_rate` and `P3.burn_length` show the Saffire-II values as recorded outside the stated objective. No count changed.
 - Saffire raw data: per-sample sensor workbooks in PSI hold "Ambient Pressure" in psia (14.825 to 14.935 over the eleven samples of Saffire-I and -II); not mapped, carried as a sentence. See the answer to request 1431.
 Earlier today (request 20261114-1242-data-to-all "Audit fixes"):
 - Evidence layer is on `data-pipeline` (commit `a454a92` and later): `data/pipeline/evidence/` (6 scenarios, 20 oxygen x pressure cells, `index.json`), `atmosphere_cells.csv`, `investigation_facts.json`, `pipeline/check.py` with `validation_report.json`.
