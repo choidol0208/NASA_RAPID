@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 13:30 KST
+updated: 2026-11-14 13:35 KST
 state: working
 blocked_on: none
 ---
@@ -17,6 +17,10 @@ Done since last sync:
 - **New check, run before every deploy:** `validation/check_catalog_pipeline.py` compares the catalog with tests.csv for all 12 investigations with test-level tables (counts, O2, pressure, flow). It passes now and failed on the old catalog.
 - Request 20261114-1305 (challenge text) closed. The follow-up gives data a short verbatim fragment for `CH.moonbase` and confirms `CH.pillars`.
 - Opened request 20261114-1319 to data: BASS-II flow increases with the restrictor out are not in tests.csv.
+- data request 1328 done (option 1, range kept):
+  - The scenario `caveat` is shown under the scenario ranges and above the tests list.
+  - "In your atmosphere" wording replaced by "in the scenario range".
+  - Each count in the tests list states its recorded O2 and pressure (lunar FLEX: 30.0 to 34.0% O2; 71.2 to 72.4 kPa).
 - Checks: unit tests 24/24, validation 26/26, parity 65/65, catalog check 12/12, build.
 
 Next:

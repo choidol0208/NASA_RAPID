@@ -424,7 +424,7 @@ function renderScenarioText(out, sc, cat) {
 // "In your atmosphere" means tests were run there, not that the need is covered: for the lunar
 // habitat those are fuel-droplet tests (pm request 1224), so it is not drawn as a full cell.
 const SN_STATUS = {
-  in_atmosphere: ["Tests run in your atmosphere", "st-partial"],
+  in_atmosphere: ["Tests in the scenario range", "st-partial"],
   oxygen_only: ["At your oxygen, pressure not recorded", "st-cond"],
   pressure_only: ["At your pressure, oxygen not recorded", "st-cond"],
   other_atmosphere: ["Only other atmospheres", "st-sum"],
@@ -442,7 +442,7 @@ function otherAtmosphereLabel(gaps) {
   return null;
 }
 const TIERS = [
-  ["atmosphere", "In your atmosphere", "oxygen and pressure both recorded and inside the ranges"],
+  ["atmosphere", "In the scenario range", "oxygen and pressure both recorded and inside the scenario's ranges"],
   ["oxygen_only", "At your oxygen, no pressure recorded", "oxygen inside the range; the table records no pressure"],
   ["pressure_only", "At your pressure, no oxygen recorded", "pressure inside the range; the table records no oxygen"],
 ];
@@ -483,8 +483,10 @@ function scenarioNeedsRow(out, pipe, order) {
   if (!sid || !pipe.scenarioNeeds) return null;
   const rows = pipe.scenarioNeeds.filter((r) => r.scenario_id === sid);
   if (!rows.length) return null;
-  const tr = h("tr", { class: "scenario-row" }, h("th", { scope: "row" }, h("b", {}, "All tables, in your atmosphere"),
-    h("small", {}, scenarioRanges(pipe.scenarioSpec.scenarios.find((x) => x.id === sid)))));
+  const spec = pipe.scenarioSpec.scenarios.find((x) => x.id === sid);
+  const tr = h("tr", { class: "scenario-row" }, h("th", { scope: "row" }, h("b", {}, "All tables, in the scenario range"),
+    h("small", {}, scenarioRanges(spec)),
+    spec.caveat ? h("small", { class: "caveat" }, spec.caveat) : null));
   for (const n of order) {
     const r = rows.find((x) => x.need_id === n.id);
     if (!r) { tr.append(h("td", { class: "st-missing" }, "—")); continue; }
@@ -524,6 +526,20 @@ function testLink(id) {
   return h("span", {}, id);
 }
 
+// The oxygen and pressure these tests were actually recorded at (from tests.csv), so a count
+// "in the scenario range" is never read as "at the challenge's exact bound" (data request 1328).
+function recordedAt(list) {
+  const span = (k, d) => {
+    const v = list.map((r) => testsIndex && testsIndex.get(r.test_id)).filter(Boolean).map((t) => parseFloat(t[k])).filter((x) => !Number.isNaN(x));
+    if (!v.length) return null;
+    const lo = Math.min(...v), hi = Math.max(...v);
+    return lo === hi ? lo.toFixed(d) : `${lo.toFixed(d)} to ${hi.toFixed(d)}`;
+  };
+  const o2 = span("o2_pct", 1), p = span("pressure_kpa", 1);
+  if (!o2 && !p) return "";
+  return `Recorded values: ${o2 ? o2 + "% O2" : "O2 not in the table"}; ${p ? p + " kPa" : "pressure not in the table"}. `;
+}
+
 async function renderTests(out, pipe, cat, phaseFilter) {
   const sec = $("#tests");
   const box = $("#tests-body");
@@ -543,6 +559,7 @@ async function renderTests(out, pipe, cat, phaseFilter) {
   box.replaceChildren();
   box.append(h("p", { class: "intro" }, h("b", {}, `${spec.label}: `), scenarioRanges(spec), ". ",
     spec.note || "", " ", link(REPO + "pipeline/spec/scenarios.json", "(scenario ranges)")));
+  if (spec.caveat) box.append(h("p", { class: "warn" }, spec.caveat));
   const bar = h("div", { class: "presets", role: "group", "aria-label": "Fuel phase" });
   for (const ph of phases) {
     const b = h("button", { type: "button", "aria-pressed": String(ph === want) }, ph === "all" ? "All fuels" : `${ph[0].toUpperCase()}${ph.slice(1)} fuels`);
@@ -574,6 +591,7 @@ async function renderTests(out, pipe, cat, phaseFilter) {
         const gravDiff = list.filter((r) => r.gravity_match === "different").length;
         tr.append(h("td", { class: "num" }, h("details", { class: "tests-list" },
           h("summary", {}, `${list.length} test${list.length === 1 ? "" : "s"}`),
+          h("p", { class: "gap" }, recordedAt(list)),
           h("p", { class: "gap" }, spec.ranges && spec.ranges.flow_cms ? `${flowIn} with flow in range. ` : "", gravDiff ? `All ${gravDiff} at microgravity, not ${spec.gravity_level} gravity. ` : ""),
           h("p", { class: "ids" }, ...list.flatMap((r, i) => [i ? ", " : "", testLink(r.test_id)])))));
       }
