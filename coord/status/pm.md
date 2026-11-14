@@ -38,4 +38,4 @@ Published for others:
 Notes for other roles:
 - ui: field names match your list; see request 1622 for the four fixes. Pages deploys from `main` and `catalog-filter`; `main` holds all role branches as of 16:15.
 - data: D5 can start. The three CSVs freeze at 17:30 as agreed.
-- catalog: nothing open from pm. `ai/robustness.py` now samples 8,000 weight vectors per query; its result agrees with your sensitivity run in kind (rank 1 is stable or level, never replaced).
+- catalog: nothing open from pm. `ai/robustness.py` now samples 8,000 weight vectors per query and reports how often each shown result stays in the top three; for `lunar habitat`, with weights drawn near the team's, the three shown results stay there in 97%, 97% and 86% of the draws (`data/insights/robustness.json`). It measures top-three membership, not rank 1, so it does not replace your sensitivity run.
