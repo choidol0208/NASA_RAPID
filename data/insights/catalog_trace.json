@@ -3,9 +3,9 @@
   "built_by": "ai/audit_catalog.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T15:08:46+09:00",
+  "generated_at": "2026-11-14T16:15:05+09:00",
   "inputs_sha256": {
-   "data/catalog/configurations.csv": "84ea5b5dd8fc344ace73263881f6caf0ffffb268b0e1471e2e934a23909a6314",
+   "data/catalog/configurations.csv": "7cde1c23f4a3d5310f02d8c4b4e63d77f7773b95eace4fbf153cdbdeea494e82",
    "data/catalog/investigations.csv": "840e0266945d73b2482b74338c9924adc1d5c8a17696804b83c71d95ce1b10e2",
    "data/pipeline/tests.csv": "b8acc1073fbc33a37563eb7f7cd12811e602fb7363ee69982d97860f05522211",
    "data/pipeline/values_long.csv": "055cddfe8abf3a70043b794bf14d8e52e62770f8cf96eaed6525db8d6a7fb1d0",
@@ -57,11 +57,11 @@
    "data/psi/experimental_tables/PSI-99_Experimental table_SAFFIRE-2.csv": "3c24390b9ef86f3d1ebaab911a1a3cc95a8759aebf42062371370e6d4b31b8ac",
    "data/psi/manifest.json": "48e213ba2120d4ba52544cb068cde03a5d71ba53d4f1ad5ccf38d5e0eb7841e7",
    "pipeline/spec/sources.json": "acf3d0a4b35ece951278bb71bca6a3c8c5b40ec542891ef63d1a1609f99140ec",
-   "scoring/scorer.py": "b4d36a01f97b9ba2da059b0c139e0925cf2eaba7eb6094c4edf441c9a799cb38",
-   "scoring/scoring_config.json": "2db36189feb9ef4db06afd74c75a3799ff3d96466c4c0ceafa61c6cf6f324acf"
+   "scoring/scorer.py": "51c60b1030eaf621ed0ab504a2d8d3c88eaaa2b7daad45a6ff2f0e059a9dd793",
+   "scoring/scoring_config.json": "141a17d376affc1f08b8e738723606d81e1b0287ab9c493772d713168cd3735c"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code); no language model ran to build it. It traces numbers in the team's AI-extracted catalog text to NASA PSI records and tables; a found number is not a check of its meaning. Team output, not a NASA conclusion.",
-  "content_sha256": "217e1c7bc19fff0d113c245fd9e2f74218073be280fb603473286b1d4a92005b"
+  "content_sha256": "a85bfe789d093de4d6ec160825e8d26f4560261cc8cccc3166b1426422d2c687"
  },
  "description": "Trace audit of the numbers in the AI-extracted catalog text that the page shows, and linter hits in text pm does not own. A status says the number was found in a NASA source, not that its meaning was checked. Catalog values remain AI-extracted and not yet checked by a person.",
  "fields_audited": [
@@ -1824,7 +1824,7 @@
    "unit": null,
    "unit_from_range": "cm/s",
    "follower": "unit:cm/s",
-   "context": "Conditions: 5–10 cm/s, weight-loss rate 1–2 mg/min, a...",
+   "context": "Conditions in the table: air flow 5–10 cm/s and aging 1–20 min. Its weight-...",
    "status": "found_in_table_cell",
    "matched_source": "data/pipeline/tests.csv#SAME-1",
    "rule": "values_long.csv: SAME-1 flow_cms = 5.0 cm/s (equal at 0 decimal places); NASA cell PSI-102_Experimental table_SAME.csv row 2 column 'Air Flow (cm/s)'"
@@ -1839,7 +1839,7 @@
    "unit": "cm/s",
    "unit_from_range": null,
    "follower": "unit:cm/s",
-   "context": "Conditions: 5–10 cm/s, weight-loss rate 1–2 mg/min, agin...",
+   "context": "Conditions in the table: air flow 5–10 cm/s and aging 1–20 min. Its weight-los...",
    "status": "found_in_table_cell",
    "matched_source": "data/pipeline/tests.csv#SAME-4",
    "rule": "values_long.csv: SAME-4 flow_cms = 10.0 cm/s (equal at 0 decimal places); NASA cell PSI-102_Experimental table_SAME.csv row 5 column 'Air Flow (cm/s)'"
@@ -1852,39 +1852,9 @@
    "field": "key_findings",
    "number": "1",
    "unit": null,
-   "unit_from_range": "mg/min",
-   "follower": "unit:mg/min",
-   "context": "Conditions: 5–10 cm/s, weight-loss rate 1–2 mg/min, aging 1–20 min (table).",
-   "status": "found_in_table_cell",
-   "matched_source": "data/pipeline/tests.csv#SAME-2",
-   "rule": "values_long.csv: SAME-2 mass_loss_rate_mg_min = 1.0 mg/min (equal at 0 decimal places); NASA cell PSI-102_Experimental table_SAME.csv row 3 column 'Weight loss rate (mg/min)'"
-  },
-  {
-   "table": "data/catalog/configurations.csv",
-   "row_id": "SAME-C01",
-   "csv_line": 35,
-   "investigation_id": "PSI-102",
-   "field": "key_findings",
-   "number": "2",
-   "unit": "mg/min",
-   "unit_from_range": null,
-   "follower": "unit:mg/min",
-   "context": "...nditions: 5–10 cm/s, weight-loss rate 1–2 mg/min, aging 1–20 min (table).",
-   "status": "found_in_table_cell",
-   "matched_source": "data/pipeline/tests.csv#SAME-1",
-   "rule": "values_long.csv: SAME-1 mass_loss_rate_mg_min = 2.0 mg/min (equal at 0 decimal places); NASA cell PSI-102_Experimental table_SAME.csv row 2 column 'Weight loss rate (mg/min)'"
-  },
-  {
-   "table": "data/catalog/configurations.csv",
-   "row_id": "SAME-C01",
-   "csv_line": 35,
-   "investigation_id": "PSI-102",
-   "field": "key_findings",
-   "number": "1",
-   "unit": null,
    "unit_from_range": "min",
    "follower": "unit:min",
-   "context": "...m/s, weight-loss rate 1–2 mg/min, aging 1–20 min (table).",
+   "context": "...the table: air flow 5–10 cm/s and aging 1–20 min. Its weight-loss rate (1–2 mg/mi...",
    "status": "found_in_table_cell",
    "matched_source": "pipeline/spec/sources.json#same",
    "rule": "NASA table cell as written: PSI-102_Experimental table_SAME.csv row 2 column 'Aging Duration (minutes)': '1'"
@@ -1899,10 +1869,40 @@
    "unit": "min",
    "unit_from_range": null,
    "follower": "unit:min",
-   "context": "...s, weight-loss rate 1–2 mg/min, aging 1–20 min (table).",
+   "context": "...e table: air flow 5–10 cm/s and aging 1–20 min. Its weight-loss rate (1–2 mg/min) ...",
    "status": "found_in_table_cell",
    "matched_source": "pipeline/spec/sources.json#same",
    "rule": "NASA table cell as written: PSI-102_Experimental table_SAME.csv row 4 column 'Aging Duration (minutes)': '20'"
+  },
+  {
+   "table": "data/catalog/configurations.csv",
+   "row_id": "SAME-C01",
+   "csv_line": 35,
+   "investigation_id": "PSI-102",
+   "field": "key_findings",
+   "number": "1",
+   "unit": null,
+   "unit_from_range": "mg/min",
+   "follower": "unit:mg/min",
+   "context": "...d aging 1–20 min. Its weight-loss rate (1–2 mg/min) is a planned target of the te...",
+   "status": "found_in_table_cell",
+   "matched_source": "data/pipeline/tests.csv#SAME-2",
+   "rule": "values_long.csv: SAME-2 mass_loss_rate_mg_min = 1.0 mg/min (equal at 0 decimal places); NASA cell PSI-102_Experimental table_SAME.csv row 3 column 'Weight loss rate (mg/min)'"
+  },
+  {
+   "table": "data/catalog/configurations.csv",
+   "row_id": "SAME-C01",
+   "csv_line": 35,
+   "investigation_id": "PSI-102",
+   "field": "key_findings",
+   "number": "2",
+   "unit": "mg/min",
+   "unit_from_range": null,
+   "follower": "unit:mg/min",
+   "context": "...aging 1–20 min. Its weight-loss rate (1–2 mg/min) is a planned target of the test...",
+   "status": "found_in_table_cell",
+   "matched_source": "data/pipeline/tests.csv#SAME-1",
+   "rule": "values_long.csv: SAME-1 mass_loss_rate_mg_min = 2.0 mg/min (equal at 0 decimal places); NASA cell PSI-102_Experimental table_SAME.csv row 2 column 'Weight loss rate (mg/min)'"
   },
   {
    "table": "data/catalog/configurations.csv",

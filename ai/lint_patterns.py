@@ -152,6 +152,12 @@ WORDING = (
                               r"|\b(?:will|would)\s+(?:not\s+)?(?:burn|ignite|spread|self-extinguish)\b", re.I)),
     ("flammability verdict", re.compile(r"\b(?:is|are)\s+(?:not\s+)?(?:non-?)?flammable\b|\bnon-?flammable\b", re.I)),
 )
+# Exact phrases of copied data-role text in which 'covers' speaks of the scope of the needs file (which
+# topics the six needs address), not of what the recorded tests cover. Only gate 'banned' for template
+# text sets them aside, and only as whole phrases; model sentences never get this allowance.
+SCOPE_PHRASES_ALLOWED = (
+    "no need of this file covers it",
+)
 INVERSE_WORDS = re.compile(r"\bburner stream\b|\binverse\b", re.I)
 
 # ---------------------------------------------------------------- gate 6: misconception linter

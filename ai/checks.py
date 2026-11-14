@@ -675,6 +675,8 @@ def gate_banned(text):
     """Template text: no score, rank number or 'best', and the wording list of gate_wording; quoted
     verbatim NASA text is not read."""
     text = strip_nasa_quotes(text)
+    for phrase in LP.SCOPE_PHRASES_ALLOWED:  # scope of the needs file, not coverage by tests
+        text = text.replace(phrase, "no need of this file addresses it")
     hits = [name for name, rx in LP.BANNED_TEMPLATE + LP.WORDING if rx.search(text)]
     if hits:
         return _fail(f"banned: {', '.join(hits)}")

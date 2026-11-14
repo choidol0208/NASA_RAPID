@@ -424,6 +424,15 @@ class TemplateTest(unittest.TestCase):
             self.assertFalse(C.check_template(t, {"x": 94.0, "y": 79.1, "z": 1, "w": 3})["checks"]["banned_ok"], t)
         self.assertTrue(C.check_template("Tied with FLEX under the team's current weights.", {})["ok"])
 
+    def test_scope_phrase_of_the_needs_file_is_not_coverage_wording(self):
+        # the data role's copied line speaks of what the needs file addresses, not of what tests cover
+        self.assertTrue(C.gate_banned("Cabin background species: no need of this file covers it.")[0])
+        # coverage wording about tests or data is still refused, in template and in model text
+        for t in ("The data set covers this atmosphere.", "This condition is well covered.",
+                  "Cabin species: no need of this file covers it, but the data set covers it."):
+            self.assertFalse(C.gate_banned(t)[0], t)
+        self.assertFalse(C.gate_wording("Cabin background species: no need of this file covers it.")[0])
+
     def test_advice_and_lint_in_templates(self):
         self.assertFalse(C.check_template("Designers should avoid this atmosphere.", {})["checks"]["policy_ok"])
         self.assertFalse(C.check_template(CURRENT_PARTIAL_GRAVITY, {})["checks"]["lint_ok"])
