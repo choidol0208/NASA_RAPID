@@ -132,7 +132,7 @@ python3 ai/check_all.py
 
 Result of the tests: `Ran 241 tests ... OK`. No test calls a model. `ai/check_all.py` only reads; it checks everything in `data/insights/`.
 
-Result of `ai/check_all.py` (measured on the working tree before the English compliance logs were committed): `FAIL: 1 hard failure(s); 0 file(s) not built yet; 0 report-only lint hit(s)`. The one failure is its compliance section; the other 11 sections reported OK. Its compliance section compares the two logs with the last commit (`git diff HEAD`), so it fails while an edit to those logs is uncommitted. It has not yet been run after that commit.
+Result of `ai/check_all.py` (14 November 2026, after the English compliance logs were committed): `PASS: 0 hard failure(s); 0 file(s) not built yet; 0 report-only lint hit(s)`.
 
 The build rewrites every file in `data/insights/`, with no model call (needs NumPy, pandas and scikit-learn; not run for this README):
 
