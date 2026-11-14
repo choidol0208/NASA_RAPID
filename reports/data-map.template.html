@@ -1,0 +1,325 @@
+<title>PSI 연소 데이터 지도</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<!-- AI-generated page: written with an AI coding assistant (Claude Code) during the NASA Space Apps Challenge 2026 hackathon (2026-11-14). Data: NASA PSI, https://psi.nasa.gov/ -->
+<style>
+/* Layout: one reading column; a sticky section bar; dense tables scroll inside their own boxes. */
+:root {
+  --bg: #f6f8fb; --surface: #ffffff; --fg: #16202e; --muted: #5a6779; --line: #d6dde8;
+  --accent: #1c58b8; --accent-soft: #e4edfb;
+  --num: #0b7a6e; --txt: #5a6779; --mix: #a85f00; --emp: #b3261e;
+  --num-bg: #dff3ef; --txt-bg: #e9edf3; --mix-bg: #fbecd2; --emp-bg: #fbe2df;
+  --font-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f141c; --surface: #171e29; --fg: #e6ebf3; --muted: #9aa7ba; --line: #2b3545;
+    --accent: #86b4ff; --accent-soft: #1b2b45;
+    --num: #5fd0c0; --txt: #9aa7ba; --mix: #f0b35a; --emp: #ff8a80;
+    --num-bg: #123832; --txt-bg: #222c3a; --mix-bg: #3d2c10; --emp-bg: #40201d;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f141c; --surface: #171e29; --fg: #e6ebf3; --muted: #9aa7ba; --line: #2b3545;
+  --accent: #86b4ff; --accent-soft: #1b2b45;
+  --num: #5fd0c0; --txt: #9aa7ba; --mix: #f0b35a; --emp: #ff8a80;
+  --num-bg: #123832; --txt-bg: #222c3a; --mix-bg: #3d2c10; --emp-bg: #40201d;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.65; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 28px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1 { font-size: 30px; line-height: 1.25; font-weight: 600; margin: 0 0 8px; text-wrap: balance; }
+h2 { font-size: 21px; font-weight: 600; margin: 0 0 6px; text-wrap: balance; }
+h3 { font-size: 16px; font-weight: 600; margin: 0 0 4px; }
+p { margin: 0 0 10px; max-width: 70ch; }
+a { color: var(--accent); }
+.lead { color: var(--muted); max-width: 72ch; }
+.meta { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; }
+nav.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line);
+  margin: 20px 0 0; padding: 8px 0; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13.5px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+nav.bar a { text-decoration: none; color: var(--muted); padding: 2px 0; }
+nav.bar a:hover, nav.bar a:focus-visible { color: var(--accent); }
+section { margin-top: 40px; scroll-margin-top: 64px; }
+.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); margin-top: 18px; }
+.fig { padding: 14px 16px; border-right: 1px solid var(--line); }
+.fig:last-child { border-right: 0; }
+.fig b { display: block; font-family: var(--font-mono); font-size: 24px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.fig span { font-size: 13px; color: var(--muted); }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); margin-top: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; font-size: 12.5px; color: var(--muted); white-space: nowrap; background: var(--surface); }
+tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--font-mono); font-size: 12.5px; white-space: nowrap; }
+.mono { font-family: var(--font-mono); font-size: 12.5px; }
+.id { font-family: var(--font-mono); font-size: 12.5px; white-space: nowrap; }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }
+.tools input { font: inherit; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--fg); min-width: 0; flex: 1 1 200px; max-width: 320px; }
+.chip { font: inherit; font-size: 13px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--fg); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.chip:focus-visible, .tools input:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+tr.row { cursor: pointer; }
+tr.row:hover td { background: var(--accent-soft); }
+.kind { display: inline-block; font-size: 12px; padding: 1px 7px; border-radius: 4px; white-space: nowrap; }
+.kind.numeric { color: var(--num); background: var(--num-bg); }
+.kind.text { color: var(--txt); background: var(--txt-bg); }
+.kind.mixed { color: var(--mix); background: var(--mix-bg); }
+.kind.empty { color: var(--emp); background: var(--emp-bg); }
+.fill { display: inline-block; width: 54px; height: 6px; background: var(--txt-bg); border-radius: 3px; vertical-align: middle; margin-right: 6px; overflow: hidden; }
+.fill i { display: block; height: 100%; background: var(--accent); }
+.cell { display: inline-block; min-width: 22px; text-align: center; font-size: 12.5px; padding: 1px 6px; border-radius: 4px; }
+.cell.y { color: var(--num); background: var(--num-bg); }
+.cell.p { color: var(--mix); background: var(--mix-bg); }
+.cell.n { color: var(--muted); }
+details.inv { border: 1px solid var(--line); border-radius: 6px; background: var(--surface); margin-top: 10px; }
+details.inv > summary { cursor: pointer; padding: 10px 14px; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; list-style: none; }
+details.inv > summary::-webkit-details-marker { display: none; }
+details.inv > summary .nm { font-weight: 600; }
+details.inv > summary .sub { color: var(--muted); font-size: 13.5px; flex: 1 1 260px; min-width: 0; }
+details.inv > summary .cnt { font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+details.inv[open] > summary { border-bottom: 1px solid var(--line); }
+.body { padding: 14px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; }
+.body > * { min-width: 0; }
+.inner table { min-width: 780px; }
+#invTable { min-width: 940px; }
+#matrixTable { min-width: 680px; }
+#layerTable { min-width: 600px; }
+.kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 3px 16px; font-size: 13.5px; margin: 0; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.note { font-size: 13.5px; color: var(--muted); }
+.tname { font-family: var(--font-mono); font-size: 12.5px; overflow-wrap: anywhere; }
+.inner { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+.issues { display: grid; gap: 18px; margin-top: 12px; }
+.issues ul { margin: 4px 0 0; padding-left: 18px; display: grid; gap: 8px; }
+.issues li b { font-weight: 600; }
+.where { font-size: 12.5px; color: var(--muted); }
+pre { font-family: var(--font-mono); font-size: 12.5px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; overflow-x: auto; margin: 8px 0 0; }
+.gloss { display: grid; grid-template-columns: max-content 1fr; gap: 6px 18px; font-size: 14px; margin: 12px 0 0; }
+.gloss dt { font-weight: 600; }
+.gloss dd { margin: 0; }
+footer { margin-top: 48px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
+@media (max-width: 560px) {
+  .kv, .gloss { grid-template-columns: minmax(0, 1fr); gap: 0 0; }
+  .kv dt, .gloss dt { margin-top: 8px; }
+  .fig { border-right: 0; border-bottom: 1px solid var(--line); }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>PSI 연소 데이터 지도</h1>
+    <p class="lead">NASA Physical Sciences Informatics(PSI)에 있는 연소 실험 24개가 어떤 층으로 이루어져 있고, 실험마다 시험 표가 어떻게 생겼는지 정리했습니다. 무엇을 만들지 정하기 전에 팀이 같은 그림을 보기 위한 자료입니다.</p>
+    <div class="meta">
+      <span id="asof"></span>
+      <span>출처: <a href="https://psi.nasa.gov/" target="_blank" rel="noopener">psi.nasa.gov</a> 카탈로그와 시험 표</span>
+      <span>이 페이지의 설명과 열 해석은 AI가 작성했습니다. '추정' 표시는 원문 확인이 필요합니다.</span>
+    </div>
+    <div class="figs" id="figs"></div>
+  </header>
+
+  <nav class="bar" aria-label="섹션">
+    <a href="#layers">다섯 층</a><a href="#list">실험 목록</a><a href="#matrix">표끼리 비교</a><a href="#tables">실험별 표 구조</a><a href="#issues">데이터 품질</a><a href="#access">받는 방법</a><a href="#glossary">용어</a>
+  </nav>
+
+  <section id="layers">
+    <h2>데이터는 다섯 층으로 나뉩니다</h2>
+    <p>용량의 99.9%는 원자료이고, 실험을 설명하고 비교하는 데 필요한 정보는 위의 세 층에 있습니다.</p>
+    <div class="scroll"><table id="layerTable"></table></div>
+  </section>
+
+  <section id="list">
+    <h2>실험 24개</h2>
+    <p>행을 누르면 그 실험의 표 구조로 이동합니다. '과제문' 열은 Flame in Freefall 과제문이 그 실험을 어떻게 언급했는지입니다.</p>
+    <div class="tools">
+      <input id="q" type="search" placeholder="이름, 번호, 설명으로 찾기" aria-label="실험 찾기">
+      <div id="famChips" class="tools" style="margin-top:0"></div>
+    </div>
+    <div class="scroll"><table id="invTable"></table></div>
+  </section>
+
+  <section id="matrix">
+    <h2>표끼리 비교할 수 있는 축</h2>
+    <p>비행 실험 19개의 시험 표에 어떤 종류의 열이 있는지입니다. 같은 축이라도 단위와 뜻이 표마다 달라서, 표시가 있다고 바로 합칠 수 있는 것은 아닙니다.</p>
+    <p class="note"><span class="cell y">있음</span> 시험별 값으로 있음 &nbsp; <span class="cell p">일부</span> 글자, 범위, 하루 단위 요약으로만 있음 &nbsp; <span class="cell n">–</span> 없음</p>
+    <div class="scroll"><table id="matrixTable"></table></div>
+  </section>
+
+  <section id="tables">
+    <h2>실험별 표 구조</h2>
+    <p>열마다 채워진 비율, 값의 종류, 숫자 범위, 대표 값을 실제 파일에서 계산했습니다. '뜻' 열은 AI의 해석입니다.</p>
+    <p class="note"><span class="kind numeric">숫자</span> 모든 값이 숫자 &nbsp; <span class="kind text">글자</span> 숫자 없음 &nbsp; <span class="kind mixed">혼합</span> 숫자와 글자가 섞임 &nbsp; <span class="kind empty">빈 열</span></p>
+    <div id="invDetails"></div>
+  </section>
+
+  <section id="issues">
+    <h2>데이터 품질에서 확인된 것</h2>
+    <p>표와 실험 기록을 읽으며 찾은 문제입니다. 값을 고치지는 않았고, 어디에 무엇이 있는지만 적었습니다.</p>
+    <div class="issues" id="issueList"></div>
+  </section>
+
+  <section id="access">
+    <h2>받는 방법</h2>
+    <p>로그인 없이 받을 수 있습니다. PSI 웹 화면이 쓰는 주소를 그대로 호출합니다.</p>
+    <div class="scroll"><table>
+      <tr><th>무엇</th><th>주소</th></tr>
+      <tr><td>실험 목록</td><td class="mono">GET psi.nasa.gov/geode-py/ws/repo/search?source=psi&amp;type=investigation&amp;size=500</td></tr>
+      <tr><td>실험 기록</td><td class="mono">GET psi.nasa.gov/geode-py/ws/repo/investigations/PSI-25</td></tr>
+      <tr><td>파일 목록</td><td class="mono">POST psi.nasa.gov/geode-py/ws/files/v2 &nbsp;{"folder":"PSI-25/","fileType":"study","studyId":"PSI-25","version":4}</td></tr>
+      <tr><td>파일 받기</td><td class="mono">GET psi.nasa.gov/geode-py/ws/studies/PSI-25/download?file=&lt;파일 이름&gt;&amp;version=1&amp;redirect=false<br>응답으로 오는 임시 주소(psi-repo-prod.s3.amazonaws.com)에서 파일을 받습니다.</td></tr>
+    </table></div>
+    <p style="margin-top:12px">프로젝트 폴더에서 아래 두 줄로 이 페이지의 수치를 다시 만들 수 있습니다. 영상이나 센서 기록 같은 원자료는 받지 않습니다.</p>
+<pre>python3 scripts/fetch_psi.py        # 실험 기록, 파일 목록, 시험 표 받기
+python3 scripts/profile_tables.py   # 열 단위 분석 결과 만들기</pre>
+    <p class="note" style="margin-top:10px">PSI는 데이터를 쓸 때 각 실험의 DOI로 인용하라고 요구합니다. 24개 중 23개가 CC0-1.0입니다.</p>
+  </section>
+
+  <section id="glossary">
+    <h2>용어</h2>
+    <dl class="gloss" id="gloss"></dl>
+  </section>
+
+  <footer>
+    <p>NASA Space Apps Challenge 2026 · Flame in Freefall · 팀 내부 자료. 이 페이지는 NASA가 만들거나 승인한 것이 아닙니다.</p>
+  </footer>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+const P = DATA.profile, A = DATA.notes;
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const GB = 2 ** 30, TB = 2 ** 40;
+const size = (b) => b >= TB ? (b / TB).toFixed(2) + " TB" : b >= GB ? (b / GB).toFixed(1) + " GB" : b >= 2 ** 20 ? (b / 2 ** 20).toFixed(1) + " MB" : b > 0 ? Math.max(1, Math.round(b / 1024)) + " KB" : "–";
+const num = (n) => Number(n).toLocaleString("en-US");
+const invs = P.investigations;
+const note = (acc) => A.investigations[acc] || {};
+const tnote = (file) => A.tables[file] || { columns: [] };
+
+// ---- headline figures
+const allTables = invs.flatMap((i) => i.tables);
+const totals = {
+  bytes: invs.reduce((s, i) => s + i.total_bytes, 0),
+  rows: allTables.reduce((s, t) => s + t.rows, 0),
+  cols: allTables.reduce((s, t) => s + t.columns.length, 0),
+  mixed: allTables.reduce((s, t) => s + t.columns.filter((c) => c.kind === "mixed").length, 0),
+};
+$("asof").textContent = "기준 시각: " + P.fetched_at.replace("T", " ").replace("Z", " UTC");
+$("figs").innerHTML = [
+  [invs.length, "연소 실험"], [allTables.length, "시험 표"], [num(totals.rows), "표의 행 합계"],
+  [totals.cols, "표의 열 합계"], [size(totals.bytes), "전체 용량"],
+].map(([b, s]) => `<div class="fig"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join("");
+
+// ---- layers
+const folder = (name) => invs.reduce((acc, i) => {
+  const f = i.files_by_folder[name]; if (f) { acc.bytes += f.bytes; acc.files += f.files; acc.inv += 1; } return acc;
+}, { bytes: 0, files: 0, inv: 0 });
+const raw = folder("Raw Data"), ana = folder("Analyzed Data"), et = folder("Experimental table");
+const docs = ["Reports", "Science Documents", "Engineering Documents", "Presentations"].map(folder)
+  .reduce((a, f) => ({ bytes: a.bytes + f.bytes, files: a.files + f.files }), { bytes: 0, files: 0 });
+const pubs = invs.reduce((s, i) => s + i.publications, 0), pubsDoi = invs.reduce((s, i) => s + i.publications_with_doi, 0);
+$("layerTable").innerHTML = `<tr><th>층</th><th>내용</th><th>규모</th><th>형태</th></tr>` + [
+  ["1", "실험 기록", `${invs.length}건`, "목적, 접근, 가설, 영향의 영어 문단과 장비, 기간, DOI 같은 정형 칸"],
+  ["2", "시험 조건 표", `${et.files}개 파일, ${size(et.bytes)}, ${num(totals.rows)}행`, "CSV. 실험마다 열 구성이 다름"],
+  ["3", "논문과 문서", `논문 ${pubs}편(DOI ${pubsDoi}편), 문서 ${num(docs.files)}개 ${size(docs.bytes)}`, "논문은 제목, 저자, DOI만. 문서는 보고서, 요구사항서, ReadMe 등의 PDF와 엑셀"],
+  ["4", "연구진이 정리한 분석 데이터", `${ana.inv}개 실험에만 있음, ${ana.files}개 파일, ${size(ana.bytes)}`, "엑셀, 시험별 요약 PDF, 시뮬레이션 출력"],
+  ["5", "원자료", `${num(raw.files)}개 파일, ${size(raw.bytes)}`, "압축 파일, 영상, 시험별 텍스트와 CSV"],
+].map((r) => `<tr><td class="n">${r[0]}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td><td>${esc(r[3])}</td></tr>`).join("");
+
+// ---- investigation list
+const families = [...new Set(invs.map((i) => note(i.accession).family).filter(Boolean))];
+let famSel = null;
+$("famChips").innerHTML = families.map((f) => `<button class="chip" type="button" aria-pressed="false" data-fam="${esc(f)}">${esc(f)}</button>`).join("");
+function drawList() {
+  const q = $("q").value.trim().toLowerCase();
+  const rows = invs.filter((i) => {
+    const n = note(i.accession);
+    if (famSel && n.family !== famSel) return false;
+    if (!q) return true;
+    return [i.accession, i.acronym, i.title, n.ko, n.phase, n.family].join(" ").toLowerCase().includes(q);
+  }).sort((a, b) => b.total_bytes - a.total_bytes);
+  $("invTable").innerHTML = `<tr><th>번호</th><th>이름</th><th>무엇을 한 실험인가</th><th>연료 상태</th><th>장치 계열</th><th class="n">용량</th><th class="n">표 행×열</th><th class="n">논문</th><th>과제문</th></tr>` +
+    (rows.length ? rows.map((i) => {
+      const n = note(i.accession);
+      const shape = i.tables.length ? i.tables.map((t) => `${t.rows}×${t.columns.length}`).join(", ") : "–";
+      return `<tr class="row" data-acc="${esc(i.accession)}" tabindex="0"><td class="id">${esc(i.accession)}</td><td>${esc(i.acronym || "(약칭 없음)")}</td><td>${esc(n.ko)}</td><td>${esc(n.phase)}</td><td>${esc(n.family)}</td><td class="n">${size(i.total_bytes)}</td><td class="n">${esc(shape)}</td><td class="n">${i.publications}</td><td>${esc(n.challenge)}</td></tr>`;
+    }).join("") : `<tr><td colspan="9">조건에 맞는 실험이 없습니다.</td></tr>`);
+}
+function openInv(acc) {
+  const d = document.getElementById("inv-" + acc); if (!d) return;
+  d.open = true; d.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+$("q").addEventListener("input", drawList);
+$("famChips").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-fam]"); if (!b) return;
+  famSel = famSel === b.dataset.fam ? null : b.dataset.fam;
+  [...$("famChips").children].forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.fam === famSel)));
+  drawList();
+});
+$("invTable").addEventListener("click", (e) => { const r = e.target.closest("tr.row"); if (r) openInv(r.dataset.acc); });
+$("invTable").addEventListener("keydown", (e) => { if (e.key === "Enter") { const r = e.target.closest("tr.row"); if (r) openInv(r.dataset.acc); } });
+drawList();
+
+// ---- matrix
+const mark = { y: ["있음", "y"], p: ["일부", "p"], n: ["–", "n"] };
+$("matrixTable").innerHTML = `<tr><th>실험</th>${A.matrix.axes.map((a) => `<th>${esc(a)}</th>`).join("")}<th>메모</th></tr>` +
+  A.matrix.rows.map(([acc, name, cells, memo]) =>
+    `<tr><td><span class="id">${esc(acc)}</span> ${esc(name)}</td>${cells.map((c) => `<td><span class="cell ${mark[c][1]}">${mark[c][0]}</span></td>`).join("")}<td>${esc(memo)}</td></tr>`).join("");
+
+// ---- per-investigation detail
+const kindKo = { numeric: "숫자", text: "글자", mixed: "혼합", empty: "빈 열" };
+const fmt = (v) => Number.isInteger(v) ? String(v) : Number(v.toPrecision(4)).toString();
+function tableBlock(t) {
+  const tn = tnote(t.file);
+  const rows = t.columns.map((c, i) => {
+    const [meaning, unit] = tn.columns[i] || ["", ""];
+    const pct = t.rows ? Math.round((c.filled / t.rows) * 100) : 0;
+    const range = c.min !== undefined ? `${fmt(c.min)} – ${fmt(c.max)}` : "";
+    const ex = (c.kind === "mixed" && c.non_numeric_examples ? c.non_numeric_examples : c.examples).slice(0, 3).map((x) => x.length > 34 ? x.slice(0, 33) + "…" : x).join(" · ");
+    return `<tr><td class="mono">${esc(c.name)}</td><td>${esc(meaning)}</td><td>${esc(unit)}</td><td><span class="kind ${c.kind}">${kindKo[c.kind]}</span></td><td class="n"><span class="fill"><i style="width:${pct}%"></i></span>${c.filled}/${t.rows}</td><td class="n">${esc(range)}</td><td class="mono">${esc(ex)}</td></tr>`;
+  }).join("");
+  return `<div><h3>${esc(t.file.replace(/^PSI-\d+_Experimental table_/, ""))}</h3>
+    <p class="note">${t.rows}행 × ${t.columns.length}열 · 한 행 = ${esc(tn.row_unit || "미확인")}${tn.note ? " · " + esc(tn.note) : ""}</p>
+    <div class="inner"><table><tr><th>열 이름</th><th>뜻</th><th>단위·형식</th><th>종류</th><th class="n">채움</th><th class="n">숫자 범위</th><th>${t.columns.some((c) => c.kind === "mixed") ? "대표 값 (혼합 열은 글자 값)" : "대표 값"}</th></tr>${rows}</table></div></div>`;
+}
+$("invDetails").innerHTML = invs.map((i) => {
+  const n = note(i.accession);
+  const folders = Object.entries(i.files_by_folder).sort((a, b) => b[1].bytes - a[1].bytes)
+    .map(([k, v]) => `${esc(k)} ${size(v.bytes)} (${num(v.files)}개)`).join(" · ");
+  const tl = i.text_lengths;
+  return `<details class="inv" id="inv-${esc(i.accession)}">
+    <summary><span class="id">${esc(i.accession)}</span><span class="nm">${esc(i.acronym || i.title)}</span><span class="sub">${esc(n.ko)}</span><span class="cnt">${i.tables.length ? i.tables.map((t) => `${t.rows}×${t.columns.length}`).join(", ") : "표 없음"}</span></summary>
+    <div class="body">
+      <dl class="kv">
+        <dt>정식 이름</dt><dd>${esc(i.title)}</dd>
+        <dt>PSI 페이지</dt><dd><a href="https://psi.nasa.gov/physci/repo/data/investigations/${esc(i.accession)}" target="_blank" rel="noopener">psi.nasa.gov/…/${esc(i.accession)}</a>${i.doi ? ` · DOI ${esc(i.doi)}` : ""}</dd>
+        <dt>유형 · 하위 분야</dt><dd>${esc(i.project_type)} · ${esc(i.sub_research_area || "(비어 있음)")}</dd>
+        <dt>플랫폼 · 장비</dt><dd>${esc(i.platform || "(비어 있음)")} · ${esc(i.hardware || "(비어 있음)")}</dd>
+        <dt>기간</dt><dd>${esc(i.start || "(비어 있음)")} – ${esc(i.end || "(비어 있음)")}</dd>
+        <dt>관련 실험</dt><dd>${esc(i.related || "–")}</dd>
+        <dt>설명 문단 길이</dt><dd>목적 ${num(tl.objective)}자 · 접근 ${num(tl.approach)}자 · 가설 ${num(tl.hypothesis)}자 · 영향 ${num(tl.researchImpacts)}자</dd>
+        <dt>논문</dt><dd>${i.publications}편 (DOI 있는 것 ${i.publications_with_doi}편)</dd>
+        <dt>파일</dt><dd>전체 ${size(i.total_bytes)} · ${folders || "–"}</dd>
+        <dt>라이선스</dt><dd>${esc(i.license || "(비어 있음)")}</dd>
+      </dl>
+      ${i.tables.length ? i.tables.map(tableBlock).join("") : `<p class="note">이 실험에는 시험 표가 없습니다.</p>`}
+    </div></details>`;
+}).join("");
+
+// ---- issues
+const groups = [...new Set(A.issues.map((x) => x.group))];
+$("issueList").innerHTML = groups.map((g) => `<div><h3>${esc(g)}</h3><ul>${A.issues.filter((x) => x.group === g)
+  .map((x) => `<li><b>${esc(x.title)}.</b> ${esc(x.detail)} <span class="where">${esc(x.where)}</span></li>`).join("")}</ul></div>`).join("");
+
+// ---- glossary
+$("gloss").innerHTML = A.glossary.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
+
+// open the investigation named in the link, e.g. #inv-PSI-69
+function fromHash() { const m = location.hash.match(/^#inv-(PSI-\d+)$/); if (m) openInv(m[1]); }
+window.addEventListener("hashchange", fromHash); fromHash();
+</script>
