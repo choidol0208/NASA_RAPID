@@ -1,14 +1,156 @@
 [
   {
-    "_example": "SHAPE ONLY, DRAFT. Placeholder values written by an AI assistant so the dashboard can be built before the real file exists. Do not display, cite or copy these values.",
+    "_example": "SHAPE ONLY, DRAFT. Placeholder values written by an AI assistant so the dashboard can be built and tested before or without the real file. Do not display, cite or copy these values. The real file is data/insights/cards.json; its fields are listed in contracts/README.md (From the pm role).",
     "investigation_id": "PSI-25",
-    "summary": "PLACEHOLDER SUMMARY. Two or three sentences written from the PSI record.",
+    "summary": "PLACEHOLDER. Quoted from the PSI record. Stated objective: \"PLACEHOLDER quote.\"",
+    "summary_sources": [
+      "PSI-25.objective"
+    ],
     "key_points": [
-      { "text": "PLACEHOLDER statement.", "source": "PSI-25.objective" },
-      { "text": "PLACEHOLDER statement.", "source": "doi:PLACEHOLDER" }
+      {
+        "text": "PLACEHOLDER. Stated hypothesis: \"PLACEHOLDER quote.\"",
+        "source": "PSI-25.hypothesis"
+      },
+      {
+        "text": "PLACEHOLDER. Impact statement in the record: \"PLACEHOLDER quote.\"",
+        "source": "PSI-25.researchImpacts"
+      }
+    ],
+    "ai_generated": false,
+    "model": "PLACEHOLDER",
+    "reviewed_by": null,
+    "updated": "PLACEHOLDER ISO time",
+    "built_by": "ai/build_baseline.py",
+    "status": "fallback_quote",
+    "record_title": "PLACEHOLDER",
+    "dataset_doi": "PLACEHOLDER",
+    "label": "PLACEHOLDER disclosure sentence.",
+    "license_note": "PLACEHOLDER",
+    "prompt_sha256": null,
+    "params": {},
+    "sentences": [
+      {
+        "role": "summary",
+        "origin": "quote",
+        "text": "PLACEHOLDER quote.",
+        "field_label": "Stated objective:",
+        "source": "PSI-25.objective",
+        "char_start": 0,
+        "char_end": 0,
+        "evidence": [
+          {
+            "id": "OBJ-1",
+            "source": "PSI-25.objective",
+            "quote": "PLACEHOLDER quote.",
+            "char_start": 0,
+            "char_end": 0
+          }
+        ],
+        "checks": {},
+        "lexical_support": null,
+        "shared_with": [],
+        "review": null
+      }
+    ],
+    "pick_rule": {}
+  },
+  {
+    "_example": "SHAPE ONLY, DRAFT. Placeholder values written by an AI assistant so the dashboard can be built and tested before or without the real file. Do not display, cite or copy these values. The real file is data/insights/cards.json; its fields are listed in contracts/README.md (From the pm role).",
+    "investigation_id": "PSI-159",
+    "summary": "PLACEHOLDER model sentence. (PSI-159 record: objective) Stated hypothesis: \"PLACEHOLDER quote that fills the slot of a removed sentence.\"",
+    "summary_sources": [
+      "PSI-159.objective",
+      "PSI-159.hypothesis"
+    ],
+    "key_points": [
+      {
+        "text": "Stated objective: \"PLACEHOLDER quote.\"",
+        "source": "PSI-159.objective"
+      }
     ],
     "ai_generated": true,
-    "model": "PLACEHOLDER",
-    "reviewed_by": null
+    "model": "PLACEHOLDER model string",
+    "reviewed_by": null,
+    "updated": "PLACEHOLDER ISO time",
+    "built_by": "ai/apply_cards.py",
+    "status": "generated_partial",
+    "record_title": "PLACEHOLDER",
+    "dataset_doi": "PLACEHOLDER",
+    "label": "PLACEHOLDER disclosure sentence.",
+    "license_note": "PLACEHOLDER",
+    "prompt_sha256": "PLACEHOLDER",
+    "params": {
+      "sentences_proposed": 0,
+      "sentences_shipped": 0,
+      "sentences_removed_by_prereview": 0
+    },
+    "pick_rule": {},
+    "removed_before_review": [
+      {
+        "n": 1,
+        "sentence": "PLACEHOLDER removed sentence.",
+        "reason": "PLACEHOLDER reason.",
+        "reviewer_kind": "ai_session_pm",
+        "replaced_by": "PSI-159.hypothesis"
+      }
+    ],
+    "sentences": [
+      {
+        "role": "summary",
+        "origin": "model",
+        "n": 0,
+        "text": "PLACEHOLDER model sentence. (PSI-159 record: objective)",
+        "field_label": null,
+        "cited_fields": [
+          "objective"
+        ],
+        "evidence": [
+          {
+            "id": "OBJ-1",
+            "source": "PSI-159.objective",
+            "quote": "PLACEHOLDER exact unit text taken by code.",
+            "char_start": 0,
+            "char_end": 0,
+            "quote_from": "evidence.json unit text, taken by code",
+            "field": "objective",
+            "model_quote": "PLACEHOLDER model copy, not for display."
+          }
+        ],
+        "checks": {},
+        "lexical_support": null,
+        "shared_with": [],
+        "repaired": false,
+        "first_pass_reasons": [],
+        "review": null
+      },
+      {
+        "role": "summary",
+        "origin": "quote",
+        "n": 1,
+        "text": "PLACEHOLDER quote that fills the slot of a removed sentence.",
+        "field_label": "Stated hypothesis:",
+        "source": "PSI-159.hypothesis",
+        "char_start": 0,
+        "char_end": 0,
+        "evidence": [
+          {
+            "id": "HYP-1",
+            "source": "PSI-159.hypothesis",
+            "quote": "PLACEHOLDER quote that fills the slot of a removed sentence.",
+            "char_start": 0,
+            "char_end": 0
+          }
+        ],
+        "checks": {},
+        "lexical_support": null,
+        "shared_with": [],
+        "review": null,
+        "replaces": {
+          "n": 1,
+          "removed_by": "ai/review/pm_prereview.json",
+          "reviewer_kind": "ai_session_pm"
+        }
+      }
+    ]
   }
 ]

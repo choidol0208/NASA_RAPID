@@ -1,0 +1,2905 @@
+[
+ {
+  "id": "iss",
+  "query": "ISS",
+  "ranking_source": "scoring.scorer.rank",
+  "frame": "For the ISS cabin scenario, the oxygen and pressure recorded for each test are compared with the team bins (oxygen 19 to 23%, pressure 85.8 to below 116.8 kPa); the bins are the team's choice. A test whose table holds no pressure value, or no oxygen value, is reported apart and is never placed inside a bin. The scenario also sets a flow range (5 to 30 cm/s); the flow speed of the matched tests is compared with it and does not change the counts. A test is counted for a need only if its investigation's PSI record states that need as an objective (objective sentences are linked to needs by the team pipeline). Inverse-flame tests, whose oxygen value is the burner stream (the gas issuing from the burner, not the surrounding atmosphere), are never matched to a crew atmosphere. Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
+  "frame_sources": [
+   "pipeline/spec/scenarios.json#iss"
+  ],
+  "frame_facts": {
+   "team_bins": {
+    "o2_pct": {
+     "min": 19,
+     "max": 23
+    },
+    "pressure_kpa": {
+     "min": 85.8,
+     "max": 116.8
+    },
+    "flow_cms": {
+     "min": 5,
+     "max": 30
+    }
+   }
+  },
+  "result_notes": [
+   {
+    "investigation_id": "PSI-25",
+    "text": "Solid-fuel configuration (team catalog classification). None of its 129 tests with recorded ambient oxygen has oxygen and pressure inside this scenario's team bins; 51 have recorded oxygen inside the bins and no pressure value the count can use; pressure is not a column in the PSI experimental table of PSI-25 (BASS-II). The team pipeline links needs P1 (Flammability limit), P2 (Ignition), P3 (Flame spread and growth) and S1 (Extinction conditions) to objectives stated in this record. Tied with BASS and SAFFIRE-III under the team's current weights. The catalog reports no pressure for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value.",
+    "sources": [
+     "data/catalog/configurations.csv#BASS-II-C01",
+     "pipeline/spec/sources.json#bass2",
+     "data/pipeline/scenario_tests.csv#iss",
+     "data/pipeline/objective_links.csv#P1/PSI-25",
+     "PSI-25.objective",
+     "data/pipeline/objective_links.csv#P2/PSI-25",
+     "data/pipeline/objective_links.csv#P3/PSI-25",
+     "data/pipeline/objective_links.csv#S1/PSI-25",
+     "scoring/scoring_config.json#atmosphere_fallback"
+    ],
+    "facts": {
+     "tests_ambient_o2": 129,
+     "tests_atmosphere": 0,
+     "tests_oxygen_only": 51,
+     "pressure_kpa_not_a_column_tests": 129,
+     "needs_stated": [
+      "P1",
+      "P2",
+      "P3",
+      "S1"
+     ]
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:solid",
+     "row_unit:test",
+     "tie",
+     "assumed_dims"
+    ],
+    "config_id": "BASS-II-C01"
+   },
+   {
+    "investigation_id": "PSI-26",
+    "text": "Solid-fuel configuration (team catalog classification). Its PSI table lists 121 tests, and oxygen and pressure are not columns in it, so none can be matched to this scenario's team bins. The team pipeline links needs P1 (Flammability limit) and S1 (Extinction conditions) to objectives stated in this record. Tied with BASS-II and SAFFIRE-III under the team's current weights. The catalog reports no oxygen or pressure for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value.",
+    "sources": [
+     "data/catalog/configurations.csv#BASS-C01",
+     "pipeline/spec/sources.json#bass",
+     "data/pipeline/scenario_tests.csv#iss",
+     "data/pipeline/objective_links.csv#P1/PSI-26",
+     "PSI-26.objective",
+     "data/pipeline/objective_links.csv#S1/PSI-26",
+     "scoring/scoring_config.json#atmosphere_fallback"
+    ],
+    "facts": {
+     "tests": 121,
+     "needs_stated": [
+      "P1",
+      "S1"
+     ]
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:solid",
+     "row_unit:test",
+     "tie",
+     "assumed_dims"
+    ],
+    "config_id": "BASS-C01"
+   },
+   {
+    "investigation_id": "PSI-99",
+    "text": "Solid-fuel configuration (team catalog classification). None of its 9 tests with recorded ambient oxygen has oxygen and pressure inside this scenario's team bins; 9 have recorded oxygen inside the bins and no pressure value the count can use; pressure is not a column in the PSI experimental table of PSI-99 (SAFFIRE-II) (the PSI record of PSI-99 says pressure was measured; the value is not in the table). The team pipeline links needs P1 (Flammability limit) and P3 (Flame spread and growth) to objectives stated in this record. Tied with SAFFIRE-I under the team's current weights. The catalog reports no pressure for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value.",
+    "sources": [
+     "data/catalog/configurations.csv#SAFFIRE-II-C01",
+     "pipeline/spec/sources.json#saffire2",
+     "data/pipeline/scenario_tests.csv#iss",
+     "PSI-99.approach",
+     "data/pipeline/objective_links.csv#P1/PSI-99",
+     "PSI-99.objective",
+     "data/pipeline/objective_links.csv#P3/PSI-99",
+     "scoring/scoring_config.json#atmosphere_fallback"
+    ],
+    "facts": {
+     "tests_ambient_o2": 9,
+     "tests_atmosphere": 0,
+     "tests_oxygen_only": 9,
+     "pressure_kpa_not_a_column_tests": 9,
+     "pressure_measured_per_record": {
+      "PSI-99": "APP-8"
+     },
+     "needs_stated": [
+      "P1",
+      "P3"
+     ]
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:solid",
+     "row_unit:test",
+     "tie",
+     "assumed_dims"
+    ],
+    "config_id": "SAFFIRE-II-C01"
+   },
+   {
+    "investigation_id": "PSI-100",
+    "text": "Solid-fuel configuration (team catalog classification). Its PSI table lists 2 tests, and oxygen and pressure are not columns in it, so none can be matched to this scenario's team bins. The team pipeline links needs P1 (Flammability limit) and P3 (Flame spread and growth) to objectives stated in this record. Tied with BASS-II and BASS under the team's current weights. Listed because its team score is level with or close to the results shown, under the team's current weights. The catalog reports no oxygen or pressure for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value.",
+    "sources": [
+     "data/catalog/configurations.csv#SAFFIRE-III-C01",
+     "pipeline/spec/sources.json#saffire3",
+     "data/pipeline/scenario_tests.csv#iss",
+     "data/pipeline/objective_links.csv#P1/PSI-100",
+     "PSI-100.objective",
+     "data/pipeline/objective_links.csv#P3/PSI-100",
+     "scoring/scoring_config.json#atmosphere_fallback"
+    ],
+    "facts": {
+     "tests": 2,
+     "needs_stated": [
+      "P1",
+      "P3"
+     ]
+    },
+    "text_origin": "template",
+    "status": "near_tie",
+    "rule": [
+     "phase:solid",
+     "row_unit:test",
+     "tie",
+     "near_tie",
+     "assumed_dims"
+    ],
+    "config_id": "SAFFIRE-III-C01"
+   },
+   {
+    "investigation_id": "PSI-98",
+    "text": "Solid-fuel configuration (team catalog classification). None of its 2 tests with recorded ambient oxygen has oxygen and pressure inside this scenario's team bins; 2 have recorded oxygen inside the bins and no pressure value the count can use; pressure is not a column in the PSI experimental table of PSI-98 (SAFFIRE-I) (the PSI record of PSI-98 says pressure was measured; the value is not in the table). The team pipeline links needs P1 (Flammability limit) and P3 (Flame spread and growth) to objectives stated in this record. Tied with SAFFIRE-II under the team's current weights. Listed because its team score is level with or close to the results shown, under the team's current weights. The catalog reports no pressure for this configuration; for the ranking only, the scorer assumed ordinary cabin air (a team assumption, not a recorded value). The counts on this page never fill in a missing value.",
+    "sources": [
+     "data/catalog/configurations.csv#SAFFIRE-I-C01",
+     "pipeline/spec/sources.json#saffire1",
+     "data/pipeline/scenario_tests.csv#iss",
+     "PSI-98.approach",
+     "data/pipeline/objective_links.csv#P1/PSI-98",
+     "PSI-98.objective",
+     "data/pipeline/objective_links.csv#P3/PSI-98",
+     "scoring/scoring_config.json#atmosphere_fallback"
+    ],
+    "facts": {
+     "tests_ambient_o2": 2,
+     "tests_atmosphere": 0,
+     "tests_oxygen_only": 2,
+     "pressure_kpa_not_a_column_tests": 2,
+     "pressure_measured_per_record": {
+      "PSI-98": "APP-9"
+     },
+     "needs_stated": [
+      "P1",
+      "P3"
+     ]
+    },
+    "text_origin": "template",
+    "status": "near_tie",
+    "rule": [
+     "phase:solid",
+     "row_unit:test",
+     "tie",
+     "near_tie",
+     "assumed_dims"
+    ],
+    "config_id": "SAFFIRE-I-C01"
+   }
+  ],
+  "needs": [
+   {
+    "need_id": "P1",
+    "need": "Flammability limit",
+    "statement": "Recorded tests (team count; team bins: oxygen 19 to 23%, pressure 85.8 to below 116.8 kPa). 58 of the 136 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges. The 58 by investigation: PSI-25 (BASS-II) 47, PSI-99 (SAFFIRE-II) 9, PSI-98 (SAFFIRE-I) 2. Pressure is not a column in the PSI experimental tables of PSI-25 (BASS-II), PSI-98 (SAFFIRE-I) and PSI-99 (SAFFIRE-II) (the PSI records of PSI-98 and PSI-99 say pressure was measured; the value is not in the table). All 58 are solid-material tests. Added carbon dioxide or helium is not a column in the PSI experimental tables of PSI-25 (BASS-II), PSI-98 (SAFFIRE-I) and PSI-99 (SAFFIRE-II), so the balance gas of 58 tests is not in the table (the table of PSI-25 (BASS-II) has measured initial and final carbon dioxide readings, which the team pipeline does not read as added gas). Flow speed of the 58 tests with oxygen inside the range and pressure inside the range or not in the table: inside the flow range of this environment in 48 tests; not recorded in 1 test. The other 9 were recorded with a flow speed outside that range. What a count of this need means (the pipeline's reading): A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#iss/P1",
+     "pipeline/spec/scenarios.json#iss",
+     "data/pipeline/evidence/scenario_iss.json#P1/status.oxygen_only",
+     "PSI-98.approach",
+     "PSI-99.approach",
+     "pipeline/spec/sources.json#bass2",
+     "pipeline/spec/sources.json#saffire1",
+     "pipeline/spec/sources.json#saffire2",
+     "data/pipeline/evidence/scenario_iss.json#P1/flow.compared",
+     "data/pipeline/evidence/scenario_iss.json#P1/need.reading",
+     "data/pipeline/objective_links.csv#P1/PSI-25",
+     "PSI-25.objective",
+     "data/pipeline/objective_links.csv#P1/PSI-98",
+     "PSI-98.objective",
+     "data/pipeline/objective_links.csv#P1/PSI-99",
+     "PSI-99.objective"
+    ],
+    "status": "oxygen_only",
+    "facts": {
+     "usable_tests": 136,
+     "team_bins": {
+      "o2_pct": {
+       "min": 19,
+       "max": 23
+      },
+      "pressure_kpa": {
+       "min": 85.8,
+       "max": 116.8
+      },
+      "flow_cms": {
+       "min": 5,
+       "max": 30
+      }
+     },
+     "pressure_kpa_not_a_column_tests": 58,
+     "pressure_measured_per_record": {
+      "PSI-98": "APP-9",
+      "PSI-99": "APP-8"
+     },
+     "tests_oxygen_only": 58,
+     "oxygen_only_by_investigation": {
+      "PSI-25": 47,
+      "PSI-99": 9,
+      "PSI-98": 2
+     },
+     "balance_not_a_column": 58,
+     "matched_tests": 58,
+     "matched_flow_in_range": 48,
+     "matched_flow_not_recorded": 1,
+     "matched_flow_outside_range": 9
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:oxygen_only",
+     "pipeline:status.oxygen_only",
+     "clause:phase",
+     "clause:balance_gas",
+     "pipeline:flow.compared",
+     "clause:flow_outside",
+     "gap:pressure:not_recorded",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "P2",
+    "need": "Ignition",
+    "statement": "Recorded tests (team count; team bins: oxygen 19 to 23%, pressure 85.8 to below 116.8 kPa). No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective. What a count of this need means (the pipeline's reading): A counted test would record the material, the oxygen and an ignition result. No mapped table records one for a solid fuel.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#iss/P2",
+     "pipeline/spec/scenarios.json#iss",
+     "data/pipeline/evidence/scenario_iss.json#P2/status.not_measured",
+     "pipeline/spec/needs.json#P2",
+     "data/pipeline/evidence/scenario_iss.json#P2/need.reading"
+    ],
+    "status": "not_measured",
+    "facts": {
+     "usable_tests": 0,
+     "team_bins": {
+      "o2_pct": {
+       "min": 19,
+       "max": 23
+      },
+      "pressure_kpa": {
+       "min": 85.8,
+       "max": 116.8
+      },
+      "flow_cms": {
+       "min": 5,
+       "max": 30
+      }
+     },
+     "investigations_in_psi": 24
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:not_measured",
+     "pipeline:status.not_measured",
+     "gap:need:no_usable_test",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "P3",
+    "need": "Flame spread and growth",
+    "statement": "Recorded tests (team count; team bins: oxygen 19 to 23%, pressure 85.8 to below 116.8 kPa). 11 of the 11 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges. The 11 by investigation: PSI-99 (SAFFIRE-II) 9, PSI-98 (SAFFIRE-I) 2. Pressure is not a column in the PSI experimental tables of PSI-98 (SAFFIRE-I) and PSI-99 (SAFFIRE-II) (the PSI records of PSI-98 and PSI-99 say pressure was measured; the value is not in the table). All 11 are solid-material tests. Added carbon dioxide or helium is not a column in the PSI experimental tables of PSI-98 (SAFFIRE-I) and PSI-99 (SAFFIRE-II), so the balance gas of 11 tests is not in the table. Flow speed of the 11 tests with oxygen inside the range and pressure inside the range or not in the table: inside the flow range of this environment in 11 tests; not recorded in 0 tests. What a count of this need means (the pipeline's reading): A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. Most counted tests record a length or a time and no spread rate; a burn time or a burn length is not a spread rate.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#iss/P3",
+     "pipeline/spec/scenarios.json#iss",
+     "data/pipeline/evidence/scenario_iss.json#P3/status.oxygen_only",
+     "PSI-98.approach",
+     "PSI-99.approach",
+     "pipeline/spec/sources.json#saffire1",
+     "pipeline/spec/sources.json#saffire2",
+     "data/pipeline/evidence/scenario_iss.json#P3/flow.compared",
+     "data/pipeline/evidence/scenario_iss.json#P3/need.reading",
+     "data/pipeline/objective_links.csv#P3/PSI-98",
+     "PSI-98.objective",
+     "data/pipeline/objective_links.csv#P3/PSI-99",
+     "PSI-99.objective"
+    ],
+    "status": "oxygen_only",
+    "facts": {
+     "usable_tests": 11,
+     "team_bins": {
+      "o2_pct": {
+       "min": 19,
+       "max": 23
+      },
+      "pressure_kpa": {
+       "min": 85.8,
+       "max": 116.8
+      },
+      "flow_cms": {
+       "min": 5,
+       "max": 30
+      }
+     },
+     "pressure_kpa_not_a_column_tests": 11,
+     "pressure_measured_per_record": {
+      "PSI-98": "APP-9",
+      "PSI-99": "APP-8"
+     },
+     "tests_oxygen_only": 11,
+     "oxygen_only_by_investigation": {
+      "PSI-99": 9,
+      "PSI-98": 2
+     },
+     "balance_not_a_column": 11,
+     "matched_tests": 11,
+     "matched_flow_in_range": 11,
+     "matched_flow_not_recorded": 0
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:oxygen_only",
+     "pipeline:status.oxygen_only",
+     "clause:phase",
+     "clause:balance_gas",
+     "pipeline:flow.compared",
+     "gap:pressure:not_recorded",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "S1",
+    "need": "Extinction conditions",
+    "statement": "Recorded tests (team count; team bins: oxygen 19 to 23%, pressure 85.8 to below 116.8 kPa). 56 of the 299 tests counted for this need were recorded with oxygen and pressure both inside the ranges of this environment. All 56 come from PSI-69 (FLEX). A further 8 have recorded oxygen inside the bins and no pressure value the count can use (PSI-25 (BASS-II) 7, PSI-69 (FLEX) 1); pressure is not a column in the PSI experimental table of PSI-25 (BASS-II); the pressure cell of 1 test in the PSI experimental table of PSI-69 (FLEX) reads '0' (column 'Ambient pressure; mmHg'), which the team pipeline flags as out of range and does not use as a pressure. All 56 are fuel-droplet tests; none is a solid-material test. Of these 56, 27 have carbon dioxide or helium added to the atmosphere (20 carbon dioxide, 7 helium); the other 29 have recorded carbon dioxide and helium fractions of zero. Recorded test ends of these 56: 34 extinction, 17 disruption, 5 completion. 'Disruption' and 'extinction' are separate values of the table's 'Test end' column; a disruption is not read here as a flame extinction. Flow speed of the 64 tests with oxygen inside the range and pressure inside the range or not in the table: inside the flow range of this environment in 7 tests; not recorded in 57 tests. 272 further tests record the needed variables, but the investigation (PSI-159) does not state this need as an objective; they are not counted. These include inverse-flame tests, whose oxygen value is the burner stream and not an atmosphere. What a count of this need means (the pipeline's reading): A counted test records the fuel, the oxygen and how the burn ended or an event word. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#iss/S1",
+     "pipeline/spec/scenarios.json#iss",
+     "data/pipeline/evidence/scenario_iss.json#S1/status.in_atmosphere",
+     "pipeline/spec/sources.json#bass2",
+     "pipeline/spec/sources.json#flex",
+     "data/pipeline/tests.csv#FLEX-114",
+     "data/pipeline/evidence/scenario_iss.json#S1/flow.compared",
+     "data/pipeline/need_tests.csv#S1",
+     "data/pipeline/evidence/scenario_iss.json#S1/need.reading",
+     "data/pipeline/objective_links.csv#S1/PSI-25",
+     "PSI-25.objective",
+     "data/pipeline/objective_links.csv#S1/PSI-69",
+     "PSI-69.objective"
+    ],
+    "status": "in_atmosphere",
+    "facts": {
+     "usable_tests": 299,
+     "team_bins": {
+      "o2_pct": {
+       "min": 19,
+       "max": 23
+      },
+      "pressure_kpa": {
+       "min": 85.8,
+       "max": 116.8
+      },
+      "flow_cms": {
+       "min": 5,
+       "max": 30
+      }
+     },
+     "tests_atmosphere": 56,
+     "atmosphere_by_investigation": {
+      "PSI-69": 56
+     },
+     "pressure_kpa_not_a_column_tests": 7,
+     "pressure_kpa_flagged_not_used": 1,
+     "pressure_kpa_flag": "out_of_range",
+     "pressure_kpa_cells_as_written": [
+      "0"
+     ],
+     "pressure_kpa_cells_as_numbers": [
+      0
+     ],
+     "tests_oxygen_only": 8,
+     "oxygen_only_by_investigation": {
+      "PSI-25": 7,
+      "PSI-69": 1
+     },
+     "balance_diluted": 27,
+     "balance_co2_added": 20,
+     "balance_he_added": 7,
+     "balance_zero": 29,
+     "test_end_extinction": 34,
+     "test_end_disruption": 17,
+     "test_end_completion": 5,
+     "matched_tests": 64,
+     "matched_flow_in_range": 7,
+     "matched_flow_not_recorded": 57,
+     "tests_recorded_outside_objective": 272,
+     "outside_objective_investigations": [
+      "PSI-159"
+     ],
+     "outside_objective_includes_inverse_flames": true
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:in_atmosphere",
+     "pipeline:status.in_atmosphere",
+     "clause:further_oxygen_only",
+     "clause:phase",
+     "clause:balance_gas",
+     "clause:test_end",
+     "pipeline:flow.compared",
+     "clause:outside_objective_inverse_flames",
+     "clause:outside_objective",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "D1",
+    "need": "Combustion products",
+    "statement": "Recorded tests (team count; team bins: oxygen 19 to 23%, pressure 85.8 to below 116.8 kPa). No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective. 126 tests record the needed variables, but the investigations (PSI-25 and PSI-102) do not state this need as an objective; they are not counted. What a count of this need means (the pipeline's reading): A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading, or a mass loss rate. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#iss/D1",
+     "pipeline/spec/scenarios.json#iss",
+     "data/pipeline/evidence/scenario_iss.json#D1/status.not_measured",
+     "pipeline/spec/needs.json#D1",
+     "data/pipeline/need_tests.csv#D1",
+     "data/pipeline/evidence/scenario_iss.json#D1/need.reading"
+    ],
+    "status": "not_measured",
+    "facts": {
+     "usable_tests": 0,
+     "team_bins": {
+      "o2_pct": {
+       "min": 19,
+       "max": 23
+      },
+      "pressure_kpa": {
+       "min": 85.8,
+       "max": 116.8
+      },
+      "flow_cms": {
+       "min": 5,
+       "max": 30
+      }
+     },
+     "investigations_in_psi": 24,
+     "tests_recorded_outside_objective": 126,
+     "outside_objective_investigations": [
+      "PSI-25",
+      "PSI-102"
+     ]
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:not_measured",
+     "pipeline:status.not_measured",
+     "gap:need:no_usable_test",
+     "clause:outside_objective",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "D2",
+    "need": "Smoke generation conditions",
+    "statement": "Recorded tests (team count; team bins: oxygen 19 to 23%, pressure 85.8 to below 116.8 kPa). None of the 4 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table. Oxygen is not a column in the PSI experimental table of PSI-102 (SAME). Pressure is not a column in the PSI experimental table of PSI-102 (SAME). What a count of this need means (the pipeline's reading): A counted test records the material, the flow speed, the aging time and the mass loss rate of the heated sample. No particle size or detector response is in the mapped tables.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#iss/D2",
+     "pipeline/spec/scenarios.json#iss",
+     "data/pipeline/evidence/scenario_iss.json#D2/status.other_atmosphere",
+     "pipeline/spec/sources.json#same",
+     "data/pipeline/evidence/scenario_iss.json#D2/need.reading",
+     "data/pipeline/objective_links.csv#D2/PSI-102",
+     "PSI-102.objective"
+    ],
+    "status": "other_atmosphere",
+    "facts": {
+     "usable_tests": 4,
+     "team_bins": {
+      "o2_pct": {
+       "min": 19,
+       "max": 23
+      },
+      "pressure_kpa": {
+       "min": 85.8,
+       "max": 116.8
+      },
+      "flow_cms": {
+       "min": 5,
+       "max": 30
+      }
+     },
+     "ranges_compared": 2,
+     "o2_pct_not_a_column_tests": 4,
+     "pressure_kpa_not_a_column_tests": 4
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:other_atmosphere",
+     "pipeline:status.other_atmosphere",
+     "gap:oxygen:not_recorded",
+     "gap:pressure:not_recorded",
+     "pipeline:need.reading"
+    ]
+   }
+  ],
+  "gaps": [
+   {
+    "text": "In the PSI experimental tables of the 24 investigations, no solid-sample test has a recorded oxygen value above 22.2%, and pressure is not a column in any solid-sample table. Oxygen is not a column in the solid-sample tables of PSI-26 (BASS), PSI-100 (SAFFIRE-III), PSI-101 (SAME-R) and PSI-102 (SAME). Outside PSI, Table 1 of the paper 'Preliminary Results from the Saffire VI Experiment' (ICES-2024-365) lists the sample test conditions of the five Saffire IV to VI samples considered in that paper; sample IV-1 (22.0 mol % oxygen, 100.0 kPa) is inside this scenario's team bins. None of the 24 PSI investigations used here is one of these flights, and these samples are not in any count on this page. The table was read by an AI assistant and not checked by a person.",
+    "needed_data": "test-level records in PSI for solid samples with both oxygen and pressure at these atmospheres",
+    "sources": [
+     "data/pipeline/tests.csv#BASS2-O2",
+     "pipeline/spec/sources.json#bass",
+     "pipeline/spec/sources.json#bass2",
+     "pipeline/spec/sources.json#saffire1",
+     "pipeline/spec/sources.json#saffire2",
+     "pipeline/spec/sources.json#saffire3",
+     "pipeline/spec/sources.json#same",
+     "pipeline/spec/sources.json#same_r",
+     "pipeline/spec/references.json#SAF456.conditions"
+    ],
+    "rule": "solid_at_atmosphere",
+    "status": "from_rule",
+    "facts": {
+     "investigations_in_psi": 24,
+     "solid_tests": 376,
+     "solid_tests_with_pressure": 0,
+     "max_solid_o2": 22.2,
+     "max_solid_o2_test": "BASS2-O2",
+     "solid_tables_without_oxygen_column": [
+      "bass",
+      "saffire3",
+      "same_r",
+      "same"
+     ],
+     "needs": [
+      "P1",
+      "P3",
+      "D2"
+     ],
+     "saffire_samples_inside_team_bins": [
+      "IV-1"
+     ],
+     "saffire_sample_conditions_o2_mol_pct_kpa": [
+      [
+       22.0,
+       100.0
+      ]
+     ],
+     "saffire_samples_in_table": 5,
+     "saffire_table_number": 1,
+     "saffire_flights_among_the_psi_investigations": [],
+     "saffire_samples_counted": 0
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "The 56 tests inside this scenario's team bins for extinction conditions (S1) are all fuel-droplet tests (PSI-69 (FLEX)); none is a solid-material or gas-burner test.",
+    "needed_data": "test-level records in PSI of extinction tests with solid materials or gas flames, with oxygen and pressure inside these bins",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#iss/S1"
+    ],
+    "rule": "s1_phase_droplets_only",
+    "status": "from_rule",
+    "facts": {
+     "s1_tests_atmosphere": 56,
+     "investigations": [
+      "PSI-69"
+     ]
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "For detection, the 4 smoke tests counted for smoke generation conditions (D2, PSI-102) have neither oxygen nor pressure in the table, and the team pipeline finds no investigation among the 24 whose PSI record states the measurement of combustion products (D1) as an objective. The NASA workshop report NASA/CP-2003-212103 describes knowledge of the fire signatures of spacecraft materials, and of the effect of low gravity on them, as inadequate for detection systems (CP2003.detection).",
+    "needed_data": "test-level records in PSI of smoke and combustion-product measurements with the oxygen and pressure of the test atmosphere",
+    "sources": [
+     "pipeline/spec/references.json#CP2003.detection",
+     "data/pipeline/scenario_needs.csv#iss/D2",
+     "data/pipeline/scenario_needs.csv#iss/D1",
+     "pipeline/spec/sources.json#same"
+    ],
+    "rule": "detection",
+    "status": "from_rule",
+    "facts": {
+     "d2_usable_tests": 4,
+     "d2_investigations": [
+      "PSI-102"
+     ],
+     "d2_oxygen_and_pressure_not_columns": true,
+     "d1_not_measured": true,
+     "d1_stated_as_objective_by_any_investigation": false,
+     "investigations_in_psi": 24
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "Post-fire clean-up: Fourth capability area in the NASA fire protection brief; the PSI tables hold no clean-up or atmosphere-recovery measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#TB008.areas"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Extinguishing agent transport and distribution: Listed as needed knowledge in NASA/CP-2003-212103; the PSI tables hold no agent-delivery measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.response"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Material flammability in partial gravity: Named a major gap; every test in the PSI tables is a microgravity test.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#TB008.gaps"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Toxic combustion products other than carbon monoxide (HCN, HCl, HF): Required monitoring targets; the PSI tables record carbon monoxide and carbon dioxide only.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#3001.T6.2-3"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Fire signatures other than combustion gases and smoke: temperature rise, light and other radiation, pressure rise, acoustic waves: Listed among the signatures detectors respond to; no standard variable of the pipeline (variables.json) holds one of them.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#TB008.signatures"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Transport of fire precursors: Named as inadequately known in NASA/CP-2003-212103; no standard variable holds a transport measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.detection"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Smoke particle size and smoke detector response: Published by the SAME investigators (SAME.sizes, SAME.detector); the PSI experimental tables of SAME and SAME-R hold the test conditions only.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#SAME.sizes"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Combustion by-products of extinguishing agents: Listed as needed knowledge (by-products of fires and agents; see also TB008.agent); the mapped tables hold no product reading for a test with an agent.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.response"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Location of a fire in the vehicle: Named among the initial conditions a response depends on; no standard variable holds where in a vehicle a fire is.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.initial"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Transfer of burning debris to adjacent materials: Part of the Test 1 acceptance criterion; no standard variable holds it.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#6001B.T1.pass"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {
+     "numerals_as_written_in_needs_json": [
+      1
+     ]
+    },
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Ignition-source control: Named under prevention in the challenge statement (read from a copy); the mapped tables hold igniter settings of single tests and nothing about ignition sources in a vehicle, and need P2 has no counted test.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CH.pillars"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Heat release of a fire: The record says the results 'are used in first order models and predictions of heat release in spacecraft fires'; no standard variable holds a heat release.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "PSI-26.researchImpacts"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   }
+  ],
+  "ai_generated": false,
+  "text_origin": "template",
+  "frame_text_origin": "template",
+  "model": "none: counts and fixed sentences filled by team code",
+  "built_by": "ai/build_baseline.py",
+  "reviewed_by": null,
+  "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
+  "updated": "2026-11-14T14:51:24+09:00",
+  "fresh": {
+   "ranker_config_version": "1.0.0",
+   "scoring_config_sha256": "09a2ac8dabe2eb63bf73bc9836034238652fde510b510d97b5081aec9c455567",
+   "catalog_sha256": "19853b004b6a05be5ed45847e1511f3e171a1f3acbbdbfdab2de68c9b762fbc4",
+   "scenario_inputs_sha256": "087063c4fd10eb8d2d719943b607f71dbf0009562abd42d746ec3bcabfbb5606",
+   "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
+  }
+ },
+ {
+  "id": "lunar_habitat",
+  "query": "lunar habitat",
+  "ranking_source": "scoring.scorer.rank",
+  "frame": "For the Lunar base or pressurized rover scenario, the oxygen and pressure recorded for each test are compared with the team bins (oxygen 30 to 36%, pressure below 85.8 kPa); the bins are the team's choice. A test whose table holds no pressure value, or no oxygen value, is reported apart and is never placed inside a bin. The challenge statement names 30% oxygen or more and 10.2 psi (70.3 kPa) or less as the expected Moon Base atmosphere (CH.moonbase, read from a copy); the team's pressure bin is wider than that. No counted test was recorded at 30% oxygen or more and at or below 10.2 psi: the 17 counted tests inside the bins are fuel-droplet tests recorded at 30 to 34% oxygen and 71.2 to 72.4 kPa (about 0.7 atm), 1 to 2 kPa above it. A test is counted for a need only if its investigation's PSI record states that need as an objective (objective sentences are linked to needs by the team pipeline). Inverse-flame tests, whose oxygen value is the burner stream (the gas issuing from the burner, not the surrounding atmosphere), are never matched to a crew atmosphere. Every test in the PSI test tables is a microgravity test (gravity level set per table by the team from the PSI record); the tables hold no partial-gravity test, and microgravity and 1 g results are not shown here as bounds for lunar or Martian gravity. NASA's fire protection technical brief OCHMO-TB-008 says: \"Material flammability in partial gravity remains a major gap for exploration missions.\" (TB008.gaps). Outside PSI, Table I of a paper on the NASA Technical Reports Server (Olson and Ferkul, NTRS-20130010991) gives limiting oxygen concentrations (the oxygen level below which the flame did not keep burning in the test) for three materials; for each of them, both limits at lunar gravity are lower than those at 1 g and at 0 g. These low-gravity limits come from 5.18 s drop-tower tests, and the paper says their extinction criteria are not the same as in 1 g; the table was read by an AI assistant and not checked by a person (OF2012.table1). Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
+  "frame_sources": [
+   "pipeline/spec/scenarios.json#lunar_habitat",
+   "pipeline/spec/references.json#CH.moonbase",
+   "pipeline/spec/scenarios.json#scenarios.1.note",
+   "data/pipeline/tests.csv#FLEX-25",
+   "data/pipeline/tests.csv#FLEX-39",
+   "data/pipeline/tests.csv#FLEX-37",
+   "data/pipeline/tests.csv#FLEX-24",
+   "pipeline/spec/references.json#TB008.gaps",
+   "pipeline/spec/references.json#OF2012.table1"
+  ],
+  "frame_facts": {
+   "team_bins": {
+    "o2_pct": {
+     "min": 30,
+     "max": 36
+    },
+    "pressure_kpa": {
+     "max": 85.8
+    }
+   },
+   "challenge_bound": {
+    "o2_pct_min": 30,
+    "pressure_psi_max": 10.2,
+    "pressure_kpa": 70.3,
+    "psi_to_kpa": 6.894757
+   },
+   "tests_with_these_values": 17,
+   "recorded_o2_pct": {
+    "min": 30.0,
+    "max": 34.0
+   },
+   "recorded_pressure_kpa_as_shown": {
+    "min": 71.2,
+    "max": 72.4
+   },
+   "recorded_pressure_kpa_in_tests_csv": {
+    "FLEX-37": 71.2341,
+    "FLEX-24": 72.3674
+   },
+   "counted_tests_at_or_below_challenge_bound": 0,
+   "recorded_pressure_atm_rounded": 0.7,
+   "kpa_above_challenge_bound_rounded": [
+    1,
+    2
+   ],
+   "counted_tests_inside_bins": 17,
+   "tests_not_microgravity": 0,
+   "of2012_gravity_level": "lunar",
+   "of2012_lower_than_one_g": "every",
+   "of2012_lower_than_one_g_and_zero_g": "every",
+   "of2012_rows_compared": "every row of values.rows of the item (one row per material)",
+   "of2012_rule": "both limits of the material (ULOI*, MOC*) at this gravity level are lower",
+   "of2012_materials_in_table": 3,
+   "of2012_fig6_averages_used": false,
+   "of2012_drop_seconds": 5.18
+  },
+  "result_notes": [
+   {
+    "investigation_id": "PSI-20",
+    "text": "Gas-burner flame study whose burner emulates condensed fuels; not a test of solid cabin materials (team catalog classification). PSI's table for this investigation has one row per test day (18 test days, 194 flames ignited in all), so its tests cannot be matched one by one: the oxygen concentrations listed (approximate, for the tests that ignited, as the table's notes say) run from 21 to 40% (the cells '3400%' and '2100%', shown as written in the table, are not used for this range), and the table's notes say the chamber pressures were varied but are 'not identified in this summary table'. The team pipeline links need S1 (Extinction conditions) to objectives stated in this record. Tied with FLEX under the team's current weights.",
+    "sources": [
+     "data/catalog/configurations.csv#ACME-BRE-C01",
+     "pipeline/spec/sources.json#acme_bre",
+     "data/pipeline/objective_links.csv#S1/PSI-20",
+     "PSI-20.objective"
+    ],
+    "facts": {
+     "test_days": 18,
+     "flames_ignited": 194,
+     "o2_setting_min": 21.0,
+     "o2_setting_max": 40.0,
+     "o2_cells_as_written": [
+      "3400%",
+      "2100%"
+     ],
+     "pressure_note_as_written": "not identified in this summary table",
+     "needs_stated": [
+      "S1"
+     ]
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:gas/surrogate:solid",
+     "row_unit:test_day",
+     "tie"
+    ],
+    "config_id": "ACME-BRE-C01"
+   },
+   {
+    "investigation_id": "PSI-69",
+    "text": "Liquid-fuel configuration; not a test of solid cabin materials (team catalog classification). 17 of its 274 tests with recorded ambient oxygen have oxygen and pressure inside this scenario's team bins (recorded at 71.2 to 72.4 kPa, above the 10.2 psi (70.3 kPa) of the challenge statement); the pressure cell of 1 test in the PSI experimental table of PSI-69 (FLEX) reads '0' (column 'Ambient pressure; mmHg'), which the team pipeline flags as out of range and does not use as a pressure. The team pipeline links need S1 (Extinction conditions) to objectives stated in this record. Tied with ACME-BRE under the team's current weights.",
+    "sources": [
+     "data/catalog/configurations.csv#FLEX-C01",
+     "pipeline/spec/sources.json#flex",
+     "data/pipeline/scenario_tests.csv#lunar_habitat",
+     "pipeline/spec/references.json#CH.moonbase",
+     "pipeline/spec/scenarios.json#scenarios.1.note",
+     "data/pipeline/tests.csv#FLEX-25",
+     "data/pipeline/tests.csv#FLEX-39",
+     "data/pipeline/tests.csv#FLEX-37",
+     "data/pipeline/tests.csv#FLEX-24",
+     "data/pipeline/tests.csv#FLEX-114",
+     "data/pipeline/objective_links.csv#S1/PSI-69",
+     "PSI-69.objective"
+    ],
+    "facts": {
+     "challenge_bound": {
+      "o2_pct_min": 30,
+      "pressure_psi_max": 10.2,
+      "pressure_kpa": 70.3,
+      "psi_to_kpa": 6.894757
+     },
+     "tests_with_these_values": 17,
+     "recorded_o2_pct": {
+      "min": 30.0,
+      "max": 34.0
+     },
+     "recorded_pressure_kpa_as_shown": {
+      "min": 71.2,
+      "max": 72.4
+     },
+     "recorded_pressure_kpa_in_tests_csv": {
+      "FLEX-37": 71.2341,
+      "FLEX-24": 72.3674
+     },
+     "counted_tests_at_or_below_challenge_bound": 0,
+     "recorded_pressure_atm_rounded": 0.7,
+     "kpa_above_challenge_bound_rounded": [
+      1,
+      2
+     ],
+     "tests_ambient_o2": 274,
+     "tests_atmosphere": 17,
+     "tests_oxygen_only": 0,
+     "pressure_kpa_flagged_not_used": 1,
+     "pressure_kpa_flag": "out_of_range",
+     "pressure_kpa_cells_as_written": [
+      "0"
+     ],
+     "pressure_kpa_cells_as_numbers": [
+      0
+     ],
+     "needs_stated": [
+      "S1"
+     ]
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:liquid",
+     "row_unit:test",
+     "tie"
+    ],
+    "config_id": "FLEX-C01"
+   },
+   {
+    "investigation_id": "PSI-159",
+    "text": "Gas-fuel flame configuration; not a test of solid cabin materials (team catalog classification). 9 of its 179 tests with recorded ambient oxygen have oxygen and pressure inside this scenario's team bins. Its 154 inverse-flame tests are not matched to this scenario's atmosphere, because the oxygen value, where recorded, is the burner stream and not the surrounding gas. The team pipeline links none of the needs to an objective stated in this record.",
+    "sources": [
+     "data/catalog/configurations.csv#ACME-CFI-G-C01",
+     "pipeline/spec/sources.json#cfig_normal",
+     "pipeline/spec/sources.json#cfig_inverse",
+     "data/pipeline/scenario_tests.csv#lunar_habitat"
+    ],
+    "facts": {
+     "tests_ambient_o2": 179,
+     "tests_atmosphere": 9,
+     "tests_oxygen_only": 0,
+     "tests_inverse_flame": 154,
+     "needs_stated": []
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:gas",
+     "row_unit:test"
+    ],
+    "config_id": "ACME-CFI-G-C01"
+   }
+  ],
+  "needs": [
+   {
+    "need_id": "P1",
+    "need": "Flammability limit",
+    "statement": "Recorded tests (team count; team bins: oxygen 30 to 36%, pressure below 85.8 kPa). None of the 136 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table. Oxygen gap: none of the 136 tests counted for this need was recorded with oxygen inside the oxygen range of this environment. Pressure is not a column in the PSI experimental tables of PSI-25 (BASS-II), PSI-98 (SAFFIRE-I) and PSI-99 (SAFFIRE-II) (the PSI records of PSI-98 and PSI-99 say pressure was measured; the value is not in the table). Gravity gap: none of the 136 tests counted for this need is recorded at the gravity level of this environment (lunar). What a count of this need means (the pipeline's reading): A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#lunar_habitat/P1",
+     "pipeline/spec/scenarios.json#lunar_habitat",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#P1/status.other_atmosphere",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#P1/gap.oxygen.no_usable_test_in_range",
+     "PSI-98.approach",
+     "PSI-99.approach",
+     "pipeline/spec/sources.json#bass2",
+     "pipeline/spec/sources.json#saffire1",
+     "pipeline/spec/sources.json#saffire2",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#P1/gap.gravity.no_usable_test_at_level",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#P1/need.reading",
+     "data/pipeline/objective_links.csv#P1/PSI-25",
+     "PSI-25.objective",
+     "data/pipeline/objective_links.csv#P1/PSI-98",
+     "PSI-98.objective",
+     "data/pipeline/objective_links.csv#P1/PSI-99",
+     "PSI-99.objective"
+    ],
+    "status": "other_atmosphere",
+    "facts": {
+     "usable_tests": 136,
+     "team_bins": {
+      "o2_pct": {
+       "min": 30,
+       "max": 36
+      },
+      "pressure_kpa": {
+       "max": 85.8
+      }
+     },
+     "ranges_compared": 2,
+     "pressure_kpa_not_a_column_tests": 136,
+     "pressure_measured_per_record": {
+      "PSI-98": "APP-9",
+      "PSI-99": "APP-8"
+     }
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:other_atmosphere",
+     "pipeline:status.other_atmosphere",
+     "pipeline:gap.oxygen.no_usable_test_in_range",
+     "gap:oxygen:no_usable_test_in_range",
+     "gap:pressure:not_recorded",
+     "pipeline:gap.gravity.no_usable_test_at_level",
+     "gap:gravity:no_usable_test_at_lunar",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "P2",
+    "need": "Ignition",
+    "statement": "Recorded tests (team count; team bins: oxygen 30 to 36%, pressure below 85.8 kPa). No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective. What a count of this need means (the pipeline's reading): A counted test would record the material, the oxygen and an ignition result. No mapped table records one for a solid fuel.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#lunar_habitat/P2",
+     "pipeline/spec/scenarios.json#lunar_habitat",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#P2/status.not_measured",
+     "pipeline/spec/needs.json#P2",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#P2/need.reading"
+    ],
+    "status": "not_measured",
+    "facts": {
+     "usable_tests": 0,
+     "team_bins": {
+      "o2_pct": {
+       "min": 30,
+       "max": 36
+      },
+      "pressure_kpa": {
+       "max": 85.8
+      }
+     },
+     "investigations_in_psi": 24
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:not_measured",
+     "pipeline:status.not_measured",
+     "gap:need:no_usable_test",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "P3",
+    "need": "Flame spread and growth",
+    "statement": "Recorded tests (team count; team bins: oxygen 30 to 36%, pressure below 85.8 kPa). None of the 11 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table. Oxygen gap: none of the 11 tests counted for this need was recorded with oxygen inside the oxygen range of this environment. Pressure is not a column in the PSI experimental tables of PSI-98 (SAFFIRE-I) and PSI-99 (SAFFIRE-II) (the PSI records of PSI-98 and PSI-99 say pressure was measured; the value is not in the table). Gravity gap: none of the 11 tests counted for this need is recorded at the gravity level of this environment (lunar). What a count of this need means (the pipeline's reading): A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. Most counted tests record a length or a time and no spread rate; a burn time or a burn length is not a spread rate.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#lunar_habitat/P3",
+     "pipeline/spec/scenarios.json#lunar_habitat",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#P3/status.other_atmosphere",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#P3/gap.oxygen.no_usable_test_in_range",
+     "PSI-98.approach",
+     "PSI-99.approach",
+     "pipeline/spec/sources.json#saffire1",
+     "pipeline/spec/sources.json#saffire2",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#P3/gap.gravity.no_usable_test_at_level",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#P3/need.reading",
+     "data/pipeline/objective_links.csv#P3/PSI-98",
+     "PSI-98.objective",
+     "data/pipeline/objective_links.csv#P3/PSI-99",
+     "PSI-99.objective"
+    ],
+    "status": "other_atmosphere",
+    "facts": {
+     "usable_tests": 11,
+     "team_bins": {
+      "o2_pct": {
+       "min": 30,
+       "max": 36
+      },
+      "pressure_kpa": {
+       "max": 85.8
+      }
+     },
+     "ranges_compared": 2,
+     "pressure_kpa_not_a_column_tests": 11,
+     "pressure_measured_per_record": {
+      "PSI-98": "APP-9",
+      "PSI-99": "APP-8"
+     }
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:other_atmosphere",
+     "pipeline:status.other_atmosphere",
+     "pipeline:gap.oxygen.no_usable_test_in_range",
+     "gap:oxygen:no_usable_test_in_range",
+     "gap:pressure:not_recorded",
+     "pipeline:gap.gravity.no_usable_test_at_level",
+     "gap:gravity:no_usable_test_at_lunar",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "S1",
+    "need": "Extinction conditions",
+    "statement": "Recorded tests (team count; team bins: oxygen 30 to 36%, pressure below 85.8 kPa). 17 of the 299 tests counted for this need were recorded with oxygen and pressure both inside the ranges of this environment. All 17 come from PSI-69 (FLEX). These 17 were recorded at 30 to 34% oxygen and 71.2 to 72.4 kPa (about 0.7 atm), which is inside the team's pressure bin and 1 to 2 kPa above the 10.2 psi (70.3 kPa) of the challenge statement (CH.moonbase); no counted test was recorded at 30% oxygen or more and at or below 10.2 psi. All 17 are fuel-droplet tests; none is a solid-material test. All 17 have recorded carbon dioxide and helium fractions of zero. The 17 matched tests ended in disruption (15) or completion (2); none is recorded as an extinction. 'Disruption' and 'extinction' are separate values of the table's 'Test end' column; a disruption is not read here as a flame extinction. Gravity gap: none of the 299 tests counted for this need is recorded at the gravity level of this environment (lunar). 272 further tests record the needed variables, but the investigation (PSI-159) does not state this need as an objective; they are not counted. These include inverse-flame tests, whose oxygen value is the burner stream and not an atmosphere. What a count of this need means (the pipeline's reading): A counted test records the fuel, the oxygen and how the burn ended or an event word. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#lunar_habitat/S1",
+     "pipeline/spec/scenarios.json#lunar_habitat",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#S1/status.in_atmosphere",
+     "pipeline/spec/references.json#CH.moonbase",
+     "pipeline/spec/scenarios.json#scenarios.1.note",
+     "data/pipeline/tests.csv#FLEX-25",
+     "data/pipeline/tests.csv#FLEX-39",
+     "data/pipeline/tests.csv#FLEX-37",
+     "data/pipeline/tests.csv#FLEX-24",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#S1/gap.gravity.no_usable_test_at_level",
+     "data/pipeline/need_tests.csv#S1",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#S1/need.reading",
+     "data/pipeline/objective_links.csv#S1/PSI-25",
+     "PSI-25.objective",
+     "data/pipeline/objective_links.csv#S1/PSI-69",
+     "PSI-69.objective"
+    ],
+    "status": "in_atmosphere",
+    "facts": {
+     "usable_tests": 299,
+     "team_bins": {
+      "o2_pct": {
+       "min": 30,
+       "max": 36
+      },
+      "pressure_kpa": {
+       "max": 85.8
+      }
+     },
+     "tests_atmosphere": 17,
+     "atmosphere_by_investigation": {
+      "PSI-69": 17
+     },
+     "challenge_bound": {
+      "o2_pct_min": 30,
+      "pressure_psi_max": 10.2,
+      "pressure_kpa": 70.3,
+      "psi_to_kpa": 6.894757
+     },
+     "tests_with_these_values": 17,
+     "recorded_o2_pct": {
+      "min": 30.0,
+      "max": 34.0
+     },
+     "recorded_pressure_kpa_as_shown": {
+      "min": 71.2,
+      "max": 72.4
+     },
+     "recorded_pressure_kpa_in_tests_csv": {
+      "FLEX-37": 71.2341,
+      "FLEX-24": 72.3674
+     },
+     "counted_tests_at_or_below_challenge_bound": 0,
+     "recorded_pressure_atm_rounded": 0.7,
+     "kpa_above_challenge_bound_rounded": [
+      1,
+      2
+     ],
+     "balance_zero": 17,
+     "test_end_disruption": 15,
+     "test_end_completion": 2,
+     "tests_recorded_outside_objective": 272,
+     "outside_objective_investigations": [
+      "PSI-159"
+     ],
+     "outside_objective_includes_inverse_flames": true
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:in_atmosphere",
+     "pipeline:status.in_atmosphere",
+     "clause:challenge_bound",
+     "clause:phase",
+     "clause:balance_gas",
+     "clause:test_end",
+     "pipeline:gap.gravity.no_usable_test_at_level",
+     "gap:gravity:no_usable_test_at_lunar",
+     "clause:outside_objective_inverse_flames",
+     "clause:outside_objective",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "D1",
+    "need": "Combustion products",
+    "statement": "Recorded tests (team count; team bins: oxygen 30 to 36%, pressure below 85.8 kPa). No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective. 126 tests record the needed variables, but the investigations (PSI-25 and PSI-102) do not state this need as an objective; they are not counted. What a count of this need means (the pipeline's reading): A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading, or a mass loss rate. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#lunar_habitat/D1",
+     "pipeline/spec/scenarios.json#lunar_habitat",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#D1/status.not_measured",
+     "pipeline/spec/needs.json#D1",
+     "data/pipeline/need_tests.csv#D1",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#D1/need.reading"
+    ],
+    "status": "not_measured",
+    "facts": {
+     "usable_tests": 0,
+     "team_bins": {
+      "o2_pct": {
+       "min": 30,
+       "max": 36
+      },
+      "pressure_kpa": {
+       "max": 85.8
+      }
+     },
+     "investigations_in_psi": 24,
+     "tests_recorded_outside_objective": 126,
+     "outside_objective_investigations": [
+      "PSI-25",
+      "PSI-102"
+     ]
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:not_measured",
+     "pipeline:status.not_measured",
+     "gap:need:no_usable_test",
+     "clause:outside_objective",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "D2",
+    "need": "Smoke generation conditions",
+    "statement": "Recorded tests (team count; team bins: oxygen 30 to 36%, pressure below 85.8 kPa). None of the 4 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table. Oxygen is not a column in the PSI experimental table of PSI-102 (SAME). Pressure is not a column in the PSI experimental table of PSI-102 (SAME). Gravity gap: none of the 4 tests counted for this need is recorded at the gravity level of this environment (lunar). What a count of this need means (the pipeline's reading): A counted test records the material, the flow speed, the aging time and the mass loss rate of the heated sample. No particle size or detector response is in the mapped tables.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#lunar_habitat/D2",
+     "pipeline/spec/scenarios.json#lunar_habitat",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#D2/status.other_atmosphere",
+     "pipeline/spec/sources.json#same",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#D2/gap.gravity.no_usable_test_at_level",
+     "data/pipeline/evidence/scenario_lunar_habitat.json#D2/need.reading",
+     "data/pipeline/objective_links.csv#D2/PSI-102",
+     "PSI-102.objective"
+    ],
+    "status": "other_atmosphere",
+    "facts": {
+     "usable_tests": 4,
+     "team_bins": {
+      "o2_pct": {
+       "min": 30,
+       "max": 36
+      },
+      "pressure_kpa": {
+       "max": 85.8
+      }
+     },
+     "ranges_compared": 2,
+     "o2_pct_not_a_column_tests": 4,
+     "pressure_kpa_not_a_column_tests": 4
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:other_atmosphere",
+     "pipeline:status.other_atmosphere",
+     "gap:oxygen:not_recorded",
+     "gap:pressure:not_recorded",
+     "pipeline:gap.gravity.no_usable_test_at_level",
+     "gap:gravity:no_usable_test_at_lunar",
+     "pipeline:need.reading"
+    ]
+   }
+  ],
+  "gaps": [
+   {
+    "text": "Every test in the PSI tables is a microgravity test; none was run at lunar gravity, and microgravity and 1 g results are not treated here as bounds for lunar gravity. NASA's fire protection technical brief OCHMO-TB-008 says: \"Material flammability in partial gravity remains a major gap for exploration missions.\" (TB008.gaps).",
+    "needed_data": "test-level records in PSI from combustion tests run at lunar gravity",
+    "sources": [
+     "pipeline/spec/references.json#TB008.gaps",
+     "data/pipeline/scenario_needs.csv#lunar_habitat"
+    ],
+    "rule": "gravity:no_usable_test_at_lunar",
+    "status": "from_rule",
+    "facts": {
+     "tests_in_psi_tables": 1824,
+     "tests_not_microgravity": 0
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "In the PSI experimental tables of the 24 investigations, no solid-sample test has a recorded oxygen value above 22.2%, and pressure is not a column in any solid-sample table. Oxygen is not a column in the solid-sample tables of PSI-26 (BASS), PSI-100 (SAFFIRE-III), PSI-101 (SAME-R) and PSI-102 (SAME). PSI's test-day table for PSI-20, a gas-burner study that emulates condensed fuels, lists approximate oxygen concentrations up to 40% and does not identify the chamber pressures; these are gas flames, not tests of solid materials. Outside PSI, Table 1 of the paper 'Preliminary Results from the Saffire VI Experiment' (ICES-2024-365) lists the sample test conditions of the five Saffire IV to VI samples considered in that paper; samples VI-2 (31.0 mol % oxygen, 54.1 kPa) and VI-3 (30.3 mol % oxygen, 54.6 kPa) are inside this scenario's team bins. None of the 24 PSI investigations used here is one of these flights, and these samples are not in any count on this page. The table was read by an AI assistant and not checked by a person.",
+    "needed_data": "test-level records in PSI for solid samples with both oxygen and pressure at these atmospheres",
+    "sources": [
+     "data/pipeline/tests.csv#BASS2-O2",
+     "pipeline/spec/sources.json#bass",
+     "pipeline/spec/sources.json#bass2",
+     "pipeline/spec/sources.json#saffire1",
+     "pipeline/spec/sources.json#saffire2",
+     "pipeline/spec/sources.json#saffire3",
+     "pipeline/spec/sources.json#same",
+     "pipeline/spec/sources.json#same_r",
+     "pipeline/spec/sources.json#acme_bre",
+     "pipeline/spec/references.json#SAF456.conditions"
+    ],
+    "rule": "solid_at_atmosphere",
+    "status": "from_rule",
+    "facts": {
+     "investigations_in_psi": 24,
+     "solid_tests": 376,
+     "solid_tests_with_pressure": 0,
+     "max_solid_o2": 22.2,
+     "max_solid_o2_test": "BASS2-O2",
+     "solid_tables_without_oxygen_column": [
+      "bass",
+      "saffire3",
+      "same_r",
+      "same"
+     ],
+     "needs": [
+      "P1",
+      "P3",
+      "D2"
+     ],
+     "psi20_max_o2_setting": 40.0,
+     "saffire_samples_inside_team_bins": [
+      "VI-2",
+      "VI-3"
+     ],
+     "saffire_sample_conditions_o2_mol_pct_kpa": [
+      [
+       31.0,
+       54.1
+      ],
+      [
+       30.3,
+       54.6
+      ]
+     ],
+     "saffire_samples_in_table": 5,
+     "saffire_table_number": 1,
+     "saffire_flights_among_the_psi_investigations": [],
+     "saffire_samples_counted": 0
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "The 17 tests inside this scenario's team bins for extinction conditions (S1) are all fuel-droplet tests (PSI-69 (FLEX)); none is a solid-material or gas-burner test. They were recorded at 71.2 to 72.4 kPa, above the 10.2 psi (70.3 kPa) of the challenge statement.",
+    "needed_data": "test-level records in PSI of extinction tests with solid materials or gas flames, with oxygen and pressure inside these bins",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#lunar_habitat/S1",
+     "pipeline/spec/references.json#CH.moonbase",
+     "pipeline/spec/scenarios.json#scenarios.1.note",
+     "data/pipeline/tests.csv#FLEX-25",
+     "data/pipeline/tests.csv#FLEX-39",
+     "data/pipeline/tests.csv#FLEX-37",
+     "data/pipeline/tests.csv#FLEX-24"
+    ],
+    "rule": "s1_phase_droplets_only",
+    "status": "from_rule",
+    "facts": {
+     "s1_tests_atmosphere": 17,
+     "investigations": [
+      "PSI-69"
+     ],
+     "challenge_bound": {
+      "o2_pct_min": 30,
+      "pressure_psi_max": 10.2,
+      "pressure_kpa": 70.3,
+      "psi_to_kpa": 6.894757
+     },
+     "tests_with_these_values": 17,
+     "recorded_o2_pct": {
+      "min": 30.0,
+      "max": 34.0
+     },
+     "recorded_pressure_kpa_as_shown": {
+      "min": 71.2,
+      "max": 72.4
+     },
+     "recorded_pressure_kpa_in_tests_csv": {
+      "FLEX-37": 71.2341,
+      "FLEX-24": 72.3674
+     },
+     "counted_tests_at_or_below_challenge_bound": 0,
+     "recorded_pressure_atm_rounded": 0.7,
+     "kpa_above_challenge_bound_rounded": [
+      1,
+      2
+     ]
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "For detection, the 4 smoke tests counted for smoke generation conditions (D2, PSI-102) have neither oxygen nor pressure in the table, and the team pipeline finds no investigation among the 24 whose PSI record states the measurement of combustion products (D1) as an objective. The NASA workshop report NASA/CP-2003-212103 describes knowledge of the fire signatures of spacecraft materials, and of the effect of low gravity on them, as inadequate for detection systems (CP2003.detection).",
+    "needed_data": "test-level records in PSI of smoke and combustion-product measurements with the oxygen and pressure of the test atmosphere",
+    "sources": [
+     "pipeline/spec/references.json#CP2003.detection",
+     "data/pipeline/scenario_needs.csv#lunar_habitat/D2",
+     "data/pipeline/scenario_needs.csv#lunar_habitat/D1",
+     "pipeline/spec/sources.json#same"
+    ],
+    "rule": "detection",
+    "status": "from_rule",
+    "facts": {
+     "d2_usable_tests": 4,
+     "d2_investigations": [
+      "PSI-102"
+     ],
+     "d2_oxygen_and_pressure_not_columns": true,
+     "d1_not_measured": true,
+     "d1_stated_as_objective_by_any_investigation": false,
+     "investigations_in_psi": 24
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "Post-fire clean-up: Fourth capability area in the NASA fire protection brief; the PSI tables hold no clean-up or atmosphere-recovery measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#TB008.areas"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Extinguishing agent transport and distribution: Listed as needed knowledge in NASA/CP-2003-212103; the PSI tables hold no agent-delivery measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.response"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Toxic combustion products other than carbon monoxide (HCN, HCl, HF): Required monitoring targets; the PSI tables record carbon monoxide and carbon dioxide only.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#3001.T6.2-3"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Fire signatures other than combustion gases and smoke: temperature rise, light and other radiation, pressure rise, acoustic waves: Listed among the signatures detectors respond to; no standard variable of the pipeline (variables.json) holds one of them.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#TB008.signatures"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Transport of fire precursors: Named as inadequately known in NASA/CP-2003-212103; no standard variable holds a transport measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.detection"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Smoke particle size and smoke detector response: Published by the SAME investigators (SAME.sizes, SAME.detector); the PSI experimental tables of SAME and SAME-R hold the test conditions only.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#SAME.sizes"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Combustion by-products of extinguishing agents: Listed as needed knowledge (by-products of fires and agents; see also TB008.agent); the mapped tables hold no product reading for a test with an agent.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.response"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Location of a fire in the vehicle: Named among the initial conditions a response depends on; no standard variable holds where in a vehicle a fire is.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.initial"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Transfer of burning debris to adjacent materials: Part of the Test 1 acceptance criterion; no standard variable holds it.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#6001B.T1.pass"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {
+     "numerals_as_written_in_needs_json": [
+      1
+     ]
+    },
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Ignition-source control: Named under prevention in the challenge statement (read from a copy); the mapped tables hold igniter settings of single tests and nothing about ignition sources in a vehicle, and need P2 has no counted test.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CH.pillars"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Heat release of a fire: The record says the results 'are used in first order models and predictions of heat release in spacecraft fires'; no standard variable holds a heat release.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "PSI-26.researchImpacts"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   }
+  ],
+  "ai_generated": false,
+  "text_origin": "template",
+  "frame_text_origin": "template",
+  "model": "none: counts and fixed sentences filled by team code",
+  "built_by": "ai/build_baseline.py",
+  "reviewed_by": null,
+  "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
+  "updated": "2026-11-14T14:51:56+09:00",
+  "fresh": {
+   "ranker_config_version": "1.0.0",
+   "scoring_config_sha256": "09a2ac8dabe2eb63bf73bc9836034238652fde510b510d97b5081aec9c455567",
+   "catalog_sha256": "19853b004b6a05be5ed45847e1511f3e171a1f3acbbdbfdab2de68c9b762fbc4",
+   "scenario_inputs_sha256": "087063c4fd10eb8d2d719943b607f71dbf0009562abd42d746ec3bcabfbb5606",
+   "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
+  }
+ },
+ {
+  "id": "spacesuit",
+  "query": "spacesuit",
+  "ranking_source": "scoring.scorer.rank",
+  "frame": "For the Spacesuit scenario, the oxygen and pressure recorded for each test are compared with the team bins (oxygen 95 to 100%, pressure below 62.8 kPa); the bins are the team's choice. A test whose table holds no pressure value, or no oxygen value, is reported apart and is never placed inside a bin. A test is counted for a need only if its investigation's PSI record states that need as an objective (objective sentences are linked to needs by the team pipeline). Inverse-flame tests, whose oxygen value is the burner stream (the gas issuing from the burner, not the surrounding atmosphere), are never matched to a crew atmosphere. The highest ambient oxygen in any test in the PSI tables is 40% (computed from the tables); higher oxygen values, up to 85%, are the burner stream of inverse flames, not the surrounding atmosphere. Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
+  "frame_sources": [
+   "pipeline/spec/scenarios.json#spacesuit",
+   "data/pipeline/tests.csv#FD-N-21301J4",
+   "data/pipeline/tests.csv#CFIG-I-21277M1"
+  ],
+  "frame_facts": {
+   "team_bins": {
+    "o2_pct": {
+     "min": 95,
+     "max": 100
+    },
+    "pressure_kpa": {
+     "max": 62.8
+    }
+   },
+   "max_ambient_o2": 40.0,
+   "max_ambient_o2_test": "FD-N-21301J4",
+   "max_stream_o2": 85.0,
+   "max_stream_o2_test": "CFIG-I-21277M1"
+  },
+  "result_notes": [
+   {
+    "investigation_id": "PSI-159",
+    "text": "Gas-fuel flame configuration; not a test of solid cabin materials (team catalog classification). None of its 179 tests with recorded ambient oxygen has oxygen and pressure inside this scenario's team bins. Its 154 inverse-flame tests are not matched to this scenario's atmosphere, because the oxygen value, where recorded, is the burner stream and not the surrounding gas. The team pipeline links none of the needs to an objective stated in this record. No test in the PSI tables has oxygen inside this scenario's team bin (95 to 100%); the results are listed for completeness, and the inverse flames among them record burner-stream oxygen, not an atmosphere.",
+    "sources": [
+     "data/catalog/configurations.csv#ACME-CFI-G-C02",
+     "pipeline/spec/sources.json#cfig_normal",
+     "pipeline/spec/sources.json#cfig_inverse",
+     "data/pipeline/scenario_tests.csv#spacesuit"
+    ],
+    "facts": {
+     "tests_ambient_o2": 179,
+     "tests_atmosphere": 0,
+     "tests_oxygen_only": 0,
+     "tests_inverse_flame": 154,
+     "needs_stated": [],
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      }
+     }
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:gas",
+     "row_unit:test",
+     "fixed:spacesuit"
+    ],
+    "config_id": "ACME-CFI-G-C02"
+   },
+   {
+    "investigation_id": "PSI-10",
+    "text": "Gas-fuel flame configuration; not a test of solid cabin materials (team catalog classification). None of its 207 tests with recorded ambient oxygen has oxygen and pressure inside this scenario's team bins. Its 120 inverse-flame tests are not matched to this scenario's atmosphere, because the oxygen value, where recorded, is the burner stream and not the surrounding gas. The team pipeline links need S1 (Extinction conditions) to objectives stated in this record. No test in the PSI tables has oxygen inside this scenario's team bin (95 to 100%); the results are listed for completeness, and the inverse flames among them record burner-stream oxygen, not an atmosphere.",
+    "sources": [
+     "data/catalog/configurations.csv#ACME-FLAME-DESIGN-C02",
+     "pipeline/spec/sources.json#flame_design_normal",
+     "pipeline/spec/sources.json#flame_design_inverse",
+     "data/pipeline/scenario_tests.csv#spacesuit",
+     "data/pipeline/objective_links.csv#S1/PSI-10",
+     "PSI-10.objective"
+    ],
+    "facts": {
+     "tests_ambient_o2": 207,
+     "tests_atmosphere": 0,
+     "tests_oxygen_only": 0,
+     "tests_inverse_flame": 120,
+     "needs_stated": [
+      "S1"
+     ],
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      }
+     }
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:gas",
+     "row_unit:test",
+     "fixed:spacesuit"
+    ],
+    "config_id": "ACME-FLAME-DESIGN-C02"
+   },
+   {
+    "investigation_id": "PSI-20",
+    "text": "Gas-burner flame study whose burner emulates condensed fuels; not a test of solid cabin materials (team catalog classification). PSI's table for this investigation has one row per test day (18 test days, 194 flames ignited in all), so its tests cannot be matched one by one: the oxygen concentrations listed (approximate, for the tests that ignited, as the table's notes say) run from 21 to 40% (the cells '3400%' and '2100%', shown as written in the table, are not used for this range), and the table's notes say the chamber pressures were varied but are 'not identified in this summary table'. The team pipeline links need S1 (Extinction conditions) to objectives stated in this record. No test in the PSI tables has oxygen inside this scenario's team bin (95 to 100%); the results are listed for completeness, and the inverse flames among them record burner-stream oxygen, not an atmosphere.",
+    "sources": [
+     "data/catalog/configurations.csv#ACME-BRE-C01",
+     "pipeline/spec/sources.json#acme_bre",
+     "data/pipeline/objective_links.csv#S1/PSI-20",
+     "PSI-20.objective"
+    ],
+    "facts": {
+     "test_days": 18,
+     "flames_ignited": 194,
+     "o2_setting_min": 21.0,
+     "o2_setting_max": 40.0,
+     "o2_cells_as_written": [
+      "3400%",
+      "2100%"
+     ],
+     "pressure_note_as_written": "not identified in this summary table",
+     "needs_stated": [
+      "S1"
+     ],
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      }
+     }
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:gas/surrogate:solid",
+     "row_unit:test_day",
+     "fixed:spacesuit"
+    ],
+    "config_id": "ACME-BRE-C01"
+   },
+   {
+    "investigation_id": "PSI-69",
+    "text": "Liquid-fuel configuration; not a test of solid cabin materials (team catalog classification). None of its 274 tests with recorded ambient oxygen has oxygen and pressure inside this scenario's team bins; the pressure cell of 1 test in the PSI experimental table of PSI-69 (FLEX) reads '0' (column 'Ambient pressure; mmHg'), which the team pipeline flags as out of range and does not use as a pressure. The team pipeline links need S1 (Extinction conditions) to objectives stated in this record. Listed because its team score is level with or close to the results shown, under the team's current weights. No test in the PSI tables has oxygen inside this scenario's team bin (95 to 100%); the results are listed for completeness, and the inverse flames among them record burner-stream oxygen, not an atmosphere.",
+    "sources": [
+     "data/catalog/configurations.csv#FLEX-C01",
+     "pipeline/spec/sources.json#flex",
+     "data/pipeline/scenario_tests.csv#spacesuit",
+     "data/pipeline/tests.csv#FLEX-114",
+     "data/pipeline/objective_links.csv#S1/PSI-69",
+     "PSI-69.objective"
+    ],
+    "facts": {
+     "tests_ambient_o2": 274,
+     "tests_atmosphere": 0,
+     "tests_oxygen_only": 0,
+     "pressure_kpa_flagged_not_used": 1,
+     "pressure_kpa_flag": "out_of_range",
+     "pressure_kpa_cells_as_written": [
+      "0"
+     ],
+     "pressure_kpa_cells_as_numbers": [
+      0
+     ],
+     "needs_stated": [
+      "S1"
+     ],
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      }
+     }
+    },
+    "text_origin": "template",
+    "status": "near_tie",
+    "rule": [
+     "phase:liquid",
+     "row_unit:test",
+     "near_tie",
+     "fixed:spacesuit"
+    ],
+    "config_id": "FLEX-C01"
+   },
+   {
+    "investigation_id": "PSI-39",
+    "text": "Liquid-fuel configuration; not a test of solid cabin materials (team catalog classification). None of its 79 tests with recorded ambient oxygen has oxygen and pressure inside this scenario's team bins. The team pipeline links need S1 (Extinction conditions) to objectives stated in this record. Listed because its team score is level with or close to the results shown, under the team's current weights. No test in the PSI tables has oxygen inside this scenario's team bin (95 to 100%); the results are listed for completeness, and the inverse flames among them record burner-stream oxygen, not an atmosphere.",
+    "sources": [
+     "data/catalog/configurations.csv#CFI-C01",
+     "pipeline/spec/sources.json#cfi",
+     "data/pipeline/scenario_tests.csv#spacesuit",
+     "data/pipeline/objective_links.csv#S1/PSI-39",
+     "PSI-39.objective"
+    ],
+    "facts": {
+     "tests_ambient_o2": 79,
+     "tests_atmosphere": 0,
+     "tests_oxygen_only": 0,
+     "needs_stated": [
+      "S1"
+     ],
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      }
+     }
+    },
+    "text_origin": "template",
+    "status": "near_tie",
+    "rule": [
+     "phase:liquid",
+     "row_unit:test",
+     "near_tie",
+     "fixed:spacesuit"
+    ],
+    "config_id": "CFI-C01"
+   },
+   {
+    "investigation_id": "PSI-68",
+    "text": "Liquid-fuel configuration; not a test of solid cabin materials (team catalog classification). PSI's table for this investigation lists planned ranges of conditions per fuel (8 rows), not individual tests, so it cannot be matched test by test. The team pipeline links need S1 (Extinction conditions) to objectives stated in this record. Listed because its team score is level with or close to the results shown, under the team's current weights. No test in the PSI tables has oxygen inside this scenario's team bin (95 to 100%); the results are listed for completeness, and the inverse flames among them record burner-stream oxygen, not an atmosphere.",
+    "sources": [
+     "data/catalog/configurations.csv#FLEX-2-C01",
+     "pipeline/spec/sources.json#flex2",
+     "data/pipeline/objective_links.csv#S1/PSI-68",
+     "PSI-68.objective"
+    ],
+    "facts": {
+     "table_rows": 8,
+     "needs_stated": [
+      "S1"
+     ],
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      }
+     }
+    },
+    "text_origin": "template",
+    "status": "near_tie",
+    "rule": [
+     "phase:liquid",
+     "row_unit:planned_matrix",
+     "near_tie",
+     "fixed:spacesuit"
+    ],
+    "config_id": "FLEX-2-C01"
+   }
+  ],
+  "needs": [
+   {
+    "need_id": "P1",
+    "need": "Flammability limit",
+    "statement": "Recorded tests (team count; team bins: oxygen 95 to 100%, pressure below 62.8 kPa). None of the 136 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table. Oxygen gap: none of the 136 tests counted for this need was recorded with oxygen inside the oxygen range of this environment. Pressure is not a column in the PSI experimental tables of PSI-25 (BASS-II), PSI-98 (SAFFIRE-I) and PSI-99 (SAFFIRE-II) (the PSI records of PSI-98 and PSI-99 say pressure was measured; the value is not in the table). What a count of this need means (the pipeline's reading): A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#spacesuit/P1",
+     "pipeline/spec/scenarios.json#spacesuit",
+     "data/pipeline/evidence/scenario_spacesuit.json#P1/status.other_atmosphere",
+     "data/pipeline/evidence/scenario_spacesuit.json#P1/gap.oxygen.no_usable_test_in_range",
+     "PSI-98.approach",
+     "PSI-99.approach",
+     "pipeline/spec/sources.json#bass2",
+     "pipeline/spec/sources.json#saffire1",
+     "pipeline/spec/sources.json#saffire2",
+     "data/pipeline/evidence/scenario_spacesuit.json#P1/need.reading",
+     "data/pipeline/objective_links.csv#P1/PSI-25",
+     "PSI-25.objective",
+     "data/pipeline/objective_links.csv#P1/PSI-98",
+     "PSI-98.objective",
+     "data/pipeline/objective_links.csv#P1/PSI-99",
+     "PSI-99.objective"
+    ],
+    "status": "other_atmosphere",
+    "facts": {
+     "usable_tests": 136,
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      },
+      "pressure_kpa": {
+       "max": 62.8
+      }
+     },
+     "ranges_compared": 2,
+     "pressure_kpa_not_a_column_tests": 136,
+     "pressure_measured_per_record": {
+      "PSI-98": "APP-9",
+      "PSI-99": "APP-8"
+     }
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:other_atmosphere",
+     "pipeline:status.other_atmosphere",
+     "pipeline:gap.oxygen.no_usable_test_in_range",
+     "gap:oxygen:no_usable_test_in_range",
+     "gap:pressure:not_recorded",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "P2",
+    "need": "Ignition",
+    "statement": "Recorded tests (team count; team bins: oxygen 95 to 100%, pressure below 62.8 kPa). No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective. What a count of this need means (the pipeline's reading): A counted test would record the material, the oxygen and an ignition result. No mapped table records one for a solid fuel.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#spacesuit/P2",
+     "pipeline/spec/scenarios.json#spacesuit",
+     "data/pipeline/evidence/scenario_spacesuit.json#P2/status.not_measured",
+     "pipeline/spec/needs.json#P2",
+     "data/pipeline/evidence/scenario_spacesuit.json#P2/need.reading"
+    ],
+    "status": "not_measured",
+    "facts": {
+     "usable_tests": 0,
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      },
+      "pressure_kpa": {
+       "max": 62.8
+      }
+     },
+     "investigations_in_psi": 24
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:not_measured",
+     "pipeline:status.not_measured",
+     "gap:need:no_usable_test",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "P3",
+    "need": "Flame spread and growth",
+    "statement": "Recorded tests (team count; team bins: oxygen 95 to 100%, pressure below 62.8 kPa). None of the 11 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table. Oxygen gap: none of the 11 tests counted for this need was recorded with oxygen inside the oxygen range of this environment. Pressure is not a column in the PSI experimental tables of PSI-98 (SAFFIRE-I) and PSI-99 (SAFFIRE-II) (the PSI records of PSI-98 and PSI-99 say pressure was measured; the value is not in the table). What a count of this need means (the pipeline's reading): A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. Most counted tests record a length or a time and no spread rate; a burn time or a burn length is not a spread rate.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#spacesuit/P3",
+     "pipeline/spec/scenarios.json#spacesuit",
+     "data/pipeline/evidence/scenario_spacesuit.json#P3/status.other_atmosphere",
+     "data/pipeline/evidence/scenario_spacesuit.json#P3/gap.oxygen.no_usable_test_in_range",
+     "PSI-98.approach",
+     "PSI-99.approach",
+     "pipeline/spec/sources.json#saffire1",
+     "pipeline/spec/sources.json#saffire2",
+     "data/pipeline/evidence/scenario_spacesuit.json#P3/need.reading",
+     "data/pipeline/objective_links.csv#P3/PSI-98",
+     "PSI-98.objective",
+     "data/pipeline/objective_links.csv#P3/PSI-99",
+     "PSI-99.objective"
+    ],
+    "status": "other_atmosphere",
+    "facts": {
+     "usable_tests": 11,
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      },
+      "pressure_kpa": {
+       "max": 62.8
+      }
+     },
+     "ranges_compared": 2,
+     "pressure_kpa_not_a_column_tests": 11,
+     "pressure_measured_per_record": {
+      "PSI-98": "APP-9",
+      "PSI-99": "APP-8"
+     }
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:other_atmosphere",
+     "pipeline:status.other_atmosphere",
+     "pipeline:gap.oxygen.no_usable_test_in_range",
+     "gap:oxygen:no_usable_test_in_range",
+     "gap:pressure:not_recorded",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "S1",
+    "need": "Extinction conditions",
+    "statement": "Recorded tests (team count; team bins: oxygen 95 to 100%, pressure below 62.8 kPa). None of the 299 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table. Oxygen gap: none of the 299 tests counted for this need was recorded with oxygen inside the oxygen range of this environment. Pressure gap: none of the 299 tests counted for this need was recorded with pressure inside the pressure range of this environment. 272 further tests record the needed variables, but the investigation (PSI-159) does not state this need as an objective; they are not counted. These include inverse-flame tests, whose oxygen value is the burner stream and not an atmosphere. What a count of this need means (the pipeline's reading): A counted test records the fuel, the oxygen and how the burn ended or an event word. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#spacesuit/S1",
+     "pipeline/spec/scenarios.json#spacesuit",
+     "data/pipeline/evidence/scenario_spacesuit.json#S1/status.other_atmosphere",
+     "data/pipeline/evidence/scenario_spacesuit.json#S1/gap.oxygen.no_usable_test_in_range",
+     "data/pipeline/evidence/scenario_spacesuit.json#S1/gap.pressure.no_usable_test_in_range",
+     "data/pipeline/need_tests.csv#S1",
+     "data/pipeline/evidence/scenario_spacesuit.json#S1/need.reading",
+     "data/pipeline/objective_links.csv#S1/PSI-25",
+     "PSI-25.objective",
+     "data/pipeline/objective_links.csv#S1/PSI-69",
+     "PSI-69.objective"
+    ],
+    "status": "other_atmosphere",
+    "facts": {
+     "usable_tests": 299,
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      },
+      "pressure_kpa": {
+       "max": 62.8
+      }
+     },
+     "ranges_compared": 2,
+     "tests_recorded_outside_objective": 272,
+     "outside_objective_investigations": [
+      "PSI-159"
+     ],
+     "outside_objective_includes_inverse_flames": true
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:other_atmosphere",
+     "pipeline:status.other_atmosphere",
+     "pipeline:gap.oxygen.no_usable_test_in_range",
+     "gap:oxygen:no_usable_test_in_range",
+     "pipeline:gap.pressure.no_usable_test_in_range",
+     "gap:pressure:no_usable_test_in_range",
+     "clause:outside_objective_inverse_flames",
+     "clause:outside_objective",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "D1",
+    "need": "Combustion products",
+    "statement": "Recorded tests (team count; team bins: oxygen 95 to 100%, pressure below 62.8 kPa). No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective. 126 tests record the needed variables, but the investigations (PSI-25 and PSI-102) do not state this need as an objective; they are not counted. What a count of this need means (the pipeline's reading): A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading, or a mass loss rate. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#spacesuit/D1",
+     "pipeline/spec/scenarios.json#spacesuit",
+     "data/pipeline/evidence/scenario_spacesuit.json#D1/status.not_measured",
+     "pipeline/spec/needs.json#D1",
+     "data/pipeline/need_tests.csv#D1",
+     "data/pipeline/evidence/scenario_spacesuit.json#D1/need.reading"
+    ],
+    "status": "not_measured",
+    "facts": {
+     "usable_tests": 0,
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      },
+      "pressure_kpa": {
+       "max": 62.8
+      }
+     },
+     "investigations_in_psi": 24,
+     "tests_recorded_outside_objective": 126,
+     "outside_objective_investigations": [
+      "PSI-25",
+      "PSI-102"
+     ]
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:not_measured",
+     "pipeline:status.not_measured",
+     "gap:need:no_usable_test",
+     "clause:outside_objective",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "D2",
+    "need": "Smoke generation conditions",
+    "statement": "Recorded tests (team count; team bins: oxygen 95 to 100%, pressure below 62.8 kPa). None of the 4 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table. Oxygen is not a column in the PSI experimental table of PSI-102 (SAME). Pressure is not a column in the PSI experimental table of PSI-102 (SAME). What a count of this need means (the pipeline's reading): A counted test records the material, the flow speed, the aging time and the mass loss rate of the heated sample. No particle size or detector response is in the mapped tables.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#spacesuit/D2",
+     "pipeline/spec/scenarios.json#spacesuit",
+     "data/pipeline/evidence/scenario_spacesuit.json#D2/status.other_atmosphere",
+     "pipeline/spec/sources.json#same",
+     "data/pipeline/evidence/scenario_spacesuit.json#D2/need.reading",
+     "data/pipeline/objective_links.csv#D2/PSI-102",
+     "PSI-102.objective"
+    ],
+    "status": "other_atmosphere",
+    "facts": {
+     "usable_tests": 4,
+     "team_bins": {
+      "o2_pct": {
+       "min": 95,
+       "max": 100
+      },
+      "pressure_kpa": {
+       "max": 62.8
+      }
+     },
+     "ranges_compared": 2,
+     "o2_pct_not_a_column_tests": 4,
+     "pressure_kpa_not_a_column_tests": 4
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:other_atmosphere",
+     "pipeline:status.other_atmosphere",
+     "gap:oxygen:not_recorded",
+     "gap:pressure:not_recorded",
+     "pipeline:need.reading"
+    ]
+   }
+  ],
+  "gaps": [
+   {
+    "text": "In the PSI experimental tables of the 24 investigations, no solid-sample test has a recorded oxygen value above 22.2%, and pressure is not a column in any solid-sample table. Oxygen is not a column in the solid-sample tables of PSI-26 (BASS), PSI-100 (SAFFIRE-III), PSI-101 (SAME-R) and PSI-102 (SAME).",
+    "needed_data": "test-level records in PSI for solid samples with both oxygen and pressure at these atmospheres",
+    "sources": [
+     "data/pipeline/tests.csv#BASS2-O2",
+     "pipeline/spec/sources.json#bass",
+     "pipeline/spec/sources.json#bass2",
+     "pipeline/spec/sources.json#saffire1",
+     "pipeline/spec/sources.json#saffire2",
+     "pipeline/spec/sources.json#saffire3",
+     "pipeline/spec/sources.json#same",
+     "pipeline/spec/sources.json#same_r"
+    ],
+    "rule": "solid_at_atmosphere",
+    "status": "from_rule",
+    "facts": {
+     "investigations_in_psi": 24,
+     "solid_tests": 376,
+     "solid_tests_with_pressure": 0,
+     "max_solid_o2": 22.2,
+     "max_solid_o2_test": "BASS2-O2",
+     "solid_tables_without_oxygen_column": [
+      "bass",
+      "saffire3",
+      "same_r",
+      "same"
+     ],
+     "needs": [
+      "P1",
+      "P3",
+      "D2"
+     ]
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "For detection, the 4 smoke tests counted for smoke generation conditions (D2, PSI-102) have neither oxygen nor pressure in the table, and the team pipeline finds no investigation among the 24 whose PSI record states the measurement of combustion products (D1) as an objective. The NASA workshop report NASA/CP-2003-212103 describes knowledge of the fire signatures of spacecraft materials, and of the effect of low gravity on them, as inadequate for detection systems (CP2003.detection).",
+    "needed_data": "test-level records in PSI of smoke and combustion-product measurements with the oxygen and pressure of the test atmosphere",
+    "sources": [
+     "pipeline/spec/references.json#CP2003.detection",
+     "data/pipeline/scenario_needs.csv#spacesuit/D2",
+     "data/pipeline/scenario_needs.csv#spacesuit/D1",
+     "pipeline/spec/sources.json#same"
+    ],
+    "rule": "detection",
+    "status": "from_rule",
+    "facts": {
+     "d2_usable_tests": 4,
+     "d2_investigations": [
+      "PSI-102"
+     ],
+     "d2_oxygen_and_pressure_not_columns": true,
+     "d1_not_measured": true,
+     "d1_stated_as_objective_by_any_investigation": false,
+     "investigations_in_psi": 24
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "Post-fire clean-up: Fourth capability area in the NASA fire protection brief; the PSI tables hold no clean-up or atmosphere-recovery measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#TB008.areas"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Extinguishing agent transport and distribution: Listed as needed knowledge in NASA/CP-2003-212103; the PSI tables hold no agent-delivery measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.response"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Material flammability in partial gravity: Named a major gap; every test in the PSI tables is a microgravity test.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#TB008.gaps"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Toxic combustion products other than carbon monoxide (HCN, HCl, HF): Required monitoring targets; the PSI tables record carbon monoxide and carbon dioxide only.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#3001.T6.2-3"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Fire signatures other than combustion gases and smoke: temperature rise, light and other radiation, pressure rise, acoustic waves: Listed among the signatures detectors respond to; no standard variable of the pipeline (variables.json) holds one of them.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#TB008.signatures"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Transport of fire precursors: Named as inadequately known in NASA/CP-2003-212103; no standard variable holds a transport measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.detection"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Smoke particle size and smoke detector response: Published by the SAME investigators (SAME.sizes, SAME.detector); the PSI experimental tables of SAME and SAME-R hold the test conditions only.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#SAME.sizes"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Combustion by-products of extinguishing agents: Listed as needed knowledge (by-products of fires and agents; see also TB008.agent); the mapped tables hold no product reading for a test with an agent.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.response"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Location of a fire in the vehicle: Named among the initial conditions a response depends on; no standard variable holds where in a vehicle a fire is.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.initial"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Transfer of burning debris to adjacent materials: Part of the Test 1 acceptance criterion; no standard variable holds it.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#6001B.T1.pass"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {
+     "numerals_as_written_in_needs_json": [
+      1
+     ]
+    },
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Ignition-source control: Named under prevention in the challenge statement (read from a copy); the mapped tables hold igniter settings of single tests and nothing about ignition sources in a vehicle, and need P2 has no counted test.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CH.pillars"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Heat release of a fire: The record says the results 'are used in first order models and predictions of heat release in spacecraft fires'; no standard variable holds a heat release.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "PSI-26.researchImpacts"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   }
+  ],
+  "ai_generated": false,
+  "text_origin": "template",
+  "frame_text_origin": "template",
+  "model": "none: counts and fixed sentences filled by team code",
+  "built_by": "ai/build_baseline.py",
+  "reviewed_by": null,
+  "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
+  "updated": "2026-11-14T14:51:24+09:00",
+  "fresh": {
+   "ranker_config_version": "1.0.0",
+   "scoring_config_sha256": "09a2ac8dabe2eb63bf73bc9836034238652fde510b510d97b5081aec9c455567",
+   "catalog_sha256": "19853b004b6a05be5ed45847e1511f3e171a1f3acbbdbfdab2de68c9b762fbc4",
+   "scenario_inputs_sha256": "087063c4fd10eb8d2d719943b607f71dbf0009562abd42d746ec3bcabfbb5606",
+   "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
+  }
+ },
+ {
+  "id": "mars_habitat",
+  "query": "Mars base",
+  "ranking_source": "scoring.scorer.rank",
+  "frame": "The pipeline sets no oxygen or pressure range for the Mars habitat scenario, so no recorded test is counted as matching its atmosphere. A test is counted for a need only if its investigation's PSI record states that need as an objective (objective sentences are linked to needs by the team pipeline). Every test in the PSI test tables is a microgravity test (gravity level set per table by the team from the PSI record); the tables hold no partial-gravity test, and microgravity and 1 g results are not shown here as bounds for lunar or Martian gravity. NASA's fire protection technical brief OCHMO-TB-008 says: \"Material flammability in partial gravity remains a major gap for exploration missions.\" (TB008.gaps). Outside PSI, Table I of a paper on the NASA Technical Reports Server (Olson and Ferkul, NTRS-20130010991) gives limiting oxygen concentrations (the oxygen level below which the flame did not keep burning in the test) for three materials; for each of them, both limits at Martian gravity are lower than those at 1 g, and for some of them they are lower than those at 0 g as well. These low-gravity limits come from 5.18 s drop-tower tests, and the paper says their extinction criteria are not the same as in 1 g; the table was read by an AI assistant and not checked by a person (OF2012.table1). The scorer preset for this scenario sets no atmosphere. NASA's Exploration Atmospheres Working Group report lists 8.0 psia (55.2 kPa) and 7.6 psia (52.4 kPa), each with 32% oxygen, among its nominal atmospheres for surface habitats and says they are not requirements (EAWG.atmospheres); the kPa values are the team's conversion, and the preset does not use these atmospheres. Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
+  "frame_sources": [
+   "pipeline/spec/scenarios.json#mars_habitat",
+   "pipeline/spec/references.json#TB008.gaps",
+   "pipeline/spec/references.json#OF2012.table1",
+   "pipeline/spec/references.json#EAWG.atmospheres",
+   "scoring/scoring_config.json#presets.mars_habitat"
+  ],
+  "frame_facts": {
+   "tests_not_microgravity": 0,
+   "of2012_gravity_level": "martian",
+   "of2012_lower_than_one_g": "every",
+   "of2012_lower_than_one_g_and_zero_g": "some",
+   "of2012_rows_compared": "every row of values.rows of the item (one row per material)",
+   "of2012_rule": "both limits of the material (ULOI*, MOC*) at this gravity level are lower",
+   "of2012_materials_in_table": 3,
+   "of2012_fig6_averages_used": false,
+   "of2012_drop_seconds": 5.18,
+   "eawg_surface_atmospheres_psia_kpa_o2": [
+    [
+     8.0,
+     55.2,
+     32
+    ],
+    [
+     7.6,
+     52.4,
+     32
+    ]
+   ],
+   "psia_to_kpa": 6.894757
+  },
+  "result_notes": [
+   {
+    "investigation_id": "PSI-25",
+    "text": "Solid-fuel configuration (team catalog classification). Its PSI tables list 129 tests; this scenario sets no oxygen or pressure range, so none is matched to an atmosphere. The team pipeline links needs P1 (Flammability limit), P2 (Ignition), P3 (Flame spread and growth) and S1 (Extinction conditions) to objectives stated in this record. Tied with SAFFIRE-II, BASS, SAFFIRE-I and SAFFIRE-III under the team's current weights. The preset sets no atmosphere, so the ranking compares only flow and research purpose (with ventilation assumed), not oxygen or pressure; it is not a match to a Mars habitat.",
+    "sources": [
+     "data/catalog/configurations.csv#BASS-II-C01",
+     "pipeline/spec/sources.json#bass2",
+     "data/pipeline/scenario_tests.csv#mars_habitat",
+     "data/pipeline/objective_links.csv#P1/PSI-25",
+     "PSI-25.objective",
+     "data/pipeline/objective_links.csv#P2/PSI-25",
+     "data/pipeline/objective_links.csv#P3/PSI-25",
+     "data/pipeline/objective_links.csv#S1/PSI-25"
+    ],
+    "facts": {
+     "tests": 129,
+     "needs_stated": [
+      "P1",
+      "P2",
+      "P3",
+      "S1"
+     ]
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:solid",
+     "row_unit:test",
+     "tie",
+     "fixed:mars_habitat"
+    ],
+    "config_id": "BASS-II-C01"
+   },
+   {
+    "investigation_id": "PSI-99",
+    "text": "Solid-fuel configuration (team catalog classification). Its PSI tables list 9 tests; this scenario sets no oxygen or pressure range, so none is matched to an atmosphere. The team pipeline links needs P1 (Flammability limit) and P3 (Flame spread and growth) to objectives stated in this record. Tied with BASS-II, BASS, SAFFIRE-I and SAFFIRE-III under the team's current weights. The preset sets no atmosphere, so the ranking compares only flow and research purpose (with ventilation assumed), not oxygen or pressure; it is not a match to a Mars habitat.",
+    "sources": [
+     "data/catalog/configurations.csv#SAFFIRE-II-C01",
+     "pipeline/spec/sources.json#saffire2",
+     "data/pipeline/scenario_tests.csv#mars_habitat",
+     "data/pipeline/objective_links.csv#P1/PSI-99",
+     "PSI-99.objective",
+     "data/pipeline/objective_links.csv#P3/PSI-99"
+    ],
+    "facts": {
+     "tests": 9,
+     "needs_stated": [
+      "P1",
+      "P3"
+     ]
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:solid",
+     "row_unit:test",
+     "tie",
+     "fixed:mars_habitat"
+    ],
+    "config_id": "SAFFIRE-II-C01"
+   },
+   {
+    "investigation_id": "PSI-26",
+    "text": "Solid-fuel configuration (team catalog classification). Its PSI tables list 121 tests; this scenario sets no oxygen or pressure range, so none is matched to an atmosphere. The team pipeline links needs P1 (Flammability limit) and S1 (Extinction conditions) to objectives stated in this record. Tied with BASS-II, SAFFIRE-II, SAFFIRE-I and SAFFIRE-III under the team's current weights. The preset sets no atmosphere, so the ranking compares only flow and research purpose (with ventilation assumed), not oxygen or pressure; it is not a match to a Mars habitat.",
+    "sources": [
+     "data/catalog/configurations.csv#BASS-C01",
+     "pipeline/spec/sources.json#bass",
+     "data/pipeline/scenario_tests.csv#mars_habitat",
+     "data/pipeline/objective_links.csv#P1/PSI-26",
+     "PSI-26.objective",
+     "data/pipeline/objective_links.csv#S1/PSI-26"
+    ],
+    "facts": {
+     "tests": 121,
+     "needs_stated": [
+      "P1",
+      "S1"
+     ]
+    },
+    "text_origin": "template",
+    "status": "top3",
+    "rule": [
+     "phase:solid",
+     "row_unit:test",
+     "tie",
+     "fixed:mars_habitat"
+    ],
+    "config_id": "BASS-C01"
+   },
+   {
+    "investigation_id": "PSI-98",
+    "text": "Solid-fuel configuration (team catalog classification). Its PSI tables list 2 tests; this scenario sets no oxygen or pressure range, so none is matched to an atmosphere. The team pipeline links needs P1 (Flammability limit) and P3 (Flame spread and growth) to objectives stated in this record. Tied with BASS-II, SAFFIRE-II, BASS and SAFFIRE-III under the team's current weights. Listed because its team score is level with or close to the results shown, under the team's current weights. The preset sets no atmosphere, so the ranking compares only flow and research purpose (with ventilation assumed), not oxygen or pressure; it is not a match to a Mars habitat.",
+    "sources": [
+     "data/catalog/configurations.csv#SAFFIRE-I-C01",
+     "pipeline/spec/sources.json#saffire1",
+     "data/pipeline/scenario_tests.csv#mars_habitat",
+     "data/pipeline/objective_links.csv#P1/PSI-98",
+     "PSI-98.objective",
+     "data/pipeline/objective_links.csv#P3/PSI-98"
+    ],
+    "facts": {
+     "tests": 2,
+     "needs_stated": [
+      "P1",
+      "P3"
+     ]
+    },
+    "text_origin": "template",
+    "status": "near_tie",
+    "rule": [
+     "phase:solid",
+     "row_unit:test",
+     "tie",
+     "near_tie",
+     "fixed:mars_habitat"
+    ],
+    "config_id": "SAFFIRE-I-C01"
+   },
+   {
+    "investigation_id": "PSI-100",
+    "text": "Solid-fuel configuration (team catalog classification). Its PSI tables list 2 tests; this scenario sets no oxygen or pressure range, so none is matched to an atmosphere. The team pipeline links needs P1 (Flammability limit) and P3 (Flame spread and growth) to objectives stated in this record. Tied with BASS-II, SAFFIRE-II, BASS and SAFFIRE-I under the team's current weights. Listed because its team score is level with or close to the results shown, under the team's current weights. The preset sets no atmosphere, so the ranking compares only flow and research purpose (with ventilation assumed), not oxygen or pressure; it is not a match to a Mars habitat.",
+    "sources": [
+     "data/catalog/configurations.csv#SAFFIRE-III-C01",
+     "pipeline/spec/sources.json#saffire3",
+     "data/pipeline/scenario_tests.csv#mars_habitat",
+     "data/pipeline/objective_links.csv#P1/PSI-100",
+     "PSI-100.objective",
+     "data/pipeline/objective_links.csv#P3/PSI-100"
+    ],
+    "facts": {
+     "tests": 2,
+     "needs_stated": [
+      "P1",
+      "P3"
+     ]
+    },
+    "text_origin": "template",
+    "status": "near_tie",
+    "rule": [
+     "phase:solid",
+     "row_unit:test",
+     "tie",
+     "near_tie",
+     "fixed:mars_habitat"
+    ],
+    "config_id": "SAFFIRE-III-C01"
+   }
+  ],
+  "needs": [
+   {
+    "need_id": "P1",
+    "need": "Flammability limit",
+    "statement": "Recorded tests (team count; no team bins: the pipeline sets no oxygen or pressure range for this scenario). This environment sets no oxygen range and no pressure range. The 136 tests counted for this need were not compared with an atmosphere. Gravity gap: none of the 136 tests counted for this need is recorded at the gravity level of this environment (martian). What a count of this need means (the pipeline's reading): A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#mars_habitat/P1",
+     "pipeline/spec/scenarios.json#mars_habitat",
+     "data/pipeline/evidence/scenario_mars_habitat.json#P1/status.atmosphere_not_specified",
+     "data/pipeline/evidence/scenario_mars_habitat.json#P1/gap.gravity.no_usable_test_at_level",
+     "data/pipeline/evidence/scenario_mars_habitat.json#P1/need.reading",
+     "data/pipeline/objective_links.csv#P1/PSI-25",
+     "PSI-25.objective",
+     "data/pipeline/objective_links.csv#P1/PSI-98",
+     "PSI-98.objective",
+     "data/pipeline/objective_links.csv#P1/PSI-99",
+     "PSI-99.objective"
+    ],
+    "status": "atmosphere_not_specified",
+    "facts": {
+     "usable_tests": 136
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:atmosphere_not_specified",
+     "pipeline:status.atmosphere_not_specified",
+     "pipeline:gap.gravity.no_usable_test_at_level",
+     "gap:gravity:no_usable_test_at_martian",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "P2",
+    "need": "Ignition",
+    "statement": "Recorded tests (team count; no team bins: the pipeline sets no oxygen or pressure range for this scenario). No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective. What a count of this need means (the pipeline's reading): A counted test would record the material, the oxygen and an ignition result. No mapped table records one for a solid fuel.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#mars_habitat/P2",
+     "pipeline/spec/scenarios.json#mars_habitat",
+     "data/pipeline/evidence/scenario_mars_habitat.json#P2/status.not_measured",
+     "pipeline/spec/needs.json#P2",
+     "data/pipeline/evidence/scenario_mars_habitat.json#P2/need.reading"
+    ],
+    "status": "not_measured",
+    "facts": {
+     "usable_tests": 0,
+     "investigations_in_psi": 24
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:not_measured",
+     "pipeline:status.not_measured",
+     "gap:need:no_usable_test",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "P3",
+    "need": "Flame spread and growth",
+    "statement": "Recorded tests (team count; no team bins: the pipeline sets no oxygen or pressure range for this scenario). This environment sets no oxygen range and no pressure range. The 11 tests counted for this need were not compared with an atmosphere. Gravity gap: none of the 11 tests counted for this need is recorded at the gravity level of this environment (martian). What a count of this need means (the pipeline's reading): A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. Most counted tests record a length or a time and no spread rate; a burn time or a burn length is not a spread rate.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#mars_habitat/P3",
+     "pipeline/spec/scenarios.json#mars_habitat",
+     "data/pipeline/evidence/scenario_mars_habitat.json#P3/status.atmosphere_not_specified",
+     "data/pipeline/evidence/scenario_mars_habitat.json#P3/gap.gravity.no_usable_test_at_level",
+     "data/pipeline/evidence/scenario_mars_habitat.json#P3/need.reading",
+     "data/pipeline/objective_links.csv#P3/PSI-98",
+     "PSI-98.objective",
+     "data/pipeline/objective_links.csv#P3/PSI-99",
+     "PSI-99.objective"
+    ],
+    "status": "atmosphere_not_specified",
+    "facts": {
+     "usable_tests": 11
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:atmosphere_not_specified",
+     "pipeline:status.atmosphere_not_specified",
+     "pipeline:gap.gravity.no_usable_test_at_level",
+     "gap:gravity:no_usable_test_at_martian",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "S1",
+    "need": "Extinction conditions",
+    "statement": "Recorded tests (team count; no team bins: the pipeline sets no oxygen or pressure range for this scenario). This environment sets no oxygen range and no pressure range. The 299 tests counted for this need were not compared with an atmosphere. Gravity gap: none of the 299 tests counted for this need is recorded at the gravity level of this environment (martian). 272 further tests record the needed variables, but the investigation (PSI-159) does not state this need as an objective; they are not counted. These include inverse-flame tests, whose oxygen value is the burner stream and not an atmosphere. What a count of this need means (the pipeline's reading): A counted test records the fuel, the oxygen and how the burn ended or an event word. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#mars_habitat/S1",
+     "pipeline/spec/scenarios.json#mars_habitat",
+     "data/pipeline/evidence/scenario_mars_habitat.json#S1/status.atmosphere_not_specified",
+     "data/pipeline/evidence/scenario_mars_habitat.json#S1/gap.gravity.no_usable_test_at_level",
+     "data/pipeline/need_tests.csv#S1",
+     "data/pipeline/evidence/scenario_mars_habitat.json#S1/need.reading",
+     "data/pipeline/objective_links.csv#S1/PSI-25",
+     "PSI-25.objective",
+     "data/pipeline/objective_links.csv#S1/PSI-69",
+     "PSI-69.objective"
+    ],
+    "status": "atmosphere_not_specified",
+    "facts": {
+     "usable_tests": 299,
+     "tests_recorded_outside_objective": 272,
+     "outside_objective_investigations": [
+      "PSI-159"
+     ],
+     "outside_objective_includes_inverse_flames": true
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:atmosphere_not_specified",
+     "pipeline:status.atmosphere_not_specified",
+     "pipeline:gap.gravity.no_usable_test_at_level",
+     "gap:gravity:no_usable_test_at_martian",
+     "clause:outside_objective_inverse_flames",
+     "clause:outside_objective",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "D1",
+    "need": "Combustion products",
+    "statement": "Recorded tests (team count; no team bins: the pipeline sets no oxygen or pressure range for this scenario). No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective. 126 tests record the needed variables, but the investigations (PSI-25 and PSI-102) do not state this need as an objective; they are not counted. What a count of this need means (the pipeline's reading): A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading, or a mass loss rate. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#mars_habitat/D1",
+     "pipeline/spec/scenarios.json#mars_habitat",
+     "data/pipeline/evidence/scenario_mars_habitat.json#D1/status.not_measured",
+     "pipeline/spec/needs.json#D1",
+     "data/pipeline/need_tests.csv#D1",
+     "data/pipeline/evidence/scenario_mars_habitat.json#D1/need.reading"
+    ],
+    "status": "not_measured",
+    "facts": {
+     "usable_tests": 0,
+     "investigations_in_psi": 24,
+     "tests_recorded_outside_objective": 126,
+     "outside_objective_investigations": [
+      "PSI-25",
+      "PSI-102"
+     ]
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:not_measured",
+     "pipeline:status.not_measured",
+     "gap:need:no_usable_test",
+     "clause:outside_objective",
+     "pipeline:need.reading"
+    ]
+   },
+   {
+    "need_id": "D2",
+    "need": "Smoke generation conditions",
+    "statement": "Recorded tests (team count; no team bins: the pipeline sets no oxygen or pressure range for this scenario). This environment sets no oxygen range and no pressure range. The 4 tests counted for this need were not compared with an atmosphere. Gravity gap: none of the 4 tests counted for this need is recorded at the gravity level of this environment (martian). What a count of this need means (the pipeline's reading): A counted test records the material, the flow speed, the aging time and the mass loss rate of the heated sample. No particle size or detector response is in the mapped tables.",
+    "sources": [
+     "data/pipeline/scenario_needs.csv#mars_habitat/D2",
+     "pipeline/spec/scenarios.json#mars_habitat",
+     "data/pipeline/evidence/scenario_mars_habitat.json#D2/status.atmosphere_not_specified",
+     "data/pipeline/evidence/scenario_mars_habitat.json#D2/gap.gravity.no_usable_test_at_level",
+     "data/pipeline/evidence/scenario_mars_habitat.json#D2/need.reading",
+     "data/pipeline/objective_links.csv#D2/PSI-102",
+     "PSI-102.objective"
+    ],
+    "status": "atmosphere_not_specified",
+    "facts": {
+     "usable_tests": 4
+    },
+    "text_origin": "template",
+    "rule": [
+     "status:atmosphere_not_specified",
+     "pipeline:status.atmosphere_not_specified",
+     "pipeline:gap.gravity.no_usable_test_at_level",
+     "gap:gravity:no_usable_test_at_martian",
+     "pipeline:need.reading"
+    ]
+   }
+  ],
+  "gaps": [
+   {
+    "text": "Every test in the PSI tables is a microgravity test; none was run at Martian gravity, and microgravity and 1 g results are not treated here as bounds for Martian gravity. NASA's fire protection technical brief OCHMO-TB-008 says: \"Material flammability in partial gravity remains a major gap for exploration missions.\" (TB008.gaps).",
+    "needed_data": "test-level records in PSI from combustion tests run at Martian gravity",
+    "sources": [
+     "pipeline/spec/references.json#TB008.gaps",
+     "data/pipeline/scenario_needs.csv#mars_habitat"
+    ],
+    "rule": "gravity:no_usable_test_at_martian",
+    "status": "from_rule",
+    "facts": {
+     "tests_in_psi_tables": 1824,
+     "tests_not_microgravity": 0
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "For detection, the 4 smoke tests counted for smoke generation conditions (D2, PSI-102) have neither oxygen nor pressure in the table, and the team pipeline finds no investigation among the 24 whose PSI record states the measurement of combustion products (D1) as an objective. The NASA workshop report NASA/CP-2003-212103 describes knowledge of the fire signatures of spacecraft materials, and of the effect of low gravity on them, as inadequate for detection systems (CP2003.detection).",
+    "needed_data": "test-level records in PSI of smoke and combustion-product measurements with the oxygen and pressure of the test atmosphere",
+    "sources": [
+     "pipeline/spec/references.json#CP2003.detection",
+     "data/pipeline/scenario_needs.csv#mars_habitat/D2",
+     "data/pipeline/scenario_needs.csv#mars_habitat/D1",
+     "pipeline/spec/sources.json#same"
+    ],
+    "rule": "detection",
+    "status": "from_rule",
+    "facts": {
+     "d2_usable_tests": 4,
+     "d2_investigations": [
+      "PSI-102"
+     ],
+     "d2_oxygen_and_pressure_not_columns": true,
+     "d1_not_measured": true,
+     "d1_stated_as_objective_by_any_investigation": false,
+     "investigations_in_psi": 24
+    },
+    "text_origin": "template"
+   },
+   {
+    "text": "Post-fire clean-up: Fourth capability area in the NASA fire protection brief; the PSI tables hold no clean-up or atmosphere-recovery measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#TB008.areas"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Extinguishing agent transport and distribution: Listed as needed knowledge in NASA/CP-2003-212103; the PSI tables hold no agent-delivery measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.response"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Toxic combustion products other than carbon monoxide (HCN, HCl, HF): Required monitoring targets; the PSI tables record carbon monoxide and carbon dioxide only.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#3001.T6.2-3"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Fire signatures other than combustion gases and smoke: temperature rise, light and other radiation, pressure rise, acoustic waves: Listed among the signatures detectors respond to; no standard variable of the pipeline (variables.json) holds one of them.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#TB008.signatures"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Transport of fire precursors: Named as inadequately known in NASA/CP-2003-212103; no standard variable holds a transport measurement.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.detection"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Smoke particle size and smoke detector response: Published by the SAME investigators (SAME.sizes, SAME.detector); the PSI experimental tables of SAME and SAME-R hold the test conditions only.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#SAME.sizes"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Combustion by-products of extinguishing agents: Listed as needed knowledge (by-products of fires and agents; see also TB008.agent); the mapped tables hold no product reading for a test with an agent.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.response"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Location of a fire in the vehicle: Named among the initial conditions a response depends on; no standard variable holds where in a vehicle a fire is.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CP2003.initial"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Transfer of burning debris to adjacent materials: Part of the Test 1 acceptance criterion; no standard variable holds it.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#6001B.T1.pass"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {
+     "numerals_as_written_in_needs_json": [
+      1
+     ]
+    },
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Ignition-source control: Named under prevention in the challenge statement (read from a copy); the mapped tables hold igniter settings of single tests and nothing about ignition sources in a vehicle, and need P2 has no counted test.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "pipeline/spec/references.json#CH.pillars"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   },
+   {
+    "text": "Heat release of a fire: The record says the results 'are used in first order models and predictions of heat release in spacecraft fires'; no standard variable holds a heat release.",
+    "needed_data": "measurements of this kind in the PSI experimental tables",
+    "sources": [
+     "pipeline/spec/needs.json#not_covered",
+     "PSI-26.researchImpacts"
+    ],
+    "rule": "copied_from_needs_json_not_covered",
+    "status": "copied",
+    "facts": {},
+    "text_origin": "template",
+    "copied_from": "pipeline/spec/needs.json#not_covered"
+   }
+  ],
+  "ai_generated": false,
+  "text_origin": "template",
+  "frame_text_origin": "template",
+  "model": "none: counts and fixed sentences filled by team code",
+  "built_by": "ai/build_baseline.py",
+  "reviewed_by": null,
+  "label": "Computed by the team's code from NASA PSI tables (code written with an AI assistant). Counts of recorded tests in the team's bins; not a statement about how a material behaves; not NASA's conclusion; not operational safety guidance.",
+  "updated": "2026-11-14T14:51:24+09:00",
+  "fresh": {
+   "ranker_config_version": "1.0.0",
+   "scoring_config_sha256": "09a2ac8dabe2eb63bf73bc9836034238652fde510b510d97b5081aec9c455567",
+   "catalog_sha256": "19853b004b6a05be5ed45847e1511f3e171a1f3acbbdbfdab2de68c9b762fbc4",
+   "scenario_inputs_sha256": "087063c4fd10eb8d2d719943b607f71dbf0009562abd42d746ec3bcabfbb5606",
+   "hash_rule": "catalog_sha256 and scenario_inputs_sha256 are ai.meta.sha256_json of {repo path: file sha256} over ['data/catalog/configurations.csv', 'data/catalog/investigations.csv'] and ['data/pipeline/scenario_needs.csv', 'data/pipeline/scenario_tests.csv', 'data/pipeline/need_tests.csv', 'data/pipeline/tests.csv', 'pipeline/spec/needs.json', 'pipeline/spec/scenarios.json', 'data/pipeline/evidence/index.json', 'data/pipeline/evidence/scenario_iss.json', 'data/pipeline/evidence/scenario_lunar_habitat.json', 'data/pipeline/evidence/scenario_mars_habitat.json', 'data/pipeline/evidence/scenario_spacesuit.json', 'data/pipeline/evidence/scenario_exploration_8_2_34.json', 'data/pipeline/evidence/scenario_exploration_10_2_26_5.json']"
+  }
+ }
+]

@@ -46,42 +46,129 @@ Rules that come with these:
 - Scores are computed by code. A language model explains a result and never changes it.
 - For an atmosphere the record does not report, the scorer uses a fallback and attaches a `fallback` warning. Whoever shows the result shows the warning.
 
-## From the pm role (agreed with ui on 11/14 11:12; examples in `contracts/examples/`)
+## From the pm role (agreed with ui on 11/14 11:12; shape-only examples in `contracts/examples/`)
+
+*Rewritten 11/14 after the data role's audit, to describe the files as `python3 ai/build_all.py` writes them now (written by an AI session of the pm role; additions to the earlier list, no field renamed or removed). The files are the authority; `contracts/examples/*.json` show the shape only, with placeholder values that must never be displayed or cited.*
 
 Where a file is missing the dashboard shows "Not available yet". Arbitrary queries get no model-written text; the page shows the scorer's own `why` and `main_gap` lines.
 
-A `source` (in every file below) is one of three forms, or an array of them, so the page can turn each into a link:
+Every file in `data/insights/` is built by a script in `ai/` (code written with an AI assistant). `python3 ai/build_all.py` rebuilds all of them in order with no language-model call and ends with `ai/check_all.py`. Each file's disclosure block is in `data/insights/_meta.json` under the file name, and also inside the file under `_meta` when the file is a JSON object (`cards.json` and `scenarios.json` are arrays, so their block is only in `_meta.json`).
 
-- `PSI-25.objective`: a field of the PSI record JSON in `data/psi/catalog/`
-- `doi:10.xxxx/yyyy`: a publication
-- `data/pipeline/tests.csv#FLEX-12`: a file and a test id
+| File | `built_by` (in `_meta.json`) | Language model at build | Read by the page today |
+|---|---|---|---|
+| `scenarios.json` | `ai/build_baseline.py` | none | yes |
+| `cards.json` | `ai/apply_cards.py`, or `ai/apply_review.py` once review verdicts are applied (`ai/build_baseline.py` writes the quoted cards first; the later steps replace them) | `gpt-oss:20b (f38aa0c53da5)` when a model sentence is shipped, else `none` | yes |
+| `evidence.json` | `ai/evidence.py` | none | no |
+| `evidence_map.json` | `ai/evidence_map.py` | none | no (planned for "Where the evidence stops") |
+| `catalog_trace.json` | `ai/audit_catalog.py` | none | no |
+| `quality.json` | `ai/apply_review.py` | none | no |
+
+### Sources: three forms
+
+A `source` (in every file below) is a string, or an array of strings, so the page can turn each into a link (`sourceLinks()` in `web/app.js`). `ai/resolve.py` resolves every one to the text or row it names, and a build stops on a source that does not resolve.
+
+1. **A PSI record**: `PSI-25.objective` is a field of `data/psi/catalog/PSI-25.json` (`title`, `objective`, `approach`, `hypothesis`, `researchImpacts`); `PSI-25` alone is the whole record (the page links it to the PSI page).
+2. **A DOI**: `doi:10.xxxx/yyyy`, a dataset DOI of `data/psi/manifest.json`, a publication DOI listed in a PSI record, or a DOI in a `references.json` url.
+3. **A file and an id**: `<repo path>#<id>`. CSV: the rows whose first column is the id, or whose first two columns are `a/b` (`data/pipeline/scenario_needs.csv#lunar_habitat/S1`). JSON: the object whose `id` is the id at any depth (`pipeline/spec/references.json#SAF456.conditions`), a top-level key, a key of `_meta`, a dotted key path (`scoring/scoring_config.json#presets.mars_habitat`), or `a/b`: the one object with id `b` inside the object whose `id`, `need_id`, `scenario_id` or `investigation_id` is `a`. The last form cites the data role's fixed sentences: `data/pipeline/evidence/scenario_lunar_habitat.json#S1/status.in_atmosphere`.
+
+A NASA experimental table is cited through its `pipeline/spec/sources.json` entry, never by its file name (the names contain spaces).
+
+### Three kinds of text and how the page labels them
+
+| Kind | How a consumer recognises it | Tag the page shows (`web/app.js`) |
+|---|---|---|
+| Quoted from NASA | card `status` = `fallback_quote` or `ai_generated` = `false`; sentence `origin` = `quote`; every key point | "Quoted from the PSI record" |
+| Computed by team code from fixed templates and the data role's fixed sentences | `text_origin` = `template` on every scenario entry and on every need statement, gap and result note; the frame carries `frame_text_origin` = `template` (the page reads `frame_text_origin`, then the entry's `text_origin`); scenario entries have `ai_generated` = `false` | "Computed by team code from NASA PSI tables" |
+| Written by the language model gpt-oss:20b and checked by code gates | card `status` = `generated` or `generated_partial` and `ai_generated` = `true` (true exactly when at least one model sentence is shown); sentence `origin` = `model` | the page's AI tag with `model` and `reviewed_by` |
+
+That the code itself was written with an AI assistant is said in each file's `_meta` block and in the `label` strings, not by `ai_generated`.
+
+Field labels: a quoted sentence is always shown after the label of the record field it comes from: `Record title:`, `Stated objective:`, `Planned approach:`, `Stated hypothesis:`, `Impact statement in the record:`.
+
+### Need list
+
+Read from `pipeline/spec/needs.json`: six needs, `P1` Flammability limit, `P2` Ignition, `P3` Flame spread and growth, `S1` Extinction conditions, `D1` Combustion products, `D2` Smoke generation conditions (P4 was removed by the decision of 11/14 12:15). A test counts for a need only if the PSI record of its investigation states that need as an objective (`objective_link` = `stated` in `need_tests.csv`); other tests that record the variables are reported as "recorded outside the stated objective" and are not counted. Each need has a `reading`: what a counted test records and what the count does not mean; every need statement ends with it.
 
 ### `data/insights/cards.json`
 
-One entry per investigation: a short model-written summary shown next to the catalog row.
+Array of 24, one entry per investigation, shown next to the result. The page reads `summary`, `summary_sources`, `key_points[].text`, `key_points[].source`, `status`, `ai_generated`, `reviewed_by` and `model`.
 
 | Field | Type | Meaning |
 |---|---|---|
 | `investigation_id` | string | PSI accession, `PSI-25`. The page joins it to `rank()` results through their `psi_accession` |
-| `summary` | string | at most 3 English sentences written from the PSI record only |
-| `key_points` | array of `{ "text", "source" }` | at most 4, each with its source |
-| `ai_generated` | boolean | `true` |
-| `model` | string | the model that wrote the text |
-| `reviewed_by` | string or null | who checked it against the PSI text; `null` until checked. The page shows "Reviewed by <name>" or "Not reviewed yet" |
-| `updated` | string | ISO time |
+| `status` | string | `generated`: every model sentence the model proposed is shown. `generated_partial`: at least one was dropped (by a code gate, by a reviewed removal of `ai/review/pm_prereview.json`, or by the review). `fallback_quote`: no model sentence is shown; the card is the quoted baseline |
+| `summary` | string | at most 3 sentences. A `fallback_quote` card begins `Quoted from the PSI record.` and quotes with field labels. A model card has model sentences, each ending with its source in brackets, `(PSI-25 record: objective)`; a sentence removed before the review is replaced in place by the NASA sentence it cited, as `<field label> "<verbatim text>"` |
+| `summary_sources` | array of sources | the record fields the summary comes from; the page links them after the summary |
+| `key_points` | array of `{ "text", "source" }` | at most 4, each a verbatim quote with its field label (`Planned approach: "..."`) and its record field as source |
+| `ai_generated` | boolean | `true` exactly when at least one model sentence is shown |
+| `model` | string | `none: verbatim NASA text chosen by team code`, or `gpt-oss:20b (f38aa0c53da5) via Ollama 0.40.16` |
+| `reviewed_by` | string or null | `null` until every model sentence of the card has a review verdict in `ai/review/review_sheet.csv`; then `second AI session (data role)`, `hackathon team member (...)` or both. A reviewed removal never sets it |
+| `updated` | string | ISO time of the last change of the entry |
+| `built_by` | string | `ai/build_baseline.py`, `ai/apply_cards.py` or `ai/apply_review.py` (the step that wrote the entry) |
+| `label` | string | the disclosure sentence for this card |
+| `record_title`, `dataset_doi`, `license_note` | string | from `data/psi/manifest.json` and the record |
+| `prompt_sha256`, `params` | string or null, object | prompt file hash and model settings, log files and sentence counts (`sentences_proposed`, `sentences_shipped`, `sentences_removed_by_prereview`); `null` and `{}` for a `fallback_quote` card |
+| `pick_rule` | object | the fixed rules that chose the quoted sentences |
+| `shared_text_note` | string, optional | when the cited PSI text is word for word the same in other records |
+| `removed_before_review` | array, optional | `[{ n, sentence, reason, reviewer_kind: "ai_session_pm", replaced_by }]`, the reviewed removals applied to this card |
+| `sentences` | array | one per shown sentence, below |
+
+`sentences[]`: `role` (`summary`, `key_point`), `origin` (`quote`, `model`), `text`, `field_label` (`null` for a model sentence), `evidence`, `checks{}`, `lexical_support`, `shared_with[]`, `review` (`null` until reviewed). A quote also has `source`, `char_start`, `char_end` (offsets in the record field); a quote that fills the slot of a removed model sentence has `n` and `replaces { n, removed_by, reviewer_kind }`. A model sentence also has `n`, `cited_fields[]`, `repaired`, `first_pass_reasons[]`.
+
+`evidence[]`: `{ id, source, quote, char_start, char_end }`. `id` is a unit of `evidence.json`; `quote` is the exact text of that unit, taken by code (`record[field][char_start:char_end]`), never the model's copy. A model sentence's evidence also has `field`, `quote_from` and `model_quote`: the model's own copy of the quote, which code gate 2 checks and `ai/check_all.py` re-runs. `model_quote` is not for display.
 
 ### `data/insights/scenarios.json`
 
-One entry per preset scenario. Order of writing: `iss` and `lunar_habitat` (the demo), then `spacesuit` and `mars_habitat`.
+Array, one entry per preset scenario: `iss`, `lunar_habitat`, `spacesuit`, `mars_habitat`. Built by `ai/build_baseline.py` from the data role's scenario matching (`scenario_needs.csv`, `scenario_tests.csv`, `need_tests.csv`, `tests.csv`) and evidence packages (`data/pipeline/evidence/scenario_<id>.json`); no language model. The dashboard shows `iss` and `lunar_habitat`. The page reads `id`, `query`, `frame`, `frame_sources`, `frame_text_origin`, `text_origin`, `needs[]` (`need_id`, `statement`, `sources`, `text_origin`), `gaps[]` (`text`, `sources`, `needed_data`, `text_origin`), `result_notes[]` (`investigation_id`, `text`, `sources`, `text_origin`), `reviewed_by` and `model`.
 
 | Field | Type | Meaning |
 |---|---|---|
 | `id` | string | preset id from `scoring/scoring_config.json` |
 | `query` | string | exactly the string the page passes to `rank()`: `"ISS"`, `"lunar habitat"`, `"spacesuit"`, `"Mars base"` |
 | `ranking_source` | string | always `scoring.scorer.rank`; the page computes the ranking live and scores are not copied here |
-| `result_notes` | array of `{ "investigation_id", "text", "sources" }` | plain-language explanation of why a result ranks where it does. A note whose investigation is not in the live top 3 is shown under "Other investigations" |
-| `needs` | array of `{ "need_id", "statement", "sources" }` | one per need id in `needs.json` (`P1`–`P3`, `S1`, `D1`, `D2`): what the recorded tests can and cannot say for this scenario, counted from `scenario_needs.csv` (tests with a stated objective only) |
-| `gaps` | array of `{ "text", "needed_data" }` | what PSI does not contain for this scenario |
-| `ai_generated`, `model`, `reviewed_by`, `updated` | as above | |
+| `frame` | string | what the counts mean for this scenario: the team bins (and the flow range where the scenario sets one), the evidence rule, the burner-stream rule and, for lunar and Martian gravity, the gravity sentence with NASA's quoted gap (`TB008.gaps`) and one cited sentence from Olson and Ferkul's Table I (`OF2012.table1`, with its 5.18 s drop-tower caveat); ends with `label` |
+| `frame_sources`, `frame_facts` | array of sources, object | sources of the frame; the values it prints |
+| `frame_text_origin`, `text_origin` | string | `template` |
+| `ai_generated` | boolean | `false` (every sentence is built by team code) |
+| `needs` | array | one per need id in `needs.json`: `{ need_id, need, statement, sources, status, facts{}, text_origin, rule[] }`. `statement` begins `Recorded tests (team count; team bins: ...)`, then the data role's fixed status sentence, the team's clauses (investigations, missing columns, fuel phase, balance gas checked against the pipeline's `added_gas` mark, test ends for S1), the data role's fixed flow and gap sentences (oxygen, pressure, flow, gravity), the tests outside the stated objective, and `What a count of this need means (the pipeline's reading): <reading>`. Every fixed sentence is used as written and cited as `data/pipeline/evidence/scenario_<id>.json#<need>/<statement id>`. `status` is the pipeline value (`in_atmosphere`, `oxygen_only`, `pressure_only`, `other_atmosphere`, `not_measured`, `atmosphere_not_specified`); `in_atmosphere` means tests were run there, never that the need is covered |
+| `gaps` | array | `{ text, needed_data, sources, facts{}, text_origin, status, rule, copied_from? }`; `status` is `from_rule` (gravity, solid fuels at the atmosphere, droplets only for S1, detection) or `copied` (a `not_covered` line of `needs.json`, with `copied_from`). The solid-fuel gap names the Saffire IV to VI samples of `SAF456.conditions` that fall in the team bins, with their Table 1 numbers; they are never counted |
+| `result_notes` | array | `{ investigation_id, config_id, text, sources, facts{}, text_origin, status, rule[] }`; `status` is `top3` or `near_tie` (within 3 points of the third result). A note whose investigation is not in the live top 3 is shown under "Other investigations" |
+| `fresh` | object | `ranker_config_version`, `scoring_config_sha256`, `catalog_sha256`, `scenario_inputs_sha256`, `hash_rule`; `ai/check_all.py` fails when they no longer match the files (the scenario inputs include the evidence packages) |
+| `model`, `built_by`, `reviewed_by`, `label`, `updated` | string | `model` is `none: counts and fixed sentences filled by team code`; `reviewed_by` is `null` |
+
+Gap codes the build knows (from `pipeline/spec/statements.json`): `oxygen:not_recorded`, `oxygen:no_usable_test_in_range`, `pressure:not_recorded`, `pressure:no_usable_test_in_range`, `flow:not_recorded`, `flow:no_usable_test_in_range`, `gravity:no_usable_test_at_lunar`, `gravity:no_usable_test_at_martian`, `need:no_usable_test`. An unknown status or gap code stops the build. Every number printed in a `statement`, `text` or `frame` is a value in that item's `facts` (or `frame_facts`); `ai/check_all.py` recounts them from the pipeline CSVs by a second code path, or finds them in a cited source.
+
+### `data/insights/evidence.json`
+
+Object, built by `ai/evidence.py` (no language model). The PSI record prose of the 24 investigations, split into numbered sentences ("units") that cards cite by id.
+
+`{ _meta, records: { "PSI-<n>": { title, acronym, license, dataset_doi, pub_count, dois[], related[], units[] } } }`. A unit is `{ id, field, prefix, source, text, char_start, char_end, words, quotable, reference_like, hedged, hedge_words[], list_marker, under_heading, shared_with[] }`. Ids are `TTL-1`, `OBJ-k`, `APP-k`, `HYP-k`, `IMP-k`; `prefix` is the field label; `text` equals `record[field][char_start:char_end]`.
+
+### `data/insights/evidence_map.json`
+
+Object, built by `ai/evidence_map.py` (no language model): the data for "Where the evidence stops" (oxygen axis, three fuel lanes). `{ _meta, labels{}, axes{}, points[], pressure_column{}, not_plotted{}, targets[], flight_tests_not_in_psi, sums{} }`.
+
+- A point is `{ fuel_phase, investigation_id, source_id, o2_pct, pressure_kpa, balance_gas, n_tests, test_ids[] }` plus optional fields. `pressure_kpa` `null` means no value (never 0, never 101 kPa); `balance_gas` is `n2_only`, `co2_added`, `he_added` or `not_recorded`. Only ambient oxygen is plotted; oxidizer-stream tests are in `not_plotted`.
+- A target is `{ id, kind, label, as_written, source, access, draw, ... }` with `kind` one of `nasa_design_atmosphere`, `nasa_test_environment`, `challenge_statement`, `team_preset`, `team_counting_range`.
+- `flight_tests_not_in_psi`: the five Saffire IV to VI samples of `SAF456.conditions` (ICES-2024-365, Table 1) as cited marks `{ o2_pct, pressure_kpa, flight_sample, flight, material, label, marker: "cross", counted: false, what, source, access }`, or `null` when the item is absent. They are never counted; `labels.saffire_note` describes them.
+- `sums.lanes`: per lane (`gas`, `liquid`, `solid`) `{ label, plotted, max_o2_pct, at_or_above_30_pct_o2, not_plotted, not_plotted_oxidizer_stream, not_plotted_no_ambient_oxygen_value }`.
+
+Not yet in `web/build.py` `OPTIONAL`; the page does not read it today.
+
+### `data/insights/catalog_trace.json`
+
+Object, built by `ai/audit_catalog.py` (no language model): for every number in the catalog text the page shows (`investigations.csv` `objectives` and `key_findings`, `configurations.csv` `key_findings` and `config_label`), whether it was found in a NASA source. `{ _meta, description, fields_audited[], rules{}, counts{}, numbers[], not_audited[], lint_hits[] }`. A number is `{ table, row_id, csv_line, investigation_id, field, number, unit, unit_from_range, follower, context, status, matched_source, rule }`; `status` is `found_in_psi_text`, `found_in_table_cell`, `found_as_count` or `not_found`, and says only that the number was found, not that its meaning was checked.
+
+### `data/insights/quality.json`
+
+Object, built by `ai/apply_review.py` (no language model): measured counts of the model sentences and their checks. Sentences proposed, passed and rejected by each gate, repaired, `removed_before_review` (`{ n, reviewer_kind: "ai_session_pm", file, sentences[], ... }`, the reviewed removals, counted apart from the review), `removed_by_review`, shipped, cards by status, rows reviewed by a person and by an AI session (separately), verdicts, `support_rate` with its `n`, and `recount_ok`.
+
+### `data/insights/_meta.json`
+
+Object keyed by file name (plus its own `_meta`): `{ built_by, code_written_with, language_model_used_at_build, generated_at, inputs_sha256{}, label, content_sha256, ... }` for every file in `data/insights/`. `language_model_used_at_build` is `none` or `gpt-oss:20b (f38aa0c53da5)`.
+
+### Planned, not built yet
+
+`ai_method.json` (the "How we checked the AI text" panel), `model_readiness.json`, `robustness.json`, `data_health.json`. Their shapes are in `docs/ai_layer_design.json` (`file_contracts`); the page must not rely on them until they are listed here.
 
 Pressure is in kPa everywhere (14.7 psi = 101.3 kPa, 10.2 psi = 70.3 kPa).

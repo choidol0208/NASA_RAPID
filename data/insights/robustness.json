@@ -1,0 +1,1140 @@
+{
+ "_meta": {
+  "built_by": "ai/robustness.py",
+  "code_written_with": "AI assistant (Claude Code)",
+  "language_model_used_at_build": "none",
+  "generated_at": "2026-11-14T14:42:30+09:00",
+  "inputs_sha256": {
+   "data/catalog/configurations.csv": "a5b116f80d9e7de14c419af85c1b2f095094d633c74038ed6d63f9f8107914e3",
+   "data/catalog/investigations.csv": "4a7f1c6865f5ef35a3697a11c39c39cc26a9afbd2d8d8033e6301688d9d1429c",
+   "scoring/scorer.py": "52acaa96412318ed798058745f07ded00a08595070f1db4bc5677edcf3f91721",
+   "scoring/scoring_config.json": "09a2ac8dabe2eb63bf73bc9836034238652fde510b510d97b5081aec9c455567"
+  },
+  "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). No language model ran to build it. Shares are computed by code from the team's ranking (scoring.scorer) under sampled weights. Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
+  "params": {
+   "seed": 42,
+   "check_seed": 43,
+   "draws": 2000,
+   "concentration": 50.0,
+   "tie_tolerance": 1e-09,
+   "numpy": "2.1.3"
+  },
+  "content_sha256": "fcf50bb1651254d6ec2c7c5019dcaa188967297122dbb6af0c265c804d1b7ad6"
+ },
+ "description": "Rank stability of the team's ranking (scoring.scorer.rank) for the four preset queries under sampled weights, tie-aware. Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
+ "label": "Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
+ "method": {
+  "family": "multi-criteria decision analysis: sensitivity of a weighted sum to its weights (SMAA-style)",
+  "local": "Dirichlet(50 x profile weights) over the profile's keys with weight above 0",
+  "uniform": "Dirichlet(1) over the same keys: no stated preference",
+  "zero_weight_dims": "a key whose profile weight is 0 stays 0",
+  "rescore": "NumPy re-score from the scorer's own similarities, gate and evidence factor; checked against scoring.scorer.rank(weights_override=...) for every draw of the seed-42 runs",
+  "first_or_tied": "score within 1e-09 of the top score of the draw (unrounded scores)",
+  "top3": "fewer than 3 other investigations score more (by more than 1e-09)",
+  "at_displayed_precision": "the same share with scores rounded to 0.1 as the page prints them",
+  "shown_in_results": "share of draws in which rank() lists the investigation among its results (after the scorer's near-tie and complementary-slot rules)",
+  "tied_in_every_draw_with": "level (within the tolerance) in every draw of both runs: a tie, not an order",
+  "assumed_dims": "copied from rank() at the profile weights; assumed_dims_scored keeps those the query scores",
+  "display_rule": "assumed_dims_scored not empty: the line says the rank uses an assumed atmosphere and shows no stability figure; else a tie in every draw is said as a tie; else 'tied for first with <id> in y%' or 'first in x%'",
+  "not_varied": "only the weights are sampled; similarities, presets, gate, evidence factor and catalog are fixed",
+  "reference": "Lahdelma and Salminen, SMAA-2, Operations Research 49(3), 2001 (method idea only)"
+ },
+ "runs": [
+  {
+   "scenario_id": "iss",
+   "query": "ISS",
+   "profile": "prevention",
+   "config_version": "1.0.0",
+   "seed": 42,
+   "draws": 2000,
+   "draws_uniform": 2000,
+   "concentration": 50.0,
+   "tie_tolerance": 1e-09,
+   "rng": "numpy.random.default_rng([42, 0]) local, default_rng([42, 1]) uniform",
+   "profile_weights": {
+    "o2": 0.25,
+    "pressure": 0.1,
+    "flow": 0.2,
+    "fuel": 0.25,
+    "geometry": 0.1,
+    "role": 0.1,
+    "diluent": 0.0
+   },
+   "sampled_dims": [
+    "o2",
+    "pressure",
+    "flow",
+    "fuel",
+    "geometry",
+    "role"
+   ],
+   "zero_weight_dims": [
+    "diluent"
+   ],
+   "scored_dims": [
+    "o2",
+    "pressure",
+    "flow",
+    "role"
+   ],
+   "scenario": {
+    "o2_pct": 21.0,
+    "pressure_kpa": 101.3,
+    "flow_state": "ventilated",
+    "gravity": "microgravity",
+    "preset": "iss",
+    "concern": "prevention"
+   },
+   "live_top3": [
+    "BASS-II",
+    "BASS",
+    "SAFFIRE-II"
+   ],
+   "default_check": {
+    "profile_weights_reproduce_live_top3": true,
+    "numpy_rescore_equals_ranking_scores": true
+   },
+   "structural_ties": [
+    {
+     "investigations": [
+      "BASS-II",
+      "BASS",
+      "SAFFIRE-III"
+     ],
+     "first_or_tied_in_every_draw": true,
+     "why": "their best configurations have the same similarity on every scored dimension (O2, pressure, flow, research purpose) and the same evidence and gate factor, so no weighting separates them",
+     "same_similarity_and_factor": true
+    },
+    {
+     "investigations": [
+      "SAFFIRE-II",
+      "SAFFIRE-I"
+     ],
+     "first_or_tied_in_every_draw": false,
+     "why": "their best configurations have the same similarity on every scored dimension (O2, pressure, flow, research purpose) and the same evidence and gate factor, so no weighting separates them",
+     "same_similarity_and_factor": true
+    }
+   ],
+   "results": [
+    {
+     "investigation_id": "BASS-II",
+     "live_rank": 1,
+     "live_position_in_ranking": 1,
+     "live_config_id": "BASS-II-C01",
+     "first_or_tied_share_local": 1.0,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 1.0,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 1.0,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "BASS",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-III",
+       "share": 1.0,
+       "share_uniform": 1.0
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "BASS",
+      "SAFFIRE-III"
+     ],
+     "assumed_dims": [
+      "pressure"
+     ],
+     "assumed_dims_scored": [
+      "pressure"
+     ],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 1.0,
+     "display_line": "Level with BASS and SAFFIRE-III in every one of the team's 4,000 sampled weightings (a tie, not an order); the rank uses an assumed atmosphere for values the record does not report (pressure).",
+     "display_rule": "assumed_atmosphere_and_tie",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 3,
+      "shares_pct": [
+       100.0,
+       100.0,
+       100.0,
+       100.0,
+       0.0,
+       100.0,
+       100.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "BASS",
+     "live_rank": 2,
+     "live_position_in_ranking": 2,
+     "live_config_id": "BASS-C01",
+     "first_or_tied_share_local": 1.0,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 1.0,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 1.0,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "BASS-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-III",
+       "share": 1.0,
+       "share_uniform": 1.0
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "BASS-II",
+      "SAFFIRE-III"
+     ],
+     "assumed_dims": [
+      "O2",
+      "pressure"
+     ],
+     "assumed_dims_scored": [
+      "O2",
+      "pressure"
+     ],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 0.0,
+     "display_line": "Level with BASS-II and SAFFIRE-III in every one of the team's 4,000 sampled weightings (a tie, not an order); the rank uses an assumed atmosphere for values the record does not report (O2 and pressure).",
+     "display_rule": "assumed_atmosphere_and_tie",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 3,
+      "shares_pct": [
+       100.0,
+       100.0,
+       100.0,
+       100.0,
+       0.0,
+       100.0,
+       100.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "SAFFIRE-II",
+     "live_rank": 3,
+     "live_position_in_ranking": 3,
+     "live_config_id": "SAFFIRE-II-C01",
+     "first_or_tied_share_local": 0.0,
+     "top3_share_local": 0.0,
+     "first_or_tied_share_uniform": 0.0,
+     "top3_share_uniform": 0.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 0.0,
+     "tied_for_first_with": [],
+     "tied_in_every_draw_with": [
+      "SAFFIRE-I"
+     ],
+     "assumed_dims": [
+      "pressure"
+     ],
+     "assumed_dims_scored": [
+      "pressure"
+     ],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 0.998,
+     "listed_first_share_local": 0.0,
+     "listing_note": "Listed by the scorer's near-tie rule (scoring_config.json selection.tie_points), which orders close scores by evidence quality; BASS-II, BASS and SAFFIRE-III score more at the profile weights.",
+     "display_line": "Level with SAFFIRE-I in every one of the team's 4,000 sampled weightings (a tie, not an order); the rank uses an assumed atmosphere for values the record does not report (pressure).",
+     "display_rule": "assumed_atmosphere_and_tie",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 2,
+      "shares_pct": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "SAFFIRE-III",
+     "live_rank": null,
+     "live_position_in_ranking": 4,
+     "live_config_id": "SAFFIRE-III-C01",
+     "first_or_tied_share_local": 1.0,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 1.0,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 1.0,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "BASS-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "BASS",
+       "share": 1.0,
+       "share_uniform": 1.0
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "BASS-II",
+      "BASS"
+     ],
+     "assumed_dims": [
+      "O2",
+      "pressure"
+     ],
+     "assumed_dims_scored": [
+      "O2",
+      "pressure"
+     ],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 0.0015,
+     "listed_first_share_local": 0.0,
+     "note": "Level with the top score in every sampled weighting but not one of the results the page lists: the scorer orders equal scores by evidence factor, 1 g comparison and configuration id, and its near-tie rule (scoring_config.json selection.tie_points) moved SAFFIRE-II up.",
+     "display_line": null,
+     "display_rule": null
+    }
+   ],
+   "parity": {
+    "rank_calls": 4000,
+    "investigation_scores_compared": 96000,
+    "mismatches": 0,
+    "rank_seconds": 3.5
+   },
+   "seed_check": {
+    "seed": 43,
+    "max_abs_diff_points": 0.0,
+    "largest_at": null,
+    "max_abs_diff_points_local": 0.0,
+    "largest_at_local": null,
+    "max_abs_diff_points_uniform": 0.0,
+    "largest_at_uniform": null,
+    "limit_points": 2.0,
+    "within_limit": true,
+    "local_within_limit": true,
+    "note": "display lines print local shares only; the design's limit is 2 points for every share"
+   }
+  },
+  {
+   "scenario_id": "lunar_habitat",
+   "query": "lunar habitat",
+   "profile": "prevention",
+   "config_version": "1.0.0",
+   "seed": 42,
+   "draws": 2000,
+   "draws_uniform": 2000,
+   "concentration": 50.0,
+   "tie_tolerance": 1e-09,
+   "rng": "numpy.random.default_rng([42, 0]) local, default_rng([42, 1]) uniform",
+   "profile_weights": {
+    "o2": 0.25,
+    "pressure": 0.1,
+    "flow": 0.2,
+    "fuel": 0.25,
+    "geometry": 0.1,
+    "role": 0.1,
+    "diluent": 0.0
+   },
+   "sampled_dims": [
+    "o2",
+    "pressure",
+    "flow",
+    "fuel",
+    "geometry",
+    "role"
+   ],
+   "zero_weight_dims": [
+    "diluent"
+   ],
+   "scored_dims": [
+    "o2",
+    "pressure",
+    "flow",
+    "role"
+   ],
+   "scenario": {
+    "o2_pct": 30.0,
+    "pressure_kpa": 70.3,
+    "flow_state": "ventilated",
+    "gravity": "lunar",
+    "preset": "lunar_habitat",
+    "concern": "prevention"
+   },
+   "live_top3": [
+    "ACME-BRE",
+    "FLEX",
+    "ACME-CFI-G"
+   ],
+   "default_check": {
+    "profile_weights_reproduce_live_top3": true,
+    "numpy_rescore_equals_ranking_scores": true
+   },
+   "structural_ties": [
+    {
+     "investigations": [
+      "ACME-BRE",
+      "FLEX"
+     ],
+     "first_or_tied_in_every_draw": false,
+     "why": "their best configurations have the same similarity on every scored dimension (O2, pressure, flow, research purpose) and the same evidence and gate factor, so no weighting separates them",
+     "same_similarity_and_factor": true
+    }
+   ],
+   "results": [
+    {
+     "investigation_id": "ACME-BRE",
+     "live_rank": 1,
+     "live_position_in_ranking": 1,
+     "live_config_id": "ACME-BRE-C01",
+     "first_or_tied_share_local": 0.967,
+     "top3_share_local": 0.98,
+     "first_or_tied_share_uniform": 0.704,
+     "top3_share_uniform": 0.742,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 0.967,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "FLEX",
+       "share": 0.967,
+       "share_uniform": 0.704
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "FLEX"
+     ],
+     "assumed_dims": [],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 0.967,
+     "display_line": "Level with FLEX in every one of the team's 4,000 sampled weightings (a tie, not an order); the two are first together in 96.7% of the 2,000 drawn around the profile weights.",
+     "display_rule": "tie_in_every_draw",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 2,
+      "shares_pct": [
+       96.7,
+       98.0,
+       70.4,
+       74.2,
+       0.0,
+       96.7
+      ]
+     }
+    },
+    {
+     "investigation_id": "FLEX",
+     "live_rank": 2,
+     "live_position_in_ranking": 2,
+     "live_config_id": "FLEX-C01",
+     "first_or_tied_share_local": 0.967,
+     "top3_share_local": 0.98,
+     "first_or_tied_share_uniform": 0.704,
+     "top3_share_uniform": 0.742,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 0.967,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "ACME-BRE",
+       "share": 0.967,
+       "share_uniform": 0.704
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "ACME-BRE"
+     ],
+     "assumed_dims": [],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 0.967,
+     "listed_first_share_local": 0.0,
+     "display_line": "Level with ACME-BRE in every one of the team's 4,000 sampled weightings (a tie, not an order); the two are first together in 96.7% of the 2,000 drawn around the profile weights.",
+     "display_rule": "tie_in_every_draw",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 2,
+      "shares_pct": [
+       96.7,
+       98.0,
+       70.4,
+       74.2,
+       0.0,
+       96.7
+      ]
+     }
+    },
+    {
+     "investigation_id": "ACME-CFI-G",
+     "live_rank": 3,
+     "live_position_in_ranking": 3,
+     "live_config_id": "ACME-CFI-G-C01",
+     "first_or_tied_share_local": 0.0,
+     "top3_share_local": 0.8645,
+     "first_or_tied_share_uniform": 0.0,
+     "top3_share_uniform": 0.6195,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 0.0,
+     "tied_for_first_with": [],
+     "tied_in_every_draw_with": [],
+     "assumed_dims": [],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 0.8805,
+     "listed_first_share_local": 0.0,
+     "display_line": "Among the first three in 86.5% of the team's 2,000 sampled weightings around the profile weights, and first in none of them.",
+     "display_rule": "top3_share",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 1,
+      "shares_pct": [
+       0.0,
+       86.5,
+       0.0,
+       62.0,
+       0.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "BASS-II",
+     "live_rank": null,
+     "live_position_in_ranking": 7,
+     "live_config_id": "BASS-II-C01",
+     "first_or_tied_share_local": 0.033,
+     "top3_share_local": 0.081,
+     "first_or_tied_share_uniform": 0.296,
+     "top3_share_uniform": 0.338,
+     "first_alone_share_local": 0.033,
+     "first_or_tied_share_local_at_displayed_precision": 0.033,
+     "tied_for_first_with": [],
+     "tied_in_every_draw_with": [],
+     "assumed_dims": [
+      "pressure"
+     ],
+     "assumed_dims_scored": [
+      "pressure"
+     ],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 0.1195,
+     "listed_first_share_local": 0.033,
+     "display_line": null,
+     "display_rule": null
+    }
+   ],
+   "parity": {
+    "rank_calls": 4000,
+    "investigation_scores_compared": 96000,
+    "mismatches": 0,
+    "rank_seconds": 3.6
+   },
+   "seed_check": {
+    "seed": 43,
+    "max_abs_diff_points": 3.6,
+    "largest_at": "ACME-CFI-G.top3_share_uniform",
+    "max_abs_diff_points_local": 2.0,
+    "largest_at_local": "ACME-CFI-G.top3_share_local",
+    "max_abs_diff_points_uniform": 3.6,
+    "largest_at_uniform": "ACME-CFI-G.top3_share_uniform",
+    "limit_points": 2.0,
+    "within_limit": false,
+    "local_within_limit": true,
+    "note": "display lines print local shares only; the design's limit is 2 points for every share"
+   }
+  },
+  {
+   "scenario_id": "spacesuit",
+   "query": "spacesuit",
+   "profile": "prevention",
+   "config_version": "1.0.0",
+   "seed": 42,
+   "draws": 2000,
+   "draws_uniform": 2000,
+   "concentration": 50.0,
+   "tie_tolerance": 1e-09,
+   "rng": "numpy.random.default_rng([42, 0]) local, default_rng([42, 1]) uniform",
+   "profile_weights": {
+    "o2": 0.25,
+    "pressure": 0.1,
+    "flow": 0.2,
+    "fuel": 0.25,
+    "geometry": 0.1,
+    "role": 0.1,
+    "diluent": 0.0
+   },
+   "sampled_dims": [
+    "o2",
+    "pressure",
+    "flow",
+    "fuel",
+    "geometry",
+    "role"
+   ],
+   "zero_weight_dims": [
+    "diluent"
+   ],
+   "scored_dims": [
+    "o2",
+    "pressure",
+    "role"
+   ],
+   "scenario": {
+    "o2_pct": 100.0,
+    "pressure_kpa": 29.6,
+    "preset": "spacesuit",
+    "concern": "prevention"
+   },
+   "live_top3": [
+    "ACME-CFI-G",
+    "ACME-FLAME-DESIGN",
+    "ACME-BRE"
+   ],
+   "default_check": {
+    "profile_weights_reproduce_live_top3": true,
+    "numpy_rescore_equals_ranking_scores": true
+   },
+   "structural_ties": [],
+   "results": [
+    {
+     "investigation_id": "ACME-CFI-G",
+     "live_rank": 1,
+     "live_position_in_ranking": 1,
+     "live_config_id": "ACME-CFI-G-C02",
+     "first_or_tied_share_local": 0.9425,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 0.761,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.9425,
+     "first_or_tied_share_local_at_displayed_precision": 0.9455,
+     "tied_for_first_with": [],
+     "tied_in_every_draw_with": [],
+     "assumed_dims": [],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 0.9455,
+     "display_line": "First in 94.2% of the team's 2,000 sampled weightings around the profile weights, and among the first three in 100%.",
+     "display_rule": "first_share",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 1,
+      "shares_pct": [
+       94.2,
+       100.0,
+       76.1,
+       100.0,
+       94.2
+      ]
+     }
+    },
+    {
+     "investigation_id": "ACME-FLAME-DESIGN",
+     "live_rank": 2,
+     "live_position_in_ranking": 2,
+     "live_config_id": "ACME-FLAME-DESIGN-C02",
+     "first_or_tied_share_local": 0.0575,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 0.239,
+     "top3_share_uniform": 0.887,
+     "first_alone_share_local": 0.0575,
+     "first_or_tied_share_local_at_displayed_precision": 0.062,
+     "tied_for_first_with": [],
+     "tied_in_every_draw_with": [],
+     "assumed_dims": [],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 0.951,
+     "listed_first_share_local": 0.0545,
+     "display_line": "First in 5.8% of the team's 2,000 sampled weightings around the profile weights, and among the first three in 100%.",
+     "display_rule": "first_share",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 1,
+      "shares_pct": [
+       5.8,
+       100.0,
+       23.9,
+       88.7,
+       5.8
+      ]
+     }
+    },
+    {
+     "investigation_id": "ACME-BRE",
+     "live_rank": 3,
+     "live_position_in_ranking": 3,
+     "live_config_id": "ACME-BRE-C01",
+     "first_or_tied_share_local": 0.0,
+     "top3_share_local": 0.96,
+     "first_or_tied_share_uniform": 0.0,
+     "top3_share_uniform": 0.783,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 0.0,
+     "tied_for_first_with": [],
+     "tied_in_every_draw_with": [],
+     "assumed_dims": [],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 0.983,
+     "listed_first_share_local": 0.0,
+     "display_line": "Among the first three in 96% of the team's 2,000 sampled weightings around the profile weights, and first in none of them.",
+     "display_rule": "top3_share",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 1,
+      "shares_pct": [
+       0.0,
+       96.0,
+       0.0,
+       78.3,
+       0.0
+      ]
+     }
+    }
+   ],
+   "parity": {
+    "rank_calls": 4000,
+    "investigation_scores_compared": 96000,
+    "mismatches": 0,
+    "rank_seconds": 3.4
+   },
+   "seed_check": {
+    "seed": 43,
+    "max_abs_diff_points": 1.85,
+    "largest_at": "ACME-FLAME-DESIGN.first_or_tied_share_uniform",
+    "max_abs_diff_points_local": 0.55,
+    "largest_at_local": "ACME-BRE.top3_share_local",
+    "max_abs_diff_points_uniform": 1.85,
+    "largest_at_uniform": "ACME-FLAME-DESIGN.first_or_tied_share_uniform",
+    "limit_points": 2.0,
+    "within_limit": true,
+    "local_within_limit": true,
+    "note": "display lines print local shares only; the design's limit is 2 points for every share"
+   }
+  },
+  {
+   "scenario_id": "mars_habitat",
+   "query": "Mars base",
+   "profile": "prevention",
+   "config_version": "1.0.0",
+   "seed": 42,
+   "draws": 2000,
+   "draws_uniform": 2000,
+   "concentration": 50.0,
+   "tie_tolerance": 1e-09,
+   "rng": "numpy.random.default_rng([42, 0]) local, default_rng([42, 1]) uniform",
+   "profile_weights": {
+    "o2": 0.25,
+    "pressure": 0.1,
+    "flow": 0.2,
+    "fuel": 0.25,
+    "geometry": 0.1,
+    "role": 0.1,
+    "diluent": 0.0
+   },
+   "sampled_dims": [
+    "o2",
+    "pressure",
+    "flow",
+    "fuel",
+    "geometry",
+    "role"
+   ],
+   "zero_weight_dims": [
+    "diluent"
+   ],
+   "scored_dims": [
+    "flow",
+    "role"
+   ],
+   "scenario": {
+    "flow_state": "ventilated",
+    "gravity": "martian",
+    "preset": "mars_habitat",
+    "concern": "prevention"
+   },
+   "live_top3": [
+    "BASS-II",
+    "SAFFIRE-II",
+    "BASS"
+   ],
+   "default_check": {
+    "profile_weights_reproduce_live_top3": true,
+    "numpy_rescore_equals_ranking_scores": true
+   },
+   "structural_ties": [
+    {
+     "investigations": [
+      "BASS-II",
+      "SAFFIRE-II",
+      "BASS",
+      "SAFFIRE-I",
+      "SAFFIRE-III"
+     ],
+     "first_or_tied_in_every_draw": true,
+     "why": "their best configurations have the same similarity on every scored dimension (flow, research purpose) and the same evidence and gate factor, so no weighting separates them",
+     "same_similarity_and_factor": true
+    }
+   ],
+   "results": [
+    {
+     "investigation_id": "BASS-II",
+     "live_rank": 1,
+     "live_position_in_ranking": 1,
+     "live_config_id": "BASS-II-C01",
+     "first_or_tied_share_local": 1.0,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 1.0,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 1.0,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "SAFFIRE-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "BASS",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-I",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-III",
+       "share": 1.0,
+       "share_uniform": 1.0
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "SAFFIRE-II",
+      "BASS",
+      "SAFFIRE-I",
+      "SAFFIRE-III"
+     ],
+     "assumed_dims": [
+      "pressure"
+     ],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 1.0,
+     "display_line": "Level with SAFFIRE-II, BASS, SAFFIRE-I and SAFFIRE-III in every one of the team's 4,000 sampled weightings: a tie, not an order.",
+     "display_rule": "tie_in_every_draw",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 5,
+      "shares_pct": [
+       100.0,
+       100.0,
+       100.0,
+       100.0,
+       0.0,
+       100.0,
+       100.0,
+       100.0,
+       100.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "SAFFIRE-II",
+     "live_rank": 2,
+     "live_position_in_ranking": 2,
+     "live_config_id": "SAFFIRE-II-C01",
+     "first_or_tied_share_local": 1.0,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 1.0,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 1.0,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "BASS-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "BASS",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-I",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-III",
+       "share": 1.0,
+       "share_uniform": 1.0
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "BASS-II",
+      "BASS",
+      "SAFFIRE-I",
+      "SAFFIRE-III"
+     ],
+     "assumed_dims": [
+      "pressure"
+     ],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 0.0,
+     "display_line": "Level with BASS-II, BASS, SAFFIRE-I and SAFFIRE-III in every one of the team's 4,000 sampled weightings: a tie, not an order.",
+     "display_rule": "tie_in_every_draw",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 5,
+      "shares_pct": [
+       100.0,
+       100.0,
+       100.0,
+       100.0,
+       0.0,
+       100.0,
+       100.0,
+       100.0,
+       100.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "BASS",
+     "live_rank": 3,
+     "live_position_in_ranking": 3,
+     "live_config_id": "BASS-C01",
+     "first_or_tied_share_local": 1.0,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 1.0,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 1.0,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "BASS-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-I",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-III",
+       "share": 1.0,
+       "share_uniform": 1.0
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "BASS-II",
+      "SAFFIRE-II",
+      "SAFFIRE-I",
+      "SAFFIRE-III"
+     ],
+     "assumed_dims": [
+      "O2",
+      "pressure"
+     ],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 0.0,
+     "display_line": "Level with BASS-II, SAFFIRE-II, SAFFIRE-I and SAFFIRE-III in every one of the team's 4,000 sampled weightings: a tie, not an order.",
+     "display_rule": "tie_in_every_draw",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 2000,
+      "draws_both_runs": 4000,
+      "top_k": 3,
+      "group_size": 5,
+      "shares_pct": [
+       100.0,
+       100.0,
+       100.0,
+       100.0,
+       0.0,
+       100.0,
+       100.0,
+       100.0,
+       100.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "SAFFIRE-I",
+     "live_rank": null,
+     "live_position_in_ranking": 4,
+     "live_config_id": "SAFFIRE-I-C01",
+     "first_or_tied_share_local": 1.0,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 1.0,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 1.0,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "BASS-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "BASS",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-III",
+       "share": 1.0,
+       "share_uniform": 1.0
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "BASS-II",
+      "SAFFIRE-II",
+      "BASS",
+      "SAFFIRE-III"
+     ],
+     "assumed_dims": [
+      "pressure"
+     ],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 0.0,
+     "listed_first_share_local": 0.0,
+     "note": "Level with the top score in every sampled weighting but not one of the results the page lists: the scorer orders equal scores by evidence factor, 1 g comparison and configuration id.",
+     "display_line": null,
+     "display_rule": null
+    },
+    {
+     "investigation_id": "SAFFIRE-III",
+     "live_rank": null,
+     "live_position_in_ranking": 5,
+     "live_config_id": "SAFFIRE-III-C01",
+     "first_or_tied_share_local": 1.0,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 1.0,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 1.0,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "BASS-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "BASS",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-I",
+       "share": 1.0,
+       "share_uniform": 1.0
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "BASS-II",
+      "SAFFIRE-II",
+      "BASS",
+      "SAFFIRE-I"
+     ],
+     "assumed_dims": [
+      "O2",
+      "pressure"
+     ],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 0.0,
+     "listed_first_share_local": 0.0,
+     "note": "Level with the top score in every sampled weighting but not one of the results the page lists: the scorer orders equal scores by evidence factor, 1 g comparison and configuration id.",
+     "display_line": null,
+     "display_rule": null
+    }
+   ],
+   "parity": {
+    "rank_calls": 4000,
+    "investigation_scores_compared": 96000,
+    "mismatches": 0,
+    "rank_seconds": 3.0
+   },
+   "seed_check": {
+    "seed": 43,
+    "max_abs_diff_points": 0.0,
+    "largest_at": null,
+    "max_abs_diff_points_local": 0.0,
+    "largest_at_local": null,
+    "max_abs_diff_points_uniform": 0.0,
+    "largest_at_uniform": null,
+    "limit_points": 2.0,
+    "within_limit": true,
+    "local_within_limit": true,
+    "note": "display lines print local shares only; the design's limit is 2 points for every share"
+   }
+  }
+ ]
+}

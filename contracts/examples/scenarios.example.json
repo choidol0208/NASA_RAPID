@@ -1,24 +1,82 @@
 [
   {
-    "_example": "SHAPE ONLY, DRAFT. Placeholder values written by an AI assistant so the dashboard can be built before the real file exists. Do not display, cite or copy these values.",
+    "_example": "SHAPE ONLY, DRAFT. Placeholder values written by an AI assistant so the dashboard can be built and tested before or without the real file. Do not display, cite or copy these values. The real file is data/insights/scenarios.json; its fields are listed in contracts/README.md (From the pm role).",
     "id": "lunar_habitat",
     "query": "lunar habitat",
     "ranking_source": "scoring.scorer.rank",
+    "frame": "PLACEHOLDER. What the counts mean for this scenario.",
+    "frame_sources": [
+      "pipeline/spec/scenarios.json#lunar_habitat"
+    ],
+    "frame_facts": {},
+    "frame_text_origin": "template",
+    "label": "PLACEHOLDER disclosure sentence.",
     "result_notes": [
-      { "investigation_id": "PLACEHOLDER", "text": "PLACEHOLDER. Plain-language explanation of why the scorer ranked this result here.", "sources": ["PLACEHOLDER"] }
+      {
+        "investigation_id": "PLACEHOLDER",
+        "config_id": "PLACEHOLDER",
+        "text": "PLACEHOLDER. Team note on this result.",
+        "sources": [
+          "PLACEHOLDER-file.csv#PLACEHOLDER"
+        ],
+        "facts": {},
+        "text_origin": "template",
+        "status": "top3",
+        "rule": []
+      }
     ],
     "needs": [
       {
-        "need_id": "P4",
-        "statement": "PLACEHOLDER. What the recorded tests can and cannot say about this need for this scenario.",
-        "sources": [ { "investigation_id": "PLACEHOLDER", "doi": "PLACEHOLDER" } ]
+        "need_id": "S1",
+        "need": "PLACEHOLDER need name",
+        "statement": "PLACEHOLDER. Recorded tests (team count; ...). PLACEHOLDER fixed status sentence. What a count of this need means (the pipeline's reading): PLACEHOLDER.",
+        "sources": [
+          "data/pipeline/scenario_needs.csv#lunar_habitat/S1",
+          "data/pipeline/evidence/scenario_lunar_habitat.json#S1/status.in_atmosphere"
+        ],
+        "status": "PLACEHOLDER pipeline status",
+        "facts": {},
+        "text_origin": "template",
+        "rule": []
       }
     ],
     "gaps": [
-      { "text": "PLACEHOLDER gap.", "needed_data": "PLACEHOLDER description of the missing experiment." }
+      {
+        "text": "PLACEHOLDER gap.",
+        "needed_data": "PLACEHOLDER description of the data that would close it.",
+        "sources": [
+          "pipeline/spec/needs.json#not_covered"
+        ],
+        "facts": {},
+        "text_origin": "template",
+        "status": "from_rule",
+        "rule": "PLACEHOLDER"
+      },
+      {
+        "text": "PLACEHOLDER copied line.",
+        "needed_data": "PLACEHOLDER.",
+        "sources": [
+          "pipeline/spec/needs.json#not_covered"
+        ],
+        "facts": {},
+        "text_origin": "template",
+        "status": "copied",
+        "rule": "copied_from_needs_json_not_covered",
+        "copied_from": "pipeline/spec/needs.json#not_covered"
+      }
     ],
-    "ai_generated": true,
+    "fresh": {
+      "ranker_config_version": "PLACEHOLDER",
+      "scoring_config_sha256": "PLACEHOLDER",
+      "catalog_sha256": "PLACEHOLDER",
+      "scenario_inputs_sha256": "PLACEHOLDER",
+      "hash_rule": "PLACEHOLDER"
+    },
+    "ai_generated": false,
     "model": "PLACEHOLDER",
-    "reviewed_by": null
+    "built_by": "ai/build_baseline.py",
+    "reviewed_by": null,
+    "updated": "PLACEHOLDER ISO time",
+    "text_origin": "template"
   }
 ]

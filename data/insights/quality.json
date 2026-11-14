@@ -1,0 +1,121 @@
+{
+ "_meta": {
+  "built_by": "ai/apply_review.py",
+  "code_written_with": "AI assistant (Claude Code)",
+  "language_model_used_at_build": "none",
+  "generated_at": "2026-11-14T14:55:57+09:00",
+  "inputs_sha256": {
+   "ai/prompts/card_v3.txt": "e013dce7e2678ff2eadeebebc8659685a076112c92fc3a524bb27e6d0f604cd9",
+   "ai/review/pm_prereview.json": "8c341ab1dc9f81bf80a8d4c7a56998f2eb93321150b1e5e43a19db284f3d2ff2",
+   "ai/review/review_sheet.csv": "bf9de60b81a83a6907372f5d1c9756f7569d6d7b5423a12048063beb356fe8d7",
+   "ai/runs/cards_20261114-v3-all24.jsonl": "e1cdc4fb4f3fdbdd3363a77cd7c72013f81dd0cdf7f7da16f5f81e052aafc851",
+   "ai/runs/cards_20261114-v3-repair.jsonl": "ebd278cb7b7fae39c4b51263420c63e9cad1daedeea94008c9ffbd2fb38747dd",
+   "data/insights/cards.json": "0cf819e2f1a47d415b449649c39d89e0c489790f4f2d92a5f10f8c6accbad520",
+   "data/insights/scenarios.json": "96d51e274616530608873d46a54cc62015e72b3353d5515e3b209ecc88939074"
+  },
+  "label": "AI-generated data file: built by code written with an AI assistant (Claude Code); no language model ran to build it. Counts of the gpt-oss:20b card sentences, the code gates and the review verdicts, computed by code. Team output, not a NASA conclusion.",
+  "content_sha256": "20052acc5d7d878beac4f83832a3c79492a281a0309f85d135bba910dce03603"
+ },
+ "description": "Measured counts for the model-written card sentences (gpt-oss:20b) and their checks, reproduced by ai/apply_review.py from ai/review/review_sheet.csv and the gate results of ai/apply_cards.py. Rates are measured before removal and carry their n. Rows read by an AI session are never counted as read by a person. Reviewed by hackathon team members or a second AI session, not by NASA or a combustion expert.",
+ "proposed": 70,
+ "passed_gates_first_pass": 56,
+ "rejected_first_pass": 14,
+ "rejected_by_gate": {
+  "quote": 7,
+  "policy": 5,
+  "lint": 1,
+  "length": 3
+ },
+ "rejected_first_gate": {
+  "quote": 7,
+  "policy": 3,
+  "lint": 1,
+  "length": 3
+ },
+ "rejected_by_gate_note": "rejected_by_gate counts every failing gate of a first-pass sentence (a sentence can fail several); rejected_first_gate counts each rejected sentence once. 'key_point' is the writer rule that the first cited unit is a quotable sentence.",
+ "repair_attempted": 13,
+ "repaired": 9,
+ "repair_failed": 4,
+ "repair_rejected_by_gate": {
+  "length": 3,
+  "policy": 2,
+  "quote": 1
+ },
+ "dropped_by_gates": 5,
+ "passed_gates": 65,
+ "removed_before_review": {
+  "n": 4,
+  "reviewer_kind": "ai_session_pm",
+  "file": "ai/review/pm_prereview.json",
+  "entries_in_file": 4,
+  "entries_matching_no_sentence": 0,
+  "sentences": [
+   {
+    "investigation_id": "PSI-26",
+    "n": 0,
+    "sentence": "The investigation aimed to bridge the gap between normal gravity tests and microgravity flammability, and to assess inert gaseous extinguishing agents on various materials. (PSI-26 record: objective)",
+    "reason": "Stronger than the record and wrong in number. PSI-26 OBJ-2 says 'Begin to bridge the gap between the normal gravity NASA-STD-6001 Test#1 method, ground-based microgravity tests, and actual material flammability in microgravity'; the sentence drops 'Begin to' and makes the three-way gap a two-way one. OBJ-5 says 'Assess the effectiveness of an inert, gaseous extinguishing agent (similar to that used on ISS)': one agent; the sentence says 'agents', as if several were assessed. Every code gate passed it, so it is removed here; its slot shows the quoted NASA sentence.",
+    "reviewer_kind": "ai_session_pm"
+   },
+   {
+    "investigation_id": "PSI-99",
+    "n": 1,
+    "sentence": "The record hypothesizes that differences between fire behavior in normal and reduced gravity make terrestrial fire standards risky for spacecraft safety. (PSI-99 record: hypothesis)",
+    "reason": "Subject changed and reason dropped. PSI-99 HYP-1 says 'the use of terrestrial fires and fire standards to design spacecraft fire safety systems presents an inherent risk to the vehicle because of the significant level of uncertainty'. The sentence says the differences 'make terrestrial fire standards risky for spacecraft safety': the risk is moved from using terrestrial fires and standards for design to the standards themselves, and 'because of the significant level of uncertainty' is gone, so it reads as a verdict on the standards. Every code gate passed it, so it is removed here; its slot shows the quoted NASA sentence.",
+    "reviewer_kind": "ai_session_pm"
+   },
+   {
+    "investigation_id": "PSI-117",
+    "n": 2,
+    "sentence": "The record states that space benefits include potential to improve spacecraft fire-safety modeling by resolving cool-flame/extinction behavior in microgravity and defining operating envelopes. (PSI-117 record: researchImpacts)",
+    "reason": "Two separate items of the record fused into one claim. PSI-117 IMP-1 says 'Potential to improve spacecraft fire-safety modeling by resolving cool-flame/extinction behavior in microgravity; leverages FLEX to define safer operating envelopes/materials'. The sentence says the potential is to improve the modeling 'by resolving cool-flame/extinction behavior in microgravity and defining operating envelopes': defining envelopes becomes a way of improving the modeling, which the record does not say, and 'leverages FLEX', 'safer' and 'materials' are lost. Every code gate passed it, so it is removed here; its slot shows the quoted NASA sentence.",
+    "reviewer_kind": "ai_session_pm"
+   },
+   {
+    "investigation_id": "PSI-159",
+    "n": 1,
+    "sentence": "The record hypothesizes that testing aboard the ISS can demonstrate the first-time improvement in understanding cool flame kinetics. (PSI-159 record: hypothesis)",
+    "reason": "Not what the record says. PSI-159 HYP-1 says testing aboard the ISS 'can demonstrate the following for the first time, contributing to an improved understanding of cool flame kinetics': what is first is the list of demonstrations that follows, and the improved understanding is what they contribute to. The sentence makes the improvement itself the first-time result. Every code gate passed it, so it is removed here; its slot shows the quoted NASA sentence.",
+    "reviewer_kind": "ai_session_pm"
+   }
+  ],
+  "rule": "sentences that passed every code gate and were removed by the pm session's reviewed removals (ai/review/pm_prereview.json) before the review; each slot shows the quoted NASA sentence it cited. Counted apart from the review: not part of removed_by_review, verdicts or the support rate, and never a reason to set reviewed_by."
+ },
+ "removed_by_review": 0,
+ "modality_removed": 0,
+ "reverted_by_final": 0,
+ "shipped_model_sentences": 61,
+ "cards_by_status": {
+  "generated": 15,
+  "generated_partial": 9
+ },
+ "model_rows_in_sheet": 61,
+ "reviewed_person": 0,
+ "reviewed_ai_session": 0,
+ "unreviewed_model_rows": 61,
+ "verdicts": {
+  "supported": 0,
+  "partly": 0,
+  "not": 0
+ },
+ "modality_kept": {
+  "yes": 0,
+  "no": 0
+ },
+ "support_rate": null,
+ "n": 0,
+ "support_rate_rule": "supported / reviewed model sentences, before removal; null while n is 0",
+ "quote_rows": 98,
+ "quote_verdicts": {},
+ "template_statements": 161,
+ "template_verdicts": {},
+ "recount_ok": true,
+ "recount_failures": [],
+ "second_opinion": null,
+ "candidates_log": "ai/runs/cards_20261114-v3-all24.jsonl",
+ "repair_log": "ai/runs/cards_20261114-v3-repair.jsonl",
+ "prompt_file": "ai/prompts/card_v3.txt",
+ "prompt_file_sha256": "e013dce7e2678ff2eadeebebc8659685a076112c92fc3a524bb27e6d0f604cd9",
+ "date": "2026-11-14",
+ "reviewed_rows_not_matched": 0
+}

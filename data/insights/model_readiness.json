@@ -1,0 +1,1078 @@
+{
+ "_meta": {
+  "built_by": "ai/model_readiness.py",
+  "code_written_with": "AI assistant (Claude Code)",
+  "language_model_used_at_build": "none",
+  "generated_at": "2026-11-14T14:38:41+09:00",
+  "inputs_sha256": {
+   "data/pipeline/tests.csv": "5ba43199cee4657cabf0fca8e27681ce25e83f9f6857d033c089deebaa84fb7a",
+   "pipeline/spec/sources.json": "2fec33112f1fd6791326817d1825fe63b89d4db6085730479acd776a4b2a5447",
+   "pipeline/spec/variables.json": "d6f8ca5fdf52f2f321cd0e59aa0b3bdacdd2614c9555133aff89dca9e1795852"
+  },
+  "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). No language model ran to build it. Counts, recorded ranges and grouped cross-validation errors are computed by code from NASA PSI tables (data/pipeline/tests.csv); the verdicts are fixed rules applied by code. Team output, not a NASA conclusion. No fitted model or model output is in this file.",
+  "libraries": {
+   "pandas": "2.2.3",
+   "numpy": "2.1.3",
+   "scikit-learn": "1.6.1"
+  },
+  "content_sha256": "3df72ac722c02fd72a687f49a86c9b04da468d68aee0ee05865aa5c38b343989"
+ },
+ "title": "Can these NASA tables support an outcome model?",
+ "fixed_line": "None is a cabin-material flammability model.",
+ "labels_and_limits": "The team's statistical diagnostics on NASA PSI tables. They describe these droplet and gas-burner experiments only. FLEX extinction is a droplet-flame outcome, not material flammability. \"Indicative\" means a simple model beat the base rate under 5-fold grouped cross-validation, nothing more. No fitted model, coefficient or model output is shipped, and none is offered for any condition, inside or outside the recorded ranges.",
+ "counts_note": "Counts are recorded tests in NASA's open PSI experimental tables, the team's computation. 'Not recorded' is never zero and never 101 kPa.",
+ "flag_rule": "Cells that carry a flag in the flags column of data/pipeline/tests.csv are left out. A test is not counted in a row when its label cell, its test id, or any condition cell the row needs (listed in 'required_cells') is flagged or empty; each row gives these exclusions in 'excluded'. A recorded range uses only unflagged, non-empty cells, and 'range_values_n' gives how many.",
+ "basis_rule": "Rows are split by o2_basis and never pooled: 'ambient' is the oxygen of the surrounding atmosphere, 'oxidizer_stream' is the oxygen of the gas issuing from the burner (CFI-G inverse flames). Burner-stream oxygen is not a habitat atmosphere and is never compared with ambient oxygen.",
+ "verdict_rule": "Fixed in code before any number was computed. 'too few' if a label has fewer than 100 tests, fewer than 20 groups, or a class with fewer than 20 tests; then no cross-validation is run. Otherwise 5-fold grouped cross-validation (scikit-learn GroupKFold, shuffled groups, seed 20261114): the simple model 'beats the base rate on held-out conditions (indicative)' when its mean fold error is lower than the baseline's by more than the larger of the two fold standard deviations; otherwise it is 'no better than the base rate'. Errors: Brier score for a class label (lower is better), mean absolute error for a numeric label (lower is better).",
+ "thresholds": {
+  "min_tests": 100,
+  "min_groups": 20,
+  "min_class": 20,
+  "folds": 5,
+  "seed": 20261114
+ },
+ "tests_csv_rows": 1824,
+ "rows": [
+  {
+   "id": "flex_extinction_diameter_ratio",
+   "label": "FLEX droplet extinction-to-initial diameter ratio (tests that ended in extinction, ratio above 0)",
+   "investigation_id": "PSI-69",
+   "source_id": "flex",
+   "column": "extinction_to_initial_diameter_ratio",
+   "o2_basis": "ambient",
+   "n_label_recorded": 159,
+   "n": 157,
+   "excluded": {
+    "tests": 2,
+    "tests_with_a_flagged_cell": 2,
+    "tests_with_an_empty_required_cell_only": 0,
+    "flagged_cells_by_column": {
+     "extinction_to_initial_diameter_ratio": 1,
+     "pressure_kpa": 1
+    },
+    "empty_cells_by_column": {}
+   },
+   "required_cells": [
+    "extinction_to_initial_diameter_ratio",
+    "test_id",
+    "test_end",
+    "fuel_material",
+    "o2_pct",
+    "pressure_kpa",
+    "co2_pct",
+    "he_pct",
+    "extinction_diameter_mm",
+    "initial_diameter_mm"
+   ],
+   "classes": null,
+   "classes_label_recorded": null,
+   "class_wording": null,
+   "label_range": [
+    0.2482,
+    0.9976
+   ],
+   "diluent_counts": {
+    "co2_added": 76,
+    "he_added": 35,
+    "n2_only": 46
+   },
+   "fuel_counts": {
+    "heptane": 55,
+    "methanol": 102
+   },
+   "fuel_cells_flagged_or_empty": 0,
+   "grouping_rule": "FLEX condition group: fuel, oxygen rounded to 1%, pressure in atmospheres (kPa / 101.325) rounded to 0.1, and diluent (nitrogen only, carbon dioxide added, helium added). Repeat tests at one condition are never split across training and held-out folds.",
+   "groups": 65,
+   "group_sizes": {
+    "min": 1,
+    "max": 8
+   },
+   "ranges": {
+    "o2_pct": [
+     12.0,
+     30.0
+    ],
+    "pressure_kpa": [
+     70.1676,
+     276.2573
+    ],
+    "co2_pct": [
+     0.0,
+     70.0
+    ],
+    "he_pct": [
+     0.0,
+     45.0
+    ],
+    "initial_diameter_mm": [
+     1.49,
+     4.67
+    ]
+   },
+   "range_values_n": {
+    "o2_pct": 157,
+    "pressure_kpa": 157,
+    "co2_pct": 157,
+    "he_pct": 157,
+    "initial_diameter_mm": 157
+   },
+   "not_recorded": [],
+   "baseline": {
+    "name": "training-fold mean (scikit-learn DummyRegressor 'mean')",
+    "metric": "mean absolute error",
+    "mean": 0.1875,
+    "fold_sd": 0.013
+   },
+   "model": {
+    "name": "linear regression (scikit-learn, standardised numbers, one-hot fuel)",
+    "features": [
+     "o2_pct",
+     "pressure_kpa",
+     "co2_pct",
+     "he_pct",
+     "fuel_material"
+    ],
+    "metric": "mean absolute error",
+    "mean": 0.126,
+    "fold_sd": 0.0276
+   },
+   "cv": {
+    "splitter": "scikit-learn GroupKFold",
+    "folds": 5,
+    "shuffle": true,
+    "seed": 20261114,
+    "groups_shared_between_training_and_held_out": 0
+   },
+   "verdict": "simple model beats the base rate on held-out conditions (indicative)",
+   "reason": "5-fold grouped cross-validation over 65 groups: mean absolute error of the simple model 0.126 (fold standard deviation 0.0276) against 0.1875 (fold standard deviation 0.013) for the baseline; the rule asks for a lower error by more than 0.0276. Held-out groups are conditions the model did not see in training, inside the recorded ranges of this table only.",
+   "sources": [
+    "PSI-69",
+    "pipeline/spec/sources.json#flex"
+   ],
+   "diluent_wording": {
+    "n2_only": "nitrogen only (no carbon dioxide or helium added)",
+    "co2_added": "carbon dioxide added",
+    "he_added": "helium added"
+   }
+  },
+  {
+   "id": "flex_test_end",
+   "label": "FLEX droplet test end",
+   "investigation_id": "PSI-69",
+   "source_id": "flex",
+   "column": "test_end",
+   "o2_basis": "ambient",
+   "n_label_recorded": 274,
+   "n": 273,
+   "excluded": {
+    "tests": 1,
+    "tests_with_a_flagged_cell": 1,
+    "tests_with_an_empty_required_cell_only": 0,
+    "flagged_cells_by_column": {
+     "pressure_kpa": 1
+    },
+    "empty_cells_by_column": {}
+   },
+   "required_cells": [
+    "test_end",
+    "test_id",
+    "fuel_material",
+    "o2_pct",
+    "pressure_kpa",
+    "co2_pct",
+    "he_pct"
+   ],
+   "classes": {
+    "completion": 27,
+    "disruption": 61,
+    "extinction": 185
+   },
+   "classes_label_recorded": {
+    "completion": 27,
+    "disruption": 61,
+    "extinction": 186
+   },
+   "class_wording": null,
+   "label_range": null,
+   "diluent_counts": {
+    "co2_added": 122,
+    "he_added": 50,
+    "n2_only": 101
+   },
+   "fuel_counts": {
+    "heptane": 117,
+    "methanol": 156
+   },
+   "fuel_cells_flagged_or_empty": 0,
+   "grouping_rule": "FLEX condition group: fuel, oxygen rounded to 1%, pressure in atmospheres (kPa / 101.325) rounded to 0.1, and diluent (nitrogen only, carbon dioxide added, helium added). Repeat tests at one condition are never split across training and held-out folds.",
+   "groups": 79,
+   "group_sizes": {
+    "min": 1,
+    "max": 17
+   },
+   "ranges": {
+    "o2_pct": [
+     12.0,
+     34.0
+    ],
+    "pressure_kpa": [
+     70.1676,
+     309.2946
+    ],
+    "co2_pct": [
+     0.0,
+     70.0
+    ],
+    "he_pct": [
+     0.0,
+     45.0
+    ],
+    "initial_diameter_mm": [
+     1.1,
+     4.67
+    ]
+   },
+   "range_values_n": {
+    "o2_pct": 273,
+    "pressure_kpa": 273,
+    "co2_pct": 273,
+    "he_pct": 273,
+    "initial_diameter_mm": 261
+   },
+   "not_recorded": [],
+   "baseline": null,
+   "model": null,
+   "cv": null,
+   "verdict": "counts only: no classifier is assessed for this label",
+   "reason": "Shown as counts, as the design fixed; the test-end classes are listed with the condition ranges and the group count, and no classifier is fitted.",
+   "sources": [
+    "PSI-69",
+    "pipeline/spec/sources.json#flex"
+   ],
+   "diluent_wording": {
+    "n2_only": "nitrogen only (no carbon dioxide or helium added)",
+    "co2_added": "carbon dioxide added",
+    "he_added": "helium added"
+   }
+  },
+  {
+   "id": "cfig_normal_test_end",
+   "label": "CFI-G normal flame test end",
+   "investigation_id": "PSI-159",
+   "source_id": "cfig_normal",
+   "column": "test_end",
+   "o2_basis": "ambient",
+   "n_label_recorded": 133,
+   "n": 133,
+   "excluded": {
+    "tests": 0,
+    "tests_with_a_flagged_cell": 0,
+    "tests_with_an_empty_required_cell_only": 0,
+    "flagged_cells_by_column": {},
+    "empty_cells_by_column": {}
+   },
+   "required_cells": [
+    "test_end",
+    "test_id",
+    "fuel_material",
+    "o2_pct",
+    "pressure_kpa"
+   ],
+   "classes": {
+    "flow termination": 31,
+    "self-extinction": 102
+   },
+   "classes_label_recorded": {
+    "flow termination": 31,
+    "self-extinction": 102
+   },
+   "class_wording": {
+    "self-extinction": "self-extinguished within the test window",
+    "flow termination": "flow termination recorded as the test end (no self-extinction recorded within the test window)"
+   },
+   "label_range": null,
+   "diluent_counts": null,
+   "fuel_counts": {
+    "30% butane": 34,
+    "30% ethane": 26,
+    "30% propane": 27,
+    "50% butane": 19,
+    "ethane": 14,
+    "propane": 13
+   },
+   "fuel_cells_flagged_or_empty": 0,
+   "grouping_rule": "CFI-G run: the five digits after 'CFIG-N-' or 'CFIG-I-' in the test id. Burns with the same run number are treated as one chamber fill and are never split across training and held-out folds (the team's reading of the table: the recorded oxygen changes from burn to burn within a run, as in the tests named in 'grouping_example').",
+   "groups": 11,
+   "group_sizes": {
+    "min": 6,
+    "max": 16
+   },
+   "ranges": {
+    "o2_pct": [
+     17.9686,
+     39.97
+    ],
+    "pressure_kpa": [
+     50.665,
+     303.99
+    ]
+   },
+   "range_values_n": {
+    "o2_pct": 133,
+    "pressure_kpa": 133
+   },
+   "not_recorded": [],
+   "baseline": null,
+   "model": null,
+   "cv": null,
+   "verdict": "too few",
+   "reason": "Under the fixed rule: 11 groups (under 20). No cross-validation is run.",
+   "sources": [
+    "PSI-159",
+    "pipeline/spec/sources.json#cfig_normal"
+   ],
+   "grouping_example": [
+    {
+     "test_id": "CFIG-N-21088A1",
+     "o2_pct": 39.39,
+     "o2_basis": "ambient"
+    },
+    {
+     "test_id": "CFIG-N-21088B1",
+     "o2_pct": 38.9823,
+     "o2_basis": "ambient"
+    },
+    {
+     "test_id": "CFIG-N-21088C1",
+     "o2_pct": 38.6321,
+     "o2_basis": "ambient"
+    }
+   ]
+  },
+  {
+   "id": "cfig_inverse_test_end",
+   "label": "CFI-G inverse flame test end (burner-stream oxygen)",
+   "investigation_id": "PSI-159",
+   "source_id": "cfig_inverse",
+   "column": "test_end",
+   "o2_basis": "oxidizer_stream",
+   "n_label_recorded": 139,
+   "n": 139,
+   "excluded": {
+    "tests": 0,
+    "tests_with_a_flagged_cell": 0,
+    "tests_with_an_empty_required_cell_only": 0,
+    "flagged_cells_by_column": {},
+    "empty_cells_by_column": {}
+   },
+   "required_cells": [
+    "test_end",
+    "test_id",
+    "fuel_material",
+    "o2_pct",
+    "pressure_kpa"
+   ],
+   "classes": {
+    "flow termination": 58,
+    "self-extinction": 81
+   },
+   "classes_label_recorded": {
+    "flow termination": 58,
+    "self-extinction": 81
+   },
+   "class_wording": {
+    "self-extinction": "self-extinguished within the test window",
+    "flow termination": "flow termination recorded as the test end (no self-extinction recorded within the test window)"
+   },
+   "label_range": null,
+   "diluent_counts": null,
+   "fuel_counts": {
+    "butane": 53,
+    "ethane": 49,
+    "propane": 37
+   },
+   "fuel_cells_flagged_or_empty": 0,
+   "grouping_rule": "CFI-G run: the five digits after 'CFIG-N-' or 'CFIG-I-' in the test id. Burns with the same run number are treated as one chamber fill and are never split across training and held-out folds (the team's reading of the table: the recorded oxygen changes from burn to burn within a run, as in the tests named in 'grouping_example').",
+   "groups": 12,
+   "group_sizes": {
+    "min": 2,
+    "max": 17
+   },
+   "ranges": {
+    "o2_pct": [
+     13.5,
+     85.0
+    ],
+    "pressure_kpa": [
+     49.5382,
+     330.99
+    ]
+   },
+   "range_values_n": {
+    "o2_pct": 139,
+    "pressure_kpa": 139
+   },
+   "not_recorded": [],
+   "baseline": null,
+   "model": null,
+   "cv": null,
+   "verdict": "too few",
+   "reason": "Under the fixed rule: 12 groups (under 20). No cross-validation is run.",
+   "sources": [
+    "PSI-159",
+    "pipeline/spec/sources.json#cfig_inverse"
+   ],
+   "grouping_example": [
+    {
+     "test_id": "CFIG-I-21196A2",
+     "o2_pct": 21.0,
+     "o2_basis": "oxidizer_stream"
+    },
+    {
+     "test_id": "CFIG-I-21196F1",
+     "o2_pct": 15.0,
+     "o2_basis": "oxidizer_stream"
+    },
+    {
+     "test_id": "CFIG-I-21196F2",
+     "o2_pct": 15.0,
+     "o2_basis": "oxidizer_stream"
+    }
+   ]
+  },
+  {
+   "id": "cfig_normal_hot_ignition",
+   "label": "CFI-G normal flame hot ignition",
+   "investigation_id": "PSI-159",
+   "source_id": "cfig_normal",
+   "column": "hot_ignition",
+   "o2_basis": "ambient",
+   "n_label_recorded": 179,
+   "n": 179,
+   "excluded": {
+    "tests": 0,
+    "tests_with_a_flagged_cell": 0,
+    "tests_with_an_empty_required_cell_only": 0,
+    "flagged_cells_by_column": {},
+    "empty_cells_by_column": {}
+   },
+   "required_cells": [
+    "hot_ignition",
+    "test_id",
+    "fuel_material",
+    "o2_pct",
+    "pressure_kpa"
+   ],
+   "classes": {
+    "no": 47,
+    "yes": 132
+   },
+   "classes_label_recorded": {
+    "no": 47,
+    "yes": 132
+   },
+   "class_wording": null,
+   "label_range": null,
+   "diluent_counts": null,
+   "fuel_counts": {
+    "30% butane": 52,
+    "30% ethane": 27,
+    "30% propane": 36,
+    "50% butane": 30,
+    "ethane": 14,
+    "propane": 20
+   },
+   "fuel_cells_flagged_or_empty": 0,
+   "grouping_rule": "CFI-G run: the five digits after 'CFIG-N-' or 'CFIG-I-' in the test id. Burns with the same run number are treated as one chamber fill and are never split across training and held-out folds (the team's reading of the table: the recorded oxygen changes from burn to burn within a run, as in the tests named in 'grouping_example').",
+   "groups": 11,
+   "group_sizes": {
+    "min": 12,
+    "max": 24
+   },
+   "ranges": {
+    "o2_pct": [
+     17.9686,
+     39.97
+    ],
+    "pressure_kpa": [
+     50.665,
+     303.99
+    ]
+   },
+   "range_values_n": {
+    "o2_pct": 179,
+    "pressure_kpa": 179
+   },
+   "not_recorded": [],
+   "baseline": null,
+   "model": null,
+   "cv": null,
+   "verdict": "too few",
+   "reason": "Under the fixed rule: 11 groups (under 20). No cross-validation is run.",
+   "sources": [
+    "PSI-159",
+    "pipeline/spec/sources.json#cfig_normal"
+   ],
+   "grouping_example": [
+    {
+     "test_id": "CFIG-N-21088A1",
+     "o2_pct": 39.39,
+     "o2_basis": "ambient"
+    },
+    {
+     "test_id": "CFIG-N-21088B1",
+     "o2_pct": 38.9823,
+     "o2_basis": "ambient"
+    },
+    {
+     "test_id": "CFIG-N-21088C1",
+     "o2_pct": 38.6321,
+     "o2_basis": "ambient"
+    }
+   ]
+  },
+  {
+   "id": "cfig_inverse_hot_ignition",
+   "label": "CFI-G inverse flame hot ignition (burner-stream oxygen)",
+   "investigation_id": "PSI-159",
+   "source_id": "cfig_inverse",
+   "column": "hot_ignition",
+   "o2_basis": "oxidizer_stream",
+   "n_label_recorded": 154,
+   "n": 154,
+   "excluded": {
+    "tests": 0,
+    "tests_with_a_flagged_cell": 0,
+    "tests_with_an_empty_required_cell_only": 0,
+    "flagged_cells_by_column": {},
+    "empty_cells_by_column": {}
+   },
+   "required_cells": [
+    "hot_ignition",
+    "test_id",
+    "fuel_material",
+    "o2_pct",
+    "pressure_kpa"
+   ],
+   "classes": {
+    "flash": 8,
+    "no": 15,
+    "yes": 131
+   },
+   "classes_label_recorded": {
+    "flash": 8,
+    "no": 15,
+    "yes": 131
+   },
+   "class_wording": null,
+   "label_range": null,
+   "diluent_counts": null,
+   "fuel_counts": {
+    "butane": 58,
+    "ethane": 53,
+    "propane": 43
+   },
+   "fuel_cells_flagged_or_empty": 0,
+   "grouping_rule": "CFI-G run: the five digits after 'CFIG-N-' or 'CFIG-I-' in the test id. Burns with the same run number are treated as one chamber fill and are never split across training and held-out folds (the team's reading of the table: the recorded oxygen changes from burn to burn within a run, as in the tests named in 'grouping_example').",
+   "groups": 12,
+   "group_sizes": {
+    "min": 6,
+    "max": 17
+   },
+   "ranges": {
+    "o2_pct": [
+     12.0,
+     85.0
+    ],
+    "pressure_kpa": [
+     49.5382,
+     330.99
+    ]
+   },
+   "range_values_n": {
+    "o2_pct": 154,
+    "pressure_kpa": 154
+   },
+   "not_recorded": [],
+   "baseline": null,
+   "model": null,
+   "cv": null,
+   "verdict": "too few",
+   "reason": "Under the fixed rule: 12 groups (under 20); class 'flash' has 8 tests (under 20); class 'no' has 15 tests (under 20). No cross-validation is run.",
+   "sources": [
+    "PSI-159",
+    "pipeline/spec/sources.json#cfig_inverse"
+   ],
+   "grouping_example": [
+    {
+     "test_id": "CFIG-I-21196A1",
+     "o2_pct": 21.0,
+     "o2_basis": "oxidizer_stream"
+    },
+    {
+     "test_id": "CFIG-I-21196A2",
+     "o2_pct": 21.0,
+     "o2_basis": "oxidizer_stream"
+    },
+    {
+     "test_id": "CFIG-I-21196F1",
+     "o2_pct": 15.0,
+     "o2_basis": "oxidizer_stream"
+    }
+   ]
+  },
+  {
+   "id": "bass2_flow_event",
+   "label": "BASS-II flow event",
+   "investigation_id": "PSI-25",
+   "source_id": "bass2",
+   "column": "flow_event",
+   "o2_basis": "ambient",
+   "n_label_recorded": 25,
+   "n": 25,
+   "excluded": {
+    "tests": 0,
+    "tests_with_a_flagged_cell": 0,
+    "tests_with_an_empty_required_cell_only": 0,
+    "flagged_cells_by_column": {},
+    "empty_cells_by_column": {}
+   },
+   "required_cells": [
+    "flow_event",
+    "test_id",
+    "o2_pct"
+   ],
+   "classes": {
+    "blowoff": 7,
+    "extinction": 16,
+    "no_ignition": 1,
+    "not_sustained": 1
+   },
+   "classes_label_recorded": {
+    "blowoff": 7,
+    "extinction": 16,
+    "no_ignition": 1,
+    "not_sustained": 1
+   },
+   "class_wording": null,
+   "label_range": null,
+   "diluent_counts": null,
+   "fuel_counts": {
+    "PMMA": 5
+   },
+   "fuel_cells_flagged_or_empty": 20,
+   "grouping_rule": "none: no model is assessed for this label",
+   "groups": null,
+   "group_sizes": null,
+   "ranges": {
+    "o2_pct": [
+     13.6,
+     20.9
+    ],
+    "flow_cms": [
+     4.0,
+     10.0
+    ]
+   },
+   "range_values_n": {
+    "o2_pct": 25,
+    "flow_cms": 20
+   },
+   "not_recorded": [
+    "pressure_kpa"
+   ],
+   "baseline": null,
+   "model": null,
+   "cv": null,
+   "verdict": "not modelable: events are noted only when they happened, and an empty cell is not a no",
+   "reason": "The BASS-II table writes a flow event only for the 25 tests in which one was noted; the other tests have an empty cell, which does not say that no event happened. So there is no recorded 'no' class to learn from.",
+   "sources": [
+    "PSI-25",
+    "pipeline/spec/sources.json#bass2"
+   ]
+  },
+  {
+   "id": "saffire2_spread_rate",
+   "label": "Saffire-II flame spread rate",
+   "investigation_id": "PSI-99",
+   "source_id": "saffire2",
+   "column": "spread_rate_mm_s",
+   "o2_basis": "ambient",
+   "n_label_recorded": 2,
+   "n": 0,
+   "excluded": {
+    "tests": 2,
+    "tests_with_a_flagged_cell": 2,
+    "tests_with_an_empty_required_cell_only": 0,
+    "flagged_cells_by_column": {
+     "o2_pct": 2
+    },
+    "empty_cells_by_column": {}
+   },
+   "required_cells": [
+    "spread_rate_mm_s",
+    "test_id",
+    "o2_pct"
+   ],
+   "classes": null,
+   "classes_label_recorded": null,
+   "class_wording": null,
+   "label_range": null,
+   "diluent_counts": null,
+   "fuel_counts": {},
+   "fuel_cells_flagged_or_empty": 0,
+   "grouping_rule": "none: no model is assessed for this label",
+   "groups": null,
+   "group_sizes": null,
+   "ranges": {},
+   "range_values_n": {},
+   "not_recorded": [
+    "pressure_kpa"
+   ],
+   "baseline": null,
+   "model": null,
+   "cv": null,
+   "verdict": "too few",
+   "reason": "Under the fixed rule: 0 tests (under 100); no grouping rule set for this label. No cross-validation is run.",
+   "sources": [
+    "PSI-99",
+    "pipeline/spec/sources.json#saffire2"
+   ]
+  },
+  {
+   "id": "saffire2_burn_length",
+   "label": "Saffire-II burn length",
+   "investigation_id": "PSI-99",
+   "source_id": "saffire2",
+   "column": "burn_length_cm",
+   "o2_basis": "ambient",
+   "n_label_recorded": 8,
+   "n": 0,
+   "excluded": {
+    "tests": 8,
+    "tests_with_a_flagged_cell": 8,
+    "tests_with_an_empty_required_cell_only": 0,
+    "flagged_cells_by_column": {
+     "burn_length_cm": 6,
+     "o2_pct": 8
+    },
+    "empty_cells_by_column": {}
+   },
+   "required_cells": [
+    "burn_length_cm",
+    "test_id",
+    "o2_pct"
+   ],
+   "classes": null,
+   "classes_label_recorded": null,
+   "class_wording": null,
+   "label_range": null,
+   "diluent_counts": null,
+   "fuel_counts": {},
+   "fuel_cells_flagged_or_empty": 0,
+   "grouping_rule": "none: no model is assessed for this label",
+   "groups": null,
+   "group_sizes": null,
+   "ranges": {},
+   "range_values_n": {},
+   "not_recorded": [
+    "pressure_kpa"
+   ],
+   "baseline": null,
+   "model": null,
+   "cv": null,
+   "verdict": "too few",
+   "reason": "Under the fixed rule: 0 tests (under 100); no grouping rule set for this label. No cross-validation is run.",
+   "sources": [
+    "PSI-99",
+    "pipeline/spec/sources.json#saffire2"
+   ]
+  }
+ ],
+ "outcome_columns_not_assessed": [
+  {
+   "source_id": "bass2",
+   "investigation_id": "PSI-25",
+   "column": "o2_final_pct",
+   "tests_with_a_value": 127,
+   "unflagged_values": 127,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "bass2",
+   "investigation_id": "PSI-25",
+   "column": "co2_initial_pct",
+   "tests_with_a_value": 127,
+   "unflagged_values": 127,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "bass2",
+   "investigation_id": "PSI-25",
+   "column": "co2_final_pct",
+   "tests_with_a_value": 123,
+   "unflagged_values": 123,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "bass2",
+   "investigation_id": "PSI-25",
+   "column": "co_initial_ppm",
+   "tests_with_a_value": 126,
+   "unflagged_values": 126,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "bass2",
+   "investigation_id": "PSI-25",
+   "column": "co_final_ppm",
+   "tests_with_a_value": 120,
+   "unflagged_values": 120,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "bass2",
+   "investigation_id": "PSI-25",
+   "column": "o2_consumed_pct_points",
+   "tests_with_a_value": 122,
+   "unflagged_values": 122,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "bass2",
+   "investigation_id": "PSI-25",
+   "column": "co2_produced_pct_points",
+   "tests_with_a_value": 121,
+   "unflagged_values": 119,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "bass2",
+   "investigation_id": "PSI-25",
+   "column": "co_produced_ppm",
+   "tests_with_a_value": 118,
+   "unflagged_values": 117,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "bass2",
+   "investigation_id": "PSI-25",
+   "column": "co_to_co2_molar_ratio",
+   "tests_with_a_value": 87,
+   "unflagged_values": 87,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "cfig_inverse",
+   "investigation_id": "PSI-159",
+   "column": "burn_time_s",
+   "tests_with_a_value": 154,
+   "unflagged_values": 154,
+   "o2_basis": [
+    "oxidizer_stream"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "cfig_normal",
+   "investigation_id": "PSI-159",
+   "column": "burn_time_s",
+   "tests_with_a_value": 175,
+   "unflagged_values": 175,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "cfig_normal",
+   "investigation_id": "PSI-159",
+   "column": "o2_final_pct",
+   "tests_with_a_value": 179,
+   "unflagged_values": 179,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "cfig_normal",
+   "investigation_id": "PSI-159",
+   "column": "o2_consumed_pct_points",
+   "tests_with_a_value": 179,
+   "unflagged_values": 179,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "flame_design_normal",
+   "investigation_id": "PSI-10",
+   "column": "o2_final_pct",
+   "tests_with_a_value": 187,
+   "unflagged_values": 187,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "flame_design_normal",
+   "investigation_id": "PSI-10",
+   "column": "o2_consumed_pct_points",
+   "tests_with_a_value": 187,
+   "unflagged_values": 187,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "flex",
+   "investigation_id": "PSI-69",
+   "column": "burn_time_s",
+   "tests_with_a_value": 268,
+   "unflagged_values": 266,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "flex",
+   "investigation_id": "PSI-69",
+   "column": "extinction_diameter_mm",
+   "tests_with_a_value": 197,
+   "unflagged_values": 197,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "flex",
+   "investigation_id": "PSI-69",
+   "column": "burning_rate_mm2_s",
+   "tests_with_a_value": 258,
+   "unflagged_values": 258,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "saffire1",
+   "investigation_id": "PSI-98",
+   "column": "burn_time_s",
+   "tests_with_a_value": 2,
+   "unflagged_values": 2,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "saffire2",
+   "investigation_id": "PSI-99",
+   "column": "burn_time_s",
+   "tests_with_a_value": 5,
+   "unflagged_values": 5,
+   "o2_basis": [
+    "ambient"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  },
+  {
+   "source_id": "same",
+   "investigation_id": "PSI-102",
+   "column": "mass_loss_rate_mg_min",
+   "tests_with_a_value": 4,
+   "unflagged_values": 4,
+   "o2_basis": [
+    "not recorded"
+   ],
+   "note": "listed with its count only; not assessed as a label here"
+  }
+ ],
+ "tables_without_outcome_column": [
+  {
+   "source_id": "bass",
+   "investigation_id": "PSI-26",
+   "tests": 121,
+   "note": "no outcome column has a recorded value in tests.csv for this table"
+  },
+  {
+   "source_id": "cfi",
+   "investigation_id": "PSI-39",
+   "tests": 79,
+   "note": "no outcome column has a recorded value in tests.csv for this table"
+  },
+  {
+   "source_id": "flame_design_inverse",
+   "investigation_id": "PSI-10",
+   "tests": 120,
+   "note": "no outcome column has a recorded value in tests.csv for this table"
+  },
+  {
+   "source_id": "saffire3",
+   "investigation_id": "PSI-100",
+   "tests": 2,
+   "note": "no outcome column has a recorded value in tests.csv for this table"
+  },
+  {
+   "source_id": "same_r",
+   "investigation_id": "PSI-101",
+   "tests": 109,
+   "note": "no outcome column has a recorded value in tests.csv for this table"
+  },
+  {
+   "source_id": "spice",
+   "investigation_id": "PSI-107",
+   "tests": 435,
+   "note": "no outcome column has a recorded value in tests.csv for this table"
+  }
+ ],
+ "not_covered": [
+  "None is a cabin-material flammability model.",
+  "No solid-sample table has a recorded pressure: in all 376 solid-fuel tests the pressure cell is empty (not recorded, which is not 101 kPa).",
+  "No solid-sample test has recorded oxygen above 22.2%.",
+  "No table has a partial-gravity test: every test row in tests.csv is recorded at microgravity. Microgravity and 1 g results are not bounds for lunar or Martian gravity."
+ ],
+ "not_covered_facts": {
+  "solid_tests": 376,
+  "solid_tests_with_pressure": 0,
+  "highest_solid_o2_pct": 22.2,
+  "gravity_levels": [
+   "microgravity"
+  ]
+ },
+ "shipped": "counts, recorded ranges, grouped cross-validation errors with their fold spread, and verdicts in words; no fitted model, coefficient, curve, grid or model output"
+}
