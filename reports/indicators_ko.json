@@ -58,20 +58,12 @@
    "reading": "운용자가 유동 설정 옆에 소염, 불려 꺼짐 등을 적어 둔 시험의 수다. 저유동의 소염과 고유동의 불려 꺼짐이 가연 경계의 두 갈래다."
   },
   "P1.o2_at_flow_event": {
-   "label": "사건이 적힌 시험의 초기 산소 농도",
-   "reading": "소염이나 불려 꺼짐이 적힌 시험의 초기 산소 농도다. 사건이 일어난 순간의 산소 농도는 표에 없다."
+   "label": "사건이 적힌 시험의 시작 산소",
+   "reading": "표에 소염·날림·점화 실패 등이 적힌 시험의 시작 시점 산소입니다. 사건이 일어난 순간의 산소가 아닙니다. 시험 뒤 산소는 '소염이 적힌 시험의 시험 뒤 산소' 지표에 있습니다."
   },
   "P1.lowest_flow_listed_at_extinction": {
    "label": "소염이 적힌 시험에 나열된 가장 낮은 유동 설정",
    "reading": "소염이 적힌 시험의 칸에 쓰인 가장 낮은 유동 속도다. 어느 설정에서 불이 꺼졌는지는 표에 없다."
-  },
-  "P2.ignition_power": {
-   "label": "점화기 출력",
-   "reading": "기록된 점화기 출력이다. 실험의 설정값이며, 재료에 불을 붙이는 데 필요한 최소 에너지가 아니다."
-  },
-  "P2.ignition_time": {
-   "label": "점화기 가동 시간",
-   "reading": "기록된 점화기 가동 시간이다. 측정된 점화 지연이 아니다."
   },
   "P3.spread_rate": {
    "label": "미세중력 화염 전파 속도",
@@ -124,6 +116,10 @@
   "D2.mass_loss": {
    "label": "시료 질량 감소율",
    "reading": "SAME 표에 적힌 질량 감소율이다."
+  },
+  "P1.o2_after_extinction": {
+   "label": "소염이 적힌 시험의 시험 뒤 산소",
+   "reading": "표에 소염이 적힌 시험의 마지막 산소 측정값입니다. BASS-II 연구진은 시험 뒤 산소를 소염 산소로 씁니다(ICES-2019). 산소 값으로 보기 어려운 측정값 몇 개는 표에 적힌 대로 두었고 시험에 표시가 붙어 있습니다."
   }
  },
  "values": {
@@ -144,7 +140,9 @@
    "butane": "부탄",
    "ethane": "에탄",
    "propane": "프로판",
-   "": "재료 미분류"
+   "": "재료 미분류",
+   "paraffin_wax": "파라핀 왁스",
+   "wax_unspecified": "왁스(종류 미기재)"
   },
   "sample_geometry": {
    "candle": "양초",
@@ -196,14 +194,16 @@
   "lunar_habitat": "달 기지·여압 로버",
   "mars_habitat": "화성 기지",
   "spacesuit": "우주복",
-  "exploration_8_2_34": "탐사 대기 8.2 psia / 34%"
+  "exploration_8_2_34": "탐사 대기 8.2 psia / 34%",
+  "exploration_10_2_26_5": "탐사 대기 10.2 psia / 산소 26.5%"
  },
  "scenario_ranges": {
   "iss": "산소 19–23%, 압력 85.8–116.8 kPa, 유동 5–30 cm/s, 미세중력",
   "lunar_habitat": "산소 30–36%, 압력 85.8 kPa 미만, 달 중력",
   "mars_habitat": "대기 수치 없음(과제문에 없음), 화성 중력",
   "spacesuit": "산소 95–100%, 압력 62.8 kPa 미만",
-  "exploration_8_2_34": "산소 32–36%, 압력 62.8 kPa 미만"
+  "exploration_8_2_34": "산소 32–36%, 압력 62.8 kPa 미만",
+  "exploration_10_2_26_5": "산소 24.5~28.5%, 압력 62.8~85.8 kPa"
  },
  "status": {
   "in_atmosphere": "대기 범위 안 시험 있음",
@@ -220,6 +220,8 @@
   "pressure:not_recorded": "압력 기록 없음",
   "pressure:no_usable_test_in_range": "압력 범위 안 시험 없음",
   "need:no_usable_test": "쓸 수 있는 시험 없음",
-  "gravity:no_usable_test_at_martian": "화성 중력 시험 없음"
+  "gravity:no_usable_test_at_martian": "화성 중력 시험 없음",
+  "flow:not_recorded": "유속이 표에 없음",
+  "flow:no_usable_test_in_range": "유속 범위 안의 시험 없음"
  }
 }

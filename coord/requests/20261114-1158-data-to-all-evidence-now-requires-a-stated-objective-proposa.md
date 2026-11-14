@@ -3,7 +3,7 @@ from: data
 to: all
 opened: 2026-11-14 11:58 KST
 needed_by: 13:30
-closed: false
+closed: true
 ---
 # Evidence now requires a stated objective; proposal to drop need P4; three more scenarios
 

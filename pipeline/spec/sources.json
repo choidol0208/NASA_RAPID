@@ -2,7 +2,10 @@
  "_meta": {
   "generated_by": "AI-generated draft (Claude Code), 2026-11-14. Not human-reviewed.",
   "purpose": "How each PSI experimental table maps onto the standard variables. One entry per table (22). 'columns' lists source column -> standard variable -> named rule in pipeline/rules.py. 'constants' are facts about the whole table that are not in a column. Tables whose rows are not individual tests are listed with the reason and are not standardized.",
-  "source": "NASA Physical Sciences Informatics (PSI), https://psi.nasa.gov, Combustion Science experimental tables"
+  "source": "NASA Physical Sciences Informatics (PSI), https://psi.nasa.gov, Combustion Science experimental tables",
+  "row_rules": "'require': a row is read only if these columns are filled. 'exclude': rows named here are not tests and are left out, with the reason. 'fill_down': a blank cell in these columns continues the cell of the row above; every value read that way is flagged blank_in_source_value_of_row_above_used. A row that repeats an earlier row cell for cell is read once. A column with 'if_empty' gives a value only where an earlier column gave none; a different value is flagged, never substituted. run_report.json lists every row left out and why. 'row_note' says what a row of the table is where it is not simply one test.",
+  "documented_elsewhere": "'documented_elsewhere' lists what a NASA record or a paper of the investigators says about a variable the experimental table does not hold. It is shown as a sentence next to the gap. It never becomes a value of a test: the table stays the only source of values. The engine checks record sentences against the record and paper sentences against references.json.",
+  "sample_keywords": "Rule 'sample_keywords' (BASS, BASS-II): 'entries' are tried in order and the first whose 'words' are all in the cell gives the material and the shape; entries with 'after_thickness' are tried only if the cell gives no thickness. 'shape_words' give the shape where the entry has none. 'rod_inches' maps the rod size written in the cell (inches) to a diameter. A cell with a thickness and no earlier entry follows 'thickness': the material named there, 'film' below limit_mm and 'slab' from it. 'not_in_cell' marks entries whose material is not written in the cell (BASS-II ReadMe: rods, spheres and unlabelled films are PMMA); the test is flagged. The shape words 'fabric sheet', 'film', 'slab', 'sphere' and the materials named here are the team's vocabulary, chosen by these keywords. A thickness is a number followed by 'micron' or 'mm'. Where 'thickness' gives the material and the cell does not name it, the test is flagged in the same way as for 'not_in_cell'. 'width_from_cell' takes the sample width from the number followed by 'cm' in the cell. If no entry applies and the cell gives no thickness, the cell is not read and the test is flagged fuel_material:not_parsed."
  },
  "sources": [
   {
@@ -104,7 +107,152 @@
       "sample_width_cm",
       "rod_diameter_mm"
      ],
-     "rule": "bass_material"
+     "rule": "sample_keywords",
+     "params": {
+      "entries": [
+       {
+        "words": [
+         "sibal"
+        ],
+        "fuel_material": "SIBAL fabric (75% cotton, 25% fiberglass)",
+        "sample_geometry": "fabric sheet",
+        "width_from_cell": true
+       },
+       {
+        "words": [
+         "nomex",
+         "blend"
+        ],
+        "fuel_material": "Nomex blend fabric",
+        "sample_geometry": "fabric sheet"
+       },
+       {
+        "words": [
+         "nomex"
+        ],
+        "fuel_material": "Nomex III fabric",
+        "sample_geometry": "fabric sheet"
+       },
+       {
+        "words": [
+         "japan wax"
+        ],
+        "fuel_material": "Japan wax"
+       },
+       {
+        "words": [
+         "paraffin"
+        ],
+        "fuel_material": "paraffin wax"
+       },
+       {
+        "words": [
+         "parrafin"
+        ],
+        "fuel_material": "paraffin wax"
+       },
+       {
+        "words": [
+         "wax"
+        ],
+        "fuel_material": "wax (kind not written in cell)"
+       },
+       {
+        "words": [
+         "candle"
+        ],
+        "fuel_material": "wax (kind not written in cell)"
+       },
+       {
+        "words": [
+         "rod",
+         "pmma"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "rod",
+        "rod": true
+       },
+       {
+        "words": [
+         "rod"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "rod",
+        "rod": true,
+        "not_in_cell": true
+       },
+       {
+        "words": [
+         "spher",
+         "section",
+         "pmma"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "spherical section",
+        "width_from_cell": true
+       },
+       {
+        "words": [
+         "spher",
+         "section"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "spherical section",
+        "width_from_cell": true,
+        "not_in_cell": true
+       },
+       {
+        "words": [
+         "spher",
+         "pmma"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "sphere",
+        "width_from_cell": true
+       },
+       {
+        "words": [
+         "spher"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "sphere",
+        "width_from_cell": true,
+        "not_in_cell": true
+       },
+       {
+        "words": [
+         "pmma"
+        ],
+        "fuel_material": "PMMA",
+        "width_from_cell": true,
+        "after_thickness": true
+       },
+       {
+        "words": [
+         "ultem"
+        ],
+        "fuel_material": "Ultem",
+        "sample_geometry": "sheet",
+        "after_thickness": true
+       }
+      ],
+      "shape_words": {
+       "candle": "candle",
+       "slab": "slab"
+      },
+      "rod_inches": {
+       "1/4": 0.25,
+       "3/8": 0.375,
+       "1/2": 0.5,
+       "0\\.5\\s*\"": 0.5
+      },
+      "thickness": {
+       "fuel_material": "PMMA",
+       "limit_mm": 1.0,
+       "below": "film",
+       "from": "slab"
+      }
+     }
     },
     {
      "from": "Air display",
@@ -117,6 +265,12 @@
      "params": {
       "max_cms": 40.0
      }
+    },
+    {
+     "from": "Fan display",
+     "to": "flow_event",
+     "rule": "event_words",
+     "if_empty": true
     },
     {
      "from": "Calibrated  initial O2 % by vol",
@@ -149,7 +303,14 @@
      "rule": "gas_reading"
     }
    ],
-   "basis": "PSI-25 'BASS-II_ReadMe.docx': Air display = duct flow in cm/s, CO 'OR' = over range (>1000 ppm); PSI-25 description: duct flow up to 40 cm/s"
+   "basis": "PSI-25 'BASS-II_ReadMe.docx': Air display = duct flow in cm/s, CO 'OR' = over range (>1000 ppm); PSI-25 description: duct flow up to 40 cm/s; 'Fan display' is read only for an event word (extinguished, blowoff) where 'Air display' has none; its numbers are fan settings and are not read",
+   "documented_elsewhere": [
+    {
+     "variable": "pressure_kpa",
+     "reference_item": "ICES19.pressure",
+     "quote": "Pressure was not varied from 1 atmosphere."
+    }
+   ]
   },
   {
    "id": "bass",
@@ -171,10 +332,162 @@
       "sample_width_cm",
       "rod_diameter_mm"
      ],
-     "rule": "bass_material"
+     "rule": "sample_keywords",
+     "params": {
+      "entries": [
+       {
+        "words": [
+         "sibal"
+        ],
+        "fuel_material": "SIBAL fabric (75% cotton, 25% fiberglass)",
+        "sample_geometry": "fabric sheet",
+        "width_from_cell": true
+       },
+       {
+        "words": [
+         "nomex",
+         "blend"
+        ],
+        "fuel_material": "Nomex blend fabric",
+        "sample_geometry": "fabric sheet"
+       },
+       {
+        "words": [
+         "nomex"
+        ],
+        "fuel_material": "Nomex III fabric",
+        "sample_geometry": "fabric sheet"
+       },
+       {
+        "words": [
+         "japan wax"
+        ],
+        "fuel_material": "Japan wax"
+       },
+       {
+        "words": [
+         "paraffin"
+        ],
+        "fuel_material": "paraffin wax"
+       },
+       {
+        "words": [
+         "parrafin"
+        ],
+        "fuel_material": "paraffin wax"
+       },
+       {
+        "words": [
+         "wax"
+        ],
+        "fuel_material": "wax (kind not written in cell)"
+       },
+       {
+        "words": [
+         "candle"
+        ],
+        "fuel_material": "wax (kind not written in cell)"
+       },
+       {
+        "words": [
+         "rod",
+         "pmma"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "rod",
+        "rod": true
+       },
+       {
+        "words": [
+         "rod"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "rod",
+        "rod": true,
+        "not_in_cell": true
+       },
+       {
+        "words": [
+         "spher",
+         "section",
+         "pmma"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "spherical section",
+        "width_from_cell": true
+       },
+       {
+        "words": [
+         "spher",
+         "section"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "spherical section",
+        "width_from_cell": true,
+        "not_in_cell": true
+       },
+       {
+        "words": [
+         "spher",
+         "pmma"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "sphere",
+        "width_from_cell": true
+       },
+       {
+        "words": [
+         "spher"
+        ],
+        "fuel_material": "PMMA",
+        "sample_geometry": "sphere",
+        "width_from_cell": true,
+        "not_in_cell": true
+       },
+       {
+        "words": [
+         "pmma"
+        ],
+        "fuel_material": "PMMA",
+        "width_from_cell": true,
+        "after_thickness": true
+       },
+       {
+        "words": [
+         "ultem"
+        ],
+        "fuel_material": "Ultem",
+        "sample_geometry": "sheet",
+        "after_thickness": true
+       }
+      ],
+      "shape_words": {
+       "candle": "candle",
+       "slab": "slab"
+      },
+      "rod_inches": {
+       "1/4": 0.25,
+       "3/8": 0.375,
+       "1/2": 0.5,
+       "0\\.5\\s*\"": 0.5
+      },
+      "thickness": {
+       "fuel_material": "PMMA",
+       "limit_mm": 1.0,
+       "below": "film",
+       "from": "slab"
+      }
+     }
     }
    ],
-   "basis": "Column names. The table lists samples only; conditions and results are in the Science Documents test matrices"
+   "basis": "Column names. The table lists samples only; conditions and results are in the Science Documents test matrices",
+   "exclude": [
+    {
+     "column": "Fuel Sample Material",
+     "equals": "SOOT Cleaning",
+     "reason": "maintenance entry in the sample column, not a test"
+    }
+   ]
   },
   {
    "id": "cfi",
@@ -299,7 +612,14 @@
      "rule": "lower"
     }
    ],
-   "basis": "Column names"
+   "basis": "Column names",
+   "documented_elsewhere": [
+    {
+     "variable": "pressure_kpa",
+     "record_field": "approach",
+     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction"
+    }
+   ]
   },
   {
    "id": "saffire2",
@@ -390,7 +710,17 @@
      "rule": "measure"
     }
    ],
-   "basis": "Column names. The first character of the two microgravity columns is unreadable in the PSI file. The 'Spread Length' column holds rates in mm/s. The 1-g columns are not mapped"
+   "basis": "Column names. The first character of the two microgravity columns is unreadable in the PSI file. The 'Spread Length' column holds rates in mm/s. The 1-g columns are not mapped. The Material cell of samples 2-6 and 2-9 is blank and continues the row above (same thickness column pattern); the value is flagged",
+   "fill_down": [
+    "Material"
+   ],
+   "documented_elsewhere": [
+    {
+     "variable": "pressure_kpa",
+     "record_field": "approach",
+     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction"
+    }
+   ]
   },
   {
    "id": "saffire3",
@@ -450,7 +780,14 @@
      "rule": "lower"
     }
    ],
-   "basis": "Column names"
+   "basis": "Column names",
+   "documented_elsewhere": [
+    {
+     "variable": "pressure_kpa",
+     "record_field": "approach",
+     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction"
+    }
+   ]
   },
   {
    "id": "cfig_normal",
@@ -692,7 +1029,20 @@
      }
     }
    ],
-   "basis": "Column names"
+   "basis": "Column names",
+   "row_note": "Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read.",
+   "documented_elsewhere": [
+    {
+     "variable": "o2_pct",
+     "record_field": "approach",
+     "quote": "The crew installed the near field hardware in the Glovebox"
+    },
+    {
+     "variable": "pressure_kpa",
+     "record_field": "approach",
+     "quote": "The crew installed the near field hardware in the Glovebox"
+    }
+   ]
   },
   {
    "id": "same_r",
@@ -726,7 +1076,8 @@
      "rule": "number"
     }
    ],
-   "basis": "Column names. The meaning of Rt/R0 is not confirmed against a NASA document"
+   "basis": "Column names. The meaning of Rt/R0 is not confirmed against a NASA document",
+   "row_note": "The PSI record reports 66 test points; the table has 109 rows, of which 42 carry a test number ending in 'a' and are a second reading of the same smoke after aging. Each row is counted as one test row."
   },
   {
    "id": "spice",
@@ -751,7 +1102,8 @@
      "rule": "number"
     }
    ],
-   "basis": "Column names. The table has no test number, so the source row number is used"
+   "basis": "Column names. The table has no test number, so the source row number is used",
+   "row_note": "A row is one flow setting of a flame, not one flame; the PSI record reports 526 flames studied."
   },
   {
    "id": "slice",
