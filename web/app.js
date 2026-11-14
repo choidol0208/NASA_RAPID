@@ -69,6 +69,49 @@ function renderConditions(out, cfg) {
   }
 }
 
+// catalog request 2001: rank() returns the conditions it read as requirements, and for each result a
+// compliance line. Shown as a table: requirements as rows, the results as columns. Text marks, not colour alone.
+const COMPLIANCE = {
+  met: ["✓", "met"], near: ["≈", "near"], not_met: ["✗", "not met"], unverified: ["?", "unverified"], not_scored: ["–", "not scored"],
+};
+function requirementSource(r, cfg) {
+  if (r.source_class === "stated") return "you";
+  if (r.source_class === "implied") {
+    const m = /preset\s+(\S+)/.exec(r.source || "");
+    const p = m && cfg.presets && cfg.presets[m[1]];
+    return p ? `from the ${p.label_en} preset` : "from a preset";
+  }
+  if (r.source_class === "derived") return "derived from your input";
+  if (r.source_class === "assumed") return "default";
+  return r.source || "";
+}
+function renderRequirements(out, cfg) {
+  const box = $("#requirements");
+  box.replaceChildren();
+  const reqs = Array.isArray(out.requirements) ? out.requirements : [];
+  const res = out.status === "ok" ? out.results.filter((r) => Array.isArray(r.compliance)) : [];
+  if (!reqs.length || !res.length) { box.hidden = true; return; }
+  const cell = (r, id) => {
+    const c = r.compliance.find((x) => x.id === id);
+    const [mark, word] = c && COMPLIANCE[c.status] ? COMPLIANCE[c.status] : ["", c ? c.status : "—"];
+    return h("td", { class: "cmp cmp-" + (c ? c.status : "none") }, h("span", { class: "mark", "aria-hidden": "true" }, mark), " ", word);
+  };
+  const table = h("table", { class: "req-table" },
+    h("thead", {}, h("tr", {}, h("th", { scope: "col" }, "Requirement"), h("th", { scope: "col" }, "Value (where it came from)"),
+      ...res.map((r) => h("th", { scope: "col" }, `${r.rank}. ${r.investigation_id}`)))),
+    h("tbody", {}, reqs.map((q) => h("tr", {},
+      h("th", { scope: "row" }, q.label || q.dimension),
+      h("td", {}, String(q.value || "").replace(/_/g, " "), " ", h("span", { class: "src" }, `(${requirementSource(q, cfg)})`)),
+      ...res.map((r) => cell(r, q.id))))));
+  box.append(
+    h("h3", {}, "Requirements read from your question"),
+    h("p", { class: "gap" }, "Requirements read from your question, and whether each result's NASA tests cover them. \"Unverified\" means the record gives no value, or the value was assumed. \"Near\" means a similarity of 0.9 or more."),
+    h("div", { class: "table-wrap" }, table),
+    h("p", { class: "gap" }, h("span", { class: "tag" }, "Computed by team code from the catalog"), " ",
+      link(REPO + "scoring/scoring_config.json", "Requirement rules (scoring_config.json, requirements)")));
+  box.hidden = false;
+}
+
 function renderAssumptions(out, cfg) {
   const box = $("#assumptions");
   box.replaceChildren();
@@ -1358,6 +1401,7 @@ async function main() {
     renderConditions(out, config);
     renderAssumptions(out, config);
     renderWarnings($("#scenario-warnings"), out.warnings);
+    renderRequirements(out, config);
     if (out.status !== "ok") {
       show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false); show("#criteria", false); show("#shown", false); show("#answers", false);
       $("#assumptions").replaceChildren();

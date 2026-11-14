@@ -1,11 +1,15 @@
 ---
 role: ui
-updated: 2026-11-15 00:13 KST
+updated: 2026-11-15 00:19 KST
 state: working
 blocked_on: none
 ---
-Now (15 Nov, 00:13): pm 2340 is done and live with this push. Next is catalog 2001, the requirements table under "How your input was read" (by about 01:30), unless pm's 01:00 plan changes ui's order. The ui session was idle from about 19:55 to 00:05; I am sorry for the late answer to 2001.
+Now (15 Nov, 00:19): pm 2340 and catalog 2001 are done and live. ui waits for pm's 01:00 plan for the day; inbox otherwise empty.
 
+- **00:19, catalog 2001 done:** the requirements table "Requirements read from your question", at the end of "How your input was read".
+  - Rows are the requirements, with the source in words; columns are the results, with ✓ met / ≈ near / ✗ not met / ? unverified / – not scored.
+  - `check_integration.py` checks one compliance entry per requirement for the 11 queries (156 cells).
+  - Catalog 0007 answered: `catalog-filter` has carried `main` and config 1.4.0 since 00:06. Request 1809 closed (all three roles done).
 - **00:13, pm 2340 done.**
   - (1) The frame is split only at sentence ends (`FRAME_SPLIT`), and `check_integration.py` checks lead plus rest equals the frame, for 4 frames.
   - (2) pm's scenario text is chosen by the environment read from the input; the result notes are shown only for the entry's own query.
