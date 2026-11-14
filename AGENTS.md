@@ -1,182 +1,190 @@
-# AI 작업 가이드라인 — NASA Space Apps Challenge 2026
+# AI working guidelines — NASA Space Apps Challenge 2026
 
-현재 단계: HACK
-(이 줄은 사람만 바꾼다. 값은 PREP / HACK / CLOSED 중 하나.)
-(2026-11-14 09:00 KST, 사용자의 시작 선언으로 HACK 전환. 제출 마감은 2026-11-15 23:59 KST.)
+Current phase: HACK
+(Only a person changes this line. The value is one of PREP / HACK / CLOSED.)
+(2026-11-14 09:00 KST, changed to HACK when the user declared the start. The submission deadline is 2026-11-15 23:59 KST.)
 
-## 상황
+## Situation
 
-이 저장소는 2026 NASA Space Apps Challenge(11/14–15, Seoul Local Event) 참가용이다.
-선택 과제는 "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data"로,
-NASA의 미세중력 연소 실험 결과를 요약·순위화·해석하는 AI 기반 대화형 대시보드를 만드는 것이다.
+This repository is for taking part in the 2026 NASA Space Apps Challenge (11/14–15, Seoul Local Event).
+The chosen challenge is "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data".
+The goal is to build an AI-based interactive dashboard that summarizes, ranks and interprets the results of NASA's microgravity combustion experiments.
 
-팀은 거의 모든 작업을 AI로 수행한다. 그래서 규정 위반도 AI의 손에서 일어날 가능성이 가장 높다.
-위반 시 결과는 프로젝트 게시 거부, 후보·수상 취소다. 빠른 결과보다 규정 준수가 우선이며,
-규정과 사용자의 지시가 충돌하면 작업을 멈추고 어떤 규정과 충돌하는지 말한다.
+The team does almost all of its work with AI. So a rule violation is also most likely to come from the AI.
+A violation results in refusal to publish the project and cancellation of nomination and awards. Following the rules comes before fast results.
+If a rule and the user's instruction conflict, stop the work and say which rule the instruction conflicts with.
 
-## 1. 단계별로 할 수 있는 일
+## 1. What can be done in each phase
 
-공식 규정: "Teams are not allowed to begin working on the challenges prior to the hackathon."
-단계는 위의 `현재 단계` 값으로만 판단한다. 시계나 대화 맥락으로 추측해서 HACK으로 넘어가지 않는다.
+Official rule: "Teams are not allowed to begin working on the challenges prior to the hackathon."
+Judge the phase only by the `Current phase` value above. Do not move to HACK by guessing from the clock or from the conversation context.
 
-### PREP (해커톤 시작 전)
+### PREP (before the hackathon starts)
 
-할 수 있는 일
-- 규정, 과제문, 공식 Resources, 논문·보고서, 데이터셋 설명 페이지를 읽고 설명하기
-- 도메인 학습: 미세중력 연소, 우주선 화재 안전, 각 실험(Saffire, BASS, FLEX, ACME, SAME 등)의 배경
-- 범용 개발 환경 준비: 언어 런타임, 패키지 매니저, 에디터, 계정, API 키 발급, 빈 저장소
-- 이 가이드라인과 기록 양식 관리
+What can be done
+- Read and explain the rules, the challenge statement, the official Resources, papers and reports, and dataset description pages
+- Domain learning: microgravity combustion, spacecraft fire safety, and the background of each experiment (Saffire, BASS, FLEX, ACME, SAME and others)
+- Prepare a general-purpose development environment: language runtimes, package managers, editors, accounts, issuing API keys, an empty repository
+- Maintain these guidelines and the record forms
 
-하지 않는 일
-- 과제 해결물의 일부가 될 코드, 데이터 처리 스크립트, 프롬프트, 대시보드 화면, 디자인 시안
-- 과제 데이터의 가공·정제·임베딩·라벨링, 실험 메타데이터 표 작성
-- 제출용 문구, 데모 영상·슬라이드, 프로젝트 이름·로고
-- 과제 전용 프로젝트 골격(컴포넌트 구조, 스키마, 파이프라인 설계 문서)
+What you do not do
+- Code, data processing scripts, prompts, dashboard screens and design drafts that will become part of the challenge solution
+- Processing, cleaning, embedding or labelling the challenge data, and writing experiment metadata tables
+- Submission text, demo videos and slides, the project name and logo
+- A challenge-specific project skeleton (component structure, schemas, pipeline design documents)
 
-판단 기준: "이 산출물을 내일 제출물에 그대로 넣을 수 있는가?" 그렇다면 PREP에서는 만들지 않는다.
-이해를 위한 메모는 괜찮지만 제출물로 옮겨 쓰지 않는다.
-원자료 사전 다운로드처럼 애매한 일은 하지 말고, Local Lead(seoul@nasaspaceappskr.org)에게 물어보라고 사용자에게 알린다.
+How to decide: "Can this output be put into the submission tomorrow as it is?" If yes, do not make it in PREP.
+Notes made for understanding are fine, but do not copy them into the submission.
+Do not do unclear things such as downloading raw data in advance. Tell the user to ask the Local Lead (seoul@nasaspaceappskr.org).
 
-### HACK (해커톤 진행 중)
+### HACK (during the hackathon)
 
-아래 2–6절을 지키며 제작한다. 시작 직후 LICENSE 파일을 추가한다(3절).
+Build while following sections 2–6 below. Add the LICENSE file right after the start (section 3).
 
-### CLOSED (제출 마감 후)
+### CLOSED (after the submission deadline)
 
-제출물과 연결된 저장소·데모를 수정하지 않는다. 수정이 필요하면 사용자에게 먼저 확인한다.
+Do not change the repository or the demo linked to the submission. If a change is needed, check with the user first.
 
-## 2. 출처 기록
+## 2. Recording sources
 
-공식 규정: 오픈소스·무료 자료를 포함해 프로젝트 제작에 쓴 모든 출처를 인용해야 한다.
-누락 시 NASA는 자료를 삭제하거나 후보·수상 자격을 취소할 수 있다.
+Official rule: all sources used to make the project must be cited, including open-source and free materials.
+If a source is missing, NASA can remove the material or cancel eligibility for nomination and awards.
 
-- 데이터, 코드, 라이브러리, 모델, 이미지, 글꼴, 아이콘, 문서를 쓰는 그 시점에 `compliance/SOURCES.md`에 한 줄을 추가한다. 나중에 몰아서 적지 않는다.
-- 다른 곳에서 가져온 코드 조각도 출처다. URL과 라이선스를 적는다.
-- 출처를 확인할 수 없는 자료는 쓰지 않는다.
+- Add one line to `compliance/SOURCES.md` at the moment you use data, code, a library, a model, an image, a font, an icon or a document. Do not write them all at once later.
+- A code snippet taken from somewhere else is also a source. Write its URL and licence.
+- Do not use material whose source cannot be confirmed.
 
-## 3. 라이선스
+## 3. Licences
 
-공식 규정
-- 팀이 만든 결과물은 제한 없이 공개되거나 OSI 승인 오픈소스 라이선스로 배포된다. 지정하지 않으면 Apache 2.0이 적용된다.
-- NASA·파트너 우주기관 이외의 자료는 제한 없이 공개된 것이거나 OSI 오픈소스여야 하고, 해당 라이선스를 제출 문서에 밝혀야 한다.
+Official rules
+- What the team makes is released to the public without restriction or distributed under an OSI-approved open-source licence. If none is specified, Apache 2.0 applies.
+- Material from outside NASA and partner space agencies must be public without restriction or OSI open source, and its licence must be stated in the submission documents.
 
-- 의존성이나 자료를 추가하기 전에 라이선스를 확인한다. OSI 승인 라이선스, CC0, 퍼블릭 도메인이 아니면 추가하지 말고 사용자에게 알린다.
-- 유료·비공개 데이터셋, 저작권 있는 이미지·음악·글꼴, 사내 자료는 쓰지 않는다.
-- 저장소 LICENSE는 Apache-2.0을 기본으로 한다. 다른 라이선스는 사용자가 정한다.
-- PSI 데이터는 조사한 항목(PSI-98, 100, 102)이 CC0-1.0이었다. 다른 항목은 쓸 때마다 페이지에서 확인한다.
+- Check the licence before adding a dependency or material. If it is not an OSI-approved licence, CC0 or public domain, do not add it, and tell the user.
+- Do not use paid or private datasets, copyrighted images, music or fonts, or company-internal material.
+- The repository LICENSE is Apache-2.0 by default. The user decides on any other licence.
+- For PSI data, the entries that were checked (PSI-98, 100, 102) were CC0-1.0. For any other entry, check on its page each time you use it.
 
-## 4. AI 사용 공개
+## 4. Disclosing AI use
 
-공식 규정: AI 도구 사용은 허용되며, 제출물에 AI 도구를 어떻게 썼는지 설명을 반드시 포함해야 한다.
-(공식 사이트는 2026년에 AI를 "Super Intelligence(SI)"로 표기한다. 제출 문서에서는 공식 표기를 따른다.)
+Official rule: using AI tools is allowed, and the submission must include an explanation of how AI tools were used.
+(In 2026 the official site writes AI as "Super Intelligence(SI)". In submission documents, follow the official term.)
 
-- 작업 세션마다 `compliance/AI_USAGE_LOG.md`에 도구, 용도, 영향을 받은 산출물을 적는다.
-- 제품 안에서 돌아가는 모델(요약, 순위화, 검색 등)도 기록한다: 모델명, 제공자, 역할.
-- AI가 만든 것을 사람이 만든 것처럼 서술하지 않는다.
-- AI 생성 이미지·영상에는 눈에 보이는 "AI 생성" 워터마크를 넣는다.
-- AI 생성 음성·코드·데이터는 설명문과 메타데이터에 생성 사실을 적는다.
-  코드는 README와 파일 상단 주석에, 데이터 파일은 메타데이터 칸이나 동반 문서에 적는다.
-- AI 생성물에 NASA 로고·깃발·미션 식별 표지를 쓰거나 포함하거나 변형하지 않는다.
-- NASA 로고를 팀·프로젝트 브랜드로 쓰지 않고, NASA의 보증이나 승인을 암시하지 않는다.
-- 공개 NASA 사진은 이용 조건을 확인하고 출처를 적는다.
-- 제출 페이지의 도구 선택 항목에서 사용한 도구를 고르고, 어디에 어떻게 썼는지 적는다.
+- In every work session, write the tool, the purpose and the affected outputs in `compliance/AI_USAGE_LOG.md`.
+- Also record the models that run inside the product (summarizing, ranking, search and so on): model name, provider, role.
+- Do not describe something made by AI as if a person made it.
+- Put a visible "AI-generated" watermark on AI-generated images and videos.
+- For AI-generated audio, code and data, state in the description and in the metadata that they are AI-generated.
+  For code, state it in the README and in a comment at the top of the file. For data files, state it in a metadata field or in an accompanying document.
+- Do not use, include or alter NASA logos, flags or mission identifiers in AI-generated content.
+- Do not use the NASA logo as a team or project brand, and do not imply NASA's endorsement or approval.
+- For public NASA photos, check the terms of use and write the source.
+- In the tool selection field of the submission page, select the tools that were used, and write where and how they were used.
 
-## 5. 내용의 정확성
+## 5. Accuracy of content
 
-심사 항목에 Validity(과학적·기술적 타당성)와 Relevance(NASA 데이터의 의미 있는 활용)가 있고,
-이 과제는 화재 안전을 다룬다. 지어낸 수치 하나가 프로젝트 전체의 신뢰를 무너뜨린다.
+The judging criteria include Validity (scientific and technical soundness) and Relevance (meaningful use of NASA data).
+This challenge deals with fire safety. One made-up number destroys trust in the whole project.
 
-- 데이터, 수치, 실험 결과, 인용문을 지어내지 않는다. 확인하지 못한 값은 "확인되지 않음"으로 표시한다.
-- 화면에 나오는 모든 수치와 요약은 원문(PSI 항목, NTRS 문서)으로 추적 가능해야 한다.
-- 팀이 계산·추정한 값과 순위는 NASA의 결론이 아니라 팀의 산출임을 화면에 밝힌다.
-- LLM 요약은 근거 문서를 함께 제시하고, 원문에 없는 내용을 덧붙이지 않는다.
-- 결과물을 실제 운용 가능한 안전 지침처럼 표현하지 않는다. 연구 탐색 도구다.
+- Do not make up data, numbers, experiment results or quotations. Mark a value that could not be confirmed as "not confirmed".
+- Every number and summary shown on screen must be traceable to its original source (a PSI entry or an NTRS document).
+- State on screen that values and rankings calculated or estimated by the team are the team's output, not NASA's conclusions.
+- Show an LLM summary together with its supporting documents, and do not add content that is not in the original text.
+- Do not present the result as if it were safety guidance that can be used in real operations. It is a research exploration tool.
 
-## 6. 제출물에 넣지 않는 것
+## 6. What does not go into the submission
 
-공식 규정상 다음이 포함되면 접수·게시되지 않는다.
+Under the official rules, a submission is not accepted or published if it includes any of the following.
 
-- 개인식별정보(생일, 주소, 전화번호 등)
-- 만 18세 미만의 이름·목소리·얼굴
-- 상업적 서비스·제품 홍보
-- 공개 권한이 없는 영업비밀·기밀 정보, 저작권을 갖지 않은 자료
-- 수출통제 정보(ITAR, EAR)
-- 위협·비방·차별·음란 표현
+- Personally identifiable information (birthday, address, phone number and so on)
+- The name, voice or face of anyone under 18 years of age
+- Promotion of commercial services or products
+- Trade secrets or confidential information that you have no right to disclose, and material that you do not hold the copyright to
+- Export-controlled information (ITAR, EAR)
+- Threatening, defamatory, discriminatory or obscene expression
 
-추가로
-- API 키와 비밀값을 저장소에 커밋하지 않는다. 최종 프로젝트 링크는 누구나 열 수 있어야 한다.
-- 팀원 개인정보를 외부 AI 서비스나 API 요청에 넣지 않는다.
-- 공식 약관은 중국 및 중국 소유 기관과 연계된 참여·협업을 금지한다. 해당 기관의 데이터나 서비스가 필요해 보이면 쓰기 전에 사용자에게 알린다. (도구 사용까지 포함되는지는 해석이 필요한 부분이다.)
-- (2026-11-14 사용자 결정) 중국 또는 중국 소유 기관이 만든 AI 모델과 AI 서비스는 쓰지 않는다. 개발 과정과 제품 안 모두에 적용한다. 모델을 고를 때 제작사와 라이선스를 확인하고 `compliance/SOURCES.md`에 적는다.
+In addition
+- Do not commit API keys or secrets to the repository. Anyone must be able to open the final project link.
+- Do not put team members' personal information into external AI services or API requests.
+- The official terms prohibit participation and collaboration linked to China and Chinese-owned organizations. If data or a service from such an organization seems to be needed, tell the user before using it. (Whether this also covers the use of tools is a point that needs interpretation.)
+- (User decision, 2026-11-14) Do not use AI models or AI services made by China or by Chinese-owned organizations. This applies both to the development process and inside the product. When choosing a model, check its maker and its licence, and write them in `compliance/SOURCES.md`.
 
-## 7. 제출
+## 7. Submission
 
-아래는 Seoul 운영진의 D-Day 안내 자료(2026-11-14)로 확인한 내용이다.
+The content below was confirmed from the D-Day guidance material of the Seoul organizers (2026-11-14).
 
-기한과 절차
-- 팀 페이지의 Project 탭에서 작성한다. 창구는 11/14 09:00 – 11/15 23:59 KST이고, 23:55까지 제출 완료를 권장한다.
-- Save Progress는 임시 저장이다. Submit for Judging을 눌러 상태가 "Project Submitted for Judging"으로 바뀌어야 제출이다.
-- 제출 후 고쳤다면 마감 전에 다시 제출한다. 마지막 제출본이 심사 대상이다. 마감 뒤에는 고치거나 재제출하지 않는다.
-- 모든 팀원이 Seoul Event에 확정 등록되어 있고 공식 팀 페이지에 올라 있어야 한다. 1인 참가자도 팀이 필요하다.
-- 팀은 최대 6명, 한 팀은 한 과제만 다룬다.
+Deadline and procedure
+- Write the submission in the Project tab of the team page. The submission window is 11/14 09:00 – 11/15 23:59 KST, and finishing the submission by 23:55 is recommended.
+- Save Progress is a temporary save. It is a submission only when you press Submit for Judging and the status changes to "Project Submitted for Judging".
+- If you made changes after submitting, submit again before the deadline. The last submitted version is the one that is judged. After the deadline, do not make changes and do not resubmit.
+- Every team member must have a confirmed registration for the Seoul Event and must be listed on the official team page. A 1-person participant also needs a team.
+- A team has at most 6 members, and one team works on only one challenge.
 
-제출 항목
-- High-Level Summary: 영어 50–200단어. 무엇을 만들었고, 과제를 어떻게 다루며, 왜 중요한지.
-- Project Demo: 링크 하나만. 7장 이하 슬라이드(제목 슬라이드 포함) 또는 30초 이하 영상.
-- Final Project: 최종 결과물의 공개 링크. 데모 링크와 별개다.
-- Project Details: 하는 일, 작동·설계 방식, 이점, 목표, 사용한 도구·언어·하드웨어·소프트웨어.
-- Use of SI: 사용한 AI 도구와 사용처(4절).
-- Space Agency Data: 사용한 NASA 자료, 사용 방법, 아이디어에 준 영향.
-- References: 모든 데이터·도구·코드·문장·이미지의 출처 링크, 사용처, 라이선스(2·3절).
+Submission fields
+- High-Level Summary: 50–200 words in English. What was built, how it addresses the challenge, and why it matters.
+- Project Demo: one link only. 7 slides or fewer (including the title slide), or a video of 30 seconds or less.
+- Final Project: a public link to the final result. It is separate from the demo link.
+- Project Details: what it does, how it works and how it is designed, its benefits, its goals, and the tools, languages, hardware and software used.
+- Use of SI: the AI tools used and where they were used (section 4).
+- Space Agency Data: the NASA material used, how it was used, and how it influenced the idea.
+- References: for all data, tools, code, text and images, the source link, where it was used, and the licence (sections 2 and 3).
 
-형식 요건
-- 프로젝트와 슬라이드는 영어로 쓴다. 다른 언어의 영상에는 영어 자막을 넣는다.
-- 모든 링크는 로그인·비밀번호·권한 요청 없이 열려야 한다. 로그아웃 상태에서 직접 확인한다.
-- 본문 이미지는 JPG·PNG·GIF, 10 MB 이하. 영상과 문서는 외부에 올리고 공개 링크를 건다.
-- 글로벌 수상 자격을 얻으려면 선택한 과제의 Resources에 있는 NASA 자료를 최소 하나 써야 한다.
-- 완전히 구현하지 못해도 설계와 그 이유를 보여준다. 심사위원은 이틀로는 완성이 어렵다는 것을 안다.
-- 확인하지 않은 효과를 검증 완료로 쓰지 않는다. 한계와 다음 검증 계획을 밝힌다.
+Format requirements
+- Write the project and the slides in English. Add English subtitles to a video in another language.
+- Every link must open without a login, a password or an access request. Check this yourself while logged out.
+- Images in the body are JPG, PNG or GIF, 10 MB or less. Upload videos and documents to an external site and add a public link.
+- To be eligible for global awards, the project must use at least one NASA resource from the Resources of the chosen challenge.
+- Even if the project is not fully implemented, show the design and the reasons for it. The judges know that it is hard to finish in two days.
+- Do not write that an effect is verified when it has not been checked. State the limits and the plan for the next verification.
 
-Seoul 참가 요건 (사람이 직접 한다)
-- 개별 체크인 5회 중 4회. 팀 미팅이 1회를 대체한다. 설문 링크는 각 시간대에 Zoom에서 공지된다.
+Seoul participation requirements (people do these themselves)
+- 4 of the 5 individual check-ins. The team meeting replaces 1 check-in. The survey link is announced on Zoom in each time slot.
   11/14 11:00–12:00, 16:00–18:00, 19:00–22:00 / 11/15 06:00–12:00, 15:00–20:00 (KST)
-- 팀 미팅 1회(10–15분, 전원 참석, 1인 팀 포함). 대표가 예약한다.
+- 1 team meeting (10–15 minutes, all members attend, including 1-person teams). The team representative books it.
 
-마감 전에 `compliance/SOURCES.md`와 `compliance/AI_USAGE_LOG.md`를 제출 양식의 References와 Use of SI로 옮긴다.
+Before the deadline, transfer `compliance/SOURCES.md` and `compliance/AI_USAGE_LOG.md` into References and Use of SI in the submission form.
 
-## 8. 아직 확인하지 못한 항목
+Added on 2026-11-14 17:00 KST by the pm session, after reading the organizers' deck in full (53 pages)
+- The Project tab has a Lock switch against simultaneous editing. If another member turns the lock off, changes that were saved but not yet submitted can be overwritten. One person edits, and long text is kept in a backup.
+- Two boxes must be ticked before the final submission: agreement to the Terms and Conditions, and "Confirm All Work is Original". The second says that every outside resource (code, text, images) is listed in the form and that no copyrighted material was used without permission.
+- The deck's seven-slide structure and its tips for the README and for Project Details are examples and recommendations, not requirements. README tips: a project overview and what is implemented, the live link at the top, screenshots, run steps with commands, unfinished features and known limits.
+- Judges review the project page and the deliverables linked from it. Seoul awards: the top 3 by overall score, honourable mentions from ranks 4 to 10, and ten recognition awards, each for a pair of the five criteria.
+- Questions about the challenge, the data or the technique can be put to subject matter experts on Space Apps Connect.
 
-- NASA의 2026 Project Submission Guide 원문은 직접 읽지 못했다. 위 내용은 Seoul 운영진의 요약이고, 운영진은 "충돌 시 NASA 최신 가이드가 우선"이라고 안내한다.
-- (2026-11-14 10:35 KST 갱신) pm 세션이 2026 Project Submission Guide와 Judging & Awards Guide 원문을 읽었다. 7절과 어긋나는 내용은 찾지 못했고, 추가로 확인한 점은 다음과 같다.
-  - 데모가 슬라이드 7장 또는 영상 30초를 넘으면 글로벌 심사 대상에서 제외된다.
-  - 영어 요건은 제출 페이지뿐 아니라 거기에 연결된 자료 전체에 적용된다.
-  - Use of SI 답변은 심사위원에게 보이지 않는다. 심사위원은 제출물 안의 AI 생성 표시(워터마크, 설명문, 메타데이터)를 본다.
-  - 가이드는 SI를 해결 아이디어 자체를 내는 데 쓰지 말라고 적고 있다.
-  - 심사는 Impact, Creativity, Validity, Relevance, Presentation을 각각 1–5점으로 매긴다.
-- 저장소를 Final Project 링크로 쓰면 한국어 내부 문서(이 파일, `compliance/`)가 "연결된 자료는 영어" 요건에 걸릴 수 있다. 제출 전에 사람이 정한다.
-- 유료 상용 API를 제품 안에서 쓰는 것이 "공개 또는 오픈소스" 요건에 맞는지는 판단할 수 없다. 쓰기 전에 사용자에게 알린다.
+## 8. Points not yet confirmed
 
-이 항목과 다른 방향으로 작업해야 할 때는 진행하기 전에 사용자에게 확인한다.
+- The original text of NASA's 2026 Project Submission Guide has not been read directly. The content above is a summary by the Seoul organizers, and the organizers state that "if there is a conflict, the latest NASA guide takes priority".
+- (Updated 2026-11-14 10:35 KST) The pm session read the original text of the 2026 Project Submission Guide and the Judging & Awards Guide. It found nothing that conflicts with section 7. The additional points it confirmed are as follows.
+  - If the demo is longer than 7 slides or 30 seconds of video, it is excluded from global judging.
+  - The English requirement applies not only to the submission page but also to all material linked from it.
+  - The Use of SI answer is not shown to the judges. The judges see the marks that show AI generation inside the submission (watermarks, descriptions, metadata).
+  - The guide says not to use SI to come up with the solution idea itself.
+  - Judging gives each of Impact, Creativity, Validity, Relevance and Presentation a score of 1–5 points.
+- If the repository is used as the Final Project link, the Korean internal documents (this file, `compliance/`) may break the "linked material is in English" requirement. A person decides before submission.
+  (Decided by the user on 2026-11-14, at about 16:50 KST) Korean-language documents in the repository are translated into English before submission. By the pm role's arrangement, each role translates the files it owns.
+- It cannot be judged whether using a paid commercial API inside the product meets the "public or open source" requirement. Tell the user before using one.
 
-## 9. 팀 협업과 세션 간 조정
+When work must go in a direction different from these points, check with the user before going ahead.
 
-역할별 세션이 사람을 거치지 않고 서로 맞춰 가도록 정한 규칙이다. 절차는 `coord/README.md`에 있다.
+## 9. Team collaboration and coordination between sessions
 
-- 역할은 pm, data, ui, catalog 넷이다(catalog는 2026-11-14 13:28 사용자 결정으로 추가). 자기 역할은 저장소 루트의 `.role` 파일(커밋하지 않음)에 한 단어로 적혀 있다. 없으면 사용자에게 한 번 묻고 적는다.
-- 역할마다 브랜치와 소유 경로가 있다(`coord/roles.json`). 자기 브랜치에만 푸시하고, 소유하지 않은 경로는 고치지 않는다. 필요하면 요청을 연다.
-- 작업을 시작할 때, 작업 단위를 끝낼 때, 멈추기 전에, 그리고 작업 중에는 적어도 20분마다 동기화한다(`/sync` 또는 `coord/README.md`의 절차).
-- `compliance/`의 두 기록과 `.gitignore`는 모두가 쓰는 파일이다. 줄을 추가만 하고, 남이 쓴 줄을 고치거나 지우지 않는다.
-- 커밋하는 조정 파일과 제품 문서는 영어로 쓴다. 사용자와의 대화는 사용자의 언어로 한다.
-- 다른 세션과 조정할 일은 요청 파일로 직접 처리한다. 사용자에게 묻는 일은 `coord/README.md`의 "Needs a human"에 있는 것으로 한정한다.
+These are rules set so that the sessions of each role coordinate with each other without going through a person. The procedure is in `coord/README.md`.
 
-## 규정 출처 (2026-11-13 확인, 2026-11-14 갱신)
+- There are four roles: pm, data, ui and catalog (catalog was added by the user's decision at 2026-11-14 13:28). Your own role is written as one word in the `.role` file (not committed) at the repository root. If it is not there, ask the user once and write it.
+- Each role has a branch and owned paths (`coord/roles.json`). Push only to your own branch, and do not change paths that you do not own. If needed, open a request.
+- Sync when you start work, when you finish a unit of work, before you stop, and at least every 20 minutes while working (`/sync` or the procedure in `coord/README.md`).
+- The two logs in `compliance/` and `.gitignore` are files that everyone writes to. Only add lines, and do not change or delete lines written by others.
+- Write committed coordination files and product documents in English. Talk with the user in the user's language.
+- Handle matters to coordinate with other sessions directly through request files. Limit what you ask the user to the items under "Needs a human" in `coord/README.md`.
 
-- NASA Space Apps Seoul 2026 D-Day 안내 자료(운영진 배포, 2026-11-14)
+## Rule sources (checked 2026-11-13, updated 2026-11-14)
+
+- NASA Space Apps Seoul 2026 D-Day guidance material (distributed by the organizers, 2026-11-14)
 
 - Participant FAQs: https://www.spaceappschallenge.org/resources/participant-faqs/
-- 2026 Participant Terms and Conditions (2026-08-07 개정): https://www.spaceappschallenge.org/legal/
-- 2026 대회 안내: https://www.spaceappschallenge.org/2026/
-- 심사 기준 보도: https://business-review.eu/tech/it/innovation-feasibility-and-relevance-among-the-criteria-for-evaluating-projects-at-nasa-space-apps-challenge-302778
-- 2022 Project Submission Guide(잠정값의 근거): https://spaceapps-prod.s3.amazonaws.com/media/documents/Space_Apps_2022_Project_Submission_Guide.pdf
-- 2026 Project Submission Guide (2026-11-13 공개, 2026-11-14 원문 확인): https://www.spaceappschallenge.org/resources/project-submission-guide/
-- 2026 Judging & Awards Guide (2026-11-13 공개, 2026-11-14 원문 확인): https://www.spaceappschallenge.org/resources/judging-awards-guide/
+- 2026 Participant Terms and Conditions (revised 2026-08-07): https://www.spaceappschallenge.org/legal/
+- 2026 event information: https://www.spaceappschallenge.org/2026/
+- News report on the judging criteria: https://business-review.eu/tech/it/innovation-feasibility-and-relevance-among-the-criteria-for-evaluating-projects-at-nasa-space-apps-challenge-302778
+- 2022 Project Submission Guide (the basis for the provisional values): https://spaceapps-prod.s3.amazonaws.com/media/documents/Space_Apps_2022_Project_Submission_Guide.pdf
+- 2026 Project Submission Guide (published 2026-11-13, original text checked 2026-11-14): https://www.spaceappschallenge.org/resources/project-submission-guide/
+- 2026 Judging & Awards Guide (published 2026-11-13, original text checked 2026-11-14): https://www.spaceappschallenge.org/resources/judging-awards-guide/
