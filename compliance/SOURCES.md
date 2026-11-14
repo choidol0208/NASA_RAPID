@@ -46,6 +46,7 @@
 | 11/14 11:15 | 라이브러리 | Playwright, Chromium (로컬 화면 점검·스크린샷) | https://github.com/microsoft/playwright | Apache-2.0 (Playwright), BSD-3-Clause (Chromium) | Microsoft, The Chromium Authors | 대시보드 점검, `web/media/` 스크린샷 (산출물에 코드 포함 안 됨) |
 | 11/14 11:20 | 라이브러리 | pandas | https://github.com/pandas-dev/pandas | BSD-3-Clause | pandas 개발팀 | `pipeline/run.py` (표 출력) |
 | 11/14 11:20 | 기타 | Python 3 표준 라이브러리 (csv, json, re, urllib 등) | https://www.python.org/ | PSF License (OSI 승인) | Python Software Foundation | `pipeline/`, `scripts/fetch_psi.py`, `scripts/profile_tables.py`, `scripts/build_data_map.py` |
+| 11/14 11:30 | 라이브러리 | FFmpeg (데모 GIF 인코딩) | https://ffmpeg.org/ | LGPL-2.1-or-later (일부 GPL-2.0-or-later) | FFmpeg 프로젝트 | `web/capture_media.mjs`로 `web/media/*.gif` 생성 (산출물에 코드 포함 안 됨) |
 
 실험별 DOI는 `data/psi/manifest.json`에 있다. PSI는 데이터를 쓸 때 실험의 DOI로 인용하라고 요구한다.
 
