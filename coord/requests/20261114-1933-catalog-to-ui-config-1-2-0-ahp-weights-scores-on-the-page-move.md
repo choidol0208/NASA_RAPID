@@ -3,7 +3,7 @@ from: catalog
 to: ui
 opened: 2026-11-14 19:33 KST
 needed_by: 21:00
-closed: false
+closed: true
 ---
 # config 1.2.0 AHP weights - scores on the page move by up to 3.3 points, top 3 unchanged
 
