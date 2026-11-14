@@ -273,6 +273,8 @@ Stochastic multicriteria acceptability analysis (SMAA; Lahdelma, Hokkanen and Sa
 - tied dimensions share their ranks in random order;
 - the share of draws that keeps an investigation at rank 1, or in the top 3, is its acceptability.
 
+The AI layer's `data/insights/robustness.json` (`ai/build_all.py`, pm role) runs a different SMAA-style check: Dirichlet draws centred on the profile weights. It shows how stable a rank is near the chosen weights. The check below keeps only their order, so it is the wider test.
+
 | Profile | Query | Top 3 (AHP weights) | Same rank 1 | Same top 3 as a set |
 |---|---|---|---|---|
 | prevention | ISS | BASS-II, BASS, SAFFIRE-II | 100% | 63% (SAME enters in 37%) |
