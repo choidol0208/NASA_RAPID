@@ -8,6 +8,7 @@ declared in pipeline/spec/:
     needs.json      what fire safety needs to know, and which variables answer it
     variables.json  the standard variables, their valid ranges, derived formulas
     sources.json    how each PSI table maps onto the standard variables
+    references.json the standards, requirements and published results behind each need
 
 Stages
     1 ingest       read each PSI table as text; nothing is changed
@@ -190,6 +191,24 @@ def assess(tests, needs, sources):
     return pd.DataFrame(matrix), pd.DataFrame(links)
 
 
+def need_references(needs, references):
+    """Need -> reference items. Fails if a need points to an unknown item."""
+    items = {i["id"]: (r, i) for r in references for i in r["items"]}
+    rows = []
+    for need in needs:
+        for item_id in need.get("references", []):
+            if item_id not in items:
+                raise SystemExit(f"need {need['id']}: unknown reference item {item_id}")
+            r, i = items[item_id]
+            rows.append({"need_id": need["id"], "item_id": item_id, "item_type": i["type"],
+                         "text": i["text"], "where": i["where"],
+                         "variables": ";".join(i.get("variables", [])),
+                         "values": json.dumps(i["values"]) if "values" in i else "",
+                         "reference_id": r["id"], "title": r["title"], "issuer": r["issuer"],
+                         "version": r["version"], "access": r["access"], "url": r["url"]})
+    return pd.DataFrame(rows)
+
+
 # ------------------------------------------------------------------ 6 export
 def export(tests, variables, derived, matrix, links, report):
     os.makedirs(OUT, exist_ok=True)
@@ -236,8 +255,11 @@ def main():
     derive(tests, derived)
     matrix, links = assess(tests, needs["needs"], src_spec["sources"])
     export(tests, variables, derived, matrix, links, report)
+    refs = need_references(needs["needs"], spec("references.json")["references"])
+    refs.to_csv(os.path.join(OUT, "need_references.csv"), index=False)
 
-    print(f"{len(tests)} tests, {report['values']} values, {len(links)} need-test links\n")
+    print(f"{len(tests)} tests, {report['values']} values, {len(links)} need-test links, "
+          f"{len(refs)} need-reference links\n")
     shown = matrix[matrix.status != "not_test_level"]
     print(shown.pivot(index="source_id", columns="need_id", values="usable_tests").to_string())
     print()

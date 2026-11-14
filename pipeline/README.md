@@ -7,6 +7,8 @@ The pipeline starts from the question side: what does spacecraft fire safety nee
 ```
 spec/needs.json      what fire safety needs to know (7 questions: prevention, detection, suppression)
         │             each need = required condition variables + any-of outcome variables + scope
+spec/references.json standards, requirements and published results each need rests on (21 documents)
+        │
 spec/variables.json  standard variables, units, valid ranges, derived formulas
         │
 spec/sources.json    22 PSI tables: source column → standard variable → named rule
@@ -25,6 +27,7 @@ Run: `python3 pipeline/run.py` (after `python3 scripts/fetch_psi.py`).
 | `values_long.csv` | One row per value, with the source column it came from |
 | `capability_matrix.csv` | Need × source: how many tests carry the required conditions and an outcome; status |
 | `need_tests.csv` | For each need, the tests that can be used as evidence |
+| `need_references.csv` | For each need, the reference items (criterion text, values, document, section, URL) |
 | `run_report.json` | Row counts, flags, unmapped source columns, fill count per variable |
 
 Status in the capability matrix: `measured`, `partial` (an outcome exists but a required condition is missing), `conditions_only`, `none`, `out_of_scope`, `not_test_level` (the table's rows are not individual tests).
@@ -35,6 +38,10 @@ Status in the capability matrix: `measured`, `partial` (an outcome exists but a 
 - A cell that a rule cannot read stays empty and gets a flag (`variable:reason`). Problems are flagged, not fixed.
 - Every value keeps its source file, row and column.
 - To add a table, a variable or a need, edit the spec files; `run.py` does not change.
+
+## References
+
+`references.json` lists each document with the items taken from it: requirements, acceptance criteria, definitions, exposure limits, design values, knowledge gaps and published results. Each item records where in the document it is, and how the document was read (`full_text_read`, `abstract_only`, `cited_not_read`, `read_from_copy`). The pipeline does not compute with these values and does not judge any test against them. Crew exposure limits (SMAC) apply to cabin air, not to a test chamber.
 
 ## Limits
 
