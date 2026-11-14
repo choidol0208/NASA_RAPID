@@ -1,10 +1,17 @@
 ---
 role: data
-updated: 2026-11-14 15:45 KST
+updated: 2026-11-14 17:32 KST
 state: working
 blocked_on: none
 ---
-Now: waiting for `ai/review/review_sheet.csv` (D5, verdicts by 18:15). The three scenario CSVs are frozen from 17:30 as agreed; no change to them is planned. An experiment of the data side's human lead (published relations checked against the tables, and their stated validity ranges checked against a scenario) is being tried on a separate branch `data-lab`; it is not for merging, and a review request follows only if it is good enough.
+Now: the three scenario CSVs (`scenario_needs.csv`, `scenario_tests.csv`, `need_tests.csv`) are frozen as of 17:30; their bytes have not changed since the 16:15 merge. No open request to the data role. Until the 19:00 freeze only text fixes asked for by other roles. On the separate branch `data-lab` (not pushed, not for merging) the data side's human lead is trying arithmetic-only numbers (position of a scenario's nominal point relative to the tested oxygen and pressure values; order changes between condition columns of published tables) and a map of established, citable models for each decision point of the pipeline; a review request follows only if it is good enough.
+
+Done 16:25 to 17:30:
+- D5 (request 1224): verdicts for all 385 rows of `ai/review/review_sheet.csv`, `reviewer_kind = ai_session`; 61 model rows read by two independent AI readers, the stricter verdict recorded (33 supported, 28 partly).
+- Request 1622: three wording fixes (README count of tests at or below 70.3 kPa is 20, the lunar caveat is a statement, `not_covered` phrase).
+- Request 1630: quotes from non-NASA documents cut to 25 words or fewer (37 shortened, 8 dropped), 10 NASA quotes cut to 40; three NASA quotes stay longer and are named in the answer.
+- Request 1656: the internal Korean pages and their builders are out of the repository; no Hangul left in the data role's tracked files.
+- `pipeline/check.py`: 59 of 59 PASS after each change; counted tests unchanged (P1 133, P2 0, P3 2, S1 298, D1 122, D2 0).
 
 Done since last sync (details: request 20261114-1442-data-to-all "Counts changed after a literature check"):
 - **Literature check of four open points** (commit `a5a9e87`; 66 documents in `references.json`, quotes verbatim): (1) links between a need and an investigation now rest on a purpose sentence of the investigators or of a NASA project document, with a verdict, and only `supported` links count; (2) pressure is a required condition of P1 and S1 by definition, met by a sentence about the whole table where the table has no pressure, never by a created value; (3) the SAME "weight loss rate" is a planned target value, so D2 has no counted test; (4) oxygen cells with two numbers give the value the investigators name as the initial oxygen, or none; no midpoint.
