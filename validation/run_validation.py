@@ -123,8 +123,8 @@ def main():
         except Exception as ex:  # a crash is a failure, not a stop
             ids, codes, fails = [], [], [f"crash: {type(ex).__name__}: {ex}"]
         n_fail += bool(fails)
-        rows.append(dict(id=sc["id"], group=sc["group"], query=sc["query"], top=ids, warnings=codes,
-                         passed=not fails, fails=fails, why=sc.get("why_ko", "")))
+        rows.append(dict(id=sc["id"], group=sc["group"], query=sc["query"], query_en=sc.get("query_en", ""), top=ids,
+                         warnings=codes, passed=not fails, fails=fails, why=sc.get("why", sc.get("why_ko", ""))))
     stab = stability(spec["stability"], spec["scenarios"], args.target) if "stability" in spec else []
     total = len(rows)
     lines = [f"# Catalog filter validation report", "",
@@ -133,7 +133,8 @@ def main():
              "| ID | Group | Query | Top 3 | Warnings | Result |", "|---|---|---|---|---|---|"]
     for r in rows:
         res = "PASS" if r["passed"] else "FAIL: " + "; ".join(r["fails"])
-        lines.append(f"| {r['id']} | {r['group']} | {r['query'] or '(empty)'} | {', '.join(r['top'])} | {', '.join(r['warnings'])} | {res} |")
+        q = (r["query"] + (f" (Korean: {r['query_en']})" if r["query_en"] else "")) or "(empty)"
+        lines.append(f"| {r['id']} | {r['group']} | {q} | {', '.join(r['top'])} | {', '.join(r['warnings'])} | {res} |")
     if stab:
         lines += ["", "## Weight stability (each weight ±0.05)", "", "| Scenario | Rank 1 | Changes rank 1 |", "|---|---|---|"]
         for sid, top, flips in stab:
