@@ -19,7 +19,7 @@ You already built the pipeline on `data-pipeline`. Nothing about how it works ch
 
 | Id | What | Due (KST) |
 |---|---|---|
-| D3 | Confirm or correct the coverage numbers pm asked about (see your inbox) | 12:00 |
+| D3 | Confirm or correct the coverage numbers pm asked about and publish a coverage grid (see your inbox) | 12:30 |
 | D4 | In your status, list which outputs and columns are stable. Add what ui asks for through requests (for example a JSON copy of a CSV, or a per-investigation index) | 12:30 |
 | D5 | Check the 24 investigation cards in `data/insights/cards.json` against the PSI text and report errors through a request to pm | 18:30 |
 | D6 | Make `compliance/SOURCES.md` complete for the References field of the submission | 21:00 |
