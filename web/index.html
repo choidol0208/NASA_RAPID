@@ -58,6 +58,23 @@
     <ol id="results" class="results"></ol>
   </section>
 
+  <section id="needs" class="needs" hidden aria-labelledby="needs-title">
+    <div class="section-head">
+      <h2 id="needs-title">What the recorded tests can say</h2>
+      <p class="team-note">Status is the team's pipeline reading of each PSI experimental table, not a NASA assessment.</p>
+    </div>
+    <p class="intro">Seven fire-safety information needs, each defined from published NASA standards and studies. For each ranked investigation, the cell says whether its PSI table records the conditions and the outcome that need asks for. Click a cell to see the pipeline row behind it.</p>
+    <div id="needs-body"></div>
+  </section>
+
+  <section id="coverage" class="coverage" hidden aria-labelledby="coverage-title">
+    <div class="section-head">
+      <h2 id="coverage-title">Where the recorded tests are</h2>
+      <p class="team-note">Counts of recorded tests computed by the team from the PSI tables; the bins are the team's choice. An empty value in a table is counted as not recorded, never filled in.</p>
+    </div>
+    <div id="coverage-body"></div>
+  </section>
+
   <section id="all" class="all" hidden aria-labelledby="all-title">
     <h2 id="all-title">All 24 investigations for this input</h2>
     <p class="team-note table-note">Order is the team's ranking, not a NASA result. Scores within 3 points are ordered by evidence quality, so a slightly lower score can sit higher. Highlighted rows are shown above; one of those places is kept for a test run at your oxygen level when the closest matches were tested at a different one.</p>
