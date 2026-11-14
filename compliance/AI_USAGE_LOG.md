@@ -38,3 +38,4 @@
 | 모델 | 제공처 | 역할 | 입력 데이터 | 출력 검증 방법 |
 |---|---|---|---|---|
 | (미정) | | | | |
+| gpt-oss:20b (Ollama tag, digest f38aa0c53da5, 20.9B, MXFP4; Apache-2.0) | OpenAI, run locally through Ollama 0.40.16 (offline at build time; the public site calls no model) | writes summary sentences from supplied PSI text; never numbers, scores, need statements or gaps. Only entry point `ai/llm.py`, whose allowlist blocks every other installed model | PSI record prose (objective, approach, hypothesis, researchImpacts), split into numbered sentences by `ai/evidence.py` | code gates, then review of every sentence |
