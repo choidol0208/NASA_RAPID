@@ -289,7 +289,7 @@ INV = {
     key_findings="Record targets reproducing the 'Goldilocks' flammability zone reported by Olson and Ferkul; results in 4 linked publications.",
     notes="Ground investigation; investigation_id assigned by team."),
  "PSI-68": dict(investigation_id="FLEX-2", project_group="CIR-MDCA droplets", tier=2,
-    objectives="Extend FLEX to practical and bi-component fuel droplets, droplet arrays, sooting and extinction boundaries over 0.5–3 atm and 17–30% O2.",
+    objectives="Extend FLEX to practical and bi-component fuel droplets, droplet arrays, sooting and extinction boundaries. Atmosphere: 0.5 to 3.0 atm and O2 mole fraction 0.1 to 0.4 (PSI-68 record, approach); the planned test matrix (PSI table) lists 0.5, 1.0, 1.5, 2.0 or 3.0 atm and O2 mole fraction 0.17, 0.21, 0.25 or 0.3.",
     research_focus="burning_rate; extinction_limit; smoke_soot", fire_safety_role="fundamental",
     fire_scenario_tags="liquid_leak", has_1g_comparison="",
     key_findings="Record lists objectives only; results in 48 linked publications.",
@@ -310,7 +310,7 @@ INV = {
     objectives="Ignition and flammability of nine 5 cm x 29 cm samples (silicone, SIBAL, PMMA, PMMA with Nomex) in a Cygnus vehicle, with 1g comparison data.",
     research_focus="ignition; flame_spread; flammability_boundary", fire_safety_role="prevention",
     fire_scenario_tags="cabin_material", has_1g_comparison="Y",
-    key_findings="At 20 cm/s and ~22% O2, silicone samples did not sustain burning in microgravity although some burned fully in 1g; SIBAL spread concurrently at 2.1–2.6 mm/s over the full 29 cm (table).",
+    key_findings="At 20 cm/s and ~21.5 to ~22.1% O2 (table), silicone samples did not sustain burning in microgravity although some burned fully in 1g; SIBAL spread concurrently at 2.1–2.6 mm/s over the full 29 cm (table).",
     notes="Record says 20 or 30 cm/s; table lists 20 cm/s for all samples. O2 derived from CO2 production (table note 1)."),
  "PSI-100": dict(investigation_id="SAFFIRE-III", project_group="Saffire", tier=1,
     objectives="Repeat of the large-scale SIBAL fire at a higher flow of 30 cm/s, concurrent and opposed, in a Cygnus vehicle.",
@@ -574,7 +574,7 @@ CONFIGS = [
      atmosphere_basis="table (test matrix ranges)", gravity_level="microgravity",
      measured_outputs="video; burning_rate; extinction_condition; soot_volume_fraction",
      flammability_boundary_reported="Y", test_count_config="", tests_table_ref="PSI-68_Experimental table_Flex2.csv"),
- cfg("FLEX-2-C02", "PSI-68", "Alcohol droplets (ethanol, propanol/glycerol 95/5 and 80/20)",
+ cfg("FLEX-2-C02", "PSI-68", "Alcohol droplets (ethanol; propanol 95% with glycerol 5%; propanol 80% with glycerol 20%)",
      fuel_phase="liquid", fuel_material="ethanol; propanol/glycerol", fuel_class="liquid_alcohol",
      sooting_tendency="low", sample_geometry="droplet", thickness_mm="1.5–5 (initial diameter)", flame_type="diffusion",
      flow_config="quiescent", flow_min_cms=0.1, flow_max_cms=5, o2_min_pct=17, o2_max_pct=30, o2_reference="ambient",
@@ -642,14 +642,14 @@ CONFIGS = [
      measured_outputs="video; flame_spread_rate; gas_species", flammability_boundary_reported="N",
      key_findings="Thick PMMA flames stayed anchored at the sample base with slow regression (0.01–0.04 mm/s); in the composite sample the PMMA burned but the Nomex did not ignite (table notes).",
      test_count_config=3, tests_table_ref="PSI-99_Experimental table_SAFFIRE-2.csv (2-7 to 2-9)"),
- cfg("SAFFIRE-III-C01", "PSI-100", "Large SIBAL fabric (0.94 x 0.406 m), concurrent flow 30 cm/s",
+ cfg("SAFFIRE-III-C01", "PSI-100", "Large SIBAL fabric (94 x 40.6 cm), concurrent flow 30 cm/s",
      fuel_phase="solid", fuel_material="SIBAL (75% cotton, 25% fiberglass)", fuel_class="fabric", melt_behavior="chars", sooting_tendency="medium",
      sample_geometry="flat_sheet", length_mm=940, width_mm=406, thermal_regime="thin", flame_type="diffusion",
      flow_config="concurrent", flow_min_cms=30, flow_max_cms=30,
      atmosphere_basis="table (flow); O2 and pressure not reported", gravity_level="microgravity",
      measured_outputs="video; flame_spread_rate; flame_temperature; radiant_flux; gas_species",
      flammability_boundary_reported="N", test_count_config=1, tests_table_ref="PSI-100_Experimental table_SAFFIRE-3.csv (S1)"),
- cfg("SAFFIRE-III-C02", "PSI-100", "Large SIBAL fabric (0.94 x 0.406 m), opposed flow 30 cm/s",
+ cfg("SAFFIRE-III-C02", "PSI-100", "Large SIBAL fabric (94 x 40.6 cm), opposed flow 30 cm/s",
      fuel_phase="solid", fuel_material="SIBAL (75% cotton, 25% fiberglass)", fuel_class="fabric", melt_behavior="chars", sooting_tendency="medium",
      sample_geometry="flat_sheet", length_mm=940, width_mm=406, thermal_regime="thin", flame_type="diffusion",
      flow_config="opposed", flow_min_cms=30, flow_max_cms=30,
@@ -736,9 +736,41 @@ CFG_COLS = ["config_id", "investigation_id", "psi_accession", "config_label",
             "flow_config", "flow_min_cms", "flow_max_cms",
             "o2_min_pct", "o2_max_pct", "o2_reference", "pressure_min_kpa", "pressure_max_kpa",
             "ppo2_min_kpa", "ppo2_max_kpa", "diluent", "diluent_max_pct", "ambient_temp_k",
-            "atmosphere_basis", "gravity_level", "ignition_method",
+            "atmosphere_basis", "o2_source", "pressure_source", "flow_source", "gravity_level", "ignition_method",
             "measured_outputs", "flammability_boundary_reported", "extinction_mechanism", "key_findings",
             "test_count_config", "tests_table_ref", "source_notes", "verification_status"]
+
+
+# Where each oxygen, pressure and flow number comes from, so the ranking never words a planned
+# or read-in value as "tested". Default: "table" when the value is set (a value per test or per
+# test group in a PSI experimental table), "" when it is empty. The exceptions:
+#   record      named in the PSI record text, not a test value in a table
+#   test_matrix a planned test-matrix table (conditions joined by "or"), not individual tests
+#   team        a team reading with no number in the table or the record
+VALUE_SOURCES = {
+    "ACME-BRE-C01": dict(pressure="record", flow="team"),  # objective: "will be examined: 14.7 psia ... 8.2 psia";
+                                                             # table note: pressures "not identified in this summary table";
+                                                             # 0 cm/s is the team's reading of "quiescent microgravity ambient"
+    **{f"BASS-C0{i}": dict(flow="record") for i in range(1, 6)},  # approach: flow "up to 40 cm/s"
+    "FLEX-2-C01": dict(o2="test_matrix", pressure="test_matrix", flow="test_matrix"),
+    "FLEX-2-C02": dict(o2="test_matrix", pressure="test_matrix", flow="test_matrix"),
+    "FLEX-C01": dict(flow="team"), "FLEX-C02": dict(flow="team"),  # droplets read as quiescent; no flow column
+    "CFI-C01": dict(flow="team"),
+}
+
+
+def value_sources(r):
+    out = {}
+    for var, (lo, hi) in (("o2", ("o2_min_pct", "o2_max_pct")), ("pressure", ("pressure_min_kpa", "pressure_max_kpa")),
+                          ("flow", ("flow_min_cms", "flow_max_cms"))):
+        has = r.get(lo, "") != "" or r.get(hi, "") != ""
+        src = VALUE_SOURCES.get(r["config_id"], {}).get(var, "table") if has else ""
+        assert not (src and not has), (r["config_id"], var)
+        out[f"{var}_source"] = src
+    basis = r.get("atmosphere_basis", "")
+    assert ("record" in basis) == ("record" in out.values()), (r["config_id"], basis, out)
+    assert ("matrix" in basis) == ("test_matrix" in out.values()), (r["config_id"], basis, out)
+    return out
 
 
 def platform_of(d):
@@ -806,6 +838,7 @@ def main():
         if r.get("o2_reference") == "ambient" and o2a != "" and pa != "":
             r["ppo2_min_kpa"] = round(o2a / 100 * pa, 1)
             r["ppo2_max_kpa"] = round(o2b / 100 * pb, 1)
+        r.update(value_sources(r))
         r.setdefault("verification_status", "ai_extracted")
         r.setdefault("source_notes", "Values from PSI record/table as stated in atmosphere_basis; classification columns are team judgement.")
         cfg_rows.append(r)

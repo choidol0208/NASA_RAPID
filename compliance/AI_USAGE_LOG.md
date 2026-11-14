@@ -40,6 +40,8 @@
 | 11/14 13:20– | Claude Code (Opus 5.5, catalog 역할) | ui에게서 카탈로그·순위 계산기·검증을 넘겨받는 새 세션. 인수인계 목록의 남은 수정(버너 산화제 흐름 산소, `o2_above_all` 기준, 기체·액적 키워드, 카탈로그와 파이프라인의 일치 검사, 사람 확인표, 열린 범위 문구)을 원 표와 대조해 수행 | `coord/status/catalog.md`, `coord/requests/*catalog-to-*`. 넘겨받은 뒤 `data/catalog/`, `scoring/`, `validation/`, `web/scorer.js` | 미검토. 시험·검증·parity 자동 통과만 확인 |
 | 11/14 12:30– | Claude Code (Opus 작업자, Fable 검토 에이전트) | AI 계층 구현: 모델 호출 장치, 원문 문장 묶음, 코드로 쓴 시나리오 문구, 검사기와 오해 차단 규칙, gpt-oss:20b로 조사 요약 생성, 카탈로그 숫자 추적 감사, 근거 지도 데이터, 독립 검증 | `ai/`, `data/insights/`, `contracts/README.md`, `docs/ai_layer_design.json`. 14:25 현재 저장소에 올리기 전 | 미검토. 모델이 쓴 문장은 검수 전까지 '검수 안 됨'으로 표시 |
 | 11/14 14:25– | Claude Code | BASS-II 원본 영상에서 불꽃 유지 시간을 재는 시범 분석(영상 처리와 작은 예측 모델). 사용자가 시범 진행을 결정 | 저장소 밖 시범 코드와 결과. 표의 기록과 맞는지 검증을 통과해야 제품에 넣음 | 미검토 |
+| 11/14 14:00– | Claude Code (Opus 5.5, catalog 역할) | 사용자 요청으로 순위 계산기의 이론적 오류 검토. 찾은 것 중 사용자가 고르게 한 5건을 수정: CO2를 산소로 읽던 정규식, '천장'을 직물로 읽던 키워드, 가정값을 신뢰도에 넣던 계산, 한쪽만 기록된 유속 범위의 유사도, 기록·시험 행렬·팀 판독 값을 'tested'로 쓰던 문구(카탈로그 출처 열 3개 추가). pm 결정 반영(사람 확인은 점수에 영향 없음, `ranges_separate` 경고). pm 점검에서 출처를 못 찾은 카탈로그 문구 4건을 원문 표기대로 수정 | `scoring/scorer.py`, `web/scorer.js`, `scoring/scoring_config.json`, `scoring/test_scorer.py`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `data/catalog/*`, `validation/scenarios.json` | 미검토. 원 표와 기록은 직접 대조했고 시험 35개·검증 29/29·parity 68/68 자동 통과. 데모 순위 불변 확인 |
+| 11/14 14:19– | Claude Code (Opus 5.5, catalog 역할) | 사용자가 준 연소공학 교재(Turns 2012, 저작권 자료)의 해당 장을 읽고, 순위 규칙의 방향과 함수 형태를 대조해 근거 문서를 작성. 교재 문장·그림·표는 옮기지 않음. 점수 코드는 바꾸지 않음 | `scoring/MODEL_BASIS.md`, `scoring/README.md`, `compliance/SOURCES.md` | 미검토. 교재 해석은 AI의 요약이며 연소 전공 팀원 확인 필요 |
 
 ## 제품 안에서 동작하는 AI
 

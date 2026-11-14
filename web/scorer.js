@@ -321,11 +321,22 @@ function fmtRange(c, lo, hi, unit) {
   if (b === null) return `at least ${fmtG(a)}${unit}`;
   return a === b ? `${fmtG(a)}${unit}` : `${fmtG(a)}–${fmtG(b)}${unit}`;
 }
+// How a number is worded by where it comes from (mirrors SOURCE_NOTE in scorer.py).
+const SOURCE_NOTE = { record: "named in the PSI record, not a test value", test_matrix: "from the test matrix, not individual tests",
+  team: "team reading, not in the table" };
+function fmtValue(c, v, label, lo, hi, unit, assumed) { // mirrors _fmt_value
+  const r = fmtRange(c, lo, hi, unit);
+  if (assumed) return `${label} not recorded, assumed ${r}`;
+  const note = get(SOURCE_NOTE, c[`${v}_source`] || "", null);
+  return note ? `${label} ${r}, ${note}` : `${label} tested ${r}`;
+}
 function fmtFlow(c) { // mirrors _fmt_flow
   const r = fmtRange(c, "flow_min_cms", "flow_max_cms", " cm/s");
   const head = `flow ${c.flow_config || "n/a"}`;
   if (r === "not reported") return `${head}, speed not reported`;
-  return r.startsWith("up to") || r.startsWith("at least") ? `${head}, ${r}` : `${head} at ${r}`;
+  const text = r.startsWith("up to") || r.startsWith("at least") ? `${head}, ${r}` : `${head} at ${r}`;
+  const note = get(SOURCE_NOTE, c.flow_source || "", null);
+  return note ? `${text}, ${note}` : text;
 }
 function fill(tpl, vars) { return tpl.replace(/\{(\w+)\}/g, (_, k) => vars[k]); }
 function explain(sc, c, s, cfg, fallback, speed) {
@@ -338,11 +349,9 @@ function explain(sc, c, s, cfg, fallback, speed) {
   const best = [...known].sort((a, b) => (assumed.has(a) - assumed.has(b)) || (-s.contributions[a] - -s.contributions[b])).slice(0, 2);
   const gaps = [...known].sort((a, b) => sim[a] - sim[b]).slice(0, 1);
   const detail = {
-    // A value filled in by the atmosphere fallback was not recorded: never word it as "tested".
-    o2: (fallback || []).includes("O2") ? `O2 not recorded, assumed ${fmtRange(c, "o2_min_pct", "o2_max_pct", "%")}`
-      : `O2 tested ${fmtRange(c, "o2_min_pct", "o2_max_pct", "%")}`,
-    pressure: (fallback || []).includes("pressure") ? `pressure not recorded, assumed ${fmtRange(c, "pressure_min_kpa", "pressure_max_kpa", " kPa")}`
-      : `pressure tested ${fmtRange(c, "pressure_min_kpa", "pressure_max_kpa", " kPa")}`,
+    // "tested" only for numbers from an experimental table; assumed, record and matrix values say so.
+    o2: fmtValue(c, "o2", "O2", "o2_min_pct", "o2_max_pct", "%", fb.includes("O2")),
+    pressure: fmtValue(c, "pressure", "pressure", "pressure_min_kpa", "pressure_max_kpa", " kPa", fb.includes("pressure")),
     flow: fmtFlow(c),
     fuel: `fuel ${c.fuel_material}`,
     geometry: `${c.sample_geometry} (${c.thermal_regime || "regime n/a"})`,
@@ -361,6 +370,12 @@ function explain(sc, c, s, cfg, fallback, speed) {
   const out = known.filter((d) => (d === "o2" || d === "pressure") && sim[d] < thr).map((d) => labels[d]);
   if (speed !== null && speed < thr) out.push("flow speed");
   if (out.length) warns.push({ code: "outside_range", message: fill(W.outside_range, { dims: out.join(", ") }) });
+  // pm decision 14:15: two true ranges compared side by side must not read as one test at both values.
+  const isSpan = (lo, hi) => { const a = f(c[lo]), b = f(c[hi]); return a !== null && b !== null && a < b; };
+  if (known.includes("o2") && known.includes("pressure") && !fb.includes("O2") && !fb.includes("pressure") &&
+      isSpan("o2_min_pct", "o2_max_pct") && isSpan("pressure_min_kpa", "pressure_max_kpa")) {
+    warns.push({ code: "ranges_separate", message: W.ranges_separate });
+  }
   if (sc.fuel_phase === "solid" && (c.fuel_phase || "").toLowerCase() === "gas") warns.push({ code: "gas_for_solid", message: W.gas_for_solid });
   if (stream && "o2" in sim) warns.push({ code: "oxidizer_stream", message: W.oxidizer_stream });
   const missing = s.unknown.filter((d) => !(stream && d === "o2")); // O2 of a stream is recorded, just not comparable

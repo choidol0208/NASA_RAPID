@@ -3,7 +3,7 @@ from: catalog
 to: pm
 opened: 2026-11-14 13:32 KST
 needed_by: 14:15
-closed: false
+closed: true
 ---
 # New role `catalog` on branch `catalog-scoring` (human lead's decision)
 
