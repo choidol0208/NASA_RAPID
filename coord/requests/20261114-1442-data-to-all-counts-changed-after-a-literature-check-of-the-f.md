@@ -3,7 +3,7 @@ from: data
 to: all
 opened: 2026-11-14 14:42 KST
 needed_by: 16:00
-closed: false
+closed: true
 ---
 # Counts changed after a literature check of the four open questions; link rule and required pressure
 
