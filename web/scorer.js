@@ -107,8 +107,9 @@ export function interpret(query, cfg) {
   if (any(t, kw.thin)) put("thermal_regime", "thin", "text");
   else if (any(t, kw.thick)) put("thermal_regime", "thick", "text");
   if (any(t, kw.rod)) put("sample_geometry", "rod", "text");
-  let m = t.match(/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)/) ||
-    t.match(/(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/);
+  // "o2" must stand alone: "CO2 30%" is not 30% oxygen (mirrors scorer.py)
+  let m = t.match(/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])/) ||
+    t.match(/(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/);
   if (m) put("o2_pct", parseFloat(m[1]), "text");
   m = t.match(/(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![\p{L}\p{N}_])/u);
   if (m) put("pressure_kpa", pyRound(parseFloat(m[1]) * UNITS_TO_KPA[m[2]], 1), "text");
@@ -163,6 +164,21 @@ function sPressure(x, c, p) {
   const r = range(c, "pressure_min_kpa", "pressure_max_kpa");
   return r ? logGauss(x, r[0], r[1], p.sigma_ln) : null;
 }
+function speedSim(v, c, sim) { // mirrors _speed: [similarity, in-range signal for outside_range]
+  // With one end not recorded ("up to 40 cm/s", a limit, not a test value), a speed on the open side scores
+  // unknown_value and raises no warning; beyond the end it decays from unknown_value, with no jump.
+  const a = f(c.flow_min_cms), b = f(c.flow_max_cms);
+  if (a === null && b === null) return [null, null];
+  const p = sim.flow_speed;
+  if (a === null || b === null) {
+    const end = a === null ? b : a;
+    if ((a === null && v <= end) || (b === null && v >= end)) return [sim.unknown_value, null];
+    const g = logGauss(v, end, end, p.sigma_ln, p.offset_cms);
+    return [sim.unknown_value * g, g];
+  }
+  const s = logGauss(v, a, b, p.sigma_ln, p.offset_cms);
+  return [s, s];
+}
 function sFlow(state, v, c, sim) {
   const cfgs = split(c.flow_config);
   let sCfg = null;
@@ -170,11 +186,7 @@ function sFlow(state, v, c, sim) {
     const row = sim.flow_config_matrix[state];
     sCfg = Math.max(...cfgs.map((k) => get(row, k, 0.3)));
   }
-  let sV = null;
-  if (v !== null && v !== undefined) {
-    const r = range(c, "flow_min_cms", "flow_max_cms");
-    if (r) sV = logGauss(v, r[0], r[1], sim.flow_speed.sigma_ln, sim.flow_speed.offset_cms);
-  }
+  const sV = v !== null && v !== undefined ? speedSim(v, c, sim)[0] : null;
   const parts = [sCfg, sV].filter((x) => x !== null);
   if (!parts.length) return null;
   return parts.length === 2 ? parts[0] * parts[1] : parts[0];
@@ -258,8 +270,7 @@ function similarities(sc, c, cfg) {
   const hasV = sc.flow_cms !== undefined && sc.flow_cms !== null;
   if (sc.flow_state || hasV) {
     S.flow = sFlow(sc.flow_state, hasV ? sc.flow_cms : null, ce, sim);
-    const r = range(ce, "flow_min_cms", "flow_max_cms");
-    if (hasV && r) speed = logGauss(sc.flow_cms, r[0], r[1], sim.flow_speed.sigma_ln, sim.flow_speed.offset_cms);
+    if (hasV) speed = speedSim(sc.flow_cms, ce, sim)[1];
   }
   if (sc.fuel_phase || sc.fuel_class || sc.fuel_material) S.fuel = sFuel(sc, ce, sim.fuel);
   if (sc.sample_geometry || sc.thermal_regime) S.geometry = sGeometry(sc, ce, sim.geometry);
@@ -267,7 +278,7 @@ function similarities(sc, c, cfg) {
   if (sc.concern === "suppression" && sc.diluent) S.diluent = sDiluent(sc.diluent, ce, sim.diluent);
   return [S, fallback, speed, ce];
 }
-function scoreConfig(sc, c, cfg, weights, rawS, caps) {
+function scoreConfig(sc, c, cfg, weights, rawS, caps, assumed = []) { // assumed: fallback dims ("o2", "pressure")
   const sim = cfg.similarity;
   const S = {}, unknown = [];
   for (const [d, v] of Object.entries(rawS)) {
@@ -294,7 +305,8 @@ function scoreConfig(sc, c, cfg, weights, rawS, caps) {
   let full = 0;
   for (const [k, v] of Object.entries(weights)) if (v > 0 && (k !== "diluent" || sc.concern === "suppression")) full += v;
   let knownW = 0;
-  for (const d of Object.keys(w)) if (!unknown.includes(d)) knownW += weights[d];
+  // Confidence counts only what was compared with a recorded value (mirrors score_config).
+  for (const d of Object.keys(w)) if (!unknown.includes(d) && !assumed.includes(d)) knownW += weights[d];
   const coverage = full ? knownW / full : 0.0;
   const contributions = {};
   for (const d of Object.keys(w)) contributions[d] = w[d] * S[d];
@@ -398,7 +410,8 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
       if (known.length) caps[d] = Math.max(...known);
     }
     const scored = pre.map(([c, S, fallback, speed, ce]) => {
-      const s = scoreConfig(sc, c, cfg, weights, S, caps);
+      const assumed = fallback.map((x) => ({ O2: "o2", pressure: "pressure" })[x]);
+      const s = scoreConfig(sc, c, cfg, weights, S, caps, assumed);
       const [why, gap, warns] = explain(sc, ce, s, cfg, fallback, speed);
       return {
         config_id: c.config_id, investigation_id: c.investigation_id, psi_accession: c.psi_accession,

@@ -117,6 +117,21 @@ class Interpretation(unittest.TestCase):
         sc, *_ = scorer.interpret("infant safety", CFG)  # 'fan' inside a word must not match
         self.assertNotIn("flow_state", sc)
 
+    def test_co2_is_not_oxygen(self):
+        sc, src, *_ = scorer.interpret("CO2 30% suppression ISS", CFG)
+        self.assertEqual(sc["o2_pct"], 21.0)  # from the ISS preset, not from "CO2 30%"
+        self.assertEqual(src["o2_pct"], "preset:iss")
+        sc, *_ = scorer.interpret("H2O2 leak", CFG)
+        self.assertNotIn("o2_pct", sc)
+        sc, *_ = scorer.interpret("CO2 5% and O2 25%", CFG)
+        self.assertEqual(sc["o2_pct"], 25.0)
+
+    def test_ceiling_is_not_fabric(self):
+        sc, *_ = scorer.interpret("천장 배선 과열", CFG)  # 천장 = ceiling, not 천 (cloth)
+        self.assertNotEqual(sc.get("fuel_class"), "fabric")
+        sc, *_ = scorer.interpret("천으로 된 커튼", CFG)
+        self.assertEqual(sc.get("fuel_class"), "fabric")
+
 
 class Ranking(unittest.TestCase):
     def test_out_of_scope(self):
@@ -159,6 +174,16 @@ class AssumedAtmosphereWording(unittest.TestCase):
                     self.assertNotIn("O2 tested", text, (q, r["config_id"]))
                 if "pressure" in r["assumed_dims"]:
                     self.assertNotIn("pressure tested", text, (q, r["config_id"]))
+
+    def test_confidence_ignores_assumed_values(self):
+        w = CFG["profiles"]["prevention"]["weights"]
+        for r in scorer.rank("ISS cotton fabric")["ranking"]:
+            assumed = {"O2": "o2", "pressure": "pressure"}
+            lost = sum(w[assumed[x]] for x in r["assumed_dims"]) + sum(w[d] for d in r["unknown_dims"])
+            self.assertAlmostEqual(r["coverage"], round(1.0 - lost, 2), places=2, msg=r["config_id"])
+        rows = {r["config_id"]: r for r in scorer.rank("ISS cotton fabric")["results"]}
+        if "BASS-C01" in rows:  # O2 and pressure both assumed: never "high"
+            self.assertNotEqual(rows["BASS-C01"]["confidence"], "high")
 
     def test_recorded_reasons_come_first(self):
         for r in scorer.rank("ISS cotton fabric")["ranking"]:
@@ -220,8 +245,22 @@ class OpenRangeWording(unittest.TestCase):
                 self.assertNotIn("at 40 cm/s", text, (q, r["config_id"]))
                 shown += "up to 40 cm/s" in text
         self.assertGreater(shown, 0, "no BASS reason mentions its flow; pick another query")
-        # The range used for similarity is unchanged: 40 cm/s is still a full match at 40.
-        self.assertEqual(scorer._range(bass[0], "flow_min_cms", "flow_max_cms"), (40.0, 40.0))
+
+    def test_open_range_speed_is_unknown_not_a_miss(self):
+        sim = CFG["similarity"]
+        c = {"flow_min_cms": "", "flow_max_cms": "40"}
+        u = sim["unknown_value"]
+        self.assertEqual(scorer._speed(10, c, sim), (u, None))   # below "up to 40": not recorded, no warning
+        self.assertEqual(scorer._speed(40, c, sim), (u, None))   # 40 is the tunnel's limit, not a test value
+        self.assertAlmostEqual(scorer._speed(40.01, c, sim)[0], u, places=3)  # no jump at the end
+        s, signal = scorer._speed(80, c, sim)                     # beyond it: decays from unknown_value
+        self.assertLess(s, u)
+        self.assertLess(signal, 0.9)                              # and raises outside_range
+        closed = {"flow_min_cms": "20", "flow_max_cms": "20"}
+        self.assertLess(scorer._speed(10, closed, sim)[0], 0.9)                     # a closed range still misses
+        rows = {r["config_id"]: r for r in scorer.rank("SIBAL 10 cm/s")["ranking"]}
+        if "BASS-C01" in rows:
+            self.assertNotIn("flow speed", " ".join(w["message"] for w in rows["BASS-C01"]["warnings"]))
 
 
 class CatalogIntegrity(unittest.TestCase):
