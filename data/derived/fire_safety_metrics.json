@@ -1,0 +1,826 @@
+{
+ "note": "Team calculations from NASA PSI experimental tables. Descriptive only; all tests are microgravity tests.",
+ "tested_ranges": [
+  {
+   "investigation_id": "PSI-10",
+   "tests": 327,
+   "fuel_phase": [
+    "gas"
+   ],
+   "ambient_o2_pct": {
+    "n": 207,
+    "min": 19.8048,
+    "median": 37.5587,
+    "max": 40.0
+   },
+   "pressure_kpa": {
+    "n": 327,
+    "min": 43.023,
+    "median": 102.456,
+    "max": 304.748
+   },
+   "flow_cms": {
+    "n": 0
+   }
+  },
+  {
+   "investigation_id": "PSI-100",
+   "tests": 2,
+   "fuel_phase": [
+    "solid"
+   ],
+   "ambient_o2_pct": {
+    "n": 0
+   },
+   "pressure_kpa": {
+    "n": 0
+   },
+   "flow_cms": {
+    "n": 2,
+    "min": 30.0,
+    "median": 30.0,
+    "max": 30.0
+   }
+  },
+  {
+   "investigation_id": "PSI-159",
+   "tests": 333,
+   "fuel_phase": [
+    "gas"
+   ],
+   "ambient_o2_pct": {
+    "n": 179,
+    "min": 17.9686,
+    "median": 37.59,
+    "max": 39.97
+   },
+   "pressure_kpa": {
+    "n": 333,
+    "min": 49.538,
+    "median": 101.33,
+    "max": 330.99
+   },
+   "flow_cms": {
+    "n": 0
+   }
+  },
+  {
+   "investigation_id": "PSI-25",
+   "tests": 129,
+   "fuel_phase": [
+    "solid"
+   ],
+   "ambient_o2_pct": {
+    "n": 129,
+    "min": 13.6,
+    "median": 18.2,
+    "max": 22.2
+   },
+   "pressure_kpa": {
+    "n": 0
+   },
+   "flow_cms": {
+    "n": 122,
+    "min": 0.0,
+    "median": 5.0,
+    "max": 28.0
+   }
+  },
+  {
+   "investigation_id": "PSI-39",
+   "tests": 87,
+   "fuel_phase": [
+    "liquid"
+   ],
+   "ambient_o2_pct": {
+    "n": 87,
+    "min": 17.0,
+    "median": 21.0,
+    "max": 21.0
+   },
+   "pressure_kpa": {
+    "n": 87,
+    "min": 50.663,
+    "median": 101.325,
+    "max": 506.625
+   },
+   "flow_cms": {
+    "n": 0
+   }
+  },
+  {
+   "investigation_id": "PSI-69",
+   "tests": 274,
+   "fuel_phase": [
+    "liquid"
+   ],
+   "ambient_o2_pct": {
+    "n": 274,
+    "min": 12.0,
+    "median": 20.0,
+    "max": 34.0
+   },
+   "pressure_kpa": {
+    "n": 273,
+    "min": 70.168,
+    "median": 101.272,
+    "max": 309.295
+   },
+   "flow_cms": {
+    "n": 0
+   }
+  },
+  {
+   "investigation_id": "PSI-98",
+   "tests": 2,
+   "fuel_phase": [
+    "solid"
+   ],
+   "ambient_o2_pct": {
+    "n": 2,
+    "min": 21.5,
+    "median": 21.55,
+    "max": 21.6
+   },
+   "pressure_kpa": {
+    "n": 0
+   },
+   "flow_cms": {
+    "n": 2,
+    "min": 20.0,
+    "median": 20.0,
+    "max": 20.0
+   }
+  },
+  {
+   "investigation_id": "PSI-99",
+   "tests": 9,
+   "fuel_phase": [
+    "solid"
+   ],
+   "ambient_o2_pct": {
+    "n": 9,
+    "min": 21.5,
+    "median": 22.1,
+    "max": 22.1
+   },
+   "pressure_kpa": {
+    "n": 0
+   },
+   "flow_cms": {
+    "n": 9,
+    "min": 20.0,
+    "median": 20.0,
+    "max": 20.0
+   }
+  }
+ ],
+ "PSI-25_BASS-II": {
+  "definition": {
+   "burned": "O2 drop >= 0.1 points or CO2 rise >= 0.05 points over the test",
+   "co_to_co2_molar_ratio": "CO rise (ppm x 1e-4) / CO2 rise (% points); a measure of incomplete combustion",
+   "lowest_o2_with_burning_pct": "lowest initial ambient O2 among tests classed as burned"
+  },
+  "by_material_geometry": [
+   {
+    "fuel_material": "Japan wax",
+    "sample_geometry": "candle",
+    "tests": 1,
+    "tests_classed_as_burned": 1,
+    "o2_tested_pct": {
+     "n": 1,
+     "min": 17.4,
+     "median": 17.4,
+     "max": 17.4
+    },
+    "flow_tested_cms": {
+     "min": 3.0,
+     "max": 3.0
+    },
+    "lowest_o2_with_burning_pct": 17.4,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "BASS2-F4",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 27
+     }
+    ],
+    "co_to_co2_molar_ratio": {
+     "n": 1,
+     "min": 0.034,
+     "median": 0.034,
+     "max": 0.034
+    },
+    "extinction_noted_while_lowering_flow": 0,
+    "blowoff_noted": 0
+   },
+   {
+    "fuel_material": "Nomex III fabric",
+    "sample_geometry": "fabric sheet",
+    "tests": 3,
+    "tests_classed_as_burned": 0,
+    "o2_tested_pct": {
+     "n": 3,
+     "min": 21.0,
+     "median": 21.7,
+     "max": 22.2
+    },
+    "flow_tested_cms": {
+     "min": 8.0,
+     "max": 15.0
+    },
+    "lowest_o2_with_burning_pct": null,
+    "lowest_o2_with_burning_source": [],
+    "co_to_co2_molar_ratio": {
+     "n": 0
+    },
+    "extinction_noted_while_lowering_flow": 0,
+    "blowoff_noted": 0
+   },
+   {
+    "fuel_material": "PMMA",
+    "sample_geometry": "film",
+    "tests": 22,
+    "tests_classed_as_burned": 19,
+    "o2_tested_pct": {
+     "n": 22,
+     "min": 15.0,
+     "median": 21.0,
+     "max": 22.2
+    },
+    "flow_tested_cms": {
+     "min": 0.0,
+     "max": 10.0
+    },
+    "lowest_o2_with_burning_pct": 17.3,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "BASS2-B16",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 17
+     }
+    ],
+    "co_to_co2_molar_ratio": {
+     "n": 16,
+     "min": 0.0004,
+     "median": 0.0229,
+     "max": 0.0524
+    },
+    "extinction_noted_while_lowering_flow": 2,
+    "blowoff_noted": 2
+   },
+   {
+    "fuel_material": "PMMA",
+    "sample_geometry": "rod",
+    "tests": 54,
+    "tests_classed_as_burned": 49,
+    "o2_tested_pct": {
+     "n": 54,
+     "min": 13.6,
+     "median": 17.05,
+     "max": 22.2
+    },
+    "flow_tested_cms": {
+     "min": 0.0,
+     "max": 38.5
+    },
+    "lowest_o2_with_burning_pct": 13.6,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "BASS2-O12",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 62
+     }
+    ],
+    "co_to_co2_molar_ratio": {
+     "n": 45,
+     "min": 0.0023,
+     "median": 0.0321,
+     "max": 0.1044
+    },
+    "extinction_noted_while_lowering_flow": 12,
+    "blowoff_noted": 1
+   },
+   {
+    "fuel_material": "PMMA",
+    "sample_geometry": "slab",
+    "tests": 20,
+    "tests_classed_as_burned": 20,
+    "o2_tested_pct": {
+     "n": 20,
+     "min": 17.9,
+     "median": 20.45,
+     "max": 22.2
+    },
+    "flow_tested_cms": {
+     "min": 0.0,
+     "max": 20.0
+    },
+    "lowest_o2_with_burning_pct": 17.9,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "BASS2-M18",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 45
+     }
+    ],
+    "co_to_co2_molar_ratio": {
+     "n": 19,
+     "min": 0.0283,
+     "median": 0.0374,
+     "max": 0.0682
+    },
+    "extinction_noted_while_lowering_flow": 1,
+    "blowoff_noted": 0
+   },
+   {
+    "fuel_material": "PMMA",
+    "sample_geometry": "spherical section",
+    "tests": 2,
+    "tests_classed_as_burned": 2,
+    "o2_tested_pct": {
+     "n": 2,
+     "min": 17.2,
+     "median": 17.25,
+     "max": 17.3
+    },
+    "flow_tested_cms": {
+     "min": 1.0,
+     "max": 10.0
+    },
+    "lowest_o2_with_burning_pct": 17.2,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "BASS2-T3",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 104
+     }
+    ],
+    "co_to_co2_molar_ratio": {
+     "n": 2,
+     "min": 0.0243,
+     "median": 0.029,
+     "max": 0.0337
+    },
+    "extinction_noted_while_lowering_flow": 0,
+    "blowoff_noted": 0
+   },
+   {
+    "fuel_material": "SIBAL fabric (75% cotton, 25% fiberglass)",
+    "sample_geometry": "fabric sheet",
+    "tests": 27,
+    "tests_classed_as_burned": 10,
+    "o2_tested_pct": {
+     "n": 27,
+     "min": 16.4,
+     "median": 17.6,
+     "max": 20.8
+    },
+    "flow_tested_cms": {
+     "min": 1.0,
+     "max": 29.0
+    },
+    "lowest_o2_with_burning_pct": 17.1,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "BASS2-T11",
+      "source_file": "PSI-25_Experimental table_BASS-II.csv",
+      "source_row": 111
+     }
+    ],
+    "co_to_co2_molar_ratio": {
+     "n": 4,
+     "min": 0.0357,
+     "median": 0.0583,
+     "max": 0.078
+    },
+    "extinction_noted_while_lowering_flow": 0,
+    "blowoff_noted": 0
+   }
+  ],
+  "all_tests": {
+   "co_to_co2_molar_ratio": {
+    "n": 87,
+    "min": 0.0004,
+    "median": 0.0338,
+    "max": 0.1044
+   },
+   "share_within_published_range_0.01_to_0.1": 0.851,
+   "published_range_source": "Olson et al., Results from on-board CSA-CP and CDM Sensor Readings during BASS-II (listed under PSI-25 publications)"
+  }
+ },
+ "PSI-69_FLEX": {
+  "definition": {
+   "lowest_o2_with_burning_pct": "lowest initial O2 among tests with a burn time of at least 1 s",
+   "extinction_to_initial_diameter_ratio": "droplet diameter at visible-flame extinction / initial diameter; a larger ratio means the flame went out earlier in the burn",
+   "o2_vs_extinction_ratio_spearman": "rank correlation between O2 and that ratio; negative means flames went out earlier at lower O2"
+  },
+  "by_fuel_diluent": [
+   {
+    "fuel_material": "heptane",
+    "diluent": "CO2",
+    "tests": 48,
+    "o2_tested_pct": {
+     "n": 48,
+     "min": 17.0,
+     "median": 20.5,
+     "max": 25.0
+    },
+    "pressure_tested_kpa": {
+     "n": 48,
+     "min": 70.808,
+     "median": 101.1985,
+     "max": 309.295
+    },
+    "diluent_tested_pct": {
+     "n": 48,
+     "min": 5.0,
+     "median": 20.0,
+     "max": 70.0
+    },
+    "outcomes": {
+     "extinction": 27,
+     "disruption": 18,
+     "completion": 3
+    },
+    "lowest_o2_with_burning_pct": 17.0,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "FLEX-195",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 196
+     }
+    ],
+    "burning_rate_mm2_s": {
+     "n": 45,
+     "min": 0.05,
+     "median": 0.5,
+     "max": 0.71
+    },
+    "extinction_to_initial_diameter_ratio": {
+     "n": 40,
+     "min": 0.0,
+     "median": 0.7865,
+     "max": 1.003
+    },
+    "o2_vs_extinction_ratio_spearman": {
+     "rho": -0.561,
+     "n": 40
+    }
+   },
+   {
+    "fuel_material": "heptane",
+    "diluent": "He",
+    "tests": 22,
+    "o2_tested_pct": {
+     "n": 22,
+     "min": 16.0,
+     "median": 18.0,
+     "max": 24.0
+    },
+    "pressure_tested_kpa": {
+     "n": 22,
+     "min": 70.394,
+     "median": 100.8715,
+     "max": 102.192
+    },
+    "diluent_tested_pct": {
+     "n": 22,
+     "min": 5.0,
+     "median": 20.0,
+     "max": 45.0
+    },
+    "outcomes": {
+     "extinction": 14,
+     "completion": 6,
+     "disruption": 2
+    },
+    "lowest_o2_with_burning_pct": 16.0,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "FLEX-243",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 244
+     }
+    ],
+    "burning_rate_mm2_s": {
+     "n": 21,
+     "min": 0.41,
+     "median": 0.65,
+     "max": 1.06
+    },
+    "extinction_to_initial_diameter_ratio": {
+     "n": 16,
+     "min": 0.0429,
+     "median": 0.6612,
+     "max": 0.9318
+    },
+    "o2_vs_extinction_ratio_spearman": {
+     "rho": -0.291,
+     "n": 16
+    }
+   },
+   {
+    "fuel_material": "heptane",
+    "diluent": "N2",
+    "tests": 47,
+    "o2_tested_pct": {
+     "n": 47,
+     "min": 13.0,
+     "median": 21.0,
+     "max": 34.0
+    },
+    "pressure_tested_kpa": {
+     "n": 47,
+     "min": 71.314,
+     "median": 101.645,
+     "max": 102.845
+    },
+    "diluent_tested_pct": null,
+    "outcomes": {
+     "extinction": 19,
+     "disruption": 18,
+     "completion": 10
+    },
+    "lowest_o2_with_burning_pct": 13.0,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "FLEX-079",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 80
+     }
+    ],
+    "burning_rate_mm2_s": {
+     "n": 41,
+     "min": 0.24,
+     "median": 0.56,
+     "max": 0.94
+    },
+    "extinction_to_initial_diameter_ratio": {
+     "n": 24,
+     "min": 0.0,
+     "median": 0.8034,
+     "max": 0.9976
+    },
+    "o2_vs_extinction_ratio_spearman": {
+     "rho": -0.647,
+     "n": 24
+    }
+   },
+   {
+    "fuel_material": "methanol",
+    "diluent": "CO2",
+    "tests": 75,
+    "o2_tested_pct": {
+     "n": 75,
+     "min": 14.0,
+     "median": 20.0,
+     "max": 25.0
+    },
+    "pressure_tested_kpa": {
+     "n": 74,
+     "min": 70.168,
+     "median": 71.827,
+     "max": 309.268
+    },
+    "diluent_tested_pct": {
+     "n": 75,
+     "min": 5.0,
+     "median": 25.0,
+     "max": 70.0
+    },
+    "outcomes": {
+     "extinction": 61,
+     "disruption": 9,
+     "completion": 5
+    },
+    "lowest_o2_with_burning_pct": 14.0,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "FLEX-167",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 168
+     }
+    ],
+    "burning_rate_mm2_s": {
+     "n": 72,
+     "min": 0.2,
+     "median": 0.43,
+     "max": 0.53
+    },
+    "extinction_to_initial_diameter_ratio": {
+     "n": 57,
+     "min": 0.2908,
+     "median": 0.5487,
+     "max": 0.9925
+    },
+    "o2_vs_extinction_ratio_spearman": {
+     "rho": -0.538,
+     "n": 57
+    }
+   },
+   {
+    "fuel_material": "methanol",
+    "diluent": "He",
+    "tests": 28,
+    "o2_tested_pct": {
+     "n": 28,
+     "min": 13.0,
+     "median": 18.0,
+     "max": 24.0
+    },
+    "pressure_tested_kpa": {
+     "n": 28,
+     "min": 70.341,
+     "median": 85.8595,
+     "max": 101.792
+    },
+    "diluent_tested_pct": {
+     "n": 28,
+     "min": 5.0,
+     "median": 30.0,
+     "max": 45.0
+    },
+    "outcomes": {
+     "extinction": 26,
+     "disruption": 2
+    },
+    "lowest_o2_with_burning_pct": 14.0,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "FLEX-247",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 248
+     }
+    ],
+    "burning_rate_mm2_s": {
+     "n": 26,
+     "min": 0.43,
+     "median": 0.585,
+     "max": 0.73
+    },
+    "extinction_to_initial_diameter_ratio": {
+     "n": 22,
+     "min": 0.351,
+     "median": 0.6426,
+     "max": 0.9944
+    },
+    "o2_vs_extinction_ratio_spearman": {
+     "rho": -0.823,
+     "n": 22
+    }
+   },
+   {
+    "fuel_material": "methanol",
+    "diluent": "N2",
+    "tests": 54,
+    "o2_tested_pct": {
+     "n": 54,
+     "min": 12.0,
+     "median": 20.0,
+     "max": 34.0
+    },
+    "pressure_tested_kpa": {
+     "n": 54,
+     "min": 71.234,
+     "median": 101.905,
+     "max": 103.205
+    },
+    "diluent_tested_pct": null,
+    "outcomes": {
+     "extinction": 39,
+     "disruption": 12,
+     "completion": 3
+    },
+    "lowest_o2_with_burning_pct": 12.0,
+    "lowest_o2_with_burning_source": [
+     {
+      "test_id": "FLEX-219",
+      "source_file": "PSI-69_Experimental table_FLEX.csv",
+      "source_row": 220
+     }
+    ],
+    "burning_rate_mm2_s": {
+     "n": 53,
+     "min": 0.27,
+     "median": 0.44,
+     "max": 0.74
+    },
+    "extinction_to_initial_diameter_ratio": {
+     "n": 38,
+     "min": 0.1102,
+     "median": 0.5416,
+     "max": 0.8739
+    },
+    "o2_vs_extinction_ratio_spearman": {
+     "rho": -0.756,
+     "n": 38
+    }
+   }
+  ],
+  "diluent_comparison_18_to_21_pct_o2_near_1_atm": [
+   {
+    "fuel_material": "heptane",
+    "diluent": "CO2",
+    "tests": 16,
+    "extinction_to_initial_diameter_ratio": {
+     "n": 16,
+     "min": 0.0613,
+     "median": 0.7271,
+     "max": 0.984
+    },
+    "burning_rate_mm2_s": {
+     "n": 16,
+     "min": 0.34,
+     "median": 0.49,
+     "max": 0.54
+    }
+   },
+   {
+    "fuel_material": "heptane",
+    "diluent": "He",
+    "tests": 7,
+    "extinction_to_initial_diameter_ratio": {
+     "n": 3,
+     "min": 0.2589,
+     "median": 0.822,
+     "max": 0.9318
+    },
+    "burning_rate_mm2_s": {
+     "n": 7,
+     "min": 0.41,
+     "median": 0.54,
+     "max": 0.65
+    }
+   },
+   {
+    "fuel_material": "heptane",
+    "diluent": "N2",
+    "tests": 20,
+    "extinction_to_initial_diameter_ratio": {
+     "n": 11,
+     "min": 0.0,
+     "median": 0.7695,
+     "max": 0.9242
+    },
+    "burning_rate_mm2_s": {
+     "n": 18,
+     "min": 0.39,
+     "median": 0.53,
+     "max": 0.79
+    }
+   },
+   {
+    "fuel_material": "methanol",
+    "diluent": "CO2",
+    "tests": 17,
+    "extinction_to_initial_diameter_ratio": {
+     "n": 16,
+     "min": 0.2908,
+     "median": 0.4374,
+     "max": 0.5182
+    },
+    "burning_rate_mm2_s": {
+     "n": 17,
+     "min": 0.36,
+     "median": 0.46,
+     "max": 0.51
+    }
+   },
+   {
+    "fuel_material": "methanol",
+    "diluent": "He",
+    "tests": 5,
+    "extinction_to_initial_diameter_ratio": {
+     "n": 3,
+     "min": 0.3849,
+     "median": 0.4659,
+     "max": 0.5661
+    },
+    "burning_rate_mm2_s": {
+     "n": 4,
+     "min": 0.51,
+     "median": 0.52,
+     "max": 0.57
+    }
+   },
+   {
+    "fuel_material": "methanol",
+    "diluent": "N2",
+    "tests": 16,
+    "extinction_to_initial_diameter_ratio": {
+     "n": 12,
+     "min": 0.3885,
+     "median": 0.4912,
+     "max": 0.6024
+    },
+    "burning_rate_mm2_s": {
+     "n": 16,
+     "min": 0.27,
+     "median": 0.48,
+     "max": 0.6
+    }
+   }
+  ]
+ }
+}

@@ -1,0 +1,654 @@
+{
+ "preset": "iss_cabin",
+ "environment": {
+  "label": "ISS cabin air",
+  "o2_pct": 21.0,
+  "pressure_kpa": 101.3,
+  "flow_cms": null,
+  "gravity": "microgravity"
+ },
+ "generated_by": "scripts/fire_safety.py (rule-based; no language model)",
+ "data_source": "NASA PSI experimental tables, https://psi.nasa.gov/",
+ "warnings": [
+  {
+   "code": "flow_not_specified",
+   "text": "No ventilation flow speed was given, so flow was not compared."
+  }
+ ],
+ "investigations_by_closeness": [
+  {
+   "investigation_id": "PSI-39",
+   "axes": {
+    "o2_pct": {
+     "status": "inside_tested_range",
+     "tested_min": 17.0,
+     "tested_max": 21.0,
+     "gap": 0.0
+    },
+    "pressure_kpa": {
+     "status": "inside_tested_range",
+     "tested_min": 50.663,
+     "tested_max": 506.625,
+     "gap": 0.0
+    }
+   },
+   "axes_inside_tested_range": 2,
+   "axes_compared": 2,
+   "nearest_tests": [
+    {
+     "test_id": "CFI-1206",
+     "fuel_material": "C12H26",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.325,
+     "flow_cms": null,
+     "distance": 0.001,
+     "source_file": "PSI-39_Experimental table_CFI.csv",
+     "source_row": 2
+    },
+    {
+     "test_id": "CFI-1207",
+     "fuel_material": "C12H26",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.325,
+     "flow_cms": null,
+     "distance": 0.001,
+     "source_file": "PSI-39_Experimental table_CFI.csv",
+     "source_row": 3
+    },
+    {
+     "test_id": "CFI-1208",
+     "fuel_material": "C12H26",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.325,
+     "flow_cms": null,
+     "distance": 0.001,
+     "source_file": "PSI-39_Experimental table_CFI.csv",
+     "source_row": 4
+    },
+    {
+     "test_id": "CFI-1209",
+     "fuel_material": "C12H26",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.325,
+     "flow_cms": null,
+     "distance": 0.001,
+     "source_file": "PSI-39_Experimental table_CFI.csv",
+     "source_row": 5
+    },
+    {
+     "test_id": "CFI-1210",
+     "fuel_material": "C12H26",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.325,
+     "flow_cms": null,
+     "distance": 0.001,
+     "source_file": "PSI-39_Experimental table_CFI.csv",
+     "source_row": 6
+    }
+   ]
+  },
+  {
+   "investigation_id": "PSI-69",
+   "axes": {
+    "o2_pct": {
+     "status": "inside_tested_range",
+     "tested_min": 12.0,
+     "tested_max": 34.0,
+     "gap": 0.0
+    },
+    "pressure_kpa": {
+     "status": "inside_tested_range",
+     "tested_min": 70.168,
+     "tested_max": 309.295,
+     "gap": 0.0
+    }
+   },
+   "axes_inside_tested_range": 2,
+   "axes_compared": 2,
+   "nearest_tests": [
+    {
+     "test_id": "FLEX-004",
+     "fuel_material": "methanol",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.325,
+     "flow_cms": null,
+     "distance": 0.001,
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": 5
+    },
+    {
+     "test_id": "FLEX-005",
+     "fuel_material": "methanol",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.325,
+     "flow_cms": null,
+     "distance": 0.001,
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": 6
+    },
+    {
+     "test_id": "FLEX-006",
+     "fuel_material": "methanol",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.325,
+     "flow_cms": null,
+     "distance": 0.001,
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": 7
+    },
+    {
+     "test_id": "FLEX-009",
+     "fuel_material": "heptane",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.325,
+     "flow_cms": null,
+     "distance": 0.001,
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": 10
+    },
+    {
+     "test_id": "FLEX-206",
+     "fuel_material": "heptane",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.352,
+     "flow_cms": null,
+     "distance": 0.003,
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": 207
+    }
+   ]
+  },
+  {
+   "investigation_id": "PSI-159",
+   "axes": {
+    "o2_pct": {
+     "status": "inside_tested_range",
+     "tested_min": 17.969,
+     "tested_max": 39.97,
+     "gap": 0.0
+    },
+    "pressure_kpa": {
+     "status": "inside_tested_range",
+     "tested_min": 49.538,
+     "tested_max": 330.99,
+     "gap": 0.0
+    }
+   },
+   "axes_inside_tested_range": 2,
+   "axes_compared": 2,
+   "nearest_tests": [
+    {
+     "test_id": "CFIG-N-21137D1",
+     "fuel_material": "30% propane",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.33,
+     "flow_cms": null,
+     "distance": 0.002,
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": 123
+    },
+    {
+     "test_id": "CFIG-N-21162C1",
+     "fuel_material": "30% ethane",
+     "o2_pct": 21.0,
+     "pressure_kpa": 101.33,
+     "flow_cms": null,
+     "distance": 0.002,
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": 145
+    },
+    {
+     "test_id": "CFIG-N-21088M4",
+     "fuel_material": "ethane",
+     "o2_pct": 21.01,
+     "pressure_kpa": 101.33,
+     "flow_cms": null,
+     "distance": 0.004,
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": 12
+    },
+    {
+     "test_id": "CFIG-N-21088L1",
+     "fuel_material": "ethane",
+     "o2_pct": 20.9639,
+     "pressure_kpa": 101.33,
+     "flow_cms": null,
+     "distance": 0.009,
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": 13
+    },
+    {
+     "test_id": "CFIG-N-21162C2",
+     "fuel_material": "30% ethane",
+     "o2_pct": 20.962,
+     "pressure_kpa": 101.33,
+     "flow_cms": null,
+     "distance": 0.009,
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": 146
+    }
+   ]
+  },
+  {
+   "investigation_id": "PSI-10",
+   "axes": {
+    "o2_pct": {
+     "status": "inside_tested_range",
+     "tested_min": 19.805,
+     "tested_max": 40.0,
+     "gap": 0.0
+    },
+    "pressure_kpa": {
+     "status": "inside_tested_range",
+     "tested_min": 43.023,
+     "tested_max": 304.748,
+     "gap": 0.0
+    }
+   },
+   "axes_inside_tested_range": 2,
+   "axes_compared": 2,
+   "nearest_tests": [
+    {
+     "test_id": "FD-N-19206A1",
+     "fuel_material": "C2H4",
+     "o2_pct": 20.9913,
+     "pressure_kpa": 101.629,
+     "flow_cms": null,
+     "distance": 0.018,
+     "source_file": "PSI-10_Experimental table_Flame Design_Normal Flame.csv",
+     "source_row": 168
+    },
+    {
+     "test_id": "FD-N-19123A1",
+     "fuel_material": "C2H4",
+     "o2_pct": 20.9829,
+     "pressure_kpa": 101.629,
+     "flow_cms": null,
+     "distance": 0.02,
+     "source_file": "PSI-10_Experimental table_Flame Design_Normal Flame.csv",
+     "source_row": 13
+    },
+    {
+     "test_id": "FD-N-19137A1",
+     "fuel_material": "C2H4",
+     "o2_pct": 21.0188,
+     "pressure_kpa": 101.698,
+     "flow_cms": null,
+     "distance": 0.024,
+     "source_file": "PSI-10_Experimental table_Flame Design_Normal Flame.csv",
+     "source_row": 32
+    },
+    {
+     "test_id": "FD-N-19137B1",
+     "fuel_material": "C2H4",
+     "o2_pct": 20.9521,
+     "pressure_kpa": 101.698,
+     "flow_cms": null,
+     "distance": 0.029,
+     "source_file": "PSI-10_Experimental table_Flame Design_Normal Flame.csv",
+     "source_row": 33
+    },
+    {
+     "test_id": "FD-N-19137C1",
+     "fuel_material": "C2H4",
+     "o2_pct": 20.8724,
+     "pressure_kpa": 101.836,
+     "flow_cms": null,
+     "distance": 0.052,
+     "source_file": "PSI-10_Experimental table_Flame Design_Normal Flame.csv",
+     "source_row": 34
+    }
+   ]
+  },
+  {
+   "investigation_id": "PSI-25",
+   "axes": {
+    "o2_pct": {
+     "status": "inside_tested_range",
+     "tested_min": 13.6,
+     "tested_max": 22.2,
+     "gap": 0.0
+    },
+    "pressure_kpa": {
+     "status": "not_in_table"
+    }
+   },
+   "axes_inside_tested_range": 1,
+   "axes_compared": 1,
+   "nearest_tests": [
+    {
+     "test_id": "BASS2-B8",
+     "fuel_material": "PMMA",
+     "o2_pct": 21.0,
+     "pressure_kpa": null,
+     "flow_cms": 10.0,
+     "distance": 0.0,
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 9
+    },
+    {
+     "test_id": "BASS2-B6",
+     "fuel_material": "PMMA",
+     "o2_pct": 21.0,
+     "pressure_kpa": null,
+     "flow_cms": 3.0,
+     "distance": 0.0,
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 7
+    },
+    {
+     "test_id": "BASS2-B10",
+     "fuel_material": "PMMA",
+     "o2_pct": 21.0,
+     "pressure_kpa": null,
+     "flow_cms": 5.0,
+     "distance": 0.0,
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 11
+    },
+    {
+     "test_id": "BASS2-B15",
+     "fuel_material": "PMMA",
+     "o2_pct": 21.0,
+     "pressure_kpa": null,
+     "flow_cms": 10.0,
+     "distance": 0.0,
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 16
+    },
+    {
+     "test_id": "BASS2-B13",
+     "fuel_material": "PMMA",
+     "o2_pct": 21.0,
+     "pressure_kpa": null,
+     "flow_cms": 10.0,
+     "distance": 0.0,
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 14
+    }
+   ]
+  },
+  {
+   "investigation_id": "PSI-98",
+   "axes": {
+    "o2_pct": {
+     "status": "outside_tested_range",
+     "tested_min": 21.5,
+     "tested_max": 21.6,
+     "gap": 0.5
+    },
+    "pressure_kpa": {
+     "status": "not_in_table"
+    }
+   },
+   "axes_inside_tested_range": 0,
+   "axes_compared": 1,
+   "nearest_tests": [
+    {
+     "test_id": "SAFFIRE-1-S2",
+     "fuel_material": "SIBAL Fabric",
+     "o2_pct": 21.5,
+     "pressure_kpa": null,
+     "flow_cms": 20.0,
+     "distance": 0.1,
+     "source_file": "PSI-98_Experimental table_SAFFIRE-1.csv",
+     "source_row": 3
+    },
+    {
+     "test_id": "SAFFIRE-1-S1",
+     "fuel_material": "SIBAL Fabric",
+     "o2_pct": 21.6,
+     "pressure_kpa": null,
+     "flow_cms": 20.0,
+     "distance": 0.12,
+     "source_file": "PSI-98_Experimental table_SAFFIRE-1.csv",
+     "source_row": 2
+    }
+   ]
+  },
+  {
+   "investigation_id": "PSI-99",
+   "axes": {
+    "o2_pct": {
+     "status": "outside_tested_range",
+     "tested_min": 21.5,
+     "tested_max": 22.1,
+     "gap": 0.5
+    },
+    "pressure_kpa": {
+     "status": "not_in_table"
+    }
+   },
+   "axes_inside_tested_range": 0,
+   "axes_compared": 1,
+   "nearest_tests": [
+    {
+     "test_id": "SAFFIRE-2-2-1",
+     "fuel_material": "Silicone",
+     "o2_pct": 21.5,
+     "pressure_kpa": null,
+     "flow_cms": 20.0,
+     "distance": 0.1,
+     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+     "source_row": 2
+    },
+    {
+     "test_id": "SAFFIRE-2-2-9",
+     "fuel_material": NaN,
+     "o2_pct": 21.95,
+     "pressure_kpa": null,
+     "flow_cms": 20.0,
+     "distance": 0.19,
+     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+     "source_row": 10
+    },
+    {
+     "test_id": "SAFFIRE-2-2-8",
+     "fuel_material": "PMMA",
+     "o2_pct": 22.05,
+     "pressure_kpa": null,
+     "flow_cms": 20.0,
+     "distance": 0.21,
+     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+     "source_row": 9
+    },
+    {
+     "test_id": "SAFFIRE-2-2-3",
+     "fuel_material": "Silicone",
+     "o2_pct": 22.1,
+     "pressure_kpa": null,
+     "flow_cms": 20.0,
+     "distance": 0.22,
+     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+     "source_row": 4
+    },
+    {
+     "test_id": "SAFFIRE-2-2-4",
+     "fuel_material": "Silicone",
+     "o2_pct": 22.1,
+     "pressure_kpa": null,
+     "flow_cms": 20.0,
+     "distance": 0.22,
+     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
+     "source_row": 5
+    }
+   ]
+  }
+ ],
+ "metrics_reference": "fire_safety_metrics.json",
+ "tested_ranges": [
+  {
+   "investigation_id": "PSI-10",
+   "tests": 327,
+   "fuel_phase": [
+    "gas"
+   ],
+   "ambient_o2_pct": {
+    "n": 207,
+    "min": 19.8048,
+    "median": 37.5587,
+    "max": 40.0
+   },
+   "pressure_kpa": {
+    "n": 327,
+    "min": 43.023,
+    "median": 102.456,
+    "max": 304.748
+   },
+   "flow_cms": {
+    "n": 0
+   }
+  },
+  {
+   "investigation_id": "PSI-100",
+   "tests": 2,
+   "fuel_phase": [
+    "solid"
+   ],
+   "ambient_o2_pct": {
+    "n": 0
+   },
+   "pressure_kpa": {
+    "n": 0
+   },
+   "flow_cms": {
+    "n": 2,
+    "min": 30.0,
+    "median": 30.0,
+    "max": 30.0
+   }
+  },
+  {
+   "investigation_id": "PSI-159",
+   "tests": 333,
+   "fuel_phase": [
+    "gas"
+   ],
+   "ambient_o2_pct": {
+    "n": 179,
+    "min": 17.9686,
+    "median": 37.59,
+    "max": 39.97
+   },
+   "pressure_kpa": {
+    "n": 333,
+    "min": 49.538,
+    "median": 101.33,
+    "max": 330.99
+   },
+   "flow_cms": {
+    "n": 0
+   }
+  },
+  {
+   "investigation_id": "PSI-25",
+   "tests": 129,
+   "fuel_phase": [
+    "solid"
+   ],
+   "ambient_o2_pct": {
+    "n": 129,
+    "min": 13.6,
+    "median": 18.2,
+    "max": 22.2
+   },
+   "pressure_kpa": {
+    "n": 0
+   },
+   "flow_cms": {
+    "n": 122,
+    "min": 0.0,
+    "median": 5.0,
+    "max": 28.0
+   }
+  },
+  {
+   "investigation_id": "PSI-39",
+   "tests": 87,
+   "fuel_phase": [
+    "liquid"
+   ],
+   "ambient_o2_pct": {
+    "n": 87,
+    "min": 17.0,
+    "median": 21.0,
+    "max": 21.0
+   },
+   "pressure_kpa": {
+    "n": 87,
+    "min": 50.663,
+    "median": 101.325,
+    "max": 506.625
+   },
+   "flow_cms": {
+    "n": 0
+   }
+  },
+  {
+   "investigation_id": "PSI-69",
+   "tests": 274,
+   "fuel_phase": [
+    "liquid"
+   ],
+   "ambient_o2_pct": {
+    "n": 274,
+    "min": 12.0,
+    "median": 20.0,
+    "max": 34.0
+   },
+   "pressure_kpa": {
+    "n": 273,
+    "min": 70.168,
+    "median": 101.272,
+    "max": 309.295
+   },
+   "flow_cms": {
+    "n": 0
+   }
+  },
+  {
+   "investigation_id": "PSI-98",
+   "tests": 2,
+   "fuel_phase": [
+    "solid"
+   ],
+   "ambient_o2_pct": {
+    "n": 2,
+    "min": 21.5,
+    "median": 21.55,
+    "max": 21.6
+   },
+   "pressure_kpa": {
+    "n": 0
+   },
+   "flow_cms": {
+    "n": 2,
+    "min": 20.0,
+    "median": 20.0,
+    "max": 20.0
+   }
+  },
+  {
+   "investigation_id": "PSI-99",
+   "tests": 9,
+   "fuel_phase": [
+    "solid"
+   ],
+   "ambient_o2_pct": {
+    "n": 9,
+    "min": 21.5,
+    "median": 22.1,
+    "max": 22.1
+   },
+   "pressure_kpa": {
+    "n": 0
+   },
+   "flow_cms": {
+    "n": 9,
+    "min": 20.0,
+    "median": 20.0,
+    "max": 20.0
+   }
+  }
+ ]
+}
