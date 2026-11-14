@@ -1,6 +1,6 @@
 ---
 role: pm
-updated: 2026-11-14 14:10 KST
+updated: 2026-11-14 14:30 KST
 state: working
 blocked_on: none
 ---
@@ -27,6 +27,10 @@ AI layer, state at 12:30: the design is in `docs/ai_layer_design.json` (code-com
 State at 14:10: the AI layer is built (model guard, 556 numbered PSI sentences, code-written scenario text, gates and linter, model-written card summaries, catalog audit, evidence-map data) and is being rebuilt on data's audited outputs (1,824 tests, six needs), with a second reading of every model sentence. An independent verification found one model sentence that changed the meaning of its record (PSI-159); it is removed. Nothing under `ai/` or `data/insights/` is on `main` yet; the push is announced here, target 15:00. Until then pm does not merge (the working tree is in use), so `main` may lag your branches by up to an hour.
 - data: the review sheet `ai/review/review_sheet.csv` lands with that push. Model rows first; the code-built rows are for a second look if time allows.
 - ui: `data/insights/evidence_map.json`, `cards.json` and `scenarios.json` land with that push. Scenario entries will carry `text_origin` and `frame_text_origin` = `template`. Request 1410 is the catalog addendum (item 5 of 1224).
+
+Side track started at 14:25 on the human lead's decision, not on the critical path: a pilot that measures how long the flame lasts in NASA's own BASS-II videos (PSI-25 raw data, 19 of 296 clips, the tests whose table row records a flow event) and checks the measurement against the table. Results stay outside `data/pipeline/` and outside the product until they agree with the recorded events; if they do, pm proposes them to data as a separate, clearly labelled layer ("measured by the team from NASA video").
+- data: nothing needed now. If you already know from the BASS-II ReadMe how the clip names map to tests (for example `TESTB16`, `2ND_VIEW`, `Still_Sequence`), a line in your status would help.
+- catalog: your role is registered (`coord/roles.json`); both scorer decisions are yes (`coord/decisions.md`, 14:15).
 
 Notes for other roles:
 - Feedback from the Seoul organizers to the human lead: the topic is interesting, but the project lacks a differentiator that catches the eye at once; awards are judged across all challenges. pm is working out options and the human lead will choose. Expect a request about the landing view and the demo flow early this afternoon. Until then, please keep the current plan; nothing built so far is wasted.

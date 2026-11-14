@@ -38,6 +38,8 @@
 | 11/14 12:45–13:20 | Claude Code (Claude Opus 5.5), ui 역할(팀장 PC의 데스크톱 세션) | 대시보드: 근거 규칙(목적 밖 시험 표시), 필요 정보 개수를 파일에서 읽기, 시나리오 2개만 표시, 출처 라벨 3종(PSI 인용·팀 코드 계산·AI 생성), 부분중력 경고 문구, 결과 섹션 순서와 첫 문구. 과제문을 공식 페이지와 대조 | `web/`, `scoring/scoring_config.json`, `.github/workflows/pages.yml`, `coord/*ui*` | 미검토 |
 | 11/14 13:05–13:30 | Claude Code (Claude Opus 5.5), ui 역할 | 순위 계산기와 카탈로그 점검. 가정한 대기 값을 "tested"로 쓰지 않게 하고, 역화염 산화제 흐름의 산소를 대기 산소와 비교하지 않게 하고, o2_above_all 기준을 주변 대기 최고치(40%)로 바꾸고, 연료 상태 키워드를 추가. 원 표 대조로 BASS-II·SPICE 유속과 CFI·SPICE·SAME 시험 수를 고치고 행마다 근거를 적음. 카탈로그-파이프라인 일치 검사를 배포 전에 실행. 이전 웹 ui 세션의 점검 메모와 패치를 출발점으로 썼지만 항목마다 원 표로 다시 확인함(BASS-II 막대 유속은 메모의 제안 0–20이 아니라 원 표대로 0–38.5) | `scoring/`, `web/scorer.js`, `scripts/build_catalog.py`, `data/catalog/*.csv`, `validation/` | 미검토. 카탈로그 41행 모두 ai_extracted |
 | 11/14 13:20– | Claude Code (Opus 5.5, catalog 역할) | ui에게서 카탈로그·순위 계산기·검증을 넘겨받는 새 세션. 인수인계 목록의 남은 수정(버너 산화제 흐름 산소, `o2_above_all` 기준, 기체·액적 키워드, 카탈로그와 파이프라인의 일치 검사, 사람 확인표, 열린 범위 문구)을 원 표와 대조해 수행 | `coord/status/catalog.md`, `coord/requests/*catalog-to-*`. 넘겨받은 뒤 `data/catalog/`, `scoring/`, `validation/`, `web/scorer.js` | 미검토. 시험·검증·parity 자동 통과만 확인 |
+| 11/14 12:30– | Claude Code (Opus 작업자, Fable 검토 에이전트) | AI 계층 구현: 모델 호출 장치, 원문 문장 묶음, 코드로 쓴 시나리오 문구, 검사기와 오해 차단 규칙, gpt-oss:20b로 조사 요약 생성, 카탈로그 숫자 추적 감사, 근거 지도 데이터, 독립 검증 | `ai/`, `data/insights/`, `contracts/README.md`, `docs/ai_layer_design.json`. 14:25 현재 저장소에 올리기 전 | 미검토. 모델이 쓴 문장은 검수 전까지 '검수 안 됨'으로 표시 |
+| 11/14 14:25– | Claude Code | BASS-II 원본 영상에서 불꽃 유지 시간을 재는 시범 분석(영상 처리와 작은 예측 모델). 사용자가 시범 진행을 결정 | 저장소 밖 시범 코드와 결과. 표의 기록과 맞는지 검증을 통과해야 제품에 넣음 | 미검토 |
 
 ## 제품 안에서 동작하는 AI
 

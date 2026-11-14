@@ -53,6 +53,7 @@
 | 11/14 12:48 | 글꼴 | IBM Plex Sans KR, IBM Plex Mono (Google Fonts 경유) — 위 10:00 행과 같은 글꼴의 추가 사용처 | https://fonts.google.com/specimen/IBM+Plex+Sans+KR | SIL Open Font License 1.1 | IBM | 팀 내부 페이지 `reports/indicators.html` |
 | 11/14 12:48 | 라이브러리 | pandas — 위 11:20 행과 같은 라이브러리의 추가 사용처 | https://github.com/pandas-dev/pandas | BSD-3-Clause | pandas 개발팀 | `pipeline/evidence.py`, `reports/build_indicators_page.py` (`pipeline/facts.py`, `pipeline/check.py`는 표준 라이브러리만 사용) |
 | 11/14 13:09 | 문서 | (정정) Flame in Freefall 과제문 — 공식 제목은 "SI-Powered", 공식 주소는 오른쪽 칸. 위 'Flame in Freefall 과제문' 행의 긴 주소는 열리지 않음. ui 세션이 2026-11-14 13:05경 팀 대표 컴퓨터에서 공식 페이지를 확인 | https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/ | 공개 안내문 | NASA Space Apps Challenge | `pipeline/spec/references.json` `CHALLENGE-2026` (달 기지 산소 30% 이상 가능성·10.2 psi 이하, 우주복 100% 산소·4.3 psi, 부분 중력 자료 없음) |
+| 11/14 14:25 | 데이터 | PSI-25 BASS-II 원본 영상 19개(전체 MP4 296개 중 불꽃 사건이 표에 기록된 시험, 약 1.8GB)와 과학 문서 4건(ReadMe, Test Matrices, Ops, Fan calibration) | https://psi.nasa.gov/physci/repo/data/investigations/PSI-25 | CC0-1.0 (PSI 기록의 라이선스 칸) | NASA PSI | 영상에서 불꽃 유지 시간을 재는 시범 분석(pm 역할). 저장소에는 올리지 않고 로컬 폴더에만 보관. 결과는 검증 전까지 제품에 넣지 않음 |
 
 실험별 DOI는 `data/psi/manifest.json`에 있다. PSI는 데이터를 쓸 때 실험의 DOI로 인용하라고 요구한다.
 
