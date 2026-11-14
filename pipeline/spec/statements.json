@@ -691,5 +691,14 @@
   "test_end": "test end",
   "flow_event": "event",
   "fuel_material": "material"
+ },
+ "raw_state": {
+  "_note": "Fixed sentences of the 'raw_state' fields of the evidence packages (pipeline/raw_gaps.py, pipeline/evidence.py). {unopened} lists the kinds of files not opened or not readable, with counts; the sentence does not say where a quantity is.",
+  "in_table": "Recorded in the experimental table.",
+  "column_in_sampled_raw_file": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table.",
+  "column_in_sampled_raw_file_all_files": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline.",
+  "documented_only": "Empty in the table. A sentence of a NASA record or a paper states it for the whole table; the sentence is not a value.",
+  "not_in_sampled_files": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: {unopened}. The files read do not say whether an unopened file holds this quantity.",
+  "no_test_table": "The investigation has no per-test table."
  }
 }

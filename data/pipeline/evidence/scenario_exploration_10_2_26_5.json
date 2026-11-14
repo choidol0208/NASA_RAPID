@@ -228,14 +228,609 @@
     ]
    },
    "indicators": [],
+   "raw_state": {
+    "fuel_material": {
+     "counted": {
+      "tests": 133,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 125,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 8,
+        "sentence": "Recorded in the experimental table."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "sentence": "Recorded in the experimental table."
+       }
+      ]
+     }
+    },
+    "o2_pct": {
+     "counted": {
+      "tests": 133,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 125,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 8,
+        "sentence": "Recorded in the experimental table."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 8,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-99",
+        "tests": 1,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 9,
+          "bytes": 168667527
+         }
+        ],
+        "bytes": 168667527,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 2,
+          "bytes": 27909445
+         }
+        ],
+        "bytes": 27909445,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "value_per_test_in_a_results_file"
+        ],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "file_groups": [
+         {
+          "group": "as_run_matrix",
+          "name_pattern": "As Run_Test Matrix.xlsx (Science Documents)",
+          "files": 1,
+          "bytes": 111886
+         }
+        ],
+        "bytes": 111886,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "file_groups": [
+         {
+          "group": "r2_drawings",
+          "name_pattern": "Engineering Documents assembly, tube and chamber drawings",
+          "files": 17,
+          "bytes": 5629729
+         },
+         {
+          "group": "u_run_workbooks",
+          "name_pattern": "Analyzed Data 2010_<DOY>_<h>_<material>_run<N>.xls (three of them were opened)",
+          "files": 66,
+          "bytes": 424455680
+         },
+         {
+          "group": "u_sample_descriptions",
+          "name_pattern": "Sample descriptions tables.docx (28.6 MB)",
+          "files": 1,
+          "bytes": 28571083
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME EIRD Rev 2.00 PDF (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_image_slides",
+          "name_pattern": "Raw Data image slides (.pptx and .pdf)",
+          "files": 84,
+          "bytes": 271100761
+         }
+        ],
+        "bytes": 735135662,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 80 files; videos 8 files; drawing no text layer 1 group 17 files; tables not opened 1 group 66 files; document over size limit 2 groups 2 files; documents not opened 1 group 84 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "file_groups": [
+         {
+          "group": "r2_sample_drawings",
+          "name_pattern": "Sample Assembly / Sample Part drawings",
+          "files": 6,
+          "bytes": 914665
+         },
+         {
+          "group": "r2_coil_drawings",
+          "name_pattern": "Ignitor Wire Coil Assembly drawings",
+          "files": 4,
+          "bytes": 605375
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME_EIRD.pdf (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_analyzed",
+          "name_pattern": "Analyzed Data workbooks other than the two opened",
+          "files": 57,
+          "bytes": 213242030
+         }
+        ],
+        "bytes": 220140479,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 4 files; videos 2 files; drawing no text layer 2 groups 10 files; document over size limit 1 group 1 files; tables not opened 1 group 57 files. The files read do not say whether an unopened file holds this quantity."
+       }
+      ]
+     }
+    },
+    "pressure_kpa": {
+     "counted": {
+      "tests": 133,
+      "states": [
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-99",
+        "tests": 8,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 9,
+          "bytes": 168667527
+         }
+        ],
+        "bytes": 168667527,
+        "sentence": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline."
+       },
+       {
+        "state": "documented_only",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 125,
+        "file_groups": [],
+        "bytes": 0,
+        "documented_by": [
+         "ICES19.pressure"
+        ],
+        "sentence": "Empty in the table. A sentence of a NASA record or a paper states it for the whole table; the sentence is not a value."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 2,
+          "bytes": 49959496
+         }
+        ],
+        "bytes": 49959496,
+        "sentence": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 9,
+          "bytes": 168667527
+         }
+        ],
+        "bytes": 168667527,
+        "sentence": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 2,
+          "bytes": 27909445
+         }
+        ],
+        "bytes": 27909445,
+        "sentence": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "value_per_test_in_a_results_file"
+        ],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "file_groups": [
+         {
+          "group": "as_run_matrix",
+          "name_pattern": "As Run_Test Matrix.xlsx (Science Documents)",
+          "files": 1,
+          "bytes": 111886
+         }
+        ],
+        "bytes": 111886,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "documented_only",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "file_groups": [],
+        "bytes": 0,
+        "documented_by": [
+         "ICES19.pressure"
+        ],
+        "sentence": "Empty in the table. A sentence of a NASA record or a paper states it for the whole table; the sentence is not a value."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "file_groups": [
+         {
+          "group": "r2_drawings",
+          "name_pattern": "Engineering Documents assembly, tube and chamber drawings",
+          "files": 17,
+          "bytes": 5629729
+         },
+         {
+          "group": "u_run_workbooks",
+          "name_pattern": "Analyzed Data 2010_<DOY>_<h>_<material>_run<N>.xls (three of them were opened)",
+          "files": 66,
+          "bytes": 424455680
+         },
+         {
+          "group": "u_sample_descriptions",
+          "name_pattern": "Sample descriptions tables.docx (28.6 MB)",
+          "files": 1,
+          "bytes": 28571083
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME EIRD Rev 2.00 PDF (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_image_slides",
+          "name_pattern": "Raw Data image slides (.pptx and .pdf)",
+          "files": 84,
+          "bytes": 271100761
+         }
+        ],
+        "bytes": 735135662,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 80 files; videos 8 files; drawing no text layer 1 group 17 files; tables not opened 1 group 66 files; document over size limit 2 groups 2 files; documents not opened 1 group 84 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "file_groups": [
+         {
+          "group": "r2_sample_drawings",
+          "name_pattern": "Sample Assembly / Sample Part drawings",
+          "files": 6,
+          "bytes": 914665
+         },
+         {
+          "group": "r2_coil_drawings",
+          "name_pattern": "Ignitor Wire Coil Assembly drawings",
+          "files": 4,
+          "bytes": 605375
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME_EIRD.pdf (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_analyzed",
+          "name_pattern": "Analyzed Data workbooks other than the two opened",
+          "files": 57,
+          "bytes": 213242030
+         }
+        ],
+        "bytes": 220140479,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 4 files; videos 2 files; drawing no text layer 2 groups 10 files; document over size limit 1 group 1 files; tables not opened 1 group 57 files. The files read do not say whether an unopened file holds this quantity."
+       }
+      ]
+     }
+    },
+    "gravity_level": {
+     "counted": {
+      "tests": 133,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 125,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 8,
+        "sentence": "Recorded in the experimental table."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "sentence": "Recorded in the experimental table."
+       }
+      ]
+     }
+    }
+   },
    "gaps": [
     {
      "code": "oxygen:no_usable_test_in_range",
-     "text": "Oxygen gap: none of the 133 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
+     "text": "Oxygen gap: none of the 133 tests counted for this need was recorded with oxygen inside the oxygen range of this environment.",
+     "raw_state": [
+      {
+       "variable": "o2_pct",
+       "tests": 133,
+       "states": [
+        {
+         "state": "in_table",
+         "column_is": [],
+         "investigation_id": "PSI-25",
+         "tests": 125,
+         "sentence": "Recorded in the experimental table."
+        },
+        {
+         "state": "in_table",
+         "column_is": [],
+         "investigation_id": "PSI-99",
+         "tests": 8,
+         "sentence": "Recorded in the experimental table."
+        }
+       ],
+       "unmatched_for_lack_of_this_variable": 0,
+       "population": "counted"
+      }
+     ]
     },
     {
      "code": "pressure:not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 133 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 133 tests counted for this need.",
+     "raw_state": [
+      {
+       "variable": "pressure_kpa",
+       "tests": 133,
+       "states": [
+        {
+         "state": "column_in_sampled_raw_file",
+         "column_is": [
+          "sensor_reading_series"
+         ],
+         "investigation_id": "PSI-99",
+         "tests": 8,
+         "file_groups": [
+          {
+           "group": "sample_sensors",
+           "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+           "files": 9,
+           "bytes": 168667527
+          }
+         ],
+         "bytes": 168667527,
+         "sentence": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline."
+        },
+        {
+         "state": "documented_only",
+         "column_is": [],
+         "investigation_id": "PSI-25",
+         "tests": 125,
+         "file_groups": [],
+         "bytes": 0,
+         "documented_by": [
+          "ICES19.pressure"
+         ],
+         "sentence": "Empty in the table. A sentence of a NASA record or a paper states it for the whole table; the sentence is not a value."
+        }
+       ],
+       "unmatched_for_lack_of_this_variable": 0,
+       "population": "counted"
+      }
+     ]
     }
    ],
    "statements": [
@@ -730,10 +1325,445 @@
     "investigation_ids": []
    },
    "indicators": [],
+   "raw_state": {
+    "fuel_material": {
+     "counted": {
+      "tests": 0,
+      "states": [],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "sentence": "Recorded in the experimental table."
+       }
+      ]
+     }
+    },
+    "o2_pct": {
+     "counted": {
+      "tests": 0,
+      "states": [],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 8,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-99",
+        "tests": 1,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 9,
+          "bytes": 168667527
+         }
+        ],
+        "bytes": 168667527,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 2,
+          "bytes": 27909445
+         }
+        ],
+        "bytes": 27909445,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "value_per_test_in_a_results_file"
+        ],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "file_groups": [
+         {
+          "group": "as_run_matrix",
+          "name_pattern": "As Run_Test Matrix.xlsx (Science Documents)",
+          "files": 1,
+          "bytes": 111886
+         }
+        ],
+        "bytes": 111886,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "file_groups": [
+         {
+          "group": "r2_drawings",
+          "name_pattern": "Engineering Documents assembly, tube and chamber drawings",
+          "files": 17,
+          "bytes": 5629729
+         },
+         {
+          "group": "u_run_workbooks",
+          "name_pattern": "Analyzed Data 2010_<DOY>_<h>_<material>_run<N>.xls (three of them were opened)",
+          "files": 66,
+          "bytes": 424455680
+         },
+         {
+          "group": "u_sample_descriptions",
+          "name_pattern": "Sample descriptions tables.docx (28.6 MB)",
+          "files": 1,
+          "bytes": 28571083
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME EIRD Rev 2.00 PDF (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_image_slides",
+          "name_pattern": "Raw Data image slides (.pptx and .pdf)",
+          "files": 84,
+          "bytes": 271100761
+         }
+        ],
+        "bytes": 735135662,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 80 files; videos 8 files; drawing no text layer 1 group 17 files; tables not opened 1 group 66 files; document over size limit 2 groups 2 files; documents not opened 1 group 84 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "file_groups": [
+         {
+          "group": "r2_sample_drawings",
+          "name_pattern": "Sample Assembly / Sample Part drawings",
+          "files": 6,
+          "bytes": 914665
+         },
+         {
+          "group": "r2_coil_drawings",
+          "name_pattern": "Ignitor Wire Coil Assembly drawings",
+          "files": 4,
+          "bytes": 605375
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME_EIRD.pdf (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_analyzed",
+          "name_pattern": "Analyzed Data workbooks other than the two opened",
+          "files": 57,
+          "bytes": 213242030
+         }
+        ],
+        "bytes": 220140479,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 4 files; videos 2 files; drawing no text layer 2 groups 10 files; document over size limit 1 group 1 files; tables not opened 1 group 57 files. The files read do not say whether an unopened file holds this quantity."
+       }
+      ]
+     }
+    }
+   },
    "gaps": [
     {
      "code": "need:no_usable_test",
-     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need.",
+     "raw_state": [
+      {
+       "variable": "hot_ignition",
+       "tests": 376,
+       "states": [
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-25",
+         "tests": 129,
+         "file_groups": [
+          {
+           "group": "r2_summary_report",
+           "name_pattern": "BASS-II Summary Report.pdf",
+           "files": 1,
+           "bytes": 48972416
+          }
+         ],
+         "bytes": 48972416,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 265 files; videos 296 files; document over size limit 1 group 1 files. The files read do not say whether an unopened file holds this quantity."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-26",
+         "tests": 121,
+         "file_groups": [
+          {
+           "group": "r2_drawings",
+           "name_pattern": "Engineering Documents drawings (Drawing_*.pdf, SPICE-front-window.pdf, Short Nozzle*.pdf)",
+           "files": 19,
+           "bytes": 4260052
+          },
+          {
+           "group": "r2_60054",
+           "name_pattern": "60054MAFH000_C.pdf",
+           "files": 1,
+           "bytes": 562119
+          },
+          {
+           "group": "u_pptx",
+           "name_pattern": "BASS Overview.pptx, BASS ERD.pptx",
+           "files": 2,
+           "bytes": 4480224
+          },
+          {
+           "group": "u_docx_paper",
+           "name_pattern": "FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+           "files": 1,
+           "bytes": 8837026
+          },
+          {
+           "group": "u_slice_review",
+           "name_pattern": "SLICE_SysReqDesignReview.pdf",
+           "files": 1,
+           "bytes": 1429180
+          }
+         ],
+         "bytes": 19568601,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 60 files; videos 114 files; drawing no text layer 2 groups 20 files; documents not opened 3 groups 4 files. The files read do not say whether an unopened file holds this quantity."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-98",
+         "tests": 2,
+         "file_groups": [
+          {
+           "group": "r2_thermocouple_drawing",
+           "name_pattern": "SFSDP-VIS-0295 Saffire 1 and 3 Thermocouple Placement.pdf",
+           "files": 1,
+           "bytes": 1065733
+          },
+          {
+           "group": "r2_offgassing",
+           "name_pattern": "SAFFIRE Offgassing Testing Strategy.pdf",
+           "files": 1,
+           "bytes": 1696929
+          },
+          {
+           "group": "r2_frame_sizes",
+           "name_pattern": "SAFFIRE-I_ImageFrameSizes_ROI_Offsets_Grid_1280x920_v1.0.pdf",
+           "files": 1,
+           "bytes": 784299
+          }
+         ],
+         "bytes": 3546961,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 62 files; videos 0 files; drawing no text layer 1 group 1 files; download failed 2 groups 2 files. The files read do not say whether an unopened file holds this quantity."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-99",
+         "tests": 9,
+         "file_groups": [
+          {
+           "group": "u_telemetry",
+           "name_pattern": "Saffire-II Telemetry Data.xlsx (41 MB)",
+           "files": 1,
+           "bytes": 41472762
+          }
+         ],
+         "bytes": 41472762,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 187 files; videos 0 files; table over size limit 1 group 1 files. The files read do not say whether an unopened file holds this quantity."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-100",
+         "tests": 2,
+         "file_groups": [
+          {
+           "group": "r2_offgassing",
+           "name_pattern": "SAFFIRE Offgassing Testing Strategy.pdf",
+           "files": 1,
+           "bytes": 1696929
+          },
+          {
+           "group": "r2_presentations",
+           "name_pattern": "SAFFIRE_<n> I Con of Env Sys presentation.pdf",
+           "files": 3,
+           "bytes": 10246234
+          },
+          {
+           "group": "u_telemetry",
+           "name_pattern": "Saffire-III Telemetry Data.xlsx, Saffire-III 1 Hz Telemetry Data.xlsx",
+           "files": 2,
+           "bytes": 29968055
+          }
+         ],
+         "bytes": 41911218,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 68 files; videos 0 files; download failed 2 groups 4 files; tables not opened 1 group 2 files. The files read do not say whether an unopened file holds this quantity."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-101",
+         "tests": 109,
+         "file_groups": [
+          {
+           "group": "r2_drawings",
+           "name_pattern": "Engineering Documents assembly, tube and chamber drawings",
+           "files": 17,
+           "bytes": 5629729
+          },
+          {
+           "group": "u_run_workbooks",
+           "name_pattern": "Analyzed Data 2010_<DOY>_<h>_<material>_run<N>.xls (three of them were opened)",
+           "files": 66,
+           "bytes": 424455680
+          },
+          {
+           "group": "u_sample_descriptions",
+           "name_pattern": "Sample descriptions tables.docx (28.6 MB)",
+           "files": 1,
+           "bytes": 28571083
+          },
+          {
+           "group": "u_eird",
+           "name_pattern": "SAME EIRD Rev 2.00 PDF (5.4 MB)",
+           "files": 1,
+           "bytes": 5378409
+          },
+          {
+           "group": "u_image_slides",
+           "name_pattern": "Raw Data image slides (.pptx and .pdf)",
+           "files": 84,
+           "bytes": 271100761
+          }
+         ],
+         "bytes": 735135662,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 80 files; videos 8 files; drawing no text layer 1 group 17 files; tables not opened 1 group 66 files; document over size limit 2 groups 2 files; documents not opened 1 group 84 files. The files read do not say whether an unopened file holds this quantity."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-102",
+         "tests": 4,
+         "file_groups": [
+          {
+           "group": "r2_sample_drawings",
+           "name_pattern": "Sample Assembly / Sample Part drawings",
+           "files": 6,
+           "bytes": 914665
+          },
+          {
+           "group": "r2_coil_drawings",
+           "name_pattern": "Ignitor Wire Coil Assembly drawings",
+           "files": 4,
+           "bytes": 605375
+          },
+          {
+           "group": "u_eird",
+           "name_pattern": "SAME_EIRD.pdf (5.4 MB)",
+           "files": 1,
+           "bytes": 5378409
+          },
+          {
+           "group": "u_analyzed",
+           "name_pattern": "Analyzed Data workbooks other than the two opened",
+           "files": 57,
+           "bytes": 213242030
+          }
+         ],
+         "bytes": 220140479,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 4 files; videos 2 files; drawing no text layer 2 groups 10 files; document over size limit 1 group 1 files; tables not opened 1 group 57 files. The files read do not say whether an unopened file holds this quantity."
+        }
+       ],
+       "population": "in_scope"
+      }
+     ]
     }
    ],
    "statements": [
@@ -1020,14 +2050,399 @@
     ]
    },
    "indicators": [],
+   "raw_state": {
+    "fuel_material": {
+     "counted": {
+      "tests": 2,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "sentence": "Recorded in the experimental table."
+       }
+      ]
+     }
+    },
+    "flow_cms": {
+     "counted": {
+      "tests": 2,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 119,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "calibration_example"
+        ],
+        "investigation_id": "PSI-25",
+        "tests": 10,
+        "file_groups": [
+         {
+          "group": "fan_calibration",
+          "name_pattern": "Fan calibration data.xlsx (Reference Data)",
+          "files": 1,
+          "bytes": 23973
+         }
+        ],
+        "bytes": 23973,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "setting_or_set_point"
+        ],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "file_groups": [
+         {
+          "group": "r2_srd",
+          "name_pattern": "SRD_BASS.pdf",
+          "files": 1,
+          "bytes": 884257
+         }
+        ],
+        "bytes": 884257,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       }
+      ]
+     }
+    },
+    "flow_direction": {
+     "counted": {
+      "tests": 2,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "file_groups": [
+         {
+          "group": "r2_summary_report",
+          "name_pattern": "BASS-II Summary Report.pdf",
+          "files": 1,
+          "bytes": 48972416
+         }
+        ],
+        "bytes": 48972416,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 265 files; videos 296 files; document over size limit 1 group 1 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "file_groups": [
+         {
+          "group": "r2_drawings",
+          "name_pattern": "Engineering Documents drawings (Drawing_*.pdf, SPICE-front-window.pdf, Short Nozzle*.pdf)",
+          "files": 19,
+          "bytes": 4260052
+         },
+         {
+          "group": "r2_60054",
+          "name_pattern": "60054MAFH000_C.pdf",
+          "files": 1,
+          "bytes": 562119
+         },
+         {
+          "group": "u_pptx",
+          "name_pattern": "BASS Overview.pptx, BASS ERD.pptx",
+          "files": 2,
+          "bytes": 4480224
+         },
+         {
+          "group": "u_docx_paper",
+          "name_pattern": "FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+          "files": 1,
+          "bytes": 8837026
+         },
+         {
+          "group": "u_slice_review",
+          "name_pattern": "SLICE_SysReqDesignReview.pdf",
+          "files": 1,
+          "bytes": 1429180
+         }
+        ],
+        "bytes": 19568601,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 60 files; videos 114 files; drawing no text layer 2 groups 20 files; documents not opened 3 groups 4 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "file_groups": [
+         {
+          "group": "r2_drawings",
+          "name_pattern": "Engineering Documents assembly, tube and chamber drawings",
+          "files": 17,
+          "bytes": 5629729
+         },
+         {
+          "group": "u_run_workbooks",
+          "name_pattern": "Analyzed Data 2010_<DOY>_<h>_<material>_run<N>.xls (three of them were opened)",
+          "files": 66,
+          "bytes": 424455680
+         },
+         {
+          "group": "u_sample_descriptions",
+          "name_pattern": "Sample descriptions tables.docx (28.6 MB)",
+          "files": 1,
+          "bytes": 28571083
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME EIRD Rev 2.00 PDF (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_image_slides",
+          "name_pattern": "Raw Data image slides (.pptx and .pdf)",
+          "files": 84,
+          "bytes": 271100761
+         }
+        ],
+        "bytes": 735135662,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 80 files; videos 8 files; drawing no text layer 1 group 17 files; tables not opened 1 group 66 files; document over size limit 2 groups 2 files; documents not opened 1 group 84 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "file_groups": [
+         {
+          "group": "r2_sample_drawings",
+          "name_pattern": "Sample Assembly / Sample Part drawings",
+          "files": 6,
+          "bytes": 914665
+         },
+         {
+          "group": "r2_coil_drawings",
+          "name_pattern": "Ignitor Wire Coil Assembly drawings",
+          "files": 4,
+          "bytes": 605375
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME_EIRD.pdf (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_analyzed",
+          "name_pattern": "Analyzed Data workbooks other than the two opened",
+          "files": 57,
+          "bytes": 213242030
+         }
+        ],
+        "bytes": 220140479,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 4 files; videos 2 files; drawing no text layer 2 groups 10 files; document over size limit 1 group 1 files; tables not opened 1 group 57 files. The files read do not say whether an unopened file holds this quantity."
+       }
+      ]
+     }
+    }
+   },
    "gaps": [
     {
      "code": "oxygen:no_usable_test_in_range",
-     "text": "Oxygen gap: none of the 2 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
+     "text": "Oxygen gap: none of the 2 tests counted for this need was recorded with oxygen inside the oxygen range of this environment.",
+     "raw_state": [
+      {
+       "variable": "o2_pct",
+       "tests": 2,
+       "states": [
+        {
+         "state": "in_table",
+         "column_is": [],
+         "investigation_id": "PSI-98",
+         "tests": 2,
+         "sentence": "Recorded in the experimental table."
+        }
+       ],
+       "unmatched_for_lack_of_this_variable": 0,
+       "population": "counted"
+      }
+     ]
     },
     {
      "code": "pressure:not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 2 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 2 tests counted for this need.",
+     "raw_state": [
+      {
+       "variable": "pressure_kpa",
+       "tests": 2,
+       "states": [
+        {
+         "state": "column_in_sampled_raw_file",
+         "column_is": [
+          "sensor_reading_series"
+         ],
+         "investigation_id": "PSI-98",
+         "tests": 2,
+         "file_groups": [
+          {
+           "group": "sample_sensors",
+           "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+           "files": 2,
+           "bytes": 49959496
+          }
+         ],
+         "bytes": 49959496,
+         "sentence": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline."
+        }
+       ],
+       "unmatched_for_lack_of_this_variable": 0,
+       "population": "counted"
+      }
+     ]
     }
    ],
    "statements": [
@@ -1914,6 +3329,645 @@
      ]
     }
    ],
+   "raw_state": {
+    "fuel_material": {
+     "counted": {
+      "tests": 298,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 25,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-69",
+        "tests": 273,
+        "sentence": "Recorded in the experimental table."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 1824,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-10",
+        "tests": 327,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-39",
+        "tests": 79,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-69",
+        "tests": 274,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-107",
+        "tests": 435,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-159",
+        "tests": 333,
+        "sentence": "Recorded in the experimental table."
+       }
+      ]
+     }
+    },
+    "o2_pct": {
+     "counted": {
+      "tests": 298,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 25,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-69",
+        "tests": 273,
+        "sentence": "Recorded in the experimental table."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 1824,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-10",
+        "tests": 316,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-39",
+        "tests": 79,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-69",
+        "tests": 274,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 8,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-159",
+        "tests": 333,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-99",
+        "tests": 1,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 9,
+          "bytes": 168667527
+         }
+        ],
+        "bytes": 168667527,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 2,
+          "bytes": 27909445
+         }
+        ],
+        "bytes": 27909445,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "value_per_test_in_a_results_file"
+        ],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "file_groups": [
+         {
+          "group": "as_run_matrix",
+          "name_pattern": "As Run_Test Matrix.xlsx (Science Documents)",
+          "files": 1,
+          "bytes": 111886
+         }
+        ],
+        "bytes": 111886,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-10",
+        "tests": 11,
+        "file_groups": [
+         {
+          "group": "r2_test_sheets",
+          "name_pattern": "<series> test sheets.pdf",
+          "files": 18,
+          "bytes": 35637382
+         },
+         {
+          "group": "r2_test_parameter_notes",
+          "name_pattern": "<series> test parameter(s) notes.pdf",
+          "files": 18,
+          "bytes": 27028622
+         },
+         {
+          "group": "r2_daily_log",
+          "name_pattern": "<series> Daily Test Point Log.pdf",
+          "files": 14,
+          "bytes": 901343
+         },
+         {
+          "group": "u_documents",
+          "name_pattern": "Reports, Science Documents and Engineering Documents PDFs",
+          "files": 7,
+          "bytes": 14663316
+         },
+         {
+          "group": "u_camera_config",
+          "name_pattern": "AcmeCameraConfigure*.txt (camera settings)",
+          "files": 36,
+          "bytes": 15384
+         }
+        ],
+        "bytes": 78246047,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 1184 files; videos 317 files; scanned pdf no text layer 3 groups 50 files; documents not opened 1 group 7 files; text files not opened 1 group 36 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "file_groups": [
+         {
+          "group": "r2_drawings",
+          "name_pattern": "Engineering Documents assembly, tube and chamber drawings",
+          "files": 17,
+          "bytes": 5629729
+         },
+         {
+          "group": "u_run_workbooks",
+          "name_pattern": "Analyzed Data 2010_<DOY>_<h>_<material>_run<N>.xls (three of them were opened)",
+          "files": 66,
+          "bytes": 424455680
+         },
+         {
+          "group": "u_sample_descriptions",
+          "name_pattern": "Sample descriptions tables.docx (28.6 MB)",
+          "files": 1,
+          "bytes": 28571083
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME EIRD Rev 2.00 PDF (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_image_slides",
+          "name_pattern": "Raw Data image slides (.pptx and .pdf)",
+          "files": 84,
+          "bytes": 271100761
+         }
+        ],
+        "bytes": 735135662,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 80 files; videos 8 files; drawing no text layer 1 group 17 files; tables not opened 1 group 66 files; document over size limit 2 groups 2 files; documents not opened 1 group 84 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "file_groups": [
+         {
+          "group": "r2_sample_drawings",
+          "name_pattern": "Sample Assembly / Sample Part drawings",
+          "files": 6,
+          "bytes": 914665
+         },
+         {
+          "group": "r2_coil_drawings",
+          "name_pattern": "Ignitor Wire Coil Assembly drawings",
+          "files": 4,
+          "bytes": 605375
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME_EIRD.pdf (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_analyzed",
+          "name_pattern": "Analyzed Data workbooks other than the two opened",
+          "files": 57,
+          "bytes": 213242030
+         }
+        ],
+        "bytes": 220140479,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 4 files; videos 2 files; drawing no text layer 2 groups 10 files; document over size limit 1 group 1 files; tables not opened 1 group 57 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-107",
+        "tests": 435,
+        "file_groups": [
+         {
+          "group": "u_calibrations",
+          "name_pattern": "flow duct, airflow comparison, duct profile, mass flow and fuel flow calibration workbooks",
+          "files": 23,
+          "bytes": 2429977
+         },
+         {
+          "group": "u_nikon_propy",
+          "name_pattern": "GMT052nikon_propy.xls",
+          "files": 1,
+          "bytes": 5451264
+         },
+         {
+          "group": "u_documents",
+          "name_pattern": "Dotson thesis, SRD .doc, presentations, contact sheets",
+          "files": 13,
+          "bytes": 41521006
+         }
+        ],
+        "bytes": 49402247,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 101 files; videos 19 files; tables not opened 2 groups 24 files; documents not opened 1 group 13 files. The files read do not say whether an unopened file holds this quantity."
+       }
+      ]
+     }
+    },
+    "pressure_kpa": {
+     "counted": {
+      "tests": 298,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-69",
+        "tests": 273,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "documented_only",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 25,
+        "file_groups": [],
+        "bytes": 0,
+        "documented_by": [
+         "ICES19.pressure"
+        ],
+        "sentence": "Empty in the table. A sentence of a NASA record or a paper states it for the whole table; the sentence is not a value."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 1824,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-10",
+        "tests": 327,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-39",
+        "tests": 79,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-69",
+        "tests": 273,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-159",
+        "tests": 333,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 2,
+          "bytes": 49959496
+         }
+        ],
+        "bytes": 49959496,
+        "sentence": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 9,
+          "bytes": 168667527
+         }
+        ],
+        "bytes": 168667527,
+        "sentence": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "sensor_reading_series"
+        ],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "file_groups": [
+         {
+          "group": "sample_sensors",
+          "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
+          "files": 2,
+          "bytes": 27909445
+         }
+        ],
+        "bytes": 27909445,
+        "sentence": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "unclear"
+        ],
+        "investigation_id": "PSI-107",
+        "tests": 435,
+        "file_groups": [
+         {
+          "group": "flight_test_data",
+          "name_pattern": "Spice Flight Test Data II modified.xls",
+          "files": 1,
+          "bytes": 429568
+         }
+        ],
+        "bytes": 429568,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "value_per_test_in_a_results_file"
+        ],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "file_groups": [
+         {
+          "group": "as_run_matrix",
+          "name_pattern": "As Run_Test Matrix.xlsx (Science Documents)",
+          "files": 1,
+          "bytes": 111886
+         }
+        ],
+        "bytes": 111886,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "value_per_test_in_a_results_file"
+        ],
+        "investigation_id": "PSI-69",
+        "tests": 1,
+        "file_groups": [
+         {
+          "group": "test_sheet",
+          "name_pattern": "FLEX-###_TestSheet.txt (+ .rtf twin)",
+          "files": 272,
+          "bytes": 250375
+         }
+        ],
+        "bytes": 250375,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "documented_only",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "file_groups": [],
+        "bytes": 0,
+        "documented_by": [
+         "ICES19.pressure"
+        ],
+        "sentence": "Empty in the table. A sentence of a NASA record or a paper states it for the whole table; the sentence is not a value."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "file_groups": [
+         {
+          "group": "r2_drawings",
+          "name_pattern": "Engineering Documents assembly, tube and chamber drawings",
+          "files": 17,
+          "bytes": 5629729
+         },
+         {
+          "group": "u_run_workbooks",
+          "name_pattern": "Analyzed Data 2010_<DOY>_<h>_<material>_run<N>.xls (three of them were opened)",
+          "files": 66,
+          "bytes": 424455680
+         },
+         {
+          "group": "u_sample_descriptions",
+          "name_pattern": "Sample descriptions tables.docx (28.6 MB)",
+          "files": 1,
+          "bytes": 28571083
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME EIRD Rev 2.00 PDF (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_image_slides",
+          "name_pattern": "Raw Data image slides (.pptx and .pdf)",
+          "files": 84,
+          "bytes": 271100761
+         }
+        ],
+        "bytes": 735135662,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 80 files; videos 8 files; drawing no text layer 1 group 17 files; tables not opened 1 group 66 files; document over size limit 2 groups 2 files; documents not opened 1 group 84 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "file_groups": [
+         {
+          "group": "r2_sample_drawings",
+          "name_pattern": "Sample Assembly / Sample Part drawings",
+          "files": 6,
+          "bytes": 914665
+         },
+         {
+          "group": "r2_coil_drawings",
+          "name_pattern": "Ignitor Wire Coil Assembly drawings",
+          "files": 4,
+          "bytes": 605375
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME_EIRD.pdf (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_analyzed",
+          "name_pattern": "Analyzed Data workbooks other than the two opened",
+          "files": 57,
+          "bytes": 213242030
+         }
+        ],
+        "bytes": 220140479,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 4 files; videos 2 files; drawing no text layer 2 groups 10 files; document over size limit 1 group 1 files; tables not opened 1 group 57 files. The files read do not say whether an unopened file holds this quantity."
+       }
+      ]
+     }
+    }
+   },
    "gaps": [],
    "statements": [
     {
@@ -2356,14 +4410,124 @@
     ]
    },
    "indicators": [],
+   "raw_state": {
+    "fuel_material": {
+     "counted": {
+      "tests": 122,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 122,
+        "sentence": "Recorded in the experimental table."
+       }
+      ],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "sentence": "Recorded in the experimental table."
+       }
+      ]
+     }
+    }
+   },
    "gaps": [
     {
      "code": "oxygen:no_usable_test_in_range",
-     "text": "Oxygen gap: none of the 122 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
+     "text": "Oxygen gap: none of the 122 tests counted for this need was recorded with oxygen inside the oxygen range of this environment.",
+     "raw_state": [
+      {
+       "variable": "o2_pct",
+       "tests": 122,
+       "states": [
+        {
+         "state": "in_table",
+         "column_is": [],
+         "investigation_id": "PSI-25",
+         "tests": 122,
+         "sentence": "Recorded in the experimental table."
+        }
+       ],
+       "unmatched_for_lack_of_this_variable": 0,
+       "population": "counted"
+      }
+     ]
     },
     {
      "code": "pressure:not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 122 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 122 tests counted for this need.",
+     "raw_state": [
+      {
+       "variable": "pressure_kpa",
+       "tests": 122,
+       "states": [
+        {
+         "state": "documented_only",
+         "column_is": [],
+         "investigation_id": "PSI-25",
+         "tests": 122,
+         "file_groups": [],
+         "bytes": 0,
+         "documented_by": [
+          "ICES19.pressure"
+         ],
+         "sentence": "Empty in the table. A sentence of a NASA record or a paper states it for the whole table; the sentence is not a value."
+        }
+       ],
+       "unmatched_for_lack_of_this_variable": 0,
+       "population": "counted"
+      }
+     ]
     }
    ],
    "statements": [
@@ -2724,10 +4888,530 @@
     "investigation_ids": []
    },
    "indicators": [],
+   "raw_state": {
+    "fuel_material": {
+     "counted": {
+      "tests": 0,
+      "states": [],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "sentence": "Recorded in the experimental table."
+       }
+      ]
+     }
+    },
+    "flow_cms": {
+     "counted": {
+      "tests": 0,
+      "states": [],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 119,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 109,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "calibration_example"
+        ],
+        "investigation_id": "PSI-25",
+        "tests": 10,
+        "file_groups": [
+         {
+          "group": "fan_calibration",
+          "name_pattern": "Fan calibration data.xlsx (Reference Data)",
+          "files": 1,
+          "bytes": 23973
+         }
+        ],
+        "bytes": 23973,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       },
+       {
+        "state": "column_in_sampled_raw_file",
+        "column_is": [
+         "setting_or_set_point"
+        ],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "file_groups": [
+         {
+          "group": "r2_srd",
+          "name_pattern": "SRD_BASS.pdf",
+          "files": 1,
+          "bytes": 884257
+         }
+        ],
+        "bytes": 884257,
+        "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+       }
+      ]
+     }
+    },
+    "aging_time_s": {
+     "counted": {
+      "tests": 0,
+      "states": [],
+      "unmatched_for_lack_of_this_variable": 0
+     },
+     "in_scope": {
+      "tests": 376,
+      "states": [
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 104,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "in_table",
+        "column_is": [],
+        "investigation_id": "PSI-102",
+        "tests": 4,
+        "sentence": "Recorded in the experimental table."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-25",
+        "tests": 129,
+        "file_groups": [
+         {
+          "group": "r2_summary_report",
+          "name_pattern": "BASS-II Summary Report.pdf",
+          "files": 1,
+          "bytes": 48972416
+         }
+        ],
+        "bytes": 48972416,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 265 files; videos 296 files; document over size limit 1 group 1 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-26",
+        "tests": 121,
+        "file_groups": [
+         {
+          "group": "r2_drawings",
+          "name_pattern": "Engineering Documents drawings (Drawing_*.pdf, SPICE-front-window.pdf, Short Nozzle*.pdf)",
+          "files": 19,
+          "bytes": 4260052
+         },
+         {
+          "group": "r2_60054",
+          "name_pattern": "60054MAFH000_C.pdf",
+          "files": 1,
+          "bytes": 562119
+         },
+         {
+          "group": "u_pptx",
+          "name_pattern": "BASS Overview.pptx, BASS ERD.pptx",
+          "files": 2,
+          "bytes": 4480224
+         },
+         {
+          "group": "u_docx_paper",
+          "name_pattern": "FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+          "files": 1,
+          "bytes": 8837026
+         },
+         {
+          "group": "u_slice_review",
+          "name_pattern": "SLICE_SysReqDesignReview.pdf",
+          "files": 1,
+          "bytes": 1429180
+         }
+        ],
+        "bytes": 19568601,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 60 files; videos 114 files; drawing no text layer 2 groups 20 files; documents not opened 3 groups 4 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-98",
+        "tests": 2,
+        "file_groups": [
+         {
+          "group": "r2_thermocouple_drawing",
+          "name_pattern": "SFSDP-VIS-0295 Saffire 1 and 3 Thermocouple Placement.pdf",
+          "files": 1,
+          "bytes": 1065733
+         },
+         {
+          "group": "r2_offgassing",
+          "name_pattern": "SAFFIRE Offgassing Testing Strategy.pdf",
+          "files": 1,
+          "bytes": 1696929
+         },
+         {
+          "group": "r2_frame_sizes",
+          "name_pattern": "SAFFIRE-I_ImageFrameSizes_ROI_Offsets_Grid_1280x920_v1.0.pdf",
+          "files": 1,
+          "bytes": 784299
+         }
+        ],
+        "bytes": 3546961,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 62 files; videos 0 files; drawing no text layer 1 group 1 files; download failed 2 groups 2 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-99",
+        "tests": 9,
+        "file_groups": [
+         {
+          "group": "u_telemetry",
+          "name_pattern": "Saffire-II Telemetry Data.xlsx (41 MB)",
+          "files": 1,
+          "bytes": 41472762
+         }
+        ],
+        "bytes": 41472762,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 187 files; videos 0 files; table over size limit 1 group 1 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-100",
+        "tests": 2,
+        "file_groups": [
+         {
+          "group": "r2_offgassing",
+          "name_pattern": "SAFFIRE Offgassing Testing Strategy.pdf",
+          "files": 1,
+          "bytes": 1696929
+         },
+         {
+          "group": "r2_presentations",
+          "name_pattern": "SAFFIRE_<n> I Con of Env Sys presentation.pdf",
+          "files": 3,
+          "bytes": 10246234
+         },
+         {
+          "group": "u_telemetry",
+          "name_pattern": "Saffire-III Telemetry Data.xlsx, Saffire-III 1 Hz Telemetry Data.xlsx",
+          "files": 2,
+          "bytes": 29968055
+         }
+        ],
+        "bytes": 41911218,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 68 files; videos 0 files; download failed 2 groups 4 files; tables not opened 1 group 2 files. The files read do not say whether an unopened file holds this quantity."
+       },
+       {
+        "state": "not_in_sampled_files",
+        "column_is": [],
+        "investigation_id": "PSI-101",
+        "tests": 5,
+        "file_groups": [
+         {
+          "group": "r2_drawings",
+          "name_pattern": "Engineering Documents assembly, tube and chamber drawings",
+          "files": 17,
+          "bytes": 5629729
+         },
+         {
+          "group": "u_run_workbooks",
+          "name_pattern": "Analyzed Data 2010_<DOY>_<h>_<material>_run<N>.xls (three of them were opened)",
+          "files": 66,
+          "bytes": 424455680
+         },
+         {
+          "group": "u_sample_descriptions",
+          "name_pattern": "Sample descriptions tables.docx (28.6 MB)",
+          "files": 1,
+          "bytes": 28571083
+         },
+         {
+          "group": "u_eird",
+          "name_pattern": "SAME EIRD Rev 2.00 PDF (5.4 MB)",
+          "files": 1,
+          "bytes": 5378409
+         },
+         {
+          "group": "u_image_slides",
+          "name_pattern": "Raw Data image slides (.pptx and .pdf)",
+          "files": 84,
+          "bytes": 271100761
+         }
+        ],
+        "bytes": 735135662,
+        "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 80 files; videos 8 files; drawing no text layer 1 group 17 files; tables not opened 1 group 66 files; document over size limit 2 groups 2 files; documents not opened 1 group 84 files. The files read do not say whether an unopened file holds this quantity."
+       }
+      ]
+     }
+    }
+   },
    "gaps": [
     {
      "code": "need:no_usable_test",
-     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need.",
+     "raw_state": [
+      {
+       "variable": "smoke_particle_size_um",
+       "tests": 376,
+       "states": [
+        {
+         "state": "column_in_sampled_raw_file",
+         "column_is": [
+          "unclear"
+         ],
+         "investigation_id": "PSI-102",
+         "tests": 4,
+         "file_groups": [
+          {
+           "group": "r2_final_science_report",
+           "name_pattern": "SAME_Final Science Report.pdf",
+           "files": 1,
+           "bytes": 3712845
+          }
+         ],
+         "bytes": 3712845,
+         "sentence": "A sampled file of this group has a column with this header. One file was opened; the files do not say whether the values are complete, calibrated, or for the same test as a row of the table."
+        },
+        {
+         "state": "column_in_sampled_raw_file",
+         "column_is": [
+          "value_per_test_in_a_results_file"
+         ],
+         "investigation_id": "PSI-101",
+         "tests": 109,
+         "file_groups": [
+          {
+           "group": "results",
+           "name_pattern": "SAME, SAME-R_Results.xlsx (Analyzed Data)",
+           "files": 1,
+           "bytes": 4061669
+          }
+         ],
+         "bytes": 4061669,
+         "sentence": "Every file of this group was read for this column (data/pipeline/raw_values.csv); the files do not say whether the values are calibrated, or for the same test as a row of the table. No value of it is used by the pipeline."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-25",
+         "tests": 129,
+         "file_groups": [
+          {
+           "group": "r2_summary_report",
+           "name_pattern": "BASS-II Summary Report.pdf",
+           "files": 1,
+           "bytes": 48972416
+          }
+         ],
+         "bytes": 48972416,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 265 files; videos 296 files; document over size limit 1 group 1 files. The files read do not say whether an unopened file holds this quantity."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-26",
+         "tests": 121,
+         "file_groups": [
+          {
+           "group": "r2_drawings",
+           "name_pattern": "Engineering Documents drawings (Drawing_*.pdf, SPICE-front-window.pdf, Short Nozzle*.pdf)",
+           "files": 19,
+           "bytes": 4260052
+          },
+          {
+           "group": "r2_60054",
+           "name_pattern": "60054MAFH000_C.pdf",
+           "files": 1,
+           "bytes": 562119
+          },
+          {
+           "group": "u_pptx",
+           "name_pattern": "BASS Overview.pptx, BASS ERD.pptx",
+           "files": 2,
+           "bytes": 4480224
+          },
+          {
+           "group": "u_docx_paper",
+           "name_pattern": "FlammabilityAspectsofFabric_USNationalCombustion.2013.docx",
+           "files": 1,
+           "bytes": 8837026
+          },
+          {
+           "group": "u_slice_review",
+           "name_pattern": "SLICE_SysReqDesignReview.pdf",
+           "files": 1,
+           "bytes": 1429180
+          }
+         ],
+         "bytes": 19568601,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 60 files; videos 114 files; drawing no text layer 2 groups 20 files; documents not opened 3 groups 4 files. The files read do not say whether an unopened file holds this quantity."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-98",
+         "tests": 2,
+         "file_groups": [
+          {
+           "group": "r2_thermocouple_drawing",
+           "name_pattern": "SFSDP-VIS-0295 Saffire 1 and 3 Thermocouple Placement.pdf",
+           "files": 1,
+           "bytes": 1065733
+          },
+          {
+           "group": "r2_offgassing",
+           "name_pattern": "SAFFIRE Offgassing Testing Strategy.pdf",
+           "files": 1,
+           "bytes": 1696929
+          },
+          {
+           "group": "r2_frame_sizes",
+           "name_pattern": "SAFFIRE-I_ImageFrameSizes_ROI_Offsets_Grid_1280x920_v1.0.pdf",
+           "files": 1,
+           "bytes": 784299
+          }
+         ],
+         "bytes": 3546961,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 62 files; videos 0 files; drawing no text layer 1 group 1 files; download failed 2 groups 2 files. The files read do not say whether an unopened file holds this quantity."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-99",
+         "tests": 9,
+         "file_groups": [
+          {
+           "group": "u_telemetry",
+           "name_pattern": "Saffire-II Telemetry Data.xlsx (41 MB)",
+           "files": 1,
+           "bytes": 41472762
+          }
+         ],
+         "bytes": 41472762,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 187 files; videos 0 files; table over size limit 1 group 1 files. The files read do not say whether an unopened file holds this quantity."
+        },
+        {
+         "state": "not_in_sampled_files",
+         "column_is": [],
+         "investigation_id": "PSI-100",
+         "tests": 2,
+         "file_groups": [
+          {
+           "group": "r2_offgassing",
+           "name_pattern": "SAFFIRE Offgassing Testing Strategy.pdf",
+           "files": 1,
+           "bytes": 1696929
+          },
+          {
+           "group": "r2_presentations",
+           "name_pattern": "SAFFIRE_<n> I Con of Env Sys presentation.pdf",
+           "files": 3,
+           "bytes": 10246234
+          },
+          {
+           "group": "u_telemetry",
+           "name_pattern": "Saffire-III Telemetry Data.xlsx, Saffire-III 1 Hz Telemetry Data.xlsx",
+           "files": 2,
+           "bytes": 29968055
+          }
+         ],
+         "bytes": 41911218,
+         "sentence": "Empty in the table, and no sampled file has a column for it. Not opened or not readable: archives 68 files; videos 0 files; download failed 2 groups 4 files; tables not opened 1 group 2 files. The files read do not say whether an unopened file holds this quantity."
+        }
+       ],
+       "population": "in_scope"
+      }
+     ]
     }
    ],
    "statements": [

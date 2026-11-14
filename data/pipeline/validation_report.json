@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 59,
+  "PASS": 67,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 59
+  "checks": 67
  },
  "checks": [
   {
@@ -1174,7 +1174,7 @@
     "packages": 26,
     "listed_in_index": 26,
     "extra_files": 0,
-    "need_block_fields_not_in_contract": 6
+    "need_block_fields_not_in_contract": 7
    },
    "failures": 0,
    "failing_examples": [],
@@ -1185,6 +1185,7 @@
      "matched_by_fuel_phase",
      "matched_ranges",
      "note",
+     "raw_state",
      "reading"
     ]
    }
@@ -1550,6 +1551,119 @@
     "sentences": 24,
     "numbers_in_sentences": 429,
     "sizes": 127
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "O1_gap_states",
+   "verifies": "gap_states.csv recounted from tests.csv: one row per investigation x need variable and state; n of N and the split of a mixed row as the README states it; the state of the other tests follows the fixed order (entry in raw_columns.json, then documented_elsewhere of sources.json, then not_in_sampled_files); file groups, files and bytes are those of the spec.",
+   "status": "PASS",
+   "numbers": {
+    "pairs": 696,
+    "rows": 722,
+    "rows_by_state": {
+     "in_table": 93,
+     "column_in_sampled_raw_file": 30,
+     "documented_only": 1,
+     "not_in_sampled_files": 250,
+     "no_test_table": 348
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "O2_need_gap_states",
+   "verifies": "need_gap_states.csv: for every scenario, need and required or outcome variable, the in-scope and counted tests equal capability_matrix.csv (tests, and usable_tests of the stated rows) and need_tests.csv; the states of the tests and the counted tests left unmatched because the variable is empty are recounted from tests.csv and scenario_tests.csv; the counted tests per need are the frozen numbers.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 426,
+    "unmatched_for_lack": 0,
+    "counted_per_need": {
+     "D1": 122,
+     "P1": 133,
+     "P3": 2,
+     "S1": 298
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "O3_retrieval_queue",
+   "verifies": "retrieval_queue.csv: one row per investigation, variable and file group for the variables in state column (one row per group with an entry) or not_in_sampled_files (one row per unopened group of the spec), only where a test of an investigation linked as supported to a need that uses the variable lacks the value; the numbers are recounted; retrievable_by_reading is yes only for a sensor series or a value per test in a results file; the rows are sorted by the stated rule and ranked 1..n.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 135,
+    "retrievable_by_reading": 14
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "O4_raw_values",
+   "verifies": "raw_values.csv: every row names a PSI file id of the listing of its investigation with the listed name and bytes; a test_id is given only with literal link evidence and exists in tests.csv for the same investigation; a series row has n_readings >= 1 and min <= first, last <= max as stored numbers.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 9764,
+    "by_extraction": {
+     "saffire_ambient_pressure": 13,
+     "same_particle_size_statistics": 9751
+    },
+    "files": 15,
+    "rows_with_test_id": 6549,
+    "tests_named": 121
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "O5_raw_columns_spec",
+   "verifies": "spec/raw_columns.json: every group with a name_regex has the files and bytes that the regex gives on the saved listing (less exclude_ids); every sample and entry file id is in the listing with the listed name and bytes; every entry carries the name pattern, files and bytes of its group, a standard variable of a need, a column_is and header_kind of _meta, has_values true, and a link_to_table_row.",
+   "status": "PASS",
+   "numbers": {
+    "groups_recounted": 211,
+    "entries": 60,
+    "entries_round_2": 19
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "O6_frozen_files",
+   "verifies": "tests.csv, need_tests.csv, scenario_needs.csv and scenario_tests.csv have the sha256 of the snapshot of 2026-11-14 17:30 KST that the README names.",
+   "status": "PASS",
+   "numbers": {
+    "files": 4
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "O7_raw_values_effect",
+   "verifies": "raw_values_effect.json: the Saffire lowest and highest readings times the psi factor of spec/findings.json, their pressure bins and scenario ranges, and the SAME-R counts per size statistic are recounted from raw_values.csv, tests.csv and the specs; the file states that nothing is adopted.",
+   "status": "PASS",
+   "numbers": {
+    "saffire_tests": 13,
+    "same_bin": 13,
+    "same_r": {
+     "count_or_arithmetic_mean_diameter_m1_m0": 105,
+     "diameter_of_average_mass": 105,
+     "hatch_choate_dg": 99
+    },
+    "d2_counted": 0
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "O8_evidence_raw_state",
+   "verifies": "Every need block of every evidence package has raw_state for each required variable: the counted and in-scope test numbers equal need_tests.csv and the need's scope, and the tests per state (summed over investigations) equal this check's recount; every gap entry has raw_state for its variable.",
+   "status": "PASS",
+   "numbers": {
+    "need_blocks": 156,
+    "gaps": 199
    },
    "failures": 0,
    "failing_examples": []

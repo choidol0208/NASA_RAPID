@@ -1,0 +1,576 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "written_by": "pipeline/raw_gaps.py",
+  "rule": "Nothing here changes a pipeline output. Saffire: the lowest and the highest stored reading of column 'Ambient Pressure' of each linked workbook (data/pipeline/raw_values.csv) are converted with the factor below and placed in the pressure bins of spec/coverage.json and the pressure ranges of spec/scenarios.json. SAME-R: the stored values of raw_values.csv that are tied to a test are counted per size statistic; a stored 0 and an error string are not counted as a value.",
+  "not_adopted": "Not adopted: a decision of the team's human lead."
+ },
+ "saffire_pressure": {
+  "factor_kpa_per_psi": 6.894757,
+  "factor_source": "spec/findings.json _meta.units.psi_to_kpa (1 psi = 6.894757 kPa); the rules for the experimental tables (spec/sources.json) hold no psia factor",
+  "arithmetic": "The conversion of the lowest and the highest reading (reading x factor, rounded to 4 decimals) is the only arithmetic. No mean, no value at ignition and no interpolation is computed.",
+  "bins": [
+   "p_lt62_8",
+   "p_62_8_85_8",
+   "p_85_8_116_8",
+   "p_ge116_8"
+  ],
+  "tests": [
+   {
+    "test_id": "SAFFIRE-1-S1",
+    "investigation_id": "PSI-98",
+    "psi_file_id": "683f4a53746db1c87dcebeb9",
+    "n_readings": 20000,
+    "min_as_stored_psia": "14.824543559509779",
+    "max_as_stored_psia": "14.903531397860322",
+    "min_kpa": 102.2116,
+    "max_kpa": 102.7562,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-1-S2",
+    "investigation_id": "PSI-98",
+    "psi_file_id": "683f4a53746db1c87dcebebc",
+    "n_readings": 20000,
+    "min_as_stored_psia": "14.850561650148373",
+    "max_as_stored_psia": "14.903531397860322",
+    "min_kpa": 102.391,
+    "max_kpa": 102.7562,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-2-2-1",
+    "investigation_id": "PSI-99",
+    "psi_file_id": "6840cdca4a0e24d624cebcfd",
+    "n_readings": 13182,
+    "min_as_stored_psia": "14.845323979344801",
+    "max_as_stored_psia": "14.885181613925599",
+    "min_kpa": 102.3549,
+    "max_kpa": 102.6297,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-2-2-2",
+    "investigation_id": "PSI-99",
+    "psi_file_id": "6840cdcb4a0e24d624cebd00",
+    "n_readings": 16818,
+    "min_as_stored_psia": "14.842529084236997",
+    "max_as_stored_psia": "14.889839772438599",
+    "min_kpa": 102.3356,
+    "max_kpa": 102.6618,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-2-2-3",
+    "investigation_id": "PSI-99",
+    "psi_file_id": "6840cdcb4a0e24d624cebd02",
+    "n_readings": 16818,
+    "min_as_stored_psia": "14.849050506155198",
+    "max_as_stored_psia": "14.90186997312",
+    "min_kpa": 102.3806,
+    "max_kpa": 102.7448,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-2-2-4",
+    "investigation_id": "PSI-99",
+    "psi_file_id": "6840cdcb4a0e24d624cebd05",
+    "n_readings": 16818,
+    "min_as_stored_psia": "14.854599790644599",
+    "max_as_stored_psia": "14.900006709714798",
+    "min_kpa": 102.4189,
+    "max_kpa": 102.7319,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-2-2-5",
+    "investigation_id": "PSI-99",
+    "psi_file_id": "6840cdcb4a0e24d624cebd07",
+    "n_readings": 11363,
+    "min_as_stored_psia": "14.858285811728798",
+    "max_as_stored_psia": "14.90186997312",
+    "min_kpa": 102.4443,
+    "max_kpa": 102.7448,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-2-2-6",
+    "investigation_id": "PSI-99",
+    "psi_file_id": "6840cdcc4a0e24d624cebd09",
+    "n_readings": 11363,
+    "min_as_stored_psia": "14.862012338539198",
+    "max_as_stored_psia": "14.903733236525198",
+    "min_kpa": 102.47,
+    "max_kpa": 102.7576,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-2-2-7",
+    "investigation_id": "PSI-99",
+    "psi_file_id": "6840cdcc4a0e24d624cebd0b",
+    "n_readings": 20454,
+    "min_as_stored_psia": "14.862943970241798",
+    "max_as_stored_psia": "14.9055964999304",
+    "min_kpa": 102.4764,
+    "max_kpa": 102.7705,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-2-2-8",
+    "investigation_id": "PSI-99",
+    "psi_file_id": "6840cdcc4a0e24d624cebd0d",
+    "n_readings": 21818,
+    "min_as_stored_psia": "14.864807233646999",
+    "max_as_stored_psia": "14.924107616803798",
+    "min_kpa": 102.4892,
+    "max_kpa": 102.8981,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-2-2-9",
+    "investigation_id": "PSI-99",
+    "psi_file_id": "6840cdcc4a0e24d624cebd0f",
+    "n_readings": 30909,
+    "min_as_stored_psia": "14.879632329436198",
+    "max_as_stored_psia": "14.935246691508798",
+    "min_kpa": 102.5914,
+    "max_kpa": 102.9749,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-3-S1",
+    "investigation_id": "PSI-100",
+    "psi_file_id": "6841ac3f8970fb41b9cebb7b",
+    "n_readings": 20909,
+    "min_as_stored_psia": "14.40268866601604",
+    "max_as_stored_psia": "14.49743291702336",
+    "min_kpa": 99.303,
+    "max_kpa": 99.9563,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   },
+   {
+    "test_id": "SAFFIRE-3-S2",
+    "investigation_id": "PSI-100",
+    "psi_file_id": "6841ac3f8970fb41b9cebb7d",
+    "n_readings": 4848,
+    "min_as_stored_psia": "14.395219539115722",
+    "max_as_stored_psia": "14.439831335112739",
+    "min_kpa": 99.2515,
+    "max_kpa": 99.5591,
+    "pressure_kpa_in_tests_csv": null,
+    "bin_of_min": "p_85_8_116_8",
+    "bin_of_max": "p_85_8_116_8",
+    "same_bin": true,
+    "scenario_pressure_ranges": {
+     "iss": {
+      "min_in_range": true,
+      "max_in_range": true
+     },
+     "lunar_habitat": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "spacesuit": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_8_2_34": {
+      "min_in_range": false,
+      "max_in_range": false
+     },
+     "exploration_10_2_26_5": {
+      "min_in_range": false,
+      "max_in_range": false
+     }
+    },
+    "sentence": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test."
+   }
+  ],
+  "tests_with_both_in_one_bin": 13,
+  "sentence_choice": "Which reading would stand for a test (the first, the lowest, the one at ignition) is a choice that no file makes; no column of the workbooks marks ignition."
+ },
+ "same_r_particle_size": {
+  "need": "D2",
+  "required_conditions": [
+   "fuel_material",
+   "flow_cms",
+   "aging_time_s"
+  ],
+  "outcomes_any": [
+   "smoke_particle_size_um"
+  ],
+  "scope": {
+   "fuel_phase": [
+    "solid"
+   ]
+  },
+  "linked_investigations_supported": [
+   "PSI-101",
+   "PSI-102"
+  ],
+  "d2_counted_tests_now": 0,
+  "d2_tests_in_scope_of_linked_investigations": 113,
+  "d2_tests_of_linked_investigations_meeting_every_required_condition": 108,
+  "statistics": [
+   {
+    "statistic": "count_or_arithmetic_mean_diameter_m1_m0",
+    "headers_as_written": [
+     "M1/M0 (micro-m)--AMD",
+     "M1/M0 (micro-m)--CMD",
+     "AMD",
+     "CMD",
+     "CMD, M1/M0, micro-m"
+    ],
+    "units_as_written": [
+     "micro-m",
+     "not written"
+    ],
+    "d2_tests_in_scope_of_linked_investigations": 113,
+    "tests_with_a_stored_nonzero_value": 105,
+    "of_which_meet_every_required_condition": 101,
+    "tests_whose_files_hold_different_values": 15
+   },
+   {
+    "statistic": "diameter_of_average_mass",
+    "headers_as_written": [
+     "Diameter of Average mass (micro-m)",
+     "Dia. of Average Mass, micro-m"
+    ],
+    "units_as_written": [
+     "micro-m"
+    ],
+    "d2_tests_in_scope_of_linked_investigations": 113,
+    "tests_with_a_stored_nonzero_value": 105,
+    "of_which_meet_every_required_condition": 101,
+    "tests_whose_files_hold_different_values": 15
+   },
+   {
+    "statistic": "hatch_choate_dg",
+    "headers_as_written": [
+     "Hatch Choate Dg"
+    ],
+    "units_as_written": [
+     "not written"
+    ],
+    "d2_tests_in_scope_of_linked_investigations": 113,
+    "tests_with_a_stored_nonzero_value": 99,
+    "of_which_meet_every_required_condition": 95,
+    "tests_whose_files_hold_different_values": 15
+   }
+  ],
+  "would_the_count_change": "The count of D2 does not change: no value is adopted, so tests.csv holds no smoke_particle_size_um and D2 keeps no counted test. If one statistic were adopted as smoke_particle_size_um, a D2 test would be counted only where it also meets every required condition (fuel_material, flow_cms, aging_time_s) under a supported link; 'statistics' gives that number per statistic. Headers without a unit (AMD, CMD, Hatch Choate Dg) would also need a unit stated by a document, and the investigators name more than one statistic, so choosing one is part of the decision."
+ },
+ "not_adopted": "Not adopted: a decision of the team's human lead."
+}
