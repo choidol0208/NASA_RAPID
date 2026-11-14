@@ -17,6 +17,10 @@
 | 11/14 오후 | Claude Code | 화재 안전 값 계산, 환경 조건 맞추기, 근거 묶음 생성 코드 작성. 계산은 규칙 기반이며 언어 모델은 수치에 관여하지 않음 | `scripts/fire_safety.py`, `data/derived/fire_safety_metrics.json`, `data/derived/evidence_*.json` | 미검토. 지표 정의는 연소 전공 팀원 확인 필요 |
 | 11/14 오후 | Claude Code | 사용자 지적에 따라 결론을 내는 코드(`scripts/fire_safety.py`, `scripts/build_test_tables.py`와 그 산출물)를 삭제하고, 명세 기반 파이프라인으로 교체. 화재 안전 정보 필요 7개, 표준 변수, 표 22개의 열 매핑을 명세 파일로 작성하고 이를 읽어 실행하는 엔진 작성. 수치는 NASA 원본 칸의 복사 또는 명세의 계산식 결과이며 언어 모델은 수치에 관여하지 않음 | `pipeline/spec/*.json`, `pipeline/run.py`, `pipeline/rules.py`, `pipeline/README.md`, `data/pipeline/*` | 미검토. 필요 정보의 정의·필수 변수·적용 범위는 연소 전공 팀원 확인 필요 |
 | 11/14 오후 | Claude Code (웹 검색 도구 Exa 사용) | 필요 정보 7개의 근거가 되는 공식 기준·요구사항·문헌 21건을 검색해 읽고, 항목(기준 문장, 수치, 문서 내 위치, 확인 방식)을 명세로 정리. 필요 정보마다 근거 항목을 연결 | `pipeline/spec/references.json`, `pipeline/spec/needs.json`의 `references`, `data/pipeline/need_references.csv` | 미검토. 수치와 조항 번호는 원문 대조 필요. 초록만 확인한 문서 5건, 인용으로만 확인한 문서 1건은 명세에 표시함 |
+| 11/14 10:30– | Claude (Opus, claude.ai 세션) | 카탈로그 2단 구조(조사표·구성표) 설계, PSI 기록·시험 표에서 값 추출, 분류 열 작성 | `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `data/catalog/*` | 미검토. 모든 행 ai_extracted |
+| 11/14 10:30– | Claude (Opus, claude.ai 세션) | 순위 점수 규칙(가중치 프로파일·유사도 식) 설정 파일과 계산 코드, 러프 입력 해석, 단위 시험 | `scoring/scoring_config.json`, `scoring/scorer.py`, `scoring/test_scorer.py`, `scoring/README.md` | 미검토. 가중치는 팀 검토 필요 |
+| 11/14 10:30– | Claude (Opus, claude.ai 세션) | 검증 시나리오 22개와 실행기, 안정성 검사 | `validation/scenarios.json`, `validation/run_validation.py`, `validation/report.md` | 미검토. 기대 답은 전문가 검토 필요 |
+| 11/14 10:30– | Claude (Opus, claude.ai 세션) | 카탈로그 필터 설명 슬라이드 1장(영어)과 생성 스크립트 | `presentation/catalog_filter_slide.pptx`, `presentation/build_catalog_filter_slide.js` | 미검토 |
 
 ## 제품 안에서 동작하는 AI
 

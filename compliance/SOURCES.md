@@ -30,6 +30,12 @@
 | 11/14 오후 | 문서 | Evaluation of Spacecraft Smoke Detector Performance in the Low-Gravity Environment (Meyer, Urban, Mulholland, Bryg, Yuan, Ruff, Cleary, Yang) (2018) | https://pmc.ncbi.nlm.nih.gov/articles/PMC7918997/ | 저작권은 발행처·저자 (서지 인용만 함) | Fire Safety Journal | `pipeline/spec/references.json` 항목 `FSJ-2018-SAME`: 필요 정보의 기준·정의 근거. 본문 확인 |
 | 11/14 오후 | 문서 | Droplet Flame Extinguishment in Microgravity (FLEX), science requirements document (v4) | https://www1.grc.nasa.gov/wp-content/uploads/FLEX_EIRD_v4.pdf | 미국 정부 저작물, 공개 열람 | NASA GRC | `pipeline/spec/references.json` 항목 `FLEX-EIRD`: 필요 정보의 기준·정의 근거. 본문 확인 |
 | 11/14 오후 | 문서 | Droplet Combustion Experiments Aboard the International Space Station (Dietrich, Nayagam, Hicks, Ferkul, Dryer, et al.) (2014) | https://link.springer.com/article/10.1007/s12217-014-9372-2 | 저작권은 발행처·저자 (서지 인용만 함) | Microgravity Science and Technology | `pipeline/spec/references.json` 항목 `MST-2014-FLEX`: 필요 정보의 기준·정의 근거. 초록·목록 페이지만 확인 |
+| 11/14 11:40 | 데이터 | PSI 연소 조사 24건의 기록(JSON)과 시험 표 22개 → 실험 카탈로그 | https://psi.nasa.gov/ | 실험별 CC0-1.0 (PSI-10은 기록에 라이선스 없음) | NASA Biological and Physical Sciences | `data/catalog/`, `scoring/` (카탈로그 필터) |
+| 11/14 11:40 | 문서 | 챌린지 Details: 달 기지·로버 산소 30% 이상·10.2 psi 이하, 우주복 4.3 psi·100% 산소, 부분중력 데이터 없음, 로켓·추진제 범위 밖 | https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/ | 공개 웹페이지 | NASA Space Apps | `scoring/scoring_config.json` 프리셋·경고 |
+| 11/14 11:40 | 라이브러리 | openpyxl | https://foss.heptapod.net/openpyxl/openpyxl | MIT | openpyxl 프로젝트 | `scripts/export_catalog_xlsx.py` (catalog.xlsx) |
+| 11/14 11:40 | 라이브러리 | PptxGenJS | https://github.com/gitbrent/PptxGenJS | MIT | gitbrent | `presentation/build_catalog_filter_slide.js` |
+| 11/14 11:40 | 아이콘 | Tabler Icons (react-icons 경유: TbFlame, TbAdjustmentsHorizontal, TbCircleCheck) | https://github.com/tabler/tabler-icons | MIT | Tabler | `presentation/catalog_filter_slide.pptx` |
+| 11/14 11:40 | 라이브러리 | react-icons, React, sharp (슬라이드 아이콘 래스터화) | https://github.com/react-icons/react-icons | MIT (react-icons, React), Apache-2.0 (sharp) | 각 프로젝트 | 슬라이드 생성 스크립트 (산출물에 코드 포함 안 됨) |
 
 실험별 DOI는 `data/psi/manifest.json`에 있다. PSI는 데이터를 쓸 때 실험의 DOI로 인용하라고 요구한다.
 
