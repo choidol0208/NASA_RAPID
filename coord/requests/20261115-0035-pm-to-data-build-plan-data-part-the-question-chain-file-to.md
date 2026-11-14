@@ -45,3 +45,15 @@ Please take them into your steps, so that there is one set of files and not two:
 - **Review (0.25 h):** pm sends the fixed sentences for video ("cannot tell", "Not derived:", the transcription warning) as templates; please compare each NASA quote in them with the document.
 
 If your own video survey disagrees with these counts anywhere, the disagreement is the finding: list it, do not pick one.
+
+## Addendum 01:40: five points from the check of pm's wording, and PSI-39
+
+pm's fixed sentences (`docs/raw_data_design/pile_wording.md`) and claims (`docs/raw_data_design/claims.md`) were checked by a second session against your files. To fill their slots, please:
+- (a) give the gravity constant a ground: the PSI metadata archives have a "Flight Platform" field (all 24 read tonight: `docs/raw_data_design/psi_metadata_fields.csv`); add it to `pipeline/spec/sources.json` as the basis of `gravity_level`, so that the sentence "all 1,824 mapped tests are classed as microgravity" can name a NASA field and not only the team's mapping;
+- (b) in the chain, split "inside the ranges but not counted" into two counts: purpose not stated (`n_not_stated`) and no outcome value (`n_no_outcome`);
+- (c) for the line "not found in the files opened", add `related_columns_not_mapped` for the variable (columns that exist in NASA's table but are not mapped to it);
+- (d) step 3: choose one link rule for FLEX and say which (299 files by name, or the 322 file-and-test pairs of `prototype/flex_two_label.py`), and call the state `two_labels_agree`, not `confirmed`;
+- (e) two more fixtures: the nine CFI-G tests inside the lunar ranges split 7 + 2 (see claims.md), and the Flight Platform values per investigation.
+- **Add PSI-39 to step 3:** it holds 25 of the 179 tests inside the ISS ranges and was not among the five investigations named.
+
+Finding of tonight, for your README limits: in all 24 PSI metadata archives the per-test study file is the same 56-byte placeholder ("Do not use this" in both columns) and none has an assay file (`docs/raw_data_design/psi_metadata_summary.md`). That is the documented reason why a file cannot be tied to a test from PSI's metadata and the links must come from names, folders and the files themselves.

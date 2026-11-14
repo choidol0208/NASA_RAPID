@@ -1,6 +1,15 @@
 # Finding the raw data a question needs, without processing the archive
 
-*AI-generated (Claude Code) on 2026-11-15 for the pm role, from five research sheets, three candidate designs and three reviews of this workflow. Not reviewed by a person. The repository was read only (state `3c2f5c2`). This final step made no request to PSI (0 bytes); it recounted the key figures with its own code from the repository and from the listings the earlier steps saved.*
+*AI-generated (Claude Code) on 2026-11-15 for the pm role, from five research sheets, three candidate designs and three reviews of this workflow. Checked by AI sessions (a recount of its key figures with separate code, and a later check of the step 9 and step 10 files against it, which found the points corrected below); read by a person: none yet. The repository was read only (state `3c2f5c2`). This final step made no request to PSI (0 bytes); it recounted the key figures with its own code from the repository and from the listings the earlier steps saved.*
+
+**Corrections of 15 November, about 01:40 KST** (pm role's AI session, after an AI session checked the step 9 and step 10 files against this design; the version of 00:35 is commit `2d503de`):
+
+- Section 9, experimental tables: the share was written as 0.0016%. It is 0.0000016% of the bytes (211,116 of 13,471,850,126,356), about 1 part in 64 million.
+- Section 9: added the share of the files that name the 26 tests (0.7746%), the pressures of those tests, and a row for video and the other kinds of file, so that every number of the slide is in the table.
+- Sections 3.2 and 7 (P1): the sentence "This gap is a missing test, not unprocessed data" is replaced. Pile 3 says only "no record in PSI (listing of 14 November 2026)"; no sentence is built on a test being missing.
+- Section 7 (S1, pile 1): the nine CFI-G tests are not counted for two reasons, not one (7 by the purpose of the record, 2 because NASA's table holds no outcome for them).
+- Section 7 (S1, flow speed): a nozzle-speed header was seen in one opened file and not mapped, so the line no longer says that nothing opened holds it.
+- The fixed wording of the page is `pile_wording.md`. Where section 7 still differs from it, `pile_wording.md` holds; its section 12 lists the differences. The pitch sentence that may be used is in `claims.md` section 2.
 
 Working folder: the design job's scratch folder on the pm session's computer (not in the repository). The files a role needs to start from are copied to `docs/raw_data_design/prototype/`: `chain_lunar_habitat.csv` and `chain_proto.py` (the question chain for the lunar habitat), `lunar_summary.json`, `lunar_links*.py` and their JSON results (files tied to the 26 tests inside the lunar ranges), `flex_two_label.py` and `.json` (the two-label check for FLEX). Paths below that start with `rawdesign/` refer to that scratch folder; ask pm for any other file named there.
 
@@ -78,7 +87,7 @@ Per scenario and question:
   3. a NASA sentence about a whole investigation (BASS-II: "Pressure was not varied from 1 atmosphere.").
   Anything else belongs in pile 2.
 
-One fixed sentence separates the two kinds of gap wherever ground 2 applies: "This gap is a missing test, not unprocessed data: every counted test of this question has its oxygen in NASA's table, and reading raw files cannot move one in."
+One fixed sentence separates the two kinds of gap wherever ground 2 applies: "This gap is not unprocessed data: PSI's tables hold no counted test of this question inside these ranges (listing of 14 November 2026)." It is followed by the count, the recorded range and the source, and by "Placement uses the table value, so reading raw files does not move one of them in" (`pile_wording.md` section 5.2).
 
 ### 3.3 The order of pile 2
 
@@ -186,7 +195,7 @@ Expected texts. Numbers in angle brackets come from the build.
 **One bar per question.** Extinction conditions (S1), 1,824 tests of all fuel phases: inside 26 | cannot be placed from the tables 676 | oxygen recorded for the oxidizer stream 63 | outside by a recorded value 1,059. Each of the five solid-fuel questions (P1, P2, P3, D1, D2), 376 tests: inside 0 | cannot be placed 237 | outside by a recorded oxygen value 139.
 
 **S1, pile 1, "In NASA's tables".**
-"17 tests counted for this question: FLEX (PSI-69) fuel-droplet tests, liquid heptane or methanol, microgravity, oxygen 30% or 34%, 71.2 to 72.4 kPa (1 to 2 kPa above 10.2 psi). Recorded for them: how the burn ended 17 of 17 (15 disruption, 2 completion); burn time 16; flow speed 0. Extinction diameter as the table writes it: a number above zero for 4, `0` for 2, blank for 8, a dash for 3. 9 more tests inside the ranges are CFI-G gas flames (PSI-159, 50.7 kPa, 33 to 36% oxygen); their investigation does not state this purpose, so they are not counted."
+"17 tests counted for this question: FLEX (PSI-69) fuel-droplet tests, liquid heptane or methanol, microgravity, oxygen 30% or 34%, 71.2 to 72.4 kPa (1 to 2 kPa above 10.2 psi). Recorded for them: how the burn ended 17 of 17 (15 disruption, 2 completion); burn time 16; flow speed 0. Extinction diameter as the table writes it: a number above zero for 4, `0` for 2, blank for 8, a dash for 3. 9 more tests inside the ranges are CFI-G gas flames (PSI-159, 50.7 kPa, 33 to 36% oxygen). None of them is counted: for 7 the PSI record of that investigation does not state this purpose, as the team read it; 2 hold no outcome of this question in NASA's table."
 
 **S1, pile 2, "In the archive, not in a table"**, with the label "Order: the team's rule, not a NASA priority. It says where to read first, not that the value is there."
 
@@ -204,7 +213,7 @@ Expected texts. Numbers in angle brackets come from the build.
   | dash | `nan` | FLEX-42 |
 
   "Read from NASA's raw files by the team's code. Not a table value, not counted. No file opened so far says what `nan`, `0.00`, a blank or a dash mean, or whether the sheet's line is the visible-flame extinction diameter of the table."
-- "Flow speed: missing for all 17; nothing opened holds it. Smallest unopened document: `FLEX_Test_Plan.pdf`, 1 file, 185,799 bytes."
+- "Flow speed: missing for all 17; no header in the files opened so far was accepted for it (nozzle-speed headers with the unit written as N/A were seen in one opened file and not mapped). Smallest unopened document: `FLEX_Test_Plan.pdf`, 1 file, 185,799 bytes."
 - "One-page summary PDFs: 11 files for 10 of the 11 tests without a number in the table (FLEX-22 has two, FLEX-24 has none), 2.45 MB. A header `Dext =` was seen in one opened file of this group. Not read."
 - "One step deeper: directories of the 47 image archives of these tests, about 6 MB and 2 minutes (from three read: 886 tif, 852 tif and 122 bmp frames for FLEX-19, 370,662 bytes). It adds frame counts. It adds no value and no test. Reading the frames themselves: 24.92 GB; no reader exists; not planned."
 - Lower shelf, "Not found in the files opened": "676 tests cannot be placed: 435 SPICE (PSI-107), 121 BASS (PSI-26), 109 SAME-R (PSI-101) and 11 others. For the 121 BASS tests a workbook has an oxygen and a pressure column under a cabin label (1 file, 111,886 bytes); whether that is the test's value is not stated."
@@ -212,7 +221,7 @@ Expected texts. Numbers in angle brackets come from the build.
 **S1, pile 3, "No record in PSI (listing of 14 November 2026)".**
 "Lunar gravity: 0 of 1,824 tests. Ground: every per-test table records microgravity; the challenge statement says PSI holds no partial-gravity combustion data yet."
 
-**P1 (flammability limit).** Pile 1: "0 tests inside." Pile 3: "This gap is a missing test, not unprocessed data. All 133 counted tests (125 BASS-II, 8 Saffire-II) have their oxygen in NASA's table, between 13.6% and 22.2%, below this environment's 30%. Reading raw files cannot move one in. Lunar gravity: 0 tests." Pile 2: "237 solid-fuel tests cannot be placed: the tables hold neither their oxygen nor their pressure. 121 BASS tests: columns under a cabin label in one workbook (111,886 bytes), not adopted; none of them has an outcome in the table. 3 Saffire tests: oxygen and pressure series in sensor workbooks, no reading marked as the test's. 113 SAME and SAME-R tests: not found in the files opened."
+**P1 (flammability limit).** Pile 1: "0 tests inside." Pile 3: "This gap is not unprocessed data: PSI's tables hold no counted test of this question inside these ranges (listing of 14 November 2026). All 133 counted tests (125 BASS-II, 8 Saffire-II) have their oxygen in NASA's table, between 13.6% and 22.2%, below this environment's 30%. Placement uses the table value, so reading raw files does not move one of them in. Lunar gravity: 0 tests." Pile 2: "237 solid-fuel tests cannot be placed: the tables hold neither their oxygen nor their pressure. 121 BASS tests: columns under a cabin label in one workbook (111,886 bytes), not adopted; none of them has an outcome in the table. 3 Saffire tests: oxygen and pressure series in sensor workbooks, no reading marked as the test's. 113 SAME and SAME-R tests: not found in the files opened."
 
 **P3, D1.** The same placement and the same two-kinds-of-gap sentence (P3: 2 counted tests at 21.5 to 21.7% oxygen; D1: 122 at 13.6 to 22.2%).
 
@@ -264,10 +273,11 @@ Expected texts. Numbers in angle brackets come from the build.
 | Archive | 60,866 files, 13,471,850,126,356 bytes, 24 investigations; listing fetched 2026-11-14T05:57:17Z | `data/pipeline/raw_inventory.json` `_meta` |
 | Archives (.zip) | 12,689 files, 12,999,389,379,194 bytes (96.49%) | same |
 | Archives whose name does not state the content | 10,501 files, 11,831,316,797,688 bytes (87.82%) | sheet "archive-and-raw-layer" (`analyze.py`) |
-| Experimental tables | 22 files, 211,116 bytes (0.0016%) | `raw_inventory.json` |
+| Video and the other kinds of file | video 2,623 files, 426,053,691,302 bytes (3.16%); all other kinds 45,554 files, 46,407,055,860 bytes (0.34%) | `raw_inventory.json` `_meta.totals.by_kind` (row added 15 November) |
+| Experimental tables | 22 files, 211,116 bytes (0.0000016% of the bytes, about 1 part in 64 million; corrected 15 November from 0.0016%); the team's 1,824 tests come from 14 of the 22 | `raw_inventory.json`; `tests.csv` (`source_file`) |
 | Missing (test, variable) cells by state | 41,024 cells: not found 94.13%, raw column 5.56%, document only 0.31% | `data/pipeline/gap_states.csv` |
-| Tests inside the lunar ranges | 26 (17 PSI-69 liquid, 9 PSI-159 gas); S1 counts 17 | `scenario_tests.csv`, `need_tests.csv` (this step) |
-| Files naming those 26 tests | 398 files, 104,358,456,350 bytes; 316 small (86,853,632 bytes); 82 archives and recordings (104,271,602,718 bytes) | `final/lunar_links_PSI-69.json`, `final/lunar_links_PSI-159.json` |
+| Tests inside the lunar ranges | 26 (17 PSI-69 liquid, recorded at 71.2341 to 72.3674 kPa; 9 PSI-159 gas, recorded at 50.665 kPa); S1 counts 17 | `scenario_tests.csv`, `need_tests.csv`, `tests.csv` (this step; pressures added 15 November) |
+| Files naming those 26 tests | 398 files, 104,358,456,350 bytes (0.7746% of the archive's bytes); 316 small (86,853,632 bytes); 82 archives and recordings (104,271,602,718 bytes) | `final/lunar_links_PSI-69.json`, `final/lunar_links_PSI-159.json` |
 | Second label for those links | 336 folder agrees; 47 folder names no test; 15 folder names another test | same |
 | FLEX test sheets | 272 files, 250,375 bytes; the 17 lunar sheets 15,369 bytes (11,871 read) | `final/flex_two_label.json`, `tiers/testsheets_read.json` |
 | Sheet against table, 17 lunar tests | identifier 17 of 17; pressure 16 of 17; oxygen 16 of 17; extinction diameter cross-table of section 7 | `tiers/testsheets_vs_table.json` (re-tabulated in this step) |
