@@ -28,6 +28,8 @@
 | 11/14 11:15 | Claude Code (data 역할) | 정정: 위에서 data 역할이 '11/14 오후'로 적은 줄들은 실제로는 11/14 오전(11:05 KST 이전)에 한 작업이다. 시계를 확인하지 않고 적었다 | `compliance/AI_USAGE_LOG.md`, `compliance/SOURCES.md`의 해당 줄 | — |
 | 11/14 11:20 | Claude Code (data 역할) | 환경 시나리오(ISS 선실, 달 기지)를 산소·압력·유동·중력 범위로 명세하고, 시험별 일치 여부와 필요 정보별 일치 시험 수를 세는 단계를 파이프라인에 추가. 예측이나 추정 없이 기록된 값의 범위 비교만 함 | `pipeline/spec/scenarios.json`, `pipeline/run.py`의 `match_scenarios`, `data/pipeline/scenario_needs.csv`, `data/pipeline/scenario_tests.csv`, `coord/requests/20261114-1116-data-to-all-…md` | 미검토. 범위 경계는 팀의 선택 |
 | 11/14 11:35 | Claude Code (data 역할) | 필요 정보별 지표를 명세로 정의(변수·조건·묶음만 지정, 계산은 고정 틀 3개)하고 계산 단계 추가. 재료 이름 통일 규칙 추가. 연기 발생(D2)의 필수 변수에 숙성 시간 추가. 지표 값은 기록된 값의 개수·최솟값·중앙값·최댓값이며 추정 없음 | `pipeline/spec/indicators.json`, `pipeline/spec/materials.json`, `pipeline/spec/needs.json`, `pipeline/spec/variables.json`, `pipeline/run.py`, `data/pipeline/indicators.csv`, `data/pipeline/indicator_tests.csv`, `data/pipeline/tests.csv`의 `material_id` 열 | 미검토. 지표 정의와 재료 묶음은 연소 전공 팀원 확인 필요 |
+| 11/14 11:20– | Claude Code (조사·평가는 Opus, 종합·반박 검토는 Fable 에이전트) | AI 계층에 쓸 기법 조사(논문·웹)와 설계, 프로젝트 차별성 아이디어 탐색. 팀 동기화와 통합 | `coord/`, `contracts/README.md`. 조사·설계 결과는 아직 제출물에 들어가지 않음 | 미검토. 방향 선택은 사용자가 함 |
+| 11/14 11:40– | Claude Code | 로컬 모델(gpt-oss:20b)로 근거 인용 방식 시험. 제품 문구는 아직 생성하지 않음 | 저장소 밖 시험 스크립트 | 미검토 |
 
 ## 제품 안에서 동작하는 AI
 
