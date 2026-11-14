@@ -23,6 +23,8 @@
 | 11/14 10:30– | Claude (Opus, claude.ai 세션) | 순위 점수 규칙(가중치 프로파일·유사도 식) 설정 파일과 계산 코드, 러프 입력 해석, 단위 시험 | `scoring/scoring_config.json`, `scoring/scorer.py`, `scoring/test_scorer.py`, `scoring/README.md` | 미검토. 가중치는 팀 검토 필요 |
 | 11/14 10:30– | Claude (Opus, claude.ai 세션) | 검증 시나리오 22개와 실행기, 안정성 검사 | `validation/scenarios.json`, `validation/run_validation.py`, `validation/report.md` | 미검토. 기대 답은 전문가 검토 필요 |
 | 11/14 10:30– | Claude (Opus, claude.ai 세션) | 카탈로그 필터 설명 슬라이드 1장(영어)과 생성 스크립트 | `presentation/catalog_filter_slide.pptx`, `presentation/build_catalog_filter_slide.js` | 미검토 |
+| 11/14 11:15 | Claude Code (data 역할) | pm 요청에 따라 대기 조건별 시험 수 격자를 파이프라인 출력으로 추가. 구간 경계는 명세에 근거와 함께 기록. 수치는 기록된 시험의 개수이며 추정 없음 | `pipeline/spec/coverage.json`, `pipeline/run.py`의 `coverage_grid`, `data/pipeline/coverage_grid.csv`, `coord/answers/20261114-1056-…data.md`, `coord/status/data.md` | 미검토 |
+| 11/14 11:15 | Claude Code (data 역할) | 정정: 위에서 data 역할이 '11/14 오후'로 적은 줄들은 실제로는 11/14 오전(11:05 KST 이전)에 한 작업이다. 시계를 확인하지 않고 적었다 | `compliance/AI_USAGE_LOG.md`, `compliance/SOURCES.md`의 해당 줄 | — |
 
 ## 제품 안에서 동작하는 AI
 

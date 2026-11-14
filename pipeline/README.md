@@ -9,6 +9,8 @@ spec/needs.json      what fire safety needs to know (7 questions: prevention, de
         │             each need = required condition variables + any-of outcome variables + scope
 spec/references.json standards, requirements and published results each need rests on (21 documents)
         │
+spec/coverage.json   bin edges of the coverage grid (oxygen, pressure), placed around named atmospheres
+        │
 spec/variables.json  standard variables, units, valid ranges, derived formulas
         │
 spec/sources.json    22 PSI tables: source column → standard variable → named rule
@@ -27,6 +29,7 @@ Run: `python3 pipeline/run.py` (after `python3 scripts/fetch_psi.py`).
 | `values_long.csv` | One row per value, with the source column it came from |
 | `capability_matrix.csv` | Need × source: how many tests carry the required conditions and an outcome; status |
 | `need_tests.csv` | For each need, the tests that can be used as evidence |
+| `coverage_grid.csv` | Recorded tests per fuel phase, oxygen basis, oxygen bin and pressure bin; `not_recorded` is its own bin |
 | `need_references.csv` | For each need, the reference items (criterion text, values, document, section, URL) |
 | `run_report.json` | Row counts, flags, unmapped source columns, fill count per variable |
 
