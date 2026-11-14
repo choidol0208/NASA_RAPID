@@ -1,7 +1,8 @@
 {
   "_meta": {
     "note": "AI-generated (Claude Code) during the NASA Space Apps Challenge 2026 hackathon. Only the pm role edits this file.",
-    "how_to_read": "Each role pushes only to its own branch and edits only the paths it owns. Everything else goes through a request (see coord/README.md)."
+    "how_to_read": "Each role pushes only to its own branch and edits only the paths it owns. Everything else goes through a request (see coord/README.md).",
+    "roles_note": "Four roles since 13:28 on 14 Nov 2026 (human lead's decision): pm, data, ui, catalog. A change to scoring/scorer.py and its JavaScript port web/scorer.js lands in one commit by the catalog role."
   },
   "integration_branch": "main",
   "roles": {
@@ -9,26 +10,60 @@
       "branch": "main",
       "does": "Project lead and integrator. Model-written text of the product (investigation summaries, explanation of results, gaps). Demo deck and submission text.",
       "owns": [
-        "AGENTS.md", "CLAUDE.md", "README.md", "LICENSE", ".gitattributes", ".claude/",
-        "coord/README.md", "coord/roles.json", "coord/board.md", "coord/decisions.md", "coord/briefs/",
-        "contracts/", "ai/", "data/insights/", "docs/", "scripts/coord.py"
+        "AGENTS.md",
+        "CLAUDE.md",
+        "README.md",
+        "LICENSE",
+        ".gitattributes",
+        ".claude/",
+        "coord/README.md",
+        "coord/roles.json",
+        "coord/board.md",
+        "coord/decisions.md",
+        "coord/briefs/",
+        "contracts/",
+        "ai/",
+        "data/insights/",
+        "docs/",
+        "scripts/coord.py"
       ]
     },
     "data": {
       "branch": "data-pipeline",
       "does": "PSI data collection and the spec-driven pipeline: standard variables, fire-safety information needs, capability matrix.",
       "owns": [
-        "pipeline/", "data/psi/", "data/derived/", "data/pipeline/", "reports/",
-        "scripts/fetch_psi.py", "scripts/profile_tables.py", "scripts/build_data_map.py"
+        "pipeline/",
+        "data/psi/",
+        "data/derived/",
+        "data/pipeline/",
+        "reports/",
+        "scripts/fetch_psi.py",
+        "scripts/profile_tables.py",
+        "scripts/build_data_map.py"
       ]
     },
     "ui": {
       "branch": "catalog-filter",
-      "does": "The experiment catalog, the rule-based ranking (catalog filter) and its validation, and the dashboard on a public URL.",
+      "does": "The dashboard on a public URL: screens, output format, deployment.",
       "owns": [
-        "data/catalog/", "scoring/", "validation/", "presentation/",
-        "scripts/build_catalog.py", "scripts/export_catalog_xlsx.py",
-        "app/", "web/", ".github/"
+        "presentation/",
+        "app/",
+        "web/ (except the three scorer-port files owned by catalog)",
+        ".github/"
+      ]
+    },
+    "catalog": {
+      "branch": "catalog-scoring",
+      "does": "The experiment catalog, the rule-based ranking (catalog filter) with its configuration and validation, and the JavaScript port of the scorer.",
+      "owns": [
+        "data/catalog/",
+        "scoring/",
+        "validation/",
+        "scripts/build_catalog.py",
+        "scripts/export_catalog_xlsx.py",
+        "web/scorer.js",
+        "web/parity_check.py",
+        "web/parity_check.mjs"
       ]
     }
   },
@@ -37,5 +72,9 @@
     "coord/requests/<id>.md": "written by the requester (the <from> part of the id)",
     "coord/answers/<id>.<role>.md": "written by the answering role"
   },
-  "shared_append_only": ["compliance/SOURCES.md", "compliance/AI_USAGE_LOG.md", ".gitignore"]
+  "shared_append_only": [
+    "compliance/SOURCES.md",
+    "compliance/AI_USAGE_LOG.md",
+    ".gitignore"
+  ]
 }
