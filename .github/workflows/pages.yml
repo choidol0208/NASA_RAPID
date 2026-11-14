@@ -1,0 +1,53 @@
+# AI-generated (Claude Code) during the NASA Space Apps Challenge 2026 hackathon.
+# Builds the static dashboard in web/ and publishes it on GitHub Pages.
+# The deploy stops if the unit tests, the validation scenarios or the
+# JavaScript/Python ranking parity check fail.
+name: Dashboard (GitHub Pages)
+
+on:
+  push:
+    branches: [catalog-filter]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Unit tests (ranking)
+        run: python3 -m unittest scoring.test_scorer
+      - name: Validation scenarios
+        run: python3 validation/run_validation.py
+      - name: JavaScript and Python give the same ranking
+        run: python3 web/parity_check.py
+      - name: Build the site
+        run: python3 web/build.py
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

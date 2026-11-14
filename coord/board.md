@@ -2,7 +2,7 @@
 
 *AI-generated (Claude Code) during the NASA Space Apps Challenge 2026 hackathon. Written by pm only; other roles report through their status files.*
 
-Last updated: 2026-11-14 11:10 KST
+Last updated: 2026-11-14 11:35 KST
 
 ## What we are building
 
@@ -20,7 +20,9 @@ It is a research exploration tool. It does not give operational safety guidance,
 | Catalog filter: rule-based ranking with presets, assumptions and warnings; 22 validation scenarios pass | `scoring/`, `validation/` | ui |
 | Collaboration system | `coord/`, `contracts/` | pm |
 
-Not built yet: the dashboard, the model-written explanations, the demo deck, the submission text.
+Live: https://choidol0208.github.io/NASA_RAPID/ (ranking, needs view, coverage view, labels).
+
+Not built yet: the model-written explanations, an attention-grabbing first screen (organizer feedback, 11:30), the demo deck, the submission text.
 
 ## Checkpoints (KST, Saturday 14 November)
 
@@ -45,19 +47,19 @@ Status values: todo, doing, done, cut.
 |---|---|---|---|---|
 | D1 | data | Fetch 24 investigations and 22 experimental tables | — | done |
 | D2 | data | Spec-driven pipeline: tests, values, 7 needs, capability matrix | — | done |
-| D3 | data | Confirm the coverage numbers and publish a coverage grid (request from pm) | 12:30 | todo |
-| D4 | data | In status: which outputs are stable to read; add what ui asks for | 12:30 | todo |
+| D3 | data | Confirm the coverage numbers and publish a coverage grid (request from pm) | 12:30 | done |
+| D4 | data | In status: which outputs are stable to read; add what ui asks for | 12:30 | done |
 | D5 | data | Check model-written summaries against the PSI text | 18:30 | todo |
-| D6 | data | Final pass on `compliance/SOURCES.md` for the References field | 21:00 | todo |
+| D6 | data | Final pass on `compliance/SOURCES.md` for the References field | 21:00 | doing |
 | U0 | ui | Catalog, catalog filter, validation scenarios | — | done |
-| U1 | ui | Choose how the dashboard is served, deploy a skeleton, publish the URL | 12:30 | todo |
-| U2 | ui | Query box wired to `scoring.scorer.rank`: results, assumptions, warnings, source links | 14:30 | todo |
-| U3 | ui | Needs view from `capability_matrix.csv` and Coverage view from the pipeline | 17:00 | todo |
-| U4 | ui | Labels (AI-generated, team computation, not safety guidance), narrow screens | 19:00 | todo |
-| U5 | ui | Screenshots and one GIF of the scenario flow for the project page | 21:00 | todo |
+| U1 | ui | Static site in `web/` on GitHub Pages: deploy a skeleton, publish the URL | 12:30 | done |
+| U2 | ui | Query box wired to `scoring.scorer.rank`: results, assumptions, warnings, source links | 14:30 | done |
+| U3 | ui | Needs view from `capability_matrix.csv` and Coverage view from the pipeline | 17:00 | done |
+| U4 | ui | Labels (AI-generated, team computation, not safety guidance), narrow screens | 19:00 | done |
+| U5 | ui | Screenshots and one GIF of the scenario flow for the project page (after the differentiator decision) | 21:00 | todo |
 | P1 | pm | Collaboration system and contracts | 11:15 | done |
-| P2 | pm | Agree with ui what model-written text the dashboard shows and in what shape | 12:30 | doing |
-| P3 | pm | `data/insights/`: investigation summaries and explanations for the preset scenarios, every statement with its source | 16:30 | todo |
+| P2 | pm | Agree with ui what model-written text the dashboard shows and in what shape | 12:30 | done |
+| P3 | pm | Design of the AI layer (methods beyond a language model alone), then `data/insights/`: summaries and scenario explanations, every statement with its source | 16:30 | doing |
 | P4 | pm | Review every model-written statement against its source | 19:00 | todo |
 | P5 | pm | Seven slides and the project page text | 21:30 | todo |
 

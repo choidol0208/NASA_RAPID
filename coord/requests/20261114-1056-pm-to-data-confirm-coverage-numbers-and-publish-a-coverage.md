@@ -3,7 +3,7 @@ from: pm
 to: data
 opened: 2026-11-14 10:56 KST
 needed_by: 12:30
-closed: false
+closed: true
 ---
 # Confirm coverage numbers and publish a coverage grid
 

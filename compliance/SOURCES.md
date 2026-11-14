@@ -38,8 +38,17 @@
 | 11/14 11:40 | 라이브러리 | PptxGenJS | https://github.com/gitbrent/PptxGenJS | MIT | gitbrent | `presentation/build_catalog_filter_slide.js` |
 | 11/14 11:40 | 아이콘 | Tabler Icons (react-icons 경유: TbFlame, TbAdjustmentsHorizontal, TbCircleCheck) | https://github.com/tabler/tabler-icons | MIT | Tabler | `presentation/catalog_filter_slide.pptx` |
 | 11/14 11:40 | 라이브러리 | react-icons, React, sharp (슬라이드 아이콘 래스터화) | https://github.com/react-icons/react-icons | MIT (react-icons, React), Apache-2.0 (sharp) | 각 프로젝트 | 슬라이드 생성 스크립트 (산출물에 코드 포함 안 됨) |
+| 11/14 11:15 | 글꼴 | Atkinson Hyperlegible (Google Fonts 경유) | https://fonts.google.com/specimen/Atkinson+Hyperlegible | SIL Open Font License 1.1 | Braille Institute of America | 대시보드 `web/` 본문 글꼴 |
+| 11/14 11:15 | 글꼴 | Barlow Semi Condensed (Google Fonts 경유) | https://fonts.google.com/specimen/Barlow+Semi+Condensed | SIL Open Font License 1.1 | Jeremy Tribby | 대시보드 `web/` 제목·숫자 글꼴 |
+| 11/14 11:15 | 코드 | GitHub Actions: actions/checkout, setup-python, setup-node, configure-pages, upload-pages-artifact, deploy-pages | https://github.com/actions | MIT | GitHub | `.github/workflows/pages.yml` (대시보드 시험·빌드·배포) |
+| 11/14 11:15 | 기타 | GitHub Pages (정적 사이트 호스팅, 무료) | https://pages.github.com/ | 서비스 (코드 포함 안 됨) | GitHub | 대시보드 공개 URL |
+| 11/14 11:15 | 라이브러리 | Node.js (계산기 JS 이식의 일치 검사 실행) | https://nodejs.org/ | MIT | OpenJS Foundation | `web/parity_check.mjs`, CI |
+| 11/14 11:15 | 라이브러리 | Playwright, Chromium (로컬 화면 점검·스크린샷) | https://github.com/microsoft/playwright | Apache-2.0 (Playwright), BSD-3-Clause (Chromium) | Microsoft, The Chromium Authors | 대시보드 점검, `web/media/` 스크린샷 (산출물에 코드 포함 안 됨) |
 | 11/14 11:20 | 라이브러리 | pandas | https://github.com/pandas-dev/pandas | BSD-3-Clause | pandas 개발팀 | `pipeline/run.py` (표 출력) |
 | 11/14 11:20 | 기타 | Python 3 표준 라이브러리 (csv, json, re, urllib 등) | https://www.python.org/ | PSF License (OSI 승인) | Python Software Foundation | `pipeline/`, `scripts/fetch_psi.py`, `scripts/profile_tables.py`, `scripts/build_data_map.py` |
+| 11/14 11:30 | 라이브러리 | FFmpeg (데모 GIF 인코딩) | https://ffmpeg.org/ | LGPL-2.1-or-later (일부 GPL-2.0-or-later) | FFmpeg 프로젝트 | `web/capture_media.mjs`로 `web/media/*.gif` 생성 (산출물에 코드 포함 안 됨) |
+| 11/14 11:40 | 모델 | gpt-oss:20b (20.9B, MXFP4 양자화, Ollama 배포본) | https://ollama.com/library/gpt-oss | Apache-2.0 (모델에 포함된 라이선스 본문으로 확인) | OpenAI (미국) | 제품에 들어갈 요약·해설 문구를 미리 생성하는 로컬 모델. 11:40 현재 시험 단계 |
+| 11/14 11:40 | 소프트웨어 | Ollama 0.40.16 (Homebrew 설치) | https://github.com/ollama/ollama | MIT (GitHub 라이선스 정보로 확인) | Ollama (미국) | 로컬 모델 실행. 제품에는 포함되지 않음 |
 
 실험별 DOI는 `data/psi/manifest.json`에 있다. PSI는 데이터를 쓸 때 실험의 DOI로 인용하라고 요구한다.
 
