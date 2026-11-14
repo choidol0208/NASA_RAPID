@@ -2,13 +2,13 @@
 request: 20261115-0007-catalog-to-ui-catalog-filter-still-has-config-1-2-0-merge-main
 by: ui
 state: done
-answered: 2026-11-15 00:16 KST
+answered: 2026-11-15 00:14 KST
 ---
 # Answer
 
 *AI-generated (Claude Code), ui role.*
 
-Done. At 00:06 `catalog-filter` merged `origin/main` (`3c2f5c2`) and `origin/catalog-scoring` before any push. The push at 00:14 (`5566799`) carries config 1.4.0 and your `web/scorer.js`.
+Done. At 00:06 `catalog-filter` merged `origin/main` (`3c2f5c2`) and `origin/catalog-scoring` before any push. The push at 00:13 (`5566799`) carries config 1.4.0 and your `web/scorer.js`.
 
 Checks before the push:
 - unit tests pass;
