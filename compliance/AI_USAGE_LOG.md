@@ -51,6 +51,7 @@
 | 11/14 15:15– | Claude Code (Anthropic; Opus 계열과 Fable 5.2), pm 역할 워크플로 | 제출문과 7장 슬라이드 개요의 초안 작성(사실 확인, 규정 확인, 심사위원 시각 검토 포함). 팀이 자기 말로 고쳐 쓰는 초안 | `docs/submission/` | 팀이 고쳐 쓸 예정 |
 | 11/14 16:20 | Claude Code (Anthropic, Fable 5.2), pm 역할 | 최신 data 문구와 합친 뒤 재빌드. 'no need of this file covers it'(data 역할의 범위 설명 문장)가 금지어 검사에 걸려, 이 문구만 예외로 두는 규칙과 테스트 추가 | `ai/checks.py`, `ai/lint_patterns.py`, `ai/test_checks.py`, `ai/review/README.md`, `docs/ai_layer_design.json` | 미검토 |
 | 11/14 16:51 | Claude Code (Opus 5.5, catalog 역할) | 사람 검토 기록: 팀원 조려진이 순위 가중치(질문 유형별 profiles)를 config 1.1.0 그대로 승인. `scoring/scoring_config.json`의 `_about` reviewed 칸에 검토자와 시각을 적음 | `scoring/scoring_config.json` (`_about`만, 점수 불변) | 가중치: 팀원 검토 완료(연소 전문가 검토 아님). 유사도 척도·관문·증거 계수 등 나머지 값은 따로 검토되지 않음 |
+| 11/14 17:03 | Claude Code (Opus 5.5, catalog 역할) | 가중치 외 값(유사도 척도·관문·증거 계수·동점 간격·유사도 표)의 AI 검토: 역할·근거 정리, 각 값을 0.5·1.5배로 바꿔 데모 4개 질의의 상위 3개 변화 계산(136번 중 129번 불변, 프리셋 2개는 항상 불변), 판단이 필요한 점 2개와 연소 전문가에게 물을 질문 8개 작성 | `scoring/PARAMETER_REVIEW.md`, `validation/sensitivity.py`, `validation/run_validation.py`, `validation/report.md`, `scoring/README.md` | AI 검토이며 사람 검토·전문가 검토가 아님. 값은 바꾸지 않음. 팀원 승인 전까지 reviewed 칸에 기록하지 않음 |
 
 ## 제품 안에서 동작하는 AI
 

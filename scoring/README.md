@@ -19,7 +19,8 @@
 | `validation/run_validation.py` | 시나리오 실행기, `validation/report.md` 생성 |
 | `presentation/catalog_filter_slide.pptx` | 발표용 설명 슬라이드 1장 (영어, 발표 메모는 한국어) |
 | `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py` | PSI 원본에서 카탈로그를 다시 만드는 스크립트 |
-| `scoring/MODEL_BASIS.md` | What each scoring rule rests on, checked against a combustion textbook (Turns 2012), what stays the team's choice, and two candidate changes (English) |
+| `scoring/MODEL_BASIS.md` | What each scoring rule rests on, checked against a combustion textbook (Turns 2012), what stays the team's choice, and two changes applied in config 1.1.0 (English) |
+| `scoring/PARAMETER_REVIEW.md` | AI review of every value other than the weights: role, basis, demo sensitivity (`validation/sensitivity.py`), two findings for a decision, and questions for a combustion specialist (English) |
 
 ## 실행
 
