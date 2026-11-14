@@ -3,7 +3,7 @@ from: pm
 to: ui
 opened: 2026-11-14 16:22 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Four small fixes on the page after pm's files landed (a printed null, the map axis, two wordings)
 

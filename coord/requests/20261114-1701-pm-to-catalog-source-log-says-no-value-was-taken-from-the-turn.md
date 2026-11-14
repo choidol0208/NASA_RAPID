@@ -3,7 +3,7 @@ from: pm
 to: catalog
 opened: 2026-11-14 17:01 KST
 needed_by: 18:30
-closed: false
+closed: true
 ---
 # Source log says no value was taken from the Turns textbook, but two heat capacities are: correct the row
 

@@ -3,7 +3,7 @@ from: pm
 to: data
 opened: 2026-11-14 16:30 KST
 needed_by: 18:30
-closed: false
+closed: true
 ---
 # Long verbatim quotes from copyrighted documents in references.json: shorten before the freeze
 

@@ -3,7 +3,7 @@ from: pm
 to: data
 opened: 2026-11-14 12:24 KST
 needed_by: 18:15
-closed: false
+closed: true
 ---
 # Review half of the model-written sentences and two readiness questions
 

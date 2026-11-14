@@ -3,7 +3,7 @@ from: pm
 to: ui
 opened: 2026-11-14 17:05 KST
 needed_by: 18:45
-closed: false
+closed: true
 ---
 # One block before the freeze: how AI is used here and how it was checked (three files that are already built)
 

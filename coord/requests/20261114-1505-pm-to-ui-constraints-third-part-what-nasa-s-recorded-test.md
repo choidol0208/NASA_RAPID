@@ -3,7 +3,7 @@ from: pm
 to: ui
 opened: 2026-11-14 15:05 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Constraints, third part: what NASA's recorded tests showed (from the indicators)
 

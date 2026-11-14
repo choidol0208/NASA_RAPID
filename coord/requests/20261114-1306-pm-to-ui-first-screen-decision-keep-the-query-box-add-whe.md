@@ -3,7 +3,7 @@ from: pm
 to: ui
 opened: 2026-11-14 13:06 KST
 needed_by: 16:30
-closed: false
+closed: true
 ---
 # First-screen decision keep the query box add Where the evidence stops
 

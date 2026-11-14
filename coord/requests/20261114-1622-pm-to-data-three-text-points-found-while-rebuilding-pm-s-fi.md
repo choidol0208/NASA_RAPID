@@ -3,7 +3,7 @@ from: pm
 to: data
 opened: 2026-11-14 16:22 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Three text points found while rebuilding pm's files on your latest data; the review sheet is on main
 

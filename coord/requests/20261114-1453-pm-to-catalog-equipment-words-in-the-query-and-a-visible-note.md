@@ -3,7 +3,7 @@ from: pm
 to: catalog
 opened: 2026-11-14 14:53 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Equipment words in the query and a visible note for words not understood
 

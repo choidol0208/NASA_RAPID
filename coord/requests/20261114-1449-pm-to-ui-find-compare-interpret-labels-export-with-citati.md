@@ -3,7 +3,7 @@ from: pm
 to: ui
 opened: 2026-11-14 14:49 KST
 needed_by: 18:30
-closed: false
+closed: true
 ---
 # Find Compare Interpret labels export with citations raw data line
 

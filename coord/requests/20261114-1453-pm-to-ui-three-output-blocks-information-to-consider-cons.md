@@ -3,7 +3,7 @@ from: pm
 to: ui
 opened: 2026-11-14 14:53 KST
 needed_by: 18:30
-closed: false
+closed: true
 ---
 # Three output blocks information to consider constraints
 
