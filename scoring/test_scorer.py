@@ -520,9 +520,24 @@ class WeightStreams(unittest.TestCase):
         os.remove(cls.tmp)
 
     def test_off_means_ahp(self):
-        off = self.dw.final_weights(self.res)
+        import json
+        import os
+        import tempfile
+        st = json.load(open(self.dw.STREAMS, encoding="utf-8"))
+        st["apply"] = False
+        fd, path = tempfile.mkstemp(suffix=".json")
+        with os.fdopen(fd, "w", encoding="utf-8") as fh:
+            json.dump(st, fh)
+        try:
+            off = self.dw.final_weights(self.res, path)
+        finally:
+            os.remove(path)
         for prof, r in self.res.items():
             self.assertEqual(off[prof]["weights"], {d: r["weights"][d] for d in self.dw.ALL_DIMS})
+
+    def test_config_uses_the_streams(self):
+        # Config 1.3.0: pooling is applied, so the config's suppression weights are the pooled ones.
+        self.assertEqual({d: CFG["profiles"]["suppression"]["weights"][d] for d in self.dw.ALL_DIMS}, self.on["suppression"]["weights"])
 
     def test_pooling_keeps_mass_and_other_dimensions(self):
         for prof, spec in self.spec.items():

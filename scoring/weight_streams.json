@@ -6,9 +6,9 @@
       "data": "Relative importance of conditions in NASA measurements (scoring/data_weights.json), pooled into the judgement weights of the dimensions it covers."
     },
     "generated_by": "AI-generated (Claude Code, catalog role), 2026-11-14.",
-    "status": "apply false: the config holds the AHP weights of config 1.2.0. Setting apply to true and running derive_weights.py --write changes the weights; that is the human lead's decision."
+    "status": "apply true since config 1.3.0 (2026-11-14 20:06 KST, the human lead's decision): the suppression weights pool the AI session's AHP judgements with the NASA FLEX data stream; prevention and detection keep the AHP weights, because no NASA table records a response for them. When team members' judgements arrive (scoring/expert_weights.json), rerun derive_weights.py --write; that also needs the human lead's decision."
   },
-  "apply": false,
+  "apply": true,
   "judgement": {
     "prefer": "expert"
   },
