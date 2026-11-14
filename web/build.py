@@ -58,6 +58,9 @@ def slim_csv(src, dst, columns, keep=lambda row: True, line_column=None):
     return n
 
 
+OPTIONAL_BUILT = []  # optional files written by this script (listed in build.json)
+
+
 def main():
     if os.path.isdir(DIST):
         shutil.rmtree(DIST)
@@ -77,6 +80,24 @@ def main():
         slim_csv(st, os.path.join(DIST, "data/scenario_tests.csv"),
                  ["scenario_id", "test_id", "investigation_id", "fuel_phase", "flow_match", "gravity_match", "tier"],
                  keep=lambda r: r.get("scenario_id") in DASH_SCENARIOS)
+    # Export for researchers (pm request 1449): the matched tests of each demo scenario, joined to
+    # their row in data/pipeline/tests.csv. Values are copied as data wrote them; nothing is computed.
+    if os.path.exists(st):
+        os.makedirs(os.path.join(DIST, "data", "export"), exist_ok=True)
+        tests = {r["test_id"]: r for r in csv.DictReader(open(os.path.join(ROOT, "data/pipeline/tests.csv"), encoding="utf-8-sig"))}
+        cols = ["scenario_id", "tier", "test_id", "investigation_id", "source_id", "fuel_phase", "fuel_material", "o2_pct", "o2_basis",
+                "o2_range_as_written", "pressure_kpa", "flow_cms", "flow_min_cms", "gravity_level", "flags", "source_file", "source_row"]
+        for sid in sorted(DASH_SCENARIOS):
+            rows = [r for r in csv.DictReader(open(st, encoding="utf-8-sig")) if r["scenario_id"] == sid and r["tier"] != "other"]
+            with open(os.path.join(DIST, "data", "export", f"scenario_{sid}_matched_tests.csv"), "w", encoding="utf-8", newline="") as out:
+                w = csv.writer(out, lineterminator="\n")
+                w.writerow(cols)
+                for r in rows:
+                    t = tests.get(r["test_id"], {})
+                    w.writerow([r["scenario_id"], r["tier"]] + [t.get(c, r.get(c, "")) for c in cols[2:]])
+            OPTIONAL_BUILT.append(f"data/export/scenario_{sid}_matched_tests.csv")
+            if os.path.exists(os.path.join(ROOT, f"data/pipeline/evidence/scenario_{sid}.json")):
+                OPTIONAL_BUILT.append(f"repo:data/pipeline/evidence/scenario_{sid}.json")  # linked in the repository
     og = os.path.join(HERE, "media", "02_lunar_top.png")
     if os.path.exists(og):  # link preview image; retaken with the final page at U5
         shutil.copy(og, os.path.join(DIST, "og.png"))
@@ -92,6 +113,7 @@ def main():
     present = sorted(dst for dst in OPTIONAL.values() if os.path.exists(os.path.join(DIST, dst)))
     if os.path.exists(os.path.join(DIST, "data/scenario_tests.csv")):
         present.append("data/scenario_tests.csv")
+    present += OPTIONAL_BUILT
     with open(os.path.join(DIST, "data", "build.json"), "w", encoding="utf-8") as fh:
         json.dump({"commit": sha, "built_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "optional": present}, fh)
     # Stamp the build into every asset URL (Pages lets browsers cache files for 10 minutes): a new

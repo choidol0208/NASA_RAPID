@@ -7,7 +7,7 @@
 ## 상황
 
 이 저장소는 2026 NASA Space Apps Challenge(11/14–15, Seoul Local Event) 참가용이다.
-선택 과제는 "Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data"로,
+선택 과제는 "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data"로,
 NASA의 미세중력 연소 실험 결과를 요약·순위화·해석하는 AI 기반 대화형 대시보드를 만드는 것이다.
 
 팀은 거의 모든 작업을 AI로 수행한다. 그래서 규정 위반도 AI의 손에서 일어날 가능성이 가장 높다.

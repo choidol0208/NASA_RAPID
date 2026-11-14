@@ -27,6 +27,11 @@ EXTRA = [
     "rocket engine", "", "   ", "random words", "100% O2 4.3 psi", "21% O2 101.3 kPa PMMA 10 cm/s opposed",
     {"preset": "iss", "fuel": "PMMA", "o2_pct": 25}, {"text": "moon", "concern": "detection"},
     {"preset": "lunar_habitat", "fuel": "cotton", "flow_state": "quiescent"},
+    # equipment queries (pm request 1453) and words the scorer does not read
+    "smoke detector for a lunar rover", "fire extinguisher for a Mars habitat", "crew clothing fabric for a Moon base",
+    "wire insulation for a pressurized rover", "water mist suppression system for a lunar habitat",
+    "battery enclosure for the ISS", "3D printer on the Moon", "glove box", "천장 배선 과열", "달 기지 배터리 보관함",
+    "oxygen sensor, ISS cabin (CO2 30%)", {"text": "battery enclosure", "preset": "iss"},
 ]
 
 
@@ -38,7 +43,7 @@ def key_view(o):
                     why=r["why"], gap=r["main_gap"], complementary=r.get("complementary"),
                     confidence=r.get("confidence"), unknown=r["unknown_dims"], assumed=r.get("assumed_dims", []))
     return dict(
-        status=o["status"], scenario=o["scenario"],
+        status=o["status"], scenario=o["scenario"], not_understood=o.get("not_understood"),
         assumptions=[(a["field"], a["source"]) for a in o["assumptions"]],
         warnings=[(w["code"], w["message"]) for w in o["warnings"]],
         results=[res(r) for r in o["results"]],

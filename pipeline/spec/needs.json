@@ -1,15 +1,15 @@
 {
  "_meta": {
   "generated_by": "AI-generated draft (Claude Code), 2026-11-14, NASA Space Apps Challenge 2026 hackathon. Not human-reviewed.",
-  "purpose": "Six questions about spacecraft fire safety that the team wrote from the documents in references.json, each with the variables a test must record to be counted for it. No fire-safety engineer was asked. The pipeline checks every mapped PSI table against this list; it does not answer the questions itself.",
+  "purpose": "Six questions about spacecraft fire safety that the team wrote from the documents in references.json, each with the variables a test must hold to be counted for it. The list of six is the team's construction, not a NASA list; 'authorship' says which parts the documents back and which are the team's own. No fire-safety engineer was asked. The pipeline checks every mapped PSI table against this list; it does not answer the questions itself.",
   "basis": [
-   "Pillars only: OCHMO-TB-008 (TB008.areas), NASA/CP-2003-212103 (CP2003.groups) and the challenge statement (CH.pillars; this passage was read from a copy and not re-checked on the official page). The six questions under the pillars are the team's. Each need lists its own reference items; see references.json."
+   "Areas only: NASA/CP-2003-212103 (CP2003.groups), the final report of NASA's Fire Prevention, Detection, and Suppression project (TM217036.areas), OCHMO-TB-008 (TB008.areas, which adds post-fire clean-up as a fourth area) and the challenge statement (CH.pillars; this passage was read from a copy and not re-checked on the official page). The six questions under the areas are the team's. Each need lists its own reference items; see references.json."
   ],
-  "status_rule": "measured = at least one outcome variable has values and every 'conditions_required' variable has values; partial = an outcome has values but a required condition is missing from the table; conditions_only = no outcome variable in the table; none = neither. 'measured' is a status name kept for the other sessions: it says that the columns hold values, not that the question of the need was measured or answered",
-  "scope_rule": "'scope' limits a need to the tests it is about (for example, material questions apply to solid samples). Tests outside the scope are not counted; a source with no test in scope gets the status out_of_scope. Five of the six needs are limited to solid samples by the team; liquid-fuel and gas-fuel tests can be counted for S1 only.",
+  "status_rule": "measured = at least one test has a value for an outcome variable and meets every 'conditions_required' variable, by a value in the table or, where the need lists the variable under 'conditions_documented_ok', by a document about the whole table (see 'documented_rule'); partial = an outcome has values but a required condition is missing from the table and is not documented; conditions_only = no outcome variable in the table; none = neither. 'measured' is a status name kept for the other sessions: it says that the columns hold values, not that the question of the need was measured or answered",
+  "scope_rule": "'scope' limits a need to the tests it is about (for example, material questions apply to solid samples). Tests outside the scope are not counted; a source with no test in scope gets the status out_of_scope. Five of the six needs are limited to solid samples by the team; liquid-fuel and gas-fuel tests can be counted for S1 only. The scope is the team's choice (see 'authorship', point 8).",
   "reference_rule": "'references' are item ids in references.json: the standards, requirements and published results that define or bound the need. Each item carries how its document was read ('access' in references.json): some documents were read as an abstract only, through a citation or from a copy.",
   "stated_by_rule": "A need is linked to an investigation by what the investigators or a NASA project document state as the purpose of that experiment. 'publication' is the id of a reference item (references.json, type stated_objective or framework) that holds the sentence verbatim; 'field' and 'quote' give the sentence of the 'objective' field of the PSI record where the record names the topic, and the engine checks it against the record. 'verdict' is what the publications read say about the link: 'supported' (the purpose is stated for this investigation), 'differs' (the investigators give this objective to another flight or another area), 'topic_only' (the record names the phenomenon, and the stated purpose of the experiment is not spacecraft fire safety or was not found in what was read). Only links with verdict 'supported' are counted. Tests of the other links, and tests that record the variables of a need without any link, are reported as recorded outside the stated objective. The verdicts rest on the documents listed in references.json and say nothing about documents that were not read.",
-  "authorship": "The split into needs, their wording, required variables and scope are the team's (AI draft). What is taken from NASA documents: the three areas (TB008.areas, CP2003.groups, CH.pillars), the reference items of each need (references.json), and the objective sentences in 'stated_by'.",
+  "authorship": "The six needs are the team's construction (AI draft). No fire-safety engineer was asked, and no document read gives this list. The team's own: (1) the list of six: the documents give three or four areas (CP2003.groups, TM217036.areas, TB008.areas) and, under them, lists of questions that cut differently (CP2004.flam.q4, CP2004.supp.q3, CP2004.det.q2); (2) the split of prevention into flammability limit, ignition, and flame spread and growth: the documents join them in single items (CP2003.prev.o2flow, CP2004.product3), and the split follows the four phenomena of the BASS-II goal sentence (ICES19.goal), which is a goal of the investigators and not a NASA list of needs; (3) P2 as a need of its own about igniting a material: the separate ignition items of the documents are about ignition sources and mechanisms (CP2003.prev.ignition, CP2004.flam.q8, EAWG.needs.ignition), for a material they name a time to ignition and a critical heat flux, not an energy (RG.ignition, CP2004.flam.fist), and the report that recommends 'ignition threshold data' does not say that the threshold is an energy or a time (EAWG.ignthreshold); (4) P3 under prevention only: the documents list flame spread under material flammability (CP2003.roadmap.spread, SMT.gap.flammability) and under response (CP2003.resp.spread, BASS2TM.growth); (5) S1 as 'extinction conditions' with three routes, and its place under suppression only: the oxygen limit is stated under prevention (CP2003.roadmap.limit) and under suppression (CP2004.supp.q3); (6) D1 under detection only: the documents place combustion products under detection (TM217036.signatures, CP2004.det.products), under crew exposure and response (3001.V2-6024.rationale, CP2003.resp.emissions) and under post-fire monitoring (SMT.gap.postfire); (7) D2 as a need at all, and the split of detection into gases (D1) and smoke (D2): what the documents state as needed is the fire signature, for smoke the particle size, and the response of detectors (TM217036.signatures, SMT.gap.detection, SAME12.need); D2 is the team's index of the SAME test conditions; (8) the scope 'solid' of P1, P2, P3, D1 and D2: the documents tie the limiting oxygen of liquid fuels to spacecraft fire safety (TP216046.loi, RG.droplet) and name BRE, an experiment on flames of gaseous fuel, as focused on spacecraft fire prevention (ACME14.bre); (9) which variables are required and which useful: the documents name flow for P1 (TM217036.threshold, CP2003.roadmap.limit), oxygen for P3 (RG.growth, SAE2008.spread) and heating for D2 (SAME.controls, SAME.keyparams) as governing variables, and this file lists them as useful; pressure is required for P1 and S1 (ISO16697.scope, CP2004.supp.q3), and meeting it by a document about the whole table ('documented_rule') is a rule of the pipeline that no document sets; temperature, named in the same sentence as pressure (ISO16697.scope), is not a variable of this file; (10) outcome variables with no document behind them: the burn time and the oxygen consumed for P1, the burn time for P3, the CO/CO2 ratio as a quantity of the detection need (the investigators present it as a measure of completeness of combustion, BASS2TM.coratio), and 'hot_ignition' as a name for P2; (11) the links: the verdicts in 'stated_by' are the team's reading of the purpose sentences in the documents read, counting only 'supported' links is the team's rule, and for PSI-26 the purpose sentence comes from a NASA guide, not from a paper of the investigators (RG.bass); this rule replaced, on 2026-11-14, a rule that used the objective field of the PSI record alone; (12) the sentence 'the size of fire a vehicle must tolerate' of the earlier P3 'why' was the team's wording, found in no document read, and was removed on 2026-11-14. What the documents back, as worded: the three areas (CP2003.groups, TM217036.areas, TB008.areas; CH.pillars for the challenge statement); the P1 question in its two variables, limiting oxygen and flow for a material (CP2003.roadmap.limit, TM217036.threshold, ICES19.minimum); the P3 name and question (SAF16.saffire1, BASS2TM.growth); the three routes of the S1 question taken one by one (CP2004.supp.q3, FLEX.objective2, CP2003.resp.passive); the D1 name (CP2004.det.products, BASS2TM.products). The reference items of each need and the purpose sentences in 'stated_by' are taken from the documents; references.json says how each document was read.",
   "not_covered": [
    {
     "area": "Post-fire clean-up",
@@ -70,14 +70,54 @@
     "area": "Heat release of a fire",
     "source_item": "PSI-26 record, researchImpacts",
     "why": "The record says the results 'are used in first order models and predictions of heat release in spacecraft fires'; no standard variable holds a heat release."
+   },
+   {
+    "area": "Non-flaming and smoldering combustion",
+    "source_item": "CP2003.prev.smolder",
+    "why": "Named as a gap by the prevention group of NASA/CP-2003-212103 (CP2003.prev.smolder) and in the organizing questions of 2004 (CP2004.flam.q7); no need of this file is about it, and no standard variable marks a test as non-flaming or smoldering."
+   },
+   {
+    "area": "Background particulate and chemical species in the cabin",
+    "source_item": "CP2004.det.q1",
+    "why": "First organizing question for fire signatures and detection (CP2004.det.q1); no need of this file covers it. The DAFT record (PSI-47) is in the catalogue: its objective field says 'The focus of DAFT / DAFT-2 was to mitigate the risk for the Smoke Aerosol Measurement Experiment (SAME).', and its table is one row per sampling session, which the pipeline does not map."
+   },
+   {
+    "area": "From small-scale experiments to large-scale fires",
+    "source_item": "CP2004.flam.q5",
+    "why": "Organizing question 5 of 2004 (CP2004.flam.q5); the pipeline does not relate tests of different sample size to each other."
+   },
+   {
+    "area": "Detector location and time to detection",
+    "source_item": "TB008.location",
+    "why": "Named as knowledge that detection depends on (TB008.location); no standard variable holds a detector position or a time to detection."
+   },
+   {
+    "area": "Flame spread over thermally thick versus thin materials",
+    "source_item": "CP2003.prev.thickthin",
+    "why": "Named by the prevention group (CP2003.prev.thickthin); the pipeline carries a sample thickness where the table gives one and does not class a test as thermally thick or thin."
+   },
+   {
+    "area": "Flammability limit of liquid fuels as a prevention question",
+    "source_item": "TP216046.loi",
+    "why": "The limiting oxygen index is named a principal objective of FLEX and tied to spacecraft fire safety (TP216046.loi; see also RG.droplet, FLEX.objective1). The team's scope 'solid' keeps the FLEX tests out of P1; they are counted for S1 only."
+   },
+   {
+    "area": "Fire prevention as the stated focus of BRE (PSI-20)",
+    "source_item": "ACME14.bre",
+    "why": "NASA documents name BRE as the ACME experiment focused on spacecraft fire prevention (ACME14.bre, RG.bre, ACME21.bre). This file links PSI-20 to S1 only, with verdict 'differs', and its table is one row per test day, so no test is counted."
+   },
+   {
+    "area": "Ignition delay of the BASS-II PMMA rods",
+    "source_item": "BASS2TM.igndelay",
+    "why": "Defined and reported by the investigators in the BASS-II Summary Report (BASS2TM.igndelay); the PSI-25 experimental table has no column for it, so need P2 has no counted test."
    }
   ],
-  "reading_rule": "'reading' says what a counted test of the need records and what the count does not mean. It is shown wherever the count is shown. A counted test is what the field 'usable_tests' counts: a test that records every required condition and at least one outcome variable of the need and whose investigation is linked to the need by 'stated_by'. The field name is kept for the other sessions; it does not say that a test can answer the question.",
+  "reading_rule": "'reading' says what a counted test of the need records and what the count does not mean. It is shown wherever the count is shown. A counted test is what the field 'usable_tests' counts in scenario_needs.csv: a test that meets every required condition (a value in the table or, where 'conditions_documented_ok' allows it, a document about the whole table), has a value for at least one outcome variable of the need, and whose investigation is linked to the need by a 'stated_by' entry with verdict 'supported'. The field name is kept for the other sessions; it does not say that a test can answer the question.",
   "stated_by_fields": [
    "objective"
   ],
-  "overlap": "The first objective sentence of PSI-25 is the link for P1, P2, P3 and S1, and the same BASS-II tests with a flow event are counted under P1 and under S1. Counts of different needs must not be added.",
-  "not_counted_but_fire_safety": "Five of the 24 PSI records contribute counted tests (PSI-25, PSI-69, PSI-98, PSI-99, PSI-102). The other 19 contribute none. Linked to a need by 'stated_by': PSI-10, PSI-39 and PSI-101 (no column mapped to an outcome variable of the need), PSI-26 (the table lists samples only), PSI-100 (no oxygen column and no outcome column), PSI-20, PSI-21, PSI-23 and PSI-68 (tables are not one row per test). Not linked to a need: PSI-107 (rows are flow settings of gas jet flames, outside the solid-fuel scope of D2), PSI-159 (its tests are reported as recorded outside the stated objective), PSI-22, PSI-47, PSI-106 and PSI-142 (tables are not one row per test), PSI-60, PSI-62, PSI-115 and PSI-117 (no experimental table). Fire-safety wording is in the records of PSI-20, 21, 26, 47, 60, 62, 68, 100, 101, 106, 107, 115, 117 and 142; pipeline/README.md gives the sentence or the field for each. The words 'fire' and 'safety' do not occur in the records of PSI-10, PSI-22, PSI-23 and PSI-159, and the PSI-22 record says its research 'is not being conducted to serve any space applications'.",
+  "overlap": "The first objective sentence of the PSI-25 record is the record sentence of the links for P1, P2, P3 and S1; the purpose sentences of these links are from the investigators' publications (BASS2TM.limits, ICES19.goal, BASS2TM.growth). The BASS-II tests with a flow event are counted under P1 and under S1, and the BASS-II tests counted for D1 are also counted for P1. Counts of different needs must not be added.",
+  "not_counted_but_fire_safety": "Four of the 24 PSI records contribute counted tests (PSI-25, PSI-69, PSI-98, PSI-99). The other 20 contribute none. Linked to a need with verdict 'supported' and no counted test: PSI-26 for P1 and S1 (the table lists samples only), PSI-100 for P3 (no outcome column), PSI-101 and PSI-102 for D2 (the tables hold test conditions and no smoke particle size). Linked with a verdict that is not counted: PSI-10, PSI-21, PSI-23, PSI-39 and PSI-68 for S1 ('topic_only') and PSI-20 for S1 ('differs'); PSI-10 and PSI-39 also have no column mapped to an outcome variable of S1, and the tables of PSI-20, 21, 23 and 68 are not one row per test. Three Saffire links have verdict 'differs': PSI-98 and PSI-100 for P1, PSI-99 for P3; the Saffire-I tests are reported for P1, and the Saffire-II tests for P3, as recorded outside the stated objective. Not linked to a need: PSI-107 (rows are flow settings of gas jet flames, outside the solid-fuel scope of D2; the stated major goal of SPICE is the prediction of soot emissions, RG.spice), PSI-159 (its tests hold the S1 variables and are reported as recorded outside the stated objective; the project scientist states its significance as engine design, ACME21.cfig.significance), PSI-22, PSI-47, PSI-106 and PSI-142 (tables are not one row per test), PSI-60, PSI-62, PSI-115 and PSI-117 (no experimental table). Fire-safety wording is in the records of PSI-20, 21, 26, 47, 60, 62, 68, 100, 101, 102, 106, 107, 115, 117 and 142; pipeline/README.md gives the sentence or the field for each. The words 'fire' and 'safety' do not occur in the records of PSI-10, PSI-22, PSI-23 and PSI-159, and the PSI-22 record says its research 'is not being conducted to serve any space applications'. A purpose stated in a publication and not held in a PSI table column: the BASS-II Summary Report reports ignition delays of PMMA rods (BASS2TM.igndelay), which the PSI-25 experimental table does not hold.",
   "removed": "P4 'Exploration atmosphere' was removed on 2026-11-14 (team decision): it is a condition that applies to every need and is carried by scenarios.json and the coverage grid.",
   "verdict_values": [
    "supported",
@@ -110,7 +150,7 @@
     "burn_time_s",
     "burn_length_cm"
    ],
-   "why": "Material selection rests on a pass/fail test of upward burning in the worst-case atmosphere (6001B.T1.pass, 6001B.T1.atmosphere), not on a measured limit. Two listed documents report that this normal-gravity test may not be conservative in low gravity (OF2012.margin, RG.test1), and a modified test that measures the limit itself is described in TB14639.modified.",
+   "why": "Material selection rests on a pass/fail test of upward burning in the worst-case atmosphere (6001B.T1.pass, 6001B.T1.atmosphere), not on a measured limit. Two listed documents report that this normal-gravity test may not be conservative in low gravity (OF2012.margin, RG.test1), and a modified test that measures the limit itself is described in TB14639.modified. NASA's research roadmap of 2003 lists the task 'Determine limiting O2 and flow for flame propagation on practical materials in µg and partial-g' (CP2003.roadmap.limit). The final report of NASA's Fire Prevention, Detection, and Suppression project gives as a task objective the oxygen flammability threshold in reduced gravity and says that this threshold 'is a function of the local convective velocity' (TM217036.threshold). The BASS-II investigators write that many of their tests looked for 'a minimum oxygen concentration or flow velocity where a material will burn in space' (ICES19.minimum).",
    "scope": {
     "fuel_phase": [
      "solid"
@@ -136,7 +176,21 @@
     "ISO16697.scope",
     "ICES14.onlyvalid",
     "SAF17.pressure",
-    "PSISAF.pressure_column"
+    "PSISAF.pressure_column",
+    "CP2003.roadmap.limit",
+    "TM217036.threshold",
+    "ICES19.minimum",
+    "SAF17.o2_initial_II",
+    "SAF17.table1_note_i",
+    "PSISAF.delay",
+    "PSISAF.o2_traces",
+    "SAF16.saffire2",
+    "SAF16b.saffire2",
+    "SAF16.saffire1.o2",
+    "RG.bass",
+    "CP2004.supp.q3",
+    "ISO16697.record",
+    "BASS2SUM.pressure_range"
    ],
    "stated_by": [
     {
@@ -182,9 +236,9 @@
      "verdict": "differs"
     }
    ],
-   "required_note": "The cited definition of an oxygen threshold holds 'at a given constant total pressure, temperature, convective flow, and gravity-level conditions', and the pressure is to be recorded on the data sheet (ISO16697.scope). Pressure and gravity level are therefore required. Pressure may be met by a document about the investigation, because the BASS-II and Saffire experimental tables have no pressure column: for BASS-II the investigators state that pressure was not varied from 1 atmosphere (ICES19.pressure), a nominal statement for the investigation and not a reading per test; for Saffire the investigators state normal pressure (SAF17.pressure) and a reading per sample is in the PSI raw data (PSISAF.pressure_column), which the pipeline does not map. Flow speed is listed as useful, not required, although the same sentence names it: several BASS-II tests near the limit give the flow only as text ('no ign at any flow', '<1'), and a test is not dropped for that. A result of such a test is valid only at the atmosphere tested (ICES14.onlyvalid); nothing here carries it to another pressure.",
-   "reading": "A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit.",
-   "note": "The Saffire tables hold one oxygen level near cabin air per test (for Saffire-II derived by NASA from CO2 production, Note 1 of the table), and Saffire-III has no oxygen column. A limit cannot be located from one oxygen level. Pressure is not a required variable of this need, although the cited definition of a threshold holds at a given total pressure, flow and gravity level (ISO16697.threshold): the BASS-II and Saffire tables have no pressure column, so no counted test records a pressure. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions); counts of different needs must not be added.",
+   "required_note": "The cited definition of an oxygen threshold holds 'at a given constant total pressure, temperature, convective flow, and gravity-level conditions' (ISO16697.scope), and under that specification the pressure is to be recorded on the data sheet (ISO16697.record). Pressure and gravity level are therefore required. ISO/TS 16697 is listed in references.json with access 'abstract_only' and has been withdrawn; no document read says that BASS-II or Saffire were run under it. Pressure may be met by a document about the investigation, because the BASS-II and Saffire experimental tables have no pressure column. That a statement about the whole table can meet the condition is the team's rule; no document sets it. For BASS-II the investigators state that pressure was not varied from 1 atmosphere (ICES19.pressure): a nominal statement for the investigation, not a reading per test. One section of the BASS-II Summary Report gives a monitored range of 99.2 to 99.5 kPa for the thin PMMA opposed-flow tests it reports (BASS2SUM.pressure_range); the pipeline attaches it to no test. For Saffire the investigators state normal pressure (SAF17.pressure), and a reading per sample is in the PSI raw data (PSISAF.pressure_column), which the pipeline does not map. Flow speed is listed as useful, not required, although the same sentence names it and the cited documents treat flow as a variable of the limit itself (TM217036.threshold, CP2003.roadmap.limit): several BASS-II tests near the limit give the flow only as text ('no ign at any flow', '<1'), and a test is not dropped for that. This is the team's choice. Temperature, named in the same sentence, is not a variable of this file. A paper on the normal-gravity test says that Test 1 'is pass-fail and is only valid at the atmosphere tested' (ICES14.onlyvalid; said of Test 1, not of the microgravity tests). No document read carries a result of a BASS-II or Saffire test to another pressure, and the pipeline does not.",
+   "reading": "A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. Its pressure is not in the table: it is documented for the investigation as a whole (ICES19.pressure, SAF17.pressure), not read per test. Its gravity level is a constant of the table in the team's source mapping. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit.",
+   "note": "The counted tests are BASS-II tests (PSI-25) and Saffire-II tests (PSI-99). The Saffire-II table holds one oxygen level near cabin air per test, and a limit cannot be located from one oxygen level. That value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the measured CO2 production (SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. The on-board oxygen sensor traces in the PSI raw data show other levels (PSISAF.o2_traces, read by eye from graphs), and the files do not comment on the difference. A Saffire cell with two numbers gives a value only where a publication names the initial oxygen (sources.json 'documented_start'); no midpoint is computed, and one Saffire-II test has no oxygen value for that reason and is not counted. The Saffire investigators give the flammability-limit objective to Saffire-II alone (SAF16.saffire2, SAF16b.saffire2) and describe the Saffire-I sample as one expected to burn in cabin air (SAF16.saffire1.o2). The links of PSI-98 and PSI-100, which rest on a sentence that the three records share, therefore have verdict 'differs': the Saffire-I tests are reported as recorded outside the stated objective, and the Saffire-III table has no oxygen column. The PSI-26 link rests on a sentence of a NASA guide about improving the 1-g material fire safety rating tests (RG.bass); no sentence about a limit was found for BASS, and its table adds no counted test. Of the four outcome variables, the event word and the burn length have a counterpart in the cited documents (ICES19.boundary, 6001B.T1.pass); the burn time and the oxygen consumed are the team's choice, and no document read names them as a measure of a flammability limit. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions): the documents state the oxygen limit under prevention (CP2003.roadmap.limit) and under suppression (CP2004.supp.q3). Counts of different needs must not be added.",
    "conditions_documented_ok": [
     "pressure_kpa"
    ]
@@ -193,7 +247,7 @@
    "id": "P2",
    "pillar": "prevention",
    "name": "Ignition",
-   "question": "How much energy and time does it take to ignite this material in this atmosphere?",
+   "question": "How long does it take to ignite this material in this atmosphere and flow, and with what heating?",
    "conditions_required": [
     "fuel_material",
     "o2_pct"
@@ -208,7 +262,7 @@
    "outcomes_any": [
     "hot_ignition"
    ],
-   "why": "Prevention means removing fuel, oxygen or ignition energy (TB008.triangle), and the challenge statement names ignition-source control (CH.pillars; this passage was read from a copy and not re-checked on the official page). The Exploration Atmospheres Working Group recommends a modified flammability test to generate ignition threshold data (EAWG.testing).",
+   "why": "Prevention means removing fuel, oxygen or ignition energy (TB008.triangle), and NASA-STD-6001B asks that ignition sources be eliminated or controlled (6001B.6.1.2.ignition). The documents read state the ignition need in three ways: as ignition sources and mechanisms (CP2003.prev.ignition, CP2004.flam.q8, EAWG.needs.ignition); as part of one item with flammability and flame propagation (CP2003.prev.o2flow, CP2004.flam.q4, CP2004.flam.q6); and as a time to ignition under an applied heat flux (RG.ignition, CP2004.flam.fist). Of the three, only the third is a quantity that the pipeline could read from a table column. The Exploration Atmospheres Working Group recommends a modified flammability test 'to generate ignition threshold data' in order to identify materials at risk from increases in oxygen concentration (EAWG.ignthreshold); the report does not say that this threshold is an energy or a time. Treating ignition as a need of its own, apart from flammability, is the team's choice.",
    "scope": {
     "fuel_phase": [
      "solid"
@@ -217,7 +271,18 @@
    "references": [
     "6001B.T1.purpose",
     "TB008.triangle",
-    "EAWG.testing"
+    "EAWG.testing",
+    "6001B.6.1.2.ignition",
+    "CP2003.prev.ignition",
+    "CP2004.flam.q8",
+    "EAWG.needs.ignition",
+    "CP2003.prev.o2flow",
+    "CP2004.flam.q4",
+    "CP2004.flam.q6",
+    "RG.ignition",
+    "CP2004.flam.fist",
+    "EAWG.ignthreshold",
+    "BASS2TM.igndelay"
    ],
    "stated_by": [
     {
@@ -229,7 +294,7 @@
     }
    ],
    "reading": "A counted test would record the material, the oxygen and an ignition result. No mapped table records one for a solid fuel.",
-   "note": "Igniter power and on-time are settings of a test, not results, and are listed as conditions. No PSI experimental table gives an ignition energy, an ignition delay or an ignite / no-ignite result for a solid fuel in a mapped column, so this need has no counted test. One BASS-II cell says 'no ign at any flow'; it is kept as a flow event under P1."
+   "note": "In the mapped tables igniter power and on-time are columns of settings (Saffire-I and Saffire-II) and are listed as conditions. The BASS-II investigators define an ignition delay from the igniter on and off times and report it against the initial oxygen concentration for PMMA rods (BASS2TM.igndelay). The PSI-25 experimental table has no column for it; the raw-data files of PSI-25 were not searched for it. No PSI experimental table gives a time to ignition, an ignition delay or an ignite / no-ignite result for a solid fuel in a mapped column, so this need has no counted test. That holds for the mapped table columns, not for the investigation. The outcome variable 'hot_ignition' is the team's name; the quantities the documents name for a material are a time to ignition and a critical heat flux (RG.ignition, CP2004.flam.fist). One BASS-II cell says 'no ign at any flow'; it is kept as a flow event under P1."
   },
   {
    "id": "P3",
@@ -252,7 +317,7 @@
     "burn_length_cm",
     "burn_time_s"
    ],
-   "why": "Sets the time available to respond and the size of fire a vehicle must tolerate.",
+   "why": "The response working group of NASA/CP-2003-212103 lists the 'Rate of fire spread anticipated in space platforms under realistic fire scenarios' first among its basic needs (CP2003.resp.spread) and writes that the flame spread rate, with the type of fire, the ignition source and the time to detection, gives an estimate of the size of the fire when the response begins (CP2003.resp.firesize). The same report distinguishes 'fire growth, a safety issue' from 'flame growth, a research and possibly safety issue' (CP2003.resp.growth).",
    "scope": {
     "fuel_phase": [
      "solid"
@@ -262,7 +327,17 @@
     "6001B.T1.pass",
     "CP2003.response",
     "SAF.result",
-    "SAE2008.spread"
+    "SAE2008.spread",
+    "CP2003.resp.spread",
+    "CP2003.resp.firesize",
+    "CP2003.resp.growth",
+    "RG.growth",
+    "SAF16b.saffire13",
+    "SAF16b.saffire2",
+    "CP2003.roadmap.spread",
+    "CP2003.prev.thickthin",
+    "SMT.gap.flammability",
+    "BASS2TM.growth"
    ],
    "stated_by": [
     {
@@ -294,14 +369,14 @@
      "verdict": "supported"
     }
    ],
-   "reading": "A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. Most counted tests record a length or a time and no spread rate; a burn time or a burn length is not a spread rate.",
-   "note": "Oxygen is not a required variable of this need, although a listed abstract relates spread rate to flow velocity, oxygen concentration and pressure (SAE2008.spread). Among the mapped tables only the Saffire-II table has a spread-rate column; the Saffire-I tests are counted on a burn time alone. The BASS-II table has no flow-direction column, so its tests are not counted here; the PSI-25 record says \"Flame appearance, flame growth, and spread rates were determined in both the opposed and concurrent flow\" (approach field), and these rates are not in the experimental table."
+   "reading": "A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. In the current tables the counted tests record a burn time and no spread rate or burn length; a burn time is not a spread rate.",
+   "note": "The counted tests are the Saffire-I tests (PSI-98), counted on a burn time alone; the burn time as an outcome is the team's choice. Oxygen is not a required variable of this need, although the documents name it among the variables that flame spread depends on (RG.growth, SAE2008.spread): the team's choice. The Saffire investigators give the fire-growth objective to Saffire-I and Saffire-III and the flammability-limit objective to Saffire-II (SAF16b.saffire13, SAF16b.saffire2). The link of PSI-99, which rests on a sentence that the three records share, therefore has verdict 'differs': the Saffire-II tests are reported as recorded outside the stated objective, and the only spread-rate column among the mapped tables, that of the Saffire-II table, is not in the counts. The Saffire-III table has no outcome column. The BASS-II table has no flow-direction column, so its tests are not counted here; the PSI-25 record says \"Flame appearance, flame growth, and spread rates were determined in both the opposed and concurrent flow\" (approach field), and these rates are not in the experimental table. The documents read list flame spread both under prevention and material flammability (CP2003.roadmap.spread, CP2003.prev.thickthin, SMT.gap.flammability) and under response (CP2003.resp.spread, BASS2TM.growth); placing the need under prevention is the team's choice."
   },
   {
    "id": "S1",
    "pillar": "suppression",
    "name": "Extinction conditions",
-   "question": "Under what conditions does the flame go out: lower oxygen, added inert gas, or reduced flow?",
+   "question": "Under what conditions does the flame go out: lower oxygen or pressure, added inert gas, or reduced flow?",
    "conditions_required": [
     "fuel_material",
     "o2_pct",
@@ -318,7 +393,7 @@
     "extinction_diameter_mm",
     "flow_event"
    ],
-   "why": "Suppression by inert-gas dilution and by stopping ventilation both depend on extinction limits (FLEX.loi, TB008.ventilation, ICES19.fanoff). The BASS-II authors add that stopping ventilation may not be applicable in future exploration missions (ICES19.fanoff).",
+   "why": "In a total flooding application the goal of the agent is to reduce the oxygen concentration below the limiting oxygen index (FLEX.loi). On the ISS, ventilation in the affected module is terminated to slow the spread of fire (TB008.ventilation). The BASS-II investigators report that their flames always quenched when the fan was turned off and add that this strategy may not be applicable in future exploration missions (ICES19.fanoff). The organizing questions for fire suppression of 2004 ask for 'the O2 mole fraction and absolute pressure below which a fire cannot exist' (CP2004.supp.q3) and for the relative effectiveness of candidate suppressants (CP2004.supp.q1). The 2003 workshop report names flow shutdown among the passive responses and agent discharge and venting among the active ones (CP2003.resp.passive).",
    "references": [
     "FLEX.loi",
     "FLEX.mec",
@@ -332,7 +407,17 @@
     "3001.V2-9063",
     "TP216046.columns",
     "CP2004.supp.q3",
-    "ICES19.pressure"
+    "ICES19.pressure",
+    "CP2004.supp.q1",
+    "CP2003.resp.passive",
+    "RG.bass",
+    "BASS13.nitrogen",
+    "CP2003.roadmap.limit",
+    "ACME14.focus",
+    "ACME14.bre",
+    "ACME14.flamedesign",
+    "RG.flex2",
+    "CFI14.motivation"
    ],
    "stated_by": [
     {
@@ -403,12 +488,12 @@
      "verdict": "topic_only"
     }
    ],
-   "reading": "A counted test records the fuel, the oxygen and how the burn ended or an event word. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending.",
-   "note": "The one investigation of an extinguishing agent on solid fuels, PSI-26, has an experimental table with sample names only. The counted solid-fuel tests are BASS-II tests with an event word beside the flow settings (extinction, blowoff, no ignition, not sustained); they are also counted for P1 (Flammability limit), and counts of different needs must not be added. Every counted test with added carbon dioxide or helium is a FLEX droplet test. The PSI-69 objective names CO2, He and SF6; the FLEX table has no SF6 column. The other investigations linked to this need add no counted test: PSI-10 and PSI-39 have no column mapped to an outcome variable of this need, and the tables of PSI-20, 21, 23 and 68 are not one row per test.",
+   "reading": "A counted test records the fuel, the oxygen and how the burn ended or an event word. Its pressure is a value of the table (FLEX) or, for BASS-II, a statement of the investigators about the investigation as a whole (ICES19.pressure), not a reading per test. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending.",
+   "note": "The one investigation of an extinguishing agent on solid fuels, PSI-26, has an experimental table with sample names only; its link rests on a NASA guide (RG.bass). The investigators' slides report a nitrogen-jet result (BASS13.nitrogen), and no sentence stating an objective was found in them. The counted solid-fuel tests are BASS-II tests with an event word beside the flow settings (extinction, blowoff, no ignition, not sustained); they are also counted for P1 (Flammability limit), because the documents state the oxygen limit under prevention (CP2003.roadmap.limit) and under suppression (CP2004.supp.q3), and counts of different needs must not be added. Every counted test with added carbon dioxide or helium is a FLEX droplet test. The PSI-69 objective names CO2, He and SF6; the FLEX table has no SF6 column. Six other records name extinction in their objective field and are not counted for this need. NASA's project scientists write that the ACME experiments 'are primarily focused on energy and environmental concerns' and name BRE (PSI-20) as the one focused on spacecraft fire prevention (ACME14.focus, ACME14.bre): PSI-20 has verdict 'differs'. The stated primary goal of Flame Design (PSI-10) is soot inception and control (ACME14.flamedesign), and the Researcher's Guide gives energy conversion as the motivation of FLEX-2 (PSI-68; RG.flex2): both have verdict 'topic_only'. For PSI-21, PSI-23 and PSI-39 the link holds no purpose sentence, and the verdict is 'topic_only'; a paper of the CFI investigators (PSI-39) gives liquid-fuel combustion as its motivation and does not use the words 'fire' or 'safety' (CFI14.motivation). The papers of the principal investigators of PSI-10, PSI-21 and PSI-23 were not read, and the verdicts say nothing about documents that were not read. PSI-10 and PSI-39 also have no column mapped to an outcome variable of this need, and the tables of PSI-20, 21, 23 and 68 are not one row per test. The CFI-G tests (PSI-159) hold the variables of this need without a link and are reported as recorded outside the stated objective.",
    "conditions_documented_ok": [
     "pressure_kpa"
    ],
-   "required_note": "The one sentence found that states this need names two variables: 'What are the O2 mole fraction and absolute pressure below which a fire cannot exist?' (CP2004.supp.q3). Pressure is therefore required; for BASS-II it is met by the investigators' statement that pressure was not varied from 1 atmosphere (ICES19.pressure), not by a reading per test."
+   "required_note": "The one sentence found that states this need names two variables: 'What are the O2 mole fraction and absolute pressure below which a fire cannot exist?' (CP2004.supp.q3). Pressure is therefore required. The FLEX table has a pressure column. For BASS-II the condition is met by the investigators' statement that pressure was not varied from 1 atmosphere (ICES19.pressure), a nominal statement for the investigation and not a reading per test. That a statement about the whole table can meet the condition is the team's rule; no document sets it."
   },
   {
    "id": "D1",
@@ -428,7 +513,7 @@
     "co2_produced_pct_points",
     "co_to_co2_molar_ratio"
    ],
-   "why": "NASA-STD-3001 requires real-time monitoring of the toxic combustion products of its Table 6.2-3 (3001.V2-6024); carbon monoxide is one of them (3001.T6.2-3), and the rate of its buildup is named as an additional early warning (TB008.co).",
+   "why": "NASA-STD-3001 requires real-time monitoring of the toxic combustion products of its Table 6.2-3 (3001.V2-6024); carbon monoxide is one of them (3001.T6.2-3), and the rate of its buildup is named as an additional early warning (TB008.co). The documents read place combustion products under three headings: as a fire signature for detection (TM217036.signatures, CP2003.det.sensors, CP2004.det.products, TB008.cowarning, FR99.co); as a hazard to the crew and an input to the response (3001.V2-6024.rationale, CP2003.resp.emissions, CP2003.prev.toxicity); and as the object of post-fire monitoring (SMT.gap.postfire). Placing the need under detection is the team's choice.",
    "scope": {
     "fuel_phase": [
      "solid"
@@ -442,7 +527,21 @@
     "TB008.co",
     "CP2003.response",
     "ICES19.sensors",
-    "ICES19.coratio"
+    "ICES19.coratio",
+    "TM217036.signatures",
+    "CP2003.det.sensors",
+    "CP2004.det.products",
+    "TB008.cowarning",
+    "FR99.co",
+    "3001.V2-6024.rationale",
+    "CP2003.resp.emissions",
+    "CP2003.prev.toxicity",
+    "SMT.gap.postfire",
+    "BASS2TM.products",
+    "ICES15.purpose",
+    "ICES15.first",
+    "BASS2TM.sensors",
+    "BASS2TM.coratio"
    ],
    "stated_by": [
     {
@@ -451,8 +550,8 @@
      "verdict": "supported"
     }
    ],
-   "reading": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
-   "note": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The material is the only required variable, so the status conditions_only says only that the sample is named."
+   "reading": "A counted test records the material and the difference between the final and the initial CO or CO2 reading of the on-board sensors of the experiment (ICES19.sensors). The readings are not cabin concentrations and are not compared with crew exposure limits (SMAC.scope). The investigators state the purpose of the readings as evaluating the levels of combustion products and the completeness of combustion (BASS2TM.products, ICES15.purpose); in the passages read they do not present them as a detection measurement. The count is a count of tests that hold such a difference; it says nothing about what a detector would register.",
+   "note": "All counted tests are BASS-II tests (PSI-25). The link rests on the investigators' purpose sentence for the gas measurements (BASS2TM.products; the same purpose is stated in ICES15.purpose). The objective field of the PSI-25 record names no gas species, so the link carries no record sentence. The investigators call the result 'the first extensive data on the stoichiometry and toxicity of combustion products in microgravity' (ICES15.first) and frame the readings as completeness of combustion, stoichiometry and heat release (BASS2TM.products, BASS2TM.sensors), not as detection. The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The investigators present the CO/CO2 ratio as a measure of completeness of combustion of interest to the combustion community (BASS2TM.coratio); using it for this need is the team's choice, and the ratio in the pipeline is a team computation. Carbon dioxide is named as a species to sense or to measure (CP2003.det.sensors, SMT.gap.postfire) and is not in Table 6.2-3 of NASA-STD-3001 (3001.T6.2-3). The material is the only required variable, so the status conditions_only says only that the sample is named."
   },
   {
    "id": "D2",
@@ -471,7 +570,7 @@
    "outcomes_any": [
     "smoke_particle_size_um"
    ],
-   "why": "The SAME investigators report that particle size changes with air flow and aging (SAME.sizes) and that the ISS smoke detector showed reduced performance for Kapton and Teflon smoke (SAME.detector). Air flow, aging time and the heating level are the controlled parameters of the SAME smoke experiment (SAME.controls, SAMEEIRD.matrix); aging time is required, which makes the need hold SAME and SAME-R rows only.",
+   "why": "No document read states 'smoke generation conditions' as a need. The phrase is in the objective field of the PSI-102 record, as the conditions to which the droplet size distribution is to be related. What the documents state as needed is knowledge of the fire signatures of spacecraft materials, for smoke the particle size, and of the response of detectors (CP2003.detection, CP2003.det.priority, TM217036.signatures, SMT.gap.detection, SAME12.need). The documents name the heating, the air flow and the aging time as conditions these depend on (SAME.keyparams, WP21.factors, WP21.heating, WP21.velocity). This need lists the SAME tests by those conditions; it is the team's index of the tests, not a need stated by NASA. The SAME investigators report that particle size changes with air flow and aging (SAME.sizes) and that the ISS smoke detector showed reduced performance for Kapton and Teflon smoke (SAME.detector). Air flow, aging time and the heating level are the controlled parameters of the SAME smoke experiment (SAME.controls, SAMEEIRD.matrix); aging time is required, which makes the need hold SAME and SAME-R rows only.",
    "scope": {
     "fuel_phase": [
      "solid"
@@ -488,7 +587,17 @@
     "SAMEEIRD.target",
     "SAMEFSR.results",
     "SAMER.rtr0",
-    "AST15P.balance"
+    "AST15P.balance",
+    "CP2003.det.priority",
+    "TM217036.signatures",
+    "SMT.gap.detection",
+    "SAME12.need",
+    "SAME.keyparams",
+    "WP21.factors",
+    "WP21.heating",
+    "WP21.velocity",
+    "SAME.massloss",
+    "SAMER.rtr0.limit"
    ],
    "stated_by": [
     {
@@ -507,7 +616,7 @@
     }
    ],
    "reading": "A row of this need holds the conditions of a smoke test: material, air flow, aging time and the heating level (a target weight loss rate in the planned SAME matrix, SAMEEIRD.target; the heater resistance ratio Rt/R0 in SAME-R, SAMER.rtr0). No row holds a measured smoke property, so no test is counted for this need.",
-   "note": "The PSI experimental tables of SAME (PSI-102) and SAME-R (PSI-101) hold conditions of the smoke tests only. The measured smoke properties (moments of the particle size distribution, mean diameters, smoke detector signals) are reported in the investigators' final reports and papers (SAMEFSR.results, SAME.sizes, SAME.detector) and are not in the tables. The four value rows of the SAME table carry the same values as the planned test matrix of the 2005 requirements document (SAMEEIRD.matrix); the weight loss rate there is a target value (SAMEEIRD.target), and the sample mass actually lost was determined by weighing and is not in the table (AST15P.balance). Do not write that the SAME tests were run at 1 or 2 mg/min. The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included."
+   "note": "The PSI experimental tables of SAME (PSI-102) and SAME-R (PSI-101) hold conditions of the smoke tests only. The measured smoke properties (moments of the particle size distribution, mean diameters, smoke detector signals) are reported in the investigators' final reports and papers (SAMEFSR.results, SAME.sizes, SAME.detector) and are not in the tables. The four value rows of the SAME table carry the same values as the planned test matrix of the 2005 requirements document (SAMEEIRD.matrix): they are planned test points, and whether tests were flown at exactly these conditions was not verified. The weight loss rate there is a target value (SAMEEIRD.target): the SAME investigators write that the baseline temperature of each material was selected 'to produce 1 to 2 mg of sample mass loss in 60 sec of heating' (SAME.massloss). The sample mass actually lost was determined by weighing and is not in the table (AST15P.balance). Do not write that the SAME tests were run at 1 or 2 mg/min. In SAME-R the heating level is the heater resistance ratio Rt/R0 (SAMER.rtr0), which is not the sample temperature (SAMER.rtr0.limit). Listing the heating level as useful and not required is the team's choice, although the heating temperature is one of the three controlled parameters (SAME.controls). The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included."
   }
  ]
 }

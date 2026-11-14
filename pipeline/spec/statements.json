@@ -2,7 +2,7 @@
  "_meta": {
   "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
   "purpose": "The fixed English sentences of the evidence packages (data/pipeline/evidence/). pipeline/evidence.py fills the placeholders with numbers that are already in the package and writes the sentences next to them. No sentence is written by a language model and no sentence holds a number that is not a field of the same block.",
-  "wording_rule": "A sentence says what was recorded and what was not, with the number of tests behind it and the unit of every value. It does not judge a material, an atmosphere or the amount of evidence. A sentence about tests recorded outside the stated objective says that they are not counted for the need. In the sentences 'counted' names the tests of the field usable_tests: tests that record every required condition and at least one outcome variable of the need and come from an investigation whose PSI record states the need. The field and the population value keep the name 'usable'.",
+  "wording_rule": "A sentence says what was recorded and what was not, with the number of tests behind it and the unit of every value. It does not judge a material, an atmosphere or the amount of evidence. A sentence about tests recorded outside the stated objective says that they are not counted for the need. In the sentences 'counted' names the tests of the field usable_tests: tests that record every required condition and at least one outcome variable of the need and come from an investigation linked to the need by a supported purpose sentence. The field and the population value keep the name 'usable'.",
   "format": {
    "text": "'{field}' is replaced by the value of the field. '[field|one|many]' is replaced by 'one' if the field equals 1 and by 'many' otherwise. A field that is not listed under 'fields' for the section, or that is empty when the sentence is used, stops the run.",
    "when": "A list of conditions [field, operator, value]; the sentence is used only if all hold. Operators: ==, !=, >, >=, <, <= (the table OPS of run.py). An empty value (null) can only be compared with == and !=.",
@@ -42,8 +42,8 @@
  "indicator_text": {
   "population": {
    "usable": "the tests counted for this need",
-   "recorded": "all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective",
-   "in_scope": "the tests within the scope of this need that record every required condition, with or without an outcome, from investigations that state this need as an objective"
+   "recorded": "all tests that meet the required conditions of this need and hold an outcome, including tests that are not counted for the need because no supported purpose sentence links their investigation to it",
+   "in_scope": "the tests within the scope of this need that hold every required condition, with or without an outcome, from the investigations linked to this need"
   },
   "group_item": "{name} {value}",
   "group_join": ", ",
@@ -243,7 +243,7 @@
       "not_measured"
      ]
     ],
-    "text": "No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective."
+    "text": "No test in the mapped PSI tables is counted for this need: no test meets every required condition, holds a value for at least one outcome variable of the need and comes from an investigation linked to the need by a supported purpose sentence of the investigators or of a NASA project document."
    },
    {
     "id": "status.atmosphere_not_specified",
@@ -461,7 +461,7 @@
       0
      ]
     ],
-    "text": "{recorded_outside_objective} other [recorded_outside_objective|test records|tests record] every required condition and at least one outcome variable of this need but [recorded_outside_objective|comes from an investigation|come from investigations] whose PSI record does not state this need as an objective. [recorded_outside_objective|This test is|These tests are] not counted for this need and [recorded_outside_objective|is|are] not in its counts."
+    "text": "{recorded_outside_objective} other [recorded_outside_objective|test records|tests record] every required condition (in the table or, where the need allows it, in a document about the whole table) and at least one outcome variable of this need but [recorded_outside_objective|comes from an investigation|come from investigations] that no supported purpose sentence of the investigators or of a NASA project document links to this need. [recorded_outside_objective|This test is|These tests are] not counted for this need and [recorded_outside_objective|is|are] not in its counts."
    },
    {
     "id": "elsewhere.oxygen",
@@ -603,7 +603,7 @@
     "id": "gap.need.no_usable_test",
     "code": "need:no_usable_test",
     "when": [],
-    "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
+    "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need."
    }
   ],
   "indicator": [
