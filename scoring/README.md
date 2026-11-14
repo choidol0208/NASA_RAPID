@@ -1,5 +1,7 @@
 # Catalog filter (the ranking)
 
+> **How it works, in one document:** `scoring/METHOD.md` (weighting rules, validation, data preprocessing).
+
 > AI-generated code and data: written with Claude (an AI assistant) on 2026-11-14. Catalog values are `ai_extracted`; a person still has to compare them with the originals. Scores and rankings are the team's method, not NASA's conclusion. The values of config 1.1.0 were approved as they are by a team member (`scoring/PARAMETER_REVIEW.md`).
 
 From the environment and conditions a user gives, the filter finds the most similar PSI test configurations and picks the top 1 to 3 investigations. Code computes the scores, so the same input always gives the same result. A language model may explain a result; it never produces or changes a score.
@@ -24,6 +26,7 @@ From the environment and conditions a user gives, the filter finds the most simi
 | `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py` | Rebuild the catalog from the PSI sources |
 | `scoring/MODEL_BASIS.md` | What each scoring rule rests on, checked against a combustion textbook (Turns 2012), what stays the team's choice, and the two changes applied in config 1.1.0 |
 | `scoring/PARAMETER_REVIEW.md` | AI review of every value other than the weights: role, basis, demo sensitivity, two findings, open questions |
+| `scoring/METHOD.md` | **Start here.** The weighting rules, how they were validated, and the data preprocessing for the catalog, in one place |
 
 ## Running it
 

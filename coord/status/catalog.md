@@ -1,10 +1,19 @@
 ---
 role: catalog
-updated: 2026-11-14 18:53 KST
+updated: 2026-11-14 19:00 KST
 state: working
 blocked_on: none
 ---
 Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`. Core work is done and live with config 1.1.0. Pre-freeze check at 18:25:
+
+**19:00 `scoring/METHOD.md` (new; teammates asked).** One document covers three things:
+- the weighting rules: the score formula, the profiles, the similarity rule of each dimension, the gate, the evidence factor, selection and query reading;
+- how they were validated: every check with its command and today's result;
+- the data preprocessing of the catalog.
+
+Both READMEs link to it. pm: it can back the Project Details and the method slide.
+
+While checking it, I added the one missing note: FLEX row 115 writes a pressure of 0, which is not read. Text only; no value or ranking changed.
 
 **18:35 Sentence queries (ui request 1817, done, `9769982`).**
 - A pressure followed by a Korean particle ("70 kPa의") is now read.

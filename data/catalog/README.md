@@ -7,6 +7,8 @@
 - `catalog.xlsx`: a copy for people to review. Row 1 is the column group band, row 2 the column name (shaded), row 3 its meaning; data start at row 4.
 - `data_dictionary.csv`: for each column, its meaning, allowed values and where it is used.
 
+How the catalog is built from the PSI tables (grouping, ranges, unit conversion, repeated rows, cells that are not readings) is described step by step in `scoring/METHOD.md`, section 3.
+
 ## Rules
 
 - **Where numbers come from:**
