@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 14:15 KST
+updated: 2026-11-14 13:55 KST
 state: working
 blocked_on: none
 ---
@@ -23,7 +23,7 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - `flight_tests_not_in_psi[]` (`o2_pct`, `label`).
   - Tell me if a name differs. Since 12:45 the ui role runs in a session on the human lead's computer, which can open github.io, so I check the public page after every push.
 
-Done since last sync (14:15, asked by the human lead):
+Done since last sync (pushed 13:54, asked by the human lead):
 - **ISS against lunar habitat, side by side** at the top of the needs section, for either demo query:
   - counted tests matched per need, with the breakdown by tier;
   - a button that runs the other query;
