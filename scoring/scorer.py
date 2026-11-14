@@ -424,12 +424,27 @@ def _fmt_range(c, lo, hi, unit):
     return f"{a:g}{unit}" if a == b else f"{a:g}–{b:g}{unit}"
 
 
+# How a number is worded by where it comes from (the catalog's o2_source, pressure_source, flow_source).
+SOURCE_NOTE = {"record": "named in the PSI record, not a test value", "test_matrix": "from the test matrix, not individual tests",
+               "team": "team reading, not in the table"}
+
+
+def _fmt_value(c, var, label, lo, hi, unit, assumed):
+    r = _fmt_range(c, lo, hi, unit)
+    if assumed:  # filled in by the atmosphere fallback: never worded as "tested"
+        return f"{label} not recorded, assumed {r}"
+    note = SOURCE_NOTE.get(c.get(f"{var}_source") or "")
+    return f"{label} {r}, {note}" if note else f"{label} tested {r}"
+
+
 def _fmt_flow(c):
     r = _fmt_range(c, "flow_min_cms", "flow_max_cms", " cm/s")
     head = f"flow {c.get('flow_config') or 'n/a'}"
     if r == "not reported":
         return f"{head}, speed not reported"
-    return f"{head}, {r}" if r.startswith(("up to", "at least")) else f"{head} at {r}"
+    text = f"{head}, {r}" if r.startswith(("up to", "at least")) else f"{head} at {r}"
+    note = SOURCE_NOTE.get(c.get("flow_source") or "")
+    return f"{text}, {note}" if note else text
 
 
 def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
@@ -445,11 +460,9 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
     best = sorted(known, key=lambda d: (d in assumed, -s["contributions"][d]))[:2]
     gaps = sorted(known, key=lambda d: sim[d])[:1]
     detail = {
-        # A value filled in by the atmosphere fallback was not recorded: never word it as "tested".
-        "o2": (f"O2 not recorded, assumed {_fmt_range(c, 'o2_min_pct', 'o2_max_pct', '%')}" if "O2" in fallback
-               else f"O2 tested {_fmt_range(c, 'o2_min_pct', 'o2_max_pct', '%')}"),
-        "pressure": (f"pressure not recorded, assumed {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}" if "pressure" in fallback
-                     else f"pressure tested {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}"),
+        # "tested" only for numbers from an experimental table; assumed, record and matrix values say so.
+        "o2": _fmt_value(c, "o2", "O2", "o2_min_pct", "o2_max_pct", "%", "O2" in fallback),
+        "pressure": _fmt_value(c, "pressure", "pressure", "pressure_min_kpa", "pressure_max_kpa", " kPa", "pressure" in fallback),
         "flow": _fmt_flow(c),
         "fuel": f"fuel {c.get('fuel_material')}",
         "geometry": f"{c.get('sample_geometry')} ({c.get('thermal_regime') or 'regime n/a'})",

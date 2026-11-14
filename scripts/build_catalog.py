@@ -736,9 +736,41 @@ CFG_COLS = ["config_id", "investigation_id", "psi_accession", "config_label",
             "flow_config", "flow_min_cms", "flow_max_cms",
             "o2_min_pct", "o2_max_pct", "o2_reference", "pressure_min_kpa", "pressure_max_kpa",
             "ppo2_min_kpa", "ppo2_max_kpa", "diluent", "diluent_max_pct", "ambient_temp_k",
-            "atmosphere_basis", "gravity_level", "ignition_method",
+            "atmosphere_basis", "o2_source", "pressure_source", "flow_source", "gravity_level", "ignition_method",
             "measured_outputs", "flammability_boundary_reported", "extinction_mechanism", "key_findings",
             "test_count_config", "tests_table_ref", "source_notes", "verification_status"]
+
+
+# Where each oxygen, pressure and flow number comes from, so the ranking never words a planned
+# or read-in value as "tested". Default: "table" when the value is set (a value per test or per
+# test group in a PSI experimental table), "" when it is empty. The exceptions:
+#   record      named in the PSI record text, not a test value in a table
+#   test_matrix a planned test-matrix table (conditions joined by "or"), not individual tests
+#   team        a team reading with no number in the table or the record
+VALUE_SOURCES = {
+    "ACME-BRE-C01": dict(pressure="record", flow="team"),  # objective: "will be examined: 14.7 psia ... 8.2 psia";
+                                                             # table note: pressures "not identified in this summary table";
+                                                             # 0 cm/s is the team's reading of "quiescent microgravity ambient"
+    **{f"BASS-C0{i}": dict(flow="record") for i in range(1, 6)},  # approach: flow "up to 40 cm/s"
+    "FLEX-2-C01": dict(o2="test_matrix", pressure="test_matrix", flow="test_matrix"),
+    "FLEX-2-C02": dict(o2="test_matrix", pressure="test_matrix", flow="test_matrix"),
+    "FLEX-C01": dict(flow="team"), "FLEX-C02": dict(flow="team"),  # droplets read as quiescent; no flow column
+    "CFI-C01": dict(flow="team"),
+}
+
+
+def value_sources(r):
+    out = {}
+    for var, (lo, hi) in (("o2", ("o2_min_pct", "o2_max_pct")), ("pressure", ("pressure_min_kpa", "pressure_max_kpa")),
+                          ("flow", ("flow_min_cms", "flow_max_cms"))):
+        has = r.get(lo, "") != "" or r.get(hi, "") != ""
+        src = VALUE_SOURCES.get(r["config_id"], {}).get(var, "table") if has else ""
+        assert not (src and not has), (r["config_id"], var)
+        out[f"{var}_source"] = src
+    basis = r.get("atmosphere_basis", "")
+    assert ("record" in basis) == ("record" in out.values()), (r["config_id"], basis, out)
+    assert ("matrix" in basis) == ("test_matrix" in out.values()), (r["config_id"], basis, out)
+    return out
 
 
 def platform_of(d):
@@ -806,6 +838,7 @@ def main():
         if r.get("o2_reference") == "ambient" and o2a != "" and pa != "":
             r["ppo2_min_kpa"] = round(o2a / 100 * pa, 1)
             r["ppo2_max_kpa"] = round(o2b / 100 * pb, 1)
+        r.update(value_sources(r))
         r.setdefault("verification_status", "ai_extracted")
         r.setdefault("source_notes", "Values from PSI record/table as stated in atmosphere_basis; classification columns are team judgement.")
         cfg_rows.append(r)

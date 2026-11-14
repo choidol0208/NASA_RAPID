@@ -195,6 +195,33 @@ class AssumedAtmosphereWording(unittest.TestCase):
                 self.assertNotRegex(r["why"].split(";")[0], r"^(O2|pressure) match", r["config_id"])
 
 
+class SourceWording(unittest.TestCase):
+    """'tested' only for numbers from an experimental table (catalog columns o2_source, pressure_source, flow_source)."""
+
+    def test_every_value_has_a_source(self):
+        for c in CFGS:
+            for var, lo, hi in (("o2", "o2_min_pct", "o2_max_pct"), ("pressure", "pressure_min_kpa", "pressure_max_kpa"),
+                                ("flow", "flow_min_cms", "flow_max_cms")):
+                has = bool(c[lo] or c[hi])
+                self.assertEqual(bool(c[f"{var}_source"]), has, (c["config_id"], var))
+                self.assertIn(c[f"{var}_source"], ("", "table", "record", "test_matrix", "team"))
+
+    def test_record_pressure_of_bre_is_not_tested(self):
+        rows = {r["config_id"]: r for r in scorer.rank("lunar habitat")["ranking"]}
+        text = rows["ACME-BRE-C01"]["why"] + " " + rows["ACME-BRE-C01"]["main_gap"]
+        self.assertIn("named in the PSI record, not a test value", text)
+        self.assertNotIn("pressure tested", text)
+
+    def test_no_non_table_value_worded_as_tested(self):
+        src = {c["config_id"]: c for c in CFGS}
+        for q in ("lunar habitat", "ISS", "spacesuit", "heptane droplet 30% O2 10.2 psi", "stagnant PMMA 34% O2"):
+            for r in scorer.rank(q)["ranking"]:
+                text = r["why"] + " " + r["main_gap"]
+                for var, label in (("o2", "O2"), ("pressure", "pressure")):
+                    if src[r["config_id"]][f"{var}_source"] not in ("table", ""):
+                        self.assertNotIn(f"{label} tested", text, (q, r["config_id"]))
+
+
 class OxidizerStream(unittest.TestCase):
     """The O2 of an inverse flame is its burner stream, not an atmosphere: never matched with the user's O2."""
 
