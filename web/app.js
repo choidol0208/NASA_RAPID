@@ -511,18 +511,68 @@ function scenarioNeedsRow(out, pipe, order) {
   return tr;
 }
 
-let testsIndex = null; // test_id -> row of tests.csv, loaded on first use
-async function loadTestsIndex() {
-  if (testsIndex) return testsIndex;
-  const text = await loadText("data/tests.csv");
-  testsIndex = new Map(parseRows(text).map((r) => [r.test_id, r]));
-  return testsIndex;
+// test_id -> row of the slim data/tests.csv written by web/build.py (test_id, source_file,
+// source_row, o2_pct, pressure_kpa, line = the row's line in data/pipeline/tests.csv). Loaded once.
+// ISS and lunar habitat side by side: the demo's contrast in one glance, from scenario_needs.csv.
+const COMPARE = [["iss", "ISS"], ["lunar_habitat", "lunar habitat"]]; // [scenario id, query the button runs]
+const SN_SHORT = { in_atmosphere: "in range", oxygen_only: "O2 in range, no pressure in table", pressure_only: "pressure in range, no O2 in table",
+  other_atmosphere: "other atmospheres only", not_measured: "no usable test" };
+function renderCompare(out, pipe, runQuery) {
+  const box = $("#compare");
+  box.replaceChildren();
+  const sid = scenarioId(out, pipe);
+  if (!sid || !pipe.scenarioNeeds || !pipe.needs || !COMPARE.some(([id]) => id === sid)) return;
+  const order = PILLARS.flatMap(([pid]) => pipe.needs.filter((n) => n.pillar === pid));
+  const specOf = (id) => pipe.scenarioSpec.scenarios.find((x) => x.id === id) || { id, label: id };
+  const thead = h("tr", {}, h("th", { scope: "col" }, "Scenario"), ...order.map((n) => h("th", { scope: "col", title: n.question }, n.name)));
+  const tb = h("tbody");
+  const summary = [];
+  for (const [id, q] of COMPARE) {
+    const spec = specOf(id);
+    const rows = pipe.scenarioNeeds.filter((r) => r.scenario_id === id);
+    if (!rows.length) continue;
+    const mine = id === sid;
+    const btn = mine ? h("span", { class: "tag" }, "your query") : h("button", { type: "button", class: "more-btn compare-go" }, `Show "${q}"`);
+    if (!mine) btn.addEventListener("click", () => runQuery(q));
+    const tr = h("tr", { class: mine ? "is-you" : null }, h("th", { scope: "row" }, h("b", {}, spec.label || id), " ", btn));
+    let withTests = 0;
+    for (const n of order) {
+      const r = rows.find((x) => x.need_id === n.id);
+      if (!r) { tr.append(h("td", { class: "st-missing" }, "—")); continue; }
+      const atm = +r.tests_atmosphere || 0, o2o = +r.tests_oxygen_only || 0, po = +r.tests_pressure_only || 0;
+      const matched = atm + o2o + po;
+      if (matched) withTests++;
+      const codes = r.gaps ? r.gaps.split(";").filter(Boolean) : [];
+      const parts = [atm ? `${atm} in range` : "", o2o ? `${o2o} with O2 in range, no pressure in table` : "", po ? `${po} with pressure in range, no O2 in table` : ""].filter(Boolean);
+      const word = parts.length ? parts.join("; ") : (r.status === "other_atmosphere" && otherAtmosphereLabel(codes)) || SN_SHORT[r.status] || r.status;
+      const [, cl] = SN_STATUS[r.status] || ["", ""];
+      tr.append(h("td", { class: "st " + cl }, rowLink("data/pipeline/scenario_needs.csv", r, String(matched), `${matched} counted tests matched to this scenario's range for ${n.name}.`), h("small", {}, word)));
+    }
+    tb.append(tr);
+    summary.push(`${spec.label || id}: matched tests for ${withTests} of ${order.length} needs`);
+  }
+  const caveats = COMPARE.map(([id]) => specOf(id)).filter((s) => s.caveat).map((s) => h("li", {}, h("b", {}, `${s.label}: `), s.caveat));
+  box.append(h("h3", {}, "ISS and lunar habitat, side by side"),
+    h("p", { class: "team-note" }, "Counted recorded tests matched to each scenario's oxygen and pressure range, per need (counted only where the investigation states the need as an objective). Team computation from the PSI tables."),
+    h("div", { class: "table-wrap" }, h("table", { class: "compare-table" }, h("thead", {}, thead), tb)),
+    h("p", { class: "cov-sum" }, summary.join(". ") + "."),
+    caveats.length ? h("ul", { class: "gap compare-caveats" }, caveats) : null);
 }
+
+let testsIndex = null, testsIndexP = null;
+function loadTestsIndex() {
+  if (!testsIndexP) testsIndexP = loadText("data/tests.csv").then((text) => {
+    testsIndex = new Map(parseRows(text).map((r) => [r.test_id, r]));
+    return testsIndex;
+  }).catch((e) => { testsIndexP = null; throw e; });
+  return testsIndexP;
+}
+const fullTestsRow = (t) => ({ _line: /^\d+$/.test(t.line || "") ? +t.line : t._line });
 function testLink(id) {
   const t = testsIndex && testsIndex.get(id);
   if (t && t.source_file && /^\d+$/.test(t.source_row))
     return link(`${REPO}data/psi/experimental_tables/${encodeURIComponent(t.source_file)}?plain=1#L${t.source_row}`, id);
-  if (t) return rowLink("data/pipeline/tests.csv", t, id);
+  if (t) return rowLink("data/pipeline/tests.csv", fullTestsRow(t), id);
   return h("span", {}, id);
 }
 
@@ -706,7 +756,7 @@ const LANES = [["gas", "Gas flames"], ["liquid", "Fuel droplets"], ["solid", "So
 function testHref(id) {
   const t = testsIndex && testsIndex.get(id);
   if (t && t.source_file && /^\d+$/.test(t.source_row)) return `${REPO}data/psi/experimental_tables/${encodeURIComponent(t.source_file)}?plain=1#L${t.source_row}`;
-  if (t) return `${REPO}data/pipeline/tests.csv?plain=1#L${t._line}`;
+  if (t) return `${REPO}data/pipeline/tests.csv?plain=1#L${fullTestsRow(t)._line}`;
   return `${REPO}data/pipeline/tests.csv`;
 }
 const targetO2 = (t) => (typeof t.o2_pct === "number" ? t.o2_pct : typeof t.o2_min === "number" ? t.o2_min : null);
@@ -895,6 +945,7 @@ async function main() {
     renderResults(out, cat, insights, sc);
     renderScenarioText(out, sc, cat);
     renderRanking(out);
+    renderCompare(out, pipe, (q2) => { run(q2); $("#needs").scrollIntoView({ behavior: "smooth", block: "start" }); });
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);
     renderTests(out, pipe, cat);

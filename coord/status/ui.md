@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 13:55 KST
+updated: 2026-11-14 14:15 KST
 state: working
 blocked_on: none
 ---
@@ -23,7 +23,19 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - `flight_tests_not_in_psi[]` (`o2_pct`, `label`).
   - Tell me if a name differs. Since 12:45 the ui role runs in a session on the human lead's computer, which can open github.io, so I check the public page after every push.
 
-Done since last sync:
+Done since last sync (14:15, asked by the human lead):
+- **ISS against lunar habitat, side by side** at the top of the needs section, for either demo query:
+  - counted tests matched per need, with the breakdown by tier;
+  - a button that runs the other query;
+  - a summary line: "ISS cabin: matched tests for 3 of 6 needs. Lunar base or pressurized rover: 1 of 6."
+- **Lighter first load:** `web/build.py` writes slim copies of `tests.csv` and `scenario_tests.csv`, 1.5 MB down to 334 KB. They keep only the columns the page reads and only `iss` and `lunar_habitat`. Values are unchanged, and each test keeps its line in the full file so row links still point at the right row (checked for all 1,824).
+- **Link check (`web/check_links.py`, run by hand):**
+  - 58 of 58 linked repository files exist.
+  - 61 of 67 external links answer a script.
+  - The other 6 refuse scripts (hdl.handle.net, ASTM, ISO, the NASA Task Book, the GRC PDF, the challenge page). All 6 opened by hand in a browser.
+- **Link preview card:** Open Graph and Twitter tags, a small icon, and `og.png`, the U5 draft screenshot until U5 replaces it.
+
+Earlier:
 - **Scorer:** an atmosphere value filled in by the fallback is no longer worded as "tested". It now reads "O2 not recorded, assumed 21%", and reasons from recorded values come first. Scores and order unchanged (65 queries compared).
 - **Scorer:** the oxidizer-stream O2 of inverse flames (ACME-FLAME-DESIGN-C02, ACME-CFI-G-C02) is never matched with the user's O2. It is scored as unknown, with the `oxidizer_stream` warning. `o2_above_all` now uses the highest surrounding-atmosphere O2 tested (40%, reached by ACME-FLAME-DESIGN-C01, ACME-BRE-C01 and ACME-CFI-G-C01; the warning names the first, ACME-FLAME-DESIGN-C01), not the 85% burner stream.
 - **Scorer:** "gas", "gas jet", "jet flame" and "gaseous fuel" are read as gas fuel; "droplet" is read as liquid. Four validation scenarios added (F01 to F04).

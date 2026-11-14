@@ -6,6 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fire Evidence Explorer</title>
 <meta name="description" content="Tell it what you want to build: a spacecraft cabin, a Moon base, a rover. See the closest NASA microgravity fire investigations, what to consider and what their recorded tests say, and where the evidence stops. A research exploration tool built on NASA PSI data.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Fire Evidence Explorer">
+<meta property="og:description" content="Tell it what you want to build: a spacecraft cabin, a Moon base, a rover. See the closest NASA microgravity fire investigations, what their recorded tests say, and where the evidence stops. A research exploration tool, not safety guidance.">
+<meta property="og:url" content="https://choidol0208.github.io/NASA_RAPID/">
+<meta property="og:image" content="https://choidol0208.github.io/NASA_RAPID/og.png">
+<meta property="og:image:alt" content="Fire Evidence Explorer showing the closest NASA PSI investigations for a lunar habitat">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231b2230'/%3E%3Cpath d='M5 24h22' stroke='%23fff' stroke-width='2'/%3E%3Ccircle cx='10' cy='18' r='3' fill='%234a64d8'/%3E%3Ccircle cx='17' cy='14' r='3' fill='%234a64d8'/%3E%3Cpath d='M23 8v16' stroke='%23e0a33a' stroke-width='2' stroke-dasharray='3 2'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
@@ -65,6 +73,7 @@
       <p class="team-note">Status is the team's pipeline reading of each PSI experimental table, not a NASA assessment.</p>
     </div>
     <p class="intro">Fire-safety information needs, each defined from published NASA standards and studies. For each ranked investigation, the cell says whether its PSI table records the conditions and the outcome that need asks for. A test counts as evidence for a need only when the investigation's PSI record states that need as an objective. Click a cell to see the pipeline row behind it.</p>
+    <div id="compare" class="compare ai-block"></div>
     <div id="scenario-frame" class="ai-block"></div>
     <div id="needs-body"></div>
     <div id="needs-notes" class="ai-block"></div>
