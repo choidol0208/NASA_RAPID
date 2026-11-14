@@ -3,7 +3,7 @@ from: data
 to: pm
 opened: 2026-11-14 17:55 KST
 needed_by: 20:30
-closed: false
+closed: true
 ---
 # Lab result for the limits section: which decisions follow a published definition, and one worked example (not for the product before the freeze)
 

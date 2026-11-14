@@ -1,10 +1,19 @@
 ---
 role: data
-updated: 2026-11-14 17:32 KST
+updated: 2026-11-14 19:45 KST
 state: working
 blocked_on: none
 ---
-Now: the three scenario CSVs (`scenario_needs.csv`, `scenario_tests.csv`, `need_tests.csv`) are frozen as of 17:30; their bytes have not changed since the 16:15 merge. No open request to the data role. Until the 19:00 freeze only text fixes asked for by other roles. On the separate branch `data-lab` (not pushed, not for merging) the data side's human lead is trying arithmetic-only numbers (position of a scenario's nominal point relative to the tested oxygen and pressure values; order changes between condition columns of published tables) and a map of established, citable models for each decision point of the pipeline; a review request follows only if it is good enough.
+Now (19:45): building, on `data-pipeline`, a state for every gap (in the table / a column exists in a sampled raw file / stated only by a document / not found in the sampled files), a queue of which raw file groups to open first, and two full readings of raw values as proof (Saffire ambient pressure, SAME-R particle size) kept in a separate file. Only fields and files are ADDED; no existing field changes. No open request. The three scenario CSVs are still as frozen at 17:30 (bytes unchanged); if the data side reopens them it will say so here first. Compliance rows for the work below are held back until pm announces that the English logs are on `main`.
+
+For pm (request 1755, your three conditions): `data-lab` is pushed (`b2d7010`). It holds `pipeline/lab/model_map.md` (130 decisions: 53 follow a published definition, 52 team rules, 25 judgements made when the rules were written), `data/pipeline/lab/numbers/envelope_lunar_habitat.md`, and the figure you asked for: `data/pipeline/lab/numbers/envelope_lunar_habitat_S1.png` and `.svg`, written by `pipeline/lab/plot_envelope.py` (standard library only; the caption inside the image says it is computed by the team's code and is not a NASA figure). Who checked: every number recomputed by a second AI agent with its own code, citations opened again by a separate agent, no person.
+
+New on `data-lab` (19:00 to 19:20), a survey of the raw files behind the tables: 159 small PSI files of 19 investigations were opened for their column names only (no archive, no video). Per investigation and variable it says: in the table / a column with that name exists in one sampled raw file (and what kind: sensor series, value per test in a results file, set point, calculation, free text, ...) / stated only by a document / not found in the sampled files. Examples: the Saffire sensor workbooks have an "Ambient Pressure" column (PSIA) that the PSI tables lack; the SAME-R results workbook has smoke particle size per test (three different statistics); the BASS as-run matrix has cabin oxygen and pressure per run. An independent AI check removed 58 of 97 first mappings as a different quantity, location or event. Files: `pipeline/spec/raw_columns.json`, `data/pipeline/lab/raw_gaps.md`.
+
+What the data role would do with the extra day, most valuable first (the data side's human lead decides tonight):
+1. Show, per need and scenario, the difference between "no test" and "tested, but the value is in a raw file and not in the table", from the survey above. It changes no count; it adds a state next to each gap.
+2. Read the few raw values that a need requires and that a sampled file holds unambiguously (Saffire ambient pressure for 13 tests; SAME-R particle size for 109 tests), each with file, sheet, column and rule, behind the same checker. This would reopen the three frozen CSVs: the pressure tier of the Saffire tests and the D2 count could change.
+3. Correct the mmHg factor (31 pressures change by 0.0001 kPa) and bring the envelope position (inside each axis / inside the region) into the evidence packages.
 
 Done 16:25 to 17:30:
 - D5 (request 1224): verdicts for all 385 rows of `ai/review/review_sheet.csv`, `reviewer_kind = ai_session`; 61 model rows read by two independent AI readers, the stricter verdict recorded (33 supported, 28 partly).
