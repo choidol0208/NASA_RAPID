@@ -5,7 +5,7 @@
     "generated_by": "AI-assisted (Claude), reviewed: no",
     "formula": "score = 100 * M * G * sum_i(w_i * S_i) over active dimensions; weights renormalized to sum 1 over active dimensions"
   },
-  "version": "1.0.0",
+  "version": "1.1.0",
   "default_profile": "prevention",
   "profiles": {
     "prevention": {
@@ -54,9 +54,10 @@
   "similarity": {
     "unknown_value": 0.5,
     "o2": {
-      "above_scale_pct": 5.0,
-      "below_scale_pct": 10.0,
-      "why": "Asymmetric: a user O2 above the tested max means the real fire may be worse than tested (non-conservative), so it decays faster."
+      "metric": "log_ratio",
+      "above_scale_ln": 0.213574,
+      "below_scale_ln": 0.646627,
+      "why": "Asymmetric: a user O2 above the tested max means the real fire may be worse than tested (non-conservative), so it decays faster. Distance is the log of the O2 ratio, because the effect of oxygen on a flame goes with ratios of its mole fraction: a diffusion flame's stoichiometric ratio scales with 1/X_O2 (Turns 2012, ch. 9; scoring/MODEL_BASIS.md). The scales are ln(26/21) above and ln(21/11) below, so near air they equal the earlier 5 and 10 percentage points; 15 against 21% is now a larger gap than 30 against 36%. Version 1.1.0 (2026-11-14)."
     },
     "pressure": {
       "sigma_ln": 0.693147,
@@ -150,7 +151,14 @@
     "diluent": {
       "same": 1.0,
       "other_inert": 0.5,
-      "none": 0.0
+      "none": 0.0,
+      "molar_cp_298K_kJ_per_kmolK": {
+        "CO2": 37.198,
+        "N2": 29.071,
+        "He": 20.786
+      },
+      "cp_ratio_exponent": 2,
+      "why": "An inert diluent acts mainly thermally (Turns 2012, ch. 8), so two different inerts are compared by molar heat capacity: similarity = (smaller cp / larger cp) ^ exponent, the best match over the configuration's diluents. cp at 298 K: CO2 and N2 from Turns 2012, Appendix A (Tables A.2, A.7, JANAF-based); He as an ideal monatomic gas, 5R/2. The exponent 2 is the team's choice: it keeps the average near the earlier flat 0.5 (CO2-N2 0.61, N2-He 0.51, CO2-He 0.31). Helium's high thermal diffusivity is not captured. other_inert is used for a gas with no cp here. Version 1.1.0 (2026-11-14)."
     },
     "unknown_cap_dims": [
       "o2",

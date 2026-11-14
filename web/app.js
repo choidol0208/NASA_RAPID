@@ -559,6 +559,30 @@ function renderCompare(out, pipe, runQuery) {
     caveats.length ? h("ul", { class: "gap compare-caveats" }, caveats) : null);
 }
 
+// The answer in two lines, right under the query box, so the first screen shows the result.
+function scenarioCoverage(pipe, id) {
+  const rows = (pipe.scenarioNeeds || []).filter((r) => r.scenario_id === id);
+  const withTests = rows.filter((r) => (+r.tests_atmosphere || 0) + (+r.tests_oxygen_only || 0) + (+r.tests_pressure_only || 0) > 0).length;
+  const spec = pipe.scenarioSpec && pipe.scenarioSpec.scenarios.find((x) => x.id === id);
+  return { label: (spec && spec.label) || id, withTests, total: rows.length };
+}
+function renderGlance(out, pipe) {
+  const box = $("#glance");
+  box.replaceChildren();
+  if (out.status !== "ok" || !out.results.length) { box.hidden = true; return; }
+  const top = h("p", {}, h("b", {}, "At a glance: "), "closest NASA investigations ",
+    ...out.results.flatMap((r, i) => [i ? ", " : "", h("a", { href: "#top" }, r.investigation_id)]),
+    ` (team scores ${out.results.map((r) => r.score).join(", ")}).`);
+  const sid = scenarioId(out, pipe);
+  const cov = sid && pipe.scenarioNeeds ? COMPARE.map(([id]) => scenarioCoverage(pipe, id)).filter((c) => c.total) : [];
+  const second = cov.length
+    ? h("p", {}, "Needs with counted recorded tests in the scenario range: ", cov.map((c) => `${c.label} ${c.withTests} of ${c.total}`).join(" · "), ". ",
+      h("a", { href: "#compare" }, "Compare"), " · ", h("a", { href: "#stops" }, "Where the evidence stops"))
+    : h("p", {}, h("a", { href: "#needs" }, "What the recorded tests say"), " · ", h("a", { href: "#stops" }, "Where the evidence stops"));
+  box.append(top, second);
+  box.hidden = false;
+}
+
 let testsIndex = null, testsIndexP = null;
 function loadTestsIndex() {
   if (!testsIndexP) testsIndexP = loadText("data/tests.csv").then((text) => {
@@ -874,20 +898,30 @@ function setStatus(text, kind) {
   s.textContent = text || "";
 }
 
+// web/build.py writes the build commit here, so every data file is fetched as file?v=<commit>:
+// a new deploy is read at once, and a page never mixes files from two builds (Pages caches 10 min).
+const DATA_V = "__BUILD__";
+let OPTIONAL_HAS = () => true; // set in main() from build.json
+const vurl = (p) => (DATA_V.startsWith("__") ? p : `${p}${p.includes("?") ? "&" : "?"}v=${DATA_V}`);
 async function loadJSON(path, fallback) {
-  try { const r = await fetch(path); if (!r.ok) throw new Error(r.status); return await r.json(); }
+  try { const r = await fetch(vurl(path)); if (!r.ok) throw new Error(r.status); return await r.json(); }
   catch (e) { if (fallback !== undefined) return fallback; throw e; }
 }
-async function loadText(path) { const r = await fetch(path); if (!r.ok) throw new Error(`${path}: ${r.status}`); return r.text(); }
+async function loadText(path) { const r = await fetch(vurl(path)); if (!r.ok) throw new Error(`${path}: ${r.status}`); return r.text(); }
 
 async function main() {
-  setStatus("Loading the catalog…");
+  setStatus("Loading the catalog and the NASA test tables…");
   let config, scorer, invOrder = [], insights = { cards: {} };
+  // build.json lists the optional files this build has; others are not fetched (no 404s).
+  const build = await loadJSON("data/build.json", null);
+  const has = (p) => !build || !Array.isArray(build.optional) || build.optional.includes(p);
+  const optJSON = (p, fb) => (has(p) ? loadJSON(p, fb) : Promise.resolve(fb));
+  OPTIONAL_HAS = has;
   try {
-    const [cfg, invCsv, cfgCsv, cards, build] = await Promise.all([
+    const [cfg, invCsv, cfgCsv, cards] = await Promise.all([
       loadJSON("data/scoring_config.json"), loadText("data/investigations.csv"), loadText("data/configurations.csv"),
-      loadJSON("data/insights/cards.json", null), loadJSON("data/build.json", null)]);
-    insights.scenarios = await loadJSON("data/insights/scenarios.json", []);
+      optJSON("data/insights/cards.json", null)]);
+    insights.scenarios = await optJSON("data/insights/scenarios.json", []);
     if (!Array.isArray(insights.scenarios)) insights.scenarios = [];
     if (build && /^[0-9a-f]{7,40}$/.test(build.commit)) REPO = REPO_BASE + build.commit + "/";
     config = cfg;
@@ -898,7 +932,7 @@ async function main() {
     setStatus("The catalog could not be loaded. Reload the page; if it persists, the site files are incomplete.", "error");
     return;
   }
-  setStatus("");
+  // The loading line stays until the first result is drawn (run() clears it).
   const cat = scorer.catalog;
   const optText = (p) => loadText(p).catch(() => null);
   const [mx, nd, gr, cv, rf] = await Promise.all([optText("data/capability_matrix.csv"), loadJSON("data/needs.json", null),
@@ -911,10 +945,12 @@ async function main() {
     coverage: cv,
     refs: rf ? parseRows(rf) : null,
   };
-  const [sn, ss, stHead] = await Promise.all([optText("data/scenario_needs.csv"), loadJSON("data/scenario_spec.json", null),
-    fetch("data/scenario_tests.csv", { method: "HEAD" }).then((r) => r.ok).catch(() => false)]);
+  const [sn, ss, stHead] = await Promise.all([
+    OPTIONAL_HAS("data/scenario_needs.csv") ? optText("data/scenario_needs.csv") : null,
+    OPTIONAL_HAS("data/scenario_spec.json") ? loadJSON("data/scenario_spec.json", null) : null,
+    OPTIONAL_HAS("data/scenario_tests.csv") ? fetch(vurl("data/scenario_tests.csv"), { method: "HEAD" }).then((r) => r.ok).catch(() => false) : false]);
   pipe.scenarioNeeds = sn ? parseRows(sn) : null;
-  pipe.evidenceMap = await loadJSON("data/insights/evidence_map.json", null);
+  pipe.evidenceMap = OPTIONAL_HAS("data/insights/evidence_map.json") ? await loadJSON("data/insights/evidence_map.json", null) : null;
   pipe.scenarioSpec = ss && Array.isArray(ss.scenarios) ? ss : null;
   pipe.hasScenarioTests = Boolean(stHead && pipe.scenarioSpec);
   // line numbers in the CSV files (header is line 1), for links to the exact source row
@@ -935,7 +971,7 @@ async function main() {
     renderAssumptions(out, config);
     renderWarnings($("#scenario-warnings"), out.warnings);
     if (out.status !== "ok") {
-      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false);
+      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false);
       $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
@@ -945,6 +981,7 @@ async function main() {
     renderResults(out, cat, insights, sc);
     renderScenarioText(out, sc, cat);
     renderRanking(out);
+    renderGlance(out, pipe);
     renderCompare(out, pipe, (q2) => { run(q2); $("#needs").scrollIntoView({ behavior: "smooth", block: "start" }); });
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);
@@ -954,6 +991,8 @@ async function main() {
   }
 
   $("#ask-form").addEventListener("submit", (e) => { e.preventDefault(); run($("#q").value.trim()); });
+  // "How the score works" links open the folded method text.
+  document.querySelectorAll('a[href="#method"]').forEach((a) => a.addEventListener("click", () => { const d = $("#method details"); if (d) d.open = true; }));
   document.querySelectorAll(".presets button").forEach((b) => b.addEventListener("click", () => run(b.dataset.q)));
   const q0 = new URL(location.href).searchParams.get("q");
   run(q0 !== null ? q0 : "ISS", q0 !== null);

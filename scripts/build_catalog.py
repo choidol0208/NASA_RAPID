@@ -415,7 +415,8 @@ CONFIGS = [
      measured_outputs="video; burner_surface_temperature; heat_flux; extinction_condition",
      flammability_boundary_reported="Y", extinction_mechanism="",
      key_findings="Quasi-steady burning without airflow in elevated O2; self-extinction in 21% O2 (record, preliminary).",
-     test_count_config=F["BRE"]["flames"], tests_table_ref="PSI-20_Experimental table_ACME BRE.csv"),
+     test_count_config=F["BRE"]["flames"], tests_table_ref="PSI-20_Experimental table_ACME BRE.csv",
+     source_notes="O2 from the column 'Oxygen Conc (percent)' (lists such as '21; 26.5; 40'). Rows 6 and 9 write '3400%' and '2100%', which cannot be oxygen percentages and are not read; the range 21 to 40% does not depend on them. Pressure 8.2 to 14.7 psia is the set of atmospheres named in the record's objective; the table note says chamber pressures 'are not identified in this summary table'. Test count: the sum of 'Flames Ignited' (flames, not tests). Classification columns are team judgement."),
  cfg("ACME-CLD-C01", "PSI-21", "Coflow laminar diffusion flames, methane and ethylene diluted with N2",
      fuel_phase="gas", fuel_material="methane; ethylene (25–100% in N2)", fuel_class="gaseous_hydrocarbon",
      sooting_tendency="medium", sample_geometry="jet_burner", flame_type="diffusion",
@@ -458,7 +459,7 @@ CONFIGS = [
      measured_outputs="video; flame_spread_rate; extinction_condition; gas_species; radiant_flux",
      flammability_boundary_reported="Y", test_count_config=F["B2_slab"]["n"],
      tests_table_ref="PSI-25_Experimental table_BASS-II.csv (Miller slabs)"),
- cfg("BASS-II-C03", "PSI-25", "PMMA rods (6.35–12.7 mm), axial stagnation flow",
+ cfg("BASS-II-C03", "PSI-25", "PMMA rods (1/4 to 1/2 inch), axial stagnation flow",
      fuel_phase="solid", fuel_material="PMMA (clear and black)", fuel_class="thermoplastic_solid", melt_behavior="melts", sooting_tendency="medium",
      sample_geometry="rod", thickness_mm="6.35–12.7 (diameter)", thermal_regime="thick", flame_type="diffusion",
      flow_config="opposed", flow_min_cms=fl("B2_rod", "air", 0), flow_max_cms=fl("B2_rod", "air", 1),
@@ -484,7 +485,7 @@ CONFIGS = [
      source_notes="Flow: 'Air display' column read as for BASS-II-C03. Highest air value 29 (row 115, '9 29'). "
                   "Rows 117 ('6 53') and 121 ('11 max(47)') hold numbers above the record's 40 cm/s limit and are not read as air speed: "
                   "47 is in brackets, which the table uses for fan readings, and 53 is the size of the fan reading of row 121 (52). Lowest 1 cm/s; row 107 also records '<1'. "
-                  "The pipeline's flow_cms is each cell's starting flow (5 to 11). Classification columns are team judgement."),
+                  "The pipeline's flow_cms is each cell's starting flow (5 to 11). The two differ on purpose: the catalog range covers every air speed the cells record during the tests, raised or lowered (for example '10   2   1'), which is what the ranking compares; the pipeline keeps the speed each test started at. Classification columns are team judgement."),
  cfg("BASS-II-C05", "PSI-25", "Nomex III fabric",
      fuel_phase="solid", fuel_material="Nomex III", fuel_class="fabric", melt_behavior="chars", sooting_tendency="medium",
      sample_geometry="flat_sheet", thermal_regime="thin", flame_type="diffusion",

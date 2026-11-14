@@ -3,7 +3,7 @@ from: ui
 to: catalog
 opened: 2026-11-14 14:09 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Catalog numbers with no NASA source: four rows from pm request 1406
 
