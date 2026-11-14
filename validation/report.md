@@ -1,6 +1,6 @@
 # Catalog filter validation report
 
-- Run: 2026-11-14 14:59 · target `scoring.scorer:rank`
+- Run: 2026-11-14 17:01 · target `scoring.scorer:rank`
 - Result: **35/35 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
@@ -60,3 +60,27 @@
 | lunar habitat | o2 | x0.5 | ACME-BRE, FLEX, BASS-II (was ACME-BRE, FLEX, ACME-CFI-G) | changed |
 | lunar habitat cotton fabric | o2 | x1.5 | SAFFIRE-II, ACME-BRE, SAFFIRE-I (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | same set |
 | lunar habitat cotton fabric | fuel | x0.5 | SAFFIRE-II, BASS-II, ACME-BRE (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | changed |
+
+## Sensitivity to the other values (each x0.5 and x1.5 on the four demo queries; config 1.1.0)
+
+- 129 of 136 runs keep the same top 3 in the same order; 3 keep the same three in another order; rank 1 changes in 3.
+
+| Value | Same top 3 (of 8) | Changes |
+|---|---|---|
+| O2 decay above the tested maximum (`similarity.o2.above_scale_ln`) | 5 | x0.5 ISS cotton fabric: BASS, SAFFIRE-III, SAFFIRE-II; x0.5 lunar habitat cotton fabric: ACME-BRE, SAFFIRE-II, BASS-II (rank 1); x1.5 ISS cotton fabric: BASS, BASS-II, SAFFIRE-III |
+| O2 decay below the tested minimum (`similarity.o2.below_scale_ln`) | 7 | x0.5 ISS cotton fabric: BASS, BASS-II, SAFFIRE-III |
+| pressure width (log) (`similarity.pressure.sigma_ln`) | 8 | — |
+| flow-speed width (log) (`similarity.flow_speed.sigma_ln`) | 8 | — |
+| flow-speed offset (`similarity.flow_speed.offset_cms`) | 8 | — |
+| value for 'not recorded' (`similarity.unknown_value`) | 8 | — |
+| gate threshold (`gate.min_similarity`) | 7 | x1.5 lunar habitat cotton fabric: SAFFIRE-II, ACME-BRE, BASS-II |
+| gate floor (`gate.factor`) | 8 | — |
+| evidence factor span (base = 1 - span) (`evidence.span`) | 8 | — |
+| tie margin (`selection.tie_points`) | 8 | — |
+| complementary slot minimum score (`complementary_slot.min_score_ratio`) | 8 | — |
+| diluent heat-capacity exponent (`similarity.diluent.cp_ratio_exponent`) | 8 | — |
+| flow configuration matrix (off-diagonal) (`similarity.flow_config_matrix`) | 8 | — |
+| fuel similarity table (`similarity.fuel`) | 6 | x1.5 ISS cotton fabric: BASS-II, BASS, SAFFIRE-III (rank 1); x1.5 lunar habitat cotton fabric: BASS-II, SAFFIRE-II, ACME-BRE (rank 1) |
+| sample-shape table (`similarity.geometry`) | 8 | — |
+| research-purpose table (`similarity.role`) | 8 | — |
+| data-availability table (`evidence.data_availability`) | 8 | — |

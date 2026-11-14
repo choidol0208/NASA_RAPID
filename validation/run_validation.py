@@ -142,6 +142,7 @@ def main():
         sys.path.insert(0, HERE)
         import sensitivity
         lines += [""] + sensitivity.report_lines(sensitivity.run())
+        lines += [""] + sensitivity.values_report_lines(sensitivity.run_values())
     report = "\n".join(lines) + "\n"
     with open(args.report, "w", encoding="utf-8") as fh:
         fh.write(report)

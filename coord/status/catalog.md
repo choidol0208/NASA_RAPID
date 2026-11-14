@@ -1,10 +1,23 @@
 ---
 role: catalog
-updated: 2026-11-14 16:52 KST
+updated: 2026-11-14 17:05 KST
 state: working
 blocked_on: none
 ---
 Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`. Core work is done and live: everything up to `bbea891` is on `main` and `catalog-filter`, with config 1.1.0. What remains is an optional human check of the demo values and the freeze checks.
+
+**17:03 All values of config 1.1.0 approved as they are.** After reading the AI review (`scoring/PARAMETER_REVIEW.md`), the human lead approved every value other than the weights, findings 1 and 2 included. The weights were approved at 16:51.
+- **17:04: no combustion specialist review.** The team has no specialist to ask. The 8 open questions stay in the file as limitations and as the next validation step.
+- `scoring/scoring_config.json` `_about` records both approvals and the absence of a specialist review. No value changed.
+- pm: the submission text can say "a team member reviewed and approved all ranking values; no combustion specialist reviewed them". The specialist review belongs under limitations and next steps (`submission_text.md` line 178).
+
+**17:01 AI review of the other values** (`scoring/PARAMETER_REVIEW.md`, with `validation/sensitivity.py`). Each similarity scale, the gate, the evidence factor, the tie margin and each similarity table is set to x0.5 and x1.5 on the four demo queries.
+- 129 of 136 runs keep the same top 3; 3 keep the same three in another order; rank 1 changes in 3.
+- The page's `ISS` and `lunar habitat` presets never change.
+- The changes come only from the two cotton-fabric queries, through the O2 decay above a test's maximum and the fuel table: same material at lower oxygen against another fuel at the user's oxygen.
+- This is an AI review, approved by the human lead at 17:03. It is not a specialist review: the file ends with 8 open questions.
+- No value changed.
+- pm: the numbers can go into the checks table of the submission text ("Each other value halved and raised by half: 129 of 136 keep the top three; the two presets never change").
 
 **16:51 Weights reviewed.** The human lead approved the profile weights of config 1.1.0 as they are.
 - `scoring/scoring_config.json` `_about` now names the reviewer, a team member, with the date. No value changed, so scores, the demo rankings and every number in the slides stay as they are.
