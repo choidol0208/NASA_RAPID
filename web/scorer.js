@@ -370,6 +370,12 @@ function explain(sc, c, s, cfg, fallback, speed) {
   const out = known.filter((d) => (d === "o2" || d === "pressure") && sim[d] < thr).map((d) => labels[d]);
   if (speed !== null && speed < thr) out.push("flow speed");
   if (out.length) warns.push({ code: "outside_range", message: fill(W.outside_range, { dims: out.join(", ") }) });
+  // pm decision 14:15: two true ranges compared side by side must not read as one test at both values.
+  const isSpan = (lo, hi) => { const a = f(c[lo]), b = f(c[hi]); return a !== null && b !== null && a < b; };
+  if (known.includes("o2") && known.includes("pressure") && !fb.includes("O2") && !fb.includes("pressure") &&
+      isSpan("o2_min_pct", "o2_max_pct") && isSpan("pressure_min_kpa", "pressure_max_kpa")) {
+    warns.push({ code: "ranges_separate", message: W.ranges_separate });
+  }
   if (sc.fuel_phase === "solid" && (c.fuel_phase || "").toLowerCase() === "gas") warns.push({ code: "gas_for_solid", message: W.gas_for_solid });
   if (stream && "o2" in sim) warns.push({ code: "oxidizer_stream", message: W.oxidizer_stream });
   const missing = s.unknown.filter((d) => !(stream && d === "o2")); // O2 of a stream is recorded, just not comparable

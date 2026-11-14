@@ -424,6 +424,11 @@ def _fmt_range(c, lo, hi, unit):
     return f"{a:g}{unit}" if a == b else f"{a:g}–{b:g}{unit}"
 
 
+def _is_span(c, lo, hi):
+    a, b = _f(c.get(lo)), _f(c.get(hi))
+    return a is not None and b is not None and a < b
+
+
 # How a number is worded by where it comes from (the catalog's o2_source, pressure_source, flow_source).
 SOURCE_NOTE = {"record": "named in the PSI record, not a test value", "test_matrix": "from the test matrix, not individual tests",
                "team": "team reading, not in the table"}
@@ -482,6 +487,10 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
         out.append("flow speed")
     if out:
         warns.append({"code": "outside_range", "message": W["outside_range"].format(dims=", ".join(out))})
+    # pm decision 14:15: two true ranges compared side by side must not read as one test at both values.
+    if "o2" in known and "pressure" in known and not ({"O2", "pressure"} & set(fallback)) \
+            and _is_span(c, "o2_min_pct", "o2_max_pct") and _is_span(c, "pressure_min_kpa", "pressure_max_kpa"):
+        warns.append({"code": "ranges_separate", "message": W["ranges_separate"]})
     if sc.get("fuel_phase") == "solid" and (c.get("fuel_phase") or "").lower() == "gas":
         warns.append({"code": "gas_for_solid", "message": W["gas_for_solid"]})
     if stream and "o2" in sim:
