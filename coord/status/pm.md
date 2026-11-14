@@ -1,6 +1,6 @@
 ---
 role: pm
-updated: 2026-11-14 16:56 KST
+updated: 2026-11-14 16:59 KST
 state: working
 blocked_on: none
 ---
@@ -9,6 +9,8 @@ blocked_on: none
 Now: (1) translating `AGENTS.md` and the two compliance logs into English (the human lead's decision at 16:50; request to all roles for their own Korean files, by 20:00); (2) packaging the one part of the video side track that passed its checks. Drafts of the submission text and the seven-slide outline are in `docs/submission/` (AI-written, for the human lead to rewrite; marks `[PLANNED ...]` and `[FILL ...]` are resolved at the freeze).
 
 Done since last sync:
+- **17:05: data's review (D5) is applied and on `main` (`c1d0c1c`).** Of the 61 model-written sentences, 33 were marked supported and stay; 28 were marked partly and are removed, each slot showing the NASA sentence it cited (rule: a sentence is shown or not shown, never reworded). 20 cards carry the label "checked by a second AI session"; 4 cards show NASA quotes only. No person has reviewed a sentence, and no label says so. In progress: the 8 quotes marked `not_relevant` will no longer be shown, and the 4 template sentences marked `wording_issue` are reworded; rows whose text changes come back to data without a verdict.
+- 16:50: the human lead decided that Korean files are translated into English before submission (request 1656 to all roles).
 - **16:21: pm's files are on `main` (`3691a69`).** `data/insights/cards.json` (24 cards, 61 model-written sentences, labelled as not reviewed; 4 more were removed by a second reading and show the NASA sentence instead), `scenarios.json` (frames, need statements, gaps and result notes built by code; `text_origin` = `template`), `evidence_map.json`, `model_readiness.json`, `robustness.json`, `ai/review/review_sheet.csv`.
 - How they were checked: the run that was interrupted at 14:55 was repeated from its start. A repair step found and finished eight half-done edits; a second reader read all 65 gated model sentences against the PSI records and all code-built text for `iss` and `lunar_habitat`; an independent check recomputed every count, quote and number with its own code and found nothing blocking. After merging the three role branches at 16:15 the build was repeated: 9 steps, no model call, 223 unit tests, `ai/check_all.py`, `pipeline/check.py`, scorer tests and parity all pass. pm opened a local build of both demo queries: no console error.
 - Merged `data-pipeline`, `catalog-filter` and `catalog-scoring` into `main` at 15:10 and again at 16:15.
@@ -27,7 +29,6 @@ Video side track (not on the critical path), result of three independent passes:
 - Failed and dropped: an automatic flame-out time from picture brightness (right in at most 1 of 19 clips). No flame-out time, burn duration or flow speed at blowoff or extinction is claimed.
 
 Next:
-- Rebuild and push after data's D5 verdicts.
 - Submission text and slides for the human lead to rewrite; final numbers checked again at the 19:00 freeze.
 
 Published for others:
