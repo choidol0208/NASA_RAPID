@@ -1,12 +1,12 @@
 ---
 role: catalog
-updated: 2026-11-14 22:54 KST
+updated: 2026-11-15 00:08 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **Config 1.4.0 is on `catalog-scoring`**; **`main` and the live site have 1.3.0** (pm's 20:16 integration, `a902840`); `catalog-filter` has 1.2.0. Correction at 22:42: my statuses from 20:16 to 22:33 said `main` had 1.1.0, which was wrong. Not yet on `main`: `bcb2db3` (1.4.0, literature stream), `310525a` (JANAF tables removed, still on `main`), `facc128` (docs). Request 2008, updated to 1.4.0 at 21:28, has no answer yet; I closed 1933 at 21:46, superseded by 2008. Sync 22:54: inbox empty; `main` 1.3.0 and `catalog-filter` 1.2.0, unchanged; request 2008 is past its 22:00 needed-by with no answer (pm is holding new work while the human lead is away, per pm's 20:16 status); 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean, `derive_weights.py --check` matches. `scoring/BUILDUP.md` now has a before-and-after table (1.1.0, 1.2.0, 1.4.0). **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **`main` and the live site run config 1.4.0** since pm's 23:35 integration (`5e08241`): the literature stream, the FLEX pooling, the requirements layer, and the JANAF tables removed. The live `scorer.js` is byte-identical to mine. `catalog-filter` is still at 1.2.0 (19:41); request 0007 asks ui to merge `main` before its next push, since Pages deploys from both branches. Request 2008 is answered by pm (`accepted`, merged) and closed; pm updates the scores and method text in `docs/submission/` once the human lead says go. Request 2001 to ui is still open. Waiting for pm's plan at about 01:00 on the human lead's new direction (23:49): help a user find which unprocessed raw data their question needs. Sync 00:08: inbox empty; 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean. **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
@@ -87,7 +87,6 @@ Done since last sync:
   - ui 1933: check the page after integration and retake score captures at the final freeze; optional wording for the close call.
 
 Next:
-- After pm's integration: check that `main` and the live site give the 1.4.0 scores.
 - Redo the flame-temperature check with NASA/TP-2002-211556 (downloading it needs the human lead's OK).
 - Needs a human: team members with combustion training fill in `scoring/expert_form.csv`. Using their judgements in the weights is the human lead's decision.
 - Next build-ups (in `BUILDUP.md`): a data-based diluent similarity (helium); a partial-gravity flow scale; material flammability properties.
@@ -99,6 +98,11 @@ Published for others:
 - `data/catalog/*.csv`: unchanged since 19:00.
 
 Notes for other roles:
+- pm, for the 01:00 plan: the catalog already reaches part of the way from a question to the quantities it needs.
+  - `rank()` returns `requirements`: one per condition the question sets, with its source and the catalog columns that verify it.
+  - Per result it returns `compliance`: met, near, not_met, unverified or not_scored.
+  - Each configuration says where its numbers come from (`o2_source`, `pressure_source`, `flow_source`: table, record, test_matrix or team).
+  - An `unverified` requirement is the natural pointer to "tested, but the value is not in the tables". If your plan needs a field per requirement, such as where to look in the raw files, tell me its name and I will add it to `requirements` in Python and JS together, with parity.
 - pm: the submission text can say "the weights of each question type are derived by the analytic hierarchy process from 51 pairwise judgements (consistency ratio 0.006 to 0.014, limit 0.10), each citing a NASA PSI record sentence, a textbook point or the team's reasoning; an AI session wrote the judgements and the human lead approved them".
 - pm: earlier numbers that changed: unit tests 39 → 45; weight sensitivity "45 of 48, rank 1 never changes" → "146 of 152 over all three profiles, rank 1 changes once"; other values 129/136 → 127/136. In that last check `ISS` now changes at rank 3 in 2 runs.
 - Earlier history of this status is in git (`git log -p coord/status/catalog.md`).
