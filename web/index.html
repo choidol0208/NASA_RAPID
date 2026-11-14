@@ -1,0 +1,95 @@
+<!doctype html>
+<!-- AI-generated code: written with an AI assistant (Claude) during the NASA Space Apps Challenge 2026 hackathon. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fire Evidence Explorer</title>
+<meta name="description" content="Find which NASA microgravity combustion investigations match a crewed environment, and where the data stops. A research exploration tool built on NASA PSI data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <h1>Fire Evidence Explorer</h1>
+    <p class="lede">Describe a crewed environment. See which NASA microgravity combustion investigations come closest, why, and where the recorded data stops.</p>
+    <p class="notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data. It is not operational fire-safety guidance, and it is not endorsed by NASA.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="ask" aria-labelledby="ask-title">
+    <h2 id="ask-title" class="visually-hidden">Ask</h2>
+    <form id="ask-form" autocomplete="off">
+      <label for="q" class="ask-label">Environment, material or question</label>
+      <div class="ask-row">
+        <input id="q" name="q" type="text" placeholder="e.g. moon cotton fabric, ISS smoke detector, 30% O2 at 10.2 psi" aria-describedby="ask-help">
+        <button type="submit">Find evidence</button>
+      </div>
+      <p id="ask-help" class="ask-help">Rough input is fine. Anything you leave out is filled from a preset or a default, and listed below so you can see it.</p>
+      <div class="presets" role="group" aria-label="Example environments">
+        <button type="button" data-q="ISS">ISS cabin</button>
+        <button type="button" data-q="lunar habitat">Lunar habitat</button>
+        <button type="button" data-q="lunar habitat cotton fabric">Lunar habitat, cotton fabric</button>
+        <button type="button" data-q="smoke detector on ISS">Smoke detection on the ISS</button>
+        <button type="button" data-q="spacesuit">Spacesuit</button>
+        <button type="button" data-q="Mars base">Mars base</button>
+      </div>
+    </form>
+  </section>
+
+  <section id="status" class="status" aria-live="polite"></section>
+
+  <section id="read" class="read" hidden aria-labelledby="read-title">
+    <h2 id="read-title">How your input was read</h2>
+    <ul id="conditions" class="conditions"></ul>
+    <div id="scenario-warnings" class="warnings"></div>
+  </section>
+
+  <section id="top" class="top" hidden aria-labelledby="top-title">
+    <div class="section-head">
+      <h2 id="top-title">Closest investigations</h2>
+      <p class="team-note">Scores (0–100) and order are the team's similarity computation, not a NASA result. <a href="#method">How the score works</a></p>
+    </div>
+    <ol id="results" class="results"></ol>
+  </section>
+
+  <section id="all" class="all" hidden aria-labelledby="all-title">
+    <h2 id="all-title">All 24 investigations for this input</h2>
+    <p class="team-note table-note">Order is the team's ranking, not a NASA result. Scores within 3 points are ordered by evidence quality, so a slightly lower score can sit higher. Highlighted rows are shown above; one of those places is kept for a test run at your oxygen level when the closest matches were tested at a different one.</p>
+    <div class="table-wrap">
+      <table id="ranking">
+        <thead><tr><th scope="col">#</th><th scope="col">Investigation</th><th scope="col">Closest test configuration</th><th scope="col" class="num">Score</th><th scope="col">Match by dimension</th><th scope="col">PSI</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="method" class="method" aria-labelledby="method-title">
+    <h2 id="method-title">How the score works</h2>
+    <p>Each of the 41 test configurations in the team's catalog is compared with your input on up to seven dimensions: oxygen, pressure, flow, fuel, sample shape, research purpose and, for suppression questions, the diluent gas. Each comparison gives a similarity from 0 to 1, shown as the strip on each result.</p>
+    <p>Weights depend on the kind of question (prevention, detection or suppression). Oxygen and flow weigh most for flammability, because a microgravity flame has no buoyancy and gets its oxygen only from forced flow. A wrong fuel phase or a far-off oxygen level cannot be made up by other matches. The total is then scaled by evidence quality (raw data, flight duration, human check).</p>
+    <p>The same code ranks every query. A language model never produces or changes a score. Catalog values are extracted from the PSI records and tables and are marked when not yet checked by a person.</p>
+    <dl class="legend">
+      <div><dt><span class="swatch s-hi"></span>Close</dt><dd>similarity 0.9 or more</dd></div>
+      <div><dt><span class="swatch s-mid"></span>Partial</dt><dd>0.5 to 0.9</dd></div>
+      <div><dt><span class="swatch s-lo"></span>Far</dt><dd>below 0.5</dd></div>
+      <div><dt><span class="swatch s-unk"></span>Not reported</dt><dd>the record has no value</dd></div>
+      <div><dt><span class="swatch s-asm"></span>Assumed</dt><dd>scored as ordinary cabin air</dd></div>
+    </dl>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Data: <a href="https://psi.nasa.gov/">NASA Physical Sciences Informatics</a>, 24 combustion investigations (dataset DOIs on each result; CC0-1.0 where stated in the record). Challenge: Flame in Freefall, NASA Space Apps Challenge 2026.</p>
+    <p>Built during the hackathon with AI assistance (Claude). Catalog values are AI-extracted from the PSI records unless marked as checked. Source code: <a href="https://github.com/choidol0208/NASA_RAPID">github.com/choidol0208/NASA_RAPID</a>.</p>
+  </div>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

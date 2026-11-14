@@ -1,6 +1,6 @@
 # Catalog filter validation report
 
-- Run: 2026-11-14 10:52 · target `scoring.scorer:rank`
+- Run: 2026-11-14 11:14 · target `scoring.scorer:rank`
 - Result: **22/22 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |

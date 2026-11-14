@@ -23,6 +23,7 @@
 | 11/14 10:30– | Claude (Opus, claude.ai 세션) | 순위 점수 규칙(가중치 프로파일·유사도 식) 설정 파일과 계산 코드, 러프 입력 해석, 단위 시험 | `scoring/scoring_config.json`, `scoring/scorer.py`, `scoring/test_scorer.py`, `scoring/README.md` | 미검토. 가중치는 팀 검토 필요 |
 | 11/14 10:30– | Claude (Opus, claude.ai 세션) | 검증 시나리오 22개와 실행기, 안정성 검사 | `validation/scenarios.json`, `validation/run_validation.py`, `validation/report.md` | 미검토. 기대 답은 전문가 검토 필요 |
 | 11/14 10:30– | Claude (Opus, claude.ai 세션) | 카탈로그 필터 설명 슬라이드 1장(영어)과 생성 스크립트 | `presentation/catalog_filter_slide.pptx`, `presentation/build_catalog_filter_slide.js` | 미검토 |
+| 11/14 11:05– | Claude Code (Opus, ui 세션) | 대시보드: 순위 계산기의 JavaScript 이식(`web/scorer.js`)과 Python 결과 일치 검사, 정적 페이지(HTML·CSS·JS), 빌드 스크립트, GitHub Pages 배포 워크플로, Python 계산기에 반올림 보조 함수 `_r` 추가(출력 형식 변화 없음) | `web/`, `.github/workflows/pages.yml`, `scoring/scorer.py` | 미검토. 일치 검사 61/61, 단위 시험, 검증 22/22 자동 통과 |
 
 ## 제품 안에서 동작하는 AI
 
