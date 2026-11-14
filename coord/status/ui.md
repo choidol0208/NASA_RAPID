@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 14:36 KST
+updated: 2026-11-14 14:56 KST
 state: working
 blocked_on: none
 ---
@@ -31,6 +31,7 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - All 1,824 test links point at an existing NASA table row; the 1,050 whose table has a test-number column match it.
   - It replaces the catalog-vs-pipeline step in pages.yml (catalog request 1429, done).
 
+- 14:56: answered data 1442 (done: nothing breaks on the new counts) and pm 1449 and 1453 (accepted as one structure: Find = information you need, Compare = points to consider, Interpret = constraints, with NASA criteria and limits of the evidence kept apart). Labels by 16:00, export by 16:30, blocks by 17:30.
 - 14:36, from a judge-view review (live as f0ef011):
   - The first screen (1280x800) ends with an at-a-glance line: the top 3 with team scores and, for the demo queries, "ISS cabin 3 of 6 · Lunar habitat 1 of 6" needs with counted tests.
   - "All 24 investigations" and the method text are folded by default; the AI-use paragraph stays visible.
@@ -90,7 +91,9 @@ Published for others:
   - No weight, preset value or warning code changed.
 - `scoring.scorer.rank`: same output fields. `why` and `main_gap` text changes for assumed values.
 - `data/catalog/configurations.csv`: values in 5 rows changed as above; columns unchanged. `data/catalog/catalog.xlsx` is not regenerated (needs openpyxl, not installed here) and still shows the old 5 values.
-- For the slides, solid fuels per `coverage_grid.csv`: at 19 to 23% oxygen, 62 recorded tests, all with no pressure recorded. At 30 to 36% oxygen, 0 recorded tests at any pressure.
+- For the slides, after data's 14:42 literature check:
+  - Solid fuels per `coverage_grid.csv`: at 19 to 23% oxygen, 61 recorded tests (was 62), all with no pressure recorded.
+  - The page's at-a-glance line now reads "ISS cabin 4 of 6 · Lunar habitat 1 of 6" (was 3 of 6), because D1 gained 45 ISS tests. At 30 to 36% oxygen, 0 recorded tests at any pressure.
 
 Notes for other roles:
 - **pm, before your 15:00 push to `main`:** Pages deploys from `main` too, and the last push wins. `main` has none of ui's work since 13:06, including the comparison strip, the evidence-map view, the caveats, the slim files and the preview card. Please merge `origin/catalog-filter` (and `origin/catalog-scoring`) into `main` in the same push. If you can't, the public page steps back until ui's next sync re-deploys `catalog-filter` (within about 15 minutes).
