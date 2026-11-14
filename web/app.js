@@ -424,7 +424,7 @@ function renderScenarioText(out, sc, cat) {
 // "In your atmosphere" means tests were run there, not that the need is covered: for the lunar
 // habitat those are fuel-droplet tests (pm request 1224), so it is not drawn as a full cell.
 const SN_STATUS = {
-  in_atmosphere: ["Tests run in your atmosphere", "st-partial"],
+  in_atmosphere: ["Tests in the scenario range", "st-partial"],
   oxygen_only: ["At your oxygen, pressure not recorded", "st-cond"],
   pressure_only: ["At your pressure, oxygen not recorded", "st-cond"],
   other_atmosphere: ["Only other atmospheres", "st-sum"],
@@ -442,7 +442,7 @@ function otherAtmosphereLabel(gaps) {
   return null;
 }
 const TIERS = [
-  ["atmosphere", "In your atmosphere", "oxygen and pressure both recorded and inside the ranges"],
+  ["atmosphere", "In the scenario range", "oxygen and pressure both recorded and inside the scenario's ranges"],
   ["oxygen_only", "At your oxygen, no pressure recorded", "oxygen inside the range; the table records no pressure"],
   ["pressure_only", "At your pressure, no oxygen recorded", "pressure inside the range; the table records no oxygen"],
 ];
@@ -483,8 +483,10 @@ function scenarioNeedsRow(out, pipe, order) {
   if (!sid || !pipe.scenarioNeeds) return null;
   const rows = pipe.scenarioNeeds.filter((r) => r.scenario_id === sid);
   if (!rows.length) return null;
-  const tr = h("tr", { class: "scenario-row" }, h("th", { scope: "row" }, h("b", {}, "All tables, in your atmosphere"),
-    h("small", {}, scenarioRanges(pipe.scenarioSpec.scenarios.find((x) => x.id === sid)))));
+  const spec = pipe.scenarioSpec.scenarios.find((x) => x.id === sid);
+  const tr = h("tr", { class: "scenario-row" }, h("th", { scope: "row" }, h("b", {}, "All tables, in the scenario range"),
+    h("small", {}, scenarioRanges(spec)),
+    spec.caveat ? h("small", { class: "caveat" }, spec.caveat) : null));
   for (const n of order) {
     const r = rows.find((x) => x.need_id === n.id);
     if (!r) { tr.append(h("td", { class: "st-missing" }, "—")); continue; }
@@ -509,19 +511,107 @@ function scenarioNeedsRow(out, pipe, order) {
   return tr;
 }
 
-let testsIndex = null; // test_id -> row of tests.csv, loaded on first use
-async function loadTestsIndex() {
-  if (testsIndex) return testsIndex;
-  const text = await loadText("data/tests.csv");
-  testsIndex = new Map(parseRows(text).map((r) => [r.test_id, r]));
-  return testsIndex;
+// test_id -> row of the slim data/tests.csv written by web/build.py (test_id, source_file,
+// source_row, o2_pct, pressure_kpa, line = the row's line in data/pipeline/tests.csv). Loaded once.
+// ISS and lunar habitat side by side: the demo's contrast in one glance, from scenario_needs.csv.
+const COMPARE = [["iss", "ISS"], ["lunar_habitat", "lunar habitat"]]; // [scenario id, query the button runs]
+const SN_SHORT = { in_atmosphere: "in range", oxygen_only: "O2 in range, no pressure in table", pressure_only: "pressure in range, no O2 in table",
+  other_atmosphere: "other atmospheres only", not_measured: "no usable test" };
+function renderCompare(out, pipe, runQuery) {
+  const box = $("#compare");
+  box.replaceChildren();
+  const sid = scenarioId(out, pipe);
+  if (!sid || !pipe.scenarioNeeds || !pipe.needs || !COMPARE.some(([id]) => id === sid)) return;
+  const order = PILLARS.flatMap(([pid]) => pipe.needs.filter((n) => n.pillar === pid));
+  const specOf = (id) => pipe.scenarioSpec.scenarios.find((x) => x.id === id) || { id, label: id };
+  const thead = h("tr", {}, h("th", { scope: "col" }, "Scenario"), ...order.map((n) => h("th", { scope: "col", title: n.question }, n.name)));
+  const tb = h("tbody");
+  const summary = [];
+  for (const [id, q] of COMPARE) {
+    const spec = specOf(id);
+    const rows = pipe.scenarioNeeds.filter((r) => r.scenario_id === id);
+    if (!rows.length) continue;
+    const mine = id === sid;
+    const btn = mine ? h("span", { class: "tag" }, "your query") : h("button", { type: "button", class: "more-btn compare-go" }, `Show "${q}"`);
+    if (!mine) btn.addEventListener("click", () => runQuery(q));
+    const tr = h("tr", { class: mine ? "is-you" : null }, h("th", { scope: "row" }, h("b", {}, spec.label || id), " ", btn));
+    let withTests = 0;
+    for (const n of order) {
+      const r = rows.find((x) => x.need_id === n.id);
+      if (!r) { tr.append(h("td", { class: "st-missing" }, "—")); continue; }
+      const atm = +r.tests_atmosphere || 0, o2o = +r.tests_oxygen_only || 0, po = +r.tests_pressure_only || 0;
+      const matched = atm + o2o + po;
+      if (matched) withTests++;
+      const codes = r.gaps ? r.gaps.split(";").filter(Boolean) : [];
+      const parts = [atm ? `${atm} in range` : "", o2o ? `${o2o} with O2 in range, no pressure in table` : "", po ? `${po} with pressure in range, no O2 in table` : ""].filter(Boolean);
+      const word = parts.length ? parts.join("; ") : (r.status === "other_atmosphere" && otherAtmosphereLabel(codes)) || SN_SHORT[r.status] || r.status;
+      const [, cl] = SN_STATUS[r.status] || ["", ""];
+      tr.append(h("td", { class: "st " + cl }, rowLink("data/pipeline/scenario_needs.csv", r, String(matched), `${matched} counted tests matched to this scenario's range for ${n.name}.`), h("small", {}, word)));
+    }
+    tb.append(tr);
+    summary.push(`${spec.label || id}: matched tests for ${withTests} of ${order.length} needs`);
+  }
+  const caveats = COMPARE.map(([id]) => specOf(id)).filter((s) => s.caveat).map((s) => h("li", {}, h("b", {}, `${s.label}: `), s.caveat));
+  box.append(h("h3", {}, "ISS and lunar habitat, side by side"),
+    h("p", { class: "team-note" }, "Counted recorded tests matched to each scenario's oxygen and pressure range, per need (counted only where the investigation states the need as an objective). Team computation from the PSI tables."),
+    h("div", { class: "table-wrap" }, h("table", { class: "compare-table" }, h("thead", {}, thead), tb)),
+    h("p", { class: "cov-sum" }, summary.join(". ") + "."),
+    caveats.length ? h("ul", { class: "gap compare-caveats" }, caveats) : null);
 }
+
+// The answer in two lines, right under the query box, so the first screen shows the result.
+function scenarioCoverage(pipe, id) {
+  const rows = (pipe.scenarioNeeds || []).filter((r) => r.scenario_id === id);
+  const withTests = rows.filter((r) => (+r.tests_atmosphere || 0) + (+r.tests_oxygen_only || 0) + (+r.tests_pressure_only || 0) > 0).length;
+  const spec = pipe.scenarioSpec && pipe.scenarioSpec.scenarios.find((x) => x.id === id);
+  return { label: (spec && spec.label) || id, withTests, total: rows.length };
+}
+function renderGlance(out, pipe) {
+  const box = $("#glance");
+  box.replaceChildren();
+  if (out.status !== "ok" || !out.results.length) { box.hidden = true; return; }
+  const top = h("p", {}, h("b", {}, "At a glance: "), "closest NASA investigations ",
+    ...out.results.flatMap((r, i) => [i ? ", " : "", h("a", { href: "#top" }, r.investigation_id)]),
+    ` (team scores ${out.results.map((r) => r.score).join(", ")}).`);
+  const sid = scenarioId(out, pipe);
+  const cov = sid && pipe.scenarioNeeds ? COMPARE.map(([id]) => scenarioCoverage(pipe, id)).filter((c) => c.total) : [];
+  const second = cov.length
+    ? h("p", {}, "Needs with counted recorded tests in the scenario range: ", cov.map((c) => `${c.label} ${c.withTests} of ${c.total}`).join(" · "), ". ",
+      h("a", { href: "#compare" }, "Compare"), " · ", h("a", { href: "#stops" }, "Where the evidence stops"))
+    : h("p", {}, h("a", { href: "#needs" }, "What the recorded tests say"), " · ", h("a", { href: "#stops" }, "Where the evidence stops"));
+  box.append(top, second);
+  box.hidden = false;
+}
+
+let testsIndex = null, testsIndexP = null;
+function loadTestsIndex() {
+  if (!testsIndexP) testsIndexP = loadText("data/tests.csv").then((text) => {
+    testsIndex = new Map(parseRows(text).map((r) => [r.test_id, r]));
+    return testsIndex;
+  }).catch((e) => { testsIndexP = null; throw e; });
+  return testsIndexP;
+}
+const fullTestsRow = (t) => ({ _line: /^\d+$/.test(t.line || "") ? +t.line : t._line });
 function testLink(id) {
   const t = testsIndex && testsIndex.get(id);
   if (t && t.source_file && /^\d+$/.test(t.source_row))
     return link(`${REPO}data/psi/experimental_tables/${encodeURIComponent(t.source_file)}?plain=1#L${t.source_row}`, id);
-  if (t) return rowLink("data/pipeline/tests.csv", t, id);
+  if (t) return rowLink("data/pipeline/tests.csv", fullTestsRow(t), id);
   return h("span", {}, id);
+}
+
+// The oxygen and pressure these tests were actually recorded at (from tests.csv), so a count
+// "in the scenario range" is never read as "at the challenge's exact bound" (data request 1328).
+function recordedAt(list) {
+  const span = (k, d) => {
+    const v = list.map((r) => testsIndex && testsIndex.get(r.test_id)).filter(Boolean).map((t) => parseFloat(t[k])).filter((x) => !Number.isNaN(x));
+    if (!v.length) return null;
+    const lo = Math.min(...v), hi = Math.max(...v);
+    return lo === hi ? lo.toFixed(d) : `${lo.toFixed(d)} to ${hi.toFixed(d)}`;
+  };
+  const o2 = span("o2_pct", 1), p = span("pressure_kpa", 1);
+  if (!o2 && !p) return "";
+  return `Recorded values: ${o2 ? o2 + "% O2" : "O2 not in the table"}; ${p ? p + " kPa" : "pressure not in the table"}. `;
 }
 
 async function renderTests(out, pipe, cat, phaseFilter) {
@@ -543,6 +633,7 @@ async function renderTests(out, pipe, cat, phaseFilter) {
   box.replaceChildren();
   box.append(h("p", { class: "intro" }, h("b", {}, `${spec.label}: `), scenarioRanges(spec), ". ",
     spec.note || "", " ", link(REPO + "pipeline/spec/scenarios.json", "(scenario ranges)")));
+  if (spec.caveat) box.append(h("p", { class: "warn" }, spec.caveat));
   const bar = h("div", { class: "presets", role: "group", "aria-label": "Fuel phase" });
   for (const ph of phases) {
     const b = h("button", { type: "button", "aria-pressed": String(ph === want) }, ph === "all" ? "All fuels" : `${ph[0].toUpperCase()}${ph.slice(1)} fuels`);
@@ -574,6 +665,7 @@ async function renderTests(out, pipe, cat, phaseFilter) {
         const gravDiff = list.filter((r) => r.gravity_match === "different").length;
         tr.append(h("td", { class: "num" }, h("details", { class: "tests-list" },
           h("summary", {}, `${list.length} test${list.length === 1 ? "" : "s"}`),
+          h("p", { class: "gap" }, recordedAt(list)),
           h("p", { class: "gap" }, spec.ranges && spec.ranges.flow_cms ? `${flowIn} with flow in range. ` : "", gravDiff ? `All ${gravDiff} at microgravity, not ${spec.gravity_level} gravity. ` : ""),
           h("p", { class: "ids" }, ...list.flatMap((r, i) => [i ? ", " : "", testLink(r.test_id)])))));
       }
@@ -674,6 +766,131 @@ function renderCoverage(out, pipe) {
     ". Counts: ", link(REPO + FILE, FILE), ", built from ", link(REPO + "data/pipeline/tests.csv", "data/pipeline/tests.csv"), " by the team's pipeline."));
 }
 
+// ------------------------------------------------------------------ evidence map (pm role, data/insights/evidence_map.json)
+// One oxygen axis, three lanes, one dot per group of recorded tests. Every number and label is read
+// from the file; the page only draws it and marks the oxygen value the query was read as.
+const SVGNS = "http://www.w3.org/2000/svg";
+function sv(tag, attrs = {}, ...kids) {
+  const el = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) if (v !== null && v !== undefined && v !== false) el.setAttribute(k, v);
+  for (const kid of kids.flat()) if (kid !== null && kid !== undefined && kid !== false) el.append(typeof kid === "string" ? document.createTextNode(kid) : kid);
+  return el;
+}
+const LANES = [["gas", "Gas flames"], ["liquid", "Fuel droplets"], ["solid", "Solid fuels"]];
+function testHref(id) {
+  const t = testsIndex && testsIndex.get(id);
+  if (t && t.source_file && /^\d+$/.test(t.source_row)) return `${REPO}data/psi/experimental_tables/${encodeURIComponent(t.source_file)}?plain=1#L${t.source_row}`;
+  if (t) return `${REPO}data/pipeline/tests.csv?plain=1#L${fullTestsRow(t)._line}`;
+  return `${REPO}data/pipeline/tests.csv`;
+}
+const targetO2 = (t) => (typeof t.o2_pct === "number" ? t.o2_pct : typeof t.o2_min === "number" ? t.o2_min : null);
+const BALANCE = { co2_added: "carbon dioxide added", he_added: "helium added", n2_only: "nitrogen balance", not_recorded: "balance gas not recorded" };
+
+async function renderEvidenceMap(out, pipe) {
+  const box = $("#stops-map");
+  box.replaceChildren();
+  const em = pipe.evidenceMap;
+  const pts = em && Array.isArray(em.points) ? em.points.filter((p) => typeof p.o2_pct === "number") : [];
+  if (!pts.length) { box.append(h("p", { class: "gap" }, "Evidence map: not available yet.")); return; }
+  try { await loadTestsIndex(); } catch (e) { /* dot links then point to tests.csv */ }
+  const labels = em.labels || {};
+  const targets = (Array.isArray(em.targets) ? em.targets : []).filter((t) => targetO2(t) !== null);
+  const flights = Array.isArray(em.flight_tests_not_in_psi) ? em.flight_tests_not_in_psi.filter((t) => typeof t.o2_pct === "number") : [];
+  const userO2 = typeof out.scenario.o2_pct === "number" ? out.scenario.o2_pct : null;
+  const axisMax = (em.axes && em.axes.o2_pct && em.axes.o2_pct.max) || 45;
+  const top = Math.max(axisMax, ...pts.map((p) => p.o2_pct), ...targets.map(targetO2), ...flights.map((t) => t.o2_pct), userO2 || 0);
+  const xmax = Math.min(100, Math.ceil(top / 5) * 5 + (top >= axisMax ? 5 : 0));
+  const W = 760, L = 112, R = 20, T = 44, LH = 62, B = 36, H = T + LANES.length * LH + B;
+  const x = (o2) => L + ((W - L - R) * o2) / xmax;
+  const svg = sv("svg", { viewBox: `0 0 ${W} ${H}`, class: "emap", role: "img",
+    "aria-label": `${labels.title || "Evidence map"}: recorded tests by oxygen in three lanes${userO2 !== null ? `, your input at ${userO2}% oxygen` : ""}` });
+  const step = xmax > 50 ? 10 : 5;
+  for (let v = 0; v <= xmax; v += step) {
+    svg.append(sv("line", { x1: x(v), x2: x(v), y1: T, y2: T + LANES.length * LH, class: "emap-grid" }),
+      sv("text", { x: x(v), y: T + LANES.length * LH + 16, class: "emap-tick", "text-anchor": "middle" }, `${v}%`));
+  }
+  svg.append(sv("text", { x: L + (W - L - R) / 2, y: H - 4, class: "emap-axis", "text-anchor": "middle" }, "Oxygen in the surrounding atmosphere, as recorded"));
+  const lanePts = {};
+  LANES.forEach(([id, name], i) => {
+    const y0 = T + i * LH;
+    const mine = pts.filter((p) => p.fuel_phase === id);
+    lanePts[id] = mine;
+    const n = mine.reduce((a, p) => a + (+p.n_tests || 0), 0);
+    svg.append(sv("rect", { x: L, y: y0, width: W - L - R, height: LH, class: i % 2 ? "emap-lane alt" : "emap-lane" }),
+      sv("text", { x: 6, y: y0 + LH / 2 - 2, class: "emap-lane-name" }, name),
+      sv("text", { x: 6, y: y0 + LH / 2 + 14, class: "emap-lane-n" }, `${n} recorded tests`));
+    mine.forEach((p, k) => {
+      const hollow = p.balance_gas === "co2_added" || p.balance_gas === "he_added";
+      const r = Math.min(8, 2.2 + 1.3 * Math.sqrt(+p.n_tests || 1));
+      const cy = y0 + 10 + ((k * 37) % (LH - 20));
+      const tip = `${p.investigation_id}: ${+p.n_tests || 1} test${+p.n_tests === 1 ? "" : "s"} at ${p.o2_pct}% O2, ${p.pressure_kpa === null || p.pressure_kpa === undefined ? "pressure not recorded" : p.pressure_kpa + " kPa"}, ${BALANCE[p.balance_gas] || p.balance_gas || "balance gas not recorded"}`;
+      const first = Array.isArray(p.test_ids) && p.test_ids.length ? p.test_ids[0] : null;
+      svg.append(sv("a", { href: first ? testHref(first) : `https://psi.nasa.gov/physci/repo/data/investigations/${p.investigation_id}`, target: "_blank", rel: "noopener" },
+        sv("circle", { cx: x(p.o2_pct), cy, r, class: hollow ? "emap-dot hollow" : "emap-dot" }, sv("title", {}, tip))));
+    });
+    if (id === "solid" && mine.length) {
+      const hi = Math.max(...mine.map((p) => p.o2_pct));
+      svg.append(sv("line", { x1: x(hi), x2: x(hi), y1: y0 + 4, y2: y0 + LH - 4, class: "emap-end" }),
+        sv("text", { x: x(hi) + 6, y: y0 + LH / 2 + 4, class: "emap-end-label" }, `highest recorded: ${hi}%`));
+    }
+  });
+  targets.forEach((t, i) => {
+    const tx = x(targetO2(t));
+    const onYou = userO2 !== null && Math.abs(targetO2(t) - userO2) < 0.5; // keep the number readable beside the input line
+    svg.append(sv("line", { x1: tx, x2: tx, y1: T - 4, y2: T + LANES.length * LH, class: "emap-target" }),
+      sv("text", { x: onYou ? tx - 8 : tx, y: T - 7, class: "emap-target-n", "text-anchor": onYou ? "end" : "middle" }, String(i + 1)));
+  });
+  flights.forEach((t) => svg.append(sv("rect", { x: x(t.o2_pct) - 4, y: T + 2 * LH + LH - 14, width: 8, height: 8, class: "emap-flight" },
+    sv("title", {}, `${t.label || "NASA flight test"}: ${t.o2_pct}% O2 (published by NASA, not in PSI; not counted)`))));
+  if (userO2 !== null) {
+    const ux = x(Math.min(userO2, xmax));
+    svg.append(sv("line", { x1: ux, x2: ux, y1: 6, y2: T + LANES.length * LH, class: "emap-you" }),
+      sv("text", { x: ux + (ux > W - 150 ? -6 : 6), y: 16, class: "emap-you-label", "text-anchor": ux > W - 150 ? "end" : "start" }, `your input: ${userO2}% O2`));
+  }
+
+  const head = h("p", { class: "emap-title" }, h("b", {}, labels.title || "Where the PSI test tables stop"), " ", computedTag());
+  const counts = h("ul", { class: "emap-counts" });
+  for (const [id, name] of LANES) {
+    const mine = lanePts[id] || [];
+    const total = mine.reduce((a, p) => a + (+p.n_tests || 0), 0);
+    const li = h("li", {}, h("b", {}, `${name}: `));
+    if (userO2 !== null) {
+      const at = mine.filter((p) => p.o2_pct >= userO2);
+      const n = at.reduce((a, p) => a + (+p.n_tests || 0), 0);
+      const byInv = new Map();
+      for (const p of at) { const e = byInv.get(p.investigation_id) || { n: 0, id: null }; e.n += +p.n_tests || 0; e.id = e.id || (p.test_ids || [])[0]; byInv.set(p.investigation_id, e); }
+      li.append(`${n} of ${total} recorded tests at or above ${userO2}% oxygen`,
+        ...(byInv.size ? [" (", ...[...byInv].flatMap(([inv, e], i) => [i ? ", " : "", link(e.id ? testHref(e.id) : `https://psi.nasa.gov/physci/repo/data/investigations/${inv}`, `${inv} ${e.n}`)]), ")"] : []), ".");
+    } else li.append(`${total} recorded tests.`);
+    const note = labels.lane_notes && labels.lane_notes[id];
+    if (note) li.append(" ", h("span", { class: "gap" }, note[0].toUpperCase() + note.slice(1) + "."));
+    counts.append(li);
+  }
+  const marks = targets.length ? h("ol", { class: "emap-targets" }, targets.map((t) =>
+    h("li", {}, t.label || t.id, " ", h("span", { class: "gap" }, `(${String(t.kind || "").replace(/_/g, " ")}; ${t.source || "source not given"}${t.access ? ", " + t.access : ""}). A mark, not a limit.`)))) : null;
+  const np = em.not_plotted || {};
+  const missing = [];
+  if (np.oxidizer_stream && np.oxidizer_stream.n) missing.push(`${np.oxidizer_stream.n} tests whose oxygen value is a burner's oxidizer stream${np.oxidizer_stream.why ? ": " + np.oxidizer_stream.why : ""}`);
+  if (np.no_ambient_oxygen_value && np.no_ambient_oxygen_value.n) missing.push(`${np.no_ambient_oxygen_value.n} tests with no surrounding-atmosphere oxygen value${np.no_ambient_oxygen_value.rule ? ": " + np.no_ambient_oxygen_value.rule : ""}`);
+  if (np.psi20_test_day_table && np.psi20_test_day_table.days) missing.push(`ACME-BRE (PSI-20): a test-day table (${np.psi20_test_day_table.days} days${np.psi20_test_day_table.flames_ignited ? ", " + np.psi20_test_day_table.flames_ignited + " flames ignited" : ""}), not single tests`);
+  const wrap = h("div", { class: "emap-wrap" }, svg);
+  box.append(...[head,
+    userO2 === null ? h("p", { class: "warn" }, "Your input has no oxygen value, so it is not marked. Add one, for example 30% O2.") : null,
+    wrap,
+    h("p", { class: "gap emap-legend" }, "Filled dot: tests in nitrogen balance or balance not recorded. Hollow dot: carbon dioxide or helium added. Dot size grows with the number of tests. Each dot links to its row in the NASA table.",
+      flights.length ? " Small squares: " + (labels.saffire_note || "published by NASA, not in PSI (checked 14 Nov 2026)") + "; never counted." : ""),
+    counts, marks,
+    missing.length ? h("p", { class: "gap" }, "Not in the picture: ", missing.join("; "), ".") : null,
+    Array.isArray(labels.caption) && labels.caption.length ? h("p", { class: "gap" }, labels.caption.join(" ")) : null,
+    h("p", { class: "gap" }, "Points: ", link(REPO + "data/insights/evidence_map.json", "data/insights/evidence_map.json"), ", built by team code from ",
+      link(REPO + "data/pipeline/tests.csv", "data/pipeline/tests.csv"), ".")].filter(Boolean));
+  // On a narrow screen the picture scrolls inside its box: start with the input's marker in view.
+  if (userO2 !== null && wrap.scrollWidth > wrap.clientWidth) {
+    const frac = x(Math.min(userO2, xmax)) / W;
+    wrap.scrollLeft = Math.max(0, frac * wrap.scrollWidth - wrap.clientWidth / 2);
+  }
+}
+
 function show(id, on) { $(id).hidden = !on; }
 function setStatus(text, kind) {
   const s = $("#status");
@@ -681,20 +898,30 @@ function setStatus(text, kind) {
   s.textContent = text || "";
 }
 
+// web/build.py writes the build commit here, so every data file is fetched as file?v=<commit>:
+// a new deploy is read at once, and a page never mixes files from two builds (Pages caches 10 min).
+const DATA_V = "__BUILD__";
+let OPTIONAL_HAS = () => true; // set in main() from build.json
+const vurl = (p) => (DATA_V.startsWith("__") ? p : `${p}${p.includes("?") ? "&" : "?"}v=${DATA_V}`);
 async function loadJSON(path, fallback) {
-  try { const r = await fetch(path); if (!r.ok) throw new Error(r.status); return await r.json(); }
+  try { const r = await fetch(vurl(path)); if (!r.ok) throw new Error(r.status); return await r.json(); }
   catch (e) { if (fallback !== undefined) return fallback; throw e; }
 }
-async function loadText(path) { const r = await fetch(path); if (!r.ok) throw new Error(`${path}: ${r.status}`); return r.text(); }
+async function loadText(path) { const r = await fetch(vurl(path)); if (!r.ok) throw new Error(`${path}: ${r.status}`); return r.text(); }
 
 async function main() {
-  setStatus("Loading the catalog…");
+  setStatus("Loading the catalog and the NASA test tables…");
   let config, scorer, invOrder = [], insights = { cards: {} };
+  // build.json lists the optional files this build has; others are not fetched (no 404s).
+  const build = await loadJSON("data/build.json", null);
+  const has = (p) => !build || !Array.isArray(build.optional) || build.optional.includes(p);
+  const optJSON = (p, fb) => (has(p) ? loadJSON(p, fb) : Promise.resolve(fb));
+  OPTIONAL_HAS = has;
   try {
-    const [cfg, invCsv, cfgCsv, cards, build] = await Promise.all([
+    const [cfg, invCsv, cfgCsv, cards] = await Promise.all([
       loadJSON("data/scoring_config.json"), loadText("data/investigations.csv"), loadText("data/configurations.csv"),
-      loadJSON("data/insights/cards.json", null), loadJSON("data/build.json", null)]);
-    insights.scenarios = await loadJSON("data/insights/scenarios.json", []);
+      optJSON("data/insights/cards.json", null)]);
+    insights.scenarios = await optJSON("data/insights/scenarios.json", []);
     if (!Array.isArray(insights.scenarios)) insights.scenarios = [];
     if (build && /^[0-9a-f]{7,40}$/.test(build.commit)) REPO = REPO_BASE + build.commit + "/";
     config = cfg;
@@ -705,7 +932,7 @@ async function main() {
     setStatus("The catalog could not be loaded. Reload the page; if it persists, the site files are incomplete.", "error");
     return;
   }
-  setStatus("");
+  // The loading line stays until the first result is drawn (run() clears it).
   const cat = scorer.catalog;
   const optText = (p) => loadText(p).catch(() => null);
   const [mx, nd, gr, cv, rf] = await Promise.all([optText("data/capability_matrix.csv"), loadJSON("data/needs.json", null),
@@ -718,9 +945,12 @@ async function main() {
     coverage: cv,
     refs: rf ? parseRows(rf) : null,
   };
-  const [sn, ss, stHead] = await Promise.all([optText("data/scenario_needs.csv"), loadJSON("data/scenario_spec.json", null),
-    fetch("data/scenario_tests.csv", { method: "HEAD" }).then((r) => r.ok).catch(() => false)]);
+  const [sn, ss, stHead] = await Promise.all([
+    OPTIONAL_HAS("data/scenario_needs.csv") ? optText("data/scenario_needs.csv") : null,
+    OPTIONAL_HAS("data/scenario_spec.json") ? loadJSON("data/scenario_spec.json", null) : null,
+    OPTIONAL_HAS("data/scenario_tests.csv") ? fetch(vurl("data/scenario_tests.csv"), { method: "HEAD" }).then((r) => r.ok).catch(() => false) : false]);
   pipe.scenarioNeeds = sn ? parseRows(sn) : null;
+  pipe.evidenceMap = OPTIONAL_HAS("data/insights/evidence_map.json") ? await loadJSON("data/insights/evidence_map.json", null) : null;
   pipe.scenarioSpec = ss && Array.isArray(ss.scenarios) ? ss : null;
   pipe.hasScenarioTests = Boolean(stHead && pipe.scenarioSpec);
   // line numbers in the CSV files (header is line 1), for links to the exact source row
@@ -741,7 +971,7 @@ async function main() {
     renderAssumptions(out, config);
     renderWarnings($("#scenario-warnings"), out.warnings);
     if (out.status !== "ok") {
-      show("#top", false); show("#all", false); show("#needs", false); show("#coverage", false); show("#gaps-section", false); show("#tests", false);
+      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false);
       $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
@@ -751,13 +981,18 @@ async function main() {
     renderResults(out, cat, insights, sc);
     renderScenarioText(out, sc, cat);
     renderRanking(out);
+    renderGlance(out, pipe);
+    renderCompare(out, pipe, (q2) => { run(q2); $("#needs").scrollIntoView({ behavior: "smooth", block: "start" }); });
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);
     renderTests(out, pipe, cat);
-    show("#top", true); show("#all", true); show("#needs", true); show("#coverage", true);
+    renderEvidenceMap(out, pipe);
+    show("#top", true); show("#all", true); show("#needs", true); show("#stops", true);
   }
 
   $("#ask-form").addEventListener("submit", (e) => { e.preventDefault(); run($("#q").value.trim()); });
+  // "How the score works" links open the folded method text.
+  document.querySelectorAll('a[href="#method"]').forEach((a) => a.addEventListener("click", () => { const d = $("#method details"); if (d) d.open = true; }));
   document.querySelectorAll(".presets button").forEach((b) => b.addEventListener("click", () => run(b.dataset.q)));
   const q0 = new URL(location.href).searchParams.get("q");
   run(q0 !== null ? q0 : "ISS", q0 !== null);

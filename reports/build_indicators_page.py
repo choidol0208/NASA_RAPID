@@ -4,6 +4,7 @@
 """Build the internal team page of indicator results (Korean).
 
 Reads   data/pipeline/indicators.csv, scenario_needs.csv, need_references.csv,
+        objective_links.csv,
         run_report.json, pipeline/spec/*.json, reports/indicators_ko.json,
         reports/indicators.template.html
 Writes  reports/indicators.html
@@ -32,6 +33,7 @@ def main():
     spec = json.load(open(os.path.join(ROOT, "pipeline", "spec", "indicators.json"), encoding="utf-8"))["indicators"]
     report = json.load(open(os.path.join(OUT, "run_report.json"), encoding="utf-8"))
     ind, sc, refs = load("indicators.csv"), load("scenario_needs.csv"), load("need_references.csv")
+    links = load("objective_links.csv")
 
     missing = [i["id"] for i in spec if i["id"] not in ko["indicators"]]
     missing += [n["id"] for n in needs if n["id"] not in ko["needs"]]
@@ -71,7 +73,10 @@ def main():
                           "label": ko["indicators"][s["id"]]["label"],
                           "reading": ko["indicators"][s["id"]]["reading"],
                           "compare": s.get("compare_with", []), "groups": groups})
-        stated = [{"inv": l["investigation_id"], "quote": l["quote"]} for l in need.get("stated_by", [])]
+        # counted links only: the purpose sentence of the investigators (objective_links.csv)
+        stated = [{"inv": r.investigation_id, "quote": r.publication_quote}
+                  for r in links[(links.need_id == need["id"]) & (links.verdict == "supported")]
+                  .drop_duplicates(["investigation_id", "publication_item"]).itertuples()]
         docs = refs[refs.need_id == need["id"]][["title", "version", "url"]].drop_duplicates("title")
         k = ko["needs"][need["id"]]
         page_needs.append({"id": need["id"], "name": k["name"], "pillar": k["pillar"],

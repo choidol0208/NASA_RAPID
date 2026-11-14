@@ -5,7 +5,7 @@
     "generated_by": "AI-assisted (Claude), reviewed: no",
     "formula": "score = 100 * M * G * sum_i(w_i * S_i) over active dimensions; weights renormalized to sum 1 over active dimensions"
   },
-  "version": "1.0.0",
+  "version": "1.1.0",
   "default_profile": "prevention",
   "profiles": {
     "prevention": {
@@ -54,9 +54,10 @@
   "similarity": {
     "unknown_value": 0.5,
     "o2": {
-      "above_scale_pct": 5.0,
-      "below_scale_pct": 10.0,
-      "why": "Asymmetric: a user O2 above the tested max means the real fire may be worse than tested (non-conservative), so it decays faster."
+      "metric": "log_ratio",
+      "above_scale_ln": 0.213574,
+      "below_scale_ln": 0.646627,
+      "why": "Asymmetric: a user O2 above the tested max means the real fire may be worse than tested (non-conservative), so it decays faster. Distance is the log of the O2 ratio, because the effect of oxygen on a flame goes with ratios of its mole fraction: a diffusion flame's stoichiometric ratio scales with 1/X_O2 (Turns 2012, ch. 9; scoring/MODEL_BASIS.md). The scales are ln(26/21) above and ln(21/11) below, so near air they equal the earlier 5 and 10 percentage points; 15 against 21% is now a larger gap than 30 against 36%. Version 1.1.0 (2026-11-14)."
     },
     "pressure": {
       "sigma_ln": 0.693147,
@@ -150,7 +151,14 @@
     "diluent": {
       "same": 1.0,
       "other_inert": 0.5,
-      "none": 0.0
+      "none": 0.0,
+      "molar_cp_298K_kJ_per_kmolK": {
+        "CO2": 37.198,
+        "N2": 29.071,
+        "He": 20.786
+      },
+      "cp_ratio_exponent": 2,
+      "why": "An inert diluent acts mainly thermally (Turns 2012, ch. 8), so two different inerts are compared by molar heat capacity: similarity = (smaller cp / larger cp) ^ exponent, the best match over the configuration's diluents. cp at 298 K: CO2 and N2 from Turns 2012, Appendix A (Tables A.2, A.7, JANAF-based); He as an ideal monatomic gas, 5R/2. The exponent 2 is the team's choice: it keeps the average near the earlier flat 0.5 (CO2-N2 0.61, N2-He 0.51, CO2-He 0.31). Helium's high thermal diffusivity is not captured. other_inert is used for a gas with no cp here. Version 1.1.0 (2026-11-14)."
     },
     "unknown_cap_dims": [
       "o2",
@@ -184,9 +192,10 @@
       "none (ground)": 0.5
     },
     "verification_status": {
-      "human_verified": 1.0,
+      "human_verified": 0.7,
       "ai_extracted": 0.7
-    }
+    },
+    "verification_why": "pm decision 2026-11-14 14:15: a human check of a catalog row does not change its score. A transcription check says the catalog copied NASA correctly; it does not make an experiment closer to the question, and checking some demo rows first must not reorder the ranking. The page shows the verification badge instead."
   },
   "selection": {
     "top_k": 3,
@@ -239,7 +248,7 @@
         "flow_state": "ventilated",
         "gravity": "lunar"
       },
-      "source": "Challenge text: lunar bases and pressurized rovers at >=30% O2 and <=10.2 psi (70.3 kPa). Ventilation assumed."
+      "source": "Challenge statement (Flame in Freefall, 'Spacesuits and oxygen concentration'): Moon Base and pressurized-rover atmosphere likely at 30% O2 or more and 10.2 psi (70.3 kPa) or less. Ventilation assumed."
     },
     "mars_habitat": {
       "label_en": "Mars habitat",
@@ -270,7 +279,7 @@
         "o2_pct": 100.0,
         "pressure_kpa": 29.6
       },
-      "source": "Challenge text: spacesuits at 4.3 psi (29.6 kPa), 100% O2."
+      "source": "Challenge statement (Flame in Freefall, 'Spacesuits and oxygen concentration'): spacesuits at 100% O2 and 4.3 psi (29.6 kPa)."
     },
     "earth": {
       "label_en": "Earth sea level",
@@ -484,7 +493,12 @@
           "cloth",
           "clothing",
           "직물",
-          "천",
+          "천으로",
+          "천이",
+          "천을",
+          "천은",
+          "천 소재",
+          "헝겊",
           "옷",
           "섬유"
         ],
@@ -671,6 +685,17 @@
       },
       {
         "keys": [
+          "droplet",
+          "droplets",
+          "fuel droplet",
+          "액적",
+          "연료 방울"
+        ],
+        "fuel_phase": "liquid",
+        "sample_geometry": "droplet"
+      },
+      {
+        "keys": [
           "fuel leak",
           "liquid fuel",
           "oil",
@@ -741,8 +766,25 @@
       {
         "keys": [
           "gas leak",
+          "gas jet",
+          "gas jets",
+          "jet flame",
+          "jet flames",
+          "gaseous fuel",
+          "gas fuel",
+          "fuel gas",
+          "gas flame",
+          "gas fire",
+          "gas burner",
+          "flammable gas",
           "가스 누출",
-          "가스"
+          "가스 화재",
+          "가스 화염",
+          "가스 불꽃",
+          "가연성 가스",
+          "연료 가스",
+          "기체 연료",
+          "제트 화염"
         ],
         "fuel_class": "gaseous_hydrocarbon",
         "fuel_phase": "gas"
@@ -784,16 +826,17 @@
     "out_of_scope": "Rocket and propellant fire safety is outside the scope of PSI combustion research.",
     "partial_gravity": "PSI has no partial-gravity (lunar or Martian) combustion data. All results here are microgravity tests; they are not bounds for lunar or Martian gravity. NASA names partial-gravity material flammability a major gap (OCHMO-TB-008).",
     "earth_gravity": "PSI results are microgravity tests. Only some investigations report 1g comparisons.",
-    "o2_above_all": "O2 is above the highest O2 tested in microgravity in PSI ({max_o2}% in {max_cfg}, {ref}). Any conclusion is an extrapolation.",
+    "o2_above_all": "O2 is above the highest surrounding-atmosphere O2 tested in microgravity in PSI ({max_o2}% in {max_cfg}). Any conclusion is an extrapolation.",
     "o2_above_result": "User O2 {user}% is above this configuration's tested maximum ({max}%): the real fire may be more severe than tested.",
     "outside_range": "Outside the tested range for: {dims}.",
     "gas_for_solid": "Evidence comes from gaseous-fuel tests; apply to solid materials with caution.",
-    "oxidizer_stream": "O2 range here is the oxidizer stream of an inverse flame, not the surrounding atmosphere.",
+    "oxidizer_stream": "O2 here is the oxidizer stream of an inverse flame, not the surrounding atmosphere, so it is not compared with your O2 (scored as unknown).",
     "not_reported": "Catalog does not report: {dims} (scored as unknown).",
     "ground_analysis": "Ground analysis or modelling that reuses flight data, not a flight experiment.",
     "need_input": "Tell me at least an environment (ISS, lunar habitat, spacesuit) or a material (cotton fabric, PMMA, heptane).",
     "fallback": "{dims} not reported in the catalog; scored as ordinary cabin air (team assumption: 21% O2, 101.3 kPa).",
-    "complementary": "Included because it was tested at your O2; the closer matches above were tested at a different O2."
+    "complementary": "Included because it was tested at your O2; the closer matches above were tested at a different O2.",
+    "ranges_separate": "The O2 range and the pressure range are each taken over all tests of this configuration; they do not say that a test was run at both of your values."
   },
   "atmosphere_fallback": {
     "o2_pct": 21.0,

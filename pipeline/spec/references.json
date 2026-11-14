@@ -6,7 +6,8 @@
    "full_text_read": "the cited passage was read in the document",
    "abstract_only": "only the public abstract or catalogue page was read",
    "cited_not_read": "known only through a citation in another listed document",
-   "read_from_copy": "read from an unofficial copy"
+   "read_from_copy": "read from an unofficial copy",
+   "read_by_teammate": "the passage was read in the document by another session of the team, which reported the wording; not read by the session that wrote this file"
   },
   "item_types": [
    "requirement",
@@ -20,10 +21,12 @@
    "framework",
    "knowledge_gap",
    "limitation",
-   "published_result"
+   "published_result",
+   "stated_objective"
   ],
-  "quote_note": "'quote' is the sentence as it appears in the document. All 12 quotes were checked a second time against the documents on 2026-11-14 by a separate AI pass and found verbatim; for NASA-STD-6001B, TASKBOOK-14639, ICES-2019-BASS2, SAFFIRE-2017, FSJ-2018-SAME and FLEX-EIRD the check used a text extraction of the PDF, not the PDF pages. Not checked by a human.",
-  "unverified": "CHALLENGE-2026: the official page could not be opened from the work environment; its items were read from a copy. ISO 14624-1, ISO/TS 16697, ASTM D2863 and SAE 2008-01-2055 were not read in full (see 'access')."
+  "quote_note": "'quote' is the sentence as it appears in the document (18 items carry one). The 12 quotes that existed on 2026-11-14 at noon were checked a second time against the documents by a separate AI pass and found verbatim; the quotes added later the same day (ICES-2019 sensors, pressure and CO/CO2 ratio; the two table captions) were read in the documents by the session that added them. For NASA-STD-6001B, TASKBOOK-14639, ICES-2019-BASS2, SAFFIRE-2017, FSJ-2018-SAME and FLEX-EIRD the check used a text extraction of the PDF, not the PDF pages. Not checked by a human.",
+  "unverified": "ISO 14624-1, ISO/TS 16697, ASTM D2863 and SAE 2008-01-2055 were not read in full (see 'access'). CHALLENGE-2026 was checked on the official page by another session of the team (access 'read_by_teammate').",
+  "item_types_note": "'stated_objective' is a sentence in which the investigators or a NASA project document state the purpose of an experiment; needs.json links a need to an investigation through such items."
  },
  "references": [
   {
@@ -118,6 +121,98 @@
       "o2_pct": 20.9,
       "pressure_kpa": 101.4
      }
+    },
+    {
+     "id": "6001B.6.1.2.spread",
+     "type": "requirement",
+     "text": "Fire control guideline of the system flammability evaluation: control of flammable materials to prevent the spread of fire.",
+     "where": "6.1.2 a [FOCR 26]",
+     "quote": "The amount and arrangement of flammable materials are controlled to prevent the spread of fire in the vehicle; any potential fire is isolated in defined areas by firebreaks or other techniques (described in JSC 29353) without propagation paths to other areas."
+    },
+    {
+     "id": "6001B.6.1.2.ignition",
+     "type": "requirement",
+     "text": "Fire control guideline of the system flammability evaluation: ignition sources.",
+     "where": "6.1.2 b [FOCR 26]",
+     "quote": "The design ensures that ignition sources are eliminated or controlled."
+    },
+    {
+     "id": "6001B.T1.focr59",
+     "type": "requirement",
+     "text": "Test 1 shall evaluate the candidate material in the worst-case atmosphere to which the material could be exposed.",
+     "where": "7.1.2a [FOCR 59]",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Test 1 shall evaluate the candidate material in the worst-case atmosphere to which the material could be exposed.",
+     "note": "Does not define 'atmosphere' in this sentence and gives no number. It does not say the result holds in any other atmosphere."
+    },
+    {
+     "id": "6001B.def.worstcase",
+     "type": "definition",
+     "text": "Worst-case anticipated use environment: the most hazardous pressure, temperature, material thickness and/or fluid exposure conditions.",
+     "where": "3.2 Definitions",
+     "variables": [
+      "pressure_kpa",
+      "sample_thickness_mm"
+     ],
+     "quote": "Worst-case anticipated use environment: Most hazardous pressure, temperature, material thickness, and/or fluid exposure conditions.",
+     "note": "The definition lists pressure, temperature, thickness and fluid exposure; it does not list oxygen concentration (that is added for Test 1 in 7.1.4f). It does not say which pressure is 'most hazardous'."
+    },
+    {
+     "id": "6001B.focr12",
+     "type": "requirement",
+     "text": "The worst-case anticipated use environment (most hazardous pressure, temperature, material thickness and fluid exposure conditions) shall be used in the evaluation of material suitability.",
+     "where": "4.1f [FOCR 12]",
+     "variables": [
+      "pressure_kpa",
+      "sample_thickness_mm"
+     ],
+     "quote": "The worst-case anticipated use environment (most hazardous pressure, temperature, material thickness, and fluid exposure conditions) shall be used in the evaluation of material suitability.",
+     "note": "A requirement on material evaluation, not a definition of a flammability limit."
+    },
+    {
+     "id": "6001B.T1.o2level",
+     "type": "requirement",
+     "text": "The Test 1 atmosphere is a mixture of gaseous oxygen and nitrogen with the oxygen level the highest the material could witness in use conditions.",
+     "where": "7.1.4f(1) (addition to ISO 14624-1:2003 section 5.1)",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "The test atmosphere shall consist of a mixture of GOX and GN2, with the oxygen level being the highest that the material could witness in use conditions.",
+     "note": "Says nothing about the pressure of the test. Pressure enters Test 1 only through 'worst-case atmosphere' (7.1.2a) and the general definition (3.2, 4.1f)."
+    },
+    {
+     "id": "6001B.T1.failenv",
+     "type": "requirement",
+     "text": "Failure of any one specimen constitutes failure of the material in that test environment.",
+     "where": "7.1.4d (exception/addition to ISO 14624-1:2003 section 4)",
+     "variables": [
+      "burn_length_cm"
+     ],
+     "quote": "Failure of any one specimen constitutes failure of the material in that test environment.",
+     "note": "Speaks of failure only; it does not say that a pass is limited to that environment (ICES-2014-179 says that, see C02)."
+    },
+    {
+     "id": "6001B.focr57",
+     "type": "requirement",
+     "text": "A deviation from standard test parameters, such as nonstandard specimen preparation or test conditions, makes the test nonstandard and the results are annotated as nonstandard.",
+     "where": "7d [FOCR 57]",
+     "variables": [],
+     "quote": "When there is a deviation from standard test parameters such as nonstandard specimen preparation or test conditions, the test shall be identified as nonstandard and the results annotated as nonstandard.",
+     "note": "Does not list which conditions are 'standard' for Test 1."
+    },
+    {
+     "id": "6001B.OI.def",
+     "type": "definition",
+     "text": "Oxygen index: the minimum concentration of oxygen (volume percent) in an oxygen-nitrogen mixture that will just support flaming combustion of a material initially at room temperature under the conditions of ASTM D2863.",
+     "where": "Appendix A.2.10.4",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "Oxygen index: The minimum concentration of oxygen, expressed as a volume percent, in a mixture of oxygen and nitrogen that will just support flaming combustion of a material initially at room temperature under the conditions of ASTM D2863, Standard Test Method for Measuring the Minimum Oxygen Concentration to Support Candle-Like Combustion of Plastics (Oxygen Index).",
+     "note": "Does not state the pressure of the oxygen-index test; it delegates the conditions to ASTM D2863 (not read in full)."
     }
    ]
   },
@@ -135,6 +230,15 @@
      "type": "definition",
      "text": "Test method that NASA-STD-6001B Test 1 adopts and tailors.",
      "where": "as cited in NASA-STD-6001B 7.1.4 [FOCR 65]"
+    },
+    {
+     "id": "ISO14624-1.abstract",
+     "type": "definition",
+     "text": "ISO 14624-1:2003 specifies a method for determining the flammability of aerospace materials by upward flame propagation: whether a material exposed to a standard ignition source self-extinguishes and does not transfer burning debris.",
+     "where": "ISO catalogue abstract, https://www.iso.org/standard/28953.html (status: withdrawn)",
+     "variables": [],
+     "quote": "ISO 14624-1:2003 specifies a method for the determination of the flammability of aerospace materials by upward flame propagation. Specifically, this test determines if a material, when exposed to a standard ignition source, will self-extinguish and not transfer burning debris to adjacent materials which can be ignited by such debris.",
+     "note": "The body of the standard was not read, so nothing can be said about how its clauses treat pressure. NASA-STD-6001B 7.1.4j shows that section 6.3 of ISO 14624-1:2003 uses the term 'ambient conditions'."
     }
    ],
    "note": "Paid standard. Only its citation inside NASA-STD-6001B was read; no URL was verified."
@@ -159,6 +263,75 @@
       "flow_cms",
       "gravity_level"
      ]
+    },
+    {
+     "id": "ISO16697.scope",
+     "type": "definition",
+     "text": "The oxygen concentration threshold is determined at a given constant total pressure, temperature, convective flow and gravity level.",
+     "where": "Clause 1 Scope (the same sentence is the ISO catalogue abstract, with 'ISO/TS 16697:2012' in place of 'This Technical Specification')",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "flow_cms",
+      "gravity_level"
+     ],
+     "quote": "This Technical Specification provides a method to determine the oxygen concentration threshold when a material exposed to a standard ignition source self-extinguishes at a given constant total pressure, temperature, convective flow, and gravity-level conditions.",
+     "note": "Does not say which pressure. Does not say the threshold is the same at another pressure. The document was withdrawn on 2023-12-12 and the ISO page lists it as 'Revised by ISO 14624-1:2023'."
+    },
+    {
+     "id": "ISO16697.otherlimits",
+     "type": "definition",
+     "text": "The method can also determine other flammability limits, such as total pressure or forced convective velocity thresholds, while the other test conditions are kept constant.",
+     "where": "Clause 1 Scope (also in the ISO catalogue abstract)",
+     "variables": [
+      "pressure_kpa",
+      "flow_cms"
+     ],
+     "quote": "The method can also be used to determine other flammability limits, such as the total pressure or forced convective velocity thresholds, while maintaining other test conditions constant.",
+     "note": "Does not give any relation between the oxygen threshold and pressure."
+    },
+    {
+     "id": "ISO16697.moc",
+     "type": "definition",
+     "text": "MOC: highest oxygen concentration where all samples tested (at least five) pass the test criteria. ULOI: oxygen concentration where approximately 50 % of samples fail the test criteria.",
+     "where": "Clause 3.2 (maximum oxygen concentration, MOC). Clause 3.1 (upward limiting oxygen index, ULOI) reads: 'oxygen concentration where approximately 50 % of samples fail the test criteria described in Clause 4'",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "highest oxygen concentration where all samples tested (at least five) pass the test criteria described in Clause 4",
+     "note": "Neither definition names pressure."
+    },
+    {
+     "id": "ISO16697.record",
+     "type": "requirement",
+     "text": "Before testing, all pertinent information, including sample identification, pressure and oxygen concentration, shall be recorded on the data sheet.",
+     "where": "Clause 7 Pre-test procedures",
+     "variables": [
+      "pressure_kpa",
+      "o2_pct"
+     ],
+     "quote": "Before testing, all pertinent information (including sample identification, pressure, and oxygen concentration) shall be recorded on the data sheet (see Annex B).",
+     "note": "Applies to tests run under this Technical Specification. No document read says BASS-II or Saffire were run under it."
+    },
+    {
+     "id": "ISO16697.report",
+     "type": "recommendation",
+     "text": "The observations that should be made and recorded include the test total pressure (item d).",
+     "where": "Clause 9 Recording and reporting, list introduced by 'The following observations should be made and recorded:'",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "quote": "d) test total pressure;",
+     "note": "'should', not 'shall'. Does not say per specimen or per series."
+    },
+    {
+     "id": "ISO16697.extrapolation",
+     "type": "recommendation",
+     "text": "The introduction states that the knowledge afforded by the threshold technique allows extrapolations of flammability behaviour to conditions not specifically tested.",
+     "where": "Introduction, p. v",
+     "variables": [],
+     "quote": "The knowledge afforded by this technique allows extrapolations of flammability behaviour to conditions not specifically tested and this could potentially result in significant cost and time savings.[6]",
+     "note": "Does not say how to extrapolate, does not name pressure, and gives no rule. Reference [6] was not identified (the bibliography is not in the preview). The scope note says: 'The method described provides an assessment of the flammability of aerospace materials under laboratory conditions only.'"
     }
    ]
   },
@@ -185,6 +358,17 @@
      "type": "limitation",
      "text": "Correlation with burning characteristics under actual use conditions is not implied.",
      "where": "Abstract (public page); the standard itself was not read"
+    },
+    {
+     "id": "D2863.validity",
+     "type": "limitation",
+     "text": "If test conditions are substituted or end-use conditions change, the test cannot always predict the change in the measured characteristics; the results are valid only for the fire-test-exposure conditions described in the method.",
+     "where": "Significance and Use 5.2, as printed on the public page https://www.astm.org/d2863-23e01.html",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "If different test conditions are substituted or the end-use conditions are changed, it is not always possible by or from this test to predict changes in the fire-test-response characteristics measured. Therefore, the results are valid only for the fire-test-exposure conditions described in this test method.",
+     "note": "The public text (1.1-1.11, 5.1, 5.2) contains no statement of the test pressure. The standard itself was not read, so 'no mention of pressure' holds for the public text only."
     }
    ]
   },
@@ -244,6 +428,20 @@
        50
       ]
      }
+    },
+    {
+     "id": "3001.V2-6024.rationale",
+     "type": "requirement",
+     "text": "The rationale of the combustion-product monitoring requirement names operational decisions and response, not fire detection.",
+     "where": "6.2.6.3 [V2 6024], Rationale (Revision F)",
+     "quote": "Monitoring of toxic by-products of combustion is generally used for operational decisions and response."
+    },
+    {
+     "id": "3001.V2-9059.rationale",
+     "type": "requirement",
+     "text": "Rationale of the fire protection system requirement.",
+     "where": "9.8.2.1 [V2 9059], Rationale (Revision F)",
+     "quote": "Fire protection is to be based on the anticipated nature of the fire and the likely location of the crew in the event of a fire."
     }
    ],
    "pdf_url": "https://www.nasa.gov/wp-content/uploads/2025/05/nasa-std-3001-vol-2.pdf"
@@ -323,6 +521,73 @@
       "pressure_kpa"
      ],
      "quote": "Material flammability in partial gravity remains a major gap for exploration missions."
+    },
+    {
+     "id": "TB008.spread",
+     "type": "framework",
+     "text": "Fire spread is named in the first sentence of the overview.",
+     "where": "Overview, p. 2",
+     "quote": "Understanding how fire spreads in space is crucial for the safety of the crew."
+    },
+    {
+     "id": "TB008.cowarning",
+     "type": "operational_practice",
+     "text": "Verbatim wording for the existing item TB008.co.",
+     "where": "Overview, p. 2",
+     "variables": [
+      "co_produced_ppm"
+     ],
+     "quote": "An additional source of early warning in the case of a fire event is the rate of buildup of atmospheric gasses. This particularly includes carbon monoxide concentrations."
+    },
+    {
+     "id": "TB008.partialg",
+     "type": "knowledge_gap",
+     "text": "List of the consequences of partial gravity along the fire-safety chain.",
+     "where": "Challenges of Deep Space Exploration, p. 5",
+     "variables": [
+      "gravity_level"
+     ],
+     "quote": "Partial gravity levels affect the whole chain of the fire safety strategy, with expected consequences on flammability, flame spread rate, smoke production, detection, mitigation, and clean-up."
+    },
+    {
+     "id": "TB008.assess",
+     "type": "recommendation",
+     "text": "Material flammability must be assessed in the relevant atmospheres and gravity levels.",
+     "where": "Application, p. 7",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "gravity_level"
+     ],
+     "quote": "Material flammability must be assessed in relevant cabin atmospheres and gravity levels for exploration transit vehicles and habitats."
+    },
+    {
+     "id": "TB008.products",
+     "type": "recommendation",
+     "text": "The gaseous combustion products to be monitored must be identified; stated under 'Fire Prevention and Material Flammability / Application'.",
+     "where": "Application, p. 7",
+     "quote": "The gaseous combustion products that are to be monitored must be identified."
+    },
+    {
+     "id": "TB008.materials",
+     "type": "recommendation",
+     "text": "Properties asked of cabin materials: ignition temperature, combustion rate, explosion potential.",
+     "where": "Application, p. 7",
+     "quote": "Materials used in pressurized cabins of spacecrafts must have high ignition temperatures, slow combustion rates, and low potential for explosion."
+    },
+    {
+     "id": "TB008.location",
+     "type": "knowledge_gap",
+     "text": "Detection depends on detector location and time to detection.",
+     "where": "Fire Detection, p. 8",
+     "quote": "Detection also depends on knowledge of where a fire detector should be located and the associated time to detection."
+    },
+    {
+     "id": "TB008.monitoring",
+     "type": "recommendation",
+     "text": "Lesson from the Mir fires: monitoring must include volatile gases as well as smoke.",
+     "where": "Lessons Learned, Mir (1997), p. 12",
+     "quote": "This requires a carefully planned monitoring strategy, which includes volatile gases as well as smoke."
     }
    ],
    "note": "The technical brief states on every page that it is for reference only; its items are not requirements."
@@ -434,6 +699,65 @@
       "o2_pct_max": 34
      },
      "quote": "These recommendations will also require materials ignition and flammability testing and certification to 34% oxygen concentration."
+    },
+    {
+     "id": "EAWG.needs.flammability",
+     "type": "knowledge_gap",
+     "text": "First need of Table 7: variables whose effect on material flammability is to be known.",
+     "where": "Table 7, Vehicle Research and Technology Development Areas, p. 14",
+     "variables": [
+      "pressure_kpa",
+      "gravity_level",
+      "o2_pct"
+     ],
+     "quote": "Effects of pressure, gravity, oxygen mole fraction, and diluent gas on material flammability."
+    },
+    {
+     "id": "EAWG.needs.detection",
+     "type": "knowledge_gap",
+     "text": "Detection need of Table 7.",
+     "where": "Table 7, p. 14",
+     "quote": "Detection of fires in alternate environments and atmospheres must be evaluated"
+    },
+    {
+     "id": "EAWG.needs.suppression",
+     "type": "knowledge_gap",
+     "text": "Suppression need of Table 7.",
+     "where": "Table 7, p. 14",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "Development of fire suppression systems that are effective for oxygen concentrations > 30%"
+    },
+    {
+     "id": "EAWG.needs.ignition",
+     "type": "knowledge_gap",
+     "text": "Ignition need of Table 7: ignition mechanisms of high-oxygen systems.",
+     "where": "Table 7, p. 14",
+     "quote": "Develop understanding of ignition mechanisms for high oxygen concentration systems (flow friction and particle impact)."
+    },
+    {
+     "id": "EAWG.ignthreshold",
+     "type": "recommendation",
+     "text": "Verbatim wording for the existing item EAWG.testing: the ignition threshold data come from a modified standard flammability test and serve to identify materials at risk from increases in oxygen concentration. The report does not say that the threshold is an ignition energy or an ignition time.",
+     "where": "Executive Summary, p. 2",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "Constellation should institute a modified standard NASA flammability test to generate ignition threshold data for key spacecraft materials. This modified test will allow NASA to identify materials at risk from increases in oxygen concentration"
+    },
+    {
+     "id": "EAWG.need",
+     "type": "knowledge_gap",
+     "text": "Listed as a research and technology need: effects of pressure, gravity, oxygen mole fraction and diluent gas on material flammability.",
+     "where": "Table 7. Vehicle Research and Technology Development Areas, p. 14 (PDF page 24)",
+     "variables": [
+      "pressure_kpa",
+      "gravity_level",
+      "o2_pct"
+     ],
+     "quote": "Effects of pressure, gravity, oxygen mole fraction, and diluent gas on material flammability.",
+     "note": "The report states no relation between a flammability limit and total pressure. Its appendix on the analytic hierarchy process says only 'Flammability of materials increases as the volume percent of oxygen increases.' (p. 72)."
     }
    ]
   },
@@ -465,23 +789,24 @@
   {
    "id": "CHALLENGE-2026",
    "kind": "challenge",
-   "title": "Flame in Freefall: AI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
+   "title": "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data (challenge statement)",
    "issuer": "NASA Space Apps Challenge",
    "version": "2026",
-   "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall-ai-powered-fire-safety-insights-from-microgravity-combustion-data/",
-   "access": "read_from_copy",
+   "url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/",
+   "access": "read_by_teammate",
    "items": [
     {
      "id": "CH.pillars",
      "type": "framework",
      "text": "Fire safety is framed as prevention (ignition-source control and material selection), detection and suppression.",
-     "where": "Background"
+     "where": "Background",
+     "note": "Not among the passages re-checked on the official page on 2026-11-14; wording from the copy read earlier."
     },
     {
      "id": "CH.moonbase",
      "type": "design_value",
-     "text": "Moon Base atmosphere expected at 30% oxygen or more and 10.2 psi or less.",
-     "where": "Background",
+     "text": "Moon Base and pressurized-rover atmosphere expected between spacesuit and Earth conditions: oxygen likely 30% or more, pressure 10.2 psi or less.",
+     "where": "Potential considerations: Spacesuits and oxygen concentration",
      "variables": [
       "o2_pct",
       "pressure_kpa"
@@ -490,9 +815,42 @@
       "o2_pct_min": 30,
       "pressure_psia_max": 10.2
      }
+    },
+    {
+     "id": "CH.spacesuit",
+     "type": "design_value",
+     "text": "Spacesuits run at 100% oxygen and 4.3 psi, against 14.7 psi at sea level.",
+     "where": "Potential considerations: Spacesuits and oxygen concentration",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "o2_pct": 100,
+      "pressure_psia": 4.3
+     }
+    },
+    {
+     "id": "CH.partial_gravity",
+     "type": "knowledge_gap",
+     "text": "PSI holds no partial-gravity combustion data yet; the page names LUCI as a future source.",
+     "where": "Potential considerations: Partial-gravity data",
+     "variables": [
+      "gravity_level"
+     ]
+    },
+    {
+     "id": "CH.hardware",
+     "type": "limitation",
+     "text": "CFI-G burner streams reached up to 85% oxygen.",
+     "where": "Potential considerations: Hardware",
+     "variables": [
+      "o2_pct",
+      "o2_basis"
+     ]
     }
    ],
-   "note": "The official page could not be opened from the work environment; text was read from a third-party copy and must be checked against the official page."
+   "note": "Checked on the official page by the ui session of the team on 2026-11-14 at about 13:05 KST, from the team lead's computer. The page cannot be opened from the work environment of the session that maintains this file; the items give the wording as reported, not a verbatim quote."
   },
   {
    "id": "TASKBOOK-14639",
@@ -640,6 +998,62 @@
       ]
      },
      "quote": "The range of the CO/CO2 molar ratio produced in microgravity flames is 0.01-0.1"
+    },
+    {
+     "id": "ICES19.goal",
+     "type": "stated_objective",
+     "text": "Overall goal of BASS-II as stated by the investigators.",
+     "where": "Introduction",
+     "variables": [
+      "flow_cms",
+      "o2_pct",
+      "sample_geometry"
+     ],
+     "quote": "The overall goal of BASS -II is to study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low velocity forced convective flows in microgravity."
+    },
+    {
+     "id": "ICES19.minimum",
+     "type": "stated_objective",
+     "text": "Focus of many tests: a minimum oxygen concentration or flow velocity at which a material will burn.",
+     "where": "Introduction",
+     "variables": [
+      "o2_pct",
+      "flow_cms"
+     ],
+     "quote": "Many of the tests focused on finding a minimum oxygen concentration or flow velocity where a material will burn in space, to compare with the Earth-based limits."
+    },
+    {
+     "id": "ICES19.growth",
+     "type": "stated_objective",
+     "text": "Flame growth rates as a stated interest.",
+     "where": "Introduction",
+     "quote": "Flame growth rates were also of interest, to determine how quickly a fire in space can grow and if the flames reach a finite size or continue to grow."
+    },
+    {
+     "id": "ICES19.test1conditions",
+     "type": "definition",
+     "text": "If the flame spreads more than 15 cm in NASA Test 1, the material is considered flammable under the oxygen and pressure conditions of the test.",
+     "where": "Introduction",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "burn_length_cm"
+     ],
+     "quote": "If the flame spreads more than 15 cm in NASA Test 1, the material is considered flammable under the oxygen and pressure conditions of the test.",
+     "note": "About NASA Test 1 in normal gravity, not about the BASS-II tests."
+    },
+    {
+     "id": "ICES19.lowpressure",
+     "type": "limitation",
+     "text": "Deactivating the ventilation, as is currently done on the ISS, may not be sufficient to extinguish a flame in high oxygen, lower pressure atmospheres for some materials used in future exploration missions.",
+     "where": "Section 'Flammability Boundary Data Summary' (the doubled 'in in' is in the source). The abstract says the same of the mitigation strategy (existing item ICES19.fanoff).",
+     "variables": [
+      "flow_cms",
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "This suggests that deactivating the ventilation, as is currently done on the ISS, may not be sufficient to extinguish a flame in high oxygen lower pressure atmospheres for some materials used in in future exploration missions.",
+     "note": "About the fan-off mitigation and about narrow-channel results at up to 40% oxygen; it gives no flammability limit at another pressure."
     }
    ],
    "note": "Results published by the BASS-II investigators for the same investigation as PSI-25. Listed as a reference for checking, not reproduced by the pipeline."
@@ -730,6 +1144,44 @@
      },
      "quote": "Table I: Limiting Oxygen Molar Concentrations and Oxygen Margin of Safety for Different Gravity Levels",
      "note": "The table is printed with one column per fuel and one row per quantity. Column headings as printed: Fuel; Mylar(R) G 10.2 psia; Ultem(R) 1000 10.2 psia; Nomex(R) HT90-40 14.7 psia. Row labels as printed: 1g ULOI, 1g MOC, Martian ULOI*, Martian MOC*, Lunar ULOI*, Lunar MOC*, 0g* ULOI*, 0g* MOC*, Martian delta-O2 %, Lunar delta-O2 %, 0g delta-O2 %. The limit rows carry no unit in the table; the title calls them oxygen molar concentrations. Pressure is printed in psia only (no kPa value in the table). The table has no footnotes: the asterisk on ULOI*/MOC* is defined in the body (p. 4, p. 6), the asterisk on '0g*' is not defined anywhere in the paper; the body says the 0g values were obtained with a concurrent flow of 30 cm/s (p. 4) and that the Lunar and 0g data are from ref. 8 (Ferkul and Olson 2011). The Conclusions (p. 8) attribute 'up to 5.75% O2 lower' to Martian gravity, but in Table I -5.75 is the Lunar value (Mylar G); the largest Martian value in the table is -3.35 (Nomex HT90-40). Read on 2026-11-14 from the NTRS PDF, both from the text layer (pdftotext -layout) and from a 200 dpi rendering of page 6; the two readings agree in every cell. AI-read, not checked by a human."
+    },
+    {
+     "id": "OF2012.test1env",
+     "type": "definition",
+     "text": "Test 1 is a pass/fail upward flame propagation test conducted in the most severe flaming combustion environment (oxygen concentration, pressure) expected in the spacecraft, currently 30% oxygen at 10.2 psia.",
+     "where": "I. Introduction, p. 1",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "o2_pct": 30,
+      "pressure_psia": 10.2
+     },
+     "quote": "The method is a pass/fail upward flame propagation test conducted in the most severe flaming combustion environment (oxygen concentration, pressure) expected in the spacecraft (e.g. currently 30% oxygen at 10.2 psia which is the pre-breath environment on the ISS for spacewalks).",
+     "note": "A description by researchers, not the text of the standard."
+    },
+    {
+     "id": "OF2012.uloi",
+     "type": "definition",
+     "text": "1g ULOI: the oxygen concentration at which a material passes the NASA-STD-6001 Test 1 burn length criterion approximately half the time. 1g MOC: the oxygen concentration where at least five samples passed and at least one sample failed at 1 percent more oxygen by volume.",
+     "where": "p. 2 (the next sentence defines 1g MOC: 'the oxygen concentration where at least five samples passed the burning criterion (according to the NASA STD 6001 Test 1 definition) and where at least one sample failed in the environment that contained 1 percent more oxygen by volume')",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "The 1g ULOI is defined as the oxygen concentration at which a material passes the NASA STD 6001 Test 1 burn length criterion approximately half the time.",
+     "note": "Pressure is absent from the two definitions. The same paper prints the pressure of each limit in the column headings of Table I (existing item OF2012.table1: 10.2 psia, 10.2 psia, 14.7 psia)."
+    },
+    {
+     "id": "OF2012.normoxic",
+     "type": "published_result",
+     "text": "Keeping oxygen partial pressure constant while reducing total pressure increases the concentration of oxygen, which in turn leads to increased flammability of materials.",
+     "where": "I. Introduction, p. 1",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Keeping oxygen partial pressure constant while reducing total pressure has the effect of increasing the concentration of oxygen which in turn leads to increased flammability of materials."
     }
    ],
    "note": "The NTRS copy lists the meeting as the 42nd International Conference on Environmental Systems, San Diego, 15-19 July 2012; the number AIAA 2012-3492 is not printed in that copy and is not verified."
@@ -764,6 +1216,32 @@
       "o2_pct",
       "pressure_kpa"
      ]
+    },
+    {
+     "id": "SAE2008.mocpressure",
+     "type": "published_result",
+     "text": "The Test 1 flammability data published by White Sands show that the 1g MOCs are not generally a strong function of pressure but vary primarily with oxygen concentration; a few fuels, which appear to have halogen species in common, have a stronger dependence on pressure.",
+     "where": "Discussion, p. 6 of NASA/TM-2008-215260 (the NASA edition of SAE 2008-01-2055)",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "gravity_level"
+     ],
+     "quote": "The Test 1 materials flammability data published by WSTF (ref. 7) demonstrate that the 1g MOCs are not generally a strong function of pressure but instead vary primarily with oxygen concentration.",
+     "note": "'not generally a strong function' is not 'independent'. The same paragraph names exceptions: 'So these fuels have a stronger dependence on pressure, where at low pressure the increased diffusive mixing results in increased scavenging.' (fuels with halogen species). The statement is about 1g MOC, not about microgravity limits."
+    },
+    {
+     "id": "SAE2008.table1",
+     "type": "published_result",
+     "text": "Each 1g and 0g limit in Table 1 is printed together with its pressure (14.7 or 10.2 psia) and, for 0g, the flow speed (30 cm/s).",
+     "where": "Table 1, p. 3 of NASA/TM-2008-215260 (page viewed as an image). Cells read, for example, '24% O2, 10.2 psia*' (1g MOC, Ultem 1000) and '23% O2, 10.2 psia, 30 cm/s' (0g MOC, Ultem 1000)",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "flow_cms",
+      "gravity_level"
+     ],
+     "quote": "TABLE 1.—COMPARISON OF 1G AND 0G FLAMMABILITY LIMITS FOR THREE FUELS"
     }
    ]
   },
@@ -809,6 +1287,224 @@
      "type": "knowledge_gap",
      "text": "Detection systems are based on inadequate knowledge of fire signatures of spacecraft materials, the effect of low gravity on signatures, and the transport of fire precursors.",
      "where": "Smoke and Fire Detection, Summary"
+    },
+    {
+     "id": "CP2003.prev.margin",
+     "type": "knowledge_gap",
+     "text": "Recommendation of the prevention working group: add to the go/no-go criteria a quantitative test method that ranks materials or indicates a flammability margin.",
+     "where": "Fire Prevention and Material Flammability, Issue 2, item 1, p. 8",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "Augment existing go/no go criteria with a quantitative test method which provides ranking or indication of flammability margin, e.g. LOI or radiation panel."
+    },
+    {
+     "id": "CP2003.prev.1g",
+     "type": "knowledge_gap",
+     "text": "More understanding is needed of the relationship between 1-g test methods and microgravity performance.",
+     "where": "Fire Prevention and Material Flammability, Issue 2, item 2, p. 8",
+     "variables": [
+      "gravity_level"
+     ],
+     "quote": "More understanding on relationship between 1-g test methods to microgravity performance."
+    },
+    {
+     "id": "CP2003.prev.smolder",
+     "type": "knowledge_gap",
+     "text": "Non-flaming and smoldering combustion in microgravity is named as a gap; the standard flammability tests do not take smoldering into account.",
+     "where": "Fire Prevention and Material Flammability, Issue 2, item 3, p. 8",
+     "quote": "Need to understand the implications of non-flaming and smoldering combustion in microgravity with respect to ISS engineering materials."
+    },
+    {
+     "id": "CP2003.prev.o2flow",
+     "type": "knowledge_gap",
+     "text": "One item covers ignition, combustion and flame propagation together, with oxygen and flow as the variables, for real engineering materials.",
+     "where": "Fire Prevention and Material Flammability, Issue 2, item 4, p. 8",
+     "variables": [
+      "o2_pct",
+      "flow_cms",
+      "fuel_material"
+     ],
+     "quote": "There is a need for additional microgravity data on the effects of oxygen and flow on ignition, combustion and flame propagation for real engineering materials."
+    },
+    {
+     "id": "CP2003.prev.thickthin",
+     "type": "knowledge_gap",
+     "text": "The relationship between flame spread over thermally thick and thin materials must be established.",
+     "where": "Fire Prevention and Material Flammability, Issue 2, item 6, p. 8",
+     "variables": [
+      "sample_thickness_mm",
+      "spread_rate_mm_s"
+     ],
+     "quote": "A better understanding of the relationship between flame spread across thermally thick and thin materials must be established."
+    },
+    {
+     "id": "CP2003.prev.toxicity",
+     "type": "knowledge_gap",
+     "text": "Toxicity of combustion and pyrolysis products is listed under material selection (prevention group), with need 'Moderate'; it is the one item of Issue 2 not rated high priority.",
+     "where": "Fire Prevention and Material Flammability, Issue 2, item 8, p. 8",
+     "quote": "Research is needed to understand the toxicity and fire hazards associated with the pyrolysis of combustion products and production of aerosols."
+    },
+    {
+     "id": "CP2003.prev.ignition",
+     "type": "knowledge_gap",
+     "text": "Under 'fire scenarios' the prevention group discusses ignition as ignition mechanisms and sources (oxygen systems, SFOG, overheated cable, short circuits, aging wire, waste auto-ignition).",
+     "where": "Fire Prevention and Material Flammability, Issue 1, pp. 7-8",
+     "quote": "Of these potential fire scenarios, the highest research priority was to investigate ignition mechanisms and flammability for pressurized oxygen systems."
+    },
+    {
+     "id": "CP2003.roadmap.limit",
+     "type": "knowledge_gap",
+     "text": "Research roadmap, technical area 'Flammability of Practical Materials', 2004-2007: determine the limiting oxygen and flow for flame propagation on practical materials.",
+     "where": "Table 2, Spacecraft Fire Safety Research Roadmap, p. 14",
+     "variables": [
+      "o2_pct",
+      "flow_cms",
+      "fuel_material",
+      "gravity_level"
+     ],
+     "quote": "Determine limiting O2 and flow for flame propagation on practical materials in µg and partial-g",
+     "note": "Table cell; the three printed lines of the cell were joined. Read on a rendering of the page and in the text layer."
+    },
+    {
+     "id": "CP2003.roadmap.spread",
+     "type": "knowledge_gap",
+     "text": "Research roadmap, technical area 'Flammability of Practical Materials', 2001-2004: flammability and flame spread are one work item, with flow and imposed heat flux as the variations.",
+     "where": "Table 2, Spacecraft Fire Safety Research Roadmap, p. 14",
+     "variables": [
+      "flow_cms",
+      "spread_rate_mm_s",
+      "gravity_level"
+     ],
+     "quote": "Determine flammability and flame spread of plastic and composite materials in partial-g for variations in flow and imposed heat flux",
+     "note": "Table cell; printed lines joined. In the text layer the lines of this cell are mixed with those of the neighbouring cell; the wording was read on a rendering of the page."
+    },
+    {
+     "id": "CP2003.roadmap.signatures",
+     "type": "knowledge_gap",
+     "text": "Research roadmap, technical area 'Fire Signatures and Detection', 2004-2007.",
+     "where": "Table 2, Spacecraft Fire Safety Research Roadmap, p. 14",
+     "quote": "Establish pre-fire and fire signatures of practical materials in low g",
+     "note": "Table cell; printed lines joined. Read on a rendering of the page and in the text layer."
+    },
+    {
+     "id": "CP2003.det.priority",
+     "type": "knowledge_gap",
+     "text": "The detection group's first research question is 'What are we looking for?' (target fire definitions, fire signatures, thresholds and background levels).",
+     "where": "Smoke and Fire Detection, Research Questions, p. 6",
+     "quote": "the identification of a target or high-risk fire and the determination of fire signatures was the most immediate, near-term research that should be accomplished"
+    },
+    {
+     "id": "CP2003.det.sensors",
+     "type": "framework",
+     "text": "Fire signatures named for sensors: CO, CO2, HCl, hydrocarbons and smoke.",
+     "where": "Smoke and Fire Detection, Enabling Technologies, p. 6",
+     "variables": [
+      "co_produced_ppm",
+      "co2_produced_pct_points"
+     ],
+     "quote": "This includes sensors that measure CO, CO2, HCl, hydrocarbons, and smoke."
+    },
+    {
+     "id": "CP2003.det.hybrid",
+     "type": "knowledge_gap",
+     "text": "Which gas species detectors should look for is stated as undetermined.",
+     "where": "Smoke and Fire Detection, Summary and Conclusions, p. 7",
+     "quote": "Which species these sensors should look for and what combination of sensors should be placed in what locations will have to be determined by future tests."
+    },
+    {
+     "id": "CP2003.det.particles",
+     "type": "published_result",
+     "text": "Microgravity detector performance differed from 1-g performance in the Comparative Soot Diagnostics experiment; the difference was attributed to larger smoke particles.",
+     "where": "Smoke and Fire Detection, p. 4",
+     "quote": "This performance difference was attributed to the growth of larger smoke particles in 0-g because of the increased residence time in high smoke concentration regions (Ref. 5)."
+    },
+    {
+     "id": "CP2003.resp.spread",
+     "type": "knowledge_gap",
+     "text": "First 'basic need' listed by the Fire and Post-Fire Response group.",
+     "where": "Fire and Post-Fire Response, Current Technology Issues, item 1, p. 10",
+     "variables": [
+      "spread_rate_mm_s"
+     ],
+     "quote": "Rate of fire spread anticipated in space platforms under realistic fire scenarios"
+    },
+    {
+     "id": "CP2003.resp.co2",
+     "type": "knowledge_gap",
+     "text": "Effectiveness and limits of the on-board carbon dioxide extinguishing systems.",
+     "where": "Fire and Post-Fire Response, Current Technology Issues, item 3, p. 10",
+     "variables": [
+      "co2_pct"
+     ],
+     "quote": "Actual effectiveness and limits of performance of the existing on-board carbon dioxide fire extinguishing systems"
+    },
+    {
+     "id": "CP2003.resp.byproducts",
+     "type": "knowledge_gap",
+     "text": "Combustion by-products are listed by the response group.",
+     "where": "Fire and Post-Fire Response, Current Technology Issues, item 6, p. 10",
+     "quote": "Types of combustion by-products emitted by the fires and the extinguishing agents applied to them in spacecraft"
+    },
+    {
+     "id": "CP2003.resp.lowg",
+     "type": "knowledge_gap",
+     "text": "Influence of low gravity on extinguishment.",
+     "where": "Fire and Post-Fire Response, Current Technology Issues, item 7, p. 10",
+     "variables": [
+      "gravity_level"
+     ],
+     "quote": "Fundamental understanding of the influence of low gravity (reduced gravity and microgravity) on the extinguishment process"
+    },
+    {
+     "id": "CP2003.resp.growth",
+     "type": "definition",
+     "text": "The report distinguishes fire growth (a safety issue) from flame growth (a research and possibly safety issue).",
+     "where": "Fire and Post-Fire Response, Research Areas, item 5, p. 11",
+     "quote": "Note the distinction between fire growth, a safety issue, and flame growth, a research and possibly safety issue."
+    },
+    {
+     "id": "CP2003.resp.passive",
+     "type": "framework",
+     "text": "Passive responses include flow shutdown; active responses include agent discharge and compartment venting.",
+     "where": "Fire and Post-Fire Response, Research Areas, item 6, p. 11",
+     "variables": [
+      "flow_cms",
+      "pressure_kpa"
+     ],
+     "quote": "Passive responses are those of fire isolation, containment, power and flow shutdown, and the like. Active responses are those of conventional extinguishment-agent discharge and compartment venting."
+    },
+    {
+     "id": "CP2003.resp.agent",
+     "type": "knowledge_gap",
+     "text": "Performance of extinguishing agents in low gravity; performance is described as quantity required and time of application.",
+     "where": "Fire and Post-Fire Response, Research Areas, item 9, p. 12",
+     "quote": "There is almost a complete lack of information on the performance of extinguishing agents in microgravity and other reduced gravity environments."
+    },
+    {
+     "id": "CP2003.resp.emissions",
+     "type": "knowledge_gap",
+     "text": "Fire-related emissions are placed under fire response, with their toxic effects.",
+     "where": "Fire and Post-Fire Response, Research Areas, item 8, p. 12",
+     "quote": "Emissions and their toxic effects are relevant to the assessment of fire response."
+    },
+    {
+     "id": "CP2003.resp.firesize",
+     "type": "framework",
+     "text": "The flame spread rate, with the type of fire, the ignition source and the time to detection, gives an estimate of the size of the fire when the response begins.",
+     "where": "Fire and Post-Fire Response, Specifications of the Conditions Prior to the Response, p. 13",
+     "variables": [
+      "spread_rate_mm_s"
+     ],
+     "quote": "Knowing the type of fire, the possible ignition source, flame spread rate, and time to detection, an estimate of the size of the fire what the automated and crew response procedures begin can be obtained.",
+     "note": "The word 'what' is printed so in the report."
+    },
+    {
+     "id": "CP2003.ws1986",
+     "type": "framework",
+     "text": "The 1986 workshop placed combustion products under the forum 'Human responses to combustion products and inert atmospheres'.",
+     "where": "Synopses of Previous Workshops, p. 2",
+     "quote": "Study of combustion, pyrolysis, and extinguishment products expected in microgravity"
     }
    ]
   },
@@ -836,6 +1532,33 @@
       "spread_rate_mm_s_opposed": 1.3,
       "flow_cms": 20
      }
+    },
+    {
+     "id": "SAF.starting_o2",
+     "type": "published_result",
+     "text": "The paper attributes the slightly faster spread of the 5-cm-wide sample to the slightly higher starting oxygen percentage, 22.1% (Saffire-II) against 21.7% (Saffire-I).",
+     "where": "Section 3 Results and Discussion",
+     "variables": [
+      "o2_pct",
+      "spread_rate_mm_s"
+     ],
+     "values": {
+      "o2_pct_start_saffire_I": 21.7,
+      "o2_pct_start_saffire_II": 22.1
+     },
+     "quote": "This may be due to the slightly higher starting oxygen percentage (22.1% vs. 21.7%)."
+    },
+    {
+     "id": "SAF.sensors",
+     "type": "published_result",
+     "text": "Oxygen concentration, carbon dioxide and pressure were recorded just upstream of the fuel in the flow duct.",
+     "where": "Section 2 Methods / Experimental",
+     "variables": [
+      "o2_pct",
+      "co2_initial_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Oxygen concentration, carbon dioxide, and pressure were also recorded just upstream of the fuel in the flow duct."
     }
    ],
    "note": "Published results for the same investigation as PSI-98. Listed for checking, not reproduced by the pipeline."
@@ -886,6 +1609,80 @@
      "variables": [
       "fuel_material"
      ]
+    },
+    {
+     "id": "SAME.feedback",
+     "type": "definition",
+     "text": "The heating wire was held at constant resistance by feedback control; the resistances were correlated to wire temperatures and held within a few degrees Celsius of target values that depended on the material.",
+     "where": "Methods, Instruments",
+     "variables": [
+      "heating_ratio"
+     ],
+     "quote": "As current was applied to the wire, its resistivity was monitored with a feedback control system to maintain constant resistance throughout the heating duration. These resistances were correlated to wire temperatures and were maintained within a few degrees Celsius of target values, which varied according to the fuel sample material."
+    },
+    {
+     "id": "SAME.baseline",
+     "type": "definition",
+     "text": "The baseline sample temperature of each material was selected to produce 1 to 2 mg of sample mass loss in 60 s of heating.",
+     "where": "Results and Discussion",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "values": {
+      "mass_loss_mg_range": [
+       1,
+       2
+      ],
+      "heating_time_s": 60
+     },
+     "quote": "The sample baseline temperatures for each material were selected to produce 1 to 2 mg of sample mass loss in 60 sec of heating and have reasonable signal on each of the moment instruments."
+    },
+    {
+     "id": "SAME.instruments",
+     "type": "definition",
+     "text": "Instruments: a thermal precipitator for microscopy samples, three real-time instruments for particle mass and number concentration, an ionization detector calibrated to estimate the first moment, and two spacecraft smoke detectors.",
+     "where": "Abstract",
+     "variables": [],
+     "quote": "Additional equipment in the experiment included a thermal precipitator to sample particles for microscopic analysis upon return to Earth, and three commercial-off-the-shelf real-time instruments to measure particle mass and number concentration, and an ionization detector calibrated to estimate the first moment of the size distribution."
+    },
+    {
+     "id": "SAME.devised",
+     "type": "stated_objective",
+     "text": "Why SAME was devised.",
+     "where": "Introduction",
+     "quote": "For these reasons, the Smoke Aerosol Measurement Experiment (SAME) was devised to create and characterize smoke in low gravity."
+    },
+    {
+     "id": "SAME.goal",
+     "type": "stated_objective",
+     "text": "Goal of SAME.",
+     "where": "Methods",
+     "quote": "The goal of SAME was to generate repeatable smoke and obtain particle size statistics on-orbit without relying exclusively upon sample return to Earth."
+    },
+    {
+     "id": "SAME.keyparams",
+     "type": "definition",
+     "text": "Parameters that the investigators name as governing the smoke properties.",
+     "where": "Results and Discussion (TEM Results)",
+     "variables": [
+      "flow_cms",
+      "heating_ratio",
+      "aging_time_s",
+      "gravity_level"
+     ],
+     "quote": "Key parameters affecting the properties of the smoke produced here are the convective flow past the heated wire, the wire temperature, the aging time and the low-gravity condition."
+    },
+    {
+     "id": "SAME.massloss",
+     "type": "definition",
+     "text": "The sample mass loss was a target used to choose the baseline heating temperature.",
+     "where": "Results and Discussion",
+     "variables": [
+      "mass_loss_rate_mg_min",
+      "heating_ratio"
+     ],
+     "quote": "The sample baseline temperatures for each material were selected to produce 1 to 2 mg of sample mass loss in 60 sec of heating and have reasonable signal on each of the moment instruments."
     }
    ],
    "note": "Particle sizes are not in the PSI experimental tables; the pipeline maps only the test conditions."
@@ -932,6 +1729,29 @@
       "co2_pct",
       "he_pct"
      ]
+    },
+    {
+     "id": "FLEX.objective1",
+     "type": "stated_objective",
+     "text": "First specific objective.",
+     "where": "4.1 Experiment Objectives",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "Map the flammability boundaries for liquid fuel combustion in reduced gravity."
+    },
+    {
+     "id": "FLEX.objective2",
+     "type": "stated_objective",
+     "text": "Second specific objective.",
+     "where": "4.1 Experiment Objectives",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "co2_pct",
+      "he_pct"
+     ],
+     "quote": "Quantify the suppressant efficacy of various gaseous suppressants over the range of candidate atmospheric pressures and O2 concentrations."
     }
    ]
   },
@@ -986,6 +1806,16 @@
       "burning_rate_mm2_s",
       "extinction_diameter_mm"
      ]
+    },
+    {
+     "id": "TP216046.loi",
+     "type": "stated_objective",
+     "text": "The limiting oxygen index was a principal objective of FLEX and is tied to spacecraft fire safety.",
+     "where": "Summary, p. 1",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "A principle objective was to determine the limiting oxygen index (LOI), the oxygen percentage below which combustion would not occur. This objective reflected the FLEX focus on investigating fire safety in spacecraft."
     }
    ]
   },
@@ -1007,6 +1837,112 @@
       "o2_pct",
       "gravity_level"
      ]
+    },
+    {
+     "id": "RG.flex",
+     "type": "framework",
+     "text": "Stated goal and application of FLEX.",
+     "where": "Flame Extinguishment Experiment (FLEX), p. 12",
+     "variables": [
+      "o2_pct",
+      "co2_pct",
+      "he_pct"
+     ],
+     "quote": "The goal of the research is to examine how the addition of an inert gas suppressant influences the flammability limit of the two fuels. The application is an improved quantitative understanding of how flammability limits change in reduced gravity as it relates to fire safety."
+    },
+    {
+     "id": "RG.flex2",
+     "type": "framework",
+     "text": "Stated motivation of FLEX and of FLEX-2: FLEX by limiting oxygen indices and suppressant efficacy, FLEX-2 by energy conversion.",
+     "where": "Droplet Combustion, p. 36",
+     "quote": "FLEX is motivated by the need to better identify and predict limiting oxygen indices (LOIs) and inert-gas suppressant efficacy. The FLEX–2 experiments are motivated by the need to better understand droplet combustion as it applies to the fundamental problems of energy conversion and utilization where liquid hydrocarbon fuels are a predominant source of energy in the world."
+    },
+    {
+     "id": "RG.spice",
+     "type": "framework",
+     "text": "Stated major goal of SPICE: prediction of soot emissions.",
+     "where": "p. 13",
+     "quote": "The SPICE experiment investigated the transition from non-sooting to sooting with a major goal to provide simple predictions of soot emissions."
+    },
+    {
+     "id": "RG.bre",
+     "type": "framework",
+     "text": "Among the ACME experiments, BRE is the one focused on fire prevention.",
+     "where": "Burning Rate Emulator (BRE), p. 15",
+     "quote": "Unlike the other current ACME, the BRE is focused on fire prevention, especially in spacecraft."
+    },
+    {
+     "id": "RG.ignite",
+     "type": "published_result",
+     "text": "Ignition in low gravity.",
+     "where": "Solid-Fuel Combustion/Material Flammability, p. 18",
+     "quote": "Materials are easier to ignite in low gravity because of reduced natural convective cooling from the fuel surface."
+    },
+    {
+     "id": "RG.bass",
+     "type": "framework",
+     "text": "Stated purpose of BASS.",
+     "where": "Burning and Suppression of Solids (BASS), p. 21",
+     "quote": "The BASS experiment will improve 1-g material fire safety rating tests and help to guide strategies for extinguishing accidental fires in microgravity."
+    },
+    {
+     "id": "RG.map",
+     "type": "definition",
+     "text": "Flammability map of a material: sensitivity to ventilation flow, oxygen concentration and possibly pressure; the limiting oxygen concentration is the worst case over these.",
+     "where": "Correlation of Flammability between Normal and Microgravity, p. 22",
+     "variables": [
+      "flow_cms",
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "The goal is to obtain the microgravity flammability map for select materials to provide information on the sensitivity of the material’s flammability to ventilation flow, ambient oxygen concentration and possibly pressure, to find the fundamental limiting oxygen concentration in microgravity."
+    },
+    {
+     "id": "RG.growth",
+     "type": "framework",
+     "text": "Variables on which flame growth, spread and decay over solids are said to depend.",
+     "where": "Fundamentals of Flame Growth and Extinction in Microgravity, p. 23",
+     "variables": [
+      "gravity_level",
+      "flow_cms",
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "The goal is to understand the fundamental processes of flame growth, spread and decay over solid materials, and their dependence on gravity, flow velocity, oxygen percentage, pressure, sample size and preheating."
+    },
+    {
+     "id": "RG.ignition",
+     "type": "definition",
+     "text": "Ignition is measured as a time to ignition, as a function of environmental conditions, with an externally applied heat flux.",
+     "where": "External Heat Flux Effects on the Ignitability and Suppression of Materials in Microgravity, p. 24",
+     "variables": [
+      "ignition_time_s"
+     ],
+     "quote": "Time to ignition and the time between introduction of suppression agent and extinction are measured as a function of environmental conditions."
+    },
+    {
+     "id": "RG.same",
+     "type": "framework",
+     "text": "What SAME examined, under the heading 'Fire Safety'.",
+     "where": "Fire Safety, p. 26",
+     "quote": "The Smoke Aerosol Measurement Experiment (SAME) examined the particle-size distribution of the smoke from spacecraft materials."
+    },
+    {
+     "id": "RG.droplet",
+     "type": "framework",
+     "text": "The flammability boundary of droplet combustion is called important for flammability limits for spacecraft fire safety.",
+     "where": "p. 32",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "Identification of this curve is important not only for identifying flammability limits for spacecraft fire safety applications but for practical reasons as well."
+    },
+    {
+     "id": "RG.signatures",
+     "type": "knowledge_gap",
+     "text": "Particulate size differs in microgravity, so detectors need different signatures.",
+     "where": "Spacecraft Fire Safety, p. 35",
+     "quote": "Since many fire detectors operate by sensing fire-generated particulates, they would need to use different signatures to detect fires in microgravity."
     }
    ]
   },
@@ -1101,6 +2037,2547 @@
     }
    ],
    "note": "Saffire IV to VI are not in NASA PSI; published results listed for context, not reproduced by the pipeline. Table 1 was read on 2026-11-14 from the PDF linked on the NTRS citation page (Saffire-ICES-2024-ICES-365-accepted final.pdf), both from the text layer (pdftotext -layout) and from a 200 dpi rendering of page 3; the two readings agree in every cell. AI-read, not checked by a human."
+  },
+  {
+   "id": "ICES-2017-224",
+   "kind": "paper",
+   "title": "Results of Large-Scale Spacecraft Flammability Tests (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+   "issuer": "47th International Conference on Environmental Systems",
+   "version": "ICES-2017-224 (16-20 July 2017, Charleston, South Carolina)",
+   "url": "https://hdl.handle.net/2346/73020",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF17.o2_initial_I",
+     "type": "published_result",
+     "text": "Saffire-I: flow speed 20 cm/s; initial oxygen concentration as reported by the ISS at the time the vehicle departed 21.7% O2.",
+     "where": "Section II Experiment, p. 3",
+     "variables": [
+      "o2_pct",
+      "flow_cms"
+     ],
+     "values": {
+      "o2_pct_initial_iss_reported": 21.7,
+      "flow_cms": 20
+     },
+     "quote": "The initial flight experiment (Saffire-I) was performed at a flow speed of 20 cm/s and the initial oxygen concentration as reported by the ISS at the time the vehicle departed was 21.7% O2.",
+     "note": "The value is the ISS report at vehicle departure, not a reading at ignition. The paper does not state mole or volume basis."
+    },
+    {
+     "id": "SAF17.o2_initial_II",
+     "type": "published_result",
+     "text": "Saffire-II: initial oxygen concentration as reported by the ISS at the time the vehicle departed 22.1% O2.",
+     "where": "Section II Experiment, p. 3",
+     "variables": [
+      "o2_pct"
+     ],
+     "values": {
+      "o2_pct_initial_iss_reported": 22.1
+     },
+     "quote": "In the second flight experiment (Saffire-II), the initial oxygen concentration as reported by the ISS at the time the vehicle departed was 22.1% O2, slightly higher than the first flight (21.7%).",
+     "note": "Flight-level value; no per-sample sentence."
+    },
+    {
+     "id": "SAF17.table1_o2",
+     "type": "published_result",
+     "text": "Table I gives, per sample, a column headed 'Δ %O2' (change in oxygen percentage): 1-1 '21.7 to 21.5'; 1-2 '~ 21.5'; 2-1 to 2-7 '~ 22.1'; 2-8 '22.1 to 22.0'; 2-9 '22.0 to 21.9'.",
+     "where": "Table I, p. 4",
+     "variables": [
+      "o2_pct",
+      "o2_final_pct"
+     ],
+     "values": {
+      "rows": [
+       {
+        "sample": "1-1",
+        "delta_pct_o2": "21.7 to 21.5"
+       },
+       {
+        "sample": "1-2",
+        "delta_pct_o2": "~ 21.5"
+       },
+       {
+        "sample": "2-1",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-2",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-3",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-4",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-5",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-6",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-7",
+        "delta_pct_o2": "~ 22.1"
+       },
+       {
+        "sample": "2-8",
+        "delta_pct_o2": "22.1 to 22.0"
+       },
+       {
+        "sample": "2-9",
+        "delta_pct_o2": "22.0 to 21.9"
+       }
+      ]
+     },
+     "quote": "Table I. Summary of Samples, Test Conditions, and Selected Results",
+     "note": "Cells kept as printed. Compared with NASA PSI: PSI-98 S1 has the same two numbers in the opposite order ('21.5 - 21.7'); PSI-99 sample 2-1 has '~ 21.5' where this table has '~ 22.1'. The table does not use the words start or end; reading 'A to B' under 'Δ' as before-to-after the burn is the reader's step. The same table was read on the PDF page of the authors' slides (NTRS 20170008805, slide 29)."
+    },
+    {
+     "id": "SAF17.table1_note_i",
+     "type": "definition",
+     "text": "The oxygen column of Table I is derived from measured CO2 production and referenced to the initial O2 concentration reported by ISS; it is not a direct oxygen reading.",
+     "where": "Table I, note i, p. 4",
+     "variables": [
+      "o2_pct",
+      "o2_final_pct"
+     ],
+     "quote": "Derived from measured CO2 production and referenced to initial O2 concentration reported by ISS.",
+     "note": "Same wording as Note 1 of the PSI-99 experimental table. Formula and stoichiometry are not given."
+    },
+    {
+     "id": "SAF17.pressure",
+     "type": "published_result",
+     "text": "All Saffire-I and Saffire-II tests were performed at normal pressure (1 atm); the pressure increase due to combustion was insignificant.",
+     "where": "Section II Experiment, p. 4",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant."
+    },
+    {
+     "id": "SAF17.sensors",
+     "type": "published_result",
+     "text": "Oxygen concentration, carbon dioxide and pressure were recorded just upstream of the fuel in the flow duct.",
+     "where": "Section II Experiment, p. 5",
+     "variables": [
+      "o2_pct",
+      "co2_initial_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Oxygen concentration, carbon dioxide, and pressure were also recorded just upstream of the fuel in the flow duct.",
+     "note": "The NASA PSI records and the pre-flight papers place the O2 sensor at the inlet to the avionics bay."
+    },
+    {
+     "id": "SAF17.starting",
+     "type": "published_result",
+     "text": "The investigators call 22.1% and 21.7% the starting oxygen percentages of Saffire-II and Saffire-I.",
+     "where": "Section III.B, p. 8",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "This may be due to the slightly higher starting oxygen percentage (22.1% vs. 21.7%).",
+     "note": "The sentence compares sample 2-5 with sample 1-1."
+    }
+   ],
+   "note": "Published results for the same investigations as PSI-98 and PSI-99. Read on 2026-11-14 as a text extraction of the repository PDF through a fetch tool (the host refused direct download); page numbers are taken from the page markers in that extraction. Table I and its notes were additionally read on the PDF page of the authors' slides for this paper (NTRS 20170008805). AI-read, not checked by a human."
+  },
+  {
+   "id": "NTRS-20170008805",
+   "kind": "paper",
+   "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+   "issuer": "NASA Technical Reports Server; 47th International Conference on Environmental Systems",
+   "version": "2017 (36 slides)",
+   "url": "https://ntrs.nasa.gov/citations/20170008805",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF17S.o2_I",
+     "type": "published_result",
+     "text": "Saffire-I: initial oxygen concentration 21.7%, an ISS reading.",
+     "where": "Slide 14 'Saffire-I Description'",
+     "variables": [
+      "o2_pct"
+     ],
+     "values": {
+      "o2_pct_initial_iss_reported": 21.7
+     },
+     "quote": "Initial oxygen concentration 21.7% (ISS reading)"
+    },
+    {
+     "id": "SAF17S.o2_II",
+     "type": "published_result",
+     "text": "Saffire-II: initial oxygen concentration 22.1%, an ISS reading.",
+     "where": "Slide 9 'Saffire-2 Description'",
+     "variables": [
+      "o2_pct"
+     ],
+     "values": {
+      "o2_pct_initial_iss_reported": 22.1
+     },
+     "quote": "Initial oxygen concentration 22.1% (ISS reading,"
+    },
+    {
+     "id": "SAF17S.table1",
+     "type": "published_result",
+     "text": "Slide 29 reproduces Table I of ICES-2017-224 with the column 'Δ %O2' and note i; cells identical to SAF17.table1_o2.",
+     "where": "Slide 29 (backup slides), Table I",
+     "variables": [
+      "o2_pct",
+      "o2_final_pct"
+     ],
+     "quote": "Table I. Summary of Samples, Test Conditions, and Selected Results"
+    }
+   ],
+   "note": "Read on 2026-11-14 from the PDF (text layer and renderings of slides 9, 14 and 29 at 90-110 dpi). The text layer drops the subscript 2 of note i; the rendering shows 'CO2' and 'O2'. AI-read, not checked by a human."
+  },
+  {
+   "id": "NTRS-20180005168",
+   "kind": "paper",
+   "title": "Saffire: A Novel Approach to Study of Spacecraft Fire Safety Using Un-Manned Spacecraft (Urban, Ferkul, Olson, Ruff, Easton, and the international topical team)",
+   "issuer": "NASA Technical Reports Server; 33rd Annual Meeting of the American Society for Gravitational and Space Research, October 25-28, 2017",
+   "version": "2017 (32 slides)",
+   "url": "https://ntrs.nasa.gov/citations/20180005168",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF123.table1",
+     "type": "published_result",
+     "text": "Table 1 repeats the 'Δ %O2' column for Saffire-I and -II (same cells as ICES-2017-224) and adds Saffire-III: III-1 '21.2 to 21.0' and III-2 '21.2 to 21.0'.",
+     "where": "Slide 30, Table 1",
+     "variables": [
+      "o2_pct",
+      "o2_final_pct"
+     ],
+     "values": {
+      "rows": [
+       {
+        "sample": "I-1",
+        "delta_pct_o2": "21.7 to 21.5"
+       },
+       {
+        "sample": "I-2",
+        "delta_pct_o2": "~ 21.5"
+       },
+       {
+        "sample": "II-8",
+        "delta_pct_o2": "22.1 to 22.0"
+       },
+       {
+        "sample": "II-9",
+        "delta_pct_o2": "22.0 to 21.9"
+       },
+       {
+        "sample": "III-1",
+        "delta_pct_o2": "21.2 to 21.0"
+       },
+       {
+        "sample": "III-2",
+        "delta_pct_o2": "21.2 to 21.0"
+       }
+      ]
+     },
+     "quote": "Table 1. Summary of Samples, Test Conditions, and Selected Results",
+     "note": "Rows II-1 to II-7 read '~ 22.1'. Both Saffire-III rows carry the same range, so the first number is not shown to be the start value of each sample in every row. The heading carries the mark 'i' but the slide has no note text."
+    }
+   ],
+   "note": "Read on 2026-11-14 from the PDF (text layer and a 110 dpi rendering of slide 30). AI-read, not checked by a human."
+  },
+  {
+   "id": "ICES-2018-SAFFIRE2-PMMA",
+   "kind": "paper",
+   "title": "Analysis of Saffire II two-sided concurrent flame spread over a thick PMMA slab (Olson, Urban, Ruff, Ferkul, Toth, Eigenbrod, Meyer)",
+   "issuer": "48th International Conference on Environmental Systems",
+   "version": "2018 (ICES paper number not verified)",
+   "url": "http://hdl.handle.net/2346/74099",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF2PMMA.hatch",
+     "type": "published_result",
+     "text": "Saffire-II atmosphere at hatch closure prior to undocking: 22.1% O2, 100.6 kPa, relative humidity 43%.",
+     "where": "Experiment Description",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "o2_pct_hatch_closure": 22.1,
+      "pressure_kpa_hatch_closure": 100.6
+     },
+     "quote": "At hatch closure prior to undocking, the atmosphere was 22.1% O2, 100.6 kPa, and RH 43%",
+     "note": "Flight-level value given in the paper on samples 8 and 9; no separate value for sample 9. Olson et al. 2023 (CNF-2023-SAFFIRE) lists 103 kPa for the same flight."
+    },
+    {
+     "id": "SAF2PMMA.order",
+     "type": "published_result",
+     "text": "Samples 8 (structured PMMA) and 9 (flat PMMA) were the last two of the nine samples; sample 8 burned first (600 s), then sample 9 (900 s).",
+     "where": "Abstract; Experiment Description",
+     "variables": [
+      "burn_time_s"
+     ],
+     "quote": "Samples 8 and 9 were the last two samples of the 9 run."
+    }
+   ],
+   "note": "Published results for the same investigation as PSI-99. Read on 2026-11-14 as a text extraction of the repository record through a fetch tool; the PDF pages were not seen. AI-read, not checked by a human."
+  },
+  {
+   "id": "CNF-2023-SAFFIRE",
+   "kind": "paper",
+   "title": "The effect of duct size, sample size, and fuel composition on concurrent flame spread over large cellulose samples in microgravity (Olson, Ruff, Ferkul, Owens, Easton, Liao, T'ien, Toth, Jomaas, Fernandez-Pello, Legros, Guibaud, Fujita, Smirnov, Urban)",
+   "issuer": "Combustion and Flame",
+   "version": "248 (2023) 112559; read in the accepted manuscript",
+   "url": "https://discovery.ucl.ac.uk/id/eprint/10164340/",
+   "access": "read_from_copy",
+   "items": [
+    {
+     "id": "CNF23.table1",
+     "type": "published_result",
+     "text": "Oxygen (% by volume) and pressure recorded at hatch closing: Saffire-I sample 1 21.7%, 102 kPa; Saffire-II samples 5 and 6 22.1%, 103 kPa; Saffire-III sample 1 21.2%, 99 kPa.",
+     "where": "Table 1 and its note '+'",
+     "variables": [
+      "o2_pct",
+      "o2_basis",
+      "pressure_kpa"
+     ],
+     "values": {
+      "rows": [
+       {
+        "flight": "I",
+        "sample": 1,
+        "o2_pct_by_vol": 21.7,
+        "pressure_kpa": 102
+       },
+       {
+        "flight": "II",
+        "sample": 5,
+        "o2_pct_by_vol": 22.1,
+        "pressure_kpa": 103
+       },
+       {
+        "flight": "II",
+        "sample": 6,
+        "o2_pct_by_vol": 22.1,
+        "pressure_kpa": 103
+       },
+       {
+        "flight": "III",
+        "sample": 1,
+        "o2_pct_by_vol": 21.2,
+        "pressure_kpa": 99
+       }
+      ]
+     },
+     "quote": "The Cygnus vehicle was originally filled with the ISS atmosphere, which at hatch closing was recorded as listed in Table 1 for Saffire I-IV.",
+     "note": "Hatch-closing values, not values at ignition. Only the cellulose samples are listed; Saffire-II samples 8 and 9 are not in the table. The column headings arrive scrambled in the text extraction; 'O2, % by vol' and 'P, kPa' are reconstructed and should be checked on the PDF page."
+    }
+   ],
+   "note": "Accepted manuscript in an institutional repository, read on 2026-11-14 as a text extraction through a fetch tool (the host refused direct download). Not compared with the published version. AI-read, not checked by a human."
+  },
+  {
+   "id": "ICES-2021-266",
+   "kind": "paper",
+   "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+   "issuer": "50th International Conference on Environmental Systems",
+   "version": "ICES-2021-266 (12-15 July 2021)",
+   "url": "https://ntrs.nasa.gov/citations/20210011521",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF45.table2",
+     "type": "published_result",
+     "text": "Summary table of thin samples lists oxygen concentration 21% and pressure 100 kPa for I-1, II-5, II-6 and III-1 (IV-1: 22%, 100 kPa; V-2: 26.2%, 70.7 kPa).",
+     "where": "Table 2, p. 8",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "o2_pct_I_1": 21,
+      "o2_pct_II_5": 21,
+      "o2_pct_II_6": 21,
+      "o2_pct_III_1": 21,
+      "pressure_kpa_I_to_III": 100
+     },
+     "quote": "Table 2 Test Conditions and flame size for thin samples",
+     "note": "Whole-number values; the paper does not say whether they are rounded or nominal. They are less precise than 21.7 / 22.1 / 21.2 given by the same group in ICES-2017-224 and Combustion and Flame 248 (2023)."
+    }
+   ],
+   "note": "Read on 2026-11-14 from the PDF linked on the NTRS citation page (text layer and a 100 dpi rendering of p. 8). AI-read, not checked by a human."
+  },
+  {
+   "id": "NTRS-20200000557",
+   "kind": "paper",
+   "title": "Buoyancy Effects on Concurrent Flame Spread Over Thick PMMA (Thomsen, Fernandez-Pello, Ruff, Urban)",
+   "issuer": "Combustion and Flame 199 (2019) 279-291; author manuscript on the NASA Technical Reports Server",
+   "version": "2018 manuscript (25 pages)",
+   "url": "https://ntrs.nasa.gov/citations/20200000557",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "THOMSEN19.conditions",
+     "type": "published_result",
+     "text": "Saffire-II sample 9 (10 mm PMMA slab) was burned in air at 200 mm/s flow and atmospheric pressure (100 kPa in the abstract). No oxygen percentage is given for the flight sample.",
+     "where": "Section 2 (microgravity experiments), p. 6; Abstract",
+     "variables": [
+      "pressure_kpa",
+      "flow_cms",
+      "o2_pct"
+     ],
+     "values": {
+      "pressure_kpa": 100,
+      "flow_cms": 20
+     },
+     "quote": "The PMMA sample was burned in air with a 200 mm/s flow and atmospheric pressure."
+    }
+   ],
+   "note": "Read on 2026-11-14 from the text layer of the NTRS PDF. AI-read, not checked by a human."
+  },
+  {
+   "id": "PSI-SAFFIRE-FILES",
+   "kind": "nasa_report",
+   "title": "NASA PSI, Saffire-I (PSI-98) and Saffire-II (PSI-99): telemetry graph documents, operations notes and Readme",
+   "issuer": "NASA Physical Sciences Informatics (PSI)",
+   "version": "PSI-98 version 4, PSI-99 version 5 (files version 1)",
+   "url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "PSISAF.delay",
+     "type": "operational_practice",
+     "text": "The experiment starts about one day after Cygnus undocks from the ISS.",
+     "where": "PSI-99_Raw Data_SAFFIRE-II Operations.pdf, single page (PSI-98_Engineering Documents_SAFFIRE-I Operations.pdf has 'about 1 day')",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "From Cygnus undock until experiment start takes about one day.",
+     "note": "Generic operations description, not a flight log. Relevant because the tabulated start oxygen is the ISS report at departure."
+    },
+    {
+     "id": "PSISAF.diagnostics",
+     "type": "definition",
+     "text": "Saffire I-III diagnostics: O2 mole fraction by solid-state sensor at the inlet to the avionics bay; CO2 mole fraction and pressure by solid-state sensors in the avionics bay.",
+     "where": "PSI-99_Science Documents_SAFFIRE-II Readme.docx, Table 3 'Saffire, I, II and III Diagnostics' (an image in the file)",
+     "variables": [
+      "o2_pct",
+      "co2_initial_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Table 3. Saffire, I, II and III Diagnostics"
+    },
+    {
+     "id": "PSISAF.o2_traces",
+     "type": "published_result",
+     "text": "The telemetry graph documents plot the on-board oxygen sensor against time for each sample. Read by eye from the curves (approximate, noise about 0.05): Saffire-I sample 1 about 22.65% before ignition falling to about 22.3%; Saffire-II sample 8 about 21.55% to about 21.5%; Saffire-II sample 9 about 21.55% to about 21.45%; Saffire-II sample 1 about 21.5%. CO2 over the same tests: about 0.43 to 0.63% (I-1), 0.36 to 0.43% (II-8), 0.43 to 0.51% (II-9).",
+     "where": "Figures 5 and 6 of PSI-98_Raw Data_Saffire I Sample 1 TM graphs.docx; PSI-99_Raw Data_Saffire-II Sample 8 TM Graphs.docx; PSI-99_Raw Data_Saffire-II Sample 9 TM Graphs.docx; PSI-99_Raw Data_Saffire-II Sample 1 TM Graphs.docx",
+     "variables": [
+      "o2_pct",
+      "o2_final_pct",
+      "co2_initial_pct",
+      "co2_final_pct"
+     ],
+     "quote": "Figure 6. Saffire-II Sample 8 Ambient Oxygen Concentration and Igniter.",
+     "note": "Graph readings by an AI from the embedded images, not values printed in the files; to be replaced by the numbers in the PSI telemetry spreadsheets before any use as data. The sensor levels differ from the ISS-referenced values of ICES-2017-224 Table I (21.7 to 21.5; 22.1 to 22.0; 22.0 to 21.9); the files do not comment on this."
+    },
+    {
+     "id": "PSISAF.pressure_column",
+     "type": "published_result",
+     "text": "NASA PSI raw data hold, for each Saffire-I and Saffire-II sample, a sensor workbook whose sheet 'Calibrated Data' has a column 'Ambient Pressure' with unit 'PSIA'. Lowest and highest cell of the column per sample, and the cell in the first row where 'Igniter Current' exceeds 1 A, are in 'values' (psia, as stored).",
+     "where": "Column header in sheet 'Calibrated Data' (row 1; the unit row below it reads 'PSIA') of the eleven workbooks 'PSI-98_Raw Data_Saffire-I Sample 1 Sensor Data Complete TM graphs.xlsx', '... Sample 2 ...' and 'PSI-99_Raw Data_Saffire Sensor Data Sample 1.xlsx' to '... Sample 9.xlsx'. Cell values per sample: 'values' of this item (section 1.2a of the report lit1_pressure.md).",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "values": {
+      "unit": "psia (as stored)",
+      "rounding": "cell values rounded to 3 decimals",
+      "rows": [
+       {
+        "flight_sample": "I-1",
+        "file": "PSI-98_Raw Data_Saffire-I Sample 1 Sensor Data Complete TM graphs.xlsx",
+        "rows": 20000,
+        "pressure_psia_min": 14.825,
+        "pressure_psia_max": 14.904,
+        "pressure_psia_min_300_rows_before_igniter": 14.827,
+        "pressure_psia_max_300_rows_before_igniter": 14.861,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.847,
+        "elapsed_s_of_that_row": 60.03
+       },
+       {
+        "flight_sample": "I-2",
+        "file": "PSI-98_Raw Data_Saffire-I Sample 2 Sensor Data Complete TM graphs.xlsx",
+        "rows": 20000,
+        "pressure_psia_min": 14.851,
+        "pressure_psia_max": 14.904,
+        "pressure_psia_min_300_rows_before_igniter": 14.867,
+        "pressure_psia_max_300_rows_before_igniter": 14.899,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.879,
+        "elapsed_s_of_that_row": 60.03
+       },
+       {
+        "flight_sample": "II-1",
+        "file": "PSI-99_Raw Data_Saffire Sensor Data Sample 1.xlsx",
+        "rows": 13182,
+        "pressure_psia_min": 14.845,
+        "pressure_psia_max": 14.885,
+        "pressure_psia_min_300_rows_before_igniter": 14.853,
+        "pressure_psia_max_300_rows_before_igniter": 14.881,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.868,
+        "elapsed_s_of_that_row": 60.03
+       },
+       {
+        "flight_sample": "II-2",
+        "file": "PSI-99_Raw Data_Saffire Sensor Data Sample 2.xlsx",
+        "rows": 16818,
+        "pressure_psia_min": 14.843,
+        "pressure_psia_max": 14.89,
+        "pressure_psia_min_300_rows_before_igniter": 14.847,
+        "pressure_psia_max_300_rows_before_igniter": 14.88,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.867,
+        "elapsed_s_of_that_row": 60.03
+       },
+       {
+        "flight_sample": "II-3",
+        "file": "PSI-99_Raw Data_Saffire Sensor Data Sample 3.xlsx",
+        "rows": 16818,
+        "pressure_psia_min": 14.849,
+        "pressure_psia_max": 14.902,
+        "pressure_psia_min_300_rows_before_igniter": 14.854,
+        "pressure_psia_max_300_rows_before_igniter": 14.883,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.876,
+        "elapsed_s_of_that_row": 60.03
+       },
+       {
+        "flight_sample": "II-4",
+        "file": "PSI-99_Raw Data_Saffire Sensor Data Sample 4.xlsx",
+        "rows": 16818,
+        "pressure_psia_min": 14.855,
+        "pressure_psia_max": 14.9,
+        "pressure_psia_min_300_rows_before_igniter": 14.858,
+        "pressure_psia_max_300_rows_before_igniter": 14.891,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.873,
+        "elapsed_s_of_that_row": 60.03
+       },
+       {
+        "flight_sample": "II-5",
+        "file": "PSI-99_Raw Data_Saffire Sensor Data Sample 5.xlsx",
+        "rows": 11363,
+        "pressure_psia_min": 14.858,
+        "pressure_psia_max": 14.902,
+        "pressure_psia_min_300_rows_before_igniter": 14.865,
+        "pressure_psia_max_300_rows_before_igniter": 14.896,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.87,
+        "elapsed_s_of_that_row": 60.03
+       },
+       {
+        "flight_sample": "II-6",
+        "file": "PSI-99_Raw Data_Saffire Sensor Data Sample 6.xlsx",
+        "rows": 11363,
+        "pressure_psia_min": 14.862,
+        "pressure_psia_max": 14.904,
+        "pressure_psia_min_300_rows_before_igniter": 14.867,
+        "pressure_psia_max_300_rows_before_igniter": 14.899,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.879,
+        "elapsed_s_of_that_row": 60.03
+       },
+       {
+        "flight_sample": "II-7",
+        "file": "PSI-99_Raw Data_Saffire Sensor Data Sample 7.xlsx",
+        "rows": 20454,
+        "pressure_psia_min": 14.863,
+        "pressure_psia_max": 14.906,
+        "pressure_psia_min_300_rows_before_igniter": 14.867,
+        "pressure_psia_max_300_rows_before_igniter": 14.898,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.88,
+        "elapsed_s_of_that_row": 60.03
+       },
+       {
+        "flight_sample": "II-8",
+        "file": "PSI-99_Raw Data_Saffire Sensor Data Sample 8.xlsx",
+        "rows": 21818,
+        "pressure_psia_min": 14.865,
+        "pressure_psia_max": 14.924,
+        "pressure_psia_min_300_rows_before_igniter": 14.869,
+        "pressure_psia_max_300_rows_before_igniter": 14.902,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.888,
+        "elapsed_s_of_that_row": 60.03
+       },
+       {
+        "flight_sample": "II-9",
+        "file": "PSI-99_Raw Data_Saffire Sensor Data Sample 9.xlsx",
+        "rows": 30909,
+        "pressure_psia_min": 14.88,
+        "pressure_psia_max": 14.935,
+        "pressure_psia_min_300_rows_before_igniter": 14.884,
+        "pressure_psia_max_300_rows_before_igniter": 14.918,
+        "pressure_psia_first_row_igniter_current_above_1A": 14.897,
+        "elapsed_s_of_that_row": 60.03
+       }
+      ]
+     },
+     "quote": "Ambient Pressure",
+     "note": "The workbooks do not say where the sensor sits (the PSI-99 Readme, existing item PSISAF.diagnostics, places the pressure sensor in the avionics bay), nor its accuracy. Readings scatter by a few hundredths of a psia from row to row. The file names for Saffire-III were seen in the PSI listing but those files were not opened."
+    },
+    {
+     "id": "PSISAF.pressure_figures",
+     "type": "published_result",
+     "text": "The PSI telemetry graph document of each Saffire-I and Saffire-II sample contains a Figure 7 that plots pressure in psia against time together with the igniter current.",
+     "where": "'PSI-99_Raw Data_Saffire-II Sample 5 TM Graphs.docx'; the same Figure 7 is in the documents for Samples 1 to 9 ('Figure 7. Saffire-II Sample 1 Pressure and Igniter'; '... Sample 8 Ambient Pressure and Igniter.'). Saffire-I: 'Figure 7. Vehicle pressure and igniter current as functions of time, Saffire-I Sample 1 (concurrent spread case).' and 'Figure 7. Saffire-I Sample 2 Inlet Pressure' (PSI-98 raw data). The vertical axis is labelled 'Pressure (PSIA)'.",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "quote": "Figure 7. Saffire-II Sample 5 Ambient Pressure and Igniter",
+     "note": "Graphs, not numbers. The three captions name the same quantity differently (vehicle, inlet, ambient pressure)."
+    }
+   ],
+   "note": "Files downloaded on 2026-11-14 through the PSI download service; licence of both investigations CC0-1.0 per the PSI records. AI-read, not checked by a human."
+  },
+  {
+   "id": "SAME-EIRD-2005",
+   "kind": "nasa_report",
+   "title": "Exploration Investigation Requirements Document for SAME a.k.a. Smoke Aerosol Measurement Experiment (PI D. Urban; Co-Is G. Mulholland, Z.-G. Yuan, J. Yang, T. Cleary)",
+   "issuer": "NASA GRC",
+   "version": "Rev. 2.0, February 25, 2005 (PSI file PSI-102_Engineering Documents_SAME_EIRD.pdf, 72 pages)",
+   "url": "https://doi.org/10.60555/gd4k-8h62",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?file=PSI-102_Engineering%20Documents_SAME_EIRD.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMEEIRD.matrix",
+     "type": "definition",
+     "text": "The requirements document plans a test matrix of two weight loss rates, two air flow rates and two aging durations (Table 3-6: Teflon at 5 cm/s, 2 mg/minute, 1 minute; 5, 1, 1; 5, 2, 20; 10, 2, 1; the other materials 'same conditions as 1-4'). The PSI-102 experimental table carries the same values.",
+     "where": "3.6 Test matrix, PDF pages 45-46 (Table 3-6)",
+     "variables": [
+      "flow_cms",
+      "mass_loss_rate_mg_min",
+      "aging_time_s",
+      "fuel_material"
+     ],
+     "values": {
+      "flow_cms": [
+       5,
+       10
+      ],
+      "weight_loss_rate_mg_min": [
+       1,
+       2
+      ],
+      "aging_duration_min": [
+       1,
+       20
+      ]
+     },
+     "quote": "The exact operating conditions will be varied based upon the results of prior tests; however the test matrix is anticipated to cover two weight loss rates, two air flow rates, and two aging durations."
+    },
+    {
+     "id": "SAMEEIRD.target",
+     "type": "definition",
+     "text": "The weight loss rates of the test matrix are target values, specified in order to vary the sample temperature.",
+     "where": "3.1.5 Sample heater, PDF page 34",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "Two target mass loss rates are specified in the test matrix (Table 3-6) to evaluate the effect of temperature on the particle size distribution."
+    },
+    {
+     "id": "SAMEEIRD.heater",
+     "type": "requirement",
+     "text": "The quantity to be controlled during heating is the wire temperature, through the wire resistance; the weight loss cannot be set through the heater power.",
+     "where": "3.1.5 Sample heater, PDF page 33",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "due to the loss of buoyant cooling of the heater wire, the weight loss in low-gravity cannot be predicted by controlling the heater power, instead, the wire temperature must be controlled; this can be accomplished by measuring the change in the wire resistance."
+    },
+    {
+     "id": "SAMEEIRD.massmeas",
+     "type": "requirement",
+     "text": "The actual mass loss of every sample is to be established by weighing the sample before and after the test.",
+     "where": "Table 3-1, item 6 d, PDF page 29; also 5 Post-flight data deliverables, item 1, PDF page 47",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "values": {
+      "accuracy_g": 0.0001
+     },
+     "quote": "Mass loss for all samples to be established by determining the mass change in the sample. Accuracy: 0.0001 g. This will require reasonably expeditious sample return."
+    },
+    {
+     "id": "SAMEEIRD.products",
+     "type": "definition",
+     "text": "Science data end products: for each material, as a function of mass loss per unit area, air flow rate and smoke aging - arithmetic mean diameter, diameter of average mass, geometric mean diameter, geometric standard deviation, spacecraft smoke detector signals normalized by number density, TEM images, signals from other smoke sensing devices.",
+     "where": "2.3 Science data end products, PDF page 26",
+     "variables": [
+      "flow_cms",
+      "aging_time_s",
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "For each material as a function of mass loss/unit area, air flow rate, and smoke aging determine:"
+    },
+    {
+     "id": "SAMEEIRD.csd",
+     "type": "limitation",
+     "text": "The sentences of the PSI-102 'approach' field about an igniter, thermophoretic soot samplers, weighing the remains of the samples and flight mass loss rates stand in this document in section 1.2.2, under the heading '1.2 Background: CSD experiment design and results'.",
+     "where": "1.2.2 Procedure and operational sequence and data reduction, PDF page 15 (heading 1.2 on PDF page 13)",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "The remains of the samples were weighed to determine their mass loss. The digital data was transcribed from the video record and analyzed to determine the response of the detectors. Once the flight mass loss rates were determined, 1-g operation conditions to produce the same loss were determined."
+    },
+    {
+     "id": "SAMEEIRD.ratio",
+     "type": "definition",
+     "text": "Ground tests were run at the resistance ratio RT/R0 that produced the desired 2 mg mass loss in 60 s; the sample mass before and after the test verified the operating condition.",
+     "where": "3.5.6 Gaseous Constituent Sensors, Test Matrix, PDF page 44",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "values": {
+      "mass_loss_mg": 2,
+      "heating_time_s": 60
+     },
+     "quote": "The initial test for each sample was conducted at the resistance ratio (RT/R0) that produced the desired 2 mg mass loss within 60 sec."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; PDF pages 45 and 46 were also viewed as page images. 'url' is the DOI given in the PSI-102 record; doi.org could not be reached from the session, so its resolution is not verified. 'pdf_url' is the PSI call that returns a temporary download link. Page numbers are PDF page numbers; the printed footer of the same page reads 'page N of 72' with the same N."
+  },
+  {
+   "id": "SAME-BCD-2005",
+   "kind": "nasa_report",
+   "title": "SAME Baseline Concept Description Document, SAME-DOC-001 Rev. A (ZIN Technologies for NASA GRC)",
+   "issuer": "NASA GRC / ZIN Technologies",
+   "version": "Rev. A, approvals dated June 2005 (PSI file PSI-102_Science Documents_SAME_Baseline Concept Description Doc.pdf, 15 pages)",
+   "url": "https://doi.org/10.60555/gd4k-8h62",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?file=PSI-102_Science%20Documents_SAME_Baseline%20Concept%20Description%20Doc.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMEBCD.matrix",
+     "type": "definition",
+     "text": "The 20-row test matrix (four conditions for each of Teflon, Kapton, silicone rubber, lamp wick and dibutyl phthalate; air flow 5 or 10 cm/s, weight loss rate 2 or 1 mg/min, aging duration 1 or 20 minutes) is stated to be taken from the EIRD.",
+     "where": "6.4 Test Matrix, Table 1, PDF page 13",
+     "variables": [
+      "flow_cms",
+      "mass_loss_rate_mg_min",
+      "aging_time_s",
+      "fuel_material"
+     ],
+     "quote": "This section includes the current test matrix as taken from the latest EIRD (Rev. 1.01)."
+    },
+    {
+     "id": "SAMEBCD.weigh",
+     "type": "definition",
+     "text": "The samples are weighed before launch and after return to quantify the actual mass loss.",
+     "where": "Hardware description, item 10 Sample Carousel Assembly, PDF page 11",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "These samples are removed from the tubes for weighing, both before and after the experiment (before launch and after being downmassed) to quantify the actual mass loss during pyrolysis."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; not viewed as page images."
+  },
+  {
+   "id": "SAME-FSR-2010",
+   "kind": "nasa_report",
+   "title": "Smoke Aerosol Measurement Experiment (SAME), Final Report, November 1, 2000 - April 14, 2009 (Urban, Ruff, Sheredy, Cleary, Yang, Mulholland, Yuan)",
+   "issuer": "NASA GRC",
+   "version": "March 15, 2010 (PSI file PSI-102_Reports_SAME_Final Science Report.pdf, 68 pages; appendices B to E reprint SAE 2009-01-2468, AIAA 2009 'Properties of Smoke from Overheated Materials in Low-Gravity', SAE 2008-01-2089 and AIAA 2008 'Spacecraft Fire Detection: Smoke Properties and Transport in Low-Gravity')",
+   "url": "https://doi.org/10.60555/gd4k-8h62",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?file=PSI-102_Reports_SAME_Final%20Science%20Report.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMEFSR.control",
+     "type": "definition",
+     "text": "In the SAME flight hardware the wire resistance was monitored to control the wire temperature; in laboratory tests this gave repeatable weight loss from sample to sample.",
+     "where": "3 (hardware description, text beside Figure 5), PDF page 21; the same sentences in Appendix D (SAE 2008-01-2089), PDF page 54",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "the wire resistance was monitored to control its temperature. This technique was found to produce repeatable weight loss from sample to sample in laboratory tests."
+    },
+    {
+     "id": "SAMEFSR.flown",
+     "type": "definition",
+     "text": "SAME flight tests (September to early October 2007): 30 samples, six each of five materials, at different airflow rates, pyrolysis temperatures and aging durations; the system was designed for 2 to 8 cm/s; Appendix A logs 47 flight tests (initial heatings and reheats).",
+     "where": "4 Flight Tests, PDF page 24; hardware description, PDF page 21; Appendix A, PDF page 33",
+     "variables": [
+      "flow_cms",
+      "aging_time_s",
+      "heating_ratio",
+      "fuel_material"
+     ],
+     "values": {
+      "samples": 30,
+      "flow_cms_design_range": [
+       2,
+       8
+      ]
+     },
+     "quote": "Overall 30 sample materials were tested. These were comprised of six samples each of 5 materials: Teflon™, Kapton™, silicone rubber, cellulose, and dibutyl-phthalate deposited on a porous wick. These samples were tested at different airflow rates, pyrolysis temperatures, and smoke aging durations."
+    },
+    {
+     "id": "SAMEFSR.results",
+     "type": "published_result",
+     "text": "Table 1 'Results of SAME flight tests' gives, for Kapton, lamp wick, silicone and Teflon, unaged and aged: geometric mean diameter, arithmetic mean diameter, diameter of average mass (nm) and geometric standard deviation.",
+     "where": "5 Test Results and Discussions, Table 1, PDF page 27 (announced on PDF page 25)",
+     "variables": [
+      "fuel_material",
+      "aging_time_s"
+     ],
+     "quote": "Results from the moment instruments for baseline runs (no aging) and 720 second aging runs are summarized in Table 1."
+    },
+    {
+     "id": "SAMEFSR.massloss",
+     "type": "limitation",
+     "text": "For the 2007 flight, the mass loss analysis of the returned samples is reported as started but not completed (2008 conference paper reprinted in the report). No table of measured SAME-1 mass losses was found in the report.",
+     "where": "Appendix D (SAE 2008-01-2089), PDF page 56",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "At this time the samples and TEM grids have been received back from the ISS; TEM and mass loss analyses have been initiated but not completed."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; not viewed as page images. In the first quote the page layout wraps the sentence around Figure 5; the words are continuous in the reading-order extraction."
+  },
+  {
+   "id": "SAMER-FR-2014",
+   "kind": "nasa_report",
+   "title": "Smoke Aerosol Measurement Experiment Re-flight (SAMER), Final Report, 01 November 2000 - June 2, 2014 (Urban, Ruff, Sheredy, Meyer, Cleary, Yang, Mulholland, Yuan)",
+   "issuer": "NASA GRC",
+   "version": "June 2, 2014 (PSI file PSI-101_Reports_SAME-R_Final Report.pdf, 89 pages)",
+   "url": "https://doi.org/10.60555/2np7-jv14",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-101/download?file=PSI-101_Reports_SAME-R_Final%20Report.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMER.rtr0",
+     "type": "definition",
+     "text": "Rt/R0 is the ratio of the resistance of the heated sample wire to its resistance at room temperature. It is the parameter by which test conditions are specified: the wire resistance measured before the run is multiplied by it to give the target resistance of the heater control.",
+     "where": "Sample heating temperature derivation, PDF page 26",
+     "variables": [
+      "heating_ratio"
+     ],
+     "quote": "Traditionally, test conditions are specified by Rt/R0, the ratio between the resistance of heated wire over the resistance of the wire at room temperature. Thus, before each run, the sample wire resistance is measured, then multiplied by this parameter to get the target resistance for the control circuitry."
+    },
+    {
+     "id": "SAMER.rtr0.limit",
+     "type": "limitation",
+     "text": "The same Rt/R0 does not mean the same sample temperature: the derived heating temperatures differed by up to 30 degrees Celsius at equal Rt/R0.",
+     "where": "Sample heating temperature derivation, PDF page 26",
+     "variables": [
+      "heating_ratio"
+     ],
+     "values": {
+      "max_temperature_difference_c": 30
+     },
+     "quote": "it is surprising that for the same Rt/R0, the actual heating temperature difference can be as large as 30 degrees Celsius."
+    },
+    {
+     "id": "SAMER.matrix",
+     "type": "definition",
+     "text": "Appendix A 'Test matrix' lists the test conditions of each run; secondary aging runs are separate entries, which gives 109 entries for 67 runs. Its rows include SAME Test #, Description, Date, Inlet Velocity, Rt/R0, Duration, Primary Aging time, Primary Mixing time and Net Aging time, the columns of the PSI-101 experimental table.",
+     "where": "Flight Operation, PDF page 3; Appendix A, PDF pages 31-49",
+     "variables": [
+      "flow_cms",
+      "heating_ratio",
+      "aging_time_s",
+      "fuel_material"
+     ],
+     "values": {
+      "runs": 67,
+      "entries": 109
+     },
+     "quote": "Totally 67 runs were conducted including two runs using reused samples. The test conditions of each run can be found in Appendix A, where the secondary aging runs are listed as separate entities, making the total run number to 109."
+    },
+    {
+     "id": "SAMER.massloss",
+     "type": "published_result",
+     "text": "The mass loss of each SAME-R sample was measured after the flight by weighing (Appendix C lists preflight average, postflight average and mass loss in mg by sample and test number). These values are not in the PSI-101 experimental table.",
+     "where": "Flight Operation, PDF page 4; Appendix C 'Sample mass loss of each test run', PDF pages 51-52",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "After entire SAMER tests were completed, the six carousels, all tested samples and the six thermal precipitators were shipped to the GRC for measuring sample weight losses and TEM grid analysis."
+    },
+    {
+     "id": "SAMER.baseline",
+     "type": "definition",
+     "text": "The baseline sample temperature of each material was chosen so that the sample loses 1 to 2 mg in 60 seconds.",
+     "where": "SAMER results (excerpt of AIAA 2012-3536), PDF page 4",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "values": {
+      "mass_loss_mg_range": [
+       1,
+       2
+      ],
+      "heating_time_s": 60
+     },
+     "quote": "The sample temperatures were based on the pyrolysis properties of the material and were thus material specific. The baseline temperature was selected to produce 1 to 2 mg of weight loss in 60 seconds and have reasonable signal on each of the moment instruments."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; PDF pages 26, 31 and 51 were also viewed as page images. A comparison of the text extraction of Appendix A with the PSI-101 table (by an AI session, not checked by a human) found test 112 (Kapton, 2 cm/s, Rt/R0 1.480) in Appendix A and not in the PSI table, and test 57 once in Appendix A (Lampwick) but twice in the PSI table (Lampwick and Teflon)."
+  },
+  {
+   "id": "SAME-OPS-2007",
+   "kind": "nasa_report",
+   "title": "Smoke Aerosol Measurement Experiment (SAME) Operations Manual, SAME-DOC-007 (ZIN Technologies for NASA GRC)",
+   "issuer": "NASA GRC / ZIN Technologies",
+   "version": "January 2007 (PSI file PSI-102_Science Documents_SAME_Operations Manual_007.pdf, 33 pages)",
+   "url": "https://doi.org/10.60555/gd4k-8h62",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?file=PSI-102_Science%20Documents_SAME_Operations%20Manual_007.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMEOPS.setpoint",
+     "type": "definition",
+     "text": "Rt/R0 is the heater control setpoint multiplier applied to the unheated sample resistance R0. Nominal values: Kapton 1.380, Lampwick 1.245, Silicone 1.327, Teflon 1.440.",
+     "where": "5.2 Setting parameters, PDF page 11",
+     "variables": [
+      "heating_ratio"
+     ],
+     "values": {
+      "Kapton": 1.38,
+      "Lampwick": 1.245,
+      "Silicone": 1.327,
+      "Teflon": 1.44
+     },
+     "quote": "Heater Control Setpoint should be set after knowing the unheated resistance of a sample, a.k.a. R0. Nominal setpoints are a multiple, Rt/R0, of R0 depending on sample type:"
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; not viewed as page images."
+  },
+  {
+   "id": "SAME-SRD-2005",
+   "kind": "nasa_report",
+   "title": "SAME Software Requirements Document, SAME-DOC-004 Rev. D (ZIN Technologies for NASA GRC)",
+   "issuer": "NASA GRC / ZIN Technologies",
+   "version": "Rev. D (PSI file PSI-102_Reference Data_SAME_Software Req Document.pdf, 29 pages)",
+   "url": "https://doi.org/10.60555/gd4k-8h62",
+   "pdf_url": "https://psi.nasa.gov/geode-py/ws/studies/PSI-102/download?file=PSI-102_Reference%20Data_SAME_Software%20Req%20Document.pdf&version=1&redirect=false",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAMESRD.commands",
+     "type": "definition",
+     "text": "Inlet flow velocity, heater setpoint, heating duration, mixing duration and primary and secondary aging durations are test parameters set by command for each test.",
+     "where": "4.4.4 Test Configuration Command Group, Table 5, PDF page 18",
+     "variables": [
+      "flow_cms",
+      "heating_ratio",
+      "aging_time_s"
+     ],
+     "quote": "Sets the target flow velocity for the inlet duct during sample heating."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the PDF downloaded from NASA PSI; not viewed as page images. Table 5 also reads: 'SetHeaterSetpoint Sets the resistance/temperature setpoint of the heater controller.' and 'SetPrimaryAgingDuration Sets the duration that smoke is kept in the smoke aging chamber.'"
+  },
+  {
+   "id": "ICES-2012-SAME2",
+   "kind": "paper",
+   "title": "Particle Morphology and Size Results from the Smoke Aerosol Measurement Experiment-2 (Urban, Ruff, Greenberg, Fischer, Meyer, Mulholland, Yuan, Bryg, Cleary, Yang)",
+   "issuer": "42nd International Conference on Environmental Systems, San Diego, 15-19 July 2012, AIAA 2012-3536",
+   "version": "2012 (NTRS 20130000422)",
+   "url": "https://ntrs.nasa.gov/citations/20130000422",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20130000422/downloads/20130000422.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "ICES12.baseline",
+     "type": "definition",
+     "text": "The baseline sample temperature of each material was selected to produce 1 to 2 mg of weight loss in 60 seconds.",
+     "where": "II.C Experimental Results, PDF page 7",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "values": {
+      "mass_loss_mg_range": [
+       1,
+       2
+      ],
+      "heating_time_s": 60
+     },
+     "quote": "The sample temperatures were based on the pyrolysis properties of the material and were thus material specific. The baseline temperature was selected to produce 1 to 2 mg of weight loss in 60 seconds and have reasonable signal on each of the moment instruments."
+    },
+    {
+     "id": "ICES12.measured",
+     "type": "definition",
+     "text": "Measured quantities: particle number concentration (zeroth moment), diameter concentration (first moment) and mass concentration (third moment); from them the diameter of average mass and the count mean diameter, and with a log-normal assumption the geometric mean diameter and geometric standard deviation.",
+     "where": "Abstract, PDF page 1",
+     "variables": [],
+     "quote": "These moment diagnostics were used to determine the particle number concentration (zeroth moment), the diameter concentration (first moment), and the mass concentration (third moment). These statistics were combined to determine the diameter of average mass and the count mean diameter and, by assuming a log-normal distribution, the geometric mean diameter and the geometric standard deviations can also be calculated."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction (pdftotext) of the NTRS PDF; not viewed as page images."
+  },
+  {
+   "id": "AST-2015-PYROLYSIS",
+   "kind": "paper",
+   "title": "Pyrolysis Smoke Generated Under Low-Gravity Conditions (Mulholland, Meyer, Urban, Ruff, Yuan, Bryg, Cleary, Yang)",
+   "issuer": "Aerosol Science and Technology 49(5), 310-321",
+   "version": "2015",
+   "url": "https://doi.org/10.1080/02786826.2015.1025125",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "AST15P.measured",
+     "type": "definition",
+     "text": "In the study the wire temperature is fixed and the pyrolysis rate is measured.",
+     "where": "2.2 Materials Studied and Heating System",
+     "variables": [
+      "heating_ratio",
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "In the current study, the temperature is fixed for both flow and no-flow conditions and for normal gravity and low-gravity conditions, and the pyrolysis rate is measured."
+    },
+    {
+     "id": "AST15P.balance",
+     "type": "definition",
+     "text": "The total mass loss of each sample was determined by microbalance weighing on Earth before and after the experiment.",
+     "where": "3.1 Pyrolysis",
+     "variables": [
+      "mass_loss_rate_mg_min"
+     ],
+     "quote": "For each material, the total mass loss, mL, was determined from microbalance measurements on earth before and after the experiment."
+    },
+    {
+     "id": "AST15P.resistance",
+     "type": "definition",
+     "text": "The heater held a constant wire resistance for 60 s; the temperature was obtained from the resistance by calibration.",
+     "where": "2.2 Materials Studied and Heating System",
+     "variables": [
+      "heating_ratio"
+     ],
+     "quote": "A constant resistance was maintained over the 60 s heating period by adjusting the duty cycle of the pulsating power. The temperature was obtained from the resistance measurement based on calibration data for resistance versus temperature."
+    }
+   ],
+   "note": "Read on 2026-11-14 as a text extraction of the publisher's full-text page (https://www.tandfonline.com/doi/full/10.1080/02786826.2015.1025125) obtained through the Exa fetch tool; the PDF pages, figures, tables and supplement were not seen. Copyright 2015 American Association for Aerosol Research: cited and quoted in single sentences only."
+  },
+  {
+   "id": "NASA-TM-2011-217036",
+   "kind": "nasa_report",
+   "title": "Final Report: Fire Prevention, Detection, and Suppression Project, Exploration Technology Development Program (Ruff)",
+   "issuer": "NASA GRC",
+   "version": "NASA/TM-2011-217036, September 2011",
+   "url": "https://ntrs.nasa.gov/citations/20110020262",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "TM217036.areas",
+     "type": "framework",
+     "text": "The three areas of NASA's fire safety technology project.",
+     "where": "Abstract, p. 1",
+     "quote": "This is accomplished by addressing the areas of (1) fire prevention and material flammability, (2) fire signatures and detection, and (3) fire suppression and response."
+    },
+    {
+     "id": "TM217036.threshold",
+     "type": "stated_objective",
+     "text": "Task objective for prevention: the oxygen flammability threshold in reduced gravity; the threshold is a function of the local convective velocity.",
+     "where": "1.2.1 Fire Prevention and Material Flammability - Low-g Oxygen Thresholds, p. 4",
+     "variables": [
+      "o2_pct",
+      "flow_cms",
+      "gravity_level",
+      "fuel_material"
+     ],
+     "quote": "However, the oxygen threshold has been shown to be lower in reduced-gravity and is a function of the local convective velocity. Therefore, the objective of this task was to determine the oxygen flammability threshold in reduced-gravity for materials identified by NASA Materials and Processes personnel and quantify the difference from thresholds determined in normal gravity."
+    },
+    {
+     "id": "TM217036.signatures",
+     "type": "definition",
+     "text": "Fire signatures defined as the gaseous species and particulate properties produced by a fire.",
+     "where": "1.2.2 Fire Signatures and Detection, p. 4",
+     "quote": "However, advanced sensors require knowledge of the fire signatures, i.e., the gaseous species and particulate properties produced by a fire that provide the quickest and most reliable detection."
+    },
+    {
+     "id": "TM217036.suppression",
+     "type": "knowledge_gap",
+     "text": "Trade studies found too little information to compare fire suppression systems quantitatively.",
+     "where": "1.2.4 Fire Suppression, p. 4",
+     "quote": "they concluded that there was insufficient information to conduct a quantitative trade study of existing fire suppression systems for spacecraft."
+    },
+    {
+     "id": "TM217036.flight",
+     "type": "framework",
+     "text": "The project names SAME and FLEX as the ISS experiments it depended on.",
+     "where": "1.1 Introduction, p. 2",
+     "quote": "The successful implementation of this project also depended on results obtained from several experiments to be conducted on the ISS, specifically, the Smoke Aerosol Measurement Experiment (SAME) and the Flame Extinguishment Experiment (FLEX)."
+    }
+   ],
+   "note": "Pages 6-66 of the report are presentation slides stored as images; they were not read."
+  },
+  {
+   "id": "NASA-CP-2004-213205-VOL1",
+   "kind": "nasa_report",
+   "title": "Strategic Research to Enable NASA's Exploration Missions Conference and Workshop: Presentations (Nahra, ed.); presentations 'Fire Prevention, Detection, and Suppression', 'Fire Suppression and Response' and 'Research Plan for Fire Signatures and Detection' (Ruff) and 'Organizing Questions for Reduced-Gravity Flammability' (Miller and NASA/NCMR project scientists)",
+   "issuer": "NASA GRC",
+   "version": "NASA/CP-2004-213205/VOL1, August 2004 (conference of June 22-23, 2004, Cleveland)",
+   "url": "https://ntrs.nasa.gov/citations/20040142351",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "CP2004.product3",
+     "type": "framework",
+     "text": "Planned product of the FPDS sub-element: design rules covering ignition and flame spread together.",
+     "where": "Ruff, Fire Prevention, Detection, and Suppression, Sub-Element Products, slide p. 840",
+     "quote": "Design rules to prevent ignition and flame spread of practical materials"
+    },
+    {
+     "id": "CP2004.flam.q1",
+     "type": "knowledge_gap",
+     "text": "Organizing question 1 for reduced-gravity flammability.",
+     "where": "Miller, Organizing Questions for Reduced-Gravity Flammability, slide p. 615",
+     "variables": [
+      "gravity_level"
+     ],
+     "quote": "Is the NASA STD 6001, Test 1 configuration conservative or non-conservative in assessing material flammability in reduced gravity"
+    },
+    {
+     "id": "CP2004.flam.velocity",
+     "type": "framework",
+     "text": "The comparison with Test 1 depends on the velocity and the flow direction.",
+     "where": "Miller, slide p. 616",
+     "variables": [
+      "flow_cms",
+      "flow_direction"
+     ],
+     "quote": "The question of conservatism of Test 1 therefore may rest on the determination of velocity and flow direction at which to compare."
+    },
+    {
+     "id": "CP2004.flam.q4",
+     "type": "knowledge_gap",
+     "text": "Organizing question 4: flammability, ignitability and LOI are asked in one question.",
+     "where": "Miller, slide p. 621",
+     "variables": [
+      "o2_pct",
+      "gravity_level"
+     ],
+     "quote": "How does the flammability, ignitability and Limiting Oxygen Index (LOI) of a material change with gravitational level?"
+    },
+    {
+     "id": "CP2004.flam.q5",
+     "type": "knowledge_gap",
+     "text": "Organizing question 5: from small-scale experiments to large-scale fires; sub-question on flame growth and spread.",
+     "where": "Miller, slide p. 622",
+     "quote": "How will flames grow and spread in real situations?"
+    },
+    {
+     "id": "CP2004.flam.q6",
+     "type": "knowledge_gap",
+     "text": "Organizing question 6: flammability and ignitability in exploration atmospheres.",
+     "where": "Miller, slide p. 623",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "gravity_level"
+     ],
+     "quote": "How do the flammability and ignitability of materials change in high-O2 mole fraction, low-pressure, reduced gravity environments?"
+    },
+    {
+     "id": "CP2004.flam.q7",
+     "type": "knowledge_gap",
+     "text": "Organizing question 7: non-flaming and smoldering combustion.",
+     "where": "Miller, slide p. 624",
+     "quote": "How does the propensity for non-flaming/smoldering combustion of materials change in high-O2 mole fraction, low-pressure, reduced gravity environments?"
+    },
+    {
+     "id": "CP2004.flam.q8",
+     "type": "knowledge_gap",
+     "text": "Organizing question 8: ignition sources.",
+     "where": "Miller, slide p. 625",
+     "quote": "What are the other credible ignition sources, other than electrical overheating and electrical short circuits that will exist on exploration vehicles?"
+    },
+    {
+     "id": "CP2004.supp.q1",
+     "type": "knowledge_gap",
+     "text": "Organizing question 1 for fire suppression: relative effectiveness of candidate suppressants.",
+     "where": "Ruff, Fire Suppression and Response, slide p. 852",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "gravity_level"
+     ],
+     "quote": "What is the relative effectiveness of candidate suppressants to extinguish a representative fire in reduced gravity, including high-O2 mole fraction, low-pressure environments?"
+    },
+    {
+     "id": "CP2004.supp.q3",
+     "type": "knowledge_gap",
+     "text": "Organizing question 3 for fire suppression: the oxygen mole fraction and absolute pressure below which a fire cannot exist.",
+     "where": "Ruff, Fire Suppression and Response, slide p. 852",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "What are the O2 mole fraction and absolute pressure below which a fire cannot exist?"
+    },
+    {
+     "id": "CP2004.supp.q5",
+     "type": "knowledge_gap",
+     "text": "Organizing question 5 for fire suppression: practical solid fuels.",
+     "where": "Ruff, Fire Suppression and Response, slide p. 852",
+     "quote": "Are the candidate suppressants effective to extinguish fires on practical solid fuels?"
+    },
+    {
+     "id": "CP2004.det.q1",
+     "type": "knowledge_gap",
+     "text": "Organizing question 1 for fire signatures and detection: background particulate and species.",
+     "where": "Ruff, Research Plan for Fire Signatures and Detection, slide p. 865",
+     "quote": "What is the background particulate and chemical species loading in a spacecraft and how does it vary with time?"
+    },
+    {
+     "id": "CP2004.det.q2",
+     "type": "knowledge_gap",
+     "text": "Organizing question 2 for fire signatures and detection; a later slide (p. 915) lists smoke particulate, gaseous species and light emission under it.",
+     "where": "Ruff, Research Plan for Fire Signatures and Detection, slide p. 865",
+     "quote": "What are the appropriate pre-fire and fire signatures for fire detection in low and partial gravity?"
+    },
+    {
+     "id": "CP2004.det.products",
+     "type": "knowledge_gap",
+     "text": "Combustion products and their concentrations are listed under quantification of fire signatures (detection).",
+     "where": "Ruff, Research Plan for Fire Signatures and Detection, slide p. 867",
+     "quote": "Effect of microgravity on combustion products and concentrations"
+    },
+    {
+     "id": "CP2004.det.params",
+     "type": "framework",
+     "text": "Parameters varied in the planned quantification of fire signatures of spacecraft materials.",
+     "where": "Ruff, Research Plan for Fire Signatures and Detection, slide p. 872",
+     "variables": [
+      "heating_ratio",
+      "flow_cms",
+      "o2_pct"
+     ],
+     "quote": "measure the time history of various fire signatures of typical spacecraft materials in 1-g at varying heating rates, temperatures, convective velocities, and oxygen concentrations"
+    },
+    {
+     "id": "CP2004.flam.fist",
+     "type": "definition",
+     "text": "Quantities named for ranking the hazard of materials in the Forced Ignition and Spread Test: time to ignition, fire spread rate, material properties, critical heat flux.",
+     "where": "Miller, slide p. 619",
+     "variables": [
+      "ignition_time_s",
+      "spread_rate_mm_s"
+     ],
+     "quote": "Develop a flammability test method to rank the hazards of materials used on spacecraft using time to ignition, fire spread rate, material properties, critical heat flux"
+    }
+   ],
+   "note": "Slides. In the text layer each question is broken over several lines, and on some slides the slide page number is printed between the lines; the quotes join the printed lines of one question. Slide page numbers are those printed on the slides (612-626 Miller; 823-847, 848-862 and 863-877 Ruff)."
+  },
+  {
+   "id": "ICES-2016-SAFFIRE",
+   "kind": "paper",
+   "title": "Operation and Development Status of the Spacecraft Fire Experiments (Saffire) (Ruff, Urban)",
+   "issuer": "46th International Conference on Environmental Systems",
+   "version": "2016 (NTRS 20170000230; the paper number is not printed in the NTRS copy)",
+   "url": "https://ntrs.nasa.gov/citations/20170000230",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF16.objectives",
+     "type": "stated_objective",
+     "text": "Objectives of Saffire-I, -II and -III together.",
+     "where": "Abstract, p. 1",
+     "quote": "The specific objectives of these three experiments are to (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test."
+    },
+    {
+     "id": "SAF16.saffire1",
+     "type": "stated_objective",
+     "text": "Objective of Saffire-I: flame spread and growth.",
+     "where": "II.C Saffire-I, II, and III Samples, p. 4",
+     "variables": [
+      "spread_rate_mm_s"
+     ],
+     "quote": "The objective of the Saffire-I experiment is to investigate flame spread and growth in low-gravity. Specifically, the experiment will determine if there is a limiting flame size when burning over a large surface and quantify the size and growth rate of the flames."
+    },
+    {
+     "id": "SAF16.saffire2",
+     "type": "stated_objective",
+     "text": "Objective of Saffire-II: the low-gravity Maximum Oxygen Concentration flammability limits.",
+     "where": "II.C Saffire-I, II, and III Samples, p. 4",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "The objective of the tests to be conducted on Saffire-II is to investigate the low-gravity Maximum Oxygen Concentration (MOC) flammability limits in long-term low gravity."
+    },
+    {
+     "id": "SAF16.saffire1.o2",
+     "type": "design_value",
+     "text": "The Saffire-I sample was chosen to burn near cabin-air oxygen; no oxygen limit was sought on that flight.",
+     "where": "II.C Saffire-I, II, and III Samples, p. 4",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "This material will be expected to burn at the anticipated oxygen mole fraction of the cabin atmosphere (near 0.21 O2 mole fraction)."
+    },
+    {
+     "id": "SMT.gap.flammability",
+     "type": "knowledge_gap",
+     "text": "Technology goal of the Spacecraft Fire Safety Systems Maturation Team (2013) for low- and partial-gravity material flammability; the two gaps listed are 'Quantification of risk from NASA-STD-6001 Test 1 normal-g data' and 'Growth rate of fire hazard'.",
+     "where": "Table 1, Spacecraft Fire Safety Technology Gaps for Exploration Missions, p. 7",
+     "quote": "Growth rate of fire hazard",
+     "note": "Table read on a rendering of page 7; in the text layer the cells are mixed. Tech goal cell as read: 'Accurate definition of the risk from material flammability in low-g (identify material flammability limits in low-g environment)'."
+    },
+    {
+     "id": "SMT.gap.detection",
+     "type": "knowledge_gap",
+     "text": "Gaps listed for fire detection: particle size discrimination and adaptation of state-of-art technology.",
+     "where": "Table 1, p. 7",
+     "quote": "Particle size discrimination"
+    },
+    {
+     "id": "SMT.gap.postfire",
+     "type": "knowledge_gap",
+     "text": "Combustion gases are listed under 'Post-fire (combustion product) monitoring', not under fire detection.",
+     "where": "Table 1, p. 7",
+     "variables": [
+      "co_produced_ppm",
+      "co2_produced_pct_points"
+     ],
+     "quote": "Measurement of CO, CO2, HF, HCl, HCN"
+    },
+    {
+     "id": "SMT.gap.suppression",
+     "type": "knowledge_gap",
+     "text": "Gaps listed for fire suppression: scaling to vehicle and size of critical fire.",
+     "where": "Table 1, p. 7",
+     "quote": "Size of critical fire"
+    },
+    {
+     "id": "SAF16.same",
+     "type": "framework",
+     "text": "What SAME investigated, in the words of the fire-safety project.",
+     "where": "IV, p. 8",
+     "quote": "For fire detection, the size of smoke particulate produced in low-gravity has been investigated by the Smoke Aerosol Measurement Experiment (SAME)"
+    },
+    {
+     "id": "RU16.transducer",
+     "type": "published_result",
+     "text": "The Saffire experiment package includes a pressure transducer to measure the pressure time-history.",
+     "where": "B. Diagnostics, p. 3. The paper is listed in the 'publications' field of PSI-98 and PSI-100. On p. 4 it says: 'The oxygen concentration in the Cygnus vehicle will be nearly 21% by volume—the same as in the ISS when the hatch was closed.'",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "quote": "A pressure transducer will also measure the pressure time-history.",
+     "note": "Written before the flights (future tense); gives no pressure value for the Saffire-I to -III tests. The 8.2 psia mentioned on p. 7 is a condition of interest for Saffire-IV to -VI."
+    }
+   ]
+  },
+  {
+   "id": "IAASS-2016-SAFFIRE",
+   "kind": "paper",
+   "title": "The Spacecraft Fire Experiment (Saffire) - Objectives, Development and Status (Schoren, Ruff, Urban)",
+   "issuer": "International Association for the Advancement of Space Safety conference, 2016",
+   "version": "2016 (NTRS 20170001636)",
+   "url": "https://ntrs.nasa.gov/citations/20170001636",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAF16b.objectives",
+     "type": "stated_objective",
+     "text": "Objectives of the three experiments together; the wording is that of the objective field of PSI-98.",
+     "where": "Abstract, p. 1",
+     "quote": "The objectives of these experiments are to (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test."
+    },
+    {
+     "id": "SAF16b.saffire13",
+     "type": "stated_objective",
+     "text": "Objective of Saffire-I and Saffire-III: fire growth and spread rate.",
+     "where": "2.1 Sample Materials, p. 2",
+     "variables": [
+      "spread_rate_mm_s"
+     ],
+     "quote": "The objective of the Saffire-I and III tests will be to determine how rapidly a large-scale fire grows in low-gravity and whether it reaches a steady-state spread rate."
+    },
+    {
+     "id": "SAF16b.saffire2",
+     "type": "stated_objective",
+     "text": "Objective of Saffire-II: the difference in flammability limits.",
+     "where": "2.1 Sample Materials, p. 3",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "Quantifying the difference in flammability limits for large samples is the objective of the Saffire-II experiments."
+    }
+   ],
+   "note": "Two-column paper; the quotes join the printed lines of one sentence. Listed in the publications field of PSI-98 and PSI-99."
+  },
+  {
+   "id": "WP-2021-FIRE-DETECTION",
+   "kind": "paper",
+   "title": "Research Questions and Challenges for Improved Spacecraft Fire Detection (Fortenberry, Wang, Cleary, Easton, Berger, Meyer)",
+   "issuer": "Topical white paper submitted to the NASEM Biological and Physical Sciences Decadal Survey 2022-2032",
+   "version": "2021-10-31 (NTRS 20210022143)",
+   "url": "https://ntrs.nasa.gov/citations/20210022143",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "WP21.factors",
+     "type": "framework",
+     "text": "What fire emissions depend on.",
+     "where": "Abstract, p. 1",
+     "variables": [
+      "fuel_material",
+      "heating_ratio",
+      "gravity_level",
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Fire emissions are affected by fuel type, heating conditions, gravity and exploration atmosphere."
+    },
+    {
+     "id": "WP21.topics",
+     "type": "knowledge_gap",
+     "text": "Research topics named for fire detection.",
+     "where": "Introduction, p. 3",
+     "quote": "Research topics to be investigated include the identification of realistic fire scenarios, characterization of gravity and exploration impacts on fire signatures, and the development of novel detectors to selectively detect a greater range of spacecraft fires."
+    },
+    {
+     "id": "WP21.heating",
+     "type": "knowledge_gap",
+     "text": "Heating conditions as a variable of smoke studies.",
+     "where": "Research topic A, p. 3",
+     "variables": [
+      "heating_ratio"
+     ],
+     "quote": "Future spacecraft smoke detection studies must attempt to recreate a variety of realistic overheating scenarios, including different maximum heating temperatures and different temperature ramp methods."
+    },
+    {
+     "id": "WP21.gases",
+     "type": "knowledge_gap",
+     "text": "Gas composition and concentrations are asked for as part of smoke measurements for detection.",
+     "where": "Research topic A, p. 3",
+     "variables": [
+      "co_produced_ppm"
+     ],
+     "quote": "there is a need for expanded smoke measurements including but not limited to gas composition and concentrations, particle charge distributions, and particle chemical composition."
+    },
+    {
+     "id": "WP21.velocity",
+     "type": "knowledge_gap",
+     "text": "Air velocity and growth time (aging) as variables of particle size.",
+     "where": "Research topic B, p. 4",
+     "variables": [
+      "flow_cms",
+      "aging_time_s",
+      "gravity_level"
+     ],
+     "quote": "particle sizes must be characterized in reduced gravity under air velocity conditions relevant to that environment. Experiments must also examine particle growth over relevant timescales"
+    },
+    {
+     "id": "WP21.emission",
+     "type": "definition",
+     "text": "Smoke emission factor: mass of smoke component per mass of fuel burned.",
+     "where": "Research topic B, p. 4",
+     "quote": "smoke emission factors (i.e., mass of smoke component per mass fuel burned)"
+    },
+    {
+     "id": "WP21.same",
+     "type": "published_result",
+     "text": "The white paper's summary of the SAME detector result.",
+     "where": "Introduction, p. 2",
+     "quote": "the ISS detector failed to alarm for Kapton smoke in half of the tests and for Teflon smoke in two-thirds of the tests"
+    }
+   ],
+   "note": "A white paper by NASA GRC, USRA, NIST and university authors; it is not a NASA requirement or program plan."
+  },
+  {
+   "id": "WP-2021-FIRE-EXTINGUISHER",
+   "kind": "paper",
+   "title": "Topical: Recommendations for Fire Extinguisher Research for Crewed Missions (Easton, Berger, Fortenberry, Padilla)",
+   "issuer": "Topical white paper submitted to the Decadal Survey 2023-2032",
+   "version": "2021-10-31 (NTRS 20210023340)",
+   "url": "https://ntrs.nasa.gov/citations/20210023340",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "WP21X.atmosphere",
+     "type": "framework",
+     "text": "Effect of the planned exploration atmosphere on flammability and ignition.",
+     "where": "p. 2",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "At these conditions, materials that are non-flammable become flammable, and flammable materials require lower ignition energy and burn faster with greater temperature and heat release rates than in normal atmosphere."
+    },
+    {
+     "id": "WP21X.research",
+     "type": "knowledge_gap",
+     "text": "Research called for on fire and extinguisher use.",
+     "where": "p. 3",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "gravity_level"
+     ],
+     "quote": "calls for research into fire and fire extinguisher use in the appropriate environments. These include elevated oxygen at reduced pressure and partial gravity environments."
+    }
+   ]
+  },
+  {
+   "id": "NASA-TM-1999-209285",
+   "kind": "nasa_report",
+   "title": "Fire Safety in the Low-Gravity Spacecraft Environment (Friedman)",
+   "issuer": "NASA GRC",
+   "version": "NASA/TM-1999-209285 (29th International Conference on Environmental Systems, July 1999)",
+   "url": "https://ntrs.nasa.gov/citations/19990063738",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "FR99.co",
+     "type": "operational_practice",
+     "text": "Carbon monoxide sampling as early warning, under the heading 'Radiation and Gas Detection'.",
+     "where": "Radiation and Gas Detection, p. 9",
+     "variables": [
+      "co_produced_ppm"
+     ],
+     "quote": "Discrete sampling of the spacecraft atmosphere for trace constituents, particularly carbon monoxide, can also provide early warning of incipient fires or smoldering [58]."
+    },
+    {
+     "id": "FR99.combined",
+     "type": "recommendation",
+     "text": "Combined detection responding to carbon monoxide and smoke.",
+     "where": "Radiation and Gas Detection, p. 9",
+     "quote": "A promising concept for the future is that of combined detection systems, with multiple logic responding to both carbon monoxide and smoke, if these can be accommodated within the spacecraft mass and power allowances [60]."
+    }
+   ],
+   "note": "Scanned report with an OCR text layer in two columns. The two quotes were read on a rendering of page 9 (PDF page 11), not taken from the text layer; only that page was read in this way."
+  },
+  {
+   "id": "ICES-2015-196",
+   "kind": "paper",
+   "title": "Results from on-board CSA-CP and CDM Sensor Readings during the Burning and Suppression of Solids - II (BASS-II) Experiment in the Microgravity Science Glovebox (MSG) (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+   "issuer": "45th International Conference on Environmental Systems",
+   "version": "ICES-2015-196 (12-16 July 2015, Bellevue, Washington; NTRS 20150019858)",
+   "url": "https://ntrs.nasa.gov/citations/20150019858",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "ICES15.abstract",
+     "type": "stated_objective",
+     "text": "What the gas sensor readings were used for.",
+     "where": "Abstract, p. 1",
+     "variables": [
+      "co_final_ppm",
+      "co2_final_pct",
+      "o2_final_pct"
+     ],
+     "quote": "Readings from these sensors allow us to evaluate the completeness of the combustion."
+    },
+    {
+     "id": "ICES15.purpose",
+     "type": "stated_objective",
+     "text": "Stated purpose of the gas measurements of BASS-II.",
+     "where": "I. Introduction, p. 3",
+     "variables": [
+      "co_produced_ppm",
+      "co2_produced_pct_points",
+      "o2_consumed_pct_points"
+     ],
+     "quote": "To evaluate the levels of combustion products produced during microgravity fires, BASS-II requested the use of the on-board sensors to measure the O2 (oxygen) depletion and the completeness of combustion (CO, CO2) for microgravity combustion tests under spacecraft ventilation flow rates to provide scientific data on the stoichiometry of the diffusion flame reactions and heat release rates."
+    },
+    {
+     "id": "ICES15.first",
+     "type": "published_result",
+     "text": "The investigators call the data the first extensive data on the stoichiometry and toxicity of combustion products in microgravity.",
+     "where": "I. Introduction, p. 3",
+     "quote": "the data reported here is the first extensive data on the stoichiometry and toxicity of combustion products in microgravity"
+    },
+    {
+     "id": "ICES15.variables",
+     "type": "definition",
+     "text": "Main variables of BASS-II.",
+     "where": "Abstract, p. 1",
+     "variables": [
+      "o2_pct",
+      "flow_cms",
+      "fuel_material",
+      "sample_thickness_mm",
+      "sample_geometry"
+     ],
+     "quote": "The main variables tested in BASS-II were ambient oxygen concentration, ventilation flow velocity, and fuel type, thickness, and geometry."
+    },
+    {
+     "id": "ICES15.cstr",
+     "type": "published_result",
+     "text": "The glovebox dilution model assumes constant pressure, temperature and volume; the oxygen consumption calculation uses P = 1 atm.",
+     "where": "p. 4 ('... constant pressure and temperature, and constant volume.'; the sentence is split over two lines in the PDF); p. 8 prints 'P= 1 atm' in the ideal gas calculation",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "values": {
+      "pressure_atm": 1
+     },
+     "quote": "The model assumes the work volume is at constant",
+     "note": "Model assumption and calculation input, not measurements. The paper reports oxygen, CO and CO2 sensor readings; it reports no pressure reading."
+    }
+   ],
+   "note": "Listed in the publications field of PSI-25. The introduction is set in a narrow column beside a figure; the quotes join the printed lines of one sentence."
+  },
+  {
+   "id": "NASA-TM-20210011385",
+   "kind": "nasa_report",
+   "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+   "issuer": "NASA GRC",
+   "version": "NASA/TM-20210011385, October 2021",
+   "url": "https://ntrs.nasa.gov/citations/20210011385",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "BASS2TM.objective",
+     "type": "stated_objective",
+     "text": "One objective of BASS-II: the worst case for material flammability compared with the upward burning screening test.",
+     "where": "1.1 Background, p. 3",
+     "quote": "One objective of the BASS–II tests is to identify what is the worst case for material flammability in spacecraft environments, and how does that compare to the terrestrial upward burning used to screen the materials for safe use aboard spacecraft."
+    },
+    {
+     "id": "BASS2TM.limits",
+     "type": "stated_objective",
+     "text": "Focus of many tests: a minimum oxygen concentration or flow velocity at which a material will burn.",
+     "where": "1.1 Background, p. 3",
+     "variables": [
+      "o2_pct",
+      "flow_cms"
+     ],
+     "quote": "Many of the tests focused on finding a minimum O2 concentration or flow velocity where a material will burn in space, to compare with the Earth-based limits."
+    },
+    {
+     "id": "BASS2TM.growth",
+     "type": "stated_objective",
+     "text": "Flame growth rates as a stated interest, with firefighting as the stated implication.",
+     "where": "1.1 Background, p. 3",
+     "quote": "Flame growth rates are also of interest, to determine how quickly a fire in space can grow and if the flames reach a finite size or continue to grow. This has implications for firefighting strategies in spacecraft."
+    },
+    {
+     "id": "BASS2TM.products",
+     "type": "stated_objective",
+     "text": "Stated purpose of the gas measurements of BASS-II.",
+     "where": "1.2 Experiment Description, p. 5",
+     "variables": [
+      "co_produced_ppm",
+      "co2_produced_pct_points",
+      "o2_consumed_pct_points"
+     ],
+     "quote": "To evaluate the levels of combustion products produced during microgravity fires, BASS–II requested the use of available onboard sensors to measure the O2 depletion and the completeness of combustion (CO and CO2) for microgravity combustion tests under spacecraft ventilation flow rates to provide scientific data on the stoichiometry of the diffusion flame reactions and heat release rates (HHRs)."
+    },
+    {
+     "id": "BASS2TM.spread",
+     "type": "stated_objective",
+     "text": "Objective of the opposed-flow flame spread task (Fernandez-Pello).",
+     "where": "4.1 Opposed-Flame Spread Task, p. 47",
+     "variables": [
+      "spread_rate_mm_s",
+      "o2_pct",
+      "flow_cms"
+     ],
+     "quote": "The scientific objective of the Burning and Suppression Solids—II (BASS–II) opposed-flow flame spread test is to further understand the mechanisms controlling the spread of flames over the surface of solid combustible materials, particularly in a spacecraft environment."
+    },
+    {
+     "id": "BASS2TM.map",
+     "type": "stated_objective",
+     "text": "Objective of the PMMA rod tests (Olson): the flammability map as a function of flow and oxygen.",
+     "where": "6.1.2 Introduction, p. 66",
+     "variables": [
+      "flow_cms",
+      "o2_pct"
+     ],
+     "quote": "The objective of these tests was to obtain the lower portion of the concurrent microgravity flammability map as a function of ventilation flow and ambient O2 concentration."
+    },
+    {
+     "id": "BASS2TM.igndelay",
+     "type": "definition",
+     "text": "Ignition delay as defined and reported by the investigators for the PMMA rod tests, plotted against the initial oxygen concentration.",
+     "where": "6.1.4.1 Ignition Delay Time, p. 68",
+     "variables": [
+      "ignition_time_s",
+      "o2_pct"
+     ],
+     "quote": "The ignition delay (tign) in each test was defined as the time from when the igniter was first turned on to the last time the igniter was turned off and a stable flame persisted."
+    },
+    {
+     "id": "BASS2TM.coratio",
+     "type": "definition",
+     "text": "The investigators present the CO/CO2 ratio as a measure of completeness of combustion, of interest to the combustion community.",
+     "where": "1.4 Combustion Products, p. 8",
+     "variables": [
+      "co_to_co2_molar_ratio"
+     ],
+     "quote": "Of interest to the combustion community is the ratio of CO to CO2, a measure of completeness of combustion"
+    },
+    {
+     "id": "BASS2TM.sensors",
+     "type": "stated_objective",
+     "text": "Use of the on-board gas sensors.",
+     "where": "1.1 Background, p. 3",
+     "variables": [
+      "co_final_ppm",
+      "co2_final_pct",
+      "o2_final_pct"
+     ],
+     "quote": "BASS–II also utilized onboard O2, CO, and CO2 sensors to evaluate the completeness of the combustion."
+    },
+    {
+     "id": "BASS2SUM.pressure_range",
+     "type": "published_result",
+     "text": "In the BASS-II opposed-flow tests on thin PMMA sheets reported in section 2.3, the total pressure was monitored and varied from 99.2 to 99.5 kPa.",
+     "where": "2.3.5 Microgravity and Normal-Gravity Experiments, p. 38 (PDF page 46), in 2.3 'Opposed-Flow Flame Spread: Comparison of Microgravity and Normal-Gravity Experiments to Establish the Thermal Regime' (Individual Principal Investigator Report: Bhattacharjee)",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "values": {
+      "pressure_kpa_range": [
+       99.2,
+       99.5
+      ]
+     },
+     "quote": "The total pressure is also monitored, which varied from 99.2 to 99.5 kPa in the tests reported.",
+     "note": "A range, not a per-test value. 'the tests reported' are the tests of that section (thin PMMA sheets, 100 to 400 µm, opposed flow), not all 126 BASS-II tests. The section does not say where the pressure was monitored."
+    },
+    {
+     "id": "BASS2SUM.sibal_1atm",
+     "type": "published_result",
+     "text": "For the BASS-II concurrent-flow tests on SIBAL composite fabric the ambient pressure is stated as 1 atm.",
+     "where": "7.1.3 Experimental, p. 94 (PDF page 102), in 7.1 'Concurrent Flame Growth, Spread, and Extinction Over Composite Fabric Samples ...' (Individual Principal Investigator Report: T'ien). Sentence before it: 'The tests were conducted in ambient O2 molar fraction of 16 to 21 percent.'",
+     "variables": [
+      "pressure_kpa",
+      "o2_pct"
+     ],
+     "quote": "Ambient pressure was 1 atm.",
+     "note": "Nominal; applies to the SIBAL fabric concurrent-flow tests of that section."
+    },
+    {
+     "id": "BASS2SUM.cstr",
+     "type": "published_result",
+     "text": "The nitrogen-dilution model of the glovebox working volume assumes constant pressure, temperature and volume.",
+     "where": "1.3 Validation of Microgravity Science Glovebox Dilution - Continuously Stirred Tank Reactor Model, p. 6 (PDF page 14). The same sentence, with a comma, is in ICES-2015-196, p. 4.",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "quote": "The model assumes the work volume is at constant pressure and temperature and constant volume.",
+     "note": "An assumption of a model, not a measurement, and no value is given."
+    },
+    {
+     "id": "BASS2SUM.idealgas",
+     "type": "published_result",
+     "text": "The calculation of oxygen consumed in the glovebox uses the ideal gas law with a free volume of 250,000 cc, P = 1 atm and T = 300 K.",
+     "where": "1.5 Global Equivalence Ratio, p. 11 (PDF page 19). ICES-2015-196, p. 8, prints 'P= 1 atm' in the same calculation.",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "values": {
+      "pressure_atm": 1
+     },
+     "quote": "Using the ideal gas law, the free volume of the MSG V = 250,000 cc, ideal gas constant R = 82.05 cc∙atm/gmol K, pressure P = 1 atm, the change of O2 percent volume, and temperature T = 300 K, the gmol of O2 consumed is calculated as",
+     "note": "A value used in a calculation (with T = 300 K, also a round value), not a reported measurement."
+    },
+    {
+     "id": "BASS2SUM.vitiation",
+     "type": "published_result",
+     "text": "BASS-II used gaseous nitrogen available on the ISS to vitiate the atmosphere in the Microgravity Science Glovebox from standard ISS air down to the low oxygen flammability limits.",
+     "where": "1.0 Summary, p. 3 (PDF page 11)",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "BASS–II utilized the gaseous nitrogen (GN2) available on International Space Station (ISS) to vitiate the atmosphere in the Microgravity Science Glovebox (MSG) from standard ISS “air” down to the low O2 flammability limits.",
+     "note": "States no pressure."
+    }
+   ],
+   "note": "Listed in the publications field of PSI-25 as 'BASS-II Summary Report'."
+  },
+  {
+   "id": "ASGSR-2013-BASS",
+   "kind": "paper",
+   "title": "Thickness and Fuel Preheating Effects on Material Flammability in Microgravity from the BASS Experiment (Ferkul, Olson, Takahashi, Endo, Johnston, T'ien)",
+   "issuer": "American Society for Gravitational and Space Research 2013 Annual Meeting (presentation)",
+   "version": "2013 (NTRS 20140011099)",
+   "url": "https://ntrs.nasa.gov/citations/20140011099",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "BASS13.approach",
+     "type": "stated_objective",
+     "text": "Approach of BASS as presented by the investigators.",
+     "where": "PDF page 2",
+     "variables": [
+      "flow_cms",
+      "flow_direction"
+     ],
+     "quote": "The effects of airflow speed on flame appearance, flame growth, and extinction were determined in both the opposed and concurrent flow."
+    },
+    {
+     "id": "BASS13.applications",
+     "type": "stated_objective",
+     "text": "Science application named: link between burn behaviour in microgravity and Earth-based material selection.",
+     "where": "PDF page 4, Science Applications",
+     "quote": "Improved strategies for NASA spacecraft materials selection; link actual burn behavior in microgravity to Earth-based selection methods"
+    },
+    {
+     "id": "BASS13.nitrogen",
+     "type": "published_result",
+     "text": "Result of the nitrogen jet on thick solids.",
+     "where": "PDF page 55",
+     "quote": "extinction with the nitrogen jet was not possible for the given flow rate"
+    }
+   ],
+   "note": "Slides; listed in the publications field of PSI-26. No sentence stating an objective of BASS was found in it; the quotes are an approach bullet, an application bullet and a result."
+  },
+  {
+   "id": "AIAA-2012-3536",
+   "kind": "paper",
+   "title": "Particle Morphology and Size Results from the Smoke Aerosol Measurement Experiment-2 (Urban, Ruff, Greenberg, Fischer, Meyer, Mulholland, Yuan, Bryg, Cleary, Yang)",
+   "issuer": "42nd International Conference on Environmental Systems",
+   "version": "AIAA 2012-3536 (15-19 July 2012, San Diego; NTRS 20130000422)",
+   "url": "https://ntrs.nasa.gov/citations/20130000422",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "SAME12.objective",
+     "type": "stated_objective",
+     "text": "Stated objective of the SAME work.",
+     "where": "I. Introduction, p. 2",
+     "quote": "The objective of this work was to make sufficient measurements of smoke from spacecraft fires to enable improved design of future detectors."
+    },
+    {
+     "id": "SAME12.need",
+     "type": "knowledge_gap",
+     "text": "Knowledge stated as needed: low-g combustion particulate, for the design of smoke detectors.",
+     "where": "I. Introduction, p. 2",
+     "quote": "direct knowledge of low-g combustion particulate is needed for more confident design of smoke detectors for spacecraft"
+    }
+   ]
+  },
+  {
+   "id": "CSSCI-2014-ACME",
+   "kind": "paper",
+   "title": "Gaseous Non-Premixed Flame Research Planned for the International Space Station (Stocker, Takahashi, Hickman, Suttles)",
+   "issuer": "2014 Spring Technical Meeting of the Central States Section of the Combustion Institute",
+   "version": "March 16-18, 2014 (NTRS 20140009169)",
+   "url": "https://ntrs.nasa.gov/citations/20140009169",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "ACME14.focus",
+     "type": "framework",
+     "text": "Stated focus of the ACME experiments: energy and environment, with fire prevention as a secondary emphasis through BRE.",
+     "where": "2. Science, p. 4",
+     "quote": "The current ACME experiments are primarily focused on energy and environmental concerns, but there is a secondary emphasis (with the BRE experiment) on fire prevention, especially for spacecraft."
+    },
+    {
+     "id": "ACME14.bre",
+     "type": "stated_objective",
+     "text": "BRE is the ACME experiment focused on spacecraft fire prevention.",
+     "where": "2. Science, p. 4",
+     "quote": "Unlike the other current ACME experiments, the Burning Rate Emulator (BRE) experiment is focused on spacecraft fire prevention."
+    },
+    {
+     "id": "ACME14.flamedesign",
+     "type": "stated_objective",
+     "text": "Primary goal of Flame Design.",
+     "where": "2. Science, p. 5",
+     "quote": "The primary goal of the Flame Design experiment is to improve our understanding of soot inception and control in order to enable the optimization of oxygen enriched combustion and the “design” of non-premixed flames that are both robust and soot free."
+    },
+    {
+     "id": "ACME14.past",
+     "type": "framework",
+     "text": "Focus of the earlier gas-jet flame experiments in space, SPICE among them.",
+     "where": "1. Introduction, p. 2",
+     "quote": "This past research was focused on gravity’s effects on the flame structure, soot and stability limits, and vortex interactions."
+    }
+   ],
+   "note": "Written by the NASA GRC project scientists of ACME, not by the principal investigators of Flame Design."
+  },
+  {
+   "id": "JASMAC-33-ACME",
+   "kind": "paper",
+   "title": "Recent Research on Flames of Gaseous Fuel Aboard the International Space Station (Stocker)",
+   "issuer": "33rd Japanese Conference on Microgravity Science and Application (presentation)",
+   "version": "13-15 October 2021 (NTRS 20210022542)",
+   "url": "https://ntrs.nasa.gov/citations/20210022542",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "ACME21.flamedesign",
+     "type": "stated_objective",
+     "text": "Objective of Flame Design.",
+     "where": "Slide 8",
+     "quote": "Objective: Improve understanding of soot inception and control."
+    },
+    {
+     "id": "ACME21.flamedesign.significance",
+     "type": "stated_objective",
+     "text": "Significance of Flame Design as stated by the project scientist.",
+     "where": "Slide 8",
+     "quote": "Significance: Optimization of O2-enriched combustion and the “design” of non-premixed flames that are both robust and soot free."
+    },
+    {
+     "id": "ACME21.cfig",
+     "type": "stated_objective",
+     "text": "Objective of CFI-G.",
+     "where": "Slide 6",
+     "quote": "Objective: Observe non-premixed quasi-steady spherical cool flames on porous burners."
+    },
+    {
+     "id": "ACME21.cfig.significance",
+     "type": "stated_objective",
+     "text": "Significance of CFI-G as stated by the project scientist: engine design, not fire safety.",
+     "where": "Slide 6",
+     "quote": "Significance: Improved and quantitative understanding of cool flame chemistry is critical to advanced engine design concepts that can simultaneously increase efficiency and reduce pollutant emissions."
+    },
+    {
+     "id": "ACME21.bre",
+     "type": "stated_objective",
+     "text": "Significance of BRE.",
+     "where": "Slide 4",
+     "quote": "Significance: Spacecraft fire prevention, including (1) microgravity flammability conditions and (2) assessment of flammability test methods for spacecraft materials."
+    }
+   ],
+   "note": "Slides by the NASA GRC project scientist of ACME."
+  },
+  {
+   "id": "CSSCI-2014-COOLFLAME",
+   "kind": "paper",
+   "title": "Cool-flame extinction during n-alkane droplet combustion in microgravity (Nayagam, Dietrich, Hicks, Williams)",
+   "issuer": "Spring Technical Meeting of the Central States Section of the Combustion Institute",
+   "version": "March 16-18, 2014 (NTRS 20140006750); conference version of the Combustion and Flame paper listed in PSI-39",
+   "url": "https://ntrs.nasa.gov/citations/20140006750",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "CFI14.motivation",
+     "type": "framework",
+     "text": "Stated motivation: combustion of liquid hydrocarbon fuels. The words 'fire' and 'safety' do not occur in the paper.",
+     "where": "1 Introduction, p. 1",
+     "quote": "Understanding the combustion characteristics of liquid hydrocarbon fuels is of practical and fundamental importance."
+    },
+    {
+     "id": "CFI14.extinction",
+     "type": "definition",
+     "text": "What the droplet extinction diameter is said to measure.",
+     "where": "1 Introduction, p. 2",
+     "quote": "the droplet extinction diameter provides a stringent measurement of chemical-kinetic characteristic times"
+    }
+   ],
+   "note": "Conference version of a paper listed in the publications field of PSI-39; the journal version was not reached."
+  },
+  {
+   "id": "NRC-2011-DECADAL",
+   "kind": "paper",
+   "title": "Recapturing a Future for Space Exploration: Life and Physical Sciences Research for a New Era (National Research Council)",
+   "issuer": "National Academies Press",
+   "version": "2011",
+   "url": "https://www.nationalacademies.org/read/13048/chapter/2",
+   "access": "abstract_only",
+   "items": [
+    {
+     "id": "NRC2011.aps",
+     "type": "recommendation",
+     "text": "Fire safety topic in the list of applied physical sciences research topics of the Summary.",
+     "where": "Summary, Applied Physical Sciences",
+     "quote": "Fire safety research to improve screening of materials in terms of flammability and fire suppression;"
+    },
+    {
+     "id": "NRC2011.translation1",
+     "type": "recommendation",
+     "text": "Fire safety entry in the list of highest-priority research areas for translation to exploration systems.",
+     "where": "Summary, Translation to Space Exploration Systems",
+     "quote": "Fire safety: materials standards and particle detectors;"
+    },
+    {
+     "id": "NRC2011.translation2",
+     "type": "recommendation",
+     "text": "Second fire safety entry in the same list.",
+     "where": "Summary, Translation to Space Exploration Systems",
+     "quote": "Fire suppression and post-fire strategies;"
+    }
+   ],
+   "note": "Only the Summary was read, as an excerpt returned by a web search tool from the official page; the fire safety sections of Chapters 9 and 10 and the numbered recommendations were not read. Not checked by a script against a saved file."
+  },
+  {
+   "id": "ICES-2014-179",
+   "kind": "paper",
+   "title": "Applying Flammability Limit Probabilities and the Normoxic Upward Limiting Pressure Concept to NASA STD-6001 Test 1 (Olson, Beeson, Fernandez-Pello)",
+   "issuer": "44th International Conference on Environmental Systems",
+   "version": "ICES-2014-179 (13-17 July 2014, Tucson, Arizona)",
+   "url": "https://ntrs.nasa.gov/citations/20150004099",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20150004099/downloads/20150004099.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "ICES14.fixedpressure",
+     "type": "definition",
+     "text": "Typical NASA Test 1 test conditions are selected at a fixed pressure, and the oxygen concentration is decreased for each set of five tests until the desired failure rate is observed.",
+     "where": "IV: Proposed Normoxic Upward Limiting Pressure (NULP), p. 8",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Typical NASA Test 1 test conditions are selected at a fixed pressure, and oxygen concentration is decreased for each set of five tests until the desired failure rate is observed (one in five tests burns more than 15.2 cm) [1, 3, 15].",
+     "note": "'Typical', not a requirement."
+    },
+    {
+     "id": "ICES14.both",
+     "type": "published_result",
+     "text": "Material flammability is a function of both pressure and oxygen.",
+     "where": "IV: Proposed Normoxic Upward Limiting Pressure (NULP), p. 8",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "Material flammability, on the other hand, is a function of both pressure and oxygen.",
+     "note": "No functional form is given in the sentence."
+    },
+    {
+     "id": "ICES14.onlyvalid",
+     "type": "limitation",
+     "text": "Test 1 is pass-fail and is only valid at the atmosphere tested.",
+     "where": "I: Introduction, p. 2 (sentence before, which opens with a drop capital: '[T]EST 1 of STD-6001[1] is an upward flame spread test to determine if a material is safe to use in a particular environment.')",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "It is pass-fail and is only valid at the atmosphere tested.",
+     "note": "Said of the pass/fail Test 1; the sentence does not mention microgravity tests."
+    },
+    {
+     "id": "ICES14.trend",
+     "type": "published_result",
+     "text": "For tests at constant oxygen partial pressure, the general trend is for flammability to be worst at the lower total pressures; if the material passes at the lowest expected total pressure, it is safe for all higher pressure atmospheres as well.",
+     "where": "IV, p. 9, after 'The general trend for all these materials shown in Figures 7-8 is for flammability to be worst at the lower total pressures for fixed partial pressure of O2, which corresponds to the highest % O2. So it makes sense to start at the lowest expected total pressure for a spacecraft (8.2 psia exploration atmosphere, excluding EVA environments which are a special case), and run constant partial pressure of oxygen Test 1 tests there.'",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "If the material passes at that atmosphere, it is safe for all higher pressure atmospheres as well.",
+     "note": "Holds for a proposed test logic at constant oxygen partial pressure (oxygen percentage rises as pressure falls), based on 1g data for the materials in Figures 7-8. It is not a statement about a fixed oxygen percentage, and not about microgravity."
+    }
+   ]
+  },
+  {
+   "id": "JTE-2006-HIRSCH",
+   "kind": "paper",
+   "title": "Pressure Effects on Oxygen Concentration Flammability Thresholds of Materials for Aerospace Applications (Hirsch, Williams, Beeson)",
+   "issuer": "NASA JSC White Sands Test Facility; preprint for the Journal of Testing and Evaluation",
+   "version": "NTRS 20070005041, preprint headed 'Journal of Testing and Evaluation, October 2006'",
+   "url": "https://ntrs.nasa.gov/citations/20070005041",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20070005041/downloads/20070005041.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "H2006.depends",
+     "type": "published_result",
+     "text": "For the range of total pressures tested, the oxygen concentration and oxygen partial pressure flammability thresholds are a near linear function of total pressure; the thresholds depend on the total pressure.",
+     "where": "Abstract, p. 1 (the sentence before it: 'For the range of total pressures tested, the oxygen concentration and oxygen partial pressure flammability thresholds show a near linear function of total pressure.')",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "The oxygen concentration/oxygen partial pressure flammability thresholds depend on the total pressure and appear to increase with increasing oxygen concentration (and oxygen partial pressure).",
+     "note": "Normal gravity, quiescent, 11 polymers and elastomers, 48.2 to 101.3 kPa. Not microgravity. PMMA and cotton-fiberglass fabric are not among the materials; one 'Silicone Rubber' is."
+    },
+    {
+     "id": "H2006.pressures",
+     "type": "published_result",
+     "text": "The oxygen concentration flammability thresholds were determined at 48.2 kPa (7 psia), 85.3 kPa (12.4 psia) and 101.3 kPa (14.7 psia).",
+     "where": "Experimental, p. 3",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "pressure_kpa": [
+       48.2,
+       85.3,
+       101.3
+      ],
+      "pressure_psia": [
+       7,
+       12.4,
+       14.7
+      ]
+     },
+     "quote": "To evaluate pressure effects, the oxygen concentration flammability thresholds were determined at 48.2 kPa (7 psia), 85.3 kPa (12.4 psia) and 101.3 kPa (14.7 psia)."
+    },
+    {
+     "id": "H2006.table2",
+     "type": "published_result",
+     "text": "Maximum oxygen concentration (MOC, vol %) which consistently results in self-extinguishment, at 48.2, 85.3 and 101.3 kPa total pressure, normal gravity, quiescent, for eleven materials (values in 'values').",
+     "where": "Table 2, p. 4 (page viewed as an image; all cells agree with the text layer)",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "fuel_material"
+     ],
+     "values": {
+      "moc_vol_pct_by_total_pressure_kpa": {
+       "columns_kpa": [
+        48.2,
+        85.3,
+        101.3
+       ],
+       "PTFE": [
+        53,
+        46,
+        42
+       ],
+       "Kel-F 81": [
+        76,
+        56,
+        53
+       ],
+       "Silicone": [
+        28,
+        23,
+        21
+       ],
+       "Zytel 42": [
+        25,
+        23,
+        23
+       ],
+       "Viton A": [
+        29,
+        21,
+        21
+       ],
+       "Buna S": [
+        18,
+        17,
+        16
+       ],
+       "Neoprene": [
+        18,
+        17,
+        16
+       ],
+       "Buna N": [
+        18,
+        16,
+        15
+       ],
+       "EPDM Rubber": [
+        18,
+        16,
+        16
+       ],
+       "Polyethylene": [
+        18,
+        18,
+        17
+       ],
+       "Delrin": [
+        13,
+        12,
+        11
+       ]
+      }
+     },
+     "quote": "TABLE 2 — Oxygen concentration, oxygen partial pressure and total pressure flammability limits for selected materials at ambient initial temperatures",
+     "note": "MOC in vol % at 48.2 / 85.3 / 101.3 kPa: PTFE 53/46/42, Kel-F 81 76/56/53, Silicone 28/23/21, Zytel 42 25/23/23, Viton A 29/21/21, Buna S 18/17/16, Neoprene 18/17/16, Buna N 18/16/15, EPDM Rubber 18/16/16, Polyethylene 18/18/17, Delrin 13/12/11. Normal gravity only."
+    },
+    {
+     "id": "H2006.range",
+     "type": "limitation",
+     "text": "The effect of total pressure on oxygen concentration flammability thresholds is greater for materials with higher thresholds; whether the relationship holds outside 48.2 to 101.3 kPa needs further testing.",
+     "where": "Conclusions and Recommendations, p. 6 (sentence before: 'The effect of total pressure on oxygen concentration flammability thresholds is greater for materials with higher thresholds.')",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "pressure_kpa_range": [
+       48.2,
+       101.3
+      ]
+     },
+     "quote": "To determine if this relationship holds outside the 48.2 to 101.3 kPa (7 to 14.7 psia) range further testing is recommended."
+    }
+   ],
+   "note": "Only the NTRS preprint was read. ICES-2014-179 cites the journal version as Journal of Testing and Evaluation, V.36, Issue 1, pp. 69-72 (2008), with 'Polymeric Materials' in the title; that version was not read. Normal-gravity tests."
+  },
+  {
+   "id": "NTRS-20070018178",
+   "kind": "paper",
+   "title": "Oxygen Concentration Flammability Thresholds of Selected Aerospace Materials Considered for the Constellation Program (Hirsch, Williams, Harper, Beeson, Pedley)",
+   "issuer": "2nd IAASS Conference 'Space Safety in a Global World' (meeting named in the NTRS record, May 2007)",
+   "version": "NTRS 20070018178",
+   "url": "https://ntrs.nasa.gov/citations/20070018178",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20070018178/downloads/20070018178.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "H2007.fixedpressure",
+     "type": "published_result",
+     "text": "The oxygen concentration flammability thresholds (ULOI, MOC) were determined at a fixed total pressure of 70.1 kPa.",
+     "where": "2. Experimental, PDF page 3; Table 2 is titled 'Upward Limiting Oxygen Indices (ULOI) and Maximum Oxygen Concentrations when Self-Extinguishment Occurs (MOC) for Selected Materials at 70.1 kPa Total Pressures'",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "pressure_kpa": 70.1
+     },
+     "quote": "The oxygen concentration flammability thresholds were determined at a fixed total pressure of 70.1 kPa.",
+     "note": "Normal-gravity tests of materials that are not the BASS-II or Saffire materials, except Nomex HT90-40."
+    }
+   ],
+   "note": "Normal-gravity tests."
+  },
+  {
+   "id": "NTRS-20100015582",
+   "kind": "paper",
+   "title": "Pressure Flammability Thresholds of Selected Aerospace Materials (Hirsch, Williams, Harper, Beeson, Ruff, Pedley)",
+   "issuer": "AIAA (per the NTRS record); NASA White Sands Test Facility",
+   "version": "NTRS 20100015582, JSC-CN-20193, 2010",
+   "url": "https://ntrs.nasa.gov/citations/20100015582",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20100015582/downloads/20100015582.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "H2010.constantpressure",
+     "type": "definition",
+     "text": "The maximum oxygen concentration (MOC) at which self-extinguishment occurs is determined under constant total pressure conditions.",
+     "where": "I. Abstract, PDF page 1",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "The test methodology used was similar to that previously used to determine the maximum oxygen concentration (MOC) at which self-extinguishment occurs under constant total pressure conditions.",
+     "note": "The paper itself measures pressure thresholds in 99.8 percent oxygen, not oxygen thresholds."
+    }
+   ],
+   "note": "Scanned copy with an OCR text layer. ICES-2014-179 cites 'Pressure Flammability Thresholds in Oxygen of Selected Aerospace Materials', AIAA 2010-6259, 40th ICES, 2010; that this NTRS file is the same paper is not verified."
+  },
+  {
+   "id": "AIAA-2011-5067",
+   "kind": "paper",
+   "title": "Selected Parametric Effects on Materials Flammability Limits (Hirsch, Juarez, Peyton, Harper, Olson)",
+   "issuer": "41st International Conference on Environmental Systems (AIAA)",
+   "version": "NTRS 20110008636, JSC-CN-23164, 2011",
+   "url": "https://ntrs.nasa.gov/citations/20110008636",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20110008636/downloads/20110008636.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "H2011.worstcase",
+     "type": "definition",
+     "text": "Test 1 is conducted in the worst case configuration, defined as the combination of material thickness, test pressure, oxygen concentration and temperature that makes the material most flammable.",
+     "where": "Abstract and I. Introduction, p. 1",
+     "variables": [
+      "sample_thickness_mm",
+      "pressure_kpa",
+      "o2_pct"
+     ],
+     "quote": "The method is a pass/fail upward flame propagation test conducted in the worst case configuration, which is defined as a combination of a material’s thickness, test pressure, oxygen concentration, and temperature that make the material most flammable.",
+     "note": "A description by researchers of NASA-STD-(I)-6001B, not the text of the standard."
+    },
+    {
+     "id": "H2011.linear",
+     "type": "published_result",
+     "text": "For materials with MOC in the range 25-35% oxygen the data indicate an approximately linear dependence of MOC on total pressure; slope between -0.975 and -0.251 % oxygen per psia, average -0.607.",
+     "where": "I. Introduction, p. 2, after 'For materials with maximum oxygen concentrations (MOCs) at which extinguishment occurs in the range of 25-35% oxygen, the data indicate there is an approximately linear dependence of MOCs on total pressure Pt having the form: MOC = m Pt + b (1)'",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "moc_slope_pct_o2_per_psia_max": -0.975,
+      "moc_slope_pct_o2_per_psia_min": -0.251,
+      "moc_slope_pct_o2_per_psia_avg": -0.607
+     },
+     "quote": "The maximum slope was -0.975% oxygen/psia and the minimum was -0.251% oxygen/psia, with an average of -0.607% oxygen/psia.",
+     "note": "A summary of an earlier paper (Hirsch et al., 39th ICES, 2009, 'Pressure Effects on the Self-Extinguishment Limits of Aerospace Materials'), which was not reached. Materials with MOC in the range 25-35% oxygen, normal gravity. The slopes are not stated for PMMA or cotton-fiberglass fabric."
+    },
+    {
+     "id": "H2011.cannot",
+     "type": "published_result",
+     "text": "For at least one of the materials tested, a material with an MOC of 30% oxygen at 10.2 psia would fail Test 1 at 25.9% oxygen and 14.7 psia.",
+     "where": "I. Introduction, p. 2",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "moc_o2_pct": 30,
+      "moc_pressure_psia": 10.2,
+      "fail_o2_pct": 25.9,
+      "fail_pressure_psia": 14.7
+     },
+     "quote": "For at least one of the materials tested, the data indicate that a material with an MOC of 30% oxygen at 10.2 psia would fail NASA-STD-(I)-6001B Test 1 at 25.9% oxygen and 14.7 psia.",
+     "note": "'at least one of the materials tested'; normal gravity; the material is not named in the sentence."
+    }
+   ],
+   "note": "The number AIAA 2011-5067 is taken from the reference list of ICES-2015-293; it is not printed in the NTRS copy. Normal-gravity tests."
+  },
+  {
+   "id": "NASA-CR-2005-213689",
+   "kind": "nasa_report",
+   "title": "Bounding the Spacecraft Atmosphere Design Space for Future Exploration Missions (Lange, Perka, Duffield, Jeng)",
+   "issuer": "NASA JSC (Jacobs Sverdrup ESC Group)",
+   "version": "NASA/CR-2005-213689, June 2005",
+   "url": "https://ntrs.nasa.gov/citations/20050185597",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20050185597/downloads/20050185597.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "LANGE.test1",
+     "type": "definition",
+     "text": "Test 1 evaluates whether a material is self-extinguishing under expected worst-case-usage conditions of pressure, temperature, oxygen concentration and thickness.",
+     "where": "2.3.1 Flammability, p. 12",
+     "variables": [
+      "pressure_kpa",
+      "o2_pct",
+      "sample_thickness_mm"
+     ],
+     "quote": "This test evaluates whether a material is self-extinguishing under expected worst-case-usage conditions of pressure, temperature, oxygen concentration, and thickness.",
+     "note": "Refers to the 1998 edition of NASA-STD-6001."
+    },
+    {
+     "id": "LANGE.lesser",
+     "type": "published_result",
+     "text": "Materials flammability depends strongly on oxygen concentration (volume percent) and to a lesser extent on total pressure, in contrast with human respiration, which depends primarily on oxygen partial pressure.",
+     "where": "2.3.1 Flammability, p. 11",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "By contrast with human respiration that depends primarily on oxygen partial pressure in the atmosphere, materials flammability depends strongly on oxygen concentration (volume percent) and to a lesser extent on total pressure.",
+     "note": "'to a lesser extent' is not 'not at all'. A review statement, not a measurement."
+    }
+   ]
+  },
+  {
+   "id": "NTRS-20150008961",
+   "kind": "paper",
+   "title": "Microgravity Flammability of PMMA Rods in Concurrent Flow (Olson, Ferkul)",
+   "issuer": "9th U.S. National Combustion Meeting, Cincinnati, Ohio, May 17-20, 2015",
+   "version": "NTRS 20150008961",
+   "url": "https://ntrs.nasa.gov/citations/20150008961",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20150008961/downloads/20150008961.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "RODS15.atmosphere",
+     "type": "definition",
+     "text": "A material either passes or fails Test 1 at a given atmosphere (oxygen concentration, pressure).",
+     "where": "Introduction, p. 1",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "The material either passes or fails the test at a given atmosphere (oxygen concentration, pressure).",
+     "note": "About NASA Test 1, not about the microgravity tests."
+    }
+   ],
+   "note": "Listed in the 'publications' field of PSI-25."
+  },
+  {
+   "id": "NTRS-20140011630",
+   "kind": "paper",
+   "title": "An Overview of the Microgravity Science Glovebox (MSG) Facility and the Research Performed in the MSG on the International Space Station (ISS) (Jordan)",
+   "issuer": "NASA Marshall Space Flight Center",
+   "version": "NTRS 20140011630, M13-2964 (abstract, November 2013)",
+   "url": "https://ntrs.nasa.gov/citations/20140011630",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20140011630/downloads/20140011630.pdf",
+   "access": "abstract_only",
+   "items": [
+    {
+     "id": "MSG.negative",
+     "type": "design_value",
+     "text": "The Microgravity Science Glovebox has an enclosed working volume that is held at a negative pressure with respect to the crew living area.",
+     "where": "Abstract (the NTRS record is an abstract only)",
+     "variables": [
+      "pressure_kpa"
+     ],
+     "quote": "The facility has an enclosed working volume that is held at a negative pressure with respect to the crew living area.",
+     "note": "No magnitude is given. It is a description of the facility, not of the BASS-II runs; the BASS-II Summary Report speaks of 'repeated tests in a sealed working volume' (p. 6) and gives no working-volume pressure apart from B02."
+    }
+   ],
+   "note": "The NTRS record holds a one-page abstract."
+  },
+  {
+   "id": "PROCI-2018-THOMSEN",
+   "kind": "paper",
+   "title": "On Simulating Concurrent Flame Spread in Reduced Gravity by Reducing Ambient Pressure (Thomsen, Fernandez-Pello, Urban, Ruff, Olson)",
+   "issuer": "Proceedings of the Combustion Institute",
+   "version": "37(3):3793-3800, doi 10.1016/j.proci.2018.05.004; author manuscript PMC6907022",
+   "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6907022/",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "THOMSEN18.saffire",
+     "type": "published_result",
+     "text": "The Saffire I and II microgravity experiments on the cotton-fiberglass fabric were conducted on board the Cygnus spacecraft at 100 kPa and an air flow velocity of 20 cm/s.",
+     "where": "Abstract of the author manuscript, PMC6907022 (Proc. Combust. Inst. 37(3):3793-3800). Section 2 names the flights: 'the Orbital Corporation Cygnus spacecraft (Saffire I and II) [19]'.",
+     "variables": [
+      "pressure_kpa",
+      "flow_cms"
+     ],
+     "values": {
+      "pressure_kpa": 100
+     },
+     "quote": "Microgravity experiments were conducted during NASA’s Spacecraft Fire Experiment (Saffire), on board of the Orbital Corporation Cygnus spacecraft at 100 kPa and an air flow velocity of 20 cm/s.",
+     "note": "Nominal statement; for the Saffire details the paper refers the reader to ICES-2017-224."
+    },
+    {
+     "id": "THOMSEN18.care",
+     "type": "limitation",
+     "text": "Care should be taken interpreting and applying results obtained at reduced pressure, because eventually low pressure will affect the chemical kinetics of the process.",
+     "where": "5. Conclusion. Earlier in the same paragraph: 'For a constant oxygen concentration, as total ambient pressure is reduced there is a subsequent reduction in the partial pressure of oxygen and flame temperature [31].'",
+     "variables": [
+      "pressure_kpa",
+      "spread_rate_mm_s"
+     ],
+     "quote": "Thus, care should be taken interpreting and applying these results, particularly because eventually low pressure will affect the chemical kinetics of the process.",
+     "note": "About using reduced pressure in normal gravity to imitate microgravity flame spread rate; not a statement about flammability limits."
+    }
+   ],
+   "note": "The PubMed Central author manuscript was read as a text extraction, not the journal version."
+  },
+  {
+   "id": "ICES-2015-293",
+   "kind": "paper",
+   "title": "Buoyant Effects on the Flammability of Silicone Samples Planned for the Spacecraft Fire Experiment (Saffire) (Niehaus, Ferkul, Gokoglu, Ruff)",
+   "issuer": "45th International Conference on Environmental Systems",
+   "version": "ICES-2015-[293] (12-16 July 2015, Bellevue, Washington)",
+   "url": "https://ntrs.nasa.gov/citations/20150022421",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20150022421/downloads/20150022421.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "NIEHAUS15.expected",
+     "type": "published_result",
+     "text": "Silicone was chosen for Saffire-II because its flammability limit is close to the expected test atmosphere (air; 21% O2, 1 atm).",
+     "where": "I. Introduction, p. 2. Listed in the 'publications' field of PSI-98, PSI-99 and PSI-100.",
+     "variables": [
+      "pressure_kpa",
+      "o2_pct"
+     ],
+     "values": {
+      "pressure_atm": 1,
+      "o2_pct": 21
+     },
+     "quote": "Silicone was chosen because its flammability limit is close to the expected test atmosphere (air; 21% O2, 1 atm), and different thicknesses were available to enable producing a variety of burn lengths in upward 1-g testing.",
+     "note": "An expectation stated in 2015, before the flights. The ground tests of the paper 'were at atmospheric pressure' (p. 4)."
+    }
+   ],
+   "note": "Ground tests before flight. Listed in the 'publications' field of PSI-98, PSI-99 and PSI-100."
+  },
+  {
+   "id": "NTRS-20150000894",
+   "kind": "paper",
+   "title": "Large-Scale Spacecraft Fire Safety Tests (Urban, Ruff, Ferkul, Olson, Fernandez-Pello, T'ien, Torero, Cowlard, Rouvreau, Minster, Toth, Legros, Eigenbrod, Smirnov, Fujita, Jomaas)",
+   "issuer": "Poster; the NTRS record names the International Symposium on Combustion, San Francisco, August 2014",
+   "version": "NTRS 20150000894, GRC-E-DAA-TN17050",
+   "url": "https://ntrs.nasa.gov/citations/20150000894",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20150000894/downloads/20150000894.pdf",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "URBAN14.loc",
+     "type": "published_result",
+     "text": "Tests with Nomex HT90-40 found the limiting oxygen concentration for flame spread as a function of ambient pressure in a quiescent environment; the authors report a strong dependence on pressure.",
+     "where": "Poster panel on Nomex HT90-40, after 'Tests have been conducted with Nomex HT90-40 to find the limiting oxygen concentration (LOC) for flame spread as a function of ambient pressure in a quiescent environment.'",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "The strong dependence on pressure suggests either kinetic effects or flow effects.",
+     "note": "A poster, normal-gravity ground tests of one material. No numbers are printed in the text."
+    },
+    {
+     "id": "URBAN14.normoxic",
+     "type": "published_result",
+     "text": "For a constant oxygen partial pressure, such as in normoxic equivalent atmospheres, it is possible that a fire resistant material can become flammable depending on the ambient pressure.",
+     "where": "Poster panel on Nomex HT90-40",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "quote": "For a constant oxygen partial pressure, such as in normoxic equivalent atmospheres, it is possible that a fire resistant material can become flammable depending on the ambient pressure.",
+     "note": "'it is possible'; one material; normal gravity."
+    }
+   ],
+   "note": "A one-page poster, not a reviewed paper."
+  },
+  {
+   "id": "ASTM-G125",
+   "kind": "standard",
+   "title": "Standard Test Method for Measuring Liquid and Solid Material Fire Limits in Gaseous Oxidants",
+   "issuer": "ASTM International",
+   "version": "ASTM G125-00 (Reapproved 2023), as indicated by the page address g0125-00r23; edition not otherwise verified",
+   "url": "https://www.astm.org/g0125-00r23.html",
+   "access": "abstract_only",
+   "items": [
+    {
+     "id": "G125.scope",
+     "type": "definition",
+     "text": "The method measures threshold-limit conditions for combustion of materials in oxidant gases under specific test conditions of pressure, temperature, flow condition, fire-propagation direction and geometry.",
+     "where": "Scope 1.1, as printed on the public page https://www.astm.org/g0125-00r23.html",
+     "variables": [
+      "pressure_kpa",
+      "o2_pct"
+     ],
+     "quote": "This test method covers a procedure for measuring the threshold-limit conditions to allow equilibrium of combustion of materials in various oxidant gases under specific test conditions of pressure, temperature, flow condition, fire-propagation directions, and various other geometrical features of common systems.",
+     "note": "Only the public scope and significance text was read."
+    },
+    {
+     "id": "G125.conditions",
+     "type": "limitation",
+     "text": "Results of the fire-limit test do not necessarily apply to any condition that does not faithfully reproduce the conditions during test; limits measured at one set of conditions are not necessarily the lowest thresholds at which combustion can occur.",
+     "where": "Scope 1.3, public page https://www.astm.org/g0125-00r23.html. Significance and Use 5.1 adds: 'Flammability limits measured at one set of conditions are not necessarily the lowest thresholds at which combustion can occur.'",
+     "variables": [],
+     "quote": "However, its results do not necessarily apply to any condition that does not faithfully reproduce the conditions during test.",
+     "note": "'not necessarily'. Only the public text was read."
+    }
+   ],
+   "note": "Paid standard. Only the scope and significance text on the public page was read, as returned by a search tool. NASA-STD-6001B A.2.10.5 [FOCR 362] names ASTM G125 or ASTM D2863 for the oxygen index test."
+  },
+  {
+   "id": "PSI-BASS2-FILES",
+   "kind": "nasa_report",
+   "title": "NASA PSI, BASS-II (PSI-25) raw-data documents: SRD_BASS-II.pdf, BASS-II Procedure.docx, BASS-II data FAQ.docx, BASS-II Test Matrix by PI Final.xlsx",
+   "issuer": "NASA Physical Sciences Informatics (PSI)",
+   "version": "PSI-25 version 4 (files version 1)",
+   "url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25",
+   "access": "full_text_read",
+   "items": [
+    {
+     "id": "PSIBASS2.measured",
+     "type": "definition",
+     "text": "The BASS-II science requirements list as measured parameters the nitrogen flow rate, fan voltage, air flow velocity and direction and flame radiation, and oxygen and CO2 readings of the working volume before and after each burn. Pressure is not in the list.",
+     "where": "'SRD_BASS-II.pdf' (PSI-25 raw data), slide 1 'BASS-II Science Requirements', Parameter Measurement. Slide 2, MSG Working Volume Gas Concentrations, adds the CSA-CP and CDM readings of oxygen and CO2 'before and after each burn'. The success criteria speak of 'the desired test conditions (O2, flow)'.",
+     "variables": [
+      "flow_cms",
+      "o2_pct"
+     ],
+     "quote": "Measurement of the GN2 flow rate, fan voltage, air flow velocity and direction, and flame radiation will be measured and overlaid on the Video.",
+     "note": "Does not say that pressure was not measured by the facility; it lists what the experiment measures. No pressure requirement or value appears anywhere in the 16 slides except inside the hypothesis sentence."
+    },
+    {
+     "id": "PSIBASS2.procedure",
+     "type": "operational_practice",
+     "text": "The BASS-II crew procedure sets the atmosphere by adding nitrogen to the working volume to reduce the oxygen partial pressure; the readings recorded are oxygen and CO (CSA-CP) and CO2 (CDM). No pressure reading is recorded in the procedure, the data FAQ or the test matrix.",
+     "where": "'BASS-II Procedure.docx' (PSI-25 raw data), OBJECTIVE. The steps list 'CSA-CP OXYGEN reading', 'CSA-CP CO reading', 'CDM CO2 reading'; no step records a pressure. 'BASS-II data FAQ.docx' explains the columns of the test matrix (date, test number, sample, material, flow restrictors, fan display, air display, radiometer gain, frames, oxygen, CO2, CO); none is a pressure. 'BASS-II Test Matrix by PI Final.xlsx' has no pressure column.",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "Conduct BASS-2 (Burning and Suppression of Solids-2) operations by adding GN2 to the WV to reduce the O2 partial pressure in order to get a stable blue flame for longer periods of time.",
+     "note": "'O2 partial pressure' here is the aim of the nitrogen dilution; no total pressure is given."
+    }
+   ],
+   "note": "Files downloaded on 2026-11-14 through the PSI download service; licence CC0-1.0 per the PSI record of PSI-25. AI-read, not checked by a human."
   }
  ]
 }

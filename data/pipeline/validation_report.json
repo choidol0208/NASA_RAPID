@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 43,
+  "PASS": 46,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 43
+  "checks": 46
  },
  "checks": [
   {
@@ -21,19 +21,19 @@
    "verifies": "Every value with a real source column is found in its raw NASA cell and is explained by a rule that the spec states (exact copy, declared factor, number in the cell text, spec vocabulary), or is one of the exceptions README declares, exactly as declared and with its flag on the test.",
    "status": "PASS",
    "numbers": {
-    "values_checked": 9231,
-    "exact": 5378,
+    "values_checked": 9226,
+    "exact": 5376,
     "declared_factor": 2629,
-    "number_in_text": 225,
+    "number_in_text": 224,
     "vocabulary": 687,
-    "one_of_several_numbers": 204,
+    "one_of_several_numbers": 203,
     "unit_in_cell": 16,
-    "declared_exception_flagged": 92,
+    "declared_exception_flagged": 91,
     "unexplained": 0,
     "declared_exception_flagged_per_kind": {
      "cell_of_row_above": 2,
      "material_from_readme": 87,
-     "oxygen_midpoint": 3
+     "oxygen_start_named_in_publication": 2
     },
     "numbers_written_with_a_leading_zero": 0,
     "failing_values_that_the_pipeline_flags": 0
@@ -50,7 +50,7 @@
      "unit_in_cell": "a number in the cell converted from the unit written next to it to the variable's unit",
      "text_in_cell": "the value is written inside a longer cell",
      "material_alias_in_cell": "the cell names a material of materials.json (id or alias) and the value is another alias of the same material",
-     "declared_exception_flagged": "a value that is not literally in the cell, of a kind README declares (table 'Values that are not literally in a NASA cell'): it is exactly what the declared rule gives and the test carries the named flag",
+     "declared_exception_flagged": "a value of a kind README declares in the table 'Values that are not literally in a NASA cell' (one of two oxygen numbers written, named by a publication; material from the BASS-II ReadMe; cell of the row above): it is exactly what the declared rule gives and the test carries the named flag",
      "unexplained": "no rule found that leads from the raw cell to the value",
      "empty_cell": "the raw cell is empty but a value is recorded. This includes columns that sources.json lists under 'fill_down' (the value is the cell of a row above): the rule that an empty cell means 'not recorded' and is never filled in does not allow it",
      "category_not_in_cell": "a text value that is not written in the cell and that no spec file maps the cell text to (the mapping lives in engine code, not in the spec)",
@@ -59,8 +59,9 @@
      "assumed_unit": "the value needs a unit conversion whose unit is neither written in the cell nor declared in sources.json",
      "declared_factor_not_applied": "sources.json declares a factor for the column but the value equals the raw number without it",
      "unit_ignored": "the number is copied although the unit written after it in the cell is not the unit of the variable",
-     "declared_exception_without_flag": "a value of a kind that README declares as 'not literally in a NASA cell' (oxygen midpoint, material from the BASS-II ReadMe, cell of the row above) but the test does not carry the flag README names for it",
-     "spec_rule_gives_other_value": "the rule written in the spec for this column (sources.json '_meta.sample_keywords') leads from the cell to a different value, or to none"
+     "declared_exception_without_flag": "a value of a kind that README declares (one of two oxygen numbers named by a publication, material from the BASS-II ReadMe, cell of the row above) but the test does not carry the flag README names for it",
+     "spec_rule_gives_other_value": "the rule written in the spec for this column (sources.json '_meta.sample_keywords' or '_meta.documented_start') leads from the cell to a different value, or to none",
+     "two_number_cell_not_documented": "an oxygen value from a cell with two numbers whose exact text is not listed under 'documented_start' (sources.json): such a cell gives no value"
     },
     "classes_that_fail": [
      "assumed_unit",
@@ -71,6 +72,7 @@
      "empty_cell",
      "reference_label_number",
      "spec_rule_gives_other_value",
+     "two_number_cell_not_documented",
      "unexplained",
      "unit_ignored"
     ],
@@ -122,8 +124,8 @@
      },
      "flow_min_cms": {
       "exact": 25,
-      "number_in_text": 18,
-      "one_of_several_numbers": 62
+      "number_in_text": 17,
+      "one_of_several_numbers": 61
      },
      "fuel_material": {
       "declared_exception_flagged": 89,
@@ -156,13 +158,16 @@
      },
      "o2_final_pct": {
       "declared_factor": 366,
-      "exact": 127
+      "exact": 122
      },
      "o2_pct": {
-      "declared_exception_flagged": 3,
+      "declared_exception_flagged": 2,
       "declared_factor": 1002,
       "exact": 129,
       "number_in_text": 8
+     },
+     "o2_range_as_written": {
+      "exact": 3
      },
      "pressure_kpa": {
       "declared_factor": 1012
@@ -775,8 +780,8 @@
    "verifies": "Every non-empty variable cell of tests.csv has exactly one row in values_long.csv with the same value, unit, file and row, and every values_long row has its cell in tests.csv.",
    "status": "PASS",
    "numbers": {
-    "non_empty_cells": 18450,
-    "values_long_rows": 18450
+    "non_empty_cells": 18445,
+    "values_long_rows": 18445
    },
    "failures": 0,
    "failing_examples": []
@@ -849,7 +854,7 @@
    "status": "PASS",
    "numbers": {
     "cell_x_variable": 246,
-    "differs_with_flag": 6,
+    "differs_with_flag": 8,
     "differs_without_flag": 0
    },
    "failures": 0,
@@ -857,7 +862,7 @@
    "details": {
     "meanings_applied": {
      "flow_cms": "Imposed flow speed at the start of the test (the number the flow cell starts with)",
-     "flow_min_cms": "Lowest flow speed written in the cell that lists the settings of the test. Not read where the cell also holds fan potentiometer settings or anything in brackets"
+     "flow_min_cms": "Lowest flow speed written in the cell that lists the settings of the test. Not read where the cell also holds fan potentiometer settings or anything in brackets, or where the cell does not start with a flow speed"
     },
     "note": "How the engine chooses among the numbers of a cell is written in pipeline/rules.py, which this check does not read. It applies the two meanings literally."
    }
@@ -873,6 +878,19 @@
      "rod_diameter_mm": 54,
      "sample_geometry": 230
     }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "A8_oxygen_two_number_cells",
+   "verifies": "An oxygen cell with two numbers gives a value only if 'documented_start' lists its exact text: then o2_pct is the listed number, which is one of the two written, and the test carries the flag 'range_in_source_start_value_named_in_publication'; otherwise o2_pct is empty with the flag 'range_in_source_start_value_not_documented'. o2_range_as_written holds the cell text in both cases.",
+   "status": "PASS",
+   "numbers": {
+    "two_number_cells": 3,
+    "listed_in_documented_start": 2,
+    "not_listed": 1,
+    "oxygen_cells": 11
    },
    "failures": 0,
    "failing_examples": []
@@ -917,26 +935,40 @@
    "verifies": "No value in tests.csv lies outside the 'ranges' of variables.json.",
    "status": "PASS",
    "numbers": {
-    "values_checked": 5094
+    "values_checked": 5086
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "C2_consistency_rules",
+   "verifies": "A raw reading for which a 'consistency' expression of variables.json holds (for example a final oxygen below 5, or above the initial oxygen + 0.5) has no value in tests.csv and carries '<variable>:<flag>'; no other reading of the variable was emptied by the rule or carries its flag.",
+   "status": "PASS",
+   "numbers": {
+    "raw_readings": 493,
+    "readings_for_which_a_rule_holds": {
+     "o2_final_pct:implausibly_low_in_source": 3,
+     "o2_final_pct:above_initial_in_source": 2
+    }
    },
    "failures": 0,
    "failing_examples": []
   },
   {
    "id": "D1_need_tests",
-   "verifies": "need_tests.csv lists exactly the in-scope tests that record every required condition and at least one outcome of each need, with objective_link 'stated' only when the investigation is in 'stated_by'.",
+   "verifies": "need_tests.csv lists exactly the in-scope tests that record every required condition (or have it documented for their table) and at least one outcome of each need, with objective_link 'stated' only when a 'stated_by' link of the investigation has verdict 'supported'.",
    "status": "PASS",
    "numbers": {
-    "rows_recomputed": 848,
-    "rows_in_file": 848,
-    "stated": 450,
+    "rows_recomputed": 838,
+    "rows_in_file": 838,
+    "stated": 555,
     "per_need_stated": {
-     "P1": 136,
+     "P1": 133,
      "P2": 0,
-     "P3": 11,
-     "S1": 299,
-     "D1": 0,
-     "D2": 4
+     "P3": 2,
+     "S1": 298,
+     "D1": 122,
+     "D2": 0
     }
    },
    "failures": 0,
@@ -944,7 +976,7 @@
   },
   {
    "id": "D2_capability_matrix",
-   "verifies": "capability_matrix.csv has one row per need and source whose counts (tests in scope, with required conditions, with an outcome, usable), status and objective_link equal the recomputation from tests.csv and needs.json.",
+   "verifies": "capability_matrix.csv has one row per need and source whose counts (tests in scope, with required conditions, with an outcome, usable), status, missing and documented conditions, objective_link and publication quote equal the recomputation from tests.csv, needs.json and sources.json.",
    "status": "PASS",
    "numbers": {
     "need_x_source": 132,
@@ -955,21 +987,26 @@
   },
   {
    "id": "D3_objective_quotes",
-   "verifies": "Every 'stated_by' quote of needs.json is literally in the named field of the investigation's PSI record (HTML tags removed, whitespace collapsed).",
+   "verifies": "Every 'stated_by' link of needs.json has a known verdict; its record sentence, where given, is literally in the named field of the PSI record; its publication, where given, is a reference item with a quote; and a link with verdict 'supported' has a publication.",
    "status": "PASS",
    "numbers": {
-    "quotes": 23
+    "links": 24,
+    "per_verdict": {
+     "differs": 4,
+     "supported": 15,
+     "topic_only": 5
+    }
    },
    "failures": 0,
    "failing_examples": []
   },
   {
    "id": "D4_objective_links",
-   "verifies": "objective_links.csv has exactly the (need, investigation, field, quote) entries of needs.json 'stated_by'.",
+   "verifies": "objective_links.csv lists exactly the links of needs.json 'stated_by' (all verdicts) with record field and sentence, publication item, the quote of that item in references.json, and verdict.",
    "status": "PASS",
    "numbers": {
-    "links_in_spec": 23,
-    "rows_in_file": 23
+    "links_in_spec": 24,
+    "rows_in_file": 24
    },
    "failures": 0,
    "failing_examples": []
@@ -979,7 +1016,7 @@
    "verifies": "Every 'see_also' entry of scenarios.json and every 'documented_elsewhere' entry of sources.json is literally in the named PSI record field, raw table cell or references.json item, and a variable documented elsewhere has no value in the tests of that table.",
    "status": "PASS",
    "numbers": {
-    "entries": 12
+    "entries": 10
    },
    "failures": 0,
    "failing_examples": []
@@ -1016,8 +1053,8 @@
     "rows_in_file": 10944,
     "tiers_recomputed": {
      "atmosphere": 220,
-     "other": 10644,
-     "oxygen_only": 63,
+     "other": 10645,
+     "oxygen_only": 62,
      "pressure_only": 17
     }
    },
@@ -1087,9 +1124,9 @@
    "verifies": "Every row of indicators.csv (value, n_tests, investigations, texts) equals the recomputation of its template over its population, filter and grouping (indicators.json), and no row is missing.",
    "status": "PASS",
    "numbers": {
-    "rows_recomputed": 165,
-    "rows_in_file": 165,
-    "indicators_with_rows": 18,
+    "rows_recomputed": 151,
+    "rows_in_file": 151,
+    "indicators_with_rows": 16,
     "indicators_in_spec": 18
    },
    "failures": 0,
@@ -1100,8 +1137,8 @@
    "verifies": "indicator_tests.csv lists exactly the tests behind each indicator row, with the value each test contributes.",
    "status": "PASS",
    "numbers": {
-    "rows_recomputed": 1458,
-    "rows_in_file": 1458
+    "rows_recomputed": 1437,
+    "rows_in_file": 1437
    },
    "failures": 0,
    "failing_examples": []
@@ -1111,9 +1148,9 @@
    "verifies": "Every reference item id used in needs.json, indicators.json and scenarios.json exists in references.json.",
    "status": "PASS",
    "numbers": {
-    "uses": 95,
-    "distinct_items_used": 51,
-    "items_defined": 60
+    "uses": 113,
+    "distinct_items_used": 66,
+    "items_defined": 309
    },
    "failures": 0,
    "failing_examples": []
@@ -1123,8 +1160,8 @@
    "verifies": "need_references.csv has exactly the reference items each need lists, with the text, place, document and URL of references.json.",
    "status": "PASS",
    "numbers": {
-    "links_in_spec": 48,
-    "rows_in_file": 48
+    "links_in_spec": 59,
+    "rows_in_file": 59
    },
    "failures": 0,
    "failing_examples": []
@@ -1137,7 +1174,7 @@
     "packages": 26,
     "listed_in_index": 26,
     "extra_files": 0,
-    "need_block_fields_not_in_contract": 5
+    "need_block_fields_not_in_contract": 6
    },
    "failures": 0,
    "failing_examples": [],
@@ -1146,6 +1183,7 @@
      "counts.matched_added_gas",
      "documented_elsewhere",
      "matched_by_fuel_phase",
+     "matched_ranges",
      "note",
      "reading"
     ]
@@ -1153,10 +1191,11 @@
   },
   {
    "id": "I2_evidence_status_counts",
-   "verifies": "status, counts and gap codes of every need block equal the environment's row in scenario_needs.csv or atmosphere_cells.csv, and index.json carries the same status.",
+   "verifies": "status, counts and gap codes of every need block equal the environment's row in scenario_needs.csv or atmosphere_cells.csv; index.json carries the same status, the first statement of the block as status text, and the caveat of the scenario.",
    "status": "PASS",
    "numbers": {
-    "need_blocks": 156
+    "need_blocks": 156,
+    "status_texts_compared": 156
    },
    "failures": 0,
    "failing_examples": []
@@ -1178,15 +1217,15 @@
    "verifies": "matched_tests of every need block is exactly the usable tests of tier atmosphere, oxygen_only or pressure_only; marks, flags, source file and row equal tests.csv; every value, unit and source column equals values_long.csv and covers the need's recorded variables.",
    "status": "PASS",
    "numbers": {
-    "matched_test_entries": 1121,
-    "values_compared": 7230
+    "matched_test_entries": 1589,
+    "values_compared": 10275
    },
    "failures": 0,
    "failing_examples": []
   },
   {
    "id": "I5_evidence_need_context",
-   "verifies": "objective sentences equal objective_links.csv, the investigations list equals the usable tests per investigation and tier with the title of the PSI record, references equal the need's items in references.json, and every gap code has a sentence.",
+   "verifies": "objective entries equal the links of needs.json, the investigations list equals the usable tests per investigation and tier with the title of the PSI record, references equal the need's items in references.json, and every gap code has a sentence.",
    "status": "PASS",
    "numbers": {
     "need_blocks": 156
@@ -1209,19 +1248,19 @@
    "verifies": "The indicators of every need block equal the need's indicators recomputed over the tests of their population whose tier in this environment is atmosphere, oxygen_only or pressure_only.",
    "status": "PASS",
    "numbers": {
-    "indicator_groups": 432
+    "indicator_groups": 394
    },
    "failures": 0,
    "failing_examples": []
   },
   {
    "id": "I8_evidence_statement_numbers",
-   "verifies": "Every number written in a statement of an evidence package is a field of the same need block (for an indicator sentence: of its indicator entry), or one of the two sums that statements.json declares.",
+   "verifies": "Every number written in a statement of an evidence package is a field of the same need block (for an indicator sentence: of its indicator entry; for an environment sentence: of its recorded_tests row), or one of the two sums that statements.json declares.",
    "status": "PASS",
    "numbers": {
-    "numbers_in_statements": 5886,
-    "statements": 1812,
-    "numbers_that_are_a_declared_sum_not_a_stored_field": 15,
+    "numbers_in_statements": 5211,
+    "statements": 1903,
+    "numbers_that_are_a_declared_sum_not_a_stored_field": 0,
     "numbers_found_only_in_matched_tests_indicators_or_references": 0
    },
    "failures": 0,
@@ -1232,26 +1271,35 @@
   },
   {
    "id": "I9_evidence_statement_words",
-   "verifies": "No statement of an evidence package contains the words safe, unsafe, flammable, sufficient, representative, proves or confirms (outside a need name or an indicator reading copied from the spec).",
+   "verifies": "No statement of an evidence package contains the words safe, unsafe, flammable, sufficient, representative, proves or confirms (outside a need name or an indicator reading copied from the spec, and outside a sentence quoted word for word from a NASA record or a publication).",
    "status": "PASS",
    "numbers": {
-    "sentences": 2020
+    "sentences": 2102,
+    "sentences_with_such_a_word_only_inside_a_verbatim_quote": 0
    },
    "failures": 0,
    "failing_examples": []
   },
   {
    "id": "I10_evidence_recorded_tests",
-   "verifies": "environment.recorded_tests of every package lists, per investigation and fuel phase, how many tests of tests.csv (whatever the need) have tier atmosphere, oxygen_only or pressure_only in that environment.",
+   "verifies": "environment.recorded_tests of every package lists, per investigation and fuel phase, how many tests of tests.csv (whatever the need) have tier atmosphere, oxygen_only or pressure_only in that environment, and 'counted_for' names the needs that count at least one of these matched tests.",
    "status": "PASS",
    "numbers": {
-    "packages": 26
+    "packages": 26,
+    "counted_for_lists": 71
    },
    "failures": 0,
-   "failing_examples": [],
-   "details": {
-    "note": "No rule text describes this field; the rule checked here is the validator's reading of its name."
-   }
+   "failing_examples": []
+  },
+  {
+   "id": "I11_evidence_matched_ranges",
+   "verifies": "matched_ranges of every need block (how many matched tests record oxygen of the surrounding atmosphere and pressure, with the lowest and highest recorded value) equals the recomputation from tests.csv over the counted tests of tier atmosphere, oxygen_only or pressure_only.",
+   "status": "PASS",
+   "numbers": {
+    "need_blocks": 156
+   },
+   "failures": 0,
+   "failing_examples": []
   },
   {
    "id": "J1_facts_entries",
@@ -1271,14 +1319,14 @@
    "verifies": "For every investigation and every table, the listed variables are exactly those with a value, and each n, min, max and value count equals the recomputation from tests.csv.",
    "status": "PASS",
    "numbers": {
-    "variable_summaries": 297
+    "variable_summaries": 301
    },
    "failures": 0,
    "failing_examples": []
   },
   {
    "id": "J3_facts_needs",
-   "verifies": "stated_needs of every investigation equal objective_links.csv, and capability equals the rows of capability_matrix.csv (status, counts, objective_link per need and table).",
+   "verifies": "stated_needs of every investigation equal the links of needs.json, and capability equals the rows of capability_matrix.csv (status, counts, objective_link per need and table).",
    "status": "PASS",
    "numbers": {
     "entries_and_need_rows": 144
@@ -1291,9 +1339,10 @@
    "verifies": "Every number written in a statement of investigation_facts.json is a field of the same entry (of the table or need the sentence is about), and no statement contains a word that judges safety or sufficiency.",
    "status": "PASS",
    "numbers": {
-    "numbers_in_statements": 1030,
-    "statements": 276,
-    "numbers_found_only_elsewhere_in_the_entry": 0
+    "numbers_in_statements": 1064,
+    "statements": 286,
+    "numbers_found_only_elsewhere_in_the_entry": 0,
+    "sentences_with_a_forbidden_word_only_inside_a_verbatim_quote": 1
    },
    "failures": 0,
    "failing_examples": []

@@ -162,7 +162,9 @@ def standardize(source, variables, report):
 
 
 # ---------------------------------------------------------------- 3 validate
-def validate(tests, ranges):
+def validate(tests, ranges, consistency=()):
+    """Range checks, then the consistency rules of variables.json: a value
+    that cannot be a reading of its variable is emptied and flagged."""
     for t in tests:
         for var, (low, high) in ranges.items():
             v = t.get(var)
@@ -171,6 +173,14 @@ def validate(tests, ranges):
             if (low is not None and v < low) or (high is not None and v > high):
                 t["_flags"].append(f"{var}:out_of_range")
                 t[var] = None
+        for rule in consistency:
+            inputs = set(re.findall(r"[a-z][a-z0-9_]*", rule["expr"])) - {"e"}
+            env = {k: t.get(k) for k in inputs}
+            if any(empty(v) for v in env.values()):
+                continue
+            if eval(rule["expr"], {"__builtins__": {}}, env):
+                t["_flags"].append(f"{rule['variable']}:{rule['flag']}")
+                t[rule["variable"]] = None
 
 
 # ------------------------------------------------------------------ 4 derive
@@ -203,21 +213,35 @@ def record_text(investigation_id, field):
     return re.sub(r"<[^>]+>|\s+", " ", record.get(field) or "").strip()
 
 
-def objective_links(needs, fields=None):
-    """Check that every 'stated_by' quote is in the PSI record. Returns
-    {need_id: {investigation_id: quote}} and the table of links."""
+def objective_links(needs, fields=None, ref_quotes=None):
+    """The links of needs.json 'stated_by'. A sentence of the PSI record is
+    checked against the record; a publication sentence must be a reference
+    item with a quote. Only links with verdict 'supported' count. Returns
+    {need_id: {investigation_id: sentence}} for those and the table of all
+    links."""
     stated, rows = {}, []
     for need in needs:
         for link in need.get("stated_by", []):
-            if fields and link["field"] not in fields:
-                raise SystemExit(f"need {need['id']}: field '{link['field']}' is not one of {fields}")
-            text = record_text(link["investigation_id"], link["field"])
-            if link["quote"] not in text:
-                raise SystemExit(f"need {need['id']}: quote not found in {link['investigation_id']}."
-                                 f"{link['field']}: {link['quote'][:60]}")
-            stated.setdefault(need["id"], {}).setdefault(link["investigation_id"], link["quote"])
+            where = f"need {need['id']}, {link['investigation_id']}"
+            if "field" in link:
+                if fields and link["field"] not in fields:
+                    raise SystemExit(f"{where}: field '{link['field']}' is not one of {fields}")
+                if link["quote"] not in record_text(link["investigation_id"], link["field"]):
+                    raise SystemExit(f"{where}: quote not found in the record field {link['field']}: "
+                                     f"{link['quote'][:60]}")
+            item = link.get("publication")
+            if item and not (ref_quotes or {}).get(item):
+                raise SystemExit(f"{where}: reference item {item} does not exist or has no quote")
+            if link["verdict"] == "supported" and not item:
+                raise SystemExit(f"{where}: verdict 'supported' needs a publication item")
+            if link["verdict"] == "supported":
+                stated.setdefault(need["id"], {}).setdefault(
+                    link["investigation_id"], (ref_quotes or {})[item])
             rows.append({"need_id": need["id"], "investigation_id": link["investigation_id"],
-                         "record_field": link["field"], "quote": link["quote"]})
+                         "record_field": link.get("field", ""), "quote": link.get("quote", ""),
+                         "publication_item": item or "",
+                         "publication_quote": (ref_quotes or {}).get(item, "") if item else "",
+                         "verdict": link["verdict"]})
     return stated, pd.DataFrame(rows)
 
 
@@ -239,6 +263,7 @@ def assess(tests, needs, sources, stated):
             if "not_standardized" in s:
                 row.update(status="not_test_level", tests=0, tests_with_required_conditions=0,
                            tests_with_outcome=0, usable_tests=0, required_missing="",
+                           required_documented_not_in_table="",
                            outcomes_present="", note=s["not_standardized"])
                 matrix.append(row)
                 continue
@@ -247,10 +272,17 @@ def assess(tests, needs, sources, stated):
             if not ts:
                 row.update(status="out_of_scope", tests=0, tests_with_required_conditions=0,
                            tests_with_outcome=0, usable_tests=0, required_missing="",
+                           required_documented_not_in_table="",
                            outcomes_present="", note="no test within the scope of this need")
                 matrix.append(row)
                 continue
-            has_req = [all(not empty(t.get(v)) for v in req) for t in ts]
+            # a required condition is met by a value in the table, or, for the
+            # variables the need lists under 'conditions_documented_ok', by a
+            # sentence of a NASA record or a paper about that table
+            # (sources.json 'documented_elsewhere'); no value is created
+            documented = {d["variable"] for d in s.get("documented_elsewhere", [])} \
+                & set(need.get("conditions_documented_ok", []))
+            has_req = [all(not empty(t.get(v)) or v in documented for v in req) for t in ts]
             has_out = [any(not empty(t.get(v)) for v in outs) for t in ts]
             usable = [t for t, a, b in zip(ts, has_req, has_out) if a and b]
             status = ("measured" if usable else "partial" if any(has_out)
@@ -258,7 +290,10 @@ def assess(tests, needs, sources, stated):
             row.update(
                 status=status, tests=len(ts), tests_with_required_conditions=sum(has_req),
                 tests_with_outcome=sum(has_out), usable_tests=len(usable),
-                required_missing=";".join(v for v in req if all(empty(t.get(v)) for t in ts)),
+                required_missing=";".join(v for v in req if v not in documented
+                                          and all(empty(t.get(v)) for t in ts)),
+                required_documented_not_in_table=";".join(
+                    v for v in req if v in documented and all(empty(t.get(v)) for t in ts)),
                 outcomes_present=";".join(v for v in outs if any(not empty(t.get(v)) for t in ts)),
                 note="")
             matrix.append(row)
@@ -564,12 +599,14 @@ def main():
             report["sources"][s["id"]] = {"file": s["file"], "not_standardized": s["not_standardized"]}
             continue
         tests += standardize(s, variables, report)
-    validate(tests, ranges)
+    validate(tests, ranges, var_spec.get("consistency", {}).get("rules", []))
     derive(tests, derived)
-    stated, obj_links = objective_links(needs["needs"], needs["_meta"].get("stated_by_fields"))
+    os.makedirs(OUT, exist_ok=True)
+    ref_quotes = {i["id"]: i.get("quote") for r in spec("references.json")["references"] for i in r["items"]}
+    stated, obj_links = objective_links(needs["needs"], needs["_meta"].get("stated_by_fields"), ref_quotes)
     obj_links.to_csv(os.path.join(OUT, "objective_links.csv"), index=False)
     matrix, links = assess(tests, needs["needs"], src_spec["sources"], stated)
-    linked = set(obj_links.investigation_id)
+    linked = set(obj_links[obj_links.verdict == "supported"].investigation_id)
     report["investigations_with_tests_and_no_stated_need"] = sorted(
         {t["investigation_id"] for t in tests} - linked, key=lambda x: int(x.split("-")[1]))
     export(tests, variables, derived, matrix, links, report)

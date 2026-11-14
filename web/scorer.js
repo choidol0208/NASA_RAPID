@@ -107,8 +107,9 @@ export function interpret(query, cfg) {
   if (any(t, kw.thin)) put("thermal_regime", "thin", "text");
   else if (any(t, kw.thick)) put("thermal_regime", "thick", "text");
   if (any(t, kw.rod)) put("sample_geometry", "rod", "text");
-  let m = t.match(/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)/) ||
-    t.match(/(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/);
+  // "o2" must stand alone: "CO2 30%" is not 30% oxygen (mirrors scorer.py)
+  let m = t.match(/(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])/) ||
+    t.match(/(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?/);
   if (m) put("o2_pct", parseFloat(m[1]), "text");
   m = t.match(/(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)(?![\p{L}\p{N}_])/u);
   if (m) put("pressure_kpa", pyRound(parseFloat(m[1]) * UNITS_TO_KPA[m[2]], 1), "text");
@@ -143,12 +144,17 @@ function range(c, lo, hi) {
   return [a !== null ? a : b, b !== null ? b : a];
 }
 function sO2(x, c, p) {
+  // An inverse flame's O2 is the burner's oxidizer stream; the surrounding atmosphere is fuel and
+  // inert gas. It is not an atmosphere a crew breathes, so it is never matched with the user's O2.
+  if ((c.o2_reference || "") === "oxidizer_stream") return null;
   const r = range(c, "o2_min_pct", "o2_max_pct");
   if (!r) return null;
   const [lo, hi] = r;
   if (lo <= x && x <= hi) return 1.0;
-  if (x > hi) return Math.exp(-(x - hi) / p.above_scale_pct);
-  return Math.exp(-(lo - x) / p.below_scale_pct);
+  // Distance on the log of the O2 ratio (mirrors s_o2; scoring/MODEL_BASIS.md).
+  if (x > hi) return Math.exp(-Math.log(x / hi) / p.above_scale_ln);
+  if (x <= 0) return 0.0;
+  return Math.exp(-Math.log(lo / x) / p.below_scale_ln);
 }
 function logGauss(x, lo, hi, sigma, offset = 0.0) {
   if (lo <= x && x <= hi) return 1.0;
@@ -160,6 +166,21 @@ function sPressure(x, c, p) {
   const r = range(c, "pressure_min_kpa", "pressure_max_kpa");
   return r ? logGauss(x, r[0], r[1], p.sigma_ln) : null;
 }
+function speedSim(v, c, sim) { // mirrors _speed: [similarity, in-range signal for outside_range]
+  // With one end not recorded ("up to 40 cm/s", a limit, not a test value), a speed on the open side scores
+  // unknown_value and raises no warning; beyond the end it decays from unknown_value, with no jump.
+  const a = f(c.flow_min_cms), b = f(c.flow_max_cms);
+  if (a === null && b === null) return [null, null];
+  const p = sim.flow_speed;
+  if (a === null || b === null) {
+    const end = a === null ? b : a;
+    if ((a === null && v <= end) || (b === null && v >= end)) return [sim.unknown_value, null];
+    const g = logGauss(v, end, end, p.sigma_ln, p.offset_cms);
+    return [sim.unknown_value * g, g];
+  }
+  const s = logGauss(v, a, b, p.sigma_ln, p.offset_cms);
+  return [s, s];
+}
 function sFlow(state, v, c, sim) {
   const cfgs = split(c.flow_config);
   let sCfg = null;
@@ -167,11 +188,7 @@ function sFlow(state, v, c, sim) {
     const row = sim.flow_config_matrix[state];
     sCfg = Math.max(...cfgs.map((k) => get(row, k, 0.3)));
   }
-  let sV = null;
-  if (v !== null && v !== undefined) {
-    const r = range(c, "flow_min_cms", "flow_max_cms");
-    if (r) sV = logGauss(v, r[0], r[1], sim.flow_speed.sigma_ln, sim.flow_speed.offset_cms);
-  }
+  const sV = v !== null && v !== undefined ? speedSim(v, c, sim)[0] : null;
   const parts = [sCfg, sV].filter((x) => x !== null);
   if (!parts.length) return null;
   return parts.length === 2 ? parts[0] * parts[1] : parts[0];
@@ -219,7 +236,15 @@ function sRole(concern, c, p) {
 function sDiluent(dil, c, p) {
   const cd = split(c.diluent);
   if (!cd.length) return p.none;
-  return cd.includes(String(dil).toLowerCase()) ? p.same : p.other_inert;
+  const d = String(dil).toLowerCase();
+  if (cd.includes(d)) return p.same;
+  // Another inert: compared by molar heat capacity (mirrors s_diluent).
+  const cp = {};
+  for (const [k, v] of Object.entries(p.molar_cp_298K_kJ_per_kmolK || {})) cp[k.toLowerCase()] = v;
+  const u = get(cp, d, null);
+  const k = get(p, "cp_ratio_exponent", 1);
+  const vals = u === null ? [] : cd.filter((x) => x in cp).map((x) => Math.pow(Math.min(u, cp[x]) / Math.max(u, cp[x]), k));
+  return vals.length ? Math.max(...vals) : p.other_inert;
 }
 function evidence(c, e) {
   const inv = c._inv;
@@ -255,8 +280,7 @@ function similarities(sc, c, cfg) {
   const hasV = sc.flow_cms !== undefined && sc.flow_cms !== null;
   if (sc.flow_state || hasV) {
     S.flow = sFlow(sc.flow_state, hasV ? sc.flow_cms : null, ce, sim);
-    const r = range(ce, "flow_min_cms", "flow_max_cms");
-    if (hasV && r) speed = logGauss(sc.flow_cms, r[0], r[1], sim.flow_speed.sigma_ln, sim.flow_speed.offset_cms);
+    if (hasV) speed = speedSim(sc.flow_cms, ce, sim)[1];
   }
   if (sc.fuel_phase || sc.fuel_class || sc.fuel_material) S.fuel = sFuel(sc, ce, sim.fuel);
   if (sc.sample_geometry || sc.thermal_regime) S.geometry = sGeometry(sc, ce, sim.geometry);
@@ -264,7 +288,7 @@ function similarities(sc, c, cfg) {
   if (sc.concern === "suppression" && sc.diluent) S.diluent = sDiluent(sc.diluent, ce, sim.diluent);
   return [S, fallback, speed, ce];
 }
-function scoreConfig(sc, c, cfg, weights, rawS, caps) {
+function scoreConfig(sc, c, cfg, weights, rawS, caps, assumed = []) { // assumed: fallback dims ("o2", "pressure")
   const sim = cfg.similarity;
   const S = {}, unknown = [];
   for (const [d, v] of Object.entries(rawS)) {
@@ -291,28 +315,54 @@ function scoreConfig(sc, c, cfg, weights, rawS, caps) {
   let full = 0;
   for (const [k, v] of Object.entries(weights)) if (v > 0 && (k !== "diluent" || sc.concern === "suppression")) full += v;
   let knownW = 0;
-  for (const d of Object.keys(w)) if (!unknown.includes(d)) knownW += weights[d];
+  // Confidence counts only what was compared with a recorded value (mirrors score_config).
+  for (const d of Object.keys(w)) if (!unknown.includes(d) && !assumed.includes(d)) knownW += weights[d];
   const coverage = full ? knownW / full : 0.0;
   const contributions = {};
   for (const d of Object.keys(w)) contributions[d] = w[d] * S[d];
   return { score, raw, gate, evidence: M, similarity: S, weights: w, unknown, coverage, contributions };
 }
 function fmtRange(c, lo, hi, unit) {
-  const r = range(c, lo, hi);
-  if (!r) return "not reported";
-  return r[0] === r[1] ? `${fmtG(r[0])}${unit}` : `${fmtG(r[0])}–${fmtG(r[1])}${unit}`;
+  // Text only (mirrors _fmt_range). When one end is not recorded, say so ("up to 40 cm/s" in the
+  // PSI-26 record is not "at 40 cm/s"). Similarity still uses range(), which treats the recorded end as both ends.
+  const a = f(c[lo]), b = f(c[hi]);
+  if (a === null && b === null) return "not reported";
+  if (a === null) return `up to ${fmtG(b)}${unit}`;
+  if (b === null) return `at least ${fmtG(a)}${unit}`;
+  return a === b ? `${fmtG(a)}${unit}` : `${fmtG(a)}–${fmtG(b)}${unit}`;
+}
+// How a number is worded by where it comes from (mirrors SOURCE_NOTE in scorer.py).
+const SOURCE_NOTE = { record: "named in the PSI record, not a test value", test_matrix: "from the test matrix, not individual tests",
+  team: "team reading, not in the table" };
+function fmtValue(c, v, label, lo, hi, unit, assumed) { // mirrors _fmt_value
+  const r = fmtRange(c, lo, hi, unit);
+  if (assumed) return `${label} not recorded, assumed ${r}`;
+  const note = get(SOURCE_NOTE, c[`${v}_source`] || "", null);
+  return note ? `${label} ${r}, ${note}` : `${label} tested ${r}`;
+}
+function fmtFlow(c) { // mirrors _fmt_flow
+  const r = fmtRange(c, "flow_min_cms", "flow_max_cms", " cm/s");
+  const head = `flow ${c.flow_config || "n/a"}`;
+  if (r === "not reported") return `${head}, speed not reported`;
+  const text = r.startsWith("up to") || r.startsWith("at least") ? `${head}, ${r}` : `${head} at ${r}`;
+  const note = get(SOURCE_NOTE, c.flow_source || "", null);
+  return note ? `${text}, ${note}` : text;
 }
 function fill(tpl, vars) { return tpl.replace(/\{(\w+)\}/g, (_, k) => vars[k]); }
 function explain(sc, c, s, cfg, fallback, speed) {
   const sim = s.similarity, W = cfg.warnings;
   const labels = { o2: "O2", pressure: "pressure", flow: "flow", fuel: "fuel", geometry: "sample shape", role: "research purpose", diluent: "diluent" };
   const known = Object.keys(s.contributions).filter((d) => !s.unknown.includes(d));
-  const best = [...known].sort((a, b) => -s.contributions[a] - -s.contributions[b]).slice(0, 2);
+  const fb = fallback || [];
+  const assumed = new Set([...(fb.includes("O2") ? ["o2"] : []), ...(fb.includes("pressure") ? ["pressure"] : [])]);
+  // Reasons come from recorded values first; an assumed (not recorded) value is a reason only if nothing else is left.
+  const best = [...known].sort((a, b) => (assumed.has(a) - assumed.has(b)) || (-s.contributions[a] - -s.contributions[b])).slice(0, 2);
   const gaps = [...known].sort((a, b) => sim[a] - sim[b]).slice(0, 1);
   const detail = {
-    o2: `O2 tested ${fmtRange(c, "o2_min_pct", "o2_max_pct", "%")}`,
-    pressure: `pressure tested ${fmtRange(c, "pressure_min_kpa", "pressure_max_kpa", " kPa")}`,
-    flow: `flow ${c.flow_config || "n/a"} at ${fmtRange(c, "flow_min_cms", "flow_max_cms", " cm/s")}`,
+    // "tested" only for numbers from an experimental table; assumed, record and matrix values say so.
+    o2: fmtValue(c, "o2", "O2", "o2_min_pct", "o2_max_pct", "%", fb.includes("O2")),
+    pressure: fmtValue(c, "pressure", "pressure", "pressure_min_kpa", "pressure_max_kpa", " kPa", fb.includes("pressure")),
+    flow: fmtFlow(c),
     fuel: `fuel ${c.fuel_material}`,
     geometry: `${c.sample_geometry} (${c.thermal_regime || "regime n/a"})`,
     role: `role ${c._inv.fire_safety_role}`,
@@ -321,7 +371,8 @@ function explain(sc, c, s, cfg, fallback, speed) {
   const why = best.map((d) => `${labels[d]} match ${sim[d].toFixed(2)} (${detail[d]})`).join("; ");
   const gap = gaps.filter((d) => sim[d] < 0.9).map((d) => `${labels[d]} ${sim[d].toFixed(2)} (${detail[d]})`).join("; ");
   const warns = [];
-  const o2max = f(c.o2_max_pct);
+  const stream = (c.o2_reference || "") === "oxidizer_stream";
+  const o2max = stream ? null : f(c.o2_max_pct);
   if (sc.o2_pct !== undefined && sc.o2_pct !== null && o2max !== null && sc.o2_pct > o2max) {
     warns.push({ code: "o2_above_result", message: fill(W.o2_above_result, { user: fmtG(sc.o2_pct), max: fmtG(o2max) }) });
   }
@@ -329,9 +380,16 @@ function explain(sc, c, s, cfg, fallback, speed) {
   const out = known.filter((d) => (d === "o2" || d === "pressure") && sim[d] < thr).map((d) => labels[d]);
   if (speed !== null && speed < thr) out.push("flow speed");
   if (out.length) warns.push({ code: "outside_range", message: fill(W.outside_range, { dims: out.join(", ") }) });
+  // pm decision 14:15: two true ranges compared side by side must not read as one test at both values.
+  const isSpan = (lo, hi) => { const a = f(c[lo]), b = f(c[hi]); return a !== null && b !== null && a < b; };
+  if (known.includes("o2") && known.includes("pressure") && !fb.includes("O2") && !fb.includes("pressure") &&
+      isSpan("o2_min_pct", "o2_max_pct") && isSpan("pressure_min_kpa", "pressure_max_kpa")) {
+    warns.push({ code: "ranges_separate", message: W.ranges_separate });
+  }
   if (sc.fuel_phase === "solid" && (c.fuel_phase || "").toLowerCase() === "gas") warns.push({ code: "gas_for_solid", message: W.gas_for_solid });
-  if ((c.o2_reference || "") === "oxidizer_stream" && "o2" in sim) warns.push({ code: "oxidizer_stream", message: W.oxidizer_stream });
-  if (s.unknown.length) warns.push({ code: "not_reported", message: fill(W.not_reported, { dims: s.unknown.map((d) => labels[d]).join(", ") }) });
+  if (stream && "o2" in sim) warns.push({ code: "oxidizer_stream", message: W.oxidizer_stream });
+  const missing = s.unknown.filter((d) => !(stream && d === "o2")); // O2 of a stream is recorded, just not comparable
+  if (missing.length) warns.push({ code: "not_reported", message: fill(W.not_reported, { dims: missing.map((d) => labels[d]).join(", ") }) });
   if (fallback.length) warns.push({ code: "fallback", message: fill(W.fallback, { dims: fallback.join(" and ") }) });
   if (c._inv.platform === "ground") warns.push({ code: "ground_analysis", message: W.ground_analysis });
   return [why, gap, warns];
@@ -358,7 +416,12 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
     if (g === "lunar" || g === "martian") warnings.push({ code: "partial_gravity", message: W.partial_gravity });
     else if (g === "earth") warnings.push({ code: "earth_gravity", message: W.earth_gravity });
     let maxO2 = null, maxC = null;
-    for (const c of cfgs) { const v = f(c.o2_max_pct); if (v !== null && (maxO2 === null || v > maxO2)) { maxO2 = v; maxC = c; } }
+    // Highest O2 of any surrounding atmosphere tested (oxidizer streams of inverse flames excluded).
+    for (const c of cfgs) {
+      if ((c.o2_reference || "") === "oxidizer_stream") continue;
+      const v = f(c.o2_max_pct);
+      if (v !== null && (maxO2 === null || v > maxO2)) { maxO2 = v; maxC = c; }
+    }
     if (sc.o2_pct !== undefined && sc.o2_pct !== null && sc.o2_pct > maxO2) {
       warnings.push({ code: "o2_above_all", message: fill(W.o2_above_all, { max_o2: fmtG(maxO2), max_cfg: maxC.config_id, ref: maxC.o2_reference || "ambient" }) });
     }
@@ -372,7 +435,8 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
       if (known.length) caps[d] = Math.max(...known);
     }
     const scored = pre.map(([c, S, fallback, speed, ce]) => {
-      const s = scoreConfig(sc, c, cfg, weights, S, caps);
+      const assumed = fallback.map((x) => ({ O2: "o2", pressure: "pressure" })[x]);
+      const s = scoreConfig(sc, c, cfg, weights, S, caps, assumed);
       const [why, gap, warns] = explain(sc, ce, s, cfg, fallback, speed);
       return {
         config_id: c.config_id, investigation_id: c.investigation_id, psi_accession: c.psi_accession,

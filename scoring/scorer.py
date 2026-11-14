@@ -143,9 +143,9 @@ def interpret(query, cfg):
         put("thermal_regime", "thick", "text")
     if _any(t, kw["rod"]):
         put("sample_geometry", "rod", "text")
-    # numbers with units
-    m = re.search(r"(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)", t) or \
-        re.search(r"(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?", t)
+    # numbers with units ("o2" must stand alone: "CO2 30%" is not 30% oxygen)
+    m = re.search(r"(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])", t) or \
+        re.search(r"(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?", t)
     if m:
         put("o2_pct", float(m.group(1)), "text")
     m = re.search(r"(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)\b", t)
@@ -205,15 +205,23 @@ def _range(c, lo, hi):
 
 
 def s_o2(x, c, p):
+    # An inverse flame's O2 is the burner's oxidizer stream; the surrounding atmosphere is fuel and
+    # inert gas. It is not an atmosphere a crew breathes, so it is never matched with the user's O2.
+    if (c.get("o2_reference") or "") == "oxidizer_stream":
+        return None
     r = _range(c, "o2_min_pct", "o2_max_pct")
     if r is None:
         return None
     lo, hi = r
     if lo <= x <= hi:
         return 1.0
+    # Distance on the log of the O2 ratio (config "log_ratio"): oxygen acts through ratios of its
+    # mole fraction, so 15 against 21% is a larger gap than 30 against 36% (scoring/MODEL_BASIS.md).
     if x > hi:
-        return math.exp(-(x - hi) / p["above_scale_pct"])
-    return math.exp(-(lo - x) / p["below_scale_pct"])
+        return math.exp(-math.log(x / hi) / p["above_scale_ln"])
+    if x <= 0:
+        return 0.0
+    return math.exp(-math.log(lo / x) / p["below_scale_ln"])
 
 
 def _log_gauss(x, lo, hi, sigma, offset=0.0):
@@ -229,18 +237,32 @@ def s_pressure(x, c, p):
     return None if r is None else _log_gauss(x, r[0], r[1], p["sigma_ln"])
 
 
+def _speed(v, c, sim):
+    """Flow-speed similarity and the in-range signal for the outside_range warning.
+    With one end not recorded (PSI-26: "up to 40 cm/s", the tunnel's limit, not a test value), a
+    speed on the open side of that end is neither a match nor a miss: it scores unknown_value and
+    raises no warning. Beyond the end it decays from unknown_value, so the score has no jump there."""
+    a, b = _f(c.get("flow_min_cms")), _f(c.get("flow_max_cms"))
+    if a is None and b is None:
+        return None, None
+    p = sim["flow_speed"]
+    if a is None or b is None:
+        end = b if a is None else a
+        if (a is None and v <= end) or (b is None and v >= end):
+            return sim["unknown_value"], None
+        g = _log_gauss(v, end, end, p["sigma_ln"], p["offset_cms"])
+        return sim["unknown_value"] * g, g
+    s = _log_gauss(v, a, b, p["sigma_ln"], p["offset_cms"])
+    return s, s
+
+
 def s_flow(state, v, c, sim):
     cfgs = _split(c.get("flow_config"))
     s_cfg = None
     if state and cfgs:
         row = sim["flow_config_matrix"][state]
         s_cfg = max(row.get(k, 0.3) for k in cfgs)
-    s_v = None
-    if v is not None:
-        r = _range(c, "flow_min_cms", "flow_max_cms")
-        if r is not None:
-            p = sim["flow_speed"]
-            s_v = _log_gauss(v, r[0], r[1], p["sigma_ln"], p["offset_cms"])
+    s_v = _speed(v, c, sim)[0] if v is not None else None
     parts = [x for x in (s_cfg, s_v) if x is not None]
     if not parts:
         return None
@@ -308,7 +330,13 @@ def s_diluent(dil, c, p):
     cd = [x.lower() for x in _split(c.get("diluent"))]
     if not cd:
         return p["none"]
-    return p["same"] if dil.lower() in cd else p["other_inert"]
+    if dil.lower() in cd:
+        return p["same"]
+    # Another inert: compared by molar heat capacity, the thermal effect of a diluent (scoring/MODEL_BASIS.md).
+    cp = {k.lower(): v for k, v in (p.get("molar_cp_298K_kJ_per_kmolK") or {}).items()}
+    u = cp.get(dil.lower())
+    vals = [(min(u, cp[x]) / max(u, cp[x])) ** p.get("cp_ratio_exponent", 1) for x in cd if u is not None and x in cp]
+    return max(vals) if vals else p["other_inert"]
 
 
 def evidence(c, e):
@@ -347,9 +375,8 @@ def similarities(sc, c, cfg):
     speed_in_range = None
     if sc.get("flow_state") or sc.get("flow_cms") is not None:
         S["flow"] = s_flow(sc.get("flow_state"), sc.get("flow_cms"), c, sim)
-        r = _range(c, "flow_min_cms", "flow_max_cms")
-        if sc.get("flow_cms") is not None and r is not None:
-            speed_in_range = _log_gauss(sc["flow_cms"], r[0], r[1], sim["flow_speed"]["sigma_ln"], sim["flow_speed"]["offset_cms"])
+        if sc.get("flow_cms") is not None:
+            speed_in_range = _speed(sc["flow_cms"], c, sim)[1]
     if any(sc.get(k) for k in ("fuel_phase", "fuel_class", "fuel_material")):
         S["fuel"] = s_fuel(sc, c, sim["fuel"])
     if sc.get("sample_geometry") or sc.get("thermal_regime"):
@@ -360,7 +387,8 @@ def similarities(sc, c, cfg):
     return S, fallback, speed_in_range, c
 
 
-def score_config(sc, c, cfg, weights, raw_S, caps):
+def score_config(sc, c, cfg, weights, raw_S, caps, assumed=()):
+    """assumed: dimensions whose catalog value was filled by the atmosphere fallback ("o2", "pressure")."""
     sim = cfg["similarity"]
     S, unknown = {}, []
     for d, v in raw_S.items():
@@ -384,7 +412,9 @@ def score_config(sc, c, cfg, weights, raw_S, caps):
     M = evidence(c, cfg["evidence"])
     score = 100.0 * M * gate * raw
     full = sum(v for k, v in weights.items() if v > 0 and (k != "diluent" or sc["concern"] == "suppression"))
-    known_w = sum(weights[d] for d in w if d not in unknown)
+    # Confidence counts only what was compared with a recorded value: an assumed (fallback) value
+    # is scored, but it is not evidence that the configuration matches.
+    known_w = sum(weights[d] for d in w if d not in unknown and d not in assumed)
     coverage = known_w / full if full else 0.0
     return dict(score=score, raw=raw, gate=gate, evidence=M, similarity=S, weights=w,
                 unknown=unknown, coverage=coverage,
@@ -392,10 +422,44 @@ def score_config(sc, c, cfg, weights, raw_S, caps):
 
 
 def _fmt_range(c, lo, hi, unit):
-    r = _range(c, lo, hi)
-    if r is None:
+    # Text only. When one end is not recorded, say so ("up to 40 cm/s" in the PSI-26 record is
+    # not "at 40 cm/s"). Similarity still uses _range, which treats the recorded end as both ends.
+    a, b = _f(c.get(lo)), _f(c.get(hi))
+    if a is None and b is None:
         return "not reported"
-    return f"{r[0]:g}{unit}" if r[0] == r[1] else f"{r[0]:g}–{r[1]:g}{unit}"
+    if a is None:
+        return f"up to {b:g}{unit}"
+    if b is None:
+        return f"at least {a:g}{unit}"
+    return f"{a:g}{unit}" if a == b else f"{a:g}–{b:g}{unit}"
+
+
+def _is_span(c, lo, hi):
+    a, b = _f(c.get(lo)), _f(c.get(hi))
+    return a is not None and b is not None and a < b
+
+
+# How a number is worded by where it comes from (the catalog's o2_source, pressure_source, flow_source).
+SOURCE_NOTE = {"record": "named in the PSI record, not a test value", "test_matrix": "from the test matrix, not individual tests",
+               "team": "team reading, not in the table"}
+
+
+def _fmt_value(c, var, label, lo, hi, unit, assumed):
+    r = _fmt_range(c, lo, hi, unit)
+    if assumed:  # filled in by the atmosphere fallback: never worded as "tested"
+        return f"{label} not recorded, assumed {r}"
+    note = SOURCE_NOTE.get(c.get(f"{var}_source") or "")
+    return f"{label} {r}, {note}" if note else f"{label} tested {r}"
+
+
+def _fmt_flow(c):
+    r = _fmt_range(c, "flow_min_cms", "flow_max_cms", " cm/s")
+    head = f"flow {c.get('flow_config') or 'n/a'}"
+    if r == "not reported":
+        return f"{head}, speed not reported"
+    text = f"{head}, {r}" if r.startswith(("up to", "at least")) else f"{head} at {r}"
+    note = SOURCE_NOTE.get(c.get("flow_source") or "")
+    return f"{text}, {note}" if note else text
 
 
 def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
@@ -404,12 +468,17 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
     labels = {"o2": "O2", "pressure": "pressure", "flow": "flow", "fuel": "fuel", "geometry": "sample shape",
               "role": "research purpose", "diluent": "diluent"}
     known = [d for d in s["contributions"] if d not in s["unknown"]]
-    best = sorted(known, key=lambda d: -s["contributions"][d])[:2]
+    assumed = {"o2"} if "O2" in fallback else set()
+    if "pressure" in fallback:
+        assumed.add("pressure")
+    # Reasons come from recorded values first; an assumed (not recorded) value is a reason only if nothing else is left.
+    best = sorted(known, key=lambda d: (d in assumed, -s["contributions"][d]))[:2]
     gaps = sorted(known, key=lambda d: sim[d])[:1]
     detail = {
-        "o2": f"O2 tested {_fmt_range(c, 'o2_min_pct', 'o2_max_pct', '%')}",
-        "pressure": f"pressure tested {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}",
-        "flow": f"flow {c.get('flow_config') or 'n/a'} at {_fmt_range(c, 'flow_min_cms', 'flow_max_cms', ' cm/s')}",
+        # "tested" only for numbers from an experimental table; assumed, record and matrix values say so.
+        "o2": _fmt_value(c, "o2", "O2", "o2_min_pct", "o2_max_pct", "%", "O2" in fallback),
+        "pressure": _fmt_value(c, "pressure", "pressure", "pressure_min_kpa", "pressure_max_kpa", " kPa", "pressure" in fallback),
+        "flow": _fmt_flow(c),
         "fuel": f"fuel {c.get('fuel_material')}",
         "geometry": f"{c.get('sample_geometry')} ({c.get('thermal_regime') or 'regime n/a'})",
         "role": f"role {c['_inv'].get('fire_safety_role')}",
@@ -418,7 +487,8 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
     why = "; ".join(f"{labels[d]} match {sim[d]:.2f} ({detail[d]})" for d in best)
     gap = "; ".join(f"{labels[d]} {sim[d]:.2f} ({detail[d]})" for d in gaps if sim[d] < 0.9)
     warns = []
-    o2max = _f(c.get("o2_max_pct"))
+    stream = (c.get("o2_reference") or "") == "oxidizer_stream"
+    o2max = None if stream else _f(c.get("o2_max_pct"))
     if sc.get("o2_pct") is not None and o2max is not None and sc["o2_pct"] > o2max:
         warns.append({"code": "o2_above_result", "message": W["o2_above_result"].format(user=f"{sc['o2_pct']:g}", max=f"{o2max:g}")})
     thr = cfg.get("outside_range_threshold", 0.9)
@@ -427,12 +497,17 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
         out.append("flow speed")
     if out:
         warns.append({"code": "outside_range", "message": W["outside_range"].format(dims=", ".join(out))})
+    # pm decision 14:15: two true ranges compared side by side must not read as one test at both values.
+    if "o2" in known and "pressure" in known and not ({"O2", "pressure"} & set(fallback)) \
+            and _is_span(c, "o2_min_pct", "o2_max_pct") and _is_span(c, "pressure_min_kpa", "pressure_max_kpa"):
+        warns.append({"code": "ranges_separate", "message": W["ranges_separate"]})
     if sc.get("fuel_phase") == "solid" and (c.get("fuel_phase") or "").lower() == "gas":
         warns.append({"code": "gas_for_solid", "message": W["gas_for_solid"]})
-    if (c.get("o2_reference") or "") == "oxidizer_stream" and "o2" in sim:
+    if stream and "o2" in sim:
         warns.append({"code": "oxidizer_stream", "message": W["oxidizer_stream"]})
-    if s["unknown"]:
-        warns.append({"code": "not_reported", "message": W["not_reported"].format(dims=", ".join(labels[d] for d in s["unknown"]))})
+    missing = [d for d in s["unknown"] if not (stream and d == "o2")]  # O2 of a stream is recorded, just not comparable
+    if missing:
+        warns.append({"code": "not_reported", "message": W["not_reported"].format(dims=", ".join(labels[d] for d in missing))})
     if fallback:
         warns.append({"code": "fallback", "message": W["fallback"].format(dims=" and ".join(fallback))})
     if c["_inv"].get("platform") == "ground":
@@ -461,7 +536,9 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
         warnings.append({"code": "partial_gravity", "message": W["partial_gravity"]})
     elif g == "earth":
         warnings.append({"code": "earth_gravity", "message": W["earth_gravity"]})
-    o2s = [(_f(c.get("o2_max_pct")), c) for c in cfgs if _f(c.get("o2_max_pct")) is not None]
+    # Highest O2 of any surrounding atmosphere tested (oxidizer streams of inverse flames excluded).
+    o2s = [(_f(c.get("o2_max_pct")), c) for c in cfgs
+           if _f(c.get("o2_max_pct")) is not None and (c.get("o2_reference") or "") != "oxidizer_stream"]
     max_o2, max_c = max(o2s, key=lambda x: x[0])
     if sc.get("o2_pct") is not None and sc["o2_pct"] > max_o2:
         warnings.append({"code": "o2_above_all", "message": W["o2_above_all"].format(
@@ -480,7 +557,8 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
             caps[d] = max(known)
     scored = []
     for c, S, fallback, speed, c_eff in pre:
-        s = score_config(sc, c, cfg, weights, S, caps)
+        assumed = {{"O2": "o2", "pressure": "pressure"}[x] for x in fallback}
+        s = score_config(sc, c, cfg, weights, S, caps, assumed)
         why, gap, warns = explain(sc, c_eff, s, cfg, fallback, speed)
         scored.append(dict(
             config_id=c["config_id"], investigation_id=c["investigation_id"], psi_accession=c["psi_accession"],

@@ -276,11 +276,14 @@ FAIL_CLASSES = {
                                    "raw number without it",
     "unit_ignored": "the number is copied although the unit written after it in the cell is not the unit of "
                     "the variable",
-    "declared_exception_without_flag": "a value of a kind that README declares as 'not literally in a NASA cell' "
-                                       "(oxygen midpoint, material from the BASS-II ReadMe, cell of the row "
+    "declared_exception_without_flag": "a value of a kind that README declares (one of two oxygen numbers named "
+                                       "by a publication, material from the BASS-II ReadMe, cell of the row "
                                        "above) but the test does not carry the flag README names for it",
     "spec_rule_gives_other_value": "the rule written in the spec for this column (sources.json "
-                                   "'_meta.sample_keywords') leads from the cell to a different value, or to none",
+                                   "'_meta.sample_keywords' or '_meta.documented_start') leads from the cell "
+                                   "to a different value, or to none",
+    "two_number_cell_not_documented": "an oxygen value from a cell with two numbers whose exact text is not "
+                                      "listed under 'documented_start' (sources.json): such a cell gives no value",
 }
 PASS_CLASSES = {
     "exact": "same text (ignoring case) or the same number as the raw cell",
@@ -294,13 +297,14 @@ PASS_CLASSES = {
     "text_in_cell": "the value is written inside a longer cell",
     "material_alias_in_cell": "the cell names a material of materials.json (id or alias) and the value is "
                               "another alias of the same material",
-    "declared_exception_flagged": "a value that is not literally in the cell, of a kind README declares (table "
-                                  "'Values that are not literally in a NASA cell'): it is exactly what the "
-                                  "declared rule gives and the test carries the named flag",
+    "declared_exception_flagged": "a value of a kind README declares in the table 'Values that are not literally "
+                                  "in a NASA cell' (one of two oxygen numbers written, named by a publication; "
+                                  "material from the BASS-II ReadMe; cell of the row above): it is exactly what "
+                                  "the declared rule gives and the test carries the named flag",
 }
 # kind of declared exception -> flag suffix that the test must carry on the variable
 EXCEPTION_FLAGS = {
-    "oxygen_midpoint": "range_in_source_midpoint_used",
+    "oxygen_start_named_in_publication": "range_in_source_start_value_named_in_publication",
     "material_from_readme": "not_written_in_cell_named_in_readme",
     "cell_of_row_above": "blank_in_source_value_of_row_above_used",
 }
@@ -420,6 +424,16 @@ def classify(cell, value, variable, col, ctx):
             return "vocabulary", "sample_keywords " + basis
         return "spec_rule_gives_other_value", "sample_keywords (%s) gives %s" % (
             reading["basis"], "no value" if want is None else repr(want))
+    if col.get("rule") == "o2_text" and variable == "o2_pct" and len(number_tokens(cell)) >= 2:
+        # sources.json '_meta.documented_start': a two-number cell gives a value only if its exact text is listed
+        entry = (params.get("documented_start") or {}).get(cell)
+        if entry is None:
+            return "two_number_cell_not_documented", ""
+        written = [t["v"] for t in number_tokens(cell)]
+        if v is not None and close(fnum(entry.get("value")), v) and any(close(w, v) for w in written) and \
+                entry.get("reference_item") in ctx.reference_items:
+            return "declared_exception", "oxygen_start_named_in_publication|documented_start: %s" % entry["reference_item"]
+        return "spec_rule_gives_other_value", "documented_start gives %s (%s)" % (entry.get("value"), entry.get("reference_item"))
     if v is not None:
         if c is not None and close(c, v):
             return "exact", ""
@@ -538,9 +552,6 @@ def trace_rows(ctx):
                     kind = None
                     if item["cls"] == "declared_exception":
                         kind, _, item["note"] = item["note"].partition("|")
-                    elif item["cls"] == "computed_midpoint" and r["variable"] == "o2_pct" and \
-                            len(number_tokens(item["cell"])) == 2:
-                        kind = "oxygen_midpoint"      # README: midpoint of an oxygen range written in the cell
                     elif item["cell"] == "" and col_name in [c.strip() for c in source.get("fill_down", [])]:
                         above = int(row_no) - 1
                         while above >= 2 and (idx >= len(table[above - 1]) or table[above - 1][idx] == ""):
@@ -690,9 +701,16 @@ def check_a3(ctx):
             elif r["unit"] != ctx.var_unit.get(var, "") or r["kind"] != kinds.get(var):
                 res.fail(problem="unit or kind differs from variables.json", unit=r["unit"], kind=r["kind"], **key)
     known = set(variables)
+    derived = ctx.spec("variables")["derived"]
     for (test_id, var), rows in idx.items():
         if test_id not in ctx.tests_by_id or var not in known:
             res.fail(problem="values_long row without a test or a tests.csv column", test_id=test_id, variable=var)
+        for r in rows:
+            col = r["source_column"]
+            if col.startswith("(") and col != CONSTANT_MARK and not (col == MATERIAL_MARK and var == "material_id") \
+                    and not (var in derived and col == "(derived: %s)" % derived[var]["formula"]):
+                res.fail(problem="source_column in parentheses is not a constant, the material vocabulary or the "
+                                 "formula of the variable", test_id=test_id, variable=var, source_column=col)
     res.checked = cells
     res.numbers = {"non_empty_cells": cells, "values_long_rows": len(ctx.table("values_long.csv"))}
     return res
@@ -945,6 +963,80 @@ def check_a7(ctx):
     return res
 
 
+def cell_of(ctx, test, column):
+    """The raw cell of a test in a column, or None when it cannot be located."""
+    table = ctx.raw(test["source_file"])
+    header = table[0]
+    name = column.strip()
+    n = int(fnum(test["source_row"]) or 0)
+    if name not in header or not 2 <= n <= len(table) or header.index(name) >= len(table[n - 1]):
+        return None
+    return table[n - 1][header.index(name)]
+
+
+@check("A8_oxygen_two_number_cells",
+       "An oxygen cell with two numbers gives a value only if 'documented_start' lists its exact text: then "
+       "o2_pct is the listed number, which is one of the two written, and the test carries the flag "
+       "'range_in_source_start_value_named_in_publication'; otherwise o2_pct is empty with the flag "
+       "'range_in_source_start_value_not_documented'. o2_range_as_written holds the cell text in both cases.")
+def check_a8(ctx):
+    res = Result()
+    named = "o2_pct:" + EXCEPTION_FLAGS["oxygen_start_named_in_publication"]
+    not_documented = "o2_pct:range_in_source_start_value_not_documented"
+    seen = False
+    numbers = {"two_number_cells": 0, "listed_in_documented_start": 0, "not_listed": 0}
+    for s in ctx.sources:
+        for col in s.get("columns", []):
+            if col.get("rule") != "o2_text":
+                continue
+            seen = True
+            for text, entry in ((col.get("params") or {}).get("documented_start") or {}).items():
+                key = {"source_id": s["id"], "documented_start": text}
+                if not any(close(t["v"], fnum(entry.get("value"))) for t in number_tokens(text)):
+                    res.fail(problem="listed value is not one of the numbers of the cell text", value=entry.get("value"), **key)
+                if entry.get("reference_item") not in ctx.reference_items:
+                    res.fail(problem="reference_item is not in references.json", reference_item=entry.get("reference_item"), **key)
+    for t in ctx.tests:
+        source = ctx.source_by_file.get(t["source_file"]) or {}
+        for col in source.get("columns", []):
+            if col.get("rule") != "o2_text":
+                continue
+            cell = cell_of(ctx, t, col["from"])
+            if cell is None:
+                continue
+            res.checked += 1
+            targets = col["to"] if isinstance(col["to"], list) else [col["to"]]
+            flags = split_list(t["flags"])
+            key = {"file": t["source_file"], "row": t["source_row"], "test_id": t["test_id"], "raw_cell": cell,
+                   "o2_pct": t.get("o2_pct", ""), "flags": ";".join(f for f in flags if f.startswith("o2_pct:"))}
+            two = len(number_tokens(cell)) >= 2
+            if "o2_range_as_written" in targets and t.get("o2_range_as_written", "") != (cell if two else ""):
+                res.fail(problem="o2_range_as_written is not the cell text of a two-number cell",
+                         o2_range_as_written=t.get("o2_range_as_written", ""), **key)
+            if not two:
+                if named in flags or not_documented in flags:
+                    res.fail(problem="two-number flag on a cell that does not hold two numbers", **key)
+                continue
+            numbers["two_number_cells"] += 1
+            entry = ((col.get("params") or {}).get("documented_start") or {}).get(cell)
+            if entry is not None:
+                numbers["listed_in_documented_start"] += 1
+                if not close(fnum(t.get("o2_pct", "")), fnum(entry.get("value"))):
+                    res.fail(problem="o2_pct is not the number documented_start names", documented=entry.get("value"), **key)
+                if named not in flags or not_documented in flags:
+                    res.fail(problem="flags of a listed two-number cell are wrong", expected=named, **key)
+            else:
+                numbers["not_listed"] += 1
+                if t.get("o2_pct", "") != "":
+                    res.fail(problem="value from a two-number cell that documented_start does not list", **key)
+                if not_documented not in flags or named in flags:
+                    res.fail(problem="flags of an unlisted two-number cell are wrong", expected=not_documented, **key)
+    if not seen:
+        raise Skip("no column of sources.json uses rule 'o2_text'")
+    res.numbers = dict(numbers, oxygen_cells=res.checked)
+    return res
+
+
 # ----------------------------------------------------------------------------
 # B. constants, derived values, material ids
 # ----------------------------------------------------------------------------
@@ -1110,6 +1202,66 @@ def check_c1(ctx):
     return res
 
 
+@check("C2_consistency_rules",
+       "A raw reading for which a 'consistency' expression of variables.json holds (for example a final "
+       "oxygen below 5, or above the initial oxygen + 0.5) has no value in tests.csv and carries "
+       "'<variable>:<flag>'; no other reading of the variable was emptied by the rule or carries its flag.")
+def check_c2(ctx):
+    res = Result()
+    rules = (ctx.spec("variables").get("consistency") or {}).get("rules") or []
+    if not rules:
+        raise Skip("variables.json has no consistency rules")
+    held = {"%s:%s" % (r["variable"], r["flag"]): 0 for r in rules}
+    by_var = {}
+    for r in rules:
+        by_var.setdefault(r["variable"], []).append(r)
+    for t in ctx.tests:
+        source = ctx.source_by_file.get(t["source_file"]) or {}
+        flags = split_list(t["flags"])
+        names = {c: fnum(t.get(c, "")) for c in ctx.variable_columns}
+        for var, var_rules in by_var.items():
+            rule_flags = ["%s:%s" % (var, r["flag"]) for r in var_rules]
+            # a recorded value must not satisfy any rule
+            if t.get(var, "") != "":
+                for r in var_rules:
+                    if evaluate(r["expr"], names):
+                        res.fail(problem="value recorded although the expression holds", test_id=t["test_id"],
+                                 variable=var, value=t[var], expr=r["expr"])
+            cols = [c for c in source.get("columns", []) if c.get("to") == var]
+            if not cols:
+                if any(f in flags for f in rule_flags):
+                    res.fail(problem="consistency flag on a test whose table has no column for the variable",
+                             test_id=t["test_id"], variable=var, flags=t["flags"])
+                continue
+            cell = cell_of(ctx, t, cols[0]["from"])
+            raw = fnum(cell) if cell is not None else None
+            if raw is None:
+                if any(f in flags for f in rule_flags):
+                    res.fail(problem="consistency flag although the raw cell is not a number", test_id=t["test_id"],
+                             variable=var, raw_cell=cell, flags=t["flags"])
+                continue
+            raw *= float((cols[0].get("params") or {}).get("factor", 1))
+            res.checked += 1
+            key = {"file": t["source_file"], "row": t["source_row"], "test_id": t["test_id"], "variable": var,
+                   "raw_cell": cell, "value": t.get(var, ""), "o2_pct": t.get("o2_pct", ""),
+                   "flags": ";".join(f for f in flags if f.split(":")[0] == var)}
+            first = next((r for r in var_rules if evaluate(r["expr"], dict(names, **{var: raw}))), None)
+            other_flags = [f for f in flags if f.split(":")[0] == var and f not in rule_flags]
+            if first is not None:
+                flag = "%s:%s" % (var, first["flag"])
+                held[flag] += 1
+                if t.get(var, "") != "" or flag not in flags:
+                    res.fail(problem="expression holds for the raw reading but the value is kept or the flag is missing",
+                             expr=first["expr"], expected_flag=flag, **key)
+            else:
+                if any(f in flags for f in rule_flags):
+                    res.fail(problem="consistency flag although no expression holds for the raw reading", **key)
+                elif t.get(var, "") == "" and not other_flags:
+                    res.fail(problem="reading emptied although no expression holds and no other flag explains it", **key)
+    res.numbers = {"raw_readings": res.checked, "readings_for_which_a_rule_holds": held}
+    return res
+
+
 # ----------------------------------------------------------------------------
 # D. needs
 # ----------------------------------------------------------------------------
@@ -1118,28 +1270,65 @@ def in_scope(test, need):
     return all(test.get(k, "") in allowed for k, allowed in (need.get("scope") or {}).items())
 
 
-def has_required(test, need):
-    return all(test.get(v, "") != "" for v in need["conditions_required"])
+def documented_variables(ctx, need, source_id):
+    """Required conditions of the need that a document about the whole table meets (needs.json
+    'documented_rule'): listed under 'conditions_documented_ok' and present in the table's
+    'documented_elsewhere' (sources.json)."""
+    source = ctx.source_by_id.get(source_id) or {}
+    documented = {e.get("variable") for e in source.get("documented_elsewhere", [])}
+    return [v for v in need["conditions_required"] if v in (need.get("conditions_documented_ok") or []) and v in documented]
+
+
+def has_required(ctx, test, need):
+    """Every required condition is recorded for the test, or is met by a document about its table. The
+    test still has no value for a documented variable."""
+    documented = documented_variables(ctx, need, test.get("source_id", ""))
+    return all(test.get(v, "") != "" or v in documented for v in need["conditions_required"])
 
 
 def has_outcome(test, need):
     return any(test.get(v, "") != "" for v in need["outcomes_any"])
 
 
+def supported_links(need):
+    """Only links with verdict 'supported' are counted (needs.json 'stated_by_rule')."""
+    return [s for s in need.get("stated_by", []) if s.get("verdict") == "supported"]
+
+
 def stated_investigations(need):
-    return {s["investigation_id"] for s in need.get("stated_by", [])}
+    return {s["investigation_id"] for s in supported_links(need)}
+
+
+def publication_quote(ctx, link):
+    item = ctx.reference_items.get(link.get("publication") or "")
+    return (item[1].get("quote") or "") if item else ""
+
+
+def link_rows(ctx):
+    """All links of needs.json as the rows objective_links.csv must hold."""
+    def load():
+        return [{"need_id": n["id"], "investigation_id": s.get("investigation_id", ""),
+                 "record_field": s.get("field") or "", "quote": s.get("quote") or "",
+                 "publication_item": s.get("publication") or "", "publication_quote": publication_quote(ctx, s),
+                 "verdict": s.get("verdict") or ""}
+                for n in ctx.needs for s in n.get("stated_by", [])]
+    return ctx._get("link_rows", load)
+
+
+LINK_FIELDS = ("record_field", "quote", "publication_item", "publication_quote", "verdict")
 
 
 def need_links(ctx):
     """Recomputed need_tests: {need_id: {test_id: objective_link}} for in-scope tests that record every
-    required condition and at least one outcome."""
+    required condition (or have it documented for their table) and at least one outcome; 'stated' where
+    the investigation has a link with verdict 'supported'."""
     def load():
         out = {}
         for need in ctx.needs:
             stated = stated_investigations(need)
             out[need["id"]] = {
                 t["test_id"]: ("stated" if t["investigation_id"] in stated else "not_stated")
-                for t in ctx.tests if in_scope(t, need) and has_required(t, need) and has_outcome(t, need)}
+                for t in ctx.tests if in_scope(t, need) and has_required(ctx, t, need) and has_outcome(t, need)}
         return out
     return ctx._get("need_links", load)
 
@@ -1149,8 +1338,9 @@ def usable_ids(ctx, need_id):
 
 
 @check("D1_need_tests",
-       "need_tests.csv lists exactly the in-scope tests that record every required condition and at least "
-       "one outcome of each need, with objective_link 'stated' only when the investigation is in 'stated_by'.")
+       "need_tests.csv lists exactly the in-scope tests that record every required condition (or have it "
+       "documented for their table) and at least one outcome of each need, with objective_link 'stated' only "
+       "when a 'stated_by' link of the investigation has verdict 'supported'.")
 def check_d1(ctx):
     res = Result()
     links = need_links(ctx)
@@ -1179,8 +1369,8 @@ def check_d1(ctx):
 
 @check("D2_capability_matrix",
        "capability_matrix.csv has one row per need and source whose counts (tests in scope, with required "
-       "conditions, with an outcome, usable), status and objective_link equal the recomputation from "
-       "tests.csv and needs.json.")
+       "conditions, with an outcome, usable), status, missing and documented conditions, objective_link and "
+       "publication quote equal the recomputation from tests.csv, needs.json and sources.json.")
 def check_d2(ctx):
     res = Result()
     have = {(r["need_id"], r["source_id"]): r for r in ctx.table("capability_matrix.csv")}
@@ -1200,13 +1390,16 @@ def check_d2(ctx):
                    "investigation_id": s["investigation_id"], "row_unit": s.get("row_unit", "")}
             if "columns" not in s:
                 exp.update(status="not_test_level", tests=0, tests_with_required_conditions=0,
-                           tests_with_outcome=0, usable_tests=0, required_missing=[], outcomes_present=[])
+                           tests_with_outcome=0, usable_tests=0, required_missing=[], outcomes_present=[],
+                           required_documented_not_in_table=[])
             else:
                 scope = [t for t in by_source.get(s["id"], []) if in_scope(t, need)]
-                missing = [v for v in need["conditions_required"] if not any(t.get(v, "") != "" for t in scope)]
+                no_value = [v for v in need["conditions_required"] if not any(t.get(v, "") != "" for t in scope)]
+                documented = [v for v in no_value if v in documented_variables(ctx, need, s["id"])]
+                missing = [v for v in no_value if v not in documented]
                 present = [v for v in need["outcomes_any"] if any(t.get(v, "") != "" for t in scope)]
                 if not scope:
-                    status, missing = "out_of_scope", []
+                    status, missing, documented = "out_of_scope", [], []
                 elif present and not missing:
                     status = "measured"
                 elif present:
@@ -1216,11 +1409,14 @@ def check_d2(ctx):
                 else:
                     status = "none"
                 exp.update(status=status, tests=len(scope),
-                           tests_with_required_conditions=sum(1 for t in scope if has_required(t, need)),
+                           tests_with_required_conditions=sum(1 for t in scope if has_required(ctx, t, need)),
                            tests_with_outcome=sum(1 for t in scope if has_outcome(t, need)),
-                           usable_tests=sum(1 for t in scope if has_required(t, need) and has_outcome(t, need)),
-                           required_missing=missing, outcomes_present=present)
+                           usable_tests=sum(1 for t in scope if has_required(ctx, t, need) and has_outcome(t, need)),
+                           required_missing=missing, outcomes_present=present,
+                           required_documented_not_in_table=documented)
             for col, want in exp.items():
+                if col == "required_documented_not_in_table" and col not in row and not want:
+                    continue
                 got = row.get(col, "")
                 if isinstance(want, list):
                     same = sorted(split_list(got)) == sorted(want)
@@ -1232,8 +1428,9 @@ def check_d2(ctx):
                     res.fail(column=col, in_file=got, recomputed=want, **key)
             q = row.get("objective_quote", "")
             if exp["objective_link"] == "stated":
-                mine = [x["quote"] for x in need["stated_by"] if x["investigation_id"] == s["investigation_id"]]
-                if q not in mine and not all(x in q for x in mine):
+                mine = [publication_quote(ctx, x) for x in supported_links(need)
+                        if x["investigation_id"] == s["investigation_id"]]
+                if q == "" or (q not in mine and not all(x in q for x in mine)):
                     res.fail(column="objective_quote", in_file=q[:120], recomputed=mine[0][:120], **key)
             elif q != "":
                 res.fail(column="objective_quote", in_file=q[:120], recomputed="", **key)
@@ -1250,40 +1447,67 @@ def clean_text(html):
 
 
 @check("D3_objective_quotes",
-       "Every 'stated_by' quote of needs.json is literally in the named field of the investigation's PSI "
-       "record (HTML tags removed, whitespace collapsed).")
+       "Every 'stated_by' link of needs.json has a known verdict; its record sentence, where given, is "
+       "literally in the named field of the PSI record; its publication, where given, is a reference item "
+       "with a quote; and a link with verdict 'supported' has a publication.")
 def check_d3(ctx):
     res = Result()
+    meta = ctx.spec("needs")["_meta"]
+    verdicts = meta.get("verdict_values") or []
+    fields = meta.get("stated_by_fields") or []
+    counts = {}
     for need in ctx.needs:
         for s in need.get("stated_by", []):
             res.checked += 1
-            key = {"need_id": need["id"], "investigation_id": s["investigation_id"], "field": s["field"]}
-            path = os.path.join(CATALOG, s["investigation_id"] + ".json")
-            if not os.path.exists(path):
+            inv = s.get("investigation_id")
+            key = {"need_id": need["id"], "investigation_id": inv, "verdict": s.get("verdict")}
+            counts[s.get("verdict")] = counts.get(s.get("verdict"), 0) + 1
+            if verdicts and s.get("verdict") not in verdicts:
+                res.fail(problem="verdict is not one of verdict_values", **key)
+            if not os.path.exists(os.path.join(CATALOG, "%s.json" % inv)):
                 res.fail(problem="no PSI record", **key)
-                continue
-            field = ctx.record(s["investigation_id"]).get(s["field"])
-            if not isinstance(field, str):
-                res.fail(problem="field missing in the record", **key)
-            elif clean_text(s["quote"]) not in clean_text(field):
-                res.fail(problem="quote not in the record field", quote=s["quote"][:160], **key)
-    res.numbers = {"quotes": res.checked}
+            if ("field" in s) != ("quote" in s):
+                res.fail(problem="'field' and 'quote' must come together", **key)
+            elif "field" in s:
+                if fields and s["field"] not in fields:
+                    res.fail(problem="field is not one of stated_by_fields", field=s["field"], **key)
+                problem = quote_in_record(ctx, inv, s["field"], s["quote"])
+                if problem:
+                    res.fail(problem=problem, field=s["field"], quote=s["quote"][:160], **key)
+            if s.get("publication"):
+                item = ctx.reference_items.get(s["publication"])
+                if item is None:
+                    res.fail(problem="publication is not an item of references.json", publication=s["publication"], **key)
+                elif not item[1].get("quote"):
+                    res.fail(problem="publication item has no quote", publication=s["publication"], **key)
+                elif item[1].get("type") not in ("stated_objective", "framework"):
+                    res.fail(problem="publication item is not of type stated_objective or framework",
+                             publication=s["publication"], item_type=item[1].get("type"), **key)
+            elif s.get("verdict") == "supported":
+                res.fail(problem="supported link without a publication", **key)
+            if "field" not in s and not s.get("publication"):
+                res.fail(problem="link with neither a record sentence nor a publication", **key)
+    res.numbers = {"links": res.checked, "per_verdict": dict(sorted(counts.items(), key=str))}
     return res
 
 
 @check("D4_objective_links",
-       "objective_links.csv has exactly the (need, investigation, field, quote) entries of needs.json 'stated_by'.")
+       "objective_links.csv lists exactly the links of needs.json 'stated_by' (all verdicts) with record "
+       "field and sentence, publication item, the quote of that item in references.json, and verdict.")
 def check_d4(ctx):
     res = Result()
-    expected = [(n["id"], s["investigation_id"], s["field"], s["quote"]) for n in ctx.needs for s in n.get("stated_by", [])]
-    have = [(r["need_id"], r["investigation_id"], r["record_field"], r["quote"]) for r in ctx.table("objective_links.csv")]
+    cols = ("need_id", "investigation_id") + LINK_FIELDS
+    expected = [tuple(r[c] for c in cols) for r in link_rows(ctx)]
+    have = [tuple(r.get(c, "") for c in cols) for r in ctx.table("objective_links.csv")]
     res.checked = len(expected)
     for k in sorted(set(expected) - set(have)):
-        res.fail(problem="in needs.json, not in the file", need_id=k[0], investigation_id=k[1], quote=k[3][:100])
+        res.fail(problem="in needs.json, not in the file (or a field differs)", need_id=k[0], investigation_id=k[1],
+                 quote=k[3][:80], publication_item=k[4], publication_quote=k[5][:80], verdict=k[6])
     for k in sorted(set(have) - set(expected)):
-        res.fail(problem="in the file, not in needs.json", need_id=k[0], investigation_id=k[1], quote=k[3][:100])
-    if len(have) != len(set(have)):
-        res.fail(problem="duplicate rows in the file")
+        res.fail(problem="in the file, not in needs.json (or a field differs)", need_id=k[0], investigation_id=k[1],
+                 quote=k[3][:80], publication_item=k[4], publication_quote=k[5][:80], verdict=k[6])
+    if sorted(have) != sorted(expected) and len(have) != len(expected):
+        res.fail(problem="number of rows", in_file=len(have), in_spec=len(expected))
     res.numbers = {"links_in_spec": len(expected), "rows_in_file": len(have)}
     return res
 
@@ -1326,13 +1550,17 @@ def check_d5(ctx):
             key = {"spec": "sources.json", "source_id": s["id"], "variable": e.get("variable")}
             if "reference_item" in e:
                 item = ctx.reference_items.get(e["reference_item"])
-                texts = [clean_text(item[1].get(k, "")) for k in ("quote", "text")] if item else []
-                if not any(clean_text(e.get("quote", "")) in t for t in texts if t):
-                    res.fail(problem="quote not in the references.json item", reference_item=e["reference_item"], **key)
-            else:
+                if item is None:
+                    res.fail(problem="reference_item is not in references.json", reference_item=e["reference_item"], **key)
+                elif not e.get("quote") or clean_text(e["quote"]) not in clean_text(item[1].get("quote", "")):
+                    res.fail(problem="quote is not contained in the quote of the references.json item",
+                             reference_item=e["reference_item"], **key)
+            elif "record_field" in e:
                 problem = quote_in_record(ctx, s["investigation_id"], e.get("record_field"), e.get("quote", ""))
                 if problem:
                     res.fail(problem=problem, field=e.get("record_field"), quote=e.get("quote", "")[:120], **key)
+            else:
+                res.fail(problem="entry has neither record_field nor reference_item", **key)
             n = sum(1 for t in ctx.tests if t["source_id"] == s["id"] and t.get(e.get("variable"), "") != "")
             if n:
                 res.fail(problem="variable documented elsewhere has values in the tests of the table", tests=n, **key)
@@ -1687,7 +1915,7 @@ def population_ids(ctx, ind):
     if pop == "in_scope":
         stated = stated_investigations(need)
         return [t["test_id"] for t in ctx.tests
-                if in_scope(t, need) and has_required(t, need) and t["investigation_id"] in stated]
+                if in_scope(t, need) and has_required(ctx, t, need) and t["investigation_id"] in stated]
     raise ValueError("unknown population " + str(pop))
 
 
@@ -2063,11 +2291,13 @@ def csv_rows_for_envs(ctx):
 
 @check("I2_evidence_status_counts",
        "status, counts and gap codes of every need block equal the environment's row in scenario_needs.csv "
-       "or atmosphere_cells.csv, and index.json carries the same status.")
+       "or atmosphere_cells.csv; index.json carries the same status, the first statement of the block as "
+       "status text, and the caveat of the scenario.")
 def check_i2(ctx):
     res = Result()
     index = {p.get("id"): p for p in evidence_index(ctx).get("packages", [])}
     rows = csv_rows_for_envs(ctx)
+    texts = 0
     for env, need, b in need_blocks(ctx):
         res.checked += 1
         key = {"package": env["id"], "need_id": need["id"]}
@@ -2085,9 +2315,26 @@ def check_i2(ctx):
         codes = [g.get("code") for g in b.get("gaps", [])]
         if codes != split_list(row["gaps"]):
             res.fail(field="gaps", package_value=codes, csv=row["gaps"], **key)
-        if ((index.get(env["id"]) or {}).get("status_by_need") or {}).get(need["id"]) != row["status"]:
+        entry = index.get(env["id"]) or {}
+        if (entry.get("status_by_need") or {}).get(need["id"]) != row["status"]:
             res.fail(field="index.status_by_need", csv=row["status"], **key)
-    res.numbers = {"need_blocks": res.checked}
+        if "status_text_by_need" in entry:
+            texts += 1
+            first = (b.get("statements") or [{}])[0].get("text")
+            if entry["status_text_by_need"].get(need["id"]) != first or not first:
+                res.fail(field="index.status_text_by_need", problem="is not the first statement of the block",
+                         index=str(entry["status_text_by_need"].get(need["id"]))[:100], first_statement=str(first)[:100], **key)
+    for env, pack in packages(ctx):
+        e = (pack or {}).get("environment") or {}
+        entry = index.get(env["id"]) or {}
+        if "caveat" in e or "caveat" in entry:
+            if (entry.get("caveat") or None) != (e.get("caveat") or None):
+                res.fail(package=env["id"], field="index.caveat", problem="differs from environment.caveat")
+            want = (env["spec"].get("caveat") if env["kind"] == "scenario" else None) or None
+            if (e.get("caveat") or None) != want:
+                res.fail(package=env["id"], field="environment.caveat", problem="differs from scenarios.json",
+                         package_value=str(e.get("caveat"))[:100], spec=str(want)[:100])
+    res.numbers = {"need_blocks": res.checked, "status_texts_compared": texts}
     return res
 
 
@@ -2191,21 +2438,23 @@ def check_i4(ctx):
 
 
 @check("I5_evidence_need_context",
-       "objective sentences equal objective_links.csv, the investigations list equals the usable tests per "
+       "objective entries equal the links of needs.json, the investigations list equals the usable tests per "
        "investigation and tier with the title of the PSI record, references equal the need's items in "
        "references.json, and every gap code has a sentence.")
 def check_i5(ctx):
     res = Result()
     links = {}
-    for r in ctx.table("objective_links.csv"):
-        links.setdefault(r["need_id"], []).append(
-            {"investigation_id": r["investigation_id"], "record_field": r["record_field"], "quote": r["quote"]})
+    for r in link_rows(ctx):
+        links.setdefault(r["need_id"], []).append(dict({"investigation_id": r["investigation_id"]}, **{f: r[f] for f in LINK_FIELDS}))
     for env, need, b in need_blocks(ctx):
         res.checked += 1
         marks = env_marks(ctx, env)
         key = {"package": env["id"], "need_id": need["id"]}
-        if b.get("objective") != links.get(need["id"], []):
-            res.fail(field="objective", problem="differs from objective_links.csv", **key)
+        got = [dict({"investigation_id": o.get("investigation_id")}, **{f: o.get(f) or "" for f in LINK_FIELDS})
+               for o in b.get("objective", [])]
+        if got != links.get(need["id"], []):
+            res.fail(field="objective", problem="differs from the links of needs.json (all verdicts, with "
+                     "publication item and quote)", in_package=len(got), in_spec=len(links.get(need["id"], [])), **key)
         per = {}
         for tid in usable_ids(ctx, need["id"]):
             inv = ctx.tests_by_id[tid]["investigation_id"]
@@ -2272,10 +2521,12 @@ def check_i6(ctx):
 
 @check("I10_evidence_recorded_tests",
        "environment.recorded_tests of every package lists, per investigation and fuel phase, how many tests of "
-       "tests.csv (whatever the need) have tier atmosphere, oxygen_only or pressure_only in that environment.")
+       "tests.csv (whatever the need) have tier atmosphere, oxygen_only or pressure_only in that environment, "
+       "and 'counted_for' names the needs that count at least one of these matched tests.")
 def check_i10(ctx):
     res = Result()
     seen = False
+    counted = 0
     for env, pack in packages(ctx):
         e = (pack or {}).get("environment") or {}
         if "recorded_tests" not in e:
@@ -2298,10 +2549,55 @@ def check_i10(ctx):
             inv = r.get("investigation_id")
             if "title" in r and os.path.exists(os.path.join(CATALOG, "%s.json" % inv)) and r["title"] != ctx.record(inv).get("title"):
                 res.fail(package=env["id"], investigation_id=inv, field="title")
+            if "counted_for" in r:
+                counted += 1
+                want = [n["id"] for n in ctx.needs if any(
+                    marks[tid]["tier"] in MATCHED_TIERS and ctx.tests_by_id[tid]["investigation_id"] == inv
+                    and ctx.tests_by_id[tid].get("fuel_phase", "") == r.get("fuel_phase")
+                    for tid in usable_ids(ctx, n["id"]))]
+                if r["counted_for"] != want:
+                    res.fail(package=env["id"], investigation_id=inv, fuel_phase=r.get("fuel_phase"), field="counted_for",
+                             package_value=r["counted_for"], recomputed=want)
     if not seen:
         raise Skip("no package carries environment.recorded_tests")
-    res.numbers = {"packages": res.checked}
-    res.details = {"note": "No rule text describes this field; the rule checked here is the validator's reading of its name."}
+    res.numbers = {"packages": res.checked, "counted_for_lists": counted}
+    return res
+
+
+@check("I11_evidence_matched_ranges",
+       "matched_ranges of every need block (how many matched tests record oxygen of the surrounding "
+       "atmosphere and pressure, with the lowest and highest recorded value) equals the recomputation from "
+       "tests.csv over the counted tests of tier atmosphere, oxygen_only or pressure_only.")
+def check_i11(ctx):
+    res = Result()
+    seen = False
+    for env, need, b in need_blocks(ctx):
+        if "matched_ranges" not in b:
+            continue
+        seen = True
+        res.checked += 1
+        marks = env_marks(ctx, env)
+        key = {"package": env["id"], "need_id": need["id"]}
+        matched = [ctx.tests_by_id[tid] for tid in usable_ids(ctx, need["id"]) if marks[tid]["tier"] in MATCHED_TIERS]
+        o2 = [fnum(t["o2_pct"]) for t in matched if t.get("o2_pct", "") != "" and t.get("o2_basis") == "ambient"]
+        pr = [fnum(t["pressure_kpa"]) for t in matched if t.get("pressure_kpa", "") != ""]
+        want = {"o2_pct": o2, "pressure_kpa": pr}
+        for var, values in want.items():
+            g = (b["matched_ranges"] or {}).get(var) or {}
+            exp = {"recorded": len(values), "min": min(values) if values else None, "max": max(values) if values else None}
+            for k, w in exp.items():
+                if (g.get(k) is None) != (w is None) or (w is not None and not close(float(g[k]), float(w))):
+                    res.fail(field="matched_ranges.%s.%s" % (var, k), package_value=g.get(k), recomputed=w, **key)
+            if "unit" in g and g["unit"] != ctx.var_unit.get(var, ""):
+                res.fail(field="matched_ranges.%s.unit" % var, package_value=g["unit"], **key)
+        if "not_ambient" in ((b["matched_ranges"] or {}).get("o2_pct") or {}):
+            n = sum(1 for t in matched if t.get("o2_pct", "") != "" and t.get("o2_basis") != "ambient")
+            if b["matched_ranges"]["o2_pct"]["not_ambient"] != n:
+                res.fail(field="matched_ranges.o2_pct.not_ambient", package_value=b["matched_ranges"]["o2_pct"]["not_ambient"],
+                         recomputed=n, **key)
+    if not seen:
+        raise Skip("no need block carries matched_ranges")
+    res.numbers = {"need_blocks": res.checked}
     return res
 
 
@@ -2396,7 +2692,8 @@ def text_numbers(text):
 
 @check("I8_evidence_statement_numbers",
        "Every number written in a statement of an evidence package is a field of the same need block (for an "
-       "indicator sentence: of its indicator entry), or one of the two sums that statements.json declares.")
+       "indicator sentence: of its indicator entry; for an environment sentence: of its recorded_tests row), "
+       "or one of the two sums that statements.json declares.")
 def check_i8(ctx):
     res = Result()
     computed_only = 0
@@ -2439,6 +2736,19 @@ def check_i8(ctx):
                     listed_only += 1
                     continue
                 res.fail(number=n, text=s.get("text", "")[:200], **key)
+    for env, pack in packages(ctx):
+        e = (pack or {}).get("environment") or {}
+        rows = {(r.get("investigation_id"), r.get("fuel_phase")): r for r in e.get("recorded_tests", [])}
+        wide = numbers_of({k: v for k, v in e.items() if k != "statements"})
+        for s in e.get("statements", []):
+            sentences += 1
+            row = rows.get((s.get("investigation_id"), s.get("fuel_phase")))
+            pool = numbers_of(row) if row is not None else wide
+            for n in text_numbers(s.get("text")):
+                res.checked += 1
+                if n not in pool:
+                    res.fail(package=env["id"], statement=s.get("id"), number=n, text=s.get("text", "")[:200],
+                             investigation_id=s.get("investigation_id"))
     res.numbers = {"numbers_in_statements": res.checked, "statements": sentences,
                    "numbers_that_are_a_declared_sum_not_a_stored_field": computed_only,
                    "numbers_found_only_in_matched_tests_indicators_or_references": listed_only}
@@ -2456,6 +2766,19 @@ def forbidden_in(text, spec_texts):
     return sorted({m.group(0).lower() for m in re.finditer(r"\b(%s)\b" % "|".join(FORBIDDEN_WORDS), text, re.I)})
 
 
+def verbatim_quotes(ctx):
+    """Sentences copied word for word from a NASA record or a publication: the quotes of references.json
+    items and the record sentences of needs.json, sources.json and scenarios.json. A forbidden word inside
+    such a quote is the source's word, not the team's; it is counted apart."""
+    def load():
+        quotes = [it.get("quote") or "" for _, it in ctx.reference_items.values()]
+        quotes += [s.get("quote") or "" for n in ctx.needs for s in n.get("stated_by", [])]
+        quotes += [e.get("quote") or "" for s in ctx.sources for e in s.get("documented_elsewhere", [])]
+        quotes += [e.get("quote") or "" for s in ctx.spec("scenarios")["scenarios"] for e in s.get("see_also", [])]
+        return [q for q in quotes if q]
+    return ctx._get("verbatim_quotes", load)
+
+
 def copied_spec_texts(ctx):
     texts = [n["name"] for n in ctx.needs]
     texts += [i.get("reading", "") for i in ctx.spec("indicators")["indicators"]]
@@ -2464,18 +2787,27 @@ def copied_spec_texts(ctx):
 
 @check("I9_evidence_statement_words",
        "No statement of an evidence package contains the words safe, unsafe, flammable, sufficient, "
-       "representative, proves or confirms (outside a need name or an indicator reading copied from the spec).")
+       "representative, proves or confirms (outside a need name or an indicator reading copied from the spec, "
+       "and outside a sentence quoted word for word from a NASA record or a publication).")
 def check_i9(ctx):
     res = Result()
     spec_texts = copied_spec_texts(ctx)
-    for env, need, b in need_blocks(ctx):
-        for s in b.get("statements", []) + [{"id": "gap:" + str(g.get("code")), "text": g.get("text")} for g in b.get("gaps", [])]:
-            res.checked += 1
-            words = forbidden_in(s.get("text") or "", spec_texts)
+    quotes = verbatim_quotes(ctx)
+    quoted_only = 0
+    sentences = [(env["id"], need["id"], s) for env, need, b in need_blocks(ctx)
+                 for s in b.get("statements", []) + [{"id": "gap:" + str(g.get("code")), "text": g.get("text")} for g in b.get("gaps", [])]]
+    sentences += [(env["id"], "", s) for env, pack in packages(ctx)
+                  for s in ((pack or {}).get("environment") or {}).get("statements", [])]
+    for package, need_id, s in sentences:
+        res.checked += 1
+        if forbidden_in(s.get("text") or "", spec_texts):
+            words = forbidden_in(s.get("text") or "", spec_texts + quotes)
             if words:
-                res.fail(package=env["id"], need_id=need["id"], statement=s.get("id"), words=words,
+                res.fail(package=package, need_id=need_id, statement=s.get("id"), words=words,
                          text=(s.get("text") or "")[:200])
-    res.numbers = {"sentences": res.checked}
+            else:
+                quoted_only += 1
+    res.numbers = {"sentences": res.checked, "sentences_with_such_a_word_only_inside_a_verbatim_quote": quoted_only}
     return res
 
 
@@ -2680,13 +3012,13 @@ def check_j2(ctx):
 
 
 @check("J3_facts_needs",
-       "stated_needs of every investigation equal objective_links.csv, and capability equals the rows of "
+       "stated_needs of every investigation equal the links of needs.json, and capability equals the rows of "
        "capability_matrix.csv (status, counts, objective_link per need and table).")
 def check_j3(ctx):
     res = Result()
     links = {}
-    for r in ctx.table("objective_links.csv"):
-        links.setdefault(r["investigation_id"], []).append((r["need_id"], r["record_field"], r["quote"]))
+    for r in link_rows(ctx):
+        links.setdefault(r["investigation_id"], []).append((r["need_id"],) + tuple(r[f] for f in LINK_FIELDS))
     matrix = {}
     for r in ctx.table("capability_matrix.csv"):
         matrix.setdefault(r["investigation_id"], {}).setdefault(r["need_id"], {})[r["source_id"]] = r
@@ -2695,9 +3027,10 @@ def check_j3(ctx):
         inv = e.get("investigation_id")
         key = {"investigation_id": inv}
         res.checked += 1
-        got = [(s.get("need_id"), s.get("record_field"), s.get("quote")) for s in e.get("stated_needs", [])]
+        got = [(s.get("need_id"),) + tuple(s.get(f) or "" for f in LINK_FIELDS) for s in e.get("stated_needs", [])]
         if sorted(got) != sorted(links.get(inv, [])):
-            res.fail(field="stated_needs", in_file=len(got), objective_links_csv=len(links.get(inv, [])), **key)
+            res.fail(field="stated_needs", problem="differs from the links of needs.json (all verdicts, with "
+                     "publication item and quote)", in_file=len(got), in_spec=len(links.get(inv, [])), **key)
         for s in e.get("stated_needs", []):
             if "need" in s and s["need"] != names.get(s.get("need_id")):
                 res.fail(field="stated_needs.need", in_file=s["need"], **key)
@@ -2753,6 +3086,7 @@ def check_j4(ctx):
     res = Result()
     spec_texts = copied_spec_texts(ctx)
     wider = 0
+    quoted_only = 0
     sentences = 0
     for e in facts(ctx):
         inv = e.get("investigation_id")
@@ -2788,11 +3122,15 @@ def check_j4(ctx):
                 res.fail(number=n, text=(s.get("text") or "")[:200], **key)
             quotes = [x.get("quote", "") for x in e.get("stated_needs", [])] + [e.get("title") or ""] + \
                      [str(v) for t in tables.values() for v in t.values() if isinstance(v, str)]
-            words = forbidden_in(s.get("text") or "", spec_texts + quotes)
-            if words:
-                res.fail(problem="forbidden word", words=words, text=(s.get("text") or "")[:200], **key)
+            if forbidden_in(s.get("text") or "", spec_texts + quotes):
+                words = forbidden_in(s.get("text") or "", spec_texts + quotes + verbatim_quotes(ctx))
+                if words:
+                    res.fail(problem="forbidden word", words=words, text=(s.get("text") or "")[:200], **key)
+                else:
+                    quoted_only += 1
     res.numbers = {"numbers_in_statements": res.checked, "statements": sentences,
-                   "numbers_found_only_elsewhere_in_the_entry": wider}
+                   "numbers_found_only_elsewhere_in_the_entry": wider,
+                   "sentences_with_a_forbidden_word_only_inside_a_verbatim_quote": quoted_only}
     return res
 
 

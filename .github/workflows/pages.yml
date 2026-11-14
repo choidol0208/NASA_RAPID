@@ -1,7 +1,7 @@
 # AI-generated (Claude Code) during the NASA Space Apps Challenge 2026 hackathon.
 # Builds the static dashboard in web/ and publishes it on GitHub Pages.
-# The deploy stops if the unit tests, the validation scenarios or the
-# JavaScript/Python ranking parity check fail.
+# The deploy stops if the unit tests, the validation scenarios, ui's integration check
+# (ranked results reach the data role's files) or the JavaScript/Python ranking parity check fail.
 # Deploys from both catalog-filter (ui) and main (pm's integration), so files that
 # reach main (data/insights, scenario files) go live without waiting for a ui merge
 # (pm request 20261114-1224, item 0). Each role pulls before it pushes, so either
@@ -37,6 +37,8 @@ jobs:
         run: python3 -m unittest scoring.test_scorer
       - name: Validation scenarios
         run: python3 validation/run_validation.py
+      - name: Ranked results join to the data role's files (ui integration check)
+        run: python3 web/check_integration.py
       - name: JavaScript and Python give the same ranking
         run: python3 web/parity_check.py
       - name: Build the site

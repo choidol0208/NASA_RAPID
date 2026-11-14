@@ -25,7 +25,8 @@
   },
   "gravity_level": null,
   "basis": [],
-  "note": "One cell of the coverage grid (coverage.json): the oxygen bin o2_23_30 and the pressure bin p_ge116_8. The bin edges are the team's choice. No flow range and no gravity level are set. Oxygen bins: 21% with the +/-2.0 point control box (EAWG.atmospheres); 30% is the Moon Base lower bound in the challenge text and the current worst-case test oxygen (CH.moonbase, read from a copy; TB14639.worstcase); 36% is the highest exploration design value, 34% (EA.8.2-34, EAWG.testing), plus the same 2-point box, which is the team's extension. The challenge text gives no upper oxygen bound. Pressure bins: Edges are midpoints between pressures named in the references: 55.2 kPa (8.0 psia), 70.3 kPa (10.2 psia) and 101.3 kPa (14.7 psia) (EAWG.atmospheres, CH.moonbase). The upper edge of the 101.3 bin mirrors its lower edge. FLEX tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa, so a bin around 70.3 is used instead of a strict 'at or below 70.3'. The bins are wide: the bin around 101.3 kPa spans 85.8 to below 116.8 kPa, against a control box of +/-0.2 psia in EAWG.atmospheres, and the lowest edge is built from 8.0 psia while the 8.2 psia atmosphere (EA.8.2-34) falls in the same bin.",
+  "note": "One cell of the coverage grid (coverage.json): the oxygen bin o2_23_30 and the pressure bin p_ge116_8. The bin edges are the team's choice. No flow range and no gravity level are set. Oxygen bins: 21% with the +/-2.0 point control box (EAWG.atmospheres); 30% is the Moon Base lower bound in the challenge text and the current worst-case test oxygen (CH.moonbase; TB14639.worstcase); 36% is the highest exploration design value, 34% (EA.8.2-34, EAWG.testing), plus the same 2-point box, which is the team's extension. The challenge text gives no upper oxygen bound. Pressure bins: Edges are midpoints between pressures named in the references: 55.2 kPa (8.0 psia), 70.3 kPa (10.2 psia) and 101.3 kPa (14.7 psia) (EAWG.atmospheres, CH.moonbase). The upper edge of the 101.3 bin mirrors its lower edge. FLEX tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa, so a bin around 70.3 is used instead of a strict 'at or below 70.3'. The bins are wide: the bin around 101.3 kPa spans 85.8 to below 116.8 kPa, against a control box of +/-0.2 psia in EAWG.atmospheres, and the lowest edge is built from 8.0 psia while the 8.2 psia atmosphere (EA.8.2-34) falls in the same bin.",
+  "caveat": null,
   "see_also": [],
   "recorded_tests": [
    {
@@ -34,7 +35,16 @@
     "fuel_phase": "gas",
     "atmosphere": 0,
     "oxygen_only": 0,
-    "pressure_only": 2
+    "pressure_only": 2,
+    "counted_for": []
+   }
+  ],
+  "statements": [
+   {
+    "id": "recorded.not_counted",
+    "text": "PSI-10 (gas): 0 tests recorded with oxygen and pressure both inside the ranges, 0 with oxygen inside the range and no pressure in the table, 2 with pressure inside the range and no oxygen in the table. None of these tests is counted for a need.",
+    "investigation_id": "PSI-10",
+    "fuel_phase": "gas"
    }
   ]
  },
@@ -47,69 +57,96 @@
    "note": "The Saffire tables hold one oxygen level near cabin air per test (for Saffire-II derived by NASA from CO2 production, Note 1 of the table), and Saffire-III has no oxygen column. A limit cannot be located from one oxygen level. Pressure is not a required variable of this need, although the cited definition of a threshold holds at a given total pressure, flow and gravity level (ISO16697.threshold): the BASS-II and Saffire tables have no pressure column, so no counted test records a pressure. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions); counts of different needs must not be added.",
    "status": "other_atmosphere",
    "counts": {
-    "usable_tests": 136,
+    "usable_tests": 133,
     "atmosphere": 0,
     "oxygen_only": 0,
     "pressure_only": 0,
-    "other": 136,
-    "recorded_outside_objective": 0,
+    "other": 133,
+    "recorded_outside_objective": 2,
     "matched_flow_in_range": 0,
     "matched_flow_not_recorded": 0,
     "matched_same_gravity": 0,
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [
     {
      "source_id": "bass2",
      "investigation_id": "PSI-25",
      "variable": "pressure_kpa",
+     "variable_label": "pressure",
      "quote": "Pressure was not varied from 1 atmosphere.",
      "said_in": "ICES19.pressure"
-    },
-    {
-     "source_id": "saffire1",
-     "investigation_id": "PSI-98",
-     "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
-     "said_in": "PSI-98.approach"
     },
     {
      "source_id": "saffire2",
      "investigation_id": "PSI-99",
      "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
-     "said_in": "PSI-99.approach"
+     "variable_label": "pressure",
+     "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant.",
+     "said_in": "SAF17.pressure"
     }
    ],
    "objective": [
     {
      "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "BASS2TM.limits",
+     "publication_quote": "Many of the tests focused on finding a minimum O2 concentration or flow velocity where a material will burn in space, to compare with the Earth-based limits.",
      "record_field": "objective",
      "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
     },
     {
      "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "BASS2TM.limits",
+     "publication_quote": "Many of the tests focused on finding a minimum O2 concentration or flow velocity where a material will burn in space, to compare with the Earth-based limits.",
      "record_field": "objective",
      "quote": "Begin to bridge the gap between the normal gravity NASA-STD-6001 Test #1 method, ground-based microgravity tests, and actual material flammability in microgravity."
     },
     {
      "investigation_id": "PSI-26",
+     "verdict": "supported",
+     "publication_item": "RG.bass",
+     "publication_quote": "The BASS experiment will improve 1-g material fire safety rating tests and help to guide strategies for extinguishing accidental fires in microgravity.",
      "record_field": "objective",
      "quote": "Begin to bridge the gap between the normal gravity NASA-STD-6001 Test#1 method, ground-based microgravity tests, and actual material flammability in microgravity."
     },
     {
      "investigation_id": "PSI-98",
+     "verdict": "differs",
+     "publication_item": "SAF16.saffire1",
+     "publication_quote": "The objective of the Saffire-I experiment is to investigate flame spread and growth in low-gravity. Specifically, the experiment will determine if there is a limiting flame size when burning over a large surface and quantify the size and growth rate of the flames.",
      "record_field": "objective",
      "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test"
     },
     {
      "investigation_id": "PSI-99",
+     "verdict": "supported",
+     "publication_item": "SAF16.saffire2",
+     "publication_quote": "The objective of the tests to be conducted on Saffire-II is to investigate the low-gravity Maximum Oxygen Concentration (MOC) flammability limits in long-term low gravity.",
      "record_field": "objective",
      "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test"
     },
     {
      "investigation_id": "PSI-100",
+     "verdict": "differs",
+     "publication_item": "SAF16b.saffire13",
+     "publication_quote": "The objective of the Saffire-I and III tests will be to determine how rapidly a large-scale fire grows in low-gravity and whether it reaches a steady-state spread rate.",
      "record_field": "objective",
      "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test"
     }
@@ -124,27 +161,19 @@
      "other": 125
     },
     {
-     "investigation_id": "PSI-98",
-     "title": "Spacecraft Fire Safety Experiment-I",
-     "atmosphere": 0,
-     "oxygen_only": 0,
-     "pressure_only": 0,
-     "other": 2
-    },
-    {
      "investigation_id": "PSI-99",
      "title": "Spacecraft Fire Experiment-II",
      "atmosphere": 0,
      "oxygen_only": 0,
      "pressure_only": 0,
-     "other": 9
+     "other": 8
     }
    ],
    "matched_tests": [],
    "usable_elsewhere": {
-    "tests": 136,
+    "tests": 133,
     "o2_pct": {
-     "recorded": 136,
+     "recorded": 133,
      "min": 13.6,
      "max": 22.2,
      "unit": "% by volume",
@@ -158,7 +187,6 @@
     },
     "investigation_ids": [
      "PSI-25",
-     "PSI-98",
      "PSI-99"
     ]
    },
@@ -166,17 +194,17 @@
    "gaps": [
     {
      "code": "oxygen:no_usable_test_in_range",
-     "text": "Oxygen gap: none of the 136 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
+     "text": "Oxygen gap: none of the 133 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
     },
     {
      "code": "pressure:not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 136 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 133 tests counted for this need."
     }
    ],
    "statements": [
     {
      "id": "status.other_atmosphere",
-     "text": "None of the 136 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
+     "text": "None of the 133 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
     },
     {
      "id": "need.reading",
@@ -184,15 +212,19 @@
     },
     {
      "id": "tiers.counts",
-     "text": "The 136 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 0 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 136 with none of these matches."
+     "text": "The 133 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 0 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 133 with none of these matches."
+    },
+    {
+     "id": "outside_objective",
+     "text": "2 other tests record every required condition and at least one outcome variable of this need but come from investigations whose PSI record does not state this need as an objective. These tests are not counted for this need and are not in its counts."
     },
     {
      "id": "elsewhere.oxygen",
-     "text": "Oxygen of the 136 counted tests not matched to this environment: recorded in 136 tests, from 13.6 to 22.2 % by volume."
+     "text": "Oxygen of the 133 counted tests not matched to this environment: recorded in 133 tests, from 13.6 to 22.2 % by volume."
     },
     {
      "id": "elsewhere.pressure_not_recorded",
-     "text": "Pressure of the 136 counted tests not matched to this environment: no pressure is recorded."
+     "text": "Pressure of the 133 counted tests not matched to this environment: no pressure is recorded."
     },
     {
      "id": "need.note",
@@ -200,27 +232,21 @@
     },
     {
      "id": "gap.oxygen.no_usable_test_in_range",
-     "text": "Oxygen gap: none of the 136 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
+     "text": "Oxygen gap: none of the 133 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
     },
     {
      "id": "gap.pressure.not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 136 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 133 tests counted for this need."
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-25 holds no value of pressure_kpa; ICES19.pressure says \"Pressure was not varied from 1 atmosphere.\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-25 holds no pressure. A NASA record or a paper of the investigators says: \"Pressure was not varied from 1 atmosphere.\" (source: ICES19.pressure). The sentence is not used as a value of any test.",
      "source_id": "bass2",
      "variable": "pressure_kpa"
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-98 holds no value of pressure_kpa; PSI-98.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
-     "source_id": "saffire1",
-     "variable": "pressure_kpa"
-    },
-    {
-     "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-99 holds no value of pressure_kpa; PSI-99.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-99 holds no pressure. A NASA record or a paper of the investigators says: \"All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant.\" (source: SAF17.pressure). The sentence is not used as a value of any test.",
      "source_id": "saffire2",
      "variable": "pressure_kpa"
     }
@@ -401,6 +427,50 @@
      "url": "https://hdl.handle.net/2346/84505",
      "access": "full_text_read",
      "quote": "Pressure was not varied from 1 atmosphere."
+    },
+    {
+     "item_id": "ISO16697.scope",
+     "type": "definition",
+     "text": "The oxygen concentration threshold is determined at a given constant total pressure, temperature, convective flow and gravity level.",
+     "where": "Clause 1 Scope (the same sentence is the ISO catalogue abstract, with 'ISO/TS 16697:2012' in place of 'This Technical Specification')",
+     "title": "Space systems - Safety and compatibility of materials - Method to determine the flammability thresholds of materials",
+     "version": "ISO/TS 16697:2012 (status: withdrawn)",
+     "url": "https://www.iso.org/standard/57450.html",
+     "access": "abstract_only",
+     "quote": "This Technical Specification provides a method to determine the oxygen concentration threshold when a material exposed to a standard ignition source self-extinguishes at a given constant total pressure, temperature, convective flow, and gravity-level conditions."
+    },
+    {
+     "item_id": "ICES14.onlyvalid",
+     "type": "limitation",
+     "text": "Test 1 is pass-fail and is only valid at the atmosphere tested.",
+     "where": "I: Introduction, p. 2 (sentence before, which opens with a drop capital: '[T]EST 1 of STD-6001[1] is an upward flame spread test to determine if a material is safe to use in a particular environment.')",
+     "title": "Applying Flammability Limit Probabilities and the Normoxic Upward Limiting Pressure Concept to NASA STD-6001 Test 1 (Olson, Beeson, Fernandez-Pello)",
+     "version": "ICES-2014-179 (13-17 July 2014, Tucson, Arizona)",
+     "url": "https://ntrs.nasa.gov/citations/20150004099",
+     "access": "full_text_read",
+     "quote": "It is pass-fail and is only valid at the atmosphere tested."
+    },
+    {
+     "item_id": "SAF17.pressure",
+     "type": "published_result",
+     "text": "All Saffire-I and Saffire-II tests were performed at normal pressure (1 atm); the pressure increase due to combustion was insignificant.",
+     "where": "Section II Experiment, p. 4",
+     "title": "Results of Large-Scale Spacecraft Flammability Tests (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+     "version": "ICES-2017-224 (16-20 July 2017, Charleston, South Carolina)",
+     "url": "https://hdl.handle.net/2346/73020",
+     "access": "full_text_read",
+     "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant."
+    },
+    {
+     "item_id": "PSISAF.pressure_column",
+     "type": "published_result",
+     "text": "NASA PSI raw data hold, for each Saffire-I and Saffire-II sample, a sensor workbook whose sheet 'Calibrated Data' has a column 'Ambient Pressure' with unit 'PSIA'. Lowest and highest cell of the column per sample, and the cell in the first row where 'Igniter Current' exceeds 1 A, are in 'values' (psia, as stored).",
+     "where": "Column header in sheet 'Calibrated Data' (row 1; the unit row below it reads 'PSIA') of the eleven workbooks 'PSI-98_Raw Data_Saffire-I Sample 1 Sensor Data Complete TM graphs.xlsx', '... Sample 2 ...' and 'PSI-99_Raw Data_Saffire Sensor Data Sample 1.xlsx' to '... Sample 9.xlsx'. Cell values per sample: 'values' of this item (section 1.2a of the report lit1_pressure.md).",
+     "title": "NASA PSI, Saffire-I (PSI-98) and Saffire-II (PSI-99): telemetry graph documents, operations notes and Readme",
+     "version": "PSI-98 version 4, PSI-99 version 5 (files version 1)",
+     "url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99",
+     "access": "full_text_read",
+     "quote": "Ambient Pressure"
     }
    ]
   },
@@ -424,10 +494,27 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [],
    "objective": [
     {
      "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "ICES19.goal",
+     "publication_quote": "The overall goal of BASS -II is to study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low velocity forced convective flows in microgravity.",
      "record_field": "objective",
      "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
     }
@@ -455,7 +542,7 @@
    "gaps": [
     {
      "code": "need:no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "statements": [
@@ -473,7 +560,7 @@
     },
     {
      "id": "gap.need.no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "references": [
@@ -520,52 +607,72 @@
    "note": "Oxygen is not a required variable of this need, although a listed abstract relates spread rate to flow velocity, oxygen concentration and pressure (SAE2008.spread). Among the mapped tables only the Saffire-II table has a spread-rate column; the Saffire-I tests are counted on a burn time alone. The BASS-II table has no flow-direction column, so its tests are not counted here; the PSI-25 record says \"Flame appearance, flame growth, and spread rates were determined in both the opposed and concurrent flow\" (approach field), and these rates are not in the experimental table.",
    "status": "other_atmosphere",
    "counts": {
-    "usable_tests": 11,
+    "usable_tests": 2,
     "atmosphere": 0,
     "oxygen_only": 0,
     "pressure_only": 0,
-    "other": 11,
-    "recorded_outside_objective": 0,
+    "other": 2,
+    "recorded_outside_objective": 9,
     "matched_flow_in_range": 0,
     "matched_flow_not_recorded": 0,
     "matched_same_gravity": 0,
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [
     {
      "source_id": "saffire1",
      "investigation_id": "PSI-98",
      "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
-     "said_in": "PSI-98.approach"
-    },
-    {
-     "source_id": "saffire2",
-     "investigation_id": "PSI-99",
-     "variable": "pressure_kpa",
-     "quote": "solid state sensors were used to measure pressure, CO2 and O2 mole faction",
-     "said_in": "PSI-99.approach"
+     "variable_label": "pressure",
+     "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant.",
+     "said_in": "SAF17.pressure"
     }
    ],
    "objective": [
     {
      "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "BASS2TM.growth",
+     "publication_quote": "Flame growth rates are also of interest, to determine how quickly a fire in space can grow and if the flames reach a finite size or continue to grow. This has implications for firefighting strategies in spacecraft.",
      "record_field": "objective",
      "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
     },
     {
      "investigation_id": "PSI-98",
+     "verdict": "supported",
+     "publication_item": "SAF16.saffire1",
+     "publication_quote": "The objective of the Saffire-I experiment is to investigate flame spread and growth in low-gravity. Specifically, the experiment will determine if there is a limiting flame size when burning over a large surface and quantify the size and growth rate of the flames.",
      "record_field": "objective",
      "quote": "determine how rapidly a large scale fire grows in low-gravity"
     },
     {
      "investigation_id": "PSI-99",
+     "verdict": "differs",
+     "publication_item": "SAF16b.saffire2",
+     "publication_quote": "Quantifying the difference in flammability limits for large samples is the objective of the Saffire-II experiments.",
      "record_field": "objective",
      "quote": "determine how rapidly a large scale fire grows in low-gravity"
     },
     {
      "investigation_id": "PSI-100",
+     "verdict": "supported",
+     "publication_item": "SAF16b.saffire13",
+     "publication_quote": "The objective of the Saffire-I and III tests will be to determine how rapidly a large-scale fire grows in low-gravity and whether it reaches a steady-state spread rate.",
      "record_field": "objective",
      "quote": "determine how rapidly a large scale fire grows in low-gravity"
     }
@@ -578,23 +685,15 @@
      "oxygen_only": 0,
      "pressure_only": 0,
      "other": 2
-    },
-    {
-     "investigation_id": "PSI-99",
-     "title": "Spacecraft Fire Experiment-II",
-     "atmosphere": 0,
-     "oxygen_only": 0,
-     "pressure_only": 0,
-     "other": 9
     }
    ],
    "matched_tests": [],
    "usable_elsewhere": {
-    "tests": 11,
+    "tests": 2,
     "o2_pct": {
-     "recorded": 11,
+     "recorded": 2,
      "min": 21.5,
-     "max": 22.1,
+     "max": 21.7,
      "unit": "% by volume",
      "not_ambient": 0
     },
@@ -605,25 +704,24 @@
      "unit": "kPa"
     },
     "investigation_ids": [
-     "PSI-98",
-     "PSI-99"
+     "PSI-98"
     ]
    },
    "indicators": [],
    "gaps": [
     {
      "code": "oxygen:no_usable_test_in_range",
-     "text": "Oxygen gap: none of the 11 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
+     "text": "Oxygen gap: none of the 2 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
     },
     {
      "code": "pressure:not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 11 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 2 tests counted for this need."
     }
    ],
    "statements": [
     {
      "id": "status.other_atmosphere",
-     "text": "None of the 11 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
+     "text": "None of the 2 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
     },
     {
      "id": "need.reading",
@@ -631,15 +729,19 @@
     },
     {
      "id": "tiers.counts",
-     "text": "The 11 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 0 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 11 with none of these matches."
+     "text": "The 2 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 0 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 2 with none of these matches."
+    },
+    {
+     "id": "outside_objective",
+     "text": "9 other tests record every required condition and at least one outcome variable of this need but come from investigations whose PSI record does not state this need as an objective. These tests are not counted for this need and are not in its counts."
     },
     {
      "id": "elsewhere.oxygen",
-     "text": "Oxygen of the 11 counted tests not matched to this environment: recorded in 11 tests, from 21.5 to 22.1 % by volume."
+     "text": "Oxygen of the 2 counted tests not matched to this environment: recorded in 2 tests, from 21.5 to 21.7 % by volume."
     },
     {
      "id": "elsewhere.pressure_not_recorded",
-     "text": "Pressure of the 11 counted tests not matched to this environment: no pressure is recorded."
+     "text": "Pressure of the 2 counted tests not matched to this environment: no pressure is recorded."
     },
     {
      "id": "need.note",
@@ -647,22 +749,16 @@
     },
     {
      "id": "gap.oxygen.no_usable_test_in_range",
-     "text": "Oxygen gap: none of the 11 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
+     "text": "Oxygen gap: none of the 2 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
     },
     {
      "id": "gap.pressure.not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 11 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 2 tests counted for this need."
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-98 holds no value of pressure_kpa; PSI-98.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-98 holds no pressure. A NASA record or a paper of the investigators says: \"All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant.\" (source: SAF17.pressure). The sentence is not used as a value of any test.",
      "source_id": "saffire1",
-     "variable": "pressure_kpa"
-    },
-    {
-     "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-99 holds no value of pressure_kpa; PSI-99.approach says \"solid state sensors were used to measure pressure, CO2 and O2 mole faction\" (a sentence of a document, not a value of any test).",
-     "source_id": "saffire2",
      "variable": "pressure_kpa"
     }
    ],
@@ -721,11 +817,11 @@
    "note": "The one investigation of an extinguishing agent on solid fuels, PSI-26, has an experimental table with sample names only. The counted solid-fuel tests are BASS-II tests with an event word beside the flow settings (extinction, blowoff, no ignition, not sustained); they are also counted for P1 (Flammability limit), and counts of different needs must not be added. Every counted test with added carbon dioxide or helium is a FLEX droplet test. The PSI-69 objective names CO2, He and SF6; the FLEX table has no SF6 column. The other investigations linked to this need add no counted test: PSI-10 and PSI-39 have no column mapped to an outcome variable of this need, and the tables of PSI-20, 21, 23 and 68 are not one row per test.",
    "status": "other_atmosphere",
    "counts": {
-    "usable_tests": 299,
+    "usable_tests": 298,
     "atmosphere": 0,
     "oxygen_only": 0,
     "pressure_only": 0,
-    "other": 299,
+    "other": 298,
     "recorded_outside_objective": 272,
     "matched_flow_in_range": 0,
     "matched_flow_not_recorded": 0,
@@ -733,11 +829,26 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
    "documented_elsewhere": [
     {
      "source_id": "bass2",
      "investigation_id": "PSI-25",
      "variable": "pressure_kpa",
+     "variable_label": "pressure",
      "quote": "Pressure was not varied from 1 atmosphere.",
      "said_in": "ICES19.pressure"
     }
@@ -745,51 +856,81 @@
    "objective": [
     {
      "investigation_id": "PSI-69",
+     "verdict": "supported",
+     "publication_item": "FLEX.objective2",
+     "publication_quote": "Quantify the suppressant efficacy of various gaseous suppressants over the range of candidate atmospheric pressures and O2 concentrations.",
      "record_field": "objective",
      "quote": "measure the effectiveness of various gaseous fire suppressants such as CO2, He, and SF6"
     },
     {
      "investigation_id": "PSI-69",
+     "verdict": "supported",
+     "publication_item": "FLEX.objective2",
+     "publication_quote": "Quantify the suppressant efficacy of various gaseous suppressants over the range of candidate atmospheric pressures and O2 concentrations.",
      "record_field": "objective",
      "quote": "map the flammability limits of liquid fuels in microgravity environments"
     },
     {
      "investigation_id": "PSI-26",
+     "verdict": "supported",
+     "publication_item": "RG.bass",
+     "publication_quote": "The BASS experiment will improve 1-g material fire safety rating tests and help to guide strategies for extinguishing accidental fires in microgravity.",
      "record_field": "objective",
      "quote": "Assess the effectiveness of an inert, gaseous extinguishing agent (similar to that used on ISS) in putting out flames over different materials, geometries, preheating, and flow."
     },
     {
      "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "ICES19.goal",
+     "publication_quote": "The overall goal of BASS -II is to study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low velocity forced convective flows in microgravity.",
      "record_field": "objective",
      "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
     },
     {
      "investigation_id": "PSI-39",
+     "verdict": "topic_only",
+     "publication_item": "",
+     "publication_quote": "",
      "record_field": "objective",
      "quote": "Investigate the relationship between droplet size, pressure, and flame extinction"
     },
     {
      "investigation_id": "PSI-10",
+     "verdict": "topic_only",
+     "publication_item": "ACME14.flamedesign",
+     "publication_quote": "The primary goal of the Flame Design experiment is to improve our understanding of soot inception and control in order to enable the optimization of oxygen enriched combustion and the “design” of non-premixed flames that are both robust and soot free.",
      "record_field": "objective",
      "quote": "Obtain extinction limits as functions of Zst, amount of N2, and pressure for normal and inverse spherical C2H4 and CH4 flames."
     },
     {
      "investigation_id": "PSI-20",
+     "verdict": "differs",
+     "publication_item": "ACME14.bre",
+     "publication_quote": "Unlike the other current ACME experiments, the Burning Rate Emulator (BRE) experiment is focused on spacecraft fire prevention.",
      "record_field": "objective",
      "quote": "Consider the conditions of Objectives 1 – 2 for extinction limits."
     },
     {
      "investigation_id": "PSI-21",
+     "verdict": "topic_only",
+     "publication_item": "",
+     "publication_quote": "",
      "record_field": "objective",
      "quote": "through measurement of flame shape, lift-off heights, temperatures and extinction limits"
     },
     {
      "investigation_id": "PSI-23",
+     "verdict": "topic_only",
+     "publication_item": "",
+     "publication_quote": "",
      "record_field": "objective",
      "quote": "Determine the quasi-steady convective/chemical-kinetic extinction limits"
     },
     {
      "investigation_id": "PSI-68",
+     "verdict": "topic_only",
+     "publication_item": "RG.flex2",
+     "publication_quote": "FLEX is motivated by the need to better identify and predict limiting oxygen indices (LOIs) and inert-gas suppressant efficacy. The FLEX–2 experiments are motivated by the need to better understand droplet combustion as it applies to the fundamental problems of energy conversion and utilization where liquid hydrocarbon fuels are a predominant source of energy in the world.",
      "record_field": "objective",
      "quote": "Study flame extinction mechanisms and their boundaries."
     }
@@ -809,14 +950,14 @@
      "atmosphere": 0,
      "oxygen_only": 0,
      "pressure_only": 0,
-     "other": 274
+     "other": 273
     }
    ],
    "matched_tests": [],
    "usable_elsewhere": {
-    "tests": 299,
+    "tests": 298,
     "o2_pct": {
-     "recorded": 299,
+     "recorded": 298,
      "min": 12.0,
      "max": 34.0,
      "unit": "% by volume",
@@ -838,7 +979,7 @@
    "statements": [
     {
      "id": "status.other_atmosphere",
-     "text": "None of the 299 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
+     "text": "None of the 298 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
     },
     {
      "id": "need.reading",
@@ -846,7 +987,7 @@
     },
     {
      "id": "tiers.counts",
-     "text": "The 299 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 0 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 299 with none of these matches."
+     "text": "The 298 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 0 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 298 with none of these matches."
     },
     {
      "id": "outside_objective",
@@ -854,11 +995,11 @@
     },
     {
      "id": "elsewhere.oxygen",
-     "text": "Oxygen of the 299 counted tests not matched to this environment: recorded in 299 tests, from 12 to 34 % by volume."
+     "text": "Oxygen of the 298 counted tests not matched to this environment: recorded in 298 tests, from 12 to 34 % by volume."
     },
     {
      "id": "elsewhere.pressure",
-     "text": "Pressure of the 299 counted tests not matched to this environment: recorded in 273 tests, from 70.1676 to 309.2946 kPa."
+     "text": "Pressure of the 298 counted tests not matched to this environment: recorded in 273 tests, from 70.1676 to 309.2946 kPa."
     },
     {
      "id": "need.note",
@@ -866,7 +1007,7 @@
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-25 holds no value of pressure_kpa; ICES19.pressure says \"Pressure was not varied from 1 atmosphere.\" (a sentence of a document, not a value of any test).",
+     "text": "The experimental table of PSI-25 holds no pressure. A NASA record or a paper of the investigators says: \"Pressure was not varied from 1 atmosphere.\" (source: ICES19.pressure). The sentence is not used as a value of any test.",
      "source_id": "bass2",
      "variable": "pressure_kpa"
     }
@@ -992,6 +1133,28 @@
      "url": "https://ntrs.nasa.gov/citations/20150023456",
      "access": "full_text_read",
      "quote": null
+    },
+    {
+     "item_id": "CP2004.supp.q3",
+     "type": "knowledge_gap",
+     "text": "Organizing question 3 for fire suppression: the oxygen mole fraction and absolute pressure below which a fire cannot exist.",
+     "where": "Ruff, Fire Suppression and Response, slide p. 852",
+     "title": "Strategic Research to Enable NASA's Exploration Missions Conference and Workshop: Presentations (Nahra, ed.); presentations 'Fire Prevention, Detection, and Suppression', 'Fire Suppression and Response' and 'Research Plan for Fire Signatures and Detection' (Ruff) and 'Organizing Questions for Reduced-Gravity Flammability' (Miller and NASA/NCMR project scientists)",
+     "version": "NASA/CP-2004-213205/VOL1, August 2004 (conference of June 22-23, 2004, Cleveland)",
+     "url": "https://ntrs.nasa.gov/citations/20040142351",
+     "access": "full_text_read",
+     "quote": "What are the O2 mole fraction and absolute pressure below which a fire cannot exist?"
+    },
+    {
+     "item_id": "ICES19.pressure",
+     "type": "published_result",
+     "text": "BASS-II varied oxygen from 13% to 22% by nitrogen dilution of the ISS atmosphere in the glovebox working volume; pressure was not varied from 1 atmosphere.",
+     "where": "Section II",
+     "title": "Flammability Limits from BASS-II Testing in Microgravity Compared to Normal Gravity Limits (Olson, Ferkul, Fernandez-Pello, Miller, Wichman, Bhattacharjee, T'ien)",
+     "version": "ICES-2019-101 (7-11 July 2019, Boston)",
+     "url": "https://hdl.handle.net/2346/84505",
+     "access": "full_text_read",
+     "quote": "Pressure was not varied from 1 atmosphere."
     }
    ]
   },
@@ -999,32 +1162,73 @@
    "need_id": "D1",
    "need": "Combustion products",
    "pillar": "detection",
-   "reading": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading, or a mass loss rate. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
-   "note": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The mass loss rate of the SAME samples is in the outcome list of this need as drafted; it is a rate of the heated sample, not a reading of a gas or of smoke. The material is the only required variable, so the status conditions_only says only that the sample is named.",
-   "status": "not_measured",
+   "reading": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
+   "note": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The material is the only required variable, so the status conditions_only says only that the sample is named.",
+   "status": "other_atmosphere",
    "counts": {
-    "usable_tests": 0,
+    "usable_tests": 122,
     "atmosphere": 0,
     "oxygen_only": 0,
     "pressure_only": 0,
-    "other": 0,
-    "recorded_outside_objective": 126,
+    "other": 122,
+    "recorded_outside_objective": 0,
     "matched_flow_in_range": 0,
     "matched_flow_not_recorded": 0,
     "matched_same_gravity": 0,
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
-   "documented_elsewhere": [],
-   "objective": [],
-   "investigations": [],
-   "matched_tests": [],
-   "usable_elsewhere": {
-    "tests": 0,
+   "matched_ranges": {
     "o2_pct": {
      "recorded": 0,
      "min": null,
      "max": null,
+     "unit": "% by volume"
+    },
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
+    }
+   },
+   "documented_elsewhere": [
+    {
+     "source_id": "bass2",
+     "investigation_id": "PSI-25",
+     "variable": "pressure_kpa",
+     "variable_label": "pressure",
+     "quote": "Pressure was not varied from 1 atmosphere.",
+     "said_in": "ICES19.pressure"
+    }
+   ],
+   "objective": [
+    {
+     "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "BASS2TM.products",
+     "publication_quote": "To evaluate the levels of combustion products produced during microgravity fires, BASS–II requested the use of available onboard sensors to measure the O2 depletion and the completeness of combustion (CO and CO2) for microgravity combustion tests under spacecraft ventilation flow rates to provide scientific data on the stoichiometry of the diffusion flame reactions and heat release rates (HHRs).",
+     "record_field": "",
+     "quote": ""
+    }
+   ],
+   "investigations": [
+    {
+     "investigation_id": "PSI-25",
+     "title": "Burning and Suppression of Solids - II",
+     "atmosphere": 0,
+     "oxygen_only": 0,
+     "pressure_only": 0,
+     "other": 122
+    }
+   ],
+   "matched_tests": [],
+   "usable_elsewhere": {
+    "tests": 122,
+    "o2_pct": {
+     "recorded": 122,
+     "min": 13.6,
+     "max": 22.2,
      "unit": "% by volume",
      "not_ambient": 0
     },
@@ -1034,35 +1238,59 @@
      "max": null,
      "unit": "kPa"
     },
-    "investigation_ids": []
+    "investigation_ids": [
+     "PSI-25"
+    ]
    },
    "indicators": [],
    "gaps": [
     {
-     "code": "need:no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "code": "oxygen:no_usable_test_in_range",
+     "text": "Oxygen gap: none of the 122 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
+    },
+    {
+     "code": "pressure:not_recorded",
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 122 tests counted for this need."
     }
    ],
    "statements": [
     {
-     "id": "status.not_measured",
-     "text": "No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective."
+     "id": "status.other_atmosphere",
+     "text": "None of the 122 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
     },
     {
      "id": "need.reading",
-     "text": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading, or a mass loss rate. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations."
+     "text": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations."
     },
     {
-     "id": "outside_objective",
-     "text": "126 other tests record every required condition and at least one outcome variable of this need but come from investigations whose PSI record does not state this need as an objective. These tests are not counted for this need and are not in its counts."
+     "id": "tiers.counts",
+     "text": "The 122 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 0 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 122 with none of these matches."
+    },
+    {
+     "id": "elsewhere.oxygen",
+     "text": "Oxygen of the 122 counted tests not matched to this environment: recorded in 122 tests, from 13.6 to 22.2 % by volume."
+    },
+    {
+     "id": "elsewhere.pressure_not_recorded",
+     "text": "Pressure of the 122 counted tests not matched to this environment: no pressure is recorded."
     },
     {
      "id": "need.note",
-     "text": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The mass loss rate of the SAME samples is in the outcome list of this need as drafted; it is a rate of the heated sample, not a reading of a gas or of smoke. The material is the only required variable, so the status conditions_only says only that the sample is named."
+     "text": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The material is the only required variable, so the status conditions_only says only that the sample is named."
     },
     {
-     "id": "gap.need.no_usable_test",
-     "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+     "id": "gap.oxygen.no_usable_test_in_range",
+     "text": "Oxygen gap: none of the 122 tests counted for this need was recorded with oxygen inside the oxygen range of this environment."
+    },
+    {
+     "id": "gap.pressure.not_recorded",
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 122 tests counted for this need."
+    },
+    {
+     "id": "documented.elsewhere",
+     "text": "The experimental table of PSI-25 holds no pressure. A NASA record or a paper of the investigators says: \"Pressure was not varied from 1 atmosphere.\" (source: ICES19.pressure). The sentence is not used as a value of any test.",
+     "source_id": "bass2",
+     "variable": "pressure_kpa"
     }
    ],
    "references": [
@@ -1160,15 +1388,15 @@
    "need_id": "D2",
    "need": "Smoke generation conditions",
    "pillar": "detection",
-   "reading": "A counted test records the material, the flow speed, the aging time and the mass loss rate of the heated sample. No particle size or detector response is in the mapped tables.",
-   "note": "Aging time is required, so this need holds the SAME tests of smoke from overheated materials. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included. The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. By these words the table treats its columns, the weight loss rate among them, as conditions, while the pipeline lists the mass loss rate as the outcome of this need. The SAME-R rows (PSI-101) hold no mass loss rate and are not counted.",
-   "status": "other_atmosphere",
+   "reading": "A row of this need holds the conditions of a smoke test: material, air flow, aging time and the heating level (a target weight loss rate in the planned SAME matrix, SAMEEIRD.target; the heater resistance ratio Rt/R0 in SAME-R, SAMER.rtr0). No row holds a measured smoke property, so no test is counted for this need.",
+   "note": "The PSI experimental tables of SAME (PSI-102) and SAME-R (PSI-101) hold conditions of the smoke tests only. The measured smoke properties (moments of the particle size distribution, mean diameters, smoke detector signals) are reported in the investigators' final reports and papers (SAMEFSR.results, SAME.sizes, SAME.detector) and are not in the tables. The four value rows of the SAME table carry the same values as the planned test matrix of the 2005 requirements document (SAMEEIRD.matrix); the weight loss rate there is a target value (SAMEEIRD.target), and the sample mass actually lost was determined by weighing and is not in the table (AST15P.balance). Do not write that the SAME tests were run at 1 or 2 mg/min. The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included.",
+   "status": "not_measured",
    "counts": {
-    "usable_tests": 4,
+    "usable_tests": 0,
     "atmosphere": 0,
     "oxygen_only": 0,
     "pressure_only": 0,
-    "other": 4,
+    "other": 0,
     "recorded_outside_objective": 0,
     "matched_flow_in_range": 0,
     "matched_flow_not_recorded": 0,
@@ -1176,47 +1404,43 @@
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {},
-   "documented_elsewhere": [
-    {
-     "source_id": "same",
-     "investigation_id": "PSI-102",
-     "variable": "o2_pct",
-     "quote": "The crew installed the near field hardware in the Glovebox",
-     "said_in": "PSI-102.approach"
+   "matched_ranges": {
+    "o2_pct": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "% by volume"
     },
-    {
-     "source_id": "same",
-     "investigation_id": "PSI-102",
-     "variable": "pressure_kpa",
-     "quote": "The crew installed the near field hardware in the Glovebox",
-     "said_in": "PSI-102.approach"
+    "pressure_kpa": {
+     "recorded": 0,
+     "min": null,
+     "max": null,
+     "unit": "kPa"
     }
-   ],
+   },
+   "documented_elsewhere": [],
    "objective": [
     {
      "investigation_id": "PSI-102",
+     "verdict": "supported",
+     "publication_item": "SAME.goal",
+     "publication_quote": "The goal of SAME was to generate repeatable smoke and obtain particle size statistics on-orbit without relying exclusively upon sample return to Earth.",
      "record_field": "objective",
      "quote": "relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment"
     },
     {
      "investigation_id": "PSI-101",
+     "verdict": "supported",
+     "publication_item": "SAME12.objective",
+     "publication_quote": "The objective of this work was to make sufficient measurements of smoke from spacecraft fires to enable improved design of future detectors.",
      "record_field": "objective",
      "quote": "relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment"
     }
    ],
-   "investigations": [
-    {
-     "investigation_id": "PSI-102",
-     "title": "Smoke and Aerosol Measurement Experiment",
-     "atmosphere": 0,
-     "oxygen_only": 0,
-     "pressure_only": 0,
-     "other": 4
-    }
-   ],
+   "investigations": [],
    "matched_tests": [],
    "usable_elsewhere": {
-    "tests": 4,
+    "tests": 0,
     "o2_pct": {
      "recorded": 0,
      "min": null,
@@ -1230,65 +1454,31 @@
      "max": null,
      "unit": "kPa"
     },
-    "investigation_ids": [
-     "PSI-102"
-    ]
+    "investigation_ids": []
    },
    "indicators": [],
    "gaps": [
     {
-     "code": "oxygen:not_recorded",
-     "text": "Oxygen gap: the experimental tables hold no oxygen value for any of the 4 tests counted for this need."
-    },
-    {
-     "code": "pressure:not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 4 tests counted for this need."
+     "code": "need:no_usable_test",
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "statements": [
     {
-     "id": "status.other_atmosphere",
-     "text": "None of the 4 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
+     "id": "status.not_measured",
+     "text": "No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective."
     },
     {
      "id": "need.reading",
-     "text": "A counted test records the material, the flow speed, the aging time and the mass loss rate of the heated sample. No particle size or detector response is in the mapped tables."
-    },
-    {
-     "id": "tiers.counts",
-     "text": "The 4 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 0 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 4 with none of these matches."
-    },
-    {
-     "id": "elsewhere.oxygen_not_recorded",
-     "text": "Oxygen of the 4 counted tests not matched to this environment: no oxygen concentration of the surrounding atmosphere is recorded."
-    },
-    {
-     "id": "elsewhere.pressure_not_recorded",
-     "text": "Pressure of the 4 counted tests not matched to this environment: no pressure is recorded."
+     "text": "A row of this need holds the conditions of a smoke test: material, air flow, aging time and the heating level (a target weight loss rate in the planned SAME matrix, SAMEEIRD.target; the heater resistance ratio Rt/R0 in SAME-R, SAMER.rtr0). No row holds a measured smoke property, so no test is counted for this need."
     },
     {
      "id": "need.note",
-     "text": "Aging time is required, so this need holds the SAME tests of smoke from overheated materials. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included. The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. By these words the table treats its columns, the weight loss rate among them, as conditions, while the pipeline lists the mass loss rate as the outcome of this need. The SAME-R rows (PSI-101) hold no mass loss rate and are not counted."
+     "text": "The PSI experimental tables of SAME (PSI-102) and SAME-R (PSI-101) hold conditions of the smoke tests only. The measured smoke properties (moments of the particle size distribution, mean diameters, smoke detector signals) are reported in the investigators' final reports and papers (SAMEFSR.results, SAME.sizes, SAME.detector) and are not in the tables. The four value rows of the SAME table carry the same values as the planned test matrix of the 2005 requirements document (SAMEEIRD.matrix); the weight loss rate there is a target value (SAMEEIRD.target), and the sample mass actually lost was determined by weighing and is not in the table (AST15P.balance). Do not write that the SAME tests were run at 1 or 2 mg/min. The SAME table has four more rows that name Kapton, Silicone Rubber, Lampwick and Dibutyl Phthalate with the words 'same conditions as 1-4' and no values; they are not read. The smoke-point rows of PSI-107 (gas jet flames: the fuel flow at which the flame starts to emit soot) are a different kind of smoke condition and are not included."
     },
     {
-     "id": "gap.oxygen.not_recorded",
-     "text": "Oxygen gap: the experimental tables hold no oxygen value for any of the 4 tests counted for this need."
-    },
-    {
-     "id": "gap.pressure.not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 4 tests counted for this need."
-    },
-    {
-     "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-102 holds no value of o2_pct; PSI-102.approach says \"The crew installed the near field hardware in the Glovebox\" (a sentence of a document, not a value of any test).",
-     "source_id": "same",
-     "variable": "o2_pct"
-    },
-    {
-     "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-102 holds no value of pressure_kpa; PSI-102.approach says \"The crew installed the near field hardware in the Glovebox\" (a sentence of a document, not a value of any test).",
-     "source_id": "same",
-     "variable": "pressure_kpa"
+     "id": "gap.need.no_usable_test",
+     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
     }
    ],
    "references": [
@@ -1357,6 +1547,61 @@
      "url": "https://standards.nasa.gov/standard/NASA/NASA-STD-3001_VOL_2",
      "access": "full_text_read",
      "quote": "The vehicle shall have a fire protection system composed of detecting, warning, and extinguishing devices that do not create a hazardous environment to all spacecraft volumes during all mission phases."
+    },
+    {
+     "item_id": "SAMEEIRD.matrix",
+     "type": "definition",
+     "text": "The requirements document plans a test matrix of two weight loss rates, two air flow rates and two aging durations (Table 3-6: Teflon at 5 cm/s, 2 mg/minute, 1 minute; 5, 1, 1; 5, 2, 20; 10, 2, 1; the other materials 'same conditions as 1-4'). The PSI-102 experimental table carries the same values.",
+     "where": "3.6 Test matrix, PDF pages 45-46 (Table 3-6)",
+     "title": "Exploration Investigation Requirements Document for SAME a.k.a. Smoke Aerosol Measurement Experiment (PI D. Urban; Co-Is G. Mulholland, Z.-G. Yuan, J. Yang, T. Cleary)",
+     "version": "Rev. 2.0, February 25, 2005 (PSI file PSI-102_Engineering Documents_SAME_EIRD.pdf, 72 pages)",
+     "url": "https://doi.org/10.60555/gd4k-8h62",
+     "access": "full_text_read",
+     "quote": "The exact operating conditions will be varied based upon the results of prior tests; however the test matrix is anticipated to cover two weight loss rates, two air flow rates, and two aging durations."
+    },
+    {
+     "item_id": "SAMEEIRD.target",
+     "type": "definition",
+     "text": "The weight loss rates of the test matrix are target values, specified in order to vary the sample temperature.",
+     "where": "3.1.5 Sample heater, PDF page 34",
+     "title": "Exploration Investigation Requirements Document for SAME a.k.a. Smoke Aerosol Measurement Experiment (PI D. Urban; Co-Is G. Mulholland, Z.-G. Yuan, J. Yang, T. Cleary)",
+     "version": "Rev. 2.0, February 25, 2005 (PSI file PSI-102_Engineering Documents_SAME_EIRD.pdf, 72 pages)",
+     "url": "https://doi.org/10.60555/gd4k-8h62",
+     "access": "full_text_read",
+     "quote": "Two target mass loss rates are specified in the test matrix (Table 3-6) to evaluate the effect of temperature on the particle size distribution."
+    },
+    {
+     "item_id": "SAMEFSR.results",
+     "type": "published_result",
+     "text": "Table 1 'Results of SAME flight tests' gives, for Kapton, lamp wick, silicone and Teflon, unaged and aged: geometric mean diameter, arithmetic mean diameter, diameter of average mass (nm) and geometric standard deviation.",
+     "where": "5 Test Results and Discussions, Table 1, PDF page 27 (announced on PDF page 25)",
+     "title": "Smoke Aerosol Measurement Experiment (SAME), Final Report, November 1, 2000 - April 14, 2009 (Urban, Ruff, Sheredy, Cleary, Yang, Mulholland, Yuan)",
+     "version": "March 15, 2010 (PSI file PSI-102_Reports_SAME_Final Science Report.pdf, 68 pages; appendices B to E reprint SAE 2009-01-2468, AIAA 2009 'Properties of Smoke from Overheated Materials in Low-Gravity', SAE 2008-01-2089 and AIAA 2008 'Spacecraft Fire Detection: Smoke Properties and Transport in Low-Gravity')",
+     "url": "https://doi.org/10.60555/gd4k-8h62",
+     "access": "full_text_read",
+     "quote": "Results from the moment instruments for baseline runs (no aging) and 720 second aging runs are summarized in Table 1."
+    },
+    {
+     "item_id": "SAMER.rtr0",
+     "type": "definition",
+     "text": "Rt/R0 is the ratio of the resistance of the heated sample wire to its resistance at room temperature. It is the parameter by which test conditions are specified: the wire resistance measured before the run is multiplied by it to give the target resistance of the heater control.",
+     "where": "Sample heating temperature derivation, PDF page 26",
+     "title": "Smoke Aerosol Measurement Experiment Re-flight (SAMER), Final Report, 01 November 2000 - June 2, 2014 (Urban, Ruff, Sheredy, Meyer, Cleary, Yang, Mulholland, Yuan)",
+     "version": "June 2, 2014 (PSI file PSI-101_Reports_SAME-R_Final Report.pdf, 89 pages)",
+     "url": "https://doi.org/10.60555/2np7-jv14",
+     "access": "full_text_read",
+     "quote": "Traditionally, test conditions are specified by Rt/R0, the ratio between the resistance of heated wire over the resistance of the wire at room temperature. Thus, before each run, the sample wire resistance is measured, then multiplied by this parameter to get the target resistance for the control circuitry."
+    },
+    {
+     "item_id": "AST15P.balance",
+     "type": "definition",
+     "text": "The total mass loss of each sample was determined by microbalance weighing on Earth before and after the experiment.",
+     "where": "3.1 Pyrolysis",
+     "title": "Pyrolysis Smoke Generated Under Low-Gravity Conditions (Mulholland, Meyer, Urban, Ruff, Yuan, Bryg, Cleary, Yang)",
+     "version": "2015",
+     "url": "https://doi.org/10.1080/02786826.2015.1025125",
+     "access": "full_text_read",
+     "quote": "For each material, the total mass loss, mL, was determined from microbalance measurements on earth before and after the experiment."
     }
    ]
   }

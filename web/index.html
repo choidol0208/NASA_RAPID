@@ -5,7 +5,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fire Evidence Explorer</title>
-<meta name="description" content="Find which NASA microgravity combustion investigations match a crewed environment, and where the data stops. A research exploration tool built on NASA PSI data.">
+<meta name="description" content="Tell it what you want to build: a spacecraft cabin, a Moon base, a rover. See the closest NASA microgravity fire investigations, what to consider and what their recorded tests say, and where the evidence stops. A research exploration tool built on NASA PSI data.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Fire Evidence Explorer">
+<meta property="og:description" content="Tell it what you want to build: a spacecraft cabin, a Moon base, a rover. See the closest NASA microgravity fire investigations, what their recorded tests say, and where the evidence stops. A research exploration tool, not safety guidance.">
+<meta property="og:url" content="https://choidol0208.github.io/NASA_RAPID/">
+<meta property="og:image" content="https://choidol0208.github.io/NASA_RAPID/og.png">
+<meta property="og:image:alt" content="Fire Evidence Explorer showing the closest NASA PSI investigations for a lunar habitat">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231b2230'/%3E%3Cpath d='M5 24h22' stroke='%23fff' stroke-width='2'/%3E%3Ccircle cx='10' cy='18' r='3' fill='%234a64d8'/%3E%3Ccircle cx='17' cy='14' r='3' fill='%234a64d8'/%3E%3Cpath d='M23 8v16' stroke='%23e0a33a' stroke-width='2' stroke-dasharray='3 2'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
@@ -15,7 +23,7 @@
 <header class="masthead">
   <div class="wrap">
     <h1>Fire Evidence Explorer</h1>
-    <p class="lede">Describe a crewed environment. See which NASA microgravity combustion investigations come closest, why, and where the recorded data stops.</p>
+    <p class="lede">Tell us what you want to build: a spacecraft cabin, a Moon base, a rover. See which NASA microgravity fire investigations come closest, what to consider and what their recorded tests say, and where the evidence stops.</p>
     <p class="notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data. It is not operational fire-safety guidance, and it is not endorsed by NASA.</p>
   </div>
 </header>
@@ -24,7 +32,7 @@
   <section class="ask" aria-labelledby="ask-title">
     <h2 id="ask-title" class="visually-hidden">Ask</h2>
     <form id="ask-form" autocomplete="off">
-      <label for="q" class="ask-label">Environment, material or question</label>
+      <label for="q" class="ask-label">What are you building, and where?</label>
       <div class="ask-row">
         <input id="q" name="q" type="text" placeholder="e.g. moon cotton fabric, ISS smoke detector, 30% O2 at 10.2 psi" aria-describedby="ask-help">
         <button type="submit">Find evidence</button>
@@ -41,7 +49,9 @@
     </form>
   </section>
 
-  <section id="status" class="status" aria-live="polite"></section>
+  <section id="status" class="status" aria-live="polite">Loading the catalog and the NASA test tables…</section>
+
+  <section id="glance" class="glance" hidden aria-label="At a glance"></section>
 
   <section id="read" class="read" hidden aria-labelledby="read-title">
     <h2 id="read-title">How your input was read</h2>
@@ -52,7 +62,7 @@
 
   <section id="top" class="top" hidden aria-labelledby="top-title">
     <div class="section-head">
-      <h2 id="top-title">Closest investigations</h2>
+      <h2 id="top-title">Closest NASA investigations</h2>
       <p class="team-note">Scores (0–100) and order are the team's similarity computation, not a NASA result, and not operational safety guidance. <a href="#method">How the score works</a></p>
     </div>
     <ol id="results" class="results"></ol>
@@ -61,10 +71,11 @@
 
   <section id="needs" class="needs" hidden aria-labelledby="needs-title">
     <div class="section-head">
-      <h2 id="needs-title">What the recorded tests can say</h2>
+      <h2 id="needs-title">What to consider, and what the recorded tests say</h2>
       <p class="team-note">Status is the team's pipeline reading of each PSI experimental table, not a NASA assessment.</p>
     </div>
     <p class="intro">Fire-safety information needs, each defined from published NASA standards and studies. For each ranked investigation, the cell says whether its PSI table records the conditions and the outcome that need asks for. A test counts as evidence for a need only when the investigation's PSI record states that need as an objective. Click a cell to see the pipeline row behind it.</p>
+    <div id="compare" class="compare ai-block"></div>
     <div id="scenario-frame" class="ai-block"></div>
     <div id="needs-body"></div>
     <div id="needs-notes" class="ai-block"></div>
@@ -72,43 +83,52 @@
 
   <section id="tests" class="tests" hidden aria-labelledby="tests-title">
     <div class="section-head">
-      <h2 id="tests-title">Recorded tests in your atmosphere</h2>
+      <h2 id="tests-title">Recorded tests in the scenario range</h2>
       <p class="team-note">Matching by the team's pipeline against stated ranges. A count of recorded tests in comparable conditions, not a statement about how a material behaves there.</p>
     </div>
     <div id="tests-body"></div>
   </section>
 
-  <section id="coverage" class="coverage" hidden aria-labelledby="coverage-title">
+  <section id="stops" class="stops" hidden aria-labelledby="stops-title">
     <div class="section-head">
-      <h2 id="coverage-title">Where the recorded tests are</h2>
-      <p class="team-note">Counts of recorded tests computed by the team from the PSI tables; the bins are the team's choice. An empty value in a table is counted as not recorded, never filled in.</p>
+      <h2 id="stops-title">Where the evidence stops</h2>
+      <p class="team-note">Recorded tests in NASA's open PSI experimental tables. Counts and lanes are the team's computation. All tests were run in microgravity.</p>
     </div>
-    <div id="coverage-body"></div>
-  </section>
-
-  <section id="gaps-section" class="gaps" hidden aria-labelledby="gaps-title">
-    <h2 id="gaps-title">Where the data stops</h2>
-    <div id="gaps"></div>
+    <div id="stops-map" class="stops-map ai-block"></div>
+    <div id="gaps-section" class="gaps" hidden>
+      <h3>What PSI does not contain for this environment</h3>
+      <div id="gaps"></div>
+    </div>
+    <div id="coverage" class="coverage">
+      <h3 id="coverage-title">Recorded tests by oxygen and pressure</h3>
+      <p class="team-note">The bins are the team's choice. An empty value in a table is counted as not recorded, never filled in.</p>
+      <div id="coverage-body"></div>
+    </div>
   </section>
 
   <section id="all" class="all" hidden aria-labelledby="all-title">
     <h2 id="all-title">All 24 investigations for this input</h2>
     <p class="team-note table-note">Order is the team's ranking, not a NASA result. Scores within 3 points are ordered by evidence quality, so a slightly lower score can sit higher. Highlighted rows are shown above; one of those places is kept for a test run at your oxygen level when the closest matches were tested at a different one.</p>
-    <p class="scroll-hint">Swipe the table sideways to see every column.</p>
-    <div class="table-wrap">
-      <table id="ranking">
-        <thead><tr><th scope="col">#</th><th scope="col">Investigation</th><th scope="col">Closest test configuration</th><th scope="col" class="num">Score</th><th scope="col">Match by dimension</th><th scope="col">PSI page</th><th scope="col">Dataset</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
+    <details class="more fold">
+      <summary>Show the full ranking</summary>
+      <p class="scroll-hint">Swipe the table sideways to see every column.</p>
+      <div class="table-wrap">
+        <table id="ranking">
+          <thead><tr><th scope="col">#</th><th scope="col">Investigation</th><th scope="col">Closest test configuration</th><th scope="col" class="num">Score</th><th scope="col">Match by dimension</th><th scope="col">PSI page</th><th scope="col">Dataset</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </details>
   </section>
 
   <section id="method" class="method" aria-labelledby="method-title">
     <h2 id="method-title">How the score works</h2>
+    <p>This page, the catalog, the ranking code and the data pipeline were written with an AI assistant (Claude) under the team's direction. Text written by a language model carries an "AI-generated" label that says whether a person has checked it against its source. The repository lists every AI use and every source.</p>
+    <details class="more fold">
+    <summary>Read the method: dimensions, weights, gates and evidence quality</summary>
     <p>Each of the 41 test configurations in the team's catalog is compared with your input on up to seven dimensions: oxygen, pressure, flow, fuel, sample shape, research purpose and, for suppression questions, the diluent gas. Each comparison gives a similarity from 0 to 1, shown as the strip on each result.</p>
     <p>Weights depend on the kind of question (prevention, detection or suppression). Oxygen and flow weigh most for flammability, because a microgravity flame has no buoyancy and gets its oxygen only from forced flow. A wrong fuel phase or a far-off oxygen level cannot be made up by other matches. The total is then scaled by evidence quality (raw data, flight duration, human check).</p>
     <p>The same code ranks every query. A language model never produces or changes a score. Catalog values are extracted from the PSI records and tables and are marked when not yet checked by a person.</p>
-    <p>This page, the catalog, the ranking code and the data pipeline were written with an AI assistant (Claude) under the team's direction. Text written by a language model carries an "AI-generated" label that says whether a person has checked it against its source. The repository lists every AI use and every source.</p>
     <dl class="legend">
       <div><dt><span class="swatch s-hi"></span>Close</dt><dd>similarity 0.9 or more</dd></div>
       <div><dt><span class="swatch s-mid"></span>Partial</dt><dd>0.5 to 0.9</dd></div>
@@ -116,6 +136,7 @@
       <div><dt><span class="swatch s-unk"></span>Not reported</dt><dd>the record has no value</dd></div>
       <div><dt><span class="swatch s-asm"></span>Assumed</dt><dd>scored as ordinary cabin air</dd></div>
     </dl>
+    </details>
   </section>
 </main>
 
