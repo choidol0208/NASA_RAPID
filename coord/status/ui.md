@@ -1,29 +1,42 @@
 ---
 role: ui
-updated: 2026-11-14 11:26 KST
+updated: 2026-11-14 13:00 KST
 state: working
 blocked_on: none
 ---
-Now: waiting for `scenario_tests.csv`, `scenario_needs.csv` and `pipeline/spec/scenarios.json` to reach `main`; the view that reads them is already pushed and switches on by itself after my next merge of `main`. Meanwhile: preparing U5 (screenshots, GIF).
+Now: the ui role moved at 12:45 to a new session on the human lead's own computer. The earlier web session stopped syncing after 11:28. This session can open github.io, so I check the public page myself after every push. Next: the optional items of pm's request 1224, then U5 after the first-screen decision.
 
 Done since last sync:
-- U2 done: assumptions listed with the preset and its stated source, catalog and investigation links to the exact CSV row, DOI column in the full ranking.
-- U3 done: needs view from `capability_matrix.csv` (top 3 or all 24, status per need, usable tests, missing conditions, link to the exact row; need definitions and basis documents) and coverage view from `coverage_grid.csv` (oxygen x pressure per fuel phase, ambient basis only, the input's cell marked, every count linked to its row).
-- U4 done: labels (team computation, not safety guidance, AI-generated with review status) and narrow screens (checked at 375 px, no page-level sideways scroll).
-- The page reads `data/insights/cards.json` and `scenarios.json` in the agreed shape. Tested with a throwaway fixture that was never committed.
-- `web/README.md` (how it works, AI-generated note).
-- Accepted data request 1116 and built its view: a row per need for "your atmosphere" (status, tests per tier, gap codes in words) above the per-investigation matrix, and "Recorded tests in your atmosphere" (tests by tier and investigation, fuel-phase filter, each test id linked to its row in the NASA PSI table). Tested locally with the files from `origin/data-pipeline`; hidden until they are on `main`.
+- Merged `main` (14 commits behind). The scenario section (row per need for "your atmosphere", recorded tests by tier) goes live with this push.
+- pm request 1224, items 0 to 3 done:
+  - Pages also deploys from `main`.
+  - Partial-gravity warning no longer says "bounds".
+  - Three provenance labels: quoted from the PSI record, computed by team code, AI-generated.
+  - `summary_sources`, `gaps[].sources` and `frame` are rendered with links.
+- data request 1242 done:
+  - Evidence rule shown: `objective_link = not_stated` reads "Outside stated objective, not counted".
+  - Need count read from `needs.json` (6 once data's files reach `main`); `reading` shown with the counts.
+  - Only `iss` and `lunar_habitat` are shown.
+  - "Oxygen and pressure not in the NASA table" wording.
+  - Unknown gap codes shown as codes.
+  - CO2 or helium added count.
+- Answered 1158 for the record (already closed by data).
+- Checks: unit tests 18/18, validation 22/22, parity 61/61, build. Local test with `main` data (7 needs) and with `origin/data-pipeline` data (6 needs). 375 px with no sideways scroll.
 
-Next: scenario tests and scenario needs (by 14:30 after they reach `main`), then U5 screenshots and GIF once pm's insight files are in (target 21:00, earlier if possible).
+Next:
+- 1224 item 4: the first screen, if the human lead chooses it.
+- 1224 items 5 to 7: the 16:00 addendum, the source-sentence toggle, the "How we checked the AI text" panel.
+- U5 screenshots and GIF after the first-screen decision, retaken with the real fonts from this machine (target 21:00).
+- Switch the Pages trigger to `main` only at the 19:00 freeze.
 
 Published for others:
 - Public URL: https://choidol0208.github.io/NASA_RAPID/ . Demo links: `?q=ISS` and `?q=lunar%20habitat`.
-- For the slides and the project text, what the page shows for solid fuels, from `coverage_grid.csv`: at 19 to 23% oxygen, 62 recorded tests, all with no pressure recorded; at 30 to 36% oxygen, 0 recorded tests at any pressure.
-- `data/catalog/*.csv` and the `scoring.scorer.rank` output — stable shape.
+- Deploy: `.github/workflows/pages.yml` runs on pushes to `catalog-filter` and `main`. It applies on `main` once pm merges this branch. pm, please record the change to decision 8.
+- `scoring/scoring_config.json` changed: `warnings.partial_gravity` text only (pm's short form). No code, weight, preset or warning code changed.
+- For the slides, solid fuels per `coverage_grid.csv`: at 19 to 23% oxygen, 62 recorded tests, all with no pressure recorded. At 30 to 36% oxygen, 0 recorded tests at any pressure.
+- `data/catalog/*.csv` and the `scoring.scorer.rank` output: stable shape.
 
 Notes for other roles:
-- pm: please merge `data-pipeline` into `main` at your next sync; the scenario view goes live with my following merge.
-- pm: scenario text appears only when the query equals the entry's `query` exactly (case and spaces ignored) and the preset matches, so write `"ISS"` and `"lunar habitat"` as agreed. `result_notes[].investigation_id` may be the PSI accession or the catalog id.
-- pm: links to repository files use the commit the site was built from, so they keep working after later changes.
-- pm: nobody has opened the live URL logged out yet; this session's proxy blocks github.io.
+- pm: set `frame_text_origin` (or the entry's `text_origin`) to `template` for code-built frames, or the frame is tagged AI-generated.
+- pm: scenario text appears only when the query equals the entry's `query` (case and spaces ignored) and the preset matches.
 - Any change to `scoring/scorer.py` or `scoring_config.json` must keep `python3 web/parity_check.py` green, or the deploy stops.

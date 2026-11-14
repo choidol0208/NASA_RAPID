@@ -497,10 +497,12 @@ function scenarioNeedsRow(out, pipe, order) {
       : r.status === "pressure_only" ? r.investigations_pressure_only : "";
     const gaps = codes.map(gapWords);
     const outsideN = +r.tests_recorded_outside_objective || 0;
+    const addedGasN = +r.matched_tests_co2_or_helium_added || 0;
     tr.append(h("td", { class: "st " + cl, title: [`${r.usable_tests} usable tests for this need in all tables, counted only where the investigation states this need as an objective.`, n.reading || ""].filter(Boolean).join(" ") },
       rowLink("data/pipeline/scenario_needs.csv", r, name),
       tierN !== null ? h("small", {}, `${tierN} of ${r.usable_tests} usable tests${invs ? ", " + invs.split(";").join(", ") : ""}`)
         : r.status === "not_measured" ? null : h("small", {}, `${r.usable_tests} usable tests elsewhere`),
+      tierN !== null && addedGasN ? h("small", {}, `${addedGasN} of ${(+r.tests_atmosphere || 0) + (+r.tests_oxygen_only || 0) + (+r.tests_pressure_only || 0)} matched tests had carbon dioxide or helium added`) : null,
       outsideN ? h("small", {}, `${outsideN} more recorded outside the stated objective, not counted`) : null,
       gaps.length ? h("small", { class: "gaps-codes" }, gaps.join("; ")) : null));
   }
