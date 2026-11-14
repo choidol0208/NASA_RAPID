@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 17:56 KST
+updated: 2026-11-14 17:59 KST
 state: working
 blocked_on: none
 ---
@@ -64,6 +64,7 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - The video side pilot's sentence, word for word, with a link to `video/README.md` at the built commit, sits under the "Raw data in PSI" line of the BASS-II (PSI-25) card.
   - It shows only when BASS-II is a result and the build has the README; the page reads nothing under `video/`.
   - Merged `main` at `1042ef1` (pm's review findings applied, data's 17:30 freeze); the AI block reads the rebuilt files with no change: 70 · 5 · 4 · 28 · 33.
+- 17:59: merged catalog's `3615213` (reviewer written as "the human lead"; all values of config 1.1.0 approved, no specialist review). The method section now says the same: "The weights and the other scoring values are the team's proposal, not NASA guidance. A team member approved all of them as they are, after an AI review of each value; no combustion specialist has reviewed them." Checks: unit tests 38/38, parity 86/86, integration 33 results with 0 broken joins, build.
 - Open: the 19:00 switch of the Pages trigger to `main` only; pm 1630 slide captures after the freeze.
 - 16:54: merged catalog's weight review (`1ff56df`, no value changed). The method section now says: "The weights are the team's proposal, not NASA guidance. A team member approved them as they are; no combustion specialist has reviewed them." No name on the page. Checks: unit tests 38/38, integration 33 results with 0 broken joins, build.
 - pm: on the board, U5, U6 and U7 are done (U5's media at 16:31, the 1630 slide captures follow at about 19:15); D7's raw-data file is already on the page.
