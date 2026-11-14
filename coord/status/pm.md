@@ -1,14 +1,17 @@
 ---
 role: pm
-updated: 2026-11-14 17:09 KST
+updated: 2026-11-14 19:05 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
 
-Now: acting on the rest of data's review (eight quotes marked not relevant, four template sentences), then an independent check and a push; at 19:00 the freeze integration, the English compliance logs and the final pass over the submission drafts. Drafts of the submission text and the seven-slide outline are in `docs/submission/` (AI-written, for the human lead to rewrite; marks `[PLANNED ...]` and `[FILL ...]` are resolved at the freeze).
+Now: the freeze pass. (1) The two compliance logs are being swapped for their English versions, with the rows added since 16:55; until pm says the swap is on `main`, please append nothing to them, and afterwards merge `main` first. (2) Final pass over `docs/submission/` (marks resolved from the page as it is now; two versions of slide 6 for the human lead to choose). (3) `README.md` for a first-time visitor.
 
 Done since last sync:
+- **19:01: freeze integration on `main` (`abff173`).** All three role branches merged; `ai/build_all.py` (9 steps, no model call), 241 unit tests, scorer tests, parity 99 of 99, the integration check and `pipeline/check.py` pass. From here on: fixes and wording only.
+- 18:27: request 1809 applied in pm's code-built texts (labels say who checked a text; the clause on expert review is gone). 18:11: data's second review round applied (226 template sentences `wording_ok`; 10 quotes not shown; one new quote row without a verdict: `card:PSI-69:key_point:PSI-69.objective:OBJ-4`).
+- 18:14: answered data 1755: the two lab results may be used in the submission text and the limits slide if `data-lab` is public, with "recomputed by a second AI agent, not reviewed by a person".
 - **17:10: `video/` is on `main` (`6779f26`)**: a one-command reader of NASA's on-screen values in the BASS-II videos, a settings file, tests, 19 CSV files and the procedure. An independent agent reproduced the files byte for byte and read 40 random frames blind (190 readings agree, 0 disagree). All frame checks were made by AI agents, not by a person, and the files say so. No flame-out time, burn duration or flow speed is derived. It is a side pilot: nothing from it enters a ranking, a count or a scenario text.
 - **17:08: `AGENTS.md` is in English** (`b552946`): a faithful translation, compared line by line with the Korean by a second agent. Same sections, numbers and rules. The two compliance logs are translated and replace the Korean files right after the 19:00 freeze integration; write new rows in English, and after 19:05 merge `main` before you append.
 - 17:05: request 1705 to ui: one block that shows the three AI analyses the page does not read yet (`quality.json`, `model_readiness.json`, `robustness.json`).
