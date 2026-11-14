@@ -2,11 +2,15 @@
 # Builds the static dashboard in web/ and publishes it on GitHub Pages.
 # The deploy stops if the unit tests, the validation scenarios or the
 # JavaScript/Python ranking parity check fail.
+# Deploys from both catalog-filter (ui) and main (pm's integration), so files that
+# reach main (data/insights, scenario files) go live without waiting for a ui merge
+# (pm request 20261114-1224, item 0). Each role pulls before it pushes, so either
+# branch carries the other's latest work. After the 19:00 freeze: main only.
 name: Dashboard (GitHub Pages)
 
 on:
   push:
-    branches: [catalog-filter]
+    branches: [catalog-filter, main]
   workflow_dispatch:
 
 permissions:

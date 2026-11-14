@@ -145,6 +145,21 @@ function aiLabel(x) {
   return h("span", { class: "tag is-ai" }, x && x.reviewed_by ? `AI-generated, reviewed by ${x.reviewed_by}` : "AI-generated, not reviewed yet",
     x && x.model ? `, model ${x.model}` : "");
 }
+// Three kinds of text, labelled honestly (pm request 1224, item 2): quoted from NASA,
+// computed by team code from fixed templates, or written by a language model.
+const isQuote = (c) => Boolean(c) && (c.status === "fallback_quote" || c.ai_generated === false);
+const isTemplate = (x, sc) => ((x && x.text_origin) || (sc && sc.text_origin)) === "template";
+const quoteTag = () => h("span", { class: "tag" }, "Quoted from the PSI record");
+const computedTag = () => h("span", { class: "tag" }, "Computed by team code from NASA PSI tables");
+const cardTag = (c) => (isQuote(c) ? quoteTag() : aiLabel(c));
+const itemTag = (x, sc) => (isTemplate(x, sc) ? computedTag() : aiLabel(sc));
+// One label after a list when every item has the same origin; otherwise one per item.
+function listLabel(items, sc) {
+  const t = items.filter((x) => isTemplate(x, sc)).length;
+  if (t === items.length) return { inline: false, tag: computedTag() };
+  if (t === 0) return { inline: false, tag: aiLabel(sc) };
+  return { inline: true, tag: null };
+}
 function scenarioNotes(query, out, insights) {
   const q = query.trim().toLowerCase();
   return (insights.scenarios || []).find((e) => typeof e.query === "string" && e.query.trim().toLowerCase() === q && e.id === out.scenario.preset) || null;
@@ -189,12 +204,13 @@ function renderResults(out, cat, insights, sc) {
     const more = h("details", { class: "more" }, h("summary", {}, "What the record says"),
       h("p", {}, h("b", {}, "Objective (catalog summary): "), inv ? inv.objectives : "—"),
       h("p", {}, h("b", {}, "Findings stated in the record or table: "), r.key_findings || "Not stated in the PSI record."),
-      card ? h("div", { class: "ai-text" }, h("p", {}, h("b", {}, "Summary: "), card.summary, " ", aiLabel(card)),
+      card ? h("div", { class: "ai-text" }, h("p", {}, h("b", {}, "Summary: "), card.summary, " ",
+        Array.isArray(card.summary_sources) && card.summary_sources.length ? [sourceLinks(card.summary_sources, cat), " "] : null, cardTag(card)),
         Array.isArray(card.key_points) && card.key_points.length ? h("ul", {}, card.key_points.map((k) => h("li", {}, k.text, " ", sourceLinks(k.source, cat)))) : null)
         : h("p", { class: "gap" }, "Written summary: not available yet."),
       r.other_configs.length ? h("p", { class: "gap" }, "Other configurations in this investigation: ", r.other_configs.join(", ")) : null);
     const note = noteFor(sc, r);
-    const noteEl = note ? h("div", { class: "ai-note" }, h("p", {}, h("b", {}, "Team note: "), note.text, " ", sourceLinks(note.sources, cat)), aiLabel(sc)) : null;
+    const noteEl = note ? h("div", { class: "ai-note" }, h("p", {}, h("b", {}, "Team note: "), note.text, " ", sourceLinks(note.sources, cat)), itemTag(note, sc)) : null;
     ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, links, more));
   }
 }
@@ -260,6 +276,11 @@ const STATUS = {
   out_of_scope: ["Not applicable", "st-na", "Outside the scope of this need (for example, not a solid fuel)."],
   not_test_level: ["Summary rows", "st-sum", "The table's rows are test days or groups, not single tests."],
 };
+// Decision 10 (coord/decisions.md, 11/14 12:15): a test is evidence for a need only when the
+// investigation's PSI record states that need as an objective (objective_link = stated).
+const OUTSIDE = ["Outside stated objective", "st-outside",
+  "Recorded, outside the investigation's stated objective: the PSI record does not name this need as an aim, so these tests are not counted as evidence."];
+const RECORDED = new Set(["measured", "partial", "conditions_only", "none"]);
 const VAR = (v) => v.replace(/_pct$/, " %").replace(/_kpa$/, " (kPa)").replace(/_cms$/, " (cm/s)").replace(/_/g, " ").replace(/^o2/, "O2");
 
 function renderNeeds(out, pipe, expanded) {
@@ -306,25 +327,36 @@ function renderNeeds(out, pipe, expanded) {
       for (const n of order) {
         const c = cells[n.id];
         if (!c) { tr.append(h("td", { class: "st-missing" }, "—")); continue; }
-        const [name, cl, expl] = STATUS[c.status] || [c.status, "", ""];
-        const detail = c.status === "measured" || c.status === "partial" || c.status === "conditions_only" || c.status === "none"
-          ? `${c.usable_tests} of ${c.tests} tests usable` : "";
+        const outside = c.objective_link === "not_stated" && RECORDED.has(c.status);
+        const [stName, , stExpl] = STATUS[c.status] || [c.status, "", ""];
+        const [name, cl, expl] = outside ? OUTSIDE : STATUS[c.status] || [c.status, "", ""];
+        const detail = RECORDED.has(c.status)
+          ? outside ? `${c.tests} tests recorded, not counted` : `${c.usable_tests} of ${c.tests} tests usable` : "";
         const miss = c.required_missing ? `Missing: ${c.required_missing.split(";").map(VAR).join(", ")}` : "";
-        const title = [expl, detail, miss, c.note].filter(Boolean).join(" ");
+        const quote = c.objective_link === "stated" && c.objective_quote ? `Stated objective: "${c.objective_quote}"` : "";
+        const title = [expl, outside ? `Pipeline status without the objective rule: ${stName}. ${stExpl}` : "", detail, miss, quote, c.note].filter(Boolean).join(" ");
         tr.append(h("td", { class: "st " + cl + (n.pillar === focus ? " is-focus" : "") },
           rowLink("data/pipeline/capability_matrix.csv", c, name, title),
           detail ? h("small", {}, detail) : null,
-          c.status === "partial" && miss ? h("small", {}, miss) : null));
+          c.status === "partial" && miss && !outside ? h("small", {}, miss) : null));
       }
       tb.append(tr);
     }
   }
-  box.append(h("p", { class: "scroll-hint" }, "Swipe the table sideways to see all seven needs."),
+  box.append(h("p", { class: "scroll-hint" }, `Swipe the table sideways to see all ${order.length} needs.`),
     h("div", { class: "table-wrap" }, h("table", { class: "needs-table" }, h("thead", {}, head1, head2), tb)));
+  if (srow) {
+    // What a count in the first row means and does not mean (data's needs.json "reading").
+    const rd = order.filter((n) => typeof n.reading === "string" && n.reading);
+    if (rd.length) box.append(h("details", { class: "more readings", open: "" }, h("summary", {}, "What the counts in the first row mean"),
+      h("dl", { class: "need-defs" }, rd.flatMap((n) => [h("dt", {}, `${n.name} (${n.id})`), h("dd", {}, n.reading)])),
+      h("p", { class: "gap" }, "Readings: ", link(REPO + "pipeline/spec/needs.json", "pipeline/spec/needs.json"), ", written by the team's data role.")));
+  }
   const btn = h("button", { type: "button", class: "more-btn" }, expanded ? "Show the top 3 only" : `Show all ${out.ranking.length} ranked investigations`);
   btn.addEventListener("click", () => renderNeeds(out, pipe, !expanded));
   const legend = h("dl", { class: "legend needs-legend" });
-  for (const [, [name, cl, expl]] of Object.entries(STATUS)) legend.append(h("div", {}, h("dt", {}, h("span", { class: "swatch " + cl }), name), h("dd", {}, expl)));
+  for (const [name, cl, expl] of [...Object.values(STATUS).slice(0, 4), OUTSIDE, ...Object.values(STATUS).slice(4)])
+    legend.append(h("div", {}, h("dt", {}, h("span", { class: "swatch " + cl }), name), h("dd", {}, expl)));
   box.append(h("div", { class: "row-actions" }, btn), legend);
 
   // what each need asks, and the documents behind it
@@ -339,6 +371,7 @@ function renderNeeds(out, pipe, expanded) {
     const docs = [...(refs.get(n.id) || new Map()).values()];
     defs.append(h("dt", {}, `${n.name} (${n.id})`),
       h("dd", {}, n.question, " ", h("span", { class: "gap" }, "Needs: ", (n.conditions_required || []).map(VAR).join(", "), "."),
+        typeof n.reading === "string" && n.reading ? h("span", { class: "gap" }, " What a count means: ", n.reading) : null,
         docs.length ? h("span", { class: "basis" }, " Basis: ", ...docs.flatMap((d, i) => [i ? "; " : "", d.url ? link(d.url, d.reference_id) : d.reference_id])) : null));
   }
   box.append(h("details", { class: "more" }, h("summary", {}, "What each need asks, and the documents behind it"),
@@ -350,6 +383,8 @@ function renderNeeds(out, pipe, expanded) {
 function renderScenarioText(out, sc, cat) {
   const other = $("#other-notes");
   other.replaceChildren();
+  const frameBox = $("#scenario-frame");
+  frameBox.replaceChildren();
   const needsBox = $("#needs-notes");
   needsBox.replaceChildren();
   const gapsBox = $("#gaps");
@@ -358,42 +393,75 @@ function renderScenarioText(out, sc, cat) {
   if (!sc) return;
   const top = new Set(out.results.flatMap((r) => [r.psi_accession, r.investigation_id]));
   const rest = (sc.result_notes || []).filter((n) => !top.has(n.investigation_id));
-  if (rest.length) other.append(h("h3", {}, "Other investigations"), h("ul", { class: "ai-list" },
-    rest.map((n) => h("li", {}, h("b", {}, n.investigation_id), ": ", n.text, " ", sourceLinks(n.sources, cat)))), aiLabel(sc));
-  if (Array.isArray(sc.needs) && sc.needs.length) needsBox.append(h("h3", {}, "For this scenario"),
-    h("ul", { class: "ai-list" }, sc.needs.map((n) => h("li", {}, h("b", {}, n.need_id), ": ", n.statement, " ", sourceLinks(n.sources, cat)))), aiLabel(sc));
+  if (rest.length) {
+    const L = listLabel(rest, sc);
+    other.append(h("h3", {}, "Other investigations"), h("ul", { class: "ai-list" },
+      rest.map((n) => h("li", {}, h("b", {}, n.investigation_id), ": ", n.text, " ", sourceLinks(n.sources, cat), L.inline ? [" ", itemTag(n, sc)] : null))), L.tag);
+  }
+  // The scenario's frame (ranges, gravity, what PSI cannot say) sits above the need list.
+  if (typeof sc.frame === "string" && sc.frame.trim()) {
+    const fx = { text_origin: sc.frame_text_origin || sc.text_origin };
+    frameBox.append(h("p", { class: "frame" }, sc.frame, " ",
+      Array.isArray(sc.frame_sources) && sc.frame_sources.length ? [sourceLinks(sc.frame_sources, cat), " "] : null, itemTag(fx, sc)));
+  }
+  if (Array.isArray(sc.needs) && sc.needs.length) {
+    const L = listLabel(sc.needs, sc);
+    needsBox.append(h("h3", {}, "For this scenario"),
+      h("ul", { class: "ai-list" }, sc.needs.map((n) => h("li", {}, h("b", {}, n.need_id), ": ", n.statement, " ", sourceLinks(n.sources, cat), L.inline ? [" ", itemTag(n, sc)] : null))), L.tag);
+  }
   if (Array.isArray(sc.gaps) && sc.gaps.length) {
-    gapsBox.append(h("ul", { class: "ai-list" }, sc.gaps.map((g) => h("li", {}, g.text, g.needed_data ? h("span", { class: "gap" }, " Data that would close it: ", g.needed_data) : null))), aiLabel(sc));
+    const L = listLabel(sc.gaps, sc);
+    gapsBox.append(h("ul", { class: "ai-list" }, sc.gaps.map((g) => h("li", {}, g.text,
+      Array.isArray(g.sources) && g.sources.length ? [" ", sourceLinks(g.sources, cat)] : null,
+      g.needed_data ? h("span", { class: "gap" }, " Data that would close it: ", g.needed_data) : null,
+      L.inline ? [" ", itemTag(g, sc)] : null))), L.tag);
     $("#gaps-section").hidden = false;
   }
 }
 
 
 // ------------------------------------------------------------------ scenario matching (data role)
+// "In your atmosphere" means tests were run there, not that the need is covered: for the lunar
+// habitat those are fuel-droplet tests (pm request 1224), so it is not drawn as a full cell.
 const SN_STATUS = {
-  in_atmosphere: ["In your atmosphere", "st-measured"],
-  oxygen_only: ["At your oxygen, pressure not recorded", "st-partial"],
-  pressure_only: ["At your pressure, oxygen not recorded", "st-partial"],
-  other_atmosphere: ["Only other atmospheres", "st-cond"],
+  in_atmosphere: ["Tests run in your atmosphere", "st-partial"],
+  oxygen_only: ["At your oxygen, pressure not recorded", "st-cond"],
+  pressure_only: ["At your pressure, oxygen not recorded", "st-cond"],
+  other_atmosphere: ["Only other atmospheres", "st-sum"],
   not_measured: ["No usable test", "st-none"],
 };
+// The dashboard shows only the two demo scenarios; data's other scenarios feed pm's text.
+const DASH_SCENARIOS = new Set(["iss", "lunar_habitat"]);
+// data request 1242, item 12: where the NASA table has no oxygen or pressure column, say so
+// instead of "Only other atmospheres".
+function otherAtmosphereLabel(gaps) {
+  const o2Missing = gaps.includes("oxygen:not_recorded"), pMissing = gaps.includes("pressure:not_recorded");
+  if (o2Missing && pMissing) return "Oxygen and pressure not in the NASA table";
+  if (o2Missing) return gaps.some((g) => g.startsWith("pressure:")) ? "Other pressure; oxygen not in the NASA table" : "Oxygen not in the NASA table";
+  if (pMissing) return gaps.some((g) => g.startsWith("oxygen:")) ? "Other oxygen; pressure not in the NASA table" : "Pressure not in the NASA table";
+  return null;
+}
 const TIERS = [
   ["atmosphere", "In your atmosphere", "oxygen and pressure both recorded and inside the ranges"],
   ["oxygen_only", "At your oxygen, no pressure recorded", "oxygen inside the range; the table records no pressure"],
   ["pressure_only", "At your pressure, no oxygen recorded", "pressure inside the range; the table records no oxygen"],
 ];
+// Known gap codes in words; an unknown code is shown as the code itself (data request 1242, item 10).
 function gapWords(code) {
   const [v, why] = code.split(":");
-  const name = { oxygen: "oxygen", pressure: "pressure", gravity: "gravity", flow: "flow" }[v] || v;
+  const NAMES = { oxygen: "oxygen", pressure: "pressure", gravity: "gravity", flow: "flow" };
+  if (v === "need" && why === "no_usable_test") return "no usable test for this need";
+  const name = NAMES[v];
+  if (!name || !why) return code;
   if (why === "not_recorded") return `${name} not recorded`;
   if (why === "no_usable_test_in_range") return `no usable test at your ${name}`;
-  const m = /^no_usable_test_at_(.+)$/.exec(why || "");
+  const m = /^no_usable_test_at_(.+)$/.exec(why);
   if (m) return `no test at ${m[1]} ${name}`;
-  return `${name}: ${String(why).replace(/_/g, " ")}`;
+  return code;
 }
 function scenarioId(out, pipe) {
   const id = out.scenario.preset;
-  return id && pipe.scenarioSpec && pipe.scenarioSpec.scenarios.some((x) => x.id === id) ? id : null;
+  return id && DASH_SCENARIOS.has(id) && pipe.scenarioSpec && pipe.scenarioSpec.scenarios.some((x) => x.id === id) ? id : null;
 }
 function rangeText(r, unit) {
   if (!r) return "any";
@@ -420,15 +488,22 @@ function scenarioNeedsRow(out, pipe, order) {
   for (const n of order) {
     const r = rows.find((x) => x.need_id === n.id);
     if (!r) { tr.append(h("td", { class: "st-missing" }, "—")); continue; }
-    const [name, cl] = SN_STATUS[r.status] || [r.status, ""];
+    const [baseName, cl] = SN_STATUS[r.status] || [r.status, ""];
+    const codes = r.gaps ? r.gaps.split(";").filter(Boolean) : [];
+    const name = (r.status === "other_atmosphere" && otherAtmosphereLabel(codes)) || baseName;
     const tierN = r.status === "in_atmosphere" ? r.tests_atmosphere : r.status === "oxygen_only" ? r.tests_oxygen_only
       : r.status === "pressure_only" ? r.tests_pressure_only : null;
     const invs = r.status === "in_atmosphere" ? r.investigations_atmosphere : r.status === "oxygen_only" ? r.investigations_oxygen_only
       : r.status === "pressure_only" ? r.investigations_pressure_only : "";
-    const gaps = r.gaps ? r.gaps.split(";").filter(Boolean).map(gapWords) : [];
-    tr.append(h("td", { class: "st " + cl, title: `${r.usable_tests} usable tests for this need in all tables.` },
+    const gaps = codes.map(gapWords);
+    const outsideN = +r.tests_recorded_outside_objective || 0;
+    const addedGasN = +r.matched_tests_co2_or_helium_added || 0;
+    tr.append(h("td", { class: "st " + cl, title: [`${r.usable_tests} usable tests for this need in all tables, counted only where the investigation states this need as an objective.`, n.reading || ""].filter(Boolean).join(" ") },
       rowLink("data/pipeline/scenario_needs.csv", r, name),
-      tierN !== null ? h("small", {}, `${tierN} of ${r.usable_tests} usable tests${invs ? ", " + invs.split(";").join(", ") : ""}`) : h("small", {}, `${r.usable_tests} usable tests elsewhere`),
+      tierN !== null ? h("small", {}, `${tierN} of ${r.usable_tests} usable tests${invs ? ", " + invs.split(";").join(", ") : ""}`)
+        : r.status === "not_measured" ? null : h("small", {}, `${r.usable_tests} usable tests elsewhere`),
+      tierN !== null && addedGasN ? h("small", {}, `${addedGasN} of ${(+r.tests_atmosphere || 0) + (+r.tests_oxygen_only || 0) + (+r.tests_pressure_only || 0)} matched tests had carbon dioxide or helium added`) : null,
+      outsideN ? h("small", {}, `${outsideN} more recorded outside the stated objective, not counted`) : null,
       gaps.length ? h("small", { class: "gaps-codes" }, gaps.join("; ")) : null));
   }
   return tr;

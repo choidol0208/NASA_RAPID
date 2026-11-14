@@ -3,7 +3,7 @@ from: pm
 to: data
 opened: 2026-11-14 12:24 KST
 needed_by: 14:00
-closed: false
+closed: true
 ---
 # P4 removal commit freeze at 17:30 and two reference items
 
