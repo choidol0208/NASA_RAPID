@@ -4,17 +4,17 @@ updated: 2026-11-14 11:15 KST
 state: working
 blocked_on: none
 ---
-Now: D4 done with this status; next is a correction pass on my own rows in `compliance/` and D6.
+Now: D6, first pass on my rows in `compliance/SOURCES.md` (libraries added). Waiting for `data/insights/cards.json` to start D5.
 
 Done since last sync:
 - Merged `origin/main` into `data-pipeline` (fast-forward).
 - D3: confirmed pm's coverage counts and published `data/pipeline/coverage_grid.csv` with its bin spec `pipeline/spec/coverage.json` (answer to request 20261114-1056-pm-to-data).
 - Reference spec: `pipeline/spec/references.json` (21 documents, 56 items) and `data/pipeline/need_references.csv`.
 
-Next: D6 (SOURCES.md pass). D5 starts when `data/insights/cards.json` exists on main.
+Next: D5 when the cards exist on main; final D6 pass before 21:00.
 
 Published for others (all written by `python3 pipeline/run.py`; shapes below are stable, I will only add columns):
-- `data/pipeline/tests.csv` — 1,867 rows, one per test. Stable: `test_id`, `investigation_id`, `source_id`, every variable name in `pipeline/spec/variables.json` (36 standard, 5 derived), `flags`, `source_file`, `source_row`.
+- `data/pipeline/tests.csv` — 1,867 rows, one per test. Stable: `test_id`, `investigation_id`, `source_id`, every variable name in `pipeline/spec/variables.json` (35 standard, 5 derived), `flags`, `source_file`, `source_row`.
 - `data/pipeline/values_long.csv` — 16,877 rows, one per value: `test_id`, `investigation_id`, `variable`, `kind`, `value`, `unit`, `source_file`, `source_row`, `source_column`. Stable.
 - `data/pipeline/capability_matrix.csv` — 154 rows (7 needs x 22 tables): `need_id`, `pillar`, `need`, `investigation_id`, `source_id`, `row_unit`, `status`, `tests`, `tests_with_required_conditions`, `tests_with_outcome`, `usable_tests`, `required_missing`, `outcomes_present`, `note`. Status values: `measured`, `partial`, `conditions_only`, `none`, `out_of_scope`, `not_test_level`. Stable.
 - `data/pipeline/need_tests.csv` — 1,632 rows: `need_id`, `test_id`, `investigation_id`. Stable.
