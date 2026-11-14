@@ -1,38 +1,236 @@
-# NASA_RAPID
+# Fire Evidence Explorer (NASA_RAPID)
 
-A project for the 2026 NASA Space Apps Challenge (Seoul), challenge **Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data**.
+Fire Evidence Explorer is a web page: you describe a crewed environment, and it shows which of NASA's microgravity fire investigations come closest, what their recorded tests can say about six fire-safety information needs, and where the evidence stops.
 
-*Work in progress during the hackathon (14–15 November 2026). Large parts of this repository are AI-generated with Claude Code; `compliance/AI_USAGE_LOG.md` lists what, and each generated file says so at the top.*
+**Live page:** https://choidol0208.github.io/NASA_RAPID/
 
-## What we are building
+**Demo links:** [ISS cabin](https://choidol0208.github.io/NASA_RAPID/?q=ISS) · [Lunar habitat](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat)
 
-A web dashboard on NASA's Physical Sciences Informatics (PSI) combustion data. You pick a crewed-environment scenario, such as a spacecraft at sea-level atmosphere or a lunar habitat at elevated oxygen and reduced pressure. The dashboard then shows:
+**Start here:** open the Lunar habitat demo, then the sections "ISS and lunar habitat, side by side" and "Where the evidence stops". For the lunar habitat (30% oxygen or more and at or below 70.3 kPa), PSI has no counted test.
 
-1. which of the 24 PSI combustion investigations are most relevant, and why;
-2. what the data can and cannot say about each fire-safety information need (prevention, detection, suppression), with the PSI source of every statement;
-3. where the data stops: the conditions no recorded test covers.
+Built during the 2026 NASA Space Apps Challenge (Seoul, 14–15 November 2026) for the challenge *Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data*. The data is NASA's Physical Sciences Informatics (PSI) archive: 24 combustion investigations.
 
-It is a research exploration tool. It is not operational safety guidance. Rankings, counts and evidence levels are computed by the team and are not conclusions by NASA.
+It is a research exploration tool. It is not operational fire-safety guidance, and it is not endorsed by NASA. Scores, rankings and counts are the team's computation, not NASA's conclusions. Nothing on the page predicts what happens under conditions that were not tested.
 
-## Repository map
+*Most of this repository was written with an AI assistant (Claude Code). Each generated file says so at the top. `compliance/AI_USAGE_LOG.md` lists every use; see "How AI was used" below.*
 
-| Path | Content |
-|---|---|
-| `pipeline/` | Spec-driven pipeline from the PSI experimental tables to standard variables and fire-safety information needs. See `pipeline/README.md` |
-| `data/psi/` | PSI records and experimental tables as downloaded |
-| `data/pipeline/` | Pipeline outputs: one row per test, capability matrix, tests per need |
-| `data/catalog/` | Catalog of the 24 investigations and 41 test configurations |
-| `scoring/`, `validation/` | Rule-based ranking (catalog filter) and its validation scenarios |
-| `data/insights/` | Model-written summaries and explanations, each statement with its source |
-| `contracts/` | Which file is produced by whom and read by whom |
-| `coord/` | How the team's three working sessions coordinate |
-| `compliance/` | Source list and AI usage log |
+## Screenshots
 
-## Data and license
+The images are screenshots of the page, taken with `web/capture_media.mjs`. Their numbers match the page built from this repository at the 19:00 freeze on 14 November.
+
+The lunar habitat query: how the input was read, and the closest investigations.
+
+![Lunar habitat query: the input as read, with oxygen 30% and 70.3 kPa from the preset, and the three closest investigations](web/media/02_lunar_first_screen.png)
+
+The ISS cabin and the lunar habitat side by side: counted recorded tests per need.
+
+![ISS cabin and lunar habitat side by side: counted tests for each of six needs](web/media/03_compare_iss_lunar.png)
+
+Where the evidence stops: every recorded test on the oxygen axis, by kind of fuel, with the input at 30% oxygen.
+
+![Recorded tests on the oxygen axis for gas flames, fuel droplets and solid fuels; solid-fuel tests end at 22.2% oxygen](web/media/04_lunar_evidence_map.png)
+
+A short animation, from the ISS query to the lunar habitat query: [`web/media/demo_iss_to_lunar.gif`](web/media/demo_iss_to_lunar.gif) (2.4 MB).
+
+## What you can do on the page
+
+1. Type what you are building and where, for example "ISS" or "lunar habitat cotton fabric", or press one of six presets. Every value you left out is filled in and shown with where it came from.
+2. See the three closest of the 24 PSI investigations, with the team's score, the match on each dimension, the largest gap, and links to the PSI page, the dataset DOI and the source table.
+3. For six fire-safety information needs (prevention, detection, suppression), see whether the recorded tests hold the conditions and the outcome the need asks for. Click a cell to see the pipeline row behind it.
+4. Compare the ISS cabin with the lunar habitat, and see where the recorded tests stop on the oxygen and pressure axes.
+5. Download the matched tests (CSV) and the evidence package (JSON), and share a query as a link (`?q=...`).
+
+## What is implemented today
+
+Checked against the page built from this repository at the freeze (`python3 web/build.py`, served locally, page read with headless Chrome for `?q=ISS` and `?q=lunar%20habitat`).
+
+- A query box with six presets: ISS cabin, Lunar habitat, Lunar habitat cotton fabric, Smoke detection on the ISS, Spacesuit, Mars base. `?q=` opens the page with a query.
+- "How your input was read": each value, marked as typed by you, taken from a preset, or a default.
+- "Closest NASA investigations": the top three with the team's score (0–100), similarity per dimension, the reason, the largest gap, a confidence label, and source links. Each result also summarises PSI's file listing for that investigation. For the ISS, lunar habitat, spacesuit and Mars base queries, each result shows how stable its rank is when the team's weights are varied.
+- "What to consider, and what the recorded tests say": six needs against the ranked investigations, one status per cell from the data pipeline, and the ISS cabin and the lunar habitat side by side.
+- "Recorded tests in the scenario range", "What is known, need by need" (fixed sentences built by code, no language model), "What NASA's recorded tests showed" and "Criteria in NASA documents".
+- "Where the evidence stops": recorded tests on the oxygen axis by kind of fuel, a grid of recorded tests by oxygen and pressure, and what PSI does not contain for the chosen environment.
+- "All 24 investigations for this input": the full ranking.
+- Downloads: the matched tests (CSV), the evidence package (JSON), all recorded tests (CSV).
+- "How AI is used here, and how it was checked": the counts for the model-written sentences, a diagnostic of whether the NASA tables could support an outcome model, and the sensitivity of the ranking to the team's weights.
+- The video side pilot appears as a note on the BASS-II result.
+
+The page is static. No language model runs in it, and it needs no server, account or API key.
+
+## How it is built
+
+The team worked in four Claude Code sessions, one per role: pm, data, ui and catalog. Each part below names its folder and its role.
+
+**Data pipeline** (`pipeline/`, outputs in `data/pipeline/`; data role). The data role's AI session (Claude Code), directed by the team, drafted six fire-safety questions from 66 published documents (`pipeline/spec/references.json`), each with the variables a test must record. The pipeline maps the 22 PSI experimental tables to standard variables, giving 1,824 test rows. It links a test to a need only when the investigation states that need as an objective. `pipeline/check.py` recomputes every output with separate code. Details: `pipeline/README.md`.
+
+**Ranking** (`scoring/`, `validation/`, `data/catalog/`; catalog role). A catalog of the 24 investigations and their 41 test configurations, extracted from the PSI records and tables by an AI assistant. A rule-based scorer compares the input with each configuration on up to seven dimensions (oxygen, pressure, flow, fuel, sample shape, research purpose, diluent gas), with weights that depend on the kind of question. Code computes every score; a language model never produces or changes one. The page runs a JavaScript port of the same scorer, and a check confirms that both give the same results. Method: `scoring/METHOD.md`.
+
+**AI layer** (`ai/`, outputs in `data/insights/`; pm role). Code builds the scenario text, the gaps, the counts, the quotes and the evidence map from the PSI files and the pipeline outputs. One local language model wrote short summary sentences for the investigation cards before publishing; code gates checked each sentence. Details: the section "AI layer" below.
+
+**Page** (`web/`; ui role). Plain HTML, CSS and JavaScript. `web/build.py` copies the page and the data files it reads into `web/dist/`. A GitHub Actions workflow (`.github/workflows/pages.yml`) runs the ranking unit tests, the validation scenarios, the integration check and the JavaScript/Python parity check, builds the page and deploys it to GitHub Pages. The AI-layer, pipeline and video checks are run by hand (see "How to run it"). Details: `web/README.md`.
+
+**Video side pilot** (`video/`; pm role). For 19 BASS-II clips (PSI-25), a reader copies the numbers NASA's video shows on screen (FUEL, AIR, FAN, RAD and a clock) into one row per second. It is a transcription of NASA's display, not a NASA data file and not a measurement. Output: `video/data/team_transcription_bass2_onscreen_readings/`. Details: `video/README.md`.
+
+## How to run it
+
+Needs Python 3 (tried with 3.13.5). The page build, the scorer and the pipeline check use only the Python standard library. Other needs are named at each step. The results below were measured on 14 November 2026, after the 19:00 freeze.
+
+### Build and open the page
+
+```
+python3 web/build.py
+cd web/dist && python3 -m http.server 8000
+```
+
+Then open http://localhost:8000/?q=lunar%20habitat. The build printed `built 44 files`.
+
+### Pipeline checks
+
+```
+python3 pipeline/check.py
+```
+
+This recomputes every output in `data/pipeline/` from the raw tables and the spec files, and rewrites `data/pipeline/validation_report.json`. To leave the repository unchanged, check a copy:
+
+```
+cp -R data/pipeline /tmp/pipeline_copy
+python3 pipeline/check.py --data /tmp/pipeline_copy
+```
+
+Result: `59 checks: 57 PASS, 0 FAIL, 2 SKIP`. The two skipped checks recount the raw-data inventory, which needs `data/psi/file_listings/`. That folder is not in the repository. `python3 pipeline/raw_inventory.py --refresh` fetches the listings from PSI.
+
+To rebuild the pipeline outputs (needs pandas; this downloads from PSI and rewrites `data/psi/` and `data/pipeline/`; not run for this README):
+
+```
+python3 scripts/fetch_psi.py
+python3 pipeline/run.py
+```
+
+### Ranking tests
+
+```
+python3 -m scoring.scorer "lunar habitat"
+python3 -m unittest scoring.test_scorer
+python3 web/parity_check.py
+python3 web/check_integration.py
+```
+
+Results: the scorer printed ACME-BRE, FLEX and ACME-CFI-G as the top three; `Ran 39 tests ... OK`; `parity: 99/99 queries identical` (needs Node.js 18 or later; tried with v25.2.1); `11 queries, 33 results checked, 0 broken joins`.
+
+The scenario, stability and sensitivity checks rewrite `validation/report.md` (not run for this README):
+
+```
+python3 validation/run_validation.py
+```
+
+### AI layer build and tests
+
+```
+python3 -m unittest discover -s ai -p "test_*.py"
+python3 ai/check_all.py
+```
+
+Result of the tests: `Ran 241 tests ... OK`. No test calls a model. `ai/check_all.py` only reads; it checks everything in `data/insights/`.
+
+Result of `ai/check_all.py` (14 November 2026, after the English compliance logs were committed): `PASS: 0 hard failure(s); 0 file(s) not built yet; 0 report-only lint hit(s)`.
+
+The build rewrites every file in `data/insights/`, with no model call (needs NumPy, pandas and scikit-learn; not run for this README):
+
+```
+python3 ai/build_all.py
+```
+
+### Video reader tests
+
+```
+python3 video/test_read_overlay.py
+python3 video/read_overlay.py --settings video/settings/bass2.json --list
+```
+
+Results: `Ran 9 tests ... OK` (needs NumPy and Pillow); `--list` printed the 19 clips. The tests run without the videos.
+
+Reading the clips needs the 19 mp4 files from PSI, which are not in the repository, and `ffmpeg` and `ffprobe` (not run for this README):
+
+```
+python3 video/read_overlay.py --settings video/settings/bass2.json --clips <folder with the mp4 files> --out <folder>
+```
+
+## Data and licence
 
 Data: NASA PSI Data Repository, https://psi.nasa.gov/ (records are CC0-1.0 where a license is stated; see `compliance/SOURCES.md`). PSI asks that each investigation be cited by its DOI; the DOIs are in `data/psi/manifest.json`.
 
-Code and documents in this repository: Apache-2.0, see `LICENSE`.
+The repository holds what the page needs: the 24 PSI records, the 22 experimental tables and the manifest in `data/psi/`. The BASS-II video clips are not in the repository. Fonts, libraries and documents used are listed with their licences in `compliance/SOURCES.md`.
+
+## How AI was used
+
+- Code, documents and data processing were written with Claude Code (Anthropic) in four working sessions, one per team role, under the team's direction. Each generated file says so at the top.
+- In the product, one local model, OpenAI gpt-oss:20b (Apache-2.0, run through Ollama), wrote short summary sentences for the investigation cards before publishing. The page never calls a model. No number, score or count comes from a model.
+- Code gates checked every model sentence; a second AI session then read them. Of 70 sentences, 33 are shown, each labelled "AI-generated" with the NASA sentences it rests on. Reviewed by a second AI session: 61. Reviewed by a person: 0.
+- The full record is `compliance/AI_USAGE_LOG.md`. On the page, the block "How AI is used here, and how it was checked" shows the counts (`data/insights/quality.json`).
+
+## Known limits
+
+Data and pipeline (from `pipeline/README.md`):
+
+- Only the PSI experimental tables are mapped. Publications, analysed data and raw data are not. Eight mapped tables are not test-level (for example, one row per test day).
+- A "test" is one row of a NASA table.
+- The six needs are the team's construction (an AI draft) from published documents, not a NASA list or standard. Five of the six are limited to solid fuels.
+- 408 of the 1,824 test rows count for at least one need. They come from four investigations (PSI-25, 69, 98, 99).
+- Ignition and smoke particle size have no counted test: no mapped column holds those outcomes.
+- The BASS-II and Saffire tables have no pressure column. Pressure is documented for each investigation as a whole (about 1 atm), not for each test.
+- The Saffire oxygen value is what the ISS reported about one day before the tests, not a reading at ignition.
+- The ISS ranges are the team's bins, not an ISS operating range.
+- Lunar habitat: the 17 counted tests in its oxygen range are FLEX droplet tests recorded at 71.2 to 72.4 kPa, 1 to 2 kPa above 70.3 kPa (10.2 psi). No counted test was recorded at 30% oxygen or more and at or below 70.3 kPa.
+- Every test in the PSI tables used here was run in microgravity. Results at 0 g and 1 g are not bounds for lunar or Martian gravity.
+
+Ranking (from `scoring/PARAMETER_REVIEW.md`):
+
+- The weights and scales are the team's choices. A combustion textbook (Turns 2012) supports the direction of several rules, not their sizes.
+- Each value was halved and raised by half on four demo queries. Of 136 runs, 129 keep the same top three in the same order, 3 keep the same three in another order, and rank 1 changes in 3.
+- The two demo queries (ISS, lunar habitat) do not change. All changes come from the two cotton-fabric queries (ISS cotton fabric, and the preset Lunar habitat cotton fabric) and from two values: how steeply oxygen above a test's maximum is penalised, and the fuel similarity table.
+- A configuration whose record gives no atmosphere is scored at an assumed 21% oxygen and 101.3 kPa. It can outscore a recorded near match; the page labels it with medium confidence.
+- Within 3 points, stronger evidence goes first. At low scores, 3 points is a large share.
+- Catalog values were extracted from the PSI records by an AI assistant and are labelled "AI-extracted" on the page.
+
+Video side pilot (from `video/README.md`):
+
+- 19 BASS-II clips only; nothing is said about the other 277 clips of PSI-25. Not tried on any other experiment.
+- An AI assistant compared 186 frames (about 750 values) with the picture and found none wrong. From the random frames alone, fewer than about 1 value in 100 should be wrong.
+- It gives no flame-out time, ignition time, burn duration, or flow speed at blowoff or extinction. An automatic flame signal from picture brightness failed its check and was removed.
+- RAD is an uncalibrated reading, not a heat flux. AIR 0 does not mean still air. A flow speed derived from FAN is a calibration estimate, off by about 30% where it could be tested.
+- The download path of `--fetch` has not been run. A watcher for new PSI data is a design only.
+
+## What is next
+
+- Review by combustion researchers: the eight questions at the end of `scoring/PARAMETER_REVIEW.md`, and the six needs in `pipeline/spec/needs.json`.
+- Compare the catalog values behind the demo rankings with the NASA rows listed in `validation/verification_sheet.csv`.
+- Map the per-sample pressure column of the Saffire raw data in PSI, which the pipeline does not read yet.
+- Add test-level records from combustion tests at lunar gravity when such records exist in PSI.
+
+## Repository map
+
+| Path | Content | Role |
+|---|---|---|
+| `web/` | The page, its build, the scorer's JavaScript port and the checks. `web/media/` holds the screenshots | ui (scorer port: catalog) |
+| `pipeline/` | Spec-driven pipeline from the PSI tables to standard variables and fire-safety information needs | data |
+| `data/psi/` | PSI records and experimental tables as downloaded, and the manifest with the DOIs | data |
+| `data/pipeline/` | Pipeline outputs: one row per test, capability matrix, tests per need, evidence packages | data |
+| `data/catalog/` | Catalog of the 24 investigations and 41 test configurations | catalog |
+| `scoring/`, `validation/` | Rule-based ranking, its method, and its test scenarios and sensitivity checks | catalog |
+| `ai/`, `data/insights/` | AI layer: code-built text, card summaries, evidence map, diagnostics | pm |
+| `video/` | Video side pilot: on-screen readings of 19 BASS-II clips | pm |
+| `docs/submission/` | Drafts of the submission text and the slide outline | pm |
+| `compliance/` | `SOURCES.md` (every source and licence) and `AI_USAGE_LOG.md` | all roles, append only |
+| `coord/` | How the four working sessions coordinate; `coord/roles.json` lists each role's branch and paths | pm |
+| `contracts/` | Which file is produced by whom and read by whom | pm |
+| `scripts/` | Fetching PSI, profiling the tables, building the catalog, coordination helper | data, catalog, pm |
+| `reports/` | Spot-check sheet of raw cells to compare with the NASA pages | data |
+| `presentation/` | One slide on the ranking | ui |
+| `AGENTS.md` | The rules the AI sessions work under | pm |
+
+## Licence
+
+Code and documents in this repository: Apache-2.0, see `LICENSE`. NASA PSI data: see "Data and licence" above.
 
 ## AI layer (`ai/`)
 

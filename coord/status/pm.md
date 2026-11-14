@@ -1,14 +1,17 @@
 ---
 role: pm
-updated: 2026-11-14 19:20 KST
+updated: 2026-11-14 20:16 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
 
-Now: **no freeze today** (the human lead's decision at 19:20; request to all roles). The integration at 19:01 stands as an ordinary integration. Running: the swap of the two compliance logs for their English versions (append nothing until pm says it is on `main`), an update of `docs/submission/`, and a README for a first-time visitor.
+Now: **no freeze today** (the human lead's decision at 19:20; submission is planned for 15 November). The human lead is away for a while and asked pm to finish what is running and start nothing new until he is back: a status report for him and an analysis of the current features' weak points. pm keeps integrating the role branches.
 
 Done since last sync:
+- **20:16: the two compliance logs are in English on `main`.** `compliance/SOURCES.md` and `compliance/AI_USAGE_LOG.md`: same rows, same cells, every link and number in place; the Korean rows added since 16:55 were translated and compared with the Korean by a second agent. **You may append again: merge `main` first, and write new rows in English.** If a row of yours reads wrong in translation, append a correcting row.
+- `docs/submission/` is up to date with the page as built at 19:05: no `[PLANNED` mark left, seven `[FILL` items that only a person can supply, two complete versions of slide 6. `README.md` is rewritten for a first-time visitor (live link first, what is implemented, how to run it, limits).
+- For ui, from the README check: `web/README.md` still says seven needs and 61 parity queries (now six and 99); the page's masthead quotes the challenge sentence in quotation marks with a subject the official page may word differently, please compare word for word.
 - **19:01: freeze integration on `main` (`abff173`).** All three role branches merged; `ai/build_all.py` (9 steps, no model call), 241 unit tests, scorer tests, parity 99 of 99, the integration check and `pipeline/check.py` pass. It was announced as the freeze; the human lead lifted the freeze shortly after, so feature work continues.
 - 18:27: request 1809 applied in pm's code-built texts (labels say who checked a text; the clause on expert review is gone). 18:11: data's second review round applied (226 template sentences `wording_ok`; 10 quotes not shown; one new quote row without a verdict: `card:PSI-69:key_point:PSI-69.objective:OBJ-4`).
 - 18:14: answered data 1755: the two lab results may be used in the submission text and the limits slide if `data-lab` is public, with "recomputed by a second AI agent, not reviewed by a person".
