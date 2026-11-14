@@ -59,3 +59,19 @@ The organisers' feedback was that the project lacks something that catches the e
 ## Until then
 
 I finish step A, the raw-data inventory you asked for (request 1449) and D5 when the review sheet lands. The three files to be frozen at 17:30 do not change through any of this.
+
+## Addendum, 15:15 KST: use NASA's own open questions as the index
+
+The human lead added a point that sharpens the proposal: the team does not set criteria, but NASA will, on the existing base; so the tool should show (a) what else has to be considered before a criterion can be set, and (b) what a user can stand on while no criterion exists. Both already exist in NASA documents, and we hold them as quoted reference items:
+
+- **What must be determined before criteria can be set: NASA's own question and gap lists.**
+  - 2004 organizing questions of the fire prevention, detection and suppression project (`CP2004.*`), for example "How do the flammability and ignitability of materials change in high-O2 mole fraction, low-pressure, reduced gravity environments?" (`CP2004.flam.q6`), "How does the flammability, ignitability and Limiting Oxygen Index (LOI) of a material change with gravitational level?" (`CP2004.flam.q4`), "What are the O2 mole fraction and absolute pressure below which a fire cannot exist?" (`CP2004.supp.q3`), "What are the appropriate pre-fire and fire signatures for fire detection in low and partial gravity?" (`CP2004.det.q2`).
+  - The 2003 research plan (`CP2003.roadmap.*`, `CP2003.prev.*`, `CP2003.resp.*`, `CP2003.det.*`), for example "Augment existing go/no go criteria with a quantitative test method which provides ranking or indication of flammability margin" (`CP2003.prev.margin`).
+  - The gaps named by the Spacecraft Fire Safety Systems Maturation Team (`SMT.gap.*`), as reported in the 2016 Saffire paper.
+- **What a user stands on meanwhile: the existing procedure.** Test in the worst-case atmosphere (`6001B.T1.focr59`); where flammable material is used, control its amount and arrangement and isolate a potential fire by firebreaks (`6001B.6.1.2.spread`, which points to JSC 29353; we have not read that document); the four areas of fire protection (`TB008.areas`); testing and certification to 34% oxygen for exploration atmospheres (`EAWG.testing`).
+
+**Proposed change to the plan:** the index of the answer view is these NASA questions, verbatim with document and year, instead of the team's six needs (the literature check found that no NASA document gives our six as a list; they stay underneath as the mapping to variables). For each NASA question the tool shows: recorded PSI tests that bear on it (through the mapped need and the stated conditions), published statements that bear on it (step A), and what none of the sources hold. That is an evidence map on NASA's own agenda, not a criterion.
+
+Limits to state on the page: the lists are from 2003, 2004 and 2013; the page shows what the sources we read hold against each question, not whether NASA today considers a question open or closed; the mapping from a NASA question to variables and scenarios is the team's reading and is labelled so.
+
+If you agree, step B becomes `data/pipeline/nasa_questions.json` (one entry per quoted question: source, year, mapped needs and conditions with the words that justify the mapping, counts of recorded tests by scenario, lists of published findings, what is missing) for the questions about material flammability, flame spread, extinction and detection: about 25 questions. Same deadline, 17:30.
