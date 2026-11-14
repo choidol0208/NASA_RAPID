@@ -50,6 +50,8 @@
 | 11/14 11:40 | 모델 | gpt-oss:20b (20.9B, MXFP4 양자화, Ollama 배포본) | https://ollama.com/library/gpt-oss | Apache-2.0 (모델에 포함된 라이선스 본문으로 확인) | OpenAI (미국) | 제품에 들어갈 요약·해설 문구를 미리 생성하는 로컬 모델. 11:40 현재 시험 단계 |
 | 11/14 11:40 | 소프트웨어 | Ollama 0.40.16 (Homebrew 설치) | https://github.com/ollama/ollama | MIT (GitHub 라이선스 정보로 확인) | Ollama (미국) | 로컬 모델 실행. 제품에는 포함되지 않음 |
 | 11/14 12:46 | 문서 | Preliminary Results from the Saffire VI Experiment (Urban, Ruff, Ferkul 외), ICES-2024-365 | https://ntrs.nasa.gov/citations/20240002981 | NTRS 공개 문서. 저작권 표시는 'may include copyright material'이므로 표 1의 수치만 인용하고 그림·긴 문장은 싣지 않음 | NASA NTRS | `pipeline/spec/references.json` 항목 `SAF456.conditions` (Saffire IV~VI 시험 조건. PSI에는 없는 실험이며 참고용) |
+| 11/14 12:48 | 글꼴 | IBM Plex Sans KR, IBM Plex Mono (Google Fonts 경유) — 위 10:00 행과 같은 글꼴의 추가 사용처 | https://fonts.google.com/specimen/IBM+Plex+Sans+KR | SIL Open Font License 1.1 | IBM | 팀 내부 페이지 `reports/indicators.html` |
+| 11/14 12:48 | 라이브러리 | pandas — 위 11:20 행과 같은 라이브러리의 추가 사용처 | https://github.com/pandas-dev/pandas | BSD-3-Clause | pandas 개발팀 | `pipeline/evidence.py`, `reports/build_indicators_page.py` (`pipeline/facts.py`, `pipeline/check.py`는 표준 라이브러리만 사용) |
 
 실험별 DOI는 `data/psi/manifest.json`에 있다. PSI는 데이터를 쓸 때 실험의 DOI로 인용하라고 요구한다.
 
