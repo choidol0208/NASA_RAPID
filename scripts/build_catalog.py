@@ -82,20 +82,19 @@ def unique_rows(rows):
     return out, len(rows) - len(out)
 
 
-def bass2_air(cell, restrictor):
+BASS2_TUNNEL_MAX_CMS = 40.0  # PSI-25 record, approach: "airflow speeds up to 40 cm/s"
+
+
+def bass2_air(cell):
     """Air speeds (cm/s) in one BASS-II 'Air display' cell, as the team reads the column:
-    - numbers outside brackets; "max(47)" keeps its number (the bracket holds the air value);
-    - other bracketed numbers and numbers after "pot"/"pots" are fan or potentiometer readings;
-    - above 40 cm/s (the record's tunnel limit) only when the flow restrictor is out
-      ('Flow restrictor' = 0); with it in, such numbers are fan readings written in the
-      air column (rows 53, 54, 63)."""
-    s = re.sub(r"(?i)max\s*\(([^)]*)\)", r" \1 ", cell)
-    s = re.sub(r"\([^)]*\)", " ", s)
+    - numbers outside brackets only: bracketed numbers, "max(47)" included, and numbers
+      after "pot"/"pots" are fan or potentiometer readings (the table's own convention);
+    - nothing above the 40 cm/s that the PSI-25 record gives as the tunnel's limit: fan
+      readings (40.5 to 62) also appear in the air column (rows 53, 54, 63, 117)."""
+    s = re.sub(r"\([^)]*\)", " ", cell)
     s = re.split(r"(?i)\bpots?\b", s)[0]
     vals = [float(x) for x in re.findall(r"\d+\.?\d*", s)]
-    if restrictor.strip() != "0":
-        vals = [v for v in vals if v <= 40]
-    return vals
+    return [v for v in vals if v <= BASS2_TUNNEL_MAX_CMS]
 
 
 # ----------------------------------------------------------------- computed table facts
@@ -180,7 +179,7 @@ def facts():
     for r in rows:
         groups.setdefault(fam(r[5]), []).append(r)
     for g, rs in groups.items():
-        air = [a for r in rs for a in bass2_air(r[8], r[6])]
+        air = [a for r in rs for a in bass2_air(r[8])]
         f[f"B2_{g}"] = dict(n=len(rs), o2=rng([num(r[11]) for r in rs], 1, 1),
                             air=rng(air, 1, 1), pis=sorted(set(r[0] for r in rs)))
     # BASS (PSI-26): sample families (table has no flow or O2 columns)
@@ -252,7 +251,7 @@ INV = {
     research_focus="ignition; flame_spread; extinction_limit; flammability_boundary", fire_safety_role="prevention",
     fire_scenario_tags="cabin_material", has_1g_comparison="Y",
     key_findings="Hypothesis tested: with adequate ventilation, materials burn as well or better in microgravity than in normal gravity, so the upward 1g test may not be conservative in space. Linked papers report a microgravity flammability boundary for PMMA rods and radiative extinction at low opposed-flow speed.",
-    notes="Wind tunnel flow up to 40 cm/s (record); with the flow restrictor removed ('Flow restrictor' = 0) the 'Air display' column records up to 53 cm/s (row 117). O2 lowered below 21% by adding N2. 'Air display' is cm/s (team check of PSI-25 ReadMe)."),
+    notes="Wind tunnel flow up to 40 cm/s (record). The 'Air display' column also holds fan readings above 40 (rows 53, 54, 63, 117, 121), which are not read as air speed; the highest air value is 38.5 (row 72). O2 lowered below 21% by adding N2. 'Air display' is cm/s (team check of PSI-25 ReadMe)."),
  "PSI-26": dict(investigation_id="BASS", project_group="BASS", tier=1,
     objectives="Flammability of practical, thicker solids (SIBAL and Nomex fabric, PMMA slabs and spheres, wax, Ultem) in concurrent and opposed flow up to 40 cm/s, and effectiveness of an inert gas (N2) extinguishing agent.",
     research_focus="flame_spread; suppression; extinction_limit", fire_safety_role="prevention; suppression",
@@ -464,8 +463,8 @@ CONFIGS = [
      key_findings="Linked paper: microgravity flammability boundary for PMMA rods in axial stagnation flow (the 'Goldilocks' zone cited by PSI-62).",
      test_count_config=F["B2_rod"]["n"], tests_table_ref="PSI-25_Experimental table_BASS-II.csv (Olson, Fernandez-Pello rods)",
      source_notes="Flow: 'Air display' column (cm/s per the PSI-25 ReadMe), numbers outside brackets; bracketed numbers and numbers after 'pot' are fan or potentiometer readings. "
-                  "Above the record's 40 cm/s only with 'Flow restrictor' = 0: the highest is 38.5 (row 72, 'incr to max 38.5'), then 28 (row 73) and 26.5 (row 74). "
-                  "Rows 53, 54 and 63 (restrictor 2) carry fan readings (40.5 to 62) in the air column and are left out. "
+                  "Numbers above 40 are left out: the PSI-25 record gives 40 cm/s as the tunnel's limit, and rows 53, 54 and 63 carry fan readings (40.5 to 62) in the air column. "
+                  "Highest air value 38.5 (row 72, 'incr to max 38.5', flow restrictor out), then 28 (row 73) and 26.5 (row 74). "
                   "The pipeline's flow_cms is each cell's starting flow (highest 20, row 48), so its range is narrower. Classification columns are team judgement."),
  cfg("BASS-II-C04", "PSI-25", "SIBAL cotton-fiberglass fabric strips (1–2 cm wide)",
      fuel_phase="solid", fuel_material="SIBAL (75% cotton, 25% fiberglass)", fuel_class="fabric", melt_behavior="chars", sooting_tendency="medium",
@@ -476,8 +475,9 @@ CONFIGS = [
      measured_outputs="video; flame_spread_rate; extinction_condition; gas_species; radiant_flux",
      flammability_boundary_reported="Y", test_count_config=F["B2_sibal"]["n"],
      tests_table_ref="PSI-25_Experimental table_BASS-II.csv (T'ien SIBAL)",
-     source_notes="Flow: 'Air display' column read as for BASS-II-C03. With 'Flow restrictor' = 0 the column records 29 (row 115, '9 29'), 53 (row 117, '6 53') and 47 (row 121, '11 max(47)'), above the record's 40 cm/s; "
-                  "the earlier cut at 40 kept 29 and dropped 47 and 53. Lowest 1 cm/s; row 107 also records '<1'. "
+     source_notes="Flow: 'Air display' column read as for BASS-II-C03. Highest air value 29 (row 115, '9 29'). "
+                  "Rows 117 ('6 53') and 121 ('11 max(47)') hold numbers above the record's 40 cm/s limit and are not read as air speed: "
+                  "47 is in brackets, which the table uses for fan readings, and 53 is the size of the fan reading of row 121 (52). Lowest 1 cm/s; row 107 also records '<1'. "
                   "The pipeline's flow_cms is each cell's starting flow (5 to 11). Classification columns are team judgement."),
  cfg("BASS-II-C05", "PSI-25", "Nomex III fabric",
      fuel_phase="solid", fuel_material="Nomex III", fuel_class="fabric", melt_behavior="chars", sooting_tendency="medium",

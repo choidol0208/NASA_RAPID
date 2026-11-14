@@ -30,9 +30,10 @@ TOL = 0.051  # catalog values carry one decimal; pipeline values carry more
 
 # Catalog flow ranges wider than tests.csv, with the reason read from the NASA table.
 FLOW_WIDER = {
-    "PSI-25": "BASS-II 'Air display' cells raise the flow with the flow restrictor out (rows 72, 74, 115, 117, 121: "
-              "up to 38.5 cm/s for rods and 53 for SIBAL); tests.csv keeps each cell's starting number "
-              "(ui request 20261114-1319 to data). See source_notes of BASS-II-C03 and C04.",
+    "PSI-25": "BASS-II 'Air display' cells record the flow raised during a test (row 72 'incr to max 38.5', "
+              "73 'incr to 28', 74 '4 incr to 26.5' for rods; row 115 '9 29' for SIBAL), within the record's 40 cm/s; "
+              "tests.csv keeps each cell's starting number (request 20261114-1319 to data). "
+              "See source_notes of BASS-II-C03 and C04.",
 }
 
 
