@@ -1,0 +1,734 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14, on the experimental branch data-lab. Not reviewed by a person or by a combustion specialist.",
+  "what_this_is": "An inference map for one question: what the documents held by the team say would have to be known before a material-flammability criterion could be set for a lunar habitat, and what the held items and PSI tests show of it. It is not a criterion, not a research plan of the team and not a prediction. Every claim, reason, closing step and verification statement is a copy of a reference item (field 'quote', the sentence as printed; or field 'text', the team's wording of the document in references.json) or of a PSI record field.",
+  "question": "What would have to be established before a material-flammability criterion could be set for a lunar habitat (oxygen 30% or more, pressure 10.2 psi or less, lunar gravity)?",
+  "authorship": "The choice of links, their parents, the required conditions of each link and the evidence items listed for it are the team's (AI) reading of the items. The documents do not arrange their questions as a tree.",
+  "no_item": "no item held",
+  "quote_fields": [
+   "quote",
+   "text"
+  ],
+  "state_rule": {
+   "conditions": "The conditions an evidence item states are those of its rows in data/pipeline/findings.csv (findings.py tags only conditions the item itself states; an oxygen number that is a result, such as a limit, is not a condition). An item with no row in findings.csv states no condition. A counted PSI test is a row of data/pipeline/need_tests.csv with objective_link 'stated' for a need of the link; its conditions are its recorded values in data/pipeline/tests.csv.",
+   "axes": {
+    "o2": "inside if the stated or recorded oxygen (both ends of a stated range) is at least the environment's lower bound",
+    "pressure": "inside if the stated or recorded pressure (both ends of a stated range) is at most the environment's upper bound in kPa, both rounded to 3 decimals",
+    "gravity": "inside if the environment's gravity level is one of the levels the item states, or the level recorded for the test",
+    "flow": "inside if the item states a flow speed or the test records one; the environment states no flow range"
+   },
+   "result": {
+    "established": "at least one row of an evidence item of kind 'result' in findings.csv, or at least one counted PSI test, is inside on every required condition of the link",
+    "partly": "not established, and at least one evidence item or counted PSI test is held for the link (at other conditions, or stating fewer of the conditions)",
+    "missing": "no evidence item and no counted PSI test is held for the link"
+   },
+   "specification": {
+    "established": "at least one evidence item of type 'requirement' in references.json is inside on every required condition",
+    "partly": "not established, and at least one evidence item is held (a design value or definition at the conditions counts here, not as established)",
+    "missing": "no evidence item is held"
+   },
+   "reading": "A state says what the held items and tests state, by this rule. It is the team's reading. It is not a judgement of the strength of a result, and 'established' does not mean that NASA considers the question closed."
+  },
+  "years": "The year of a document is the year written in its id, version or title in references.json; the script checks it. 'not stated in references.json' where none is written there. The year of the PSI record is its releaseDate.",
+  "forbidden_words": [
+   "safe",
+   "unsafe",
+   "acceptable",
+   "sufficient",
+   "adequate",
+   "recommended",
+   "proves",
+   "confirms",
+   "validated"
+  ]
+ },
+ "environment": {
+  "label": "Lunar habitat",
+  "bounds_from": "CH.moonbase",
+  "o2_min_key": "o2_pct_min",
+  "pressure_max_key": "pressure_psia_max",
+  "pressure_unit_factors_from": "pipeline/spec/relation_cards.json _meta.units.pressure_to_kpa",
+  "gravity_from": "pipeline/spec/scenarios.json lunar_habitat gravity_level",
+  "scenario_id": "lunar_habitat",
+  "stated_by": [
+   {
+    "item": "CH.moonbase",
+    "field": "text",
+    "quote": "Moon Base and pressurized-rover atmosphere expected between spacesuit and Earth conditions: oxygen likely 30% or more, pressure 10.2 psi or less."
+   },
+   {
+    "item": "TB14639.worstcase",
+    "field": "text",
+    "quote": "Test 1 is conducted in the most severe environment expected in the spacecraft, currently 30% oxygen at 10.2 psia."
+   },
+   {
+    "item": "EAWG.atmospheres",
+    "field": "text",
+    "quote": "Recommended nominal atmospheres: 14.7 psia / 21% O2; 10.2 psia / 26.5% O2; 8.0 psia / 32% O2 (landers, surface habitats); 7.6 psia / 32% O2 (surface habitats). Control box +/-0.2 psia and +/-2.0% O2. Recommendations, not requirements."
+   }
+  ]
+ },
+ "document_years": {
+  "NASA-STD-6001B": "2011",
+  "NASA-CP-2003-212103": "2003",
+  "NASA-CP-2004-213205-VOL1": "2004",
+  "NASA-TM-20210011385": "2021",
+  "ICES-2019-BASS2": "2019",
+  "NP-2015-10-034-JSC": "2015",
+  "NTRS-20130010991": "2012",
+  "ICES-2016-SAFFIRE": "2016",
+  "IAASS-2016-SAFFIRE": "2016",
+  "TASKBOOK-14639": "2022",
+  "OCHMO-TB-008": null,
+  "CHALLENGE-2026": "2026",
+  "NASA-TP-2010-216134": "2010",
+  "ISO-TS-16697": "2012",
+  "ICES-2014-179": "2014",
+  "JTE-2006-HIRSCH": "2006",
+  "AIAA-2011-5067": "2011",
+  "NTRS-20070018178": null,
+  "NASA-CR-2005-213689": "2005",
+  "NTRS-20150000894": null,
+  "SAE-2008-01-2055": "2008",
+  "ICES-2024-365": "2024",
+  "ICES-2021-266": "2021",
+  "SAFFIRE-2017": "2017",
+  "PROCI-2018-THOMSEN": "2018",
+  "WP-2021-FIRE-EXTINGUISHER": "2021",
+  "NTRS-20150021491": "2015",
+  "NASA-TM-2011-217036": "2011"
+ },
+ "walked_path": {
+  "question": "Is the normal-gravity screening test conservative in microgravity?",
+  "note": "The steps are in the order of the procedure, not in the order of the years; a proposal fed back to the criterion (CP2003.prev.margin) is older than the results.",
+  "steps": [
+   {
+    "step": "existing criterion",
+    "items": [
+     {
+      "item": "6001B.T1.purpose",
+      "field": "quote",
+      "quote": "The purpose of this test is to determine if a material, when exposed to a standard ignition source, will self-extinguish and not transfer burning debris, which can ignite adjacent materials."
+     },
+     {
+      "item": "6001B.T1.focr59",
+      "field": "quote",
+      "quote": "Test 1 shall evaluate the candidate material in the worst-case atmosphere to which the material could be exposed."
+     },
+     {
+      "item": "6001B.T1.pass",
+      "field": "text",
+      "quote": "A material is self-extinguishing if no specimen burns more than 15 cm and no specimen propagates a flame by transfer of burning debris."
+     }
+    ]
+   },
+   {
+    "step": "doubt stated",
+    "items": [
+     {
+      "item": "CP2003.prev.1g",
+      "field": "quote",
+      "quote": "More understanding on relationship between 1-g test methods to microgravity performance."
+     },
+     {
+      "item": "CP2004.flam.q1",
+      "field": "quote",
+      "quote": "Is the NASA STD 6001, Test 1 configuration conservative or non-conservative in assessing material flammability in reduced gravity"
+     }
+    ]
+   },
+   {
+    "step": "hypothesis",
+    "items": [
+     {
+      "record": "PSI-25",
+      "field": "hypothesis",
+      "quote": "BASS–II tests the hypothesis that materials in microgravity, with adequate ventilation, burn as well if not better than the same material in normal gravity with other conditions being identical (pressure, O2\nconcentration, temperature, etc.)."
+     },
+     {
+      "record": "PSI-25",
+      "field": "hypothesis",
+      "quote": "However, it may not be conservative for flammability in space."
+     }
+    ]
+   },
+   {
+    "step": "test designed to discriminate",
+    "items": [
+     {
+      "item": "BASS2TM.objective",
+      "field": "quote",
+      "quote": "One objective of the BASS–II tests is to identify what is the worst case for material flammability in spacecraft environments, and how does that compare to the terrestrial upward burning used to screen the materials for safe use aboard spacecraft."
+     },
+     {
+      "item": "ICES19.minimum",
+      "field": "quote",
+      "quote": "Many of the tests focused on finding a minimum oxygen concentration or flow velocity where a material will burn in space, to compare with the Earth-based limits."
+     }
+    ]
+   },
+   {
+    "step": "result",
+    "items": [
+     {
+      "item": "ICES19.limits",
+      "field": "text",
+      "quote": "BASS-II PMMA: minimum oxygen concentration in the flammability boundary from the concurrent (stagnation-flow) rod tests 13.6% O2; minimum flammable value for the opposed-flow rods 16.3% O2 (no comparable boundary was obtained for opposed flow); normal-gravity PMMA extinction limits 17% O2 (downward spread) and 15.4% O2 (upward spread)."
+     },
+     {
+      "item": "RG.test1",
+      "field": "text",
+      "quote": "Test 1 is not conservative: materials can burn at lower oxygen levels in microgravity than on Earth."
+     },
+     {
+      "item": "OF2012.margin",
+      "field": "text",
+      "quote": "Oxygen margins of safety (low-gravity limit minus 1g limit, % O2 by mole) were negative by as much as -5.75 (lunar gravity, Mylar G at 10.2 psia); the largest at Martian gravity was -3.35 (Nomex HT90-40) and at 0g -4.1 (Mylar G). Normal-gravity screening tests may not be conservative. The low-g limits come from 5 s drop tests and their extinction criteria are not the same as in 1g."
+     }
+    ]
+   },
+   {
+    "step": "scale-up designed",
+    "items": [
+     {
+      "item": "SAF16.objectives",
+      "field": "quote",
+      "quote": "The specific objectives of these three experiments are to (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test."
+     },
+     {
+      "item": "SAF16.saffire2",
+      "field": "quote",
+      "quote": "The objective of the tests to be conducted on Saffire-II is to investigate the low-gravity Maximum Oxygen Concentration (MOC) flammability limits in long-term low gravity."
+     },
+     {
+      "item": "SAF16b.saffire2",
+      "field": "quote",
+      "quote": "Quantifying the difference in flammability limits for large samples is the objective of the Saffire-II experiments."
+     }
+    ]
+   },
+   {
+    "step": "scale-up result",
+    "items": "no item held",
+    "searched_for": "an item that states a low-gravity flammability limit measured on Saffire-II"
+   },
+   {
+    "step": "fed back to the criterion",
+    "items": [
+     {
+      "item": "TB14639.modified",
+      "field": "text",
+      "quote": "A modified Test 1 measures the actual upward flammability limit (akin to the Limiting Oxygen Index) so that the margin of safety in the use environment can be assessed."
+     },
+     {
+      "item": "CP2003.prev.margin",
+      "field": "quote",
+      "quote": "Augment existing go/no go criteria with a quantitative test method which provides ranking or indication of flammability margin, e.g. LOI or radiation panel."
+     }
+    ]
+   },
+   {
+    "step": "criterion revised",
+    "items": "no item held",
+    "searched_for": "an item that states a change of NASA-STD-6001 Test 1 made on the basis of the low-gravity results"
+   },
+   {
+    "step": "still open",
+    "items": [
+     {
+      "item": "TB008.gaps",
+      "field": "quote",
+      "quote": "Material flammability in partial gravity remains a major gap for exploration missions."
+     },
+     {
+      "item": "TB14639.gap",
+      "field": "text",
+      "quote": "Normal-gravity flammability tests do not correlate with flammability in ventilated, micro- or reduced-gravity conditions."
+     }
+    ]
+   }
+  ]
+ },
+ "map": {
+  "root": {
+   "id": "ROOT",
+   "label": "material flammability assessed for the habitat",
+   "claim": {
+    "item": "TB008.assess",
+    "field": "quote",
+    "quote": "Material flammability must be assessed in relevant cabin atmospheres and gravity levels for exploration transit vehicles and habitats."
+   },
+   "why_needed": [
+    {
+     "item": "6001B.T1.focr59",
+     "field": "quote",
+     "quote": "Test 1 shall evaluate the candidate material in the worst-case atmosphere to which the material could be exposed."
+    },
+    {
+     "item": "6001B.focr12",
+     "field": "quote",
+     "quote": "The worst-case anticipated use environment (most hazardous pressure, temperature, material thickness, and fluid exposure conditions) shall be used in the evaluation of material suitability."
+    }
+   ],
+   "verification": [
+    {
+     "item": "ICES14.onlyvalid",
+     "field": "quote",
+     "quote": "It is pass-fail and is only valid at the atmosphere tested."
+    }
+   ]
+  },
+  "links": [
+   {
+    "id": "L1",
+    "parent": "ROOT",
+    "label": "the atmosphere the material is evaluated in",
+    "claim": {
+     "item": "TB008.o2",
+     "field": "quote",
+     "quote": "Design requirements need to specify pressure and % O2 combinations permitted in the habitable volume"
+    },
+    "why_needed": [
+     {
+      "item": "6001B.T1.focr59",
+      "field": "quote",
+      "quote": "Test 1 shall evaluate the candidate material in the worst-case atmosphere to which the material could be exposed."
+     },
+     {
+      "item": "6001B.T1.o2level",
+      "field": "quote",
+      "quote": "The test atmosphere shall consist of a mixture of GOX and GN2, with the oxygen level being the highest that the material could witness in use conditions."
+     }
+    ],
+    "required_conditions": [
+     "o2",
+     "pressure"
+    ],
+    "required_conditions_basis": "the claim names pressure and % O2",
+    "rule": "specification",
+    "evidence_items": [
+     "TB14639.worstcase",
+     "OF2012.test1env",
+     "EAWG.atmospheres",
+     "EA.8.2-34"
+    ],
+    "psi_needs": [],
+    "stated_open": [],
+    "what_would_close_it": [
+     {
+      "item": "EAWG.testing",
+      "field": "quote",
+      "quote": "These recommendations will also require materials ignition and flammability testing and certification to 34% oxygen concentration."
+     }
+    ],
+    "verification": [
+     {
+      "item": "6001B.T1.failenv",
+      "field": "quote",
+      "quote": "Failure of any one specimen constitutes failure of the material in that test environment."
+     }
+    ]
+   },
+   {
+    "id": "L2",
+    "parent": "ROOT",
+    "label": "whether the normal-gravity screening test is conservative at reduced gravity",
+    "claim": {
+     "item": "CP2004.flam.q1",
+     "field": "quote",
+     "quote": "Is the NASA STD 6001, Test 1 configuration conservative or non-conservative in assessing material flammability in reduced gravity"
+    },
+    "why_needed": [
+     {
+      "item": "TB14639.gap",
+      "field": "text",
+      "quote": "Normal-gravity flammability tests do not correlate with flammability in ventilated, micro- or reduced-gravity conditions."
+     }
+    ],
+    "required_conditions": [
+     "pressure",
+     "gravity"
+    ],
+    "required_conditions_basis": "the habitat pressure, and the gravity named in the claim",
+    "rule": "result",
+    "evidence_items": [
+     "OF2012.table1",
+     "OF2012.margin",
+     "RG.test1",
+     "ICES19.limits",
+     "SAE2008.uloi",
+     "SAE2008.table1"
+    ],
+    "psi_needs": [
+     "P1"
+    ],
+    "stated_open": [],
+    "what_would_close_it": [
+     {
+      "item": "TB14639.modified",
+      "field": "text",
+      "quote": "A modified Test 1 measures the actual upward flammability limit (akin to the Limiting Oxygen Index) so that the margin of safety in the use environment can be assessed."
+     },
+     {
+      "item": "CP2003.prev.margin",
+      "field": "quote",
+      "quote": "Augment existing go/no go criteria with a quantitative test method which provides ranking or indication of flammability margin, e.g. LOI or radiation panel."
+     }
+    ],
+    "verification": [
+     {
+      "item": "OF2012.margin",
+      "field": "text",
+      "quote": "Oxygen margins of safety (low-gravity limit minus 1g limit, % O2 by mole) were negative by as much as -5.75 (lunar gravity, Mylar G at 10.2 psia); the largest at Martian gravity was -3.35 (Nomex HT90-40) and at 0g -4.1 (Mylar G). Normal-gravity screening tests may not be conservative. The low-g limits come from 5 s drop tests and their extinction criteria are not the same as in 1g."
+     }
+    ]
+   },
+   {
+    "id": "L2.1",
+    "parent": "L2",
+    "label": "the flow speed and direction at which to compare",
+    "claim": {
+     "item": "CP2004.flam.velocity",
+     "field": "quote",
+     "quote": "The question of conservatism of Test 1 therefore may rest on the determination of velocity and flow direction at which to compare."
+    },
+    "why_needed": [
+     {
+      "item": "RG.map",
+      "field": "quote",
+      "quote": "The goal is to obtain the microgravity flammability map for select materials to provide information on the sensitivity of the material’s flammability to ventilation flow, ambient oxygen concentration and possibly pressure, to find the fundamental limiting oxygen concentration in microgravity."
+     }
+    ],
+    "required_conditions": [
+     "gravity",
+     "flow"
+    ],
+    "required_conditions_basis": "the gravity of L2 and the flow named in the claim",
+    "rule": "result",
+    "evidence_items": [
+     "ICES19.limits",
+     "SAE2008.table1",
+     "SAF.result",
+     "ICES19.fanoff"
+    ],
+    "psi_needs": [
+     "P1"
+    ],
+    "stated_open": [],
+    "what_would_close_it": [
+     {
+      "item": "CP2003.prev.o2flow",
+      "field": "quote",
+      "quote": "There is a need for additional microgravity data on the effects of oxygen and flow on ignition, combustion and flame propagation for real engineering materials."
+     }
+    ],
+    "verification": "no item held"
+   },
+   {
+    "id": "L3",
+    "parent": "ROOT",
+    "label": "flammability in a high-oxygen, low-pressure, reduced-gravity atmosphere",
+    "claim": {
+     "item": "CP2004.flam.q6",
+     "field": "quote",
+     "quote": "How do the flammability and ignitability of materials change in high-O2 mole fraction, low-pressure, reduced gravity environments?"
+    },
+    "why_needed": [
+     {
+      "item": "TB008.partialg",
+      "field": "quote",
+      "quote": "Partial gravity levels affect the whole chain of the fire safety strategy, with expected consequences on flammability, flame spread rate, smoke production, detection, mitigation, and clean-up."
+     }
+    ],
+    "required_conditions": [
+     "o2",
+     "pressure",
+     "gravity"
+    ],
+    "required_conditions_basis": "the three conditions named in the claim",
+    "rule": "result",
+    "evidence_items": [
+     "OF2012.table1",
+     "H2011.cannot",
+     "SAE2008.table1",
+     "ICES19.fanoff"
+    ],
+    "psi_needs": [
+     "P1",
+     "P2"
+    ],
+    "stated_open": [
+     {
+      "item": "TB008.gaps",
+      "field": "quote",
+      "quote": "Material flammability in partial gravity remains a major gap for exploration missions."
+     },
+     {
+      "item": "CH.partial_gravity",
+      "field": "text",
+      "quote": "PSI holds no partial-gravity combustion data yet; the page names LUCI as a future source."
+     }
+    ],
+    "what_would_close_it": [
+     {
+      "item": "EAWG.testing",
+      "field": "quote",
+      "quote": "These recommendations will also require materials ignition and flammability testing and certification to 34% oxygen concentration."
+     },
+     {
+      "item": "WP21X.research",
+      "field": "quote",
+      "quote": "calls for research into fire and fire extinguisher use in the appropriate environments. These include elevated oxygen at reduced pressure and partial gravity environments."
+     }
+    ],
+    "verification": [
+     {
+      "item": "ISO16697.extrapolation",
+      "field": "quote",
+      "quote": "The knowledge afforded by this technique allows extrapolations of flammability behaviour to conditions not specifically tested and this could potentially result in significant cost and time savings.[6]"
+     }
+    ]
+   },
+   {
+    "id": "L3.1",
+    "parent": "L3",
+    "label": "the limiting oxygen and flow in partial gravity",
+    "claim": {
+     "item": "CP2003.roadmap.limit",
+     "field": "quote",
+     "quote": "Determine limiting O2 and flow for flame propagation on practical materials in µg and partial-g"
+    },
+    "why_needed": [
+     {
+      "item": "ISO16697.scope",
+      "field": "quote",
+      "quote": "This Technical Specification provides a method to determine the oxygen concentration threshold when a material exposed to a standard ignition source self-extinguishes at a given constant total pressure, temperature, convective flow, and gravity-level conditions."
+     }
+    ],
+    "required_conditions": [
+     "pressure",
+     "gravity",
+     "flow"
+    ],
+    "required_conditions_basis": "the conditions ISO16697.scope names besides oxygen (temperature is not compared)",
+    "rule": "result",
+    "evidence_items": [
+     "OF2012.table1",
+     "ICES19.limits",
+     "SAE2008.table1"
+    ],
+    "psi_needs": [
+     "P1"
+    ],
+    "stated_open": [
+     {
+      "item": "CH.partial_gravity",
+      "field": "text",
+      "quote": "PSI holds no partial-gravity combustion data yet; the page names LUCI as a future source."
+     }
+    ],
+    "what_would_close_it": [
+     {
+      "item": "CH.partial_gravity",
+      "field": "text",
+      "quote": "PSI holds no partial-gravity combustion data yet; the page names LUCI as a future source."
+     },
+     {
+      "item": "TM217036.threshold",
+      "field": "quote",
+      "quote": "However, the oxygen threshold has been shown to be lower in reduced-gravity and is a function of the local convective velocity. Therefore, the objective of this task was to determine the oxygen flammability threshold in reduced-gravity for materials identified by NASA Materials and Processes personnel and quantify the difference from thresholds determined in normal gravity."
+     }
+    ],
+    "verification": [
+     {
+      "item": "THOMSEN18.care",
+      "field": "quote",
+      "quote": "Thus, care should be taken interpreting and applying these results, particularly because eventually low pressure will affect the chemical kinetics of the process."
+     }
+    ]
+   },
+   {
+    "id": "L3.2",
+    "parent": "L3",
+    "label": "the effect of total pressure at the habitat oxygen",
+    "claim": {
+     "item": "EAWG.needs.flammability",
+     "field": "quote",
+     "quote": "Effects of pressure, gravity, oxygen mole fraction, and diluent gas on material flammability."
+    },
+    "why_needed": [
+     {
+      "item": "ICES14.both",
+      "field": "quote",
+      "quote": "Material flammability, on the other hand, is a function of both pressure and oxygen."
+     },
+     {
+      "item": "6001B.def.worstcase",
+      "field": "quote",
+      "quote": "Worst-case anticipated use environment: Most hazardous pressure, temperature, material thickness, and/or fluid exposure conditions."
+     }
+    ],
+    "required_conditions": [
+     "o2",
+     "pressure"
+    ],
+    "required_conditions_basis": "the habitat atmosphere; gravity is the subject of L3.1",
+    "rule": "result",
+    "evidence_items": [
+     "H2006.depends",
+     "H2006.table2",
+     "H2007.fixedpressure",
+     "H2011.cannot",
+     "H2011.linear",
+     "ICES14.both",
+     "ICES14.trend",
+     "OF2012.normoxic",
+     "LANGE.lesser",
+     "URBAN14.loc",
+     "URBAN14.normoxic",
+     "SAE2008.mocpressure"
+    ],
+    "psi_needs": [
+     "P1"
+    ],
+    "stated_open": [],
+    "what_would_close_it": "no item held",
+    "verification": [
+     {
+      "item": "H2006.range",
+      "field": "quote",
+      "quote": "To determine if this relationship holds outside the 48.2 to 101.3 kPa (7 to 14.7 psia) range further testing is recommended."
+     }
+    ]
+   },
+   {
+    "id": "L3.3",
+    "parent": "L3",
+    "label": "ignition at high oxygen",
+    "claim": {
+     "item": "EAWG.needs.ignition",
+     "field": "quote",
+     "quote": "Develop understanding of ignition mechanisms for high oxygen concentration systems (flow friction and particle impact)."
+    },
+    "why_needed": [
+     {
+      "item": "TB008.materials",
+      "field": "quote",
+      "quote": "Materials used in pressurized cabins of spacecrafts must have high ignition temperatures, slow combustion rates, and low potential for explosion."
+     }
+    ],
+    "required_conditions": [
+     "o2",
+     "pressure",
+     "gravity"
+    ],
+    "required_conditions_basis": "the conditions of L3",
+    "rule": "result",
+    "evidence_items": [
+     "RG.ignite"
+    ],
+    "psi_needs": [
+     "P2"
+    ],
+    "stated_open": [],
+    "what_would_close_it": [
+     {
+      "item": "EAWG.ignthreshold",
+      "field": "quote",
+      "quote": "Constellation should institute a modified standard NASA flammability test to generate ignition threshold data for key spacecraft materials. This modified test will allow NASA to identify materials at risk from increases in oxygen concentration"
+     }
+    ],
+    "verification": "no item held"
+   },
+   {
+    "id": "L4",
+    "parent": "ROOT",
+    "label": "flame growth and spread in real situations",
+    "claim": {
+     "item": "CP2004.flam.q5",
+     "field": "quote",
+     "quote": "How will flames grow and spread in real situations?"
+    },
+    "why_needed": [
+     {
+      "item": "6001B.6.1.2.spread",
+      "field": "quote",
+      "quote": "The amount and arrangement of flammable materials are controlled to prevent the spread of fire in the vehicle; any potential fire is isolated in defined areas by firebreaks or other techniques (described in JSC 29353) without propagation paths to other areas."
+     }
+    ],
+    "required_conditions": [
+     "o2",
+     "pressure",
+     "gravity"
+    ],
+    "required_conditions_basis": "the three conditions of the environment",
+    "rule": "result",
+    "evidence_items": [
+     "SAF456.conditions",
+     "SAF45.table2",
+     "SAF.result",
+     "SAE2008.spread"
+    ],
+    "psi_needs": [
+     "P3"
+    ],
+    "stated_open": [
+     {
+      "item": "CP2003.resp.spread",
+      "field": "quote",
+      "quote": "Rate of fire spread anticipated in space platforms under realistic fire scenarios"
+     }
+    ],
+    "what_would_close_it": [
+     {
+      "item": "CP2003.roadmap.spread",
+      "field": "quote",
+      "quote": "Determine flammability and flame spread of plastic and composite materials in partial-g for variations in flow and imposed heat flux"
+     }
+    ],
+    "verification": [
+     {
+      "item": "CP2003.resp.growth",
+      "field": "quote",
+      "quote": "Note the distinction between fire growth, a safety issue, and flame growth, a research and possibly safety issue."
+     }
+    ]
+   },
+   {
+    "id": "L5",
+    "parent": "ROOT",
+    "label": "non-flaming and smoldering combustion",
+    "claim": {
+     "item": "CP2004.flam.q7",
+     "field": "quote",
+     "quote": "How does the propensity for non-flaming/smoldering combustion of materials change in high-O2 mole fraction, low-pressure, reduced gravity environments?"
+    },
+    "why_needed": [
+     {
+      "item": "CP2003.prev.smolder",
+      "field": "text",
+      "quote": "Non-flaming and smoldering combustion in microgravity is named as a gap; the standard flammability tests do not take smoldering into account."
+     }
+    ],
+    "required_conditions": [
+     "o2",
+     "pressure",
+     "gravity"
+    ],
+    "required_conditions_basis": "the three conditions named in the claim",
+    "rule": "result",
+    "evidence_items": [],
+    "psi_needs": [],
+    "stated_open": [
+     {
+      "item": "CP2003.prev.smolder",
+      "field": "quote",
+      "quote": "Need to understand the implications of non-flaming and smoldering combustion in microgravity with respect to ISS engineering materials."
+     }
+    ],
+    "what_would_close_it": "no item held",
+    "verification": "no item held"
+   }
+  ]
+ }
+}

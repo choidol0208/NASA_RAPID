@@ -72,3 +72,32 @@ Each gate file also lists, per fuel phase, the recorded tests of the scenario's 
 - No fitted boundary, no LOI estimate, no interpolation, no extrapolation, no prediction for any scenario. The FLEX card shows the lowest oxygen recorded beside the published LOI; the lowest oxygen tested is not an LOI. FLEX.mec is not applied.
 - The validity of a card is what its own items state. Conditions stated by another item of the same paper (for example "Pressure was not varied from 1 atmosphere" next to the CO/CO2 range) are shown under `not_used` and not attached.
 - The cards, their words and the criteria are an AI reading of `references.json`; items read as abstract only (MST14.loi) or as a summary of an unread paper (H2011.linear) keep that access level in `references.json`.
+
+# Inference map (experiment, branch `data-lab`)
+
+*AI-generated (Claude Code) on 2026-11-14. Not reviewed by a person or by a combustion specialist.*
+
+The idea it tries: not a model that computes an answer, but the procedure by which a question about a new environment is carried from doubt to result. For one question, "what would have to be established before a material-flammability criterion could be set for a lunar habitat (oxygen 30% or more, pressure 10.2 psi or less, lunar gravity)?", the map lays out the claims the held documents state, and for each one what the held items and PSI tests already show.
+
+| File | What |
+|---|---|
+| `pipeline/spec/inference_map.json` | The walked path, the environment, the root claim and the links, every text as a copy of a reference item or a PSI record field; the state rule; the year of each document |
+| `pipeline/lab/inference_map.py` | Checks the spec, counts the PSI tests, assigns the states, writes the two outputs |
+| `data/pipeline/lab/inference_map_lunar_habitat.json` | The map with the documents, conditions, counts and states filled in |
+| `data/pipeline/lab/inference_map_lunar_habitat.md` | Plain-text rendering: the walked path, a tree with one line per link, then the quotes of each link |
+
+Run: `python3 pipeline/lab/inference_map.py` (reads `data/pipeline/findings.csv`, `need_tests.csv`, `tests.csv` and `answers/lunar_habitat__<need>.json`, which `pipeline/run.py` writes). Standard library only; the same input gives the same bytes.
+
+## What it holds
+
+- **Walked path.** How the question "is the normal-gravity screening test conservative in microgravity?" went from doubt to result in the held documents: existing criterion, doubt stated, hypothesis (PSI-25 record), test designed to discriminate, result, scale-up designed, scale-up result, fed back to the criterion, criterion revised, still open. Two steps are "no item held": no held item states a Saffire-II low-gravity limit, and none states a change of Test 1 made on the basis of the results. The steps follow the procedure, not the years.
+- **Map.** A root claim (`TB008.assess`) and links. Each link has a claim (a NASA question or requirement), `why_needed` (the item that makes it a precondition of a criterion), the conditions it requires (oxygen, pressure, gravity, flow; the team's choice, with the basis written), the evidence items, the PSI needs whose counted tests are compared, items that state it open, `what_would_close_it` (only quoted research needs or planned work) and `verification` (only quoted statements about what limits or supports such a result). A field with no supporting item is "no item held".
+- **State.** Assigned by code by the rule in `_meta.state_rule`: `established` if one result item (its conditions as tagged in `findings.csv`) or one counted PSI test is inside the environment on every required condition of the link; `partly` if items or tests are held but none is; `missing` if none is held. L1 (the atmosphere) is a specification link and is established only by an item of type requirement. The environment bounds are read from `CH.moonbase` (30% oxygen, 10.2 psia converted with the factor of `relation_cards.json`) and the gravity level from `scenarios.json`.
+
+## What it is and is not
+
+- It is a map of what the held documents say must be known and of what is known in the held items and PSI tests. It is not a criterion, not a flammability limit, not a research plan of the team, and not advice on any material or atmosphere.
+- The choice of links, their parents and their required conditions is the team's (AI) reading. The documents do not arrange their questions as a tree; another reading would give another tree.
+- The state of a link is the team's reading of the items by a mechanical rule. It counts presence, not strength: one 5 s drop-tower paper on three materials (`OF2012.table1`) is enough to make L2 `established`, and its caveat is shown beside it under verification. `established` does not mean that NASA considers the question closed.
+- Quotes marked "team wording" are the `text` field of an item (the team's wording of the document in `references.json`), not the sentence as printed. Items read as abstract only or by another session keep that access mark.
+- The documents are from 2003 to 2024 (plus the 2026 challenge page). They do not say what NASA considers open today, and documents not in `references.json` were not read.
