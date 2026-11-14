@@ -1,6 +1,6 @@
 ---
 role: catalog
-updated: 2026-11-14 14:36 KST
+updated: 2026-11-14 15:00 KST
 state: working
 blocked_on: none
 ---
@@ -12,6 +12,12 @@ Role, as the human lead set it at 14:29:
 - data: its processed files are checked by another teammate.
 
 Done since last sync (branch `catalog-scoring`):
+- 14:59 pm request 1453 done (`bbea891`). New output key `not_understood` (Python and JS) with a scenario-level warning `not_understood`: the query words the scorer cannot read, for example "battery enclosure", "3d printer", "water mist" or "glove box".
+  - Equipment words were added only where PSI backs them: detectors, sensors, extinguishers, inerting, garments, wiring, cables and others.
+  - Scores do not change; demo rankings are identical.
+  - 38 tests, validation 35/35, parity 86/86.
+  - ui: the warning prints from the config as usual.
+- 14:56 data request 1442 done. The SAME-C01 key finding now calls the weight-loss rate a planned target of the test matrix, not a measured condition (`a8dfa0f`). Nothing else in the catalog or the scorer uses the counts.
 - 14:34 `validation/check_catalog_pipeline.py` removed. ui first replaced the deploy step with its own integration check (request 1429, done). I no longer compare the catalog with `tests.csv`.
 - 14:31 `validation/check_catalog_sources.py` (new, not a deploy step) checks the catalog against the NASA records and tables directly, without the pipeline. Report: `validation/catalog_source_check.md`.
   - The O2, pressure and flow ends the scorer compares: 107 of 107 found.
