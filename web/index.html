@@ -24,7 +24,7 @@
   <div class="wrap">
     <h1>Fire Evidence Explorer</h1>
     <p class="lede">Tell us what you want to build: a spacecraft cabin, a Moon base, a rover. See which NASA microgravity fire investigations come closest, what to consider and what their recorded tests say, and where the evidence stops.</p>
-    <p class="challenge">The challenge calls NASA's combustion results "hard to find, harder to compare, and harder yet to interpret". This page takes them in that order: <b>Find</b>, <b>Compare</b>, <b>Interpret</b>.</p>
+    <p class="challenge">The challenge says that the low-gravity combustion data in NASA's PSI database "can be hard to find, harder to compare, and harder yet to interpret". This page takes them in that order: <b>Find</b>, <b>Compare</b>, <b>Interpret</b>.</p>
     <p class="notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data. It is not operational fire-safety guidance, and it is not endorsed by NASA.</p>
   </div>
 </header>
@@ -59,6 +59,7 @@
     <ul id="conditions" class="conditions"></ul>
     <div id="assumptions" class="assumptions"></div>
     <div id="scenario-warnings" class="warnings"></div>
+    <div id="requirements" class="requirements" hidden></div>
   </section>
 
   <section id="top" class="top" hidden aria-labelledby="top-title">
@@ -166,8 +167,9 @@
     <details class="more fold">
     <summary>Read the method: dimensions, weights, gates and evidence quality</summary>
     <p>Each of the 41 test configurations in the team's catalog is compared with your input on up to seven dimensions: oxygen, pressure, flow, fuel, sample shape, research purpose and, for suppression questions, the diluent gas. Each comparison gives a similarity from 0 to 1, shown as the strip on each result.</p>
-    <p>Weights depend on the kind of question (prevention, detection or suppression). They are derived by the analytic hierarchy process (AHP): every pair of dimensions is compared, each judgement with its basis in a NASA record sentence, a textbook point or the team's reasoning, and the weights follow from the comparisons (consistency ratio 0.014 at most, below the usual limit of 0.10). For flammability, oxygen and fuel weigh most, then flow, because a microgravity flame has no buoyancy and gets its oxygen only from forced flow; for detection, the research purpose weighs most. A wrong fuel phase or a far-off oxygen level cannot be made up by other matches. The total is then scaled by evidence quality (raw data, flight duration, human check). <a data-repo-path="scoring/WEIGHTING.md" href="https://github.com/choidol0208/NASA_RAPID">How the weights were set</a></p>
-    <p>The weights and the other scoring values are the team's proposal, not NASA guidance. The pairwise judgements were written by an AI session; a team member approved them, and the other scoring values after an AI review of each value, as they are.</p>
+    <p>Weights depend on the kind of question (prevention, detection or suppression). They are derived by the analytic hierarchy process (AHP) from pairwise comparisons of the dimensions, each with a cited source: combustion textbooks, papers and NASA records; for suppression they are also pooled with how much each condition mattered in NASA's FLEX measurements. Flow matters because a microgravity flame has no buoyancy and gets its oxygen only from forced flow. A wrong fuel phase or a far-off oxygen level cannot be made up by other matches. The total is then scaled by evidence quality (raw data, flight duration, human check). <a data-repo-path="scoring/BUILDUP.md" href="https://github.com/choidol0208/NASA_RAPID">How the weights were set, with sources</a></p>
+    <ul id="weights-now" class="weights-now"></ul>
+    <p>The weights and the other scoring values are the team's proposal, not NASA guidance. The pairwise judgements were filled in by an AI session from the cited sources; a team member approved each step of the derivation, and the other scoring values after an AI review of each value, as they are.</p>
     <p>The same code ranks every query. A language model never produces or changes a score. Catalog values are extracted from the PSI records and tables and are marked when not yet checked by a person.</p>
     <dl class="legend">
       <div><dt><span class="swatch s-hi"></span>Close</dt><dd>similarity 0.9 or more</dd></div>

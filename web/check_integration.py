@@ -205,6 +205,44 @@ def main():
         expected[q] = exp
         print(f"{q!r}: " + ", ".join(f"{x['rank']}. {x['id']} {x['score']} [{x['config']}, {x['tests_in_config']} tests]" for x in exp["results"]))
 
+    # catalog request 2001: the requirements table needs one compliance entry per requirement, in the
+    # same order, with a status the page knows, for every result.
+    known = {"met", "near", "not_met", "unverified", "not_scored"}
+    n_cells = 0
+    for q in QUERIES:
+        o = rank(q)
+        ids = [r["id"] for r in o.get("requirements", [])]
+        for res in o.get("results", []):
+            comp = res.get("compliance") or []
+            if [c["id"] for c in comp] != ids:
+                problems.append(f"{q!r} {res['investigation_id']}: compliance ids {[c['id'] for c in comp]} != requirements {ids}")
+            bad = [c["status"] for c in comp if c["status"] not in known]
+            if bad:
+                problems.append(f"{q!r} {res['investigation_id']}: unknown compliance status {bad}")
+            n_cells += len(comp)
+    print(f"requirements table: {n_cells} cells checked")
+
+    # pm request 2340, item 1: the page shows each scenario frame as a lead (two sentences) and a folded
+    # rest. Both parts joined must give the whole frame: no text may be lost at a decimal point.
+    frame_split_js = r"/(?<=[.!?])\s+(?=[A-Z(\"'])/"
+    app_js = open(os.path.join(ROOT, "web", "app.js"), encoding="utf-8").read()
+    if f"const FRAME_SPLIT = {frame_split_js.replace(chr(92) + chr(34), chr(34))};" not in app_js:
+        problems.append("web/app.js: FRAME_SPLIT is not the expression this check tests")
+    frame_split = re.compile(r"(?<=[.!?])\s+(?=[A-Z(\"'])")
+    scen_path = os.path.join(ROOT, "data", "insights", "scenarios.json")
+    n_frames = 0
+    if os.path.exists(scen_path):
+        for e in json.load(open(scen_path, encoding="utf-8")):
+            frame = (e.get("frame") or "").strip()
+            if not frame:
+                continue
+            n_frames += 1
+            parts = frame_split.split(frame)
+            shown = " ".join(parts[:2]) + (" " + " ".join(parts[2:]) if len(parts) > 2 else "")
+            if re.sub(r"\s+", "", shown) != re.sub(r"\s+", "", frame):
+                problems.append(f"scenario {e.get('id')}: the frame shown as lead and rest differs from the frame text")
+    print(f"scenario frames: {n_frames} checked (lead plus rest equals the frame)")
+
     if "--emit" in sys.argv:
         json.dump(expected, open(sys.argv[sys.argv.index("--emit") + 1], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     for n in notes:

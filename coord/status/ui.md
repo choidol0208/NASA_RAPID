@@ -1,9 +1,27 @@
 ---
 role: ui
-updated: 2026-11-14 19:41 KST
+updated: 2026-11-15 00:19 KST
 state: working
 blocked_on: none
 ---
+Now (15 Nov, 00:19): pm 2340 and catalog 2001 are done and live. ui waits for pm's 01:00 plan for the day; inbox otherwise empty.
+
+- **00:19, catalog 2001 done:** the requirements table "Requirements read from your question", at the end of "How your input was read".
+  - Rows are the requirements, with the source in words; columns are the results, with ✓ met / ≈ near / ✗ not met / ? unverified / – not scored.
+  - `check_integration.py` checks one compliance entry per requirement for the 11 queries (156 cells).
+  - Catalog 0007 answered: `catalog-filter` has carried `main` and config 1.4.0 since 00:06. Request 1809 closed (all three roles done).
+- **00:13, pm 2340 done.**
+  - (1) The frame is split only at sentence ends (`FRAME_SPLIT`), and `check_integration.py` checks lead plus rest equals the frame, for 4 frames.
+  - (2) pm's scenario text is chosen by the environment read from the input; the result notes are shown only for the entry's own query.
+  - (3) The at-a-glance line covers the input's environment only, with "oxygen and pressure both in range" kept apart from "oxygen in range, no pressure in the table", and the test kind named. For ISS: "1 of 6 … (Extinction conditions; fuel droplets only). 3 more …".
+  - (4) A line "Counted for the … range, not for the value you typed" where oxygen or pressure is typed.
+- **00:13, other changes:**
+  - The masthead quote is matched to the official page: "the low-gravity combustion data in NASA's PSI database 'can be hard to find, harder to compare, and harder yet to interpret'".
+  - `web/README.md` now says six needs and 99 parity queries.
+  - The method text describes config 1.4.0 (AHP with cited sources, suppression pooled with FLEX) and links `scoring/BUILDUP.md`. The weights are listed from `scoring_config.json` at load time.
+  - pm's `robustness.json` is on 1.4.0, so the per-card weight-check lines are shown again.
+  - Checks: unit tests, parity 99/99, integration 33 results with 0 broken joins plus 4 frames, build, no console errors, phone width 390.
+
 Now: the catalog, the scorer and validation moved to the new `catalog` role (branch `catalog-scoring`, human lead's decision at 13:28). ui answered the handover request 20261114-1332 `done`:
 - items (1) and (2) are done;
 - items (3) to (6) were already done and pushed before the split, and are now catalog's to review;

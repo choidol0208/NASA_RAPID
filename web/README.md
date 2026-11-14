@@ -4,7 +4,7 @@ Live: https://choidol0208.github.io/NASA_RAPID/
 
 *The code in this folder was written with an AI assistant (Claude Code, model Claude Opus) during the NASA Space Apps Challenge 2026 hackathon, under the team's direction. Each file says so in its first lines.*
 
-A static web page. You describe a crewed environment ("ISS", "lunar habitat cotton fabric", "30% O2 at 10.2 psi"); the page shows which NASA PSI microgravity combustion investigations come closest, why, what their recorded tests can say about seven fire-safety information needs, and where the recorded tests stop.
+A static web page. You describe a crewed environment ("ISS", "lunar habitat cotton fabric", "30% O2 at 10.2 psi"); the page shows which NASA PSI microgravity combustion investigations come closest, why, what their recorded tests can say about six fire-safety information needs, and where the recorded tests stop.
 
 It is a research exploration tool. It is not operational fire-safety guidance and it is not endorsed by NASA. Scores, rankings, statuses and counts are the team's computation.
 
@@ -13,11 +13,11 @@ It is a research exploration tool. It is not operational fire-safety guidance an
 | Part | File | Source of truth |
 |---|---|---|
 | Ranking | `scorer.js` | A JavaScript port of `scoring/scorer.py`. It reads the same `scoring/scoring_config.json` and `data/catalog/*.csv`. |
-| Same answer as Python | `parity_check.py`, `parity_check.mjs` | Runs 61 queries (the 22 validation scenarios plus 39 more) through both and fails on any difference. |
+| Same answer as Python | `parity_check.py`, `parity_check.mjs` | Runs every validation scenario plus extra queries (99 in all on 15 Nov 2026) through both and fails on any difference. |
 | Page | `index.html`, `style.css`, `app.js` | Renders the `rank()` output, `data/pipeline/capability_matrix.csv` (needs view, and ISS against lunar habitat from `scenario_needs.csv`), `data/pipeline/coverage_grid.csv` (coverage view) and, when present, `data/insights/*.json` (team and model-written text, labelled; the evidence map). |
 | Build | `build.py` | Copies the page and the data files into `web/dist/` and records the commit, so every link to a source file points at the exact version the page reads. `tests.csv` and `scenario_tests.csv` are copied slimmed: only the columns the page reads, and only the two demo scenarios, values unchanged, with each test's line in the full file kept for links. |
 | Deploy | `.github/workflows/pages.yml` | On every push to `catalog-filter` or `main`: unit tests, validation, integration check, parity, build, then GitHub Pages. |
-| Integration | `check_integration.py` | For representative queries, every top-3 result must reach its data: manifest entry and DOI, the experimental-table file, the catalog row the page links to, its rows in `capability_matrix.csv`, and the configuration's own tests in `tests.csv` (count equal, O2/pressure/flow inside the catalog range). `--emit` writes what the page should show, for a browser comparison. |
+| Integration | `check_integration.py` | For representative queries, every top-3 result must reach its data: manifest entry and DOI, the experimental-table file, the catalog row the page links to, its rows in `capability_matrix.csv`, and the configuration's own tests in `tests.csv` (count equal, O2/pressure/flow inside the catalog range). It also checks that each scenario frame, shown as a lead and a folded rest, keeps all of its text. `--emit` writes what the page should show, for a browser comparison. |
 | Links | `check_links.py` | Run by hand before the freeze: every repository file the page links to exists; external pages answer (publishers that refuse scripts are listed to open by hand). |
 
 No language model runs in the page. No paid service, API key or server is involved; nothing is called on page load except the page's own files and Google Fonts.

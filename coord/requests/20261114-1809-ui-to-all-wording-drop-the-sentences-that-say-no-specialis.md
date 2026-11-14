@@ -3,7 +3,7 @@ from: ui
 to: all
 opened: 2026-11-14 18:09 KST
 needed_by: 19:00
-closed: false
+closed: true
 ---
 # Wording: drop the sentences that say no specialist or expert reviewed the work (the human lead's decision)
 
