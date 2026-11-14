@@ -50,6 +50,7 @@
 | 11/14 15:05–16:15 | Claude Code (Anthropic, Fable 5.2), pm 역할 워크플로 | BASS-II 영상 시범의 최종 검토: 화면 수치 판독을 추가 106프레임으로 재확인하고, 공개해도 되는 것과 안 되는 것을 판정 | 저장소 밖 작업 폴더(제품 미반영) | 사용자에게 결과 보고 |
 | 11/14 15:15– | Claude Code (Anthropic; Opus 계열과 Fable 5.2), pm 역할 워크플로 | 제출문과 7장 슬라이드 개요의 초안 작성(사실 확인, 규정 확인, 심사위원 시각 검토 포함). 팀이 자기 말로 고쳐 쓰는 초안 | `docs/submission/` | 팀이 고쳐 쓸 예정 |
 | 11/14 16:20 | Claude Code (Anthropic, Fable 5.2), pm 역할 | 최신 data 문구와 합친 뒤 재빌드. 'no need of this file covers it'(data 역할의 범위 설명 문장)가 금지어 검사에 걸려, 이 문구만 예외로 두는 규칙과 테스트 추가 | `ai/checks.py`, `ai/lint_patterns.py`, `ai/test_checks.py`, `ai/review/README.md`, `docs/ai_layer_design.json` | 미검토 |
+| 11/14 16:51 | Claude Code (Opus 5.5, catalog 역할) | 사람 검토 기록: 팀원 조려진이 순위 가중치(질문 유형별 profiles)를 config 1.1.0 그대로 승인. `scoring/scoring_config.json`의 `_about` reviewed 칸에 검토자와 시각을 적음 | `scoring/scoring_config.json` (`_about`만, 점수 불변) | 가중치: 팀원 검토 완료(연소 전문가 검토 아님). 유사도 척도·관문·증거 계수 등 나머지 값은 따로 검토되지 않음 |
 
 ## 제품 안에서 동작하는 AI
 

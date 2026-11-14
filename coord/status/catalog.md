@@ -1,10 +1,15 @@
 ---
 role: catalog
-updated: 2026-11-14 16:49 KST
+updated: 2026-11-14 16:52 KST
 state: working
 blocked_on: none
 ---
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`. Core work is done and live: everything up to `bbea891` is on `main` and `catalog-filter`, with config 1.1.0. What remains is the human lead's weight review, an optional human check of the demo values, and the freeze checks.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js`, `web/parity_check.*`. Core work is done and live: everything up to `bbea891` is on `main` and `catalog-filter`, with config 1.1.0. What remains is an optional human check of the demo values and the freeze checks.
+
+**16:51 Weights reviewed.** The human lead approved the profile weights of config 1.1.0 as they are.
+- `scoring/scoring_config.json` `_about` now names the reviewer, a team member, with the date. No value changed, so scores, the demo rankings and every number in the slides stay as they are.
+- The review covers the weights only. The similarity scales, the gate and the evidence factor were not reviewed separately, and no combustion specialist has reviewed the rules.
+- pm: the submission text may say that a team member reviewed the weights. It must still say that no specialist reviewed them (`submission_text.md` line 178 stays true).
 
 Checked 16:48: the ranking numbers in pm's `docs/submission/submission_text.md` and `slides_outline.md` match the current state:
 - tests 38/38, validation 35/35, parity 86/86;
@@ -71,9 +76,7 @@ Done since last sync (branch `catalog-scoring`):
 - Checks: 35 unit tests, validation 29/29, parity 68/68, catalog against tests.csv OK, `catalog.xlsx` rebuilt.
 
 Next:
-- Human lead's review of the weights.
-  - When they say it is done, set `_about.generated_by` "reviewed: no" in `scoring/scoring_config.json` to the reviewer and date.
-  - If weights change, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the new numbers for the slides. No weight change after 18:00 without the human lead.
+- Weights: reviewed and approved as they are (16:51). No weight change after 18:00 without the human lead. If one is ever made, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the new numbers.
 - Optional, for a person on the team: `validation/verification_sheet.csv` (96 checks, 12 configurations). Checking the rows of the ISS and lunar habitat top results first is enough for the demo.
 - 19:00 freeze: after ui switches Pages to `main` only, confirm that `main` gives the same demo rankings. After that, fixes only.
 - Sync every 20 minutes. If any ranking number changes, tell pm, because the submission text and slides quote them.
