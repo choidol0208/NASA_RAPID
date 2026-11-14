@@ -4,6 +4,7 @@
 
 **This is an AI review, not a human review.** It explains each value, says what it rests on, and measures how much the demo rankings depend on it.
 - **Approved 2026-11-14 17:03 KST:** a team member read this review and approved all values as they are, findings 1 and 2 included, with no change. The approval is recorded in `scoring/scoring_config.json` `_about`; the weights were approved at 16:51.
+- **Config 1.2.0 (19:26):** the profile weights were replaced by an AHP derivation (`scoring/WEIGHTING.md`). No value reviewed here changed. The sensitivity numbers below were measured with the 1.1.0 weights; the 1.2.0 numbers are in `validation/report.md`.
 - Next step: the questions at the end, for combustion researchers. They are the points the rules rest on that this review cannot settle.
 
 Sensitivity is measured by `python3 validation/sensitivity.py` and reported in `validation/report.md`:
@@ -61,4 +62,4 @@ These are the points the rules rest on that need an answer from combustion resea
 5. Across 56 to 101 kPa, does a symmetric rule, where a factor of 2 in pressure gives 0.61, make sense for solid flammability?
 6. For extinguishment by inert dilution, is molar heat capacity the right way to compare CO2, N2 and He? Should helium's high diffusivity count separately?
 7. Where the record gives no atmosphere for an ISS-cabin or Cygnus experiment, is assuming 21% O2 and 101.3 kPa acceptable? Should such a value rank below a recorded near value (finding 2)?
-8. Are the prevention weights a reasonable starting point: O2 0.25, fuel 0.25, flow 0.20, and pressure, sample shape and research purpose 0.10 each?
+8. Are the pairwise judgements behind the weights reasonable (`scoring/ahp_judgements.json`, 51 pairs with their basis)? With them, the prevention weights are O2 0.285, fuel 0.267, flow 0.166, sample shape 0.111, pressure 0.090 and research purpose 0.081.
