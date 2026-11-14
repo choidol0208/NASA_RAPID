@@ -1,80 +1,96 @@
-# 카탈로그 필터 (Catalog filter)
+# Catalog filter (the ranking)
 
-> AI 생성 코드·데이터: Claude(AI 도우미)로 2026-11-14에 작성했습니다. 카탈로그 값은 `ai_extracted` 상태이며 사람이 원문과 대조해야 합니다. 점수와 순위는 팀의 방법이지 NASA의 결론이 아닙니다.
+> AI-generated code and data: written with Claude (an AI assistant) on 2026-11-14. Catalog values are `ai_extracted`; a person still has to compare them with the originals. Scores and rankings are the team's method, not NASA's conclusion. The values of config 1.1.0 were approved as they are by a team member; no combustion specialist has reviewed them (`scoring/PARAMETER_REVIEW.md`).
 
-사용자가 넣은 환경과 조건에 가장 비슷한 PSI 시험 구성을 찾아 1~3순위 조사를 고릅니다. 점수는 코드가 계산하므로 같은 입력에는 항상 같은 결과가 나옵니다. AI(LLM)는 이 결과를 받아 설명만 합니다.
+From the environment and conditions a user gives, the filter finds the most similar PSI test configurations and picks the top 1 to 3 investigations. Code computes the scores, so the same input always gives the same result. A language model may explain a result; it never produces or changes a score.
 
-## 파일
+## Files
 
-| 파일 | 내용 |
+| File | Content |
 | --- | --- |
-| `data/catalog/investigations.csv` | 조사표: PSI 연소 조사 24개, 1행 = 조사 1개 |
-| `data/catalog/configurations.csv` | 구성표: 시험 구성 41개, 1행 = 점수를 매기는 단위 |
-| `data/catalog/catalog.xlsx` | 사람이 보는 사본 (머리글 음영, 한국어 뜻, 데이터 사전) |
-| `data/catalog/data_dictionary.csv` | 열 이름, 한국어 뜻, 허용값, 쓰임 |
-| `scoring/scoring_config.json` | 가중치 프로파일, 유사도 기준 폭, 프리셋, 키워드, 경고 문구 (대시보드도 이 파일을 읽으면 됨) |
-| `scoring/scorer.py` | 해석 + 점수 계산 + 1~3순위 선정 (표준 라이브러리만 사용) |
-| `scoring/test_scorer.py` | 단위 시험 18개 (손계산 예시 포함) |
-| `validation/scenarios.json` | 검증 시나리오 22개 + 가중치 안정성 검사 |
-| `validation/run_validation.py` | 시나리오 실행기, `validation/report.md` 생성 |
-| `presentation/catalog_filter_slide.pptx` | 발표용 설명 슬라이드 1장 (영어, 발표 메모는 한국어) |
-| `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py` | PSI 원본에서 카탈로그를 다시 만드는 스크립트 |
-| `scoring/MODEL_BASIS.md` | What each scoring rule rests on, checked against a combustion textbook (Turns 2012), what stays the team's choice, and two changes applied in config 1.1.0 (English) |
-| `scoring/PARAMETER_REVIEW.md` | AI review of every value other than the weights: role, basis, demo sensitivity (`validation/sensitivity.py`), two findings for a decision, and questions for a combustion specialist (English) |
+| `data/catalog/investigations.csv` | Investigation table: 24 PSI combustion investigations, one row each |
+| `data/catalog/configurations.csv` | Configuration table: 41 test configurations, one row each; the unit the ranking scores |
+| `data/catalog/catalog.xlsx` | A copy for people (shaded headers, column meanings, data dictionary) |
+| `data/catalog/data_dictionary.csv` | Column name, meaning, allowed values, where it is used |
+| `scoring/scoring_config.json` | Weight profiles, similarity scales, presets, keywords, warning texts. The dashboard reads the same file. Korean keywords are user input; `keywords._gloss_ko` gives their English |
+| `scoring/scorer.py` | Reading the query, scoring, picking the top 1 to 3 (standard library only) |
+| `scoring/test_scorer.py` | 38 unit tests, hand-calculated examples included |
+| `validation/scenarios.json` | 35 validation scenarios with expected results |
+| `validation/run_validation.py` | Runs the scenarios, the weight stability check and the sensitivity checks; writes `validation/report.md` |
+| `validation/sensitivity.py` | Each weight and each other value halved and raised by half, on four demo queries |
+| `validation/check_catalog_sources.py` | Checks the catalog against the NASA records and tables directly; writes `validation/catalog_source_check.md` |
+| `validation/build_verification_sheet.py` | Writes `validation/verification_sheet.csv`: the catalog values behind the demo rankings, with the NASA rows to check them against |
+| `web/scorer.js`, `web/parity_check.py` | The JavaScript port used by the page, and the check that Python and JavaScript give the same results (86 queries) |
+| `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py` | Rebuild the catalog from the PSI sources |
+| `scoring/MODEL_BASIS.md` | What each scoring rule rests on, checked against a combustion textbook (Turns 2012), what stays the team's choice, and the two changes applied in config 1.1.0 |
+| `scoring/PARAMETER_REVIEW.md` | AI review of every value other than the weights: role, basis, demo sensitivity, two findings, open questions |
 
-## 실행
+## Running it
 
 ```bash
-python3 -m scoring.scorer "달 기지 면직물"                 # 사람이 읽는 출력
-python3 -m scoring.scorer "ISS" --json                     # 대시보드용 JSON
-python3 -m unittest scoring.test_scorer -v                  # 단위 시험
-python3 validation/run_validation.py                        # 시나리오 22개 + 안정성 → validation/report.md
-python3 validation/run_validation.py --target app.pipeline:rank   # 대시보드의 함수로 같은 검증
-python3 scripts/build_catalog.py && python3 scripts/export_catalog_xlsx.py   # 카탈로그 재생성
+python3 -m scoring.scorer "lunar habitat cotton fabric"     # output for people
+python3 -m scoring.scorer "ISS" --json                       # JSON for the dashboard
+python3 -m unittest scoring.test_scorer -v                    # unit tests
+python3 validation/run_validation.py                          # scenarios, stability, sensitivity -> validation/report.md
+python3 web/parity_check.py                                   # Python and JavaScript agree (needs Node.js 18+)
+python3 validation/check_catalog_sources.py                   # catalog against the NASA sources
+python3 scripts/build_catalog.py && python3 scripts/export_catalog_xlsx.py   # rebuild the catalog
 ```
 
 ```python
 from scoring.scorer import rank
-out = rank("lunar habitat cotton fabric")          # 문자열(러프 입력) 또는
-out = rank({"preset": "iss", "fuel": "PMMA", "o2_pct": 25})   # 구조화 입력
-out["status"]        # ok | out_of_scope | need_input
-out["assumptions"]   # 사용자가 말하지 않아 프리셋·기본값으로 채운 값 (화면에 보여주기)
-out["warnings"]      # 부분중력, 외삽, 범위 밖 등
-out["results"]       # 1~3순위: investigation_id, config_id, score, similarity, why, main_gap, warnings, psi_url, dataset_doi
-out["ranking"]       # 전체 조사 순위 (표·차트용)
+out = rank("lunar habitat cotton fabric")                     # a rough string, or
+out = rank({"preset": "iss", "fuel": "PMMA", "o2_pct": 25})   # a structured input
+out["status"]          # ok | out_of_scope | need_input
+out["assumptions"]     # values the user did not give, filled from a preset or a default (shown on the page)
+out["warnings"]        # partial gravity, extrapolation, words not understood, ...
+out["not_understood"]  # query words the scorer could not read, e.g. ["battery enclosure"]
+out["results"]         # ranks 1 to 3: investigation_id, config_id, score, confidence, similarity, why, main_gap, warnings, psi_url, dataset_doi
+out["ranking"]         # every investigation in order (tables, charts)
 ```
 
-## 다른 팀원 산출물과의 연결
+## What happens after the ranking
 
-1~3순위가 정해진 뒤 4단계(로우데이터 확인)는 팀원의 파이프라인 결과 `data/pipeline/tests.csv`를 씁니다. 결과의 `psi_accession`(예: PSI-69)으로 `investigation_id` 열을 거르고, 구성의 연료(`fuel_material`)로 한 번 더 거르면 됩니다. 구성표의 `tests_table_ref`는 PSI 원본 표 파일과 조건을 적어 둔 것입니다.
+The page (ui role) shows the processed data of each ranked investigation. The join key is the result's `psi_accession` (for example PSI-69), which is `investigation_id` in `data/pipeline/tests.csv`. `tests_table_ref` in the configuration table names the PSI table file and the condition that selects the configuration's rows.
 
-## 러프한 입력 처리
+## Reading a rough query
 
-입력은 세 층으로 해석하고, 뒤의 층이 앞의 층을 덮습니다: 기본값 < 프리셋 < 문장 속 단어·숫자 < 명시한 필드.
+A query is read in layers, each later one overriding the earlier: default < preset < words and numbers in the text < explicit fields.
 
-| 입력 | 해석 |
+| Input | Read as |
 | --- | --- |
-| `ISS` | 산소 21%, 101.3 kPa, 환기, 미세중력, 질문 유형 예방 (모두 "가정"으로 표시) |
-| `moon` / `달` | 산소 30%, 70.3 kPa (과제문), 환기, 부분중력 경고 |
-| `Mars base` | 대기 수치 없음 → 입력 요청 경고, 부분중력 경고 |
-| `spacesuit` | 산소 100%, 29.6 kPa (과제문) → PSI 최고치(85%) 초과 외삽 경고 |
-| `fabric`, `smoke`처럼 한 단어 | 재료 또는 질문 유형만으로 순위 |
-| `ISS at 30% O2 and 10.2 psi` | 문장 속 숫자가 프리셋을 덮음 |
-| 빈 입력 | 순위를 만들지 않고 무엇을 넣을지 안내 (`need_input`) |
-| `로켓 추진제` 등 | 범위 밖 (`out_of_scope`) |
+| `ISS` | 21% O2, 101.3 kPa, ventilated, microgravity, prevention question (each shown as an assumption) |
+| `moon`, `달` (Korean: Moon) | 30% O2 and 70.3 kPa (challenge text), ventilated, partial-gravity warning |
+| `Mars base` | no atmosphere values: a request for input, partial-gravity warning |
+| `spacesuit` | 100% O2, 29.6 kPa (challenge text): above the highest surrounding-atmosphere O2 tested in PSI (40%), extrapolation warning |
+| One word such as `fabric` or `smoke` | ranked by the material or the question alone |
+| `ISS at 30% O2 and 10.2 psi` | numbers in the text override the preset |
+| `battery enclosure for the ISS` | the ISS environment; `not_understood` = ["battery enclosure"] and a warning that these words change nothing |
+| Empty input | no ranking; says what to enter (`need_input`) |
+| `로켓 추진제` (Korean: rocket propellant) and the like | out of scope (`out_of_scope`) |
 
-사용자가 주지 않은 차원은 점수에서 빼고, 남은 가중치를 합 1로 다시 나눕니다. 결과마다 `confidence`(high/medium/low)는 프로파일 가중치 중 실제로 비교한 몫입니다.
+Dimensions the user did not give are left out of the score, and the remaining weights are rescaled to sum to 1. Each result's `confidence` (high, medium, low) is the share of the profile's weight that was compared with a recorded value; assumed values do not count.
 
-## 점수 규칙
+## Scoring rules
 
-`score = 100 × M × G × Σ wᵢ·Sᵢ`. 차원별 식과 근거는 가이드라인 문서와 `scoring_config.json`의 `why` 항목에 있습니다. 가이드라인 문서 이후 바뀐 규칙은 다섯 가지입니다.
+`score = 100 × M × G × Σ wᵢ·Sᵢ`, where S is the similarity of each dimension, w its weight, G the gate and M the evidence factor. The formula for each dimension and its basis are in the `why` entries of `scoring_config.json`, in `scoring/MODEL_BASIS.md` and in `scoring/PARAMETER_REVIEW.md`. In short:
 
-1. **게이트는 계단이 아니라 경사**: 연료나 산소 유사도가 0.2 미만이면 0.5에서 1.0 사이로 줄입니다(0이면 0.5, 0.2면 1.0). 0.199와 0.201이 크게 갈리는 문제를 없앴습니다.
-2. **보고되지 않은 대기**: PSI 기록은 특이한 대기를 항상 적으므로, 산소가 비어 있으면 일반 공기(21%)로 계산합니다. 압력은 ISS 선실·MSG·Cygnus에서 한 실험만 101.3 kPa로 계산합니다. 카탈로그는 빈칸 그대로 두고, 이 가정을 쓴 결과에는 `fallback` 경고가 붙습니다.
-3. **모름이 측정값을 이기지 않게**: 연료가 비어 있는 행은 0.5와 "이번 질문에서 가장 잘 맞은 실제 값" 중 작은 값으로 계산합니다.
-4. **보완 슬롯**: 사용자 산소가 일반 공기(21±2%)가 아닌데 상위 3개 중 그 산소에서 시험한 결과가 없으면, 3위 자리에 그 산소를 시험한 가장 좋은 결과를 넣고 `complementary` 경고로 이유를 밝힙니다.
-5. **동점**: 3점 이내 차이는 동점으로 보고, 근거 품질과 1g 비교 여부로 순서를 정합니다.
+1. **Oxygen** is compared on the log of the ratio of mole fractions, and it falls faster above a test's maximum than below its minimum (config 1.1.0).
+2. **Pressure and flow speed** are compared on a log scale. A one-sided range such as "up to 40 cm/s" scores as unknown on its open side.
+3. **Gate, a ramp rather than a step:** when the fuel or the O2 similarity is below 0.2, the score is cut to between 0.5 and 1.0 of its value (0.5 at 0, 1.0 at 0.2).
+4. **Unreported atmosphere:** when the record gives no O2, it is scored as ordinary air (21%). Pressure is filled as 101.3 kPa only for experiments that ran in the ISS cabin, the MSG or a Cygnus cabin. The catalog stays empty, and a result that uses the assumption carries the `fallback` warning.
+5. **Unknown never beats measured:** an empty fuel or O2 value scores the smaller of 0.5 and the best real match of the query.
+6. **Complementary slot:** if the user's O2 is not ordinary air (21 ± 2%) and none of the top 3 was tested at that O2, the third place goes to the best result that was, with the `complementary` warning.
+7. **Ties:** scores within 3 points count as tied and are ordered by evidence quality and by whether a 1 g comparison exists.
+8. **Reasons:** the reason text says "tested" only for values from an experimental table. Values from the record text, a test matrix or a team reading say so, and assumed values read "not recorded, assumed". When oxygen and pressure are both ranges, a result carries `ranges_separate`.
 
-## 검증 결과 (2026-11-14)
+## Checks (2026-11-14, config 1.1.0)
 
-시나리오 22/22 통과, 주요 시나리오 5개에서 가중치를 ±0.05 바꿔도 1위 유지. 기대 답은 팀이 연소 지식으로 정한 것이라 전문가 검토가 남아 있습니다. 자세한 표는 `validation/report.md`.
+- Validation scenarios 35 of 35 pass.
+- Unit tests 38 of 38 pass.
+- Python and JavaScript give the same results on 86 of 86 queries.
+- Each prevention weight halved and raised by half: 45 of 48 variants keep the same top 3, and rank 1 never changes.
+- Each other value halved and raised by half: 129 of 136 runs keep the same top 3. The `ISS` and `lunar habitat` presets never change.
+- Against the NASA sources: 107 ranking values written in the source and 8 team readings; 24 of 24 range ends match; 135 of 135 numbers in the shown text are written in the source.
+
+The expected answers were written by an AI session for the team and have not been reviewed by a specialist. Details are in `validation/report.md` and `validation/catalog_source_check.md`.

@@ -23,6 +23,8 @@ EXTRA = [
     "40% oxygen 70 kPa fabric", "PMMA rod 15 cm/s 18% O2", "thin PMMA film stagnant", "thick acrylic slab ventilation",
     "silicone sheet ISS", "nomex fabric lunar", "wire insulation overheat smoke", "kapton teflon smoke",
     "propane 40% oxygen", "methane jet", "hydrogen leak", "dust", "paper fire", "wax candle", "earth sea level fabric",
+    # Korean queries: Mars base 30% oxygen; space station cotton fabric; lunar base acrylic stagnant zone;
+    # smoke detection; carbon dioxide suppression heptane
     "화성 기지 산소 30%", "우주정거장 면직물", "달 기지 아크릴 정체 구역", "연기 감지", "이산화탄소 소화 헵탄",
     "rocket engine", "", "   ", "random words", "100% O2 4.3 psi", "21% O2 101.3 kPa PMMA 10 cm/s opposed",
     {"preset": "iss", "fuel": "PMMA", "o2_pct": 25}, {"text": "moon", "concern": "detection"},
@@ -30,7 +32,7 @@ EXTRA = [
     # equipment queries (pm request 1453) and words the scorer does not read
     "smoke detector for a lunar rover", "fire extinguisher for a Mars habitat", "crew clothing fabric for a Moon base",
     "wire insulation for a pressurized rover", "water mist suppression system for a lunar habitat",
-    "battery enclosure for the ISS", "3D printer on the Moon", "glove box", "천장 배선 과열", "달 기지 배터리 보관함",
+    "battery enclosure for the ISS", "3D printer on the Moon", "glove box", "천장 배선 과열", "달 기지 배터리 보관함",  # Korean: ceiling wiring overheating; lunar base battery box
     "oxygen sensor, ISS cabin (CO2 30%)", {"text": "battery enclosure", "preset": "iss"},
 ]
 

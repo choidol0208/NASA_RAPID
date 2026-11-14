@@ -3,7 +3,7 @@
 # Challenge 2026 hackathon (2026-11-14). Scores are the team's ranking method, not NASA's.
 """Rank PSI test configurations by similarity to a user scenario.
 
-The user may give a rough query ("ISS", "달 기지 면직물", "smoke detector") or a
+The user may give a rough query ("ISS", "달 기지 면직물" = Korean for "lunar base cotton fabric", "smoke detector") or a
 structured dict. The query is interpreted in three layers, later ones winning:
     defaults  <  preset (e.g. ISS)  <  words and numbers in the text  <  explicit fields
 Every value that did not come from the user is listed in `assumptions`, so the
@@ -99,6 +99,7 @@ def _spans(text, key):
     return out
 
 
+# Korean input words in the patterns: 산소 = oxygen, 농도 = concentration.
 NUMBER_PATTERNS = [r"(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])",
                    r"(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?",
                    r"(\d+(?:\.\d+)?)\s*(kpa|psia|psi|atm|bar|mmhg)\b", r"(\d+(?:\.\d+)?)\s*(cm/s|mm/s|m/s)"]
@@ -192,7 +193,7 @@ def interpret(query, cfg):
         put("thermal_regime", "thick", "text")
     if _any(t, kw["rod"]):
         put("sample_geometry", "rod", "text")
-    # numbers with units ("o2" must stand alone: "CO2 30%" is not 30% oxygen)
+    # numbers with units ("o2" must stand alone: "CO2 30%" is not 30% oxygen; 산소 = oxygen, 농도 = concentration)
     m = re.search(r"(\d+(?:\.\d+)?)\s*%\s*(?:o2|oxygen|산소)(?![a-z0-9])", t) or \
         re.search(r"(?<![a-z0-9])(?:o2|oxygen|산소)\s*(?:농도)?\s*[:=]?\s*(\d+(?:\.\d+)?)\s*%?", t)
     if m:

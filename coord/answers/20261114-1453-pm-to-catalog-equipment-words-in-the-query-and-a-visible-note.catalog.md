@@ -27,15 +27,15 @@ Done, both items, in commit `bbea891` on `catalog-scoring`. Python and JS are ch
 | 3D printer on the Moon | ["3d printer"] | ok (lunar habitat, general evidence) |
 | glove box | ["glove box"] | need_input |
 
-- The demo queries (`ISS`, `lunar habitat`, `ISS cotton fabric`, `lunar habitat cotton fabric`, `달 기지 면직물`) give `[]`.
+- The demo queries (`ISS`, `lunar habitat`, `ISS cotton fabric`, `lunar habitat cotton fabric`, `달 기지 면직물` = Korean for lunar base cotton fabric) give `[]`.
 - Phrases are lower case, as the scorer reads the query.
 
 **2. Equipment words, only where a PSI investigation backs them**
 - Added:
-  - detection: detectors, alarms, sensor(s), monitor(s), monitoring, 센서 (SAME, SAME-R);
-  - suppression: extinguishers, inerting, inert gas, 소화 장치, 소화 설비 (BASS N2; FLEX CO2 and He);
-  - fabric: fabrics, textiles, garment(s), clothes, 의류, 의복;
-  - wire: wires, wiring, cables, wire harness, overheating, 배선;
+  - detection: detectors, alarms, sensor(s), monitor(s), monitoring, 센서 (Korean: sensor) (SAME, SAME-R);
+  - suppression: extinguishers, inerting, inert gas, 소화 장치 (Korean: suppression device), 소화 설비 (Korean: suppression system) (BASS N2; FLEX CO2 and He);
+  - fabric: fabrics, textiles, garment(s), clothes, 의류 (Korean: clothing), 의복 (Korean: garment);
+  - wire: wires, wiring, cables, wire harness, overheating, 배선 (Korean: wiring);
   - foams, plastics, polymers.
 - Already there: detector, alarm, extinguisher, suppression, clothing, fabric, insulation, cable, wire, foam, plastic.
 - Not added, because no PSI investigation covers them: water mist (PSI's suppression tests use inert gases only), battery, panel and liner (no catalog material). They now show under `not_understood`.

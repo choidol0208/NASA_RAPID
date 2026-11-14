@@ -122,7 +122,7 @@ class Interpretation(unittest.TestCase):
         self.assertFalse(oos)
 
     def test_korean_lunar_fabric(self):
-        sc, *_ = scorer.interpret("달 기지 면직물", CFG)
+        sc, *_ = scorer.interpret("달 기지 면직물", CFG)  # Korean: "lunar base cotton fabric"
         self.assertEqual(sc["preset"], "lunar_habitat")
         self.assertEqual(sc["fuel_class"], "fabric")
 
@@ -158,7 +158,7 @@ class Interpretation(unittest.TestCase):
         self.assertEqual(scorer.rank("3D printer on the Moon")["not_understood"], ["3d printer"])
         out = scorer.rank("glove box")
         self.assertEqual((out["status"], out["not_understood"]), ("need_input", ["glove box"]))
-        for q in ("ISS", "lunar habitat", "ISS cotton fabric", "lunar habitat cotton fabric", "달 기지 면직물",
+        for q in ("ISS", "lunar habitat", "ISS cotton fabric", "lunar habitat cotton fabric", "달 기지 면직물",  # Korean: lunar base cotton fabric
                   "ISS at 30% O2 and 10.2 psi", "CO2 suppression of heptane fire"):
             out = scorer.rank(q)
             self.assertEqual(out["not_understood"], [], q)
@@ -169,9 +169,9 @@ class Interpretation(unittest.TestCase):
         self.assertEqual(a, b)
 
     def test_ceiling_is_not_fabric(self):
-        sc, *_ = scorer.interpret("천장 배선 과열", CFG)  # 천장 = ceiling, not 천 (cloth)
+        sc, *_ = scorer.interpret("천장 배선 과열", CFG)  # Korean: "ceiling wiring overheating"; 천장 = ceiling, not 천 (cloth)
         self.assertNotEqual(sc.get("fuel_class"), "fabric")
-        sc, *_ = scorer.interpret("천으로 된 커튼", CFG)
+        sc, *_ = scorer.interpret("천으로 된 커튼", CFG)  # Korean: "a curtain made of cloth"
         self.assertEqual(sc.get("fuel_class"), "fabric")
 
 

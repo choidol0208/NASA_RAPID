@@ -1,12 +1,12 @@
 # Catalog filter validation report
 
-- Run: 2026-11-14 17:01 · target `scoring.scorer:rank`
+- Run: 2026-11-14 17:15 · target `scoring.scorer:rank`
 - Result: **35/35 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
 |---|---|---|---|---|---|
 | R01 | rough_input | ISS | BASS-II, BASS, SAFFIRE-II |  | PASS |
-| R02 | rough_input | 우주정거장 | BASS-II, BASS, SAFFIRE-II |  | PASS |
+| R02 | rough_input | 우주정거장 (Korean: space station) | BASS-II, BASS, SAFFIRE-II |  | PASS |
 | R03 | rough_input | moon | ACME-BRE, FLEX, ACME-CFI-G | partial_gravity | PASS |
 | R04 | rough_input | fabric | BASS-II, SAFFIRE-II, BASS |  | PASS |
 | R05 | rough_input | smoke | SAME, SAME-R, DAFT |  | PASS |
@@ -14,9 +14,9 @@
 | R07 | rough_input | ISS at 30% O2 and 10.2 psi | ACME-BRE, FLEX, ACME-CFI-G |  | PASS |
 | P01 | prevention | ISS cotton fabric | BASS, SAFFIRE-III, BASS-II |  | PASS |
 | P02 | prevention | lunar habitat cotton fabric | SAFFIRE-II, SAFFIRE-I, ACME-BRE | partial_gravity | PASS |
-| P03 | prevention | 달 기지 면직물 | SAFFIRE-II, SAFFIRE-I, ACME-BRE | partial_gravity | PASS |
+| P03 | prevention | 달 기지 면직물 (Korean: lunar base cotton fabric) | SAFFIRE-II, SAFFIRE-I, ACME-BRE | partial_gravity | PASS |
 | P04 | prevention | stagnant PMMA | BASS-II, ACME-BRE, BASS |  | PASS |
-| P05 | prevention | 달 기지 아크릴 정체 구역 | ACME-BRE, BASS-II, FLEX | partial_gravity | PASS |
+| P05 | prevention | 달 기지 아크릴 정체 구역 (Korean: lunar base acrylic stagnant zone) | ACME-BRE, BASS-II, FLEX | partial_gravity | PASS |
 | P06 | prevention | propane 40% oxygen | ACME-CFI-G, ACME-BRE, ACME-FLAME-DESIGN |  | PASS |
 | D01 | detection | smoke detector on ISS | SAME, SAME-R, DAFT |  | PASS |
 | D02 | detection | wire insulation overheating smoke | SAME, SAME-R, SAME-SIM |  | PASS |
@@ -39,7 +39,7 @@
 | T01 | trap | spacesuit | ACME-BRE, ACME-CFI-G, FLEX | o2_above_all | PASS |
 | T02 | trap | Mars base | BASS-II, SAFFIRE-II, BASS | partial_gravity, mars_atmosphere | PASS |
 | T03 | trap | hybrid rocket combustion chamber fire |  | out_of_scope | PASS |
-| T04 | trap | 로켓 추진제 화재 위험 |  | out_of_scope | PASS |
+| T04 | trap | 로켓 추진제 화재 위험 (Korean: rocket propellant fire hazard) |  | out_of_scope | PASS |
 
 ## Weight stability (each weight ±0.05)
 
