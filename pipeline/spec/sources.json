@@ -4,7 +4,7 @@
   "purpose": "How each PSI experimental table maps onto the standard variables. One entry per table (22). 'columns' lists source column -> standard variable -> named rule in pipeline/rules.py. 'constants' are facts about the whole table that are not in a column. Tables whose rows are not individual tests are listed with the reason and are not standardized.",
   "source": "NASA Physical Sciences Informatics (PSI), https://psi.nasa.gov, Combustion Science experimental tables",
   "row_rules": "'require': a row is read only if these columns are filled. 'exclude': rows named here are not tests and are left out, with the reason. 'fill_down': a blank cell in these columns continues the cell of the row above; every value read that way is flagged blank_in_source_value_of_row_above_used. A row that repeats an earlier row cell for cell is read once. A column with 'if_empty' gives a value only where an earlier column gave none; a different value is flagged, never substituted. run_report.json lists every row left out and why. 'row_note' says what a row of the table is where it is not simply one test.",
-  "documented_elsewhere": "'documented_elsewhere' lists what a NASA record or a paper of the investigators says about a variable the experimental table does not hold. It is shown as a sentence next to the gap. It never becomes a value of a test: the table stays the only source of values. The engine checks record sentences against the record and paper sentences against references.json.",
+  "documented_elsewhere": "'documented_elsewhere' lists what a NASA record or a paper of the investigators says about a variable the experimental table does not hold. It is shown as a sentence next to the gap. It never becomes a value of a test: the table stays the only source of values. The engine checks record sentences against the record and paper sentences against references.json. A need can list a required condition under 'conditions_documented_ok' (needs.json): such a condition counts as known for the tests of a table when this list holds a sentence about it. The sentence says what is known for the investigation as a whole (for BASS-II a nominal 1 atmosphere, not a reading per test); for Saffire-I and -II a reading per sample exists in the NASA PSI raw-data workbooks (PSISAF.pressure_column), which this pipeline does not map.",
   "sample_keywords": "Rule 'sample_keywords' (BASS, BASS-II): 'entries' are tried in order and the first whose 'words' are all in the cell gives the material and the shape; entries with 'after_thickness' are tried only if the cell gives no thickness. 'shape_words' give the shape where the entry has none. 'rod_inches' maps the rod size written in the cell (inches) to a diameter. A cell with a thickness and no earlier entry follows 'thickness': the material named there, 'film' below limit_mm and 'slab' from it. 'not_in_cell' marks entries whose material is not written in the cell (BASS-II ReadMe: rods, spheres and unlabelled films are PMMA); the test is flagged. The shape words 'fabric sheet', 'film', 'slab', 'sphere' and the materials named here are the team's vocabulary, chosen by these keywords. A thickness is a number followed by 'micron' or 'mm'. Where 'thickness' gives the material and the cell does not name it, the test is flagged in the same way as for 'not_in_cell'. 'width_from_cell' takes the sample width from the number followed by 'cm' in the cell. If no entry applies and the cell gives no thickness, the cell is not read and the test is flagged fuel_material:not_parsed.",
   "documented_start": "Rule 'o2_text': a cell with two oxygen numbers gives a value only if 'documented_start' names, for that exact cell text, which of the two written numbers a publication gives as the initial oxygen ('reference_item' in references.json). The test is flagged o2_pct:range_in_source_start_value_named_in_publication. A two-number cell that is not listed gives no value (flag o2_pct:range_in_source_start_value_not_documented). No midpoint or average is computed. The cell text is kept in o2_range_as_written."
  },
@@ -628,8 +628,8 @@
    "documented_elsewhere": [
     {
      "variable": "pressure_kpa",
-     "record_field": "approach",
-     "quote": "solid state sensors were used to measure pressure"
+     "reference_item": "SAF17.pressure",
+     "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant."
     }
    ]
   },
@@ -740,8 +740,8 @@
    "documented_elsewhere": [
     {
      "variable": "pressure_kpa",
-     "record_field": "approach",
-     "quote": "solid state sensors were used to measure pressure"
+     "reference_item": "SAF17.pressure",
+     "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant."
     }
    ]
   },

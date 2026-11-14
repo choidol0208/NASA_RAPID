@@ -203,7 +203,8 @@ class Builder:
         self.objective = {}
         for row in obj_links.to_dict("records"):
             self.objective.setdefault(row["need_id"], []).append(
-                {k: row[k] for k in ("investigation_id", "record_field", "quote")})
+                {k: row[k] for k in ("investigation_id", "verdict", "publication_item",
+                                     "publication_quote", "record_field", "quote")})
         self.ref_items = {}
         for r in engine.spec("references.json")["references"]:
             for i in r["items"]:

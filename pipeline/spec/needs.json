@@ -8,7 +8,7 @@
   "status_rule": "measured = at least one outcome variable has values and every 'conditions_required' variable has values; partial = an outcome has values but a required condition is missing from the table; conditions_only = no outcome variable in the table; none = neither. 'measured' is a status name kept for the other sessions: it says that the columns hold values, not that the question of the need was measured or answered",
   "scope_rule": "'scope' limits a need to the tests it is about (for example, material questions apply to solid samples). Tests outside the scope are not counted; a source with no test in scope gets the status out_of_scope. Five of the six needs are limited to solid samples by the team; liquid-fuel and gas-fuel tests can be counted for S1 only.",
   "reference_rule": "'references' are item ids in references.json: the standards, requirements and published results that define or bound the need. Each item carries how its document was read ('access' in references.json): some documents were read as an abstract only, through a citation or from a copy.",
-  "stated_by_rule": "A need is linked to an investigation when a sentence in the 'objective' field of its PSI record names the topic of the need as something the investigation set out to determine. The sentence is copied here and the engine checks that it is in that field. Other fields (hypothesis, approach, researchImpacts) are not used, so that one rule applies to all 24 records. The link is a property of the catalogue text and was made by the team: it does not show that a test can or cannot inform the need. Tests that record the variables of a need without such a link are reported next to the count as 'recorded outside the stated objective'.",
+  "stated_by_rule": "A need is linked to an investigation by what the investigators or a NASA project document state as the purpose of that experiment. 'publication' is the id of a reference item (references.json, type stated_objective or framework) that holds the sentence verbatim; 'field' and 'quote' give the sentence of the 'objective' field of the PSI record where the record names the topic, and the engine checks it against the record. 'verdict' is what the publications read say about the link: 'supported' (the purpose is stated for this investigation), 'differs' (the investigators give this objective to another flight or another area), 'topic_only' (the record names the phenomenon, and the stated purpose of the experiment is not spacecraft fire safety or was not found in what was read). Only links with verdict 'supported' are counted. Tests of the other links, and tests that record the variables of a need without any link, are reported as recorded outside the stated objective. The verdicts rest on the documents listed in references.json and say nothing about documents that were not read.",
   "authorship": "The split into needs, their wording, required variables and scope are the team's (AI draft). What is taken from NASA documents: the three areas (TB008.areas, CP2003.groups, CH.pillars), the reference items of each need (references.json), and the objective sentences in 'stated_by'.",
   "not_covered": [
    {
@@ -78,7 +78,13 @@
   ],
   "overlap": "The first objective sentence of PSI-25 is the link for P1, P2, P3 and S1, and the same BASS-II tests with a flow event are counted under P1 and under S1. Counts of different needs must not be added.",
   "not_counted_but_fire_safety": "Five of the 24 PSI records contribute counted tests (PSI-25, PSI-69, PSI-98, PSI-99, PSI-102). The other 19 contribute none. Linked to a need by 'stated_by': PSI-10, PSI-39 and PSI-101 (no column mapped to an outcome variable of the need), PSI-26 (the table lists samples only), PSI-100 (no oxygen column and no outcome column), PSI-20, PSI-21, PSI-23 and PSI-68 (tables are not one row per test). Not linked to a need: PSI-107 (rows are flow settings of gas jet flames, outside the solid-fuel scope of D2), PSI-159 (its tests are reported as recorded outside the stated objective), PSI-22, PSI-47, PSI-106 and PSI-142 (tables are not one row per test), PSI-60, PSI-62, PSI-115 and PSI-117 (no experimental table). Fire-safety wording is in the records of PSI-20, 21, 26, 47, 60, 62, 68, 100, 101, 106, 107, 115, 117 and 142; pipeline/README.md gives the sentence or the field for each. The words 'fire' and 'safety' do not occur in the records of PSI-10, PSI-22, PSI-23 and PSI-159, and the PSI-22 record says its research 'is not being conducted to serve any space applications'.",
-  "removed": "P4 'Exploration atmosphere' was removed on 2026-11-14 (team decision): it is a condition that applies to every need and is carried by scenarios.json and the coverage grid."
+  "removed": "P4 'Exploration atmosphere' was removed on 2026-11-14 (team decision): it is a condition that applies to every need and is carried by scenarios.json and the coverage grid.",
+  "verdict_values": [
+   "supported",
+   "differs",
+   "topic_only"
+  ],
+  "documented_rule": "'conditions_documented_ok' lists required conditions that may be met by a sentence of a NASA record or a paper about the whole table (sources.json 'documented_elsewhere') where the table has no value. The test still has no value for the variable: scenario matching, bins and indicators use recorded values only."
  },
  "needs": [
   {
@@ -88,15 +94,15 @@
    "question": "Down to what oxygen concentration, and in what range of flow speed, does this material keep burning?",
    "conditions_required": [
     "fuel_material",
-    "o2_pct"
+    "o2_pct",
+    "pressure_kpa",
+    "gravity_level"
    ],
    "conditions_useful": [
     "flow_cms",
     "sample_geometry",
     "sample_thickness_mm",
-    "pressure_kpa",
-    "flow_direction",
-    "gravity_level"
+    "flow_direction"
    ],
    "outcomes_any": [
     "flow_event",
@@ -126,43 +132,62 @@
     "OF2012.margin",
     "SAE2008.uloi",
     "RG.test1",
-    "ICES19.pressure"
+    "ICES19.pressure",
+    "ISO16697.scope",
+    "ICES14.onlyvalid",
+    "SAF17.pressure",
+    "PSISAF.pressure_column"
    ],
    "stated_by": [
     {
      "investigation_id": "PSI-25",
      "field": "objective",
-     "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
+     "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity.",
+     "publication": "BASS2TM.limits",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-25",
      "field": "objective",
-     "quote": "Begin to bridge the gap between the normal gravity NASA-STD-6001 Test #1 method, ground-based microgravity tests, and actual material flammability in microgravity."
+     "quote": "Begin to bridge the gap between the normal gravity NASA-STD-6001 Test #1 method, ground-based microgravity tests, and actual material flammability in microgravity.",
+     "publication": "BASS2TM.limits",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-26",
      "field": "objective",
-     "quote": "Begin to bridge the gap between the normal gravity NASA-STD-6001 Test#1 method, ground-based microgravity tests, and actual material flammability in microgravity."
+     "quote": "Begin to bridge the gap between the normal gravity NASA-STD-6001 Test#1 method, ground-based microgravity tests, and actual material flammability in microgravity.",
+     "publication": "RG.bass",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-98",
      "field": "objective",
-     "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test"
+     "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test",
+     "publication": "SAF16.saffire1",
+     "verdict": "differs"
     },
     {
      "investigation_id": "PSI-99",
      "field": "objective",
-     "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test"
+     "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test",
+     "publication": "SAF16.saffire2",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-100",
      "field": "objective",
-     "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test"
+     "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test",
+     "publication": "SAF16b.saffire13",
+     "verdict": "differs"
     }
    ],
-   "required_note": "Flow speed is listed as useful, not required: several BASS-II tests near the limit give the flow only as text ('no ign at any flow', '<1'), and a test is not dropped for that.",
+   "required_note": "The cited definition of an oxygen threshold holds 'at a given constant total pressure, temperature, convective flow, and gravity-level conditions', and the pressure is to be recorded on the data sheet (ISO16697.scope). Pressure and gravity level are therefore required. Pressure may be met by a document about the investigation, because the BASS-II and Saffire experimental tables have no pressure column: for BASS-II the investigators state that pressure was not varied from 1 atmosphere (ICES19.pressure), a nominal statement for the investigation and not a reading per test; for Saffire the investigators state normal pressure (SAF17.pressure) and a reading per sample is in the PSI raw data (PSISAF.pressure_column), which the pipeline does not map. Flow speed is listed as useful, not required, although the same sentence names it: several BASS-II tests near the limit give the flow only as text ('no ign at any flow', '<1'), and a test is not dropped for that. A result of such a test is valid only at the atmosphere tested (ICES14.onlyvalid); nothing here carries it to another pressure.",
    "reading": "A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit.",
-   "note": "The Saffire tables hold one oxygen level near cabin air per test (for Saffire-II derived by NASA from CO2 production, Note 1 of the table), and Saffire-III has no oxygen column. A limit cannot be located from one oxygen level. Pressure is not a required variable of this need, although the cited definition of a threshold holds at a given total pressure, flow and gravity level (ISO16697.threshold): the BASS-II and Saffire tables have no pressure column, so no counted test records a pressure. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions); counts of different needs must not be added."
+   "note": "The Saffire tables hold one oxygen level near cabin air per test (for Saffire-II derived by NASA from CO2 production, Note 1 of the table), and Saffire-III has no oxygen column. A limit cannot be located from one oxygen level. Pressure is not a required variable of this need, although the cited definition of a threshold holds at a given total pressure, flow and gravity level (ISO16697.threshold): the BASS-II and Saffire tables have no pressure column, so no counted test records a pressure. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions); counts of different needs must not be added.",
+   "conditions_documented_ok": [
+    "pressure_kpa"
+   ]
   },
   {
    "id": "P2",
@@ -198,7 +223,9 @@
     {
      "investigation_id": "PSI-25",
      "field": "objective",
-     "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
+     "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity.",
+     "publication": "ICES19.goal",
+     "verdict": "supported"
     }
    ],
    "reading": "A counted test would record the material, the oxygen and an ignition result. No mapped table records one for a solid fuel.",
@@ -241,22 +268,30 @@
     {
      "investigation_id": "PSI-25",
      "field": "objective",
-     "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
+     "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity.",
+     "publication": "BASS2TM.growth",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-98",
      "field": "objective",
-     "quote": "determine how rapidly a large scale fire grows in low-gravity"
+     "quote": "determine how rapidly a large scale fire grows in low-gravity",
+     "publication": "SAF16.saffire1",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-99",
      "field": "objective",
-     "quote": "determine how rapidly a large scale fire grows in low-gravity"
+     "quote": "determine how rapidly a large scale fire grows in low-gravity",
+     "publication": "SAF16b.saffire2",
+     "verdict": "differs"
     },
     {
      "investigation_id": "PSI-100",
      "field": "objective",
-     "quote": "determine how rapidly a large scale fire grows in low-gravity"
+     "quote": "determine how rapidly a large scale fire grows in low-gravity",
+     "publication": "SAF16b.saffire13",
+     "verdict": "supported"
     }
    ],
    "reading": "A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. Most counted tests record a length or a time and no spread rate; a burn time or a burn length is not a spread rate.",
@@ -269,12 +304,12 @@
    "question": "Under what conditions does the flame go out: lower oxygen, added inert gas, or reduced flow?",
    "conditions_required": [
     "fuel_material",
-    "o2_pct"
+    "o2_pct",
+    "pressure_kpa"
    ],
    "conditions_useful": [
     "co2_pct",
     "he_pct",
-    "pressure_kpa",
     "flow_cms",
     "flow_min_cms"
    ],
@@ -295,62 +330,85 @@
     "CP2003.response",
     "3001.V2-9059",
     "3001.V2-9063",
-    "TP216046.columns"
+    "TP216046.columns",
+    "CP2004.supp.q3",
+    "ICES19.pressure"
    ],
    "stated_by": [
     {
      "investigation_id": "PSI-69",
      "field": "objective",
-     "quote": "measure the effectiveness of various gaseous fire suppressants such as CO2, He, and SF6"
+     "quote": "measure the effectiveness of various gaseous fire suppressants such as CO2, He, and SF6",
+     "publication": "FLEX.objective2",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-69",
      "field": "objective",
-     "quote": "map the flammability limits of liquid fuels in microgravity environments"
+     "quote": "map the flammability limits of liquid fuels in microgravity environments",
+     "publication": "FLEX.objective2",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-26",
      "field": "objective",
-     "quote": "Assess the effectiveness of an inert, gaseous extinguishing agent (similar to that used on ISS) in putting out flames over different materials, geometries, preheating, and flow."
+     "quote": "Assess the effectiveness of an inert, gaseous extinguishing agent (similar to that used on ISS) in putting out flames over different materials, geometries, preheating, and flow.",
+     "publication": "RG.bass",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-25",
      "field": "objective",
-     "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
+     "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity.",
+     "publication": "ICES19.goal",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-39",
      "field": "objective",
-     "quote": "Investigate the relationship between droplet size, pressure, and flame extinction"
+     "quote": "Investigate the relationship between droplet size, pressure, and flame extinction",
+     "verdict": "topic_only"
     },
     {
      "investigation_id": "PSI-10",
      "field": "objective",
-     "quote": "Obtain extinction limits as functions of Zst, amount of N2, and pressure for normal and inverse spherical C2H4 and CH4 flames."
+     "quote": "Obtain extinction limits as functions of Zst, amount of N2, and pressure for normal and inverse spherical C2H4 and CH4 flames.",
+     "publication": "ACME14.flamedesign",
+     "verdict": "topic_only"
     },
     {
      "investigation_id": "PSI-20",
      "field": "objective",
-     "quote": "Consider the conditions of Objectives 1 – 2 for extinction limits."
+     "quote": "Consider the conditions of Objectives 1 – 2 for extinction limits.",
+     "publication": "ACME14.bre",
+     "verdict": "differs"
     },
     {
      "investigation_id": "PSI-21",
      "field": "objective",
-     "quote": "through measurement of flame shape, lift-off heights, temperatures and extinction limits"
+     "quote": "through measurement of flame shape, lift-off heights, temperatures and extinction limits",
+     "verdict": "topic_only"
     },
     {
      "investigation_id": "PSI-23",
      "field": "objective",
-     "quote": "Determine the quasi-steady convective/chemical-kinetic extinction limits"
+     "quote": "Determine the quasi-steady convective/chemical-kinetic extinction limits",
+     "verdict": "topic_only"
     },
     {
      "investigation_id": "PSI-68",
      "field": "objective",
-     "quote": "Study flame extinction mechanisms and their boundaries."
+     "quote": "Study flame extinction mechanisms and their boundaries.",
+     "publication": "RG.flex2",
+     "verdict": "topic_only"
     }
    ],
    "reading": "A counted test records the fuel, the oxygen and how the burn ended or an event word. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending.",
-   "note": "The one investigation of an extinguishing agent on solid fuels, PSI-26, has an experimental table with sample names only. The counted solid-fuel tests are BASS-II tests with an event word beside the flow settings (extinction, blowoff, no ignition, not sustained); they are also counted for P1 (Flammability limit), and counts of different needs must not be added. Every counted test with added carbon dioxide or helium is a FLEX droplet test. The PSI-69 objective names CO2, He and SF6; the FLEX table has no SF6 column. The other investigations linked to this need add no counted test: PSI-10 and PSI-39 have no column mapped to an outcome variable of this need, and the tables of PSI-20, 21, 23 and 68 are not one row per test."
+   "note": "The one investigation of an extinguishing agent on solid fuels, PSI-26, has an experimental table with sample names only. The counted solid-fuel tests are BASS-II tests with an event word beside the flow settings (extinction, blowoff, no ignition, not sustained); they are also counted for P1 (Flammability limit), and counts of different needs must not be added. Every counted test with added carbon dioxide or helium is a FLEX droplet test. The PSI-69 objective names CO2, He and SF6; the FLEX table has no SF6 column. The other investigations linked to this need add no counted test: PSI-10 and PSI-39 have no column mapped to an outcome variable of this need, and the tables of PSI-20, 21, 23 and 68 are not one row per test.",
+   "conditions_documented_ok": [
+    "pressure_kpa"
+   ],
+   "required_note": "The one sentence found that states this need names two variables: 'What are the O2 mole fraction and absolute pressure below which a fire cannot exist?' (CP2004.supp.q3). Pressure is therefore required; for BASS-II it is met by the investigators' statement that pressure was not varied from 1 atmosphere (ICES19.pressure), not by a reading per test."
   },
   {
    "id": "D1",
@@ -386,8 +444,13 @@
     "ICES19.sensors",
     "ICES19.coratio"
    ],
-   "stated_by": [],
-   "stated_by_note": "No PSI record names carbon monoxide or another gas species as something the investigation set out to determine. The BASS-II investigators describe the CO/CO2 sensor as measuring the completeness of combustion and report a CO/CO2 ratio (ICES19.sensors, ICES19.coratio). The BASS-II gas readings are therefore reported as recorded outside the stated objective.",
+   "stated_by": [
+    {
+     "investigation_id": "PSI-25",
+     "publication": "BASS2TM.products",
+     "verdict": "supported"
+    }
+   ],
    "reading": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
    "note": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The material is the only required variable, so the status conditions_only says only that the sample is named."
   },
@@ -431,12 +494,16 @@
     {
      "investigation_id": "PSI-102",
      "field": "objective",
-     "quote": "relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment"
+     "quote": "relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment",
+     "publication": "SAME.goal",
+     "verdict": "supported"
     },
     {
      "investigation_id": "PSI-101",
      "field": "objective",
-     "quote": "relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment"
+     "quote": "relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment",
+     "publication": "SAME12.objective",
+     "verdict": "supported"
     }
    ],
    "reading": "A row of this need holds the conditions of a smoke test: material, air flow, aging time and the heating level (a target weight loss rate in the planned SAME matrix, SAMEEIRD.target; the heater resistance ratio Rt/R0 in SAME-R, SAMER.rtr0). No row holds a measured smoke property, so no test is counted for this need.",
