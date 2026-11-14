@@ -16,6 +16,8 @@
 | 11/14 오후 | Claude Code | 시험 표 11개를 공통 형식의 시험 단위 표로 바꾸는 규칙과 코드 재작성 | `scripts/build_test_tables.py`, `data/derived/tests_*.csv` | 미검토. 원본 5행 대조 필요 |
 | 11/14 오후 | Claude Code | 화재 안전 값 계산, 환경 조건 맞추기, 근거 묶음 생성 코드 작성. 계산은 규칙 기반이며 언어 모델은 수치에 관여하지 않음 | `scripts/fire_safety.py`, `data/derived/fire_safety_metrics.json`, `data/derived/evidence_*.json` | 미검토. 지표 정의는 연소 전공 팀원 확인 필요 |
 | 11/14 오후 | Claude Code | 사용자 지적에 따라 결론을 내는 코드(`scripts/fire_safety.py`, `scripts/build_test_tables.py`와 그 산출물)를 삭제하고, 명세 기반 파이프라인으로 교체. 화재 안전 정보 필요 7개, 표준 변수, 표 22개의 열 매핑을 명세 파일로 작성하고 이를 읽어 실행하는 엔진 작성. 수치는 NASA 원본 칸의 복사 또는 명세의 계산식 결과이며 언어 모델은 수치에 관여하지 않음 | `pipeline/spec/*.json`, `pipeline/run.py`, `pipeline/rules.py`, `pipeline/README.md`, `data/pipeline/*` | 미검토. 필요 정보의 정의·필수 변수·적용 범위는 연소 전공 팀원 확인 필요 |
+| 11/14 10:30– | Claude Code | 공식 제출·심사 가이드 원문 확인, PSI 시험 표의 예비 집계, 팀 일정과 역할 계획 정리 | 저장소 밖의 팀 내부 계획 문서. 제출물에 들어간 것 없음 | 사용자가 대화로 확인 |
+| 11/14 10:50– | Claude Code | 세션 간 협업 체계 작성: 역할·브랜치 규칙, 조정 파일과 도우미 스크립트, 역할별 브리프, AI 산출물 형식 초안, 저장소 README | `coord/`, `contracts/`, `scripts/coord.py`, `.claude/commands/sync.md`, `.gitattributes`, `README.md`, `AGENTS.md` 8·9절 | 미검토 |
 
 ## 제품 안에서 동작하는 AI
 

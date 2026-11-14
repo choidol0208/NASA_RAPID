@@ -1,0 +1,37 @@
+{
+  "_meta": {
+    "note": "AI-generated (Claude Code) during the NASA Space Apps Challenge 2026 hackathon. Only the pm role edits this file.",
+    "how_to_read": "Each role pushes only to its own branch and edits only the paths it owns. Everything else goes through a request (see coord/README.md)."
+  },
+  "integration_branch": "main",
+  "roles": {
+    "pm": {
+      "branch": "main",
+      "does": "Project lead and integrator. Product-side AI outputs (investigation cards, scenarios, ranking). Demo and submission text.",
+      "owns": [
+        "AGENTS.md", "CLAUDE.md", "README.md", "LICENSE", ".gitattributes", ".claude/",
+        "coord/README.md", "coord/roles.json", "coord/board.md", "coord/decisions.md", "coord/briefs/",
+        "contracts/", "ai/", "data/insights/", "docs/", "scripts/coord.py"
+      ]
+    },
+    "data": {
+      "branch": "data-pipeline",
+      "does": "PSI data collection and the spec-driven pipeline: standard variables, fire-safety information needs, capability matrix.",
+      "owns": [
+        "pipeline/", "data/psi/", "data/derived/", "data/pipeline/", "reports/",
+        "scripts/fetch_psi.py", "scripts/profile_tables.py", "scripts/build_data_map.py"
+      ]
+    },
+    "ui": {
+      "branch": "ui",
+      "does": "The dashboard: screens, output format, deployment to a public URL.",
+      "owns": ["web/", ".github/"]
+    }
+  },
+  "single_writer_coordination_files": {
+    "coord/status/<role>.md": "written by <role>",
+    "coord/requests/<id>.md": "written by the requester (the <from> part of the id)",
+    "coord/answers/<id>.<role>.md": "written by the answering role"
+  },
+  "shared_append_only": ["compliance/SOURCES.md", "compliance/AI_USAGE_LOG.md", ".gitignore"]
+}

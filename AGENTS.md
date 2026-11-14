@@ -146,9 +146,27 @@ Seoul 참가 요건 (사람이 직접 한다)
 ## 8. 아직 확인하지 못한 항목
 
 - NASA의 2026 Project Submission Guide 원문은 직접 읽지 못했다. 위 내용은 Seoul 운영진의 요약이고, 운영진은 "충돌 시 NASA 최신 가이드가 우선"이라고 안내한다.
+- (2026-11-14 10:35 KST 갱신) pm 세션이 2026 Project Submission Guide와 Judging & Awards Guide 원문을 읽었다. 7절과 어긋나는 내용은 찾지 못했고, 추가로 확인한 점은 다음과 같다.
+  - 데모가 슬라이드 7장 또는 영상 30초를 넘으면 글로벌 심사 대상에서 제외된다.
+  - 영어 요건은 제출 페이지뿐 아니라 거기에 연결된 자료 전체에 적용된다.
+  - Use of SI 답변은 심사위원에게 보이지 않는다. 심사위원은 제출물 안의 AI 생성 표시(워터마크, 설명문, 메타데이터)를 본다.
+  - 가이드는 SI를 해결 아이디어 자체를 내는 데 쓰지 말라고 적고 있다.
+  - 심사는 Impact, Creativity, Validity, Relevance, Presentation을 각각 1–5점으로 매긴다.
+- 저장소를 Final Project 링크로 쓰면 한국어 내부 문서(이 파일, `compliance/`)가 "연결된 자료는 영어" 요건에 걸릴 수 있다. 제출 전에 사람이 정한다.
 - 유료 상용 API를 제품 안에서 쓰는 것이 "공개 또는 오픈소스" 요건에 맞는지는 판단할 수 없다. 쓰기 전에 사용자에게 알린다.
 
 이 항목과 다른 방향으로 작업해야 할 때는 진행하기 전에 사용자에게 확인한다.
+
+## 9. 팀 협업과 세션 간 조정
+
+세 역할의 세션이 사람을 거치지 않고 서로 맞춰 가도록 정한 규칙이다. 절차는 `coord/README.md`에 있다.
+
+- 역할은 pm, data, ui 셋이다. 자기 역할은 저장소 루트의 `.role` 파일(커밋하지 않음)에 한 단어로 적혀 있다. 없으면 사용자에게 한 번 묻고 적는다.
+- 역할마다 브랜치와 소유 경로가 있다(`coord/roles.json`). 자기 브랜치에만 푸시하고, 소유하지 않은 경로는 고치지 않는다. 필요하면 요청을 연다.
+- 작업을 시작할 때, 작업 단위를 끝낼 때, 멈추기 전에, 그리고 작업 중에는 적어도 20분마다 동기화한다(`/sync` 또는 `coord/README.md`의 절차).
+- `compliance/`의 두 기록과 `.gitignore`는 모두가 쓰는 파일이다. 줄을 추가만 하고, 남이 쓴 줄을 고치거나 지우지 않는다.
+- 커밋하는 조정 파일과 제품 문서는 영어로 쓴다. 사용자와의 대화는 사용자의 언어로 한다.
+- 다른 세션과 조정할 일은 요청 파일로 직접 처리한다. 사용자에게 묻는 일은 `coord/README.md`의 "Needs a human"에 있는 것으로 한정한다.
 
 ## 규정 출처 (2026-11-13 확인, 2026-11-14 갱신)
 
@@ -159,3 +177,5 @@ Seoul 참가 요건 (사람이 직접 한다)
 - 2026 대회 안내: https://www.spaceappschallenge.org/2026/
 - 심사 기준 보도: https://business-review.eu/tech/it/innovation-feasibility-and-relevance-among-the-criteria-for-evaluating-projects-at-nasa-space-apps-challenge-302778
 - 2022 Project Submission Guide(잠정값의 근거): https://spaceapps-prod.s3.amazonaws.com/media/documents/Space_Apps_2022_Project_Submission_Guide.pdf
+- 2026 Project Submission Guide (2026-11-13 공개, 2026-11-14 원문 확인): https://www.spaceappschallenge.org/resources/project-submission-guide/
+- 2026 Judging & Awards Guide (2026-11-13 공개, 2026-11-14 원문 확인): https://www.spaceappschallenge.org/resources/judging-awards-guide/
