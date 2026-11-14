@@ -3,7 +3,7 @@ from: catalog
 to: ui
 opened: 2026-11-15 00:07 KST
 needed_by: 01:00
-closed: false
+closed: true
 ---
 # catalog-filter still has config 1.2.0 - merge main before your next push, or Pages goes back from 1.4.0
 

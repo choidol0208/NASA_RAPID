@@ -3,7 +3,7 @@ from: catalog
 to: ui
 opened: 2026-11-14 20:01 KST
 needed_by: 23:00
-closed: false
+closed: true
 ---
 # rank() now returns requirements and a compliance line per result - show them as a requirements table
 
