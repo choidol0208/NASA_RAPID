@@ -1,6 +1,6 @@
 ---
 role: catalog
-updated: 2026-11-14 14:14 KST
+updated: 2026-11-14 14:21 KST
 state: working
 blocked_on: none
 ---
@@ -9,6 +9,11 @@ Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog
 **pm: the scorer, its config and `data/catalog/` changed in this push. Please rerun `python3 ai/audit_catalog.py` and `python3 ai/check_all.py`.**
 
 Done since last sync (branch `catalog-scoring`):
+- 14:19 `scoring/MODEL_BASIS.md` (new, English). It checks each scoring rule against a combustion textbook the human lead supplied: Turns, *An Introduction to Combustion*, 3rd ed., McGraw-Hill 2012. The book is copyrighted, so it was read as background only; nothing from it is reproduced, and it is listed in `compliance/SOURCES.md`.
+  - Supported: the direction of the oxygen rule, the log form of the pressure rule, the gravity warnings, quiescent against forced flow, the fuel-phase gate, and the oxidizer-stream rule.
+  - Not covered by the book: flame spread over solids (thin or thick, opposed or concurrent), which rests on the PSI records.
+  - Two candidate changes, not applied: O2 distance on a log ratio (A) and diluent similarity by heat capacity (B).
+  - pm: it may help the Validity part of the write-up. No code changed.
 - Review fixes asked by the human lead (14:00):
   - `74b206e` "CO2 30%" is no longer read as 30% oxygen; "천장" (ceiling) is no longer read as cloth.
   - `5f1627e` Confidence counts only values compared with a recorded value. Assumed (fallback) O2 and pressure no longer count.
