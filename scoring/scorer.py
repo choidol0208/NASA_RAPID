@@ -570,14 +570,67 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
     return why, gap, warns
 
 
+# ------------------------------------------------------------------ requirements (systems engineering)
+# A query becomes a list of requirements, one per scorer dimension the query sets, each with its source and
+# the catalog columns that verify it (config "requirements"). Each result gets a compliance line per
+# requirement. Nothing here changes a score.
+SOURCE_RANK = ("stated", "implied", "derived", "assumed")
+
+
+def _req_source(s, classes):
+    if s.startswith("preset:"):
+        return "implied", "implied by preset " + s.split(":", 1)[1]
+    k = classes.get(s, "assumed")
+    return k, k
+
+
+def requirements(sc, src, cfg):
+    spec = cfg.get("requirements") or {}
+    classes = spec.get("source_class", {})
+    out = []
+    for g in spec.get("groups", []):
+        present = [f for f in g["fields"] if sc.get(f) is not None and sc.get(f) != ""]
+        if not present:
+            continue
+        units = g.get("units", {})
+        vals = [f"{sc[f]:g}{units.get(f, '')}" if isinstance(sc[f], (int, float)) and not isinstance(sc[f], bool) else str(sc[f])
+                for f in present]
+        cls = [_req_source(src.get(f, ""), classes) for f in present]
+        best = min(range(len(cls)), key=lambda i: SOURCE_RANK.index(cls[i][0]))
+        out.append(dict(id=f"R{len(out) + 1}", dimension=g["dimension"], kind=g["kind"], label=g["label"],
+                        value=", ".join(vals), source_class=cls[best][0], source=cls[best][1], verified_by=g["verified_by"]))
+    return out
+
+
+def compliance(reqs, r, sc, cfg):
+    thr = cfg.get("outside_range_threshold", 0.9)
+    assumed = {{"O2": "o2", "pressure": "pressure"}.get(x, x) for x in r.get("assumed_dims", [])}
+    out = []
+    for q in reqs:
+        d = q["dimension"]
+        if d == "gravity":
+            g = sc.get("gravity")
+            st = "met" if g == "microgravity" else "near" if g == "earth" and r.get("has_1g_comparison") else "not_met"
+        elif d not in r["similarity"]:
+            st = "not_scored"
+        elif d in r["unknown_dims"] or d in assumed:
+            st = "unverified"
+        else:
+            s = r["similarity"][d]
+            st = "met" if s >= 0.999 else "near" if s >= thr else "not_met"
+        out.append({"id": q["id"], "status": st})
+    return out
+
+
 def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None, catalog=None):
     cfg = config if isinstance(config, dict) else load_config(config)
     inv, cfgs = catalog or load_catalog(catalog_dir)
     sc, src, assumptions, out_of_scope, informative = interpret(query, cfg)
     W = cfg["warnings"]
     unread = not_understood(query, cfg)
+    reqs = requirements(sc, src, cfg)
     base = {"scenario": {k: v for k, v in sc.items()}, "sources": src, "assumptions": assumptions,
-            "config_version": cfg["version"], "not_understood": unread}
+            "config_version": cfg["version"], "not_understood": unread, "requirements": reqs}
     unread_w = [{"code": "not_understood", "message": W["not_understood"].format(words=", ".join(f"'{p}'" for p in unread))}] if unread else []
     if out_of_scope:
         return dict(base, status="out_of_scope", warnings=[{"code": "out_of_scope", "message": W["out_of_scope"]}], results=[], ranking=[])
@@ -667,6 +720,7 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
         if not r.get("complementary"):
             r["other_configs"] = others.get(r["investigation_id"], [])
         r["confidence"] = "high" if r["coverage"] >= conf["high"] else "medium" if r["coverage"] >= conf["medium"] else "low"
+        r["compliance"] = compliance(reqs, r, sc, cfg)
         results.append(r)
     if sc.get("fuel_phase") == "solid" and results and all((x["gate"] < 1 or "gas_for_solid" in [w["code"] for w in x["warnings"]]) for x in results):
         warnings.append({"code": "weak_match", "message": "No close solid-material match; treat the ranking as indicative."})

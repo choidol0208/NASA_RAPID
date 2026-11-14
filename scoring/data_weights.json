@@ -1,0 +1,292 @@
+{
+  "_meta": {
+    "what": "Data stream for the scoring weights: share of the explained variance of measured FLEX responses that each condition accounts for.",
+    "label": "AI-generated data file: computed by code written with an AI assistant (Claude Code). No language model ran to build it. The team's analysis of NASA data, not a NASA result.",
+    "source": "NASA PSI-69 FLEX experimental table (CC0-1.0), https://psi.nasa.gov/ ; read directly, not through the data pipeline",
+    "input_sha256": "37c88ce8ae9391b7544ff630a45ce87543d04d317cdbfbed104fe7d5c27e1b96",
+    "rows_used": 261,
+    "rows_dropped": [
+      10,
+      25,
+      54,
+      81,
+      82,
+      84,
+      97,
+      115,
+      139,
+      211,
+      224,
+      238,
+      243
+    ],
+    "bootstrap": 1000,
+    "seed": 20261114,
+    "method": "OLS on a log-linear model; LMG (Shapley) decomposition of R^2 over predictor groups; nonparametric bootstrap, percentile 95% intervals. See scoring/WEIGHTING.md section 'Data stream'.",
+    "use": {
+      "suppression": "dext_over_d0"
+    }
+  },
+  "responses": {
+    "ln_K": {
+      "label": "ln K, the table's Burning rate column read as the d^2-law constant (unit written as mm; not confirmed)",
+      "n": 257,
+      "r2": 0.655,
+      "coefficients": {
+        "intercept": {
+          "value": 0.4891,
+          "ci95": [
+            -0.0582,
+            0.9594
+          ]
+        },
+        "ln X_O2": {
+          "value": 0.8796,
+          "ci95": [
+            0.7669,
+            0.9987
+          ]
+        },
+        "ln P": {
+          "value": 0.1368,
+          "ci95": [
+            0.0271,
+            0.2877
+          ]
+        },
+        "X_CO2": {
+          "value": -0.4426,
+          "ci95": [
+            -0.6894,
+            -0.2312
+          ]
+        },
+        "X_He": {
+          "value": 0.9501,
+          "ci95": [
+            0.7983,
+            1.0941
+          ]
+        },
+        "heptane": {
+          "value": 0.0065,
+          "ci95": [
+            -0.0584,
+            0.0654
+          ]
+        },
+        "ln d0": {
+          "value": -0.373,
+          "ci95": [
+            -0.4709,
+            -0.2685
+          ]
+        }
+      },
+      "importance": {
+        "o2": {
+          "r2_share": 0.3231,
+          "normalised": 0.4932,
+          "ci95": [
+            0.3721,
+            0.5909
+          ]
+        },
+        "pressure": {
+          "r2_share": 0.0102,
+          "normalised": 0.0156,
+          "ci95": [
+            0.01,
+            0.0386
+          ]
+        },
+        "diluent": {
+          "r2_share": 0.2196,
+          "normalised": 0.3352,
+          "ci95": [
+            0.2333,
+            0.4479
+          ]
+        },
+        "fuel": {
+          "r2_share": 0.016,
+          "normalised": 0.0244,
+          "ci95": [
+            0.0037,
+            0.0831
+          ]
+        },
+        "size": {
+          "r2_share": 0.0862,
+          "normalised": 0.1316,
+          "ci95": [
+            0.0659,
+            0.2192
+          ]
+        }
+      }
+    },
+    "dext_over_d0": {
+      "label": "d_ext/d0 at flame extinction (tests that ended in extinction)",
+      "n": 158,
+      "r2": 0.6193,
+      "coefficients": {
+        "intercept": {
+          "value": -0.4129,
+          "ci95": [
+            -1.2406,
+            0.282
+          ]
+        },
+        "ln X_O2": {
+          "value": -0.6462,
+          "ci95": [
+            -0.776,
+            -0.5295
+          ]
+        },
+        "ln P": {
+          "value": -0.0984,
+          "ci95": [
+            -0.2418,
+            0.0682
+          ]
+        },
+        "X_CO2": {
+          "value": 0.4083,
+          "ci95": [
+            0.252,
+            0.578
+          ]
+        },
+        "X_He": {
+          "value": 0.2,
+          "ci95": [
+            -0.0731,
+            0.4291
+          ]
+        },
+        "heptane": {
+          "value": 0.2247,
+          "ci95": [
+            0.1829,
+            0.2773
+          ]
+        },
+        "ln d0": {
+          "value": 0.2737,
+          "ci95": [
+            0.1549,
+            0.394
+          ]
+        }
+      },
+      "importance": {
+        "o2": {
+          "r2_share": 0.2216,
+          "normalised": 0.3578,
+          "ci95": [
+            0.2313,
+            0.4757
+          ]
+        },
+        "pressure": {
+          "r2_share": 0.0141,
+          "normalised": 0.0228,
+          "ci95": [
+            0.0082,
+            0.0725
+          ]
+        },
+        "diluent": {
+          "r2_share": 0.082,
+          "normalised": 0.1324,
+          "ci95": [
+            0.0667,
+            0.2271
+          ]
+        },
+        "fuel": {
+          "r2_share": 0.2168,
+          "normalised": 0.3501,
+          "ci95": [
+            0.2108,
+            0.4959
+          ]
+        },
+        "size": {
+          "r2_share": 0.0848,
+          "normalised": 0.1369,
+          "ci95": [
+            0.055,
+            0.2371
+          ]
+        }
+      }
+    }
+  },
+  "theory_check": [
+    {
+      "statement": "d^2 law: K = (8 k_g / (rho_l c_pg)) ln(1 + B) (Turns 2012, ch. 10). With B roughly proportional to the ambient O2 mass fraction, the elasticity d ln K / d ln Y_O2 = B / ((1 + B) ln(1 + B)) lies between 0 and 1; the fitted ln X_O2 coefficient of ln K should lie there too.",
+      "fitted": {
+        "value": 0.8796,
+        "ci95": [
+          0.7669,
+          0.9987
+        ]
+      },
+      "holds": true
+    },
+    {
+      "statement": "The d^2-law K does not depend on pressure to first order (k_g and c_pg do not); the fitted ln P coefficient of ln K should be small.",
+      "fitted": {
+        "value": 0.1368,
+        "ci95": [
+          0.0271,
+          0.2877
+        ]
+      },
+      "holds": true
+    },
+    {
+      "statement": "Helium raises the thermal conductivity of the gas, so K should rise with X_He; CO2 has a higher heat capacity and lowers the O2 mass fraction at the same mole fraction, so K should fall with X_CO2.",
+      "fitted": {
+        "X_He": {
+          "value": 0.9501,
+          "ci95": [
+            0.7983,
+            1.0941
+          ]
+        },
+        "X_CO2": {
+          "value": -0.4426,
+          "ci95": [
+            -0.6894,
+            -0.2312
+          ]
+        }
+      },
+      "holds": true
+    },
+    {
+      "statement": "A lower O2 fraction brings the flame nearer its extinction limit, so the extinction diameter ratio d_ext/d0 should fall as X_O2 rises (negative ln X_O2 coefficient) and rise with an inert that suppresses (positive X_CO2 coefficient).",
+      "fitted": {
+        "ln_X_O2": {
+          "value": -0.6462,
+          "ci95": [
+            -0.776,
+            -0.5295
+          ]
+        },
+        "X_CO2": {
+          "value": 0.4083,
+          "ci95": [
+            0.252,
+            0.578
+          ]
+        }
+      },
+      "holds": true
+    }
+  ]
+}

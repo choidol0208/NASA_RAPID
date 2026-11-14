@@ -3,18 +3,18 @@
   "built_by": "ai/apply_review.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T19:03:23+09:00",
+  "generated_at": "2026-11-14T20:16:23+09:00",
   "inputs_sha256": {
    "ai/prompts/card_v3.txt": "e013dce7e2678ff2eadeebebc8659685a076112c92fc3a524bb27e6d0f604cd9",
    "ai/review/pm_prereview.json": "86369fdb2b5b5a6be878e8684d789bb7f0d728d4a49de2a0f14f05cf33a315e4",
-   "ai/review/review_sheet.csv": "1cc65dd46af9e3bfb52041493034b9346a758abc99eeb9f6505b81419d57b238",
+   "ai/review/review_sheet.csv": "a8fff5d470de82ba447c3992b82aded4634fbcbcdd12f0a3b55760a1f92b49d8",
    "ai/runs/cards_20261114-v3-all24.jsonl": "e1cdc4fb4f3fdbdd3363a77cd7c72013f81dd0cdf7f7da16f5f81e052aafc851",
    "ai/runs/cards_20261114-v3-repair.jsonl": "ebd278cb7b7fae39c4b51263420c63e9cad1daedeea94008c9ffbd2fb38747dd",
-   "data/insights/cards.json": "aa2e68714ca1d0205ebbee93aa6b8686a6934c8d2783375c62bd49ca487b172f",
-   "data/insights/scenarios.json": "62f9ae6dd3c6ffa11f226de83b1459fe6191e424c50b2616f580f0f4322493c3"
+   "data/insights/cards.json": "708b87af2e7d0590bb3ef5d9962d5e1016618173341655202b4e70c2c5b69818",
+   "data/insights/scenarios.json": "9d1e392364a26cd0c51b2ca2ecb25217e4fd2cf89d347ce4d5658644455e8d14"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code); no language model ran to build it. Counts of the gpt-oss:20b card sentences, the code gates and the review verdicts, computed by code. Team output, not a NASA conclusion.",
-  "content_sha256": "0b756a10bc976c3c5d9dc0acd485086b70e2a6fb7775163fab818731c2723154"
+  "content_sha256": "7ed914c191d7172bec5c6d0f5c814fed7dfd8ae4f23e6e89286318f9d4e4f2f7"
  },
  "description": "Measured counts for the model-written card sentences (gpt-oss:20b) and their checks, reproduced by ai/apply_review.py from ai/review/review_sheet.csv and the gate results of ai/apply_cards.py. Rates are measured before removal and carry their n. Rows read by an AI session are never counted as read by a person. The counts reviewed_person and reviewed_ai_session say who read the rows.",
  "proposed": 70,
@@ -251,17 +251,25 @@
   "marked_rows_matching_no_quote": [],
   "rule": "a verbatim NASA quote whose sheet row is marked not_relevant is not shown on its card: a key point is dropped and the pick rule goes on to its next candidate; the quoted slot of a removed model sentence uses the next unit that sentence cited, or is left out; a card's last quoted summary sentence is never removed (listed under kept_although_marked). Nothing is reworded. Counted apart from the model-sentence counts (removed_by_review, verdicts, support_rate)."
  },
- "template_statements": 226,
+ "template_statements": 233,
  "template_verdicts": {
   "wording_ok": 226
  },
  "rows_without_verdict": {
-  "n": 1,
+  "n": 8,
   "by_origin": {
-   "quote": 1
+   "quote": 1,
+   "template": 7
   },
   "items": [
-   "card:PSI-69:key_point:PSI-69.objective:OBJ-4"
+   "card:PSI-69:key_point:PSI-69.objective:OBJ-4",
+   "scenario:lunar_habitat:note:PSI-68",
+   "scenario:spacesuit:note:PSI-21",
+   "scenario:spacesuit:note:PSI-25",
+   "scenario:spacesuit:note:PSI-99",
+   "scenario:spacesuit:note:PSI-26",
+   "scenario:spacesuit:note:PSI-98",
+   "scenario:spacesuit:note:PSI-100"
   ],
   "rule": "rows that are new or whose sentence text changed (matched by item and sentence_sha) have no verdict and go back to the reviewer"
  },

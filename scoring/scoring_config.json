@@ -1,51 +1,51 @@
 {
   "_about": {
     "what": "Scoring rules for ranking PSI test configurations against a user scenario. Read by scoring/scorer.py; the dashboard can read the same file (e.g., to draw weight sliders).",
-    "status": "Team proposal (2026-11-14), not NASA guidance. All values of config 1.1.0 were reviewed and approved as they are by a team member (see generated_by): the profile weights, and the other values on the basis of the AI review in scoring/PARAMETER_REVIEW.md. Questions for combustion researchers, the next validation step, are listed in that file. Change values here only, never in code.",
-    "generated_by": "AI-assisted (Claude), reviewed: profile weights approved as-is by the human lead (team member), 2026-11-14 16:51 KST; all other values (similarity scales and tables, gate, evidence factor, selection, confidence, complementary slot, atmosphere fallback) approved as-is by the same reviewer, 2026-11-14 17:03 KST, after the AI review in scoring/PARAMETER_REVIEW.md; config 1.1.0",
+    "status": "Team proposal (2026-11-14), not NASA guidance. Config 1.3.0: the profile weights come from scoring/derive_weights.py, which combines the streams named in scoring/weight_streams.json. Prevention and detection: AHP over the AI session's pairwise judgements (scoring/ahp_judgements.json; CR 0.012 and 0.014). Suppression: the same AHP (CR 0.006) pooled, over o2, pressure, diluent and fuel, with the relative importance of those conditions in the NASA FLEX measurements (scoring/data_weights.json) by a log-linear opinion pool. The human lead approved the judgements (19:26) and the pooling (20:06). All other values are unchanged from 1.1.0 and were approved after the AI review in scoring/PARAMETER_REVIEW.md. The model's build-up and its sources are in scoring/BUILDUP.md. Change values here only, never in code; change the weights only through the stream files and derive_weights.py --write.",
+    "generated_by": "AI-assisted (Claude), reviewed: profile weights of 1.0.0-1.1.0 (direct point allocation) approved as-is by the human lead (team member), 2026-11-14 16:51 KST; all other values approved as-is by the same reviewer, 2026-11-14 17:03 KST, after the AI review in scoring/PARAMETER_REVIEW.md; config 1.2.0 (2026-11-14 19:26 KST): profile weights replaced by the AHP derivation, pairwise judgements approved as-is and applied by decision of the same reviewer; config 1.3.0 (2026-11-14 20:06 KST): suppression weights pooled with the NASA FLEX data stream, by decision of the same reviewer",
     "formula": "score = 100 * M * G * sum_i(w_i * S_i) over active dimensions; weights renormalized to sum 1 over active dimensions"
   },
-  "version": "1.1.0",
+  "version": "1.3.0",
   "default_profile": "prevention",
   "profiles": {
     "prevention": {
       "label_en": "Material flammability (prevention)",
       "weights": {
-        "o2": 0.25,
-        "pressure": 0.1,
-        "flow": 0.2,
-        "fuel": 0.25,
-        "geometry": 0.1,
-        "role": 0.1,
+        "o2": 0.285,
+        "pressure": 0.09,
+        "flow": 0.166,
+        "fuel": 0.267,
+        "geometry": 0.111,
+        "role": 0.081,
         "diluent": 0.0
       },
-      "rationale": "Microgravity solid flammability is mapped on an oxygen-concentration vs flow-speed plane (U-shaped boundary), so O2 and flow carry 0.45; fuel type next; pressure and geometry modify."
+      "rationale": "Microgravity solid flammability is mapped on an oxygen-concentration vs flow-speed plane (U-shaped boundary), so O2 and flow carry 0.45; fuel type next; pressure and geometry modify. Weights derived by AHP from scoring/ahp_judgements.json (scoring/derive_weights.py); evidence for each judgement in scoring/WEIGHTING.md."
     },
     "detection": {
       "label_en": "Smoke and fire detection",
       "weights": {
-        "o2": 0.1,
-        "pressure": 0.05,
-        "flow": 0.1,
-        "fuel": 0.3,
-        "geometry": 0.05,
-        "role": 0.4,
+        "o2": 0.085,
+        "pressure": 0.049,
+        "flow": 0.136,
+        "fuel": 0.221,
+        "geometry": 0.051,
+        "role": 0.458,
         "diluent": 0.0
       },
-      "rationale": "Smoke amount and particle size depend mostly on the material and on whether the study measured smoke; atmosphere is secondary."
+      "rationale": "Smoke amount and particle size depend mostly on the material and on whether the study measured smoke; atmosphere is secondary. Weights derived by AHP from scoring/ahp_judgements.json (scoring/derive_weights.py); evidence for each judgement in scoring/WEIGHTING.md."
     },
     "suppression": {
       "label_en": "Suppression and extinguishment",
       "weights": {
-        "o2": 0.15,
-        "pressure": 0.05,
-        "flow": 0.1,
-        "fuel": 0.2,
-        "geometry": 0.05,
-        "role": 0.3,
-        "diluent": 0.15
+        "o2": 0.204,
+        "pressure": 0.036,
+        "flow": 0.089,
+        "fuel": 0.202,
+        "geometry": 0.059,
+        "role": 0.286,
+        "diluent": 0.124
       },
-      "rationale": "Whether the study tested extinguishment and with which diluent matters most; post-dilution O2 still governs extinction."
+      "rationale": "Whether the study tested extinguishment and with which diluent matters most; post-dilution O2 still governs extinction. Weights: AHP from scoring/ahp_judgements.json, pooled over o2, pressure, diluent and fuel with the NASA FLEX measurements (scoring/data_weights.json); see scoring/BUILDUP.md."
     }
   },
   "similarity": {
@@ -202,6 +202,104 @@
   "confidence": {
     "high": 0.75,
     "medium": 0.45
+  },
+  "requirements": {
+    "why": "Systems-engineering view of a query (NASA Systems Engineering Handbook, NASA/SP-2016-6105 Rev2: stakeholder expectations become technical requirements, each verifiable and traceable). Each condition the scorer reads becomes one requirement with its source (stated by the user, implied by a preset, derived, or assumed by default) and the catalog columns that verify it. Each result gets a compliance line per requirement: met (the configuration's recorded conditions cover it), near (similarity at or above outside_range_threshold), not_met, unverified (no recorded value, or an assumed atmosphere), or not_scored. The requirements do not change any score.",
+    "groups": [
+      {
+        "dimension": "gravity",
+        "fields": [
+          "gravity"
+        ],
+        "kind": "environment",
+        "label": "Gravity",
+        "verified_by": "configurations.gravity_level; investigations.has_1g_comparison. Every PSI test in the catalog ran in microgravity"
+      },
+      {
+        "dimension": "o2",
+        "fields": [
+          "o2_pct"
+        ],
+        "units": {
+          "o2_pct": "%"
+        },
+        "kind": "environment",
+        "label": "Oxygen mole fraction",
+        "verified_by": "configurations.o2_min_pct, o2_max_pct, o2_source, o2_reference"
+      },
+      {
+        "dimension": "pressure",
+        "fields": [
+          "pressure_kpa"
+        ],
+        "units": {
+          "pressure_kpa": " kPa"
+        },
+        "kind": "environment",
+        "label": "Total pressure",
+        "verified_by": "configurations.pressure_min_kpa, pressure_max_kpa, pressure_source"
+      },
+      {
+        "dimension": "flow",
+        "fields": [
+          "flow_state",
+          "flow_cms"
+        ],
+        "units": {
+          "flow_cms": " cm/s"
+        },
+        "kind": "scenario",
+        "label": "Flow around the fuel",
+        "verified_by": "configurations.flow_config, flow_min_cms, flow_max_cms, flow_source"
+      },
+      {
+        "dimension": "fuel",
+        "fields": [
+          "fuel_material",
+          "fuel_class",
+          "fuel_phase",
+          "melt_behavior"
+        ],
+        "kind": "material",
+        "label": "Fuel",
+        "verified_by": "configurations.fuel_material, fuel_class, fuel_phase, melt_behavior"
+      },
+      {
+        "dimension": "geometry",
+        "fields": [
+          "sample_geometry",
+          "thermal_regime"
+        ],
+        "kind": "material",
+        "label": "Sample shape and thickness",
+        "verified_by": "configurations.sample_geometry, thermal_regime"
+      },
+      {
+        "dimension": "diluent",
+        "fields": [
+          "diluent"
+        ],
+        "kind": "environment",
+        "label": "Diluent or suppressant gas",
+        "verified_by": "configurations.diluent, diluent_max_pct (scored in suppression questions only)"
+      },
+      {
+        "dimension": "role",
+        "fields": [
+          "concern"
+        ],
+        "kind": "purpose",
+        "label": "Purpose of the question",
+        "verified_by": "investigations.fire_safety_role, research_focus (team classification of the PSI record)"
+      }
+    ],
+    "source_class": {
+      "text": "stated",
+      "input": "stated",
+      "preset": "implied",
+      "derived": "derived",
+      "default": "assumed"
+    }
   },
   "presets": {
     "iss": {
