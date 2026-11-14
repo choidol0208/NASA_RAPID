@@ -162,9 +162,18 @@ function listLabel(items, sc) {
   if (t === 0) return { inline: false, tag: aiLabel(sc) };
   return { inline: true, tag: null };
 }
+// pm request 2340, item 2: pm's scenario text is chosen by the environment the page read from the input
+// (the preset id), not by the exact input text. The frame, the needs and "what PSI does not contain"
+// describe the environment and hold for any input in it. The result notes were written for the ranking
+// of the entry's own query, so they are shown only when the input is that query.
 function scenarioNotes(query, out, insights) {
+  const pid = out.scenario && out.scenario.preset;
+  if (!pid) return null;
+  const all = (insights.scenarios || []).filter((e) => e.id === pid);
   const q = query.trim().toLowerCase();
-  return (insights.scenarios || []).find((e) => typeof e.query === "string" && e.query.trim().toLowerCase() === q && e.id === out.scenario.preset) || null;
+  const exact = all.find((e) => typeof e.query === "string" && e.query.trim().toLowerCase() === q);
+  if (exact) return exact;
+  return all.length ? { ...all[0], result_notes: [] } : null;
 }
 function noteFor(sc, r) {
   if (!sc || !Array.isArray(sc.result_notes)) return null;
@@ -393,6 +402,10 @@ function renderNeeds(out, pipe, expanded) {
 }
 
 
+// pm request 2340, item 1: split the frame only at a sentence end followed by white space and a capital
+// letter, a bracket or a quote, never at a decimal point ("70.3 kPa"). web/check_integration.py checks
+// that the parts joined give the whole frame for every scenario, with this same expression.
+const FRAME_SPLIT = /(?<=[.!?])\s+(?=[A-Z("'])/;
 function renderScenarioText(out, sc, cat) {
   const other = $("#other-notes");
   other.replaceChildren();
@@ -415,8 +428,8 @@ function renderScenarioText(out, sc, cat) {
   if (typeof sc.frame === "string" && sc.frame.trim()) {
     const fx = { text_origin: sc.frame_text_origin || sc.text_origin };
     // Long frames (the lunar one is ~540 words): first two sentences, the rest folded (pm request 1622).
-    const sents = sc.frame.match(/[^.!?]+(?:[.!?]+(?=\s|$)|$)/g) || [sc.frame];
-    const lead = sents.slice(0, 2).join("").trim(), rest = sents.slice(2).join("").trim();
+    const sents = sc.frame.trim().split(FRAME_SPLIT);
+    const lead = sents.slice(0, 2).join(" "), rest = sents.slice(2).join(" ");
     frameBox.append(h("div", { class: "frame" }, h("p", {}, lead, " ",
       Array.isArray(sc.frame_sources) && sc.frame_sources.length ? [sourceLinks(sc.frame_sources, cat), " "] : null, itemTag(fx, sc)),
       rest ? h("details", { class: "more" }, h("summary", {}, "Read the rest of the frame"), h("p", {}, rest)) : null));
@@ -806,11 +819,51 @@ function renderCriteria(pipe) {
 }
 
 // The answer in two lines, right under the query box, so the first screen shows the result.
+// pm request 2340, item 3: counts for the environment of the input only, with "oxygen and pressure both
+// in range" kept apart from "oxygen in range, no pressure in the table", and the kind of test named when
+// all matched tests are of one kind (fuel phase from pm's evidence map).
+const PHASE_WORDS = { gas: "gas flames", liquid: "fuel droplets", solid: "solid fuels" };
 function scenarioCoverage(pipe, id) {
   const rows = (pipe.scenarioNeeds || []).filter((r) => r.scenario_id === id);
-  const withTests = rows.filter((r) => (+r.tests_atmosphere || 0) + (+r.tests_oxygen_only || 0) + (+r.tests_pressure_only || 0) > 0).length;
+  const n = (r, k) => +r[k] || 0;
+  const both = rows.filter((r) => n(r, "tests_atmosphere") > 0);
+  const o2only = rows.filter((r) => !n(r, "tests_atmosphere") && n(r, "tests_oxygen_only") > 0);
+  const ponly = rows.filter((r) => !n(r, "tests_atmosphere") && !n(r, "tests_oxygen_only") && n(r, "tests_pressure_only") > 0);
+  const phaseOf = new Map();
+  for (const p of (pipe.evidenceMap && pipe.evidenceMap.points) || []) {
+    if (!phaseOf.has(p.investigation_id)) phaseOf.set(p.investigation_id, new Set());
+    phaseOf.get(p.investigation_id).add(p.fuel_phase);
+  }
+  const kindOf = (rs) => {
+    const invs = [...new Set(rs.flatMap((r) => String(r.investigations_atmosphere || "").split(";").filter(Boolean)))];
+    if (!invs.length || invs.some((i) => !phaseOf.has(i))) return null;
+    const ph = new Set(invs.flatMap((i) => [...phaseOf.get(i)]));
+    return ph.size === 1 ? PHASE_WORDS[[...ph][0]] || null : null;
+  };
   const spec = pipe.scenarioSpec && pipe.scenarioSpec.scenarios.find((x) => x.id === id);
-  return { label: (spec && spec.label) || id, withTests, total: rows.length };
+  return { label: (spec && spec.label) || id, total: rows.length, both, o2only, ponly, kind: kindOf(both), spec };
+}
+function coverageLine(c) {
+  const names = (rs) => rs.map((r) => r.need).join(", ");
+  const first = c.both.length
+    ? `${c.label}: ${c.both.length} of ${c.total} needs ${c.both.length === 1 ? "has" : "have"} recorded tests with oxygen and pressure both in the scenario range (${names(c.both)}${c.kind ? `; ${c.kind} only` : ""}).`
+    : `${c.label}: none of the ${c.total} needs has recorded tests with oxygen and pressure both in the scenario range.`;
+  const more = [
+    c.o2only.length ? `${c.o2only.length} ${c.both.length ? "more" : ""} ${c.o2only.length === 1 ? "has" : "have"} tests with oxygen in range and no pressure in the PSI table (${names(c.o2only)}).` : "",
+    c.ponly.length ? `${c.ponly.length} ${c.both.length || c.o2only.length ? "more" : ""} ${c.ponly.length === 1 ? "has" : "have"} tests with pressure in range and no oxygen recorded (${names(c.ponly)}).` : "",
+  ].filter(Boolean).map((s) => s.replace(/\s+/g, " "));
+  return [first, ...more].join(" ");
+}
+// pm request 2340, fourth point: a typed oxygen or pressure is shown as "(you)", but the counts are those
+// of the environment's range.
+function typedNote(out, pipe, sid) {
+  if (!sid) return null;
+  const typed = ["o2_pct", "pressure_kpa"].some((f) => f in out.scenario && !/^(preset|default$|derived$)/.test(out.sources[f] || ""));
+  const spec = pipe.scenarioSpec && pipe.scenarioSpec.scenarios.find((x) => x.id === sid);
+  if (!typed || !spec) return null;
+  const r = spec.ranges || {};
+  const parts = [r.o2_pct ? `oxygen ${rangeText(r.o2_pct, "%")}` : null, r.pressure_kpa ? `pressure ${rangeText(r.pressure_kpa, " kPa")}` : null].filter(Boolean);
+  return h("p", { class: "gap typed-note" }, `Counted for the ${spec.label} range${parts.length ? ` (${parts.join(", ")})` : ""}, not for the value you typed.`);
 }
 function renderGlance(out, pipe) {
   const box = $("#glance");
@@ -820,12 +873,14 @@ function renderGlance(out, pipe) {
     ...out.results.flatMap((r, i) => [i ? ", " : "", h("a", { href: "#top" }, r.investigation_id)]),
     ` (team scores ${out.results.map((r) => r.score).join(", ")}).`);
   const sid = scenarioId(out, pipe);
-  const cov = sid && pipe.scenarioNeeds ? COMPARE.map(([id]) => scenarioCoverage(pipe, id)).filter((c) => c.total) : [];
-  const second = cov.length
-    ? h("p", {}, "Needs with counted recorded tests in the scenario range: ", cov.map((c) => `${c.label} ${c.withTests} of ${c.total}`).join(" · "), ". ",
+  const cov = sid && pipe.scenarioNeeds ? scenarioCoverage(pipe, sid) : null;
+  const second = cov && cov.total
+    ? h("p", {}, coverageLine(cov), " ",
       h("a", { href: "#compare" }, "Compare"), " · ", h("a", { href: "#stops" }, "Where the evidence stops"))
     : h("p", {}, h("a", { href: "#needs" }, "What the recorded tests say"), " · ", h("a", { href: "#stops" }, "Where the evidence stops"));
   box.append(top, second);
+  const tn = cov && cov.total ? typedNote(out, pipe, sid) : null;
+  if (tn) box.append(tn);
   box.hidden = false;
 }
 
@@ -880,6 +935,8 @@ async function renderTests(out, pipe, cat, phaseFilter) {
   box.append(h("p", { class: "intro" }, h("b", {}, `${spec.label}: `), scenarioRanges(spec), ". ",
     spec.note || "", " ", link(REPO + "pipeline/spec/scenarios.json", "(scenario ranges)")));
   if (spec.caveat) box.append(h("p", { class: "warn" }, spec.caveat));
+  const tn = typedNote(out, pipe, sid);
+  if (tn) box.append(tn);
   const bar = h("div", { class: "presets", role: "group", "aria-label": "Fuel phase" });
   for (const ph of phases) {
     const b = h("button", { type: "button", "aria-pressed": String(ph === want) }, ph === "all" ? "All fuels" : `${ph[0].toUpperCase()}${ph.slice(1)} fuels`);
@@ -1327,6 +1384,15 @@ async function main() {
     show("#top", true); show("#all", true); show("#needs", true); show("#stops", true); // #answers, #shown and #criteria are set by renderAnswers()
   }
 
+  // The weights in the method text are read from the scoring config, so the text never goes stale.
+  const wl = $("#weights-now");
+  if (wl && config.profiles) {
+    wl.replaceChildren(...Object.entries(config.profiles).map(([, p]) => {
+      const w = Object.entries(p.weights || {}).filter(([, v]) => typeof v === "number" && v > 0).sort((a, b) => b[1] - a[1]);
+      return h("li", {}, h("b", {}, `${p.label_en || ""}: `), w.map(([k, v]) => `${(DIMS[k] || k).toLowerCase()} ${Math.round(v * 100)}%`).join(", "));
+    }));
+    wl.after(h("p", { class: "gap" }, `Weights of scoring configuration ${config.version}, read from `, link(REPO + "scoring/scoring_config.json", "scoring/scoring_config.json"), "."));
+  }
   // Static links to repository files point at the built commit (like every other source link).
   document.querySelectorAll("a[data-repo-path]").forEach((a) => { a.href = REPO + a.dataset.repoPath; a.target = "_blank"; a.rel = "noopener"; });
   renderAiUse({ quality: aiQuality, readiness: aiReadiness, robust: aiRobust, configVersion: config.version }, (q2) => { run(q2); $("#top").scrollIntoView({ behavior: "smooth", block: "start" }); });
