@@ -235,16 +235,16 @@
    "question": "Under what heating, flow and aging conditions was smoke from this material characterised?",
    "conditions_required": [
     "fuel_material",
-    "flow_cms"
+    "flow_cms",
+    "aging_time_s"
    ],
    "conditions_useful": [
-    "heating_ratio",
-    "aging_time_s"
+    "heating_ratio"
    ],
    "outcomes_any": [
     "mass_loss_rate_mg_min"
    ],
-   "why": "Smoke particle size depends on flow and aging, and detectors respond differently to different sizes. Particle-size results are not in the experimental tables.",
+   "why": "Smoke particle size depends on flow and aging, and detectors respond differently to different sizes. Particle-size results are not in the experimental tables. Aging time is required because it marks a smoke test (SAME.controls); flame tests record a flow speed but are not smoke tests.",
    "scope": {
     "fuel_phase": [
      "solid"

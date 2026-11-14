@@ -13,6 +13,10 @@ spec/coverage.json   bin edges of the coverage grid (oxygen, pressure), placed a
         │
 spec/scenarios.json  crewed environments (ISS cabin, lunar habitat) as ranges of oxygen, pressure, flow and gravity
         │
+spec/materials.json  one id per material; the names each table uses for it
+        │
+spec/indicators.json what is computed per need from the linked tests: variable, filter, grouping; three fixed templates
+        │
 spec/variables.json  standard variables, units, valid ranges, derived formulas
         │
 spec/sources.json    22 PSI tables: source column → standard variable → named rule
@@ -34,6 +38,8 @@ Run: `python3 pipeline/run.py` (after `python3 scripts/fetch_psi.py`).
 | `coverage_grid.csv` | Recorded tests per fuel phase, oxygen basis, oxygen bin and pressure bin; `not_recorded` is its own bin |
 | `scenario_tests.csv` | Scenario × test: whether the recorded oxygen, pressure, flow and gravity fall in the scenario ranges; match tier |
 | `scenario_needs.csv` | Scenario × need: usable tests by match tier, investigations, status, and gap codes |
+| `indicators.csv` | Per need and group: count, min, median, max of a recorded variable, with the indicator's reading and reference items |
+| `indicator_tests.csv` | The tests behind every indicator row |
 | `need_references.csv` | For each need, the reference items (criterion text, values, document, section, URL) |
 | `run_report.json` | Row counts, flags, unmapped source columns, fill count per variable |
 
@@ -45,6 +51,10 @@ Status in the capability matrix: `measured`, `partial` (an outcome exists but a 
 - A cell that a rule cannot read stays empty and gets a flag (`variable:reason`). Problems are flagged, not fixed.
 - Every value keeps its source file, row and column.
 - To add a table, a variable or a need, edit the spec files; `run.py` does not change.
+
+## Indicators
+
+`indicators.json` declares what is computed for each need. The engine has three templates (`summary`, `count_by`, `count`); the spec only chooses the variable, the filter and the grouping, so no number comes from anything but recorded values. Each indicator carries a `reading` that says what it does not mean (for example, the lowest oxygen tested is not a flammability limit), the reference items that define the concept, and, where the investigators published a result for the same investigation, a `compare_with` pointer. The pipeline does not make that comparison.
 
 ## Scenarios
 

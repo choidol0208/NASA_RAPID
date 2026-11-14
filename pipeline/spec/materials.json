@@ -1,0 +1,198 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
+  "purpose": "One id per material or fuel, so that the same material written differently in different PSI tables is grouped together. fuel_material keeps the name as standardized from the table; material_id is added next to it. A name that is not listed here gets no material_id and the flag material_id:not_in_vocabulary.",
+  "matching": "exact match on fuel_material, ignoring letter case and surrounding spaces"
+ },
+ "materials": [
+  {
+   "id": "sibal",
+   "label": "SIBAL cotton-fiberglass fabric",
+   "fuel_phase": "solid",
+   "aliases": [
+    "SIBAL Fabric",
+    "Cotton-Fiberglass (SIBAL)",
+    "SIBAL fabric (75% cotton, 25% fiberglass)"
+   ],
+   "note": "Same fabric in BASS, BASS-II and Saffire: the BASS-II ReadMe gives 75% cotton, 25% fiberglass; the Saffire paper gives 52 g cotton and 17 g fiberglass (SAF.result source)."
+  },
+  {
+   "id": "pmma",
+   "label": "PMMA (polymethyl methacrylate)",
+   "fuel_phase": "solid",
+   "aliases": [
+    "PMMA"
+   ]
+  },
+  {
+   "id": "nomex",
+   "label": "Nomex fabric",
+   "fuel_phase": "solid",
+   "aliases": [
+    "Nomex III fabric"
+   ]
+  },
+  {
+   "id": "pmma_nomex",
+   "label": "PMMA with Nomex (one Saffire-II sample)",
+   "fuel_phase": "solid",
+   "aliases": [
+    "PMMA & Nomex"
+   ],
+   "note": "Kept apart: a combined sample, not comparable with either material alone."
+  },
+  {
+   "id": "silicone",
+   "label": "Silicone",
+   "fuel_phase": "solid",
+   "aliases": [
+    "Silicone"
+   ],
+   "note": "Saffire-II silicone sheets and SAME-R silicone rubber share the name only; thickness and form differ."
+  },
+  {
+   "id": "teflon",
+   "label": "Teflon",
+   "fuel_phase": "solid",
+   "aliases": [
+    "Teflon"
+   ]
+  },
+  {
+   "id": "kapton",
+   "label": "Kapton",
+   "fuel_phase": "solid",
+   "aliases": [
+    "Kapton"
+   ]
+  },
+  {
+   "id": "pyrell",
+   "label": "Pyrell foam",
+   "fuel_phase": "solid",
+   "aliases": [
+    "Pyrell"
+   ]
+  },
+  {
+   "id": "lampwick",
+   "label": "Lamp wick",
+   "fuel_phase": "solid",
+   "aliases": [
+    "Lampwick"
+   ]
+  },
+  {
+   "id": "ultem",
+   "label": "Ultem",
+   "fuel_phase": "solid",
+   "aliases": [
+    "Ultem"
+   ]
+  },
+  {
+   "id": "japan_wax",
+   "label": "Japan wax",
+   "fuel_phase": "solid",
+   "aliases": [
+    "Japan wax"
+   ]
+  },
+  {
+   "id": "heptane",
+   "label": "Heptane",
+   "fuel_phase": "liquid",
+   "aliases": [
+    "heptane"
+   ]
+  },
+  {
+   "id": "methanol",
+   "label": "Methanol",
+   "fuel_phase": "liquid",
+   "aliases": [
+    "methanol"
+   ]
+  },
+  {
+   "id": "c12h26",
+   "label": "C12H26 (as written in the CFI table)",
+   "fuel_phase": "liquid",
+   "aliases": [
+    "C12H26"
+   ]
+  },
+  {
+   "id": "c12h26_isododecane",
+   "label": "C12H26 / iso-dodecane blends",
+   "fuel_phase": "liquid",
+   "aliases": [
+    "[.60]/[.40] C12H26/iso-dodecane",
+    "[.75]/[.25] C12H26/iso-dodecane"
+   ],
+   "note": "Blend ratio stays in fuel_material."
+  },
+  {
+   "id": "ethylene",
+   "label": "Ethylene",
+   "fuel_phase": "gas",
+   "aliases": [
+    "C2H4",
+    "Ethylene"
+   ]
+  },
+  {
+   "id": "propane",
+   "label": "Propane",
+   "fuel_phase": "gas",
+   "aliases": [
+    "C3H8",
+    "Propane",
+    "propane",
+    "30% propane"
+   ],
+   "note": "Dilution of the fuel stream stays in fuel_material."
+  },
+  {
+   "id": "butane",
+   "label": "Butane",
+   "fuel_phase": "gas",
+   "aliases": [
+    "butane",
+    "30% butane",
+    "50% butane"
+   ],
+   "note": "Dilution stays in fuel_material."
+  },
+  {
+   "id": "ethane",
+   "label": "Ethane",
+   "fuel_phase": "gas",
+   "aliases": [
+    "ethane",
+    "30% ethane"
+   ],
+   "note": "Dilution stays in fuel_material."
+  },
+  {
+   "id": "propylene",
+   "label": "Propylene",
+   "fuel_phase": "gas",
+   "aliases": [
+    "Propylene",
+    "50 % Propylene",
+    "75 % Propylene",
+    "75% Propylene"
+   ],
+   "note": "Dilution stays in fuel_material."
+  },
+  {
+   "id": "methane",
+   "label": "Methane",
+   "fuel_phase": "gas",
+   "aliases": [
+    "Methane"
+   ]
+  }
+ ]
+}

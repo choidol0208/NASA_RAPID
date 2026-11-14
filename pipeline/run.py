@@ -11,6 +11,8 @@ declared in pipeline/spec/:
     references.json the standards, requirements and published results behind each need
     coverage.json   bin edges for the coverage grid
     scenarios.json  crewed environments to compare the recorded tests with
+    indicators.json what is computed per need, by fixed templates
+    materials.json  one id per material, with the names used in the tables
 
 Stages
     1 ingest       read each PSI table as text; nothing is changed
@@ -51,6 +53,10 @@ TRACE_COLS = ["flags", "source_file", "source_row"]
 def spec(name):
     with open(os.path.join(HERE, "spec", name), encoding="utf-8") as f:
         return json.load(f)
+
+
+MATERIAL_IDS = {alias.strip().lower(): m["id"]
+                for m in spec("materials.json")["materials"] for alias in m["aliases"]}
 
 
 def empty(v):
@@ -104,6 +110,13 @@ def standardize(source, variables, report):
             for k, v in (result if isinstance(result, dict) else {var: result}).items():
                 if not empty(v):
                     rec[k], origin[k] = v, c["from"]
+        name = rec.get("fuel_material")
+        if not empty(name):
+            mid = MATERIAL_IDS.get(str(name).strip().lower())
+            if mid:
+                rec["material_id"], origin["material_id"] = mid, "(materials.json from fuel_material)"
+            else:
+                flags.append("material_id:not_in_vocabulary")
         rec["_flags"], rec["_origin"] = flags, origin
         rec["source_file"], rec["source_row"] = source["file"], source_row
         tests.append(rec)
@@ -324,6 +337,76 @@ def match_scenarios(tests, links, needs, scen_spec, report):
     return pd.DataFrame(test_rows), pd.DataFrame(need_rows)
 
 
+OPS = {"==": lambda a, b: a == b, "!=": lambda a, b: a != b, ">": lambda a, b: a > b,
+       ">=": lambda a, b: a >= b, "<": lambda a, b: a < b, "<=": lambda a, b: a <= b}
+
+
+def passes(t, cond):
+    var, op = cond[0], cond[1]
+    v = ";".join(t["_flags"]) if var == "flags" else t.get(var)
+    if op == "notnull":
+        return not empty(v)
+    if op == "contains":
+        return cond[2] in (v or "")
+    return not empty(v) and OPS[op](v, cond[2])
+
+
+def indicators(tests, links, needs, ind_spec, variables, derived, ref_items):
+    """Apply the fixed templates of indicators.json. Returns the indicator
+    table and the list of tests behind every row."""
+    units = {k: v["unit"] for k, v in {**variables, **derived}.items()}
+    need_by_id = {n["id"]: n for n in needs}
+    usable = {}
+    for row in links.itertuples():
+        usable.setdefault(row.need_id, set()).add(row.test_id)
+    rows, members = [], []
+    for ind in ind_spec["indicators"]:
+        need = need_by_id[ind["need_id"]]
+        for ref in ind["definition_ref"] + ind.get("compare_with", []):
+            if ref not in ref_items:
+                raise SystemExit(f"indicator {ind['id']}: unknown reference item {ref}")
+        var = ind.get("variable")
+        if var and var not in units and var != "flags":
+            raise SystemExit(f"indicator {ind['id']}: unknown variable {var}")
+        if ind["population"] == "usable":
+            pop = [t for t in tests if t["test_id"] in usable.get(need["id"], set())]
+        else:
+            pop = [t for t in tests
+                   if all(t.get(k) in allowed for k, allowed in need.get("scope", {}).items())
+                   and all(not empty(t.get(v)) for v in need["conditions_required"])]
+        pop = [t for t in pop if all(passes(t, c) for c in ind["where"])]
+        if ind["template"] != "count":
+            pop = [t for t in pop if not empty(t.get(var))]
+        groups = {}
+        for t in pop:
+            key = tuple("" if empty(t.get(g)) else str(t.get(g)) for g in ind["group_by"])
+            groups.setdefault(key, []).append(t)
+        for key, ts in sorted(groups.items()):
+            group = ";".join(f"{g}={v}" for g, v in zip(ind["group_by"], key))
+            base = {"indicator_id": ind["id"], "need_id": ind["need_id"], "label": ind["label"],
+                    "group": group, "variable": var, "unit": units.get(var, ""), "n_tests": len(ts),
+                    "investigation_ids": ";".join(sorted({t["investigation_id"] for t in ts},
+                                                         key=lambda x: int(x.split("-")[1]))),
+                    "definition_ref": ";".join(ind["definition_ref"]),
+                    "compare_with": ";".join(ind.get("compare_with", [])),
+                    "reading": ind["reading"]}
+            if ind["template"] == "summary":
+                values = pd.Series([t[var] for t in ts], dtype=float)
+                for stat in ind["stats"]:
+                    rows.append({**base, "stat": stat, "category": "",
+                                 "value": round(float(getattr(values, stat)()), 5)})
+            elif ind["template"] == "count_by":
+                for cat, n in sorted(Counter(str(t[var]) for t in ts).items()):
+                    rows.append({**base, "stat": "count", "category": cat, "value": n})
+            else:
+                rows.append({**base, "stat": "count", "category": "", "value": len(ts)})
+            members += [{"indicator_id": ind["id"], "group": group, "test_id": t["test_id"],
+                         "value": t.get(var) if var != "flags" else ""} for t in ts]
+    cols = ["indicator_id", "need_id", "label", "group", "stat", "category", "value", "unit",
+            "n_tests", "investigation_ids", "variable", "definition_ref", "compare_with", "reading"]
+    return pd.DataFrame(rows, columns=cols), pd.DataFrame(members)
+
+
 def need_references(needs, references):
     """Need -> reference items. Fails if a need points to an unknown item."""
     items = {i["id"]: (r, i) for r in references for i in r["items"]}
@@ -396,6 +479,12 @@ def main():
     sc_needs.to_csv(os.path.join(OUT, "scenario_needs.csv"), index=False)
     with open(os.path.join(OUT, "run_report.json"), "w", encoding="utf-8") as f:
         json.dump(report, f, indent=1, ensure_ascii=False)
+    all_refs = spec("references.json")["references"]
+    ref_items = {i["id"] for r in all_refs for i in r["items"]}
+    ind_table, ind_tests = indicators(tests, links, needs["needs"], spec("indicators.json"),
+                                      variables, derived, ref_items)
+    ind_table.to_csv(os.path.join(OUT, "indicators.csv"), index=False)
+    ind_tests.to_csv(os.path.join(OUT, "indicator_tests.csv"), index=False)
     refs = need_references(needs["needs"], spec("references.json")["references"])
     refs.to_csv(os.path.join(OUT, "need_references.csv"), index=False)
 

@@ -10,6 +10,11 @@
    "unit": "",
    "meaning": "Material or fuel burned"
   },
+  "material_id": {
+   "kind": "condition",
+   "unit": "id in materials.json",
+   "meaning": "Standard material id; groups the same material across tables"
+  },
   "fuel_phase": {
    "kind": "condition",
    "unit": "solid | liquid | gas | aerosol",
@@ -198,11 +203,23 @@
   },
   "co2_produced_pct_points": {
    "unit": "percentage points",
-   "formula": "co2_final_pct - co2_initial_pct"
+   "formula": "co2_final_pct - co2_initial_pct",
+   "flag_if": [
+    {
+     "expr": "value < 0",
+     "flag": "final_below_initial"
+    }
+   ]
   },
   "co_produced_ppm": {
    "unit": "ppm",
-   "formula": "co_final_ppm - co_initial_ppm"
+   "formula": "co_final_ppm - co_initial_ppm",
+   "flag_if": [
+    {
+     "expr": "value < 0",
+     "flag": "final_below_initial"
+    }
+   ]
   },
   "co_to_co2_molar_ratio": {
    "unit": "mol/mol",
