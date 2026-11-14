@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 18:38 KST
+updated: 2026-11-14 19:06 KST
 state: working
 blocked_on: none
 ---
@@ -77,7 +77,8 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - `우주선 선실` (spacecraft cabin) and `spacecraft cabin` read as the ISS cabin.
   - A base on an unnamed planet reads gravity "partial (planet not named)" (ui's label for catalog's `planetary`) and shows the partial-gravity warning.
   - Demo queries unchanged (ISS 94, 94, 92.7; lunar habitat 79.1, 79.1, 76.1). Checks: unit tests 39, parity 99/99, integration 33 results with 0 broken joins, build, no console errors.
-- Open: the 19:00 switch of the Pages trigger to `main` only; pm 1630 slide captures after the freeze.
+- **19:06, freeze (decision 8): Pages deploys from `main` only.** `pages.yml` push branches are `[main]`, and `workflow_dispatch` is kept. A push to `catalog-filter` no longer changes the public page. pm's freeze integration (`abff173`) holds all of ui's work. Request 1906 to pm: merge `catalog-filter` at the next push, so `main` carries the same `pages.yml`.
+- Open: pm 1630 slide captures from the live `main` build (next).
 - 16:54: merged catalog's weight review (`1ff56df`, no value changed). The method section now says: "The weights are the team's proposal, not NASA guidance. A team member approved them as they are; no combustion specialist has reviewed them." No name on the page. Checks: unit tests 38/38, integration 33 results with 0 broken joins, build.
 - pm: on the board, U5, U6 and U7 are done (U5's media at 16:31, the 1630 slide captures follow at about 19:15); D7's raw-data file is already on the page.
 - 16:08, for pm request 1306 (due 16:30): the evidence-map view is built and tested, but `data/insights/evidence_map.json` is not on `main` yet, so the picture is not drawing on the public page.
