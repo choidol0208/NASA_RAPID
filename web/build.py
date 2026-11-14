@@ -168,6 +168,17 @@ def main():
                 with open(os.path.join(DIST, "data", "answers", f"{sid}_index.json"), "w", encoding="utf-8") as fh:
                     json.dump(index, fh, ensure_ascii=False)
                 OPTIONAL_BUILT.append(f"data/answers/{sid}_index.json")
+    # The three piles per question (pm request 20261115-0035, step 8 of docs/raw_data_design/design.md):
+    # fixed sentences filled from the team's files by web/raw_piles.py. Its checks (fixture F1, chain
+    # cross-check, bar sums, the "17" rule, the word scan, no unfilled slot) stop the build on failure.
+    import raw_piles  # noqa: E402  (web/ is on sys.path when this script runs)
+    piles = raw_piles.build(ROOT)
+    os.makedirs(os.path.join(DIST, "data", "piles"), exist_ok=True)
+    for sid, doc in piles.items():
+        with open(os.path.join(DIST, "data", "piles", f"{sid}.json"), "w", encoding="utf-8") as fh:
+            json.dump(doc, fh, ensure_ascii=False)
+        OPTIONAL_BUILT.append(f"data/piles/{sid}.json")
+    print("three piles: " + ", ".join(f"{k} ({len(v['needs'])} questions)" for k, v in piles.items()))
     # Link preview image: web/media/og.png (1200 x 630, written by capture_media.mjs), else the old draft.
     for og in (os.path.join(HERE, "media", "og.png"), os.path.join(HERE, "media", "02_lunar_top.png")):
         if os.path.exists(og):

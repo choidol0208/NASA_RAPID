@@ -1112,6 +1112,62 @@ function renderCoverage(out, pipe) {
     ". Counts: ", link(REPO + FILE, FILE), ", built from ", link(REPO + "data/pipeline/tests.csv", "data/pipeline/tests.csv"), " by the team's pipeline."));
 }
 
+// ------------------------------------------------------------------ the three piles (pm request 20261115-0035)
+// Per environment and question: in NASA's tables / in the archive, not in a table / no record in PSI.
+// Every sentence comes from data/piles/<scenario>.json, written by web/raw_piles.py from the team's
+// files with the fixed templates of docs/raw_data_design/pile_wording.md; the page adds only labels.
+const PILE_COLORS = { inside: "seg-in", cannot_be_placed_from_table: "seg-cannot", oxygen_of_oxidizer_stream: "seg-stream", outside_by_recorded_value: "seg-out" };
+const pilesCache = new Map();
+function pilesFor(sid) {
+  if (!sid || !OPTIONAL_HAS(`data/piles/${sid}.json`)) return Promise.resolve(null);
+  if (!pilesCache.has(sid)) pilesCache.set(sid, loadJSON(`data/piles/${sid}.json`, null));
+  return pilesCache.get(sid);
+}
+async function renderPiles(out, pipe) {
+  const sec = $("#piles"), body = $("#piles-body");
+  const sid = out.status === "ok" ? scenarioId(out, pipe) : null;
+  const doc = await pilesFor(sid);
+  if (!doc || scenarioId(out, pipe) !== doc.scenario) { sec.hidden = true; body.replaceChildren(); return; }
+  const focus = { prevention: ["P1", "P2", "P3"], detection: ["D1", "D2"], suppression: ["S1"] }[out.scenario.concern] || [];
+  const list = (items) => (items && items.length ? h("ul", { class: "pile-list" }, items.map((s) => h("li", {}, s))) : null);
+  const blocks = doc.needs.map((n, i) => {
+    const total = n.segments.reduce((a, s) => a + s.n, 0) || 1;
+    const barEl = h("div", { class: "pile-bar", role: "img", "aria-label": n.bar },
+      ...n.segments.map((s) => h("span", { class: "seg " + (PILE_COLORS[s.placement] || ""), style: `flex-grow:${s.n}`, title: `${s.label}: ${s.n}` })));
+    const pile2 = [...n.pile2];
+    const inside = (n.segments.find((s) => s.placement === "inside") || { n: 0 }).n;
+    const p1 = h("div", { class: "pile" }, h("h4", {}, "In NASA's tables"), list(n.pile1));
+    const p2 = h("div", { class: "pile" }, h("h4", {}, "In the archive, not in a table"),
+      pile2.length ? list(pile2) : h("p", { class: "gap" }, !inside ? "No test of this question is inside these ranges, so no file group is listed for one."
+        : n.pile2_from_chain ? "No file group of the tests counted here has a column seen for a value this question lacks."
+        : "The file groups of these tests are listed once the data role's question chain covers this environment."),
+      n.shelf.length ? h("div", { class: "shelf" }, h("h5", {}, "Not found in the files opened"), list(n.shelf)) : null);
+    const p3 = n.pile3.length ? h("div", { class: "pile" }, h("h4", {}, doc.pile3_label), list(n.pile3)) : null;
+    // open the first question of the user's kind, and any question with tests inside the ranges
+    const open = n.id === focus[0] || inside > 0 || (!focus.length && i === 0);
+    const d = h("details", { class: "pile-need" + (focus.includes(n.id) ? " is-focus" : "") },
+      h("summary", {}, h("b", {}, `${n.name} (${n.id})`), " ", barEl),
+      h("p", { class: "bar-line" }, n.bar), p1, p2, p3);
+    if (open) d.open = true;
+    return d;
+  });
+  const legend = h("p", { class: "pile-legend" }, ...Object.entries(PILE_COLORS).map(([k, c]) =>
+    h("span", {}, h("span", { class: "swatch " + c }), " ", { inside: "inside the ranges", cannot_be_placed_from_table: "cannot be placed from the tables", oxygen_of_oxidizer_stream: "oxygen recorded for an oxidizer stream", outside_by_recorded_value: "outside by a recorded value" }[k])));
+  const srcs = Object.entries(doc.sources || {}).filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join("; ");
+  // the one-line meaning of each pile (pile_wording.md section 3), printed once above the questions
+  const meanings = h("dl", { class: "pile-meanings" },
+    h("div", {}, h("dt", {}, "In NASA's tables"), h("dd", {}, "Tests recorded inside this environment's oxygen and pressure ranges, and what NASA's per-test tables hold for them.")),
+    h("div", {}, h("dt", {}, "In the archive, not in a table"), h("dd", {}, "A test is recorded, and a value this question needs is not in NASA's table. Listed here: the file groups that name these tests, how many files were opened, and what was read. A listed file group is not shown to hold the value.")),
+    h("div", {}, h("dt", {}, "Not found in the files opened"), h("dd", {}, "Not in a table, and no header accepted for it in any file opened so far. This is a statement about the files opened, not about the archive.")),
+    h("div", {}, h("dt", {}, doc.pile3_label), h("dd", {}, doc.pile3_meaning)));
+  body.replaceChildren(
+    h("div", { class: "pile-header" }, ...doc.header.map((s) => h("p", {}, s))),
+    meanings, legend, ...blocks,
+    h("div", { class: "small-print" }, ...doc.small_print.map((s) => h("p", {}, s)),
+      h("p", {}, "Files read for this block: ", srcs, ". ", h("span", { class: "tag" }, "Computed by team code from NASA PSI tables and file listing"))));
+  sec.hidden = false;
+}
+
 // ------------------------------------------------------------------ how AI is used here (pm request 1705)
 // Reads pm's data/insights/quality.json, model_readiness.json and robustness.json. Every sentence and
 // number is printed as the files give it; the page computes nothing here.
@@ -1403,7 +1459,7 @@ async function main() {
     renderWarnings($("#scenario-warnings"), out.warnings);
     renderRequirements(out, config);
     if (out.status !== "ok") {
-      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false); show("#criteria", false); show("#shown", false); show("#answers", false);
+      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false); show("#criteria", false); show("#shown", false); show("#answers", false); show("#piles", false);
       $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
@@ -1420,6 +1476,7 @@ async function main() {
     renderShown(out, pipe);
     renderExport(out, pipe, cat);
     renderAnswers(out, pipe);
+    renderPiles(out, pipe);
     renderCompare(out, pipe, (q2) => { run(q2); $("#needs").scrollIntoView({ behavior: "smooth", block: "start" }); });
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);

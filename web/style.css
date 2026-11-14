@@ -357,3 +357,31 @@ td.st small.gaps-codes { margin-top: 3px; font-style: italic; }
 .req-table .cmp-not_met { background: #fbe9e7; }
 .req-table .cmp-unverified { background: #fff6dd; }
 .req-table .cmp-not_scored { color: var(--ink-2); }
+
+/* The three piles (pm request 20261115-0035) */
+.piles .pile-header p { margin: 0 0 6px; }
+.pile-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.86rem; color: var(--ink-2); margin: 10px 0; }
+.pile-legend .swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; vertical-align: -1px; }
+.pile-need { border: 1px solid var(--rule); border-radius: 8px; background: var(--white); margin: 10px 0; padding: 8px 12px; }
+.pile-need.is-focus { border-color: var(--blue, #2348c8); }
+.pile-need > summary { cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.pile-bar { display: flex; flex: 1 1 220px; min-width: 160px; height: 14px; border-radius: 3px; overflow: hidden; background: var(--grid); }
+.pile-bar .seg { display: block; min-width: 2px; }
+.seg-in { background: #2348c8; }
+.seg-cannot { background: #f2b84b; }
+.seg-stream { background: #9aa5b8; }
+.seg-out { background: #d9dee6; }
+.bar-line { font-size: 0.9rem; margin: 8px 0; }
+.pile { margin: 10px 0 4px; }
+.pile h4 { margin: 8px 0 2px; font-size: 0.98rem; }
+.pile h5 { margin: 8px 0 2px; font-size: 0.92rem; }
+.pile-list { margin: 4px 0; padding-left: 20px; }
+.pile-list li { margin: 4px 0; }
+.shelf { border-left: 3px solid var(--rule); padding-left: 10px; margin-top: 8px; }
+.small-print { font-size: 0.84rem; color: var(--ink-2); margin-top: 12px; }
+.small-print p { margin: 3px 0; }
+.pile-meanings { margin: 10px 0; font-size: 0.88rem; }
+.pile-meanings div { margin: 3px 0; }
+.pile-meanings dt { display: inline; font-weight: 700; }
+.pile-meanings dt::after { content: ": "; }
+.pile-meanings dd { display: inline; margin: 0; color: var(--ink-2); }
