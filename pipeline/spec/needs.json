@@ -3,12 +3,11 @@
   "generated_by": "AI-generated draft (Claude Code), 2026-11-14, NASA Space Apps Challenge 2026 hackathon. Not human-reviewed.",
   "purpose": "What a spacecraft fire-safety engineer needs to know, written as questions, with the variables a test must record to help answer each one. The pipeline checks every data source against this list; it does not answer the questions itself.",
   "basis": [
-   "Flame in Freefall challenge statement: prevention = ignition-source control and material selection, which depends on flammability limits; flammability depends on oxygen concentration and air flow; detection (SAME); suppression (FLEX)",
-   "A Researcher's Guide to: Combustion Science (NASA ISS Program Science Office, 2015), sections 'Solid-Fuel Combustion/Material Flammability' and 'Spacecraft Fire Safety'",
-   "PSI investigation records for BASS, BASS-II, Saffire, SAME, FLEX (objectives and hypotheses)"
+   "Framework: OCHMO-TB-008 (TB008.areas), NASA/CP-2003-212103 (CP2003.groups) and the challenge statement (CH.pillars). Each need lists its own reference items; see references.json."
   ],
   "status_rule": "measured = at least one outcome variable has values and every 'conditions_required' variable has values; partial = an outcome has values but a required condition is missing from the table; conditions_only = no outcome variable in the table; none = neither",
-  "scope_rule": "'scope' limits a need to the tests it is about (for example, material questions apply to solid samples). Tests outside the scope are not counted; a source with no test in scope gets the status out_of_scope."
+  "scope_rule": "'scope' limits a need to the tests it is about (for example, material questions apply to solid samples). Tests outside the scope are not counted; a source with no test in scope gets the status out_of_scope.",
+  "reference_rule": "'references' are item ids in references.json: the standards, requirements and published results that define or bound the need."
  },
  "needs": [
   {
@@ -39,7 +38,24 @@
     "fuel_phase": [
      "solid"
     ]
-   }
+   },
+   "references": [
+    "6001B.T1.pass",
+    "6001B.T1.moc",
+    "6001B.T1.atmosphere",
+    "6001B.T1.noflow",
+    "ISO16697.threshold",
+    "D2863.oi",
+    "D2863.caveat",
+    "TB14639.modified",
+    "TB14639.gap",
+    "ICES19.boundary",
+    "ICES19.issflow",
+    "ICES19.limits",
+    "OF2012.margin",
+    "SAE2008.uloi",
+    "RG.test1"
+   ]
   },
   {
    "id": "P2",
@@ -65,7 +81,12 @@
     "fuel_phase": [
      "solid"
     ]
-   }
+   },
+   "references": [
+    "6001B.T1.purpose",
+    "TB008.triangle",
+    "EAWG.testing"
+   ]
   },
   {
    "id": "P3",
@@ -93,7 +114,14 @@
     "fuel_phase": [
      "solid"
     ]
-   }
+   },
+   "references": [
+    "6001B.T1.pass",
+    "CP2003.response",
+    "SAF.objectives",
+    "SAF.result",
+    "SAE2008.spread"
+   ]
   },
   {
    "id": "P4",
@@ -116,7 +144,19 @@
     "flow_event",
     "o2_consumed_pct_points"
    ],
-   "why": "The Moon Base atmosphere is expected at 30% oxygen or more and 10.2 psi or less, which makes materials more flammable."
+   "why": "The Moon Base atmosphere is expected at 30% oxygen or more and 10.2 psi or less, which makes materials more flammable.",
+   "references": [
+    "EAWG.atmospheres",
+    "EAWG.testing",
+    "EA.8.2-34",
+    "CH.moonbase",
+    "SMAC.atmospheres",
+    "TB14639.worstcase",
+    "TB008.o2",
+    "TB008.gaps",
+    "6001B.T1.atmosphere",
+    "6001B.T1.ambient"
+   ]
   },
   {
    "id": "S1",
@@ -139,7 +179,20 @@
     "extinction_diameter_mm",
     "flow_event"
    ],
-   "why": "Suppression by inert-gas dilution and by stopping ventilation both depend on extinction limits."
+   "why": "Suppression by inert-gas dilution and by stopping ventilation both depend on extinction limits.",
+   "references": [
+    "FLEX.loi",
+    "FLEX.mec",
+    "FLEX.objectives",
+    "MST14.loi",
+    "TB008.ventilation",
+    "TB008.agent",
+    "ICES19.fanoff",
+    "CP2003.response",
+    "3001.V2-9059",
+    "3001.V2-9063",
+    "TP216046.columns"
+   ]
   },
   {
    "id": "D1",
@@ -165,7 +218,15 @@
     "fuel_phase": [
      "solid"
     ]
-   }
+   },
+   "references": [
+    "3001.V2-6024",
+    "3001.T6.2-3",
+    "SMAC.co",
+    "SMAC.scope",
+    "TB008.co",
+    "CP2003.response"
+   ]
   },
   {
    "id": "D2",
@@ -188,7 +249,15 @@
     "fuel_phase": [
      "solid"
     ]
-   }
+   },
+   "references": [
+    "SAME.controls",
+    "SAME.sizes",
+    "SAME.detector",
+    "TB008.signatures",
+    "CP2003.detection",
+    "3001.V2-9059"
+   ]
   }
  ]
 }

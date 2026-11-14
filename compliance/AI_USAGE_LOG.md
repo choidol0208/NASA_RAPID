@@ -18,6 +18,7 @@
 | 11/14 오후 | Claude Code | 사용자 지적에 따라 결론을 내는 코드(`scripts/fire_safety.py`, `scripts/build_test_tables.py`와 그 산출물)를 삭제하고, 명세 기반 파이프라인으로 교체. 화재 안전 정보 필요 7개, 표준 변수, 표 22개의 열 매핑을 명세 파일로 작성하고 이를 읽어 실행하는 엔진 작성. 수치는 NASA 원본 칸의 복사 또는 명세의 계산식 결과이며 언어 모델은 수치에 관여하지 않음 | `pipeline/spec/*.json`, `pipeline/run.py`, `pipeline/rules.py`, `pipeline/README.md`, `data/pipeline/*` | 미검토. 필요 정보의 정의·필수 변수·적용 범위는 연소 전공 팀원 확인 필요 |
 | 11/14 10:30– | Claude Code | 공식 제출·심사 가이드 원문 확인, PSI 시험 표의 예비 집계, 팀 일정과 역할 계획 정리 | 저장소 밖의 팀 내부 계획 문서. 제출물에 들어간 것 없음 | 사용자가 대화로 확인 |
 | 11/14 10:50– | Claude Code | 세션 간 협업 체계 작성: 역할·브랜치 규칙, 조정 파일과 도우미 스크립트, 역할별 브리프, AI 산출물 형식 초안, 저장소 README | `coord/`, `contracts/`, `scripts/coord.py`, `.claude/commands/sync.md`, `.gitattributes`, `README.md`, `AGENTS.md` 8·9절 | 미검토 |
+| 11/14 오후 | Claude Code (웹 검색 도구 Exa 사용) | 필요 정보 7개의 근거가 되는 공식 기준·요구사항·문헌 21건을 검색해 읽고, 항목(기준 문장, 수치, 문서 내 위치, 확인 방식)을 명세로 정리. 필요 정보마다 근거 항목을 연결 | `pipeline/spec/references.json`, `pipeline/spec/needs.json`의 `references`, `data/pipeline/need_references.csv` | 미검토. 수치와 조항 번호는 원문 대조 필요. 초록만 확인한 문서 5건, 인용으로만 확인한 문서 1건은 명세에 표시함 |
 
 ## 제품 안에서 동작하는 AI
 
