@@ -1,0 +1,47 @@
+{
+ "_meta": "AI-generated (Claude Code), 2026-11-14. Korean labels for the internal team page reports/indicators.html. Not human-reviewed. The English definitions in pipeline/spec/ are the authority.",
+ "needs": {
+  "P1": {"name": "가연 한계", "pillar": "예방", "question": "이 재료는 산소 농도가 얼마까지 낮아져도, 유동 속도가 어느 범위일 때 계속 타는가?", "criterion": "NASA-STD-6001B Test 1: 시편 5개 중 어느 것도 15 cm 넘게 타지 않고 불붙은 파편을 옮기지 않으면 합격. 시험 중 공기 유동은 금지. 연구진은 가연 경계를 산소 농도와 유동 속도의 평면에서 정의하며, 저유동 쪽은 소염, 고유동 쪽은 불려 꺼짐이다."},
+  "P2": {"name": "점화", "pillar": "예방", "question": "이 대기에서 이 재료에 불을 붙이려면 에너지와 시간이 얼마나 필요한가?", "criterion": "NASA-STD-6001B Test 1의 목적은 표준 점화원에 노출했을 때 스스로 꺼지는지 보는 것이다. 점화 에너지나 시간에 대한 수치 기준은 찾지 못했다."},
+  "P3": {"name": "화염 전파와 성장", "pillar": "예방", "question": "불이 붙으면 얼마나 빨리 퍼지고 얼마나 커지는가?", "criterion": "NASA 연구 수요 보고서(2003)는 현실적인 화재 상황에서의 전파 속도를 필요한 지식으로 꼽는다. Saffire의 목적은 큰 규모의 불이 저중력에서 얼마나 빨리 자라는지 재는 것이다."},
+  "P4": {"name": "탐사 대기 조건", "pillar": "예방", "question": "달·화성 거주지에 계획된 고산소·저압 조건에서 시험된 적이 있는가?", "criterion": "권고 대기: 14.7 psia/21%, 10.2 psia/26.5%, 8.0 psia/32%, 8.2 psia/34%. 과제문은 달 기지를 산소 30% 이상, 10.2 psi 이하로 적는다. 이 필요 정보의 지표는 아래 '환경별 비교' 표다."},
+  "S1": {"name": "소염 조건", "pillar": "진압", "question": "산소를 낮추거나, 불활성 기체를 넣거나, 유동을 줄이면 어떤 조건에서 불이 꺼지는가?", "criterion": "한계 산소 지수(LOI)는 그 아래에서는 정상 화염이 유지되지 않는 산소 몰분율이다. 최소 소화 농도(MEC)와는 LOI = 0.209 × (1 − MEC) 관계다. ISS는 화재 감지 후 환기를 끄고 CO2 소화기를 쓴다."},
+  "D1": {"name": "연소 생성물", "pillar": "감지", "question": "불이나 과열된 재료에서 감지기와 승무원이 마주칠 무엇이 나오는가?", "criterion": "NASA-STD-3001 표 6.2-3의 감시 범위: CO 5–1000 ppm, HCN·HCl·HF 2–50 ppm. PSI 표에 있는 것은 CO뿐이다. 승무원 노출 허용 농도(SMAC)는 선실 공기 기준이라 시험 덕트 측정값과 비교하지 않는다."},
+  "D2": {"name": "연기 발생 조건", "pillar": "감지", "question": "어떤 가열·유동·숙성 조건에서 이 재료의 연기를 측정했는가?", "criterion": "SAME 실험의 통제 변수는 가열 온도, 시료 주변 유동, 숙성 시간이다. 입자 크기 결과는 PSI 시험 표에 없다."}
+ },
+ "indicators": {
+  "P1.o2_tested": {"label": "시험한 초기 산소 농도", "reading": "이 재료와 형상으로 시험한 초기 산소 농도의 범위다. 가연 한계가 아니다. 어떤 산소 농도에서 시험했다는 것만으로는 거기서 탔는지 꺼졌는지 알 수 없다."},
+  "P1.o2_with_oxygen_drop": {"label": "시험 중 산소 값이 내려간 시험의 초기 산소 농도", "reading": "시험 중 산소 측정값이 내려간 것을 시료가 탔다는 표시로 본다. 내려간 크기에는 기준을 두지 않았다. 최솟값은 이 표에서 그 표시가 있는 가장 낮은 초기 산소 농도이며, 한계 산소 농도가 아니다."},
+  "P1.flow_events": {"label": "유동 설정 옆에 적힌 사건", "reading": "운용자가 유동 설정 옆에 소염, 불려 꺼짐 등을 적어 둔 시험의 수다. 저유동의 소염과 고유동의 불려 꺼짐이 가연 경계의 두 갈래다."},
+  "P1.o2_at_flow_event": {"label": "사건이 적힌 시험의 초기 산소 농도", "reading": "소염이나 불려 꺼짐이 적힌 시험의 초기 산소 농도다. 사건이 일어난 순간의 산소 농도는 표에 없다."},
+  "P1.lowest_flow_listed_at_extinction": {"label": "소염이 적힌 시험에 나열된 가장 낮은 유동 설정", "reading": "소염이 적힌 시험의 칸에 쓰인 가장 낮은 유동 속도다. 어느 설정에서 불이 꺼졌는지는 표에 없다."},
+  "P2.ignition_power": {"label": "점화기 출력", "reading": "기록된 점화기 출력이다. 실험의 설정값이며, 재료에 불을 붙이는 데 필요한 최소 에너지가 아니다."},
+  "P2.ignition_time": {"label": "점화기 가동 시간", "reading": "기록된 점화기 가동 시간이다. 측정된 점화 지연이 아니다."},
+  "P3.spread_rate": {"label": "미세중력 화염 전파 속도", "reading": "표에 적힌 전파 속도다. 숫자 대신 글이 적힌 칸은 세지 않았다."},
+  "P3.burn_length": {"label": "미세중력에서 탄 길이", "reading": "표에 적힌 연소 길이다. NASA-STD-6001B Test 1의 15 cm 기준은 지상 중력, 무유동, 30 cm 시편에 대한 것이다. 이 시험들은 그 표준으로 한 것이 아니므로 기준에 대어 판정하지 않는다."},
+  "P3.burn_time": {"label": "연소 시간", "reading": "표에 적힌 연소 시간이다."},
+  "S1.test_end": {"label": "시험이 끝난 방식", "reading": "기록된 종료 방식별 시험 수다. 액체 방울(FLEX)은 소염·붕괴·완전 연소, 버너 화염(CFI-G)은 자체 소염·유동 차단이다."},
+  "S1.o2_by_test_end": {"label": "종료 방식별 초기 산소 농도", "reading": "각 방식으로 끝난 시험의 주변 산소 농도 범위다. 한계 산소 지수가 아니다. LOI는 소염 지름에서 구하는데 이 지표는 그것을 쓰지 않는다."},
+  "S1.co2_added": {"label": "대기에 넣은 이산화탄소", "reading": "소화 기체로 이산화탄소를 넣은 시험의 농도 범위다. 최소 소화 농도가 아니다."},
+  "S1.helium_added": {"label": "대기에 넣은 헬륨", "reading": "헬륨을 넣은 시험의 농도 범위다. 최소 소화 농도가 아니다."},
+  "D1.co_produced": {"label": "시험 동안 늘어난 일산화탄소", "reading": "시험 덕트에서 잰 CO의 종료값에서 초기값을 뺀 것이다. 덕트 측정값이며 선실 농도가 아니므로 승무원 노출 허용 농도와 비교할 수 없다. 측정 범위를 넘은 시험은 이 범위에 없다(아래 '측정 범위 초과' 참조)."},
+  "D1.co_over_range": {"label": "CO 측정 범위를 넘은 시험", "reading": "종료 CO 값이 측정 범위 초과로 기록된 시험의 수다(BASS-II 설명서 기준 1000 ppm 초과)."},
+  "D1.co_to_co2": {"label": "CO2 대비 CO 생성 비", "reading": "CO와 CO2의 증가량으로 파이프라인이 계산한 몰비다. 팀의 계산이다."},
+  "D2.flow": {"label": "가열 시료 주변 유동", "reading": "연기 시험의 유동 범위다. 유동의 영향을 받는 입자 크기는 PSI 표에 없다."},
+  "D2.aging": {"label": "연기 숙성 시간", "reading": "연기 시험의 숙성 시간 범위다."},
+  "D2.mass_loss": {"label": "시료 질량 감소율", "reading": "SAME 표에 적힌 질량 감소율이다."}
+ },
+ "values": {
+  "material_id": {"sibal": "SIBAL 면-유리섬유 직물", "pmma": "PMMA(아크릴)", "nomex": "노멕스 직물", "pmma_nomex": "PMMA+노멕스", "silicone": "실리콘", "teflon": "테플론", "kapton": "캡톤", "pyrell": "파이렐 폼", "lampwick": "램프 심지", "ultem": "울템", "japan_wax": "목랍(Japan wax)", "heptane": "헵탄", "methanol": "메탄올", "butane": "부탄", "ethane": "에탄", "propane": "프로판", "": "재료 미분류"},
+  "sample_geometry": {"candle": "양초", "fabric sheet": "직물 시트", "film": "필름", "rod": "막대", "sheet or slab": "시트·판", "slab": "판", "spherical section": "구형 단면", "": "형상 기록 없음"},
+  "flow_event": {"blowoff": "불려 꺼짐", "extinction": "소염", "not_sustained": "불이 유지되지 않음", "no_ignition": "점화 안 됨"},
+  "flow_direction": {"concurrent": "순방향 유동", "opposed": "역방향 유동", "": "방향 기록 없음"},
+  "fuel_phase": {"gas": "기체", "liquid": "액체", "solid": "고체"},
+  "test_end": {"completion": "완전 연소", "disruption": "붕괴", "extinction": "소염", "flow termination": "유동 차단", "self-extinction": "자체 소염"}
+ },
+ "units": {"% by volume": "%", "cm/s": "cm/s", "W": "W", "s": "s", "mm/s": "mm/s", "cm": "cm", "ppm": "ppm", "mol/mol": "mol/mol", "mg/min": "mg/min"},
+ "scenarios": {"iss": "ISS 선실", "lunar_habitat": "달 기지·여압 로버"},
+ "scenario_ranges": {"iss": "산소 19–23%, 압력 85.8–116.8 kPa, 유동 5–30 cm/s, 미세중력", "lunar_habitat": "산소 30–36%, 압력 85.8 kPa 미만, 달 중력"},
+ "status": {"in_atmosphere": "대기 범위 안 시험 있음", "oxygen_only": "산소만 범위 안, 압력 기록 없음", "pressure_only": "압력만 범위 안, 산소 기록 없음", "other_atmosphere": "범위 안 시험 없음", "not_measured": "쓸 수 있는 시험 없음"},
+ "gaps": {"gravity:no_usable_test_at_lunar": "달 중력 시험 없음", "oxygen:no_usable_test_in_range": "산소 범위 안 시험 없음", "oxygen:not_recorded": "산소 기록 없음", "pressure:not_recorded": "압력 기록 없음", "pressure:no_usable_test_in_range": "압력 범위 안 시험 없음", "need:no_usable_test": "쓸 수 있는 시험 없음"}
+}
