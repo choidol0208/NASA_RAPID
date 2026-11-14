@@ -1,0 +1,920 @@
+{
+ "_about": "Built by code that an AI assistant (Claude) wrote, from PSI's file listing of 14 November 2026, and the team's test tables. Checked by AI sessions; not reviewed by a person. Summary of video/data/video_links.csv. A tie says which NASA recording belongs to which test row, by the labels shown; it is not a measurement, no value was read from any video for it, and it says nothing about what a recording shows. 'Video of this test' is used only where two labels agree. A research exploration aid, not safety guidance. The rules are in video/settings/name_rules.json; the command is video/index_by_name.py.",
+ "inputs_sha256": {
+  "video/data/psi_video_names_2026-11-14.csv": "e8d95c757c202e730ffd2ea72770595d67b43f6b46e4b9715c1bde2d3e856508",
+  "data/pipeline/tests.csv": "b8acc1073fbc33a37563eb7f7cd12811e602fb7363ee69982d97860f05522211",
+  "data/pipeline/need_tests.csv": "8f2cf847728016c6669a95931c89d06286ce7030214cece1d65d66a93d119a77",
+  "data/pipeline/scenario_tests.csv": "6581e840553a2d4197d90ecc2ad94b5b307747112f81b4d418a2e357ae45eaab",
+  "video/settings/name_rules.json": "3b758391bb2b5c9da9d2036126fbbc98c58142a3e65ce69fac5677c6420e5fd1",
+  "video/settings/bass2.json": "ff43054a114fb3c1bcce43d0ef484622b4a8a354c4735666366fd0d8e2d69ff5"
+ },
+ "totals": {
+  "files": 2623,
+  "bytes": 426053691302
+ },
+ "checks": {
+  "videos": 2623,
+  "values_read_again_and_compared_by_saved_key": {
+   "actual_date": 114,
+   "cir_day": 138,
+   "cir_testpoint": 233,
+   "clip_words": 2623,
+   "date_on_video": 114,
+   "folder_cir": 246,
+   "folder_day": 1,
+   "folder_day_range": 26,
+   "folder_test": 296,
+   "folder_testpoint": 1354,
+   "gmt_day": 306,
+   "recording_start": 2041,
+   "sample": 286,
+   "test": 296,
+   "test_day_yyddd": 1711,
+   "testpoint": 1698,
+   "testpoint_2013": 163
+  },
+  "differences_from_saved_reading": 0,
+  "identifier_keys_taken_from_saved_listing_without_reading_again": {
+   "asrun_candidate": 48,
+   "check_gmt_sample": 287,
+   "clip_number": 5,
+   "dims_number": 26,
+   "flex_number": 78,
+   "folder_flex_number": 246,
+   "folder_flex_test": 17,
+   "folder_material": 3,
+   "ignition": 5,
+   "iss_code": 113,
+   "iss_code_day": 113,
+   "material": 5,
+   "ordinal_candidate": 5,
+   "radiometer_point": 9,
+   "table_ignitions_that_day": 7,
+   "time": 12,
+   "time_in_name": 114,
+   "work_order": 16,
+   "year": 2
+  },
+  "day_only_videos": 1217,
+  "day_only_videos_whose_day_key_was_read_again": 1217,
+  "id_not_in_table_videos": 330,
+  "id_not_in_table_videos_whose_identifier_was_read_again": 330,
+  "taken_from_saved_listing": "which table row an identifier points to (tie_level, test_id, candidate_test_ids_n) and, for BASS-II, the day-and-sample check against NASA's table (check_gmt_sample)",
+  "tests_named_by_test_ties_found_in_tests_csv": 813,
+  "test_rows_in_tests_csv": 1824
+ },
+ "by_tie_scope": {
+  "test": {
+   "files": 1046,
+   "bytes": 238966365726
+  },
+  "run": {
+   "files": 3,
+   "bytes": 1046973725
+  },
+  "day": {
+   "files": 1188,
+   "bytes": 97871246079
+  },
+  "several_days": {
+   "files": 26,
+   "bytes": 3194450614
+  },
+  "none": {
+   "files": 360,
+   "bytes": 84974655158
+  }
+ },
+ "by_link_state": {
+  "two_labels_agree": {
+   "files": 662,
+   "bytes": 152320655239,
+   "phrase": "video of this test (file name and PSI folder name the same test)"
+  },
+  "one_label": {
+   "files": 374,
+   "bytes": 81527352372,
+   "phrase": "tied by the {label} only"
+  },
+  "labels_disagree": {
+   "files": 10,
+   "bytes": 5118358115,
+   "phrase": "tied by {label}; {other} disagrees"
+  },
+  "day_only": {
+   "files": 1217,
+   "bytes": 102112670418,
+   "phrase": "a video of that test day ({n} tests that day; which one is not known)"
+  },
+  "id_not_in_table": {
+   "files": 330,
+   "bytes": 83454932324,
+   "phrase": "carries an identifier that NASA's table does not list"
+  },
+  "none": {
+   "files": 30,
+   "bytes": 1519722834,
+   "phrase": "not tied to a test"
+  }
+ },
+ "by_investigation": {
+  "PSI-10": {
+   "files": 317,
+   "bytes": 75056452412,
+   "two_labels_agree": 0,
+   "one_label": 306,
+   "labels_disagree": 0,
+   "day_only": 11,
+   "id_not_in_table": 0,
+   "none": 0
+  },
+  "PSI-20": {
+   "files": 199,
+   "bytes": 16005205760,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree": 0,
+   "day_only": 163,
+   "id_not_in_table": 33,
+   "none": 3
+  },
+  "PSI-21": {
+   "files": 363,
+   "bytes": 16288001313,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree": 0,
+   "day_only": 358,
+   "id_not_in_table": 2,
+   "none": 3
+  },
+  "PSI-22": {
+   "files": 221,
+   "bytes": 12514311991,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree": 0,
+   "day_only": 215,
+   "id_not_in_table": 0,
+   "none": 6
+  },
+  "PSI-23": {
+   "files": 290,
+   "bytes": 9605077668,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree": 0,
+   "day_only": 285,
+   "id_not_in_table": 1,
+   "none": 4
+  },
+  "PSI-25": {
+   "files": 296,
+   "bytes": 17707763150,
+   "two_labels_agree": 244,
+   "one_label": 47,
+   "labels_disagree": 5,
+   "day_only": 0,
+   "id_not_in_table": 0,
+   "none": 0
+  },
+  "PSI-26": {
+   "files": 114,
+   "bytes": 22789478092,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree": 0,
+   "day_only": 113,
+   "id_not_in_table": 1,
+   "none": 0
+  },
+  "PSI-39": {
+   "files": 246,
+   "bytes": 128712180638,
+   "two_labels_agree": 101,
+   "one_label": 5,
+   "labels_disagree": 2,
+   "day_only": 20,
+   "id_not_in_table": 118,
+   "none": 0
+  },
+  "PSI-69": {
+   "files": 183,
+   "bytes": 35883054431,
+   "two_labels_agree": 3,
+   "one_label": 5,
+   "labels_disagree": 1,
+   "day_only": 0,
+   "id_not_in_table": 163,
+   "none": 11
+  },
+  "PSI-101": {
+   "files": 8,
+   "bytes": 3686907389,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree": 0,
+   "day_only": 8,
+   "id_not_in_table": 0,
+   "none": 0
+  },
+  "PSI-102": {
+   "files": 2,
+   "bytes": 14205881,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree": 0,
+   "day_only": 0,
+   "id_not_in_table": 0,
+   "none": 2
+  },
+  "PSI-106": {
+   "files": 28,
+   "bytes": 3679267615,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree": 0,
+   "day_only": 27,
+   "id_not_in_table": 0,
+   "none": 1
+  },
+  "PSI-107": {
+   "files": 19,
+   "bytes": 2393690532,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree": 0,
+   "day_only": 7,
+   "id_not_in_table": 12,
+   "none": 0
+  },
+  "PSI-159": {
+   "files": 337,
+   "bytes": 81718094430,
+   "two_labels_agree": 314,
+   "one_label": 11,
+   "labels_disagree": 2,
+   "day_only": 10,
+   "id_not_in_table": 0,
+   "none": 0
+  }
+ },
+ "one_label_by_investigation_and_label": {
+  "PSI-10 name_id": 306,
+  "PSI-159 name_id": 11,
+  "PSI-25 name_id (run letter)": 47,
+  "PSI-39 folder_id": 5,
+  "PSI-69 folder_id": 5
+ },
+ "labels_disagree_files": [
+  {
+   "investigation": "PSI-25",
+   "file_name": "PSI-25_Raw Data_BASS_GMT183_SAMPLE_175_TESTB15.mp4",
+   "test_id": "BASS2-B17",
+   "labels_agreeing": "folder_id",
+   "labels_against": "name_id",
+   "labels_values": "file name: B15, day 183, sample 175; folder: B17"
+  },
+  {
+   "investigation": "PSI-25",
+   "file_name": "PSI-25_Raw Data_BASS_GMT183_SAMPLE_175_TESTB15_2ND_VIEW.mp4",
+   "test_id": "BASS2-B17",
+   "labels_agreeing": "folder_id",
+   "labels_against": "name_id",
+   "labels_values": "file name: B15, day 183, sample 175; folder: B17"
+  },
+  {
+   "investigation": "PSI-25",
+   "file_name": "PSI-25_Raw Data_BASS_GMT203_SAMPLE_210_TEST_O10_2ND_VIEW.mp4",
+   "test_id": "BASS2-O10",
+   "labels_agreeing": "name_id folder_id",
+   "labels_against": "name_gmt_or_sample_vs_table",
+   "labels_values": "file name: O10, day 203, sample 210; folder: O10; NASA's table (as looked up in the saved listing): GMT in name 203 vs table 213"
+  },
+  {
+   "investigation": "PSI-25",
+   "file_name": "PSI-25_Raw Data_BASS_GMT203_SAMPLE_210_TEST_O10_Still_Sequence.mp4",
+   "test_id": "BASS2-O10",
+   "labels_agreeing": "name_id folder_id",
+   "labels_against": "name_gmt_or_sample_vs_table",
+   "labels_values": "file name: O10, day 203, sample 210; folder: O10; NASA's table (as looked up in the saved listing): GMT in name 203 vs table 213"
+  },
+  {
+   "investigation": "PSI-25",
+   "file_name": "PSI-25_Raw Data_BASS_GMT50_SAMPLE_148_TEST_B3.mp4",
+   "test_id": "BASS2-B3",
+   "labels_agreeing": "name_id",
+   "labels_against": "folder_id",
+   "labels_values": "file name: B3, day 50, sample 148; folder: B1"
+  },
+  {
+   "investigation": "PSI-39",
+   "file_name": "PSI-39_Raw Data_vlc-record-2017-07-10-16h15m31s-udp_F191D05.mp4",
+   "test_id": "CFI-1323",
+   "labels_agreeing": "name_id",
+   "labels_against": "folder_id",
+   "labels_values": "file name: F191D05; folder: F195D01"
+  },
+  {
+   "investigation": "PSI-39",
+   "file_name": "PSI-39_Raw Data_vlc-record-2017-07-10-16h15m31s-udp_F191D05.ts",
+   "test_id": "CFI-1323",
+   "labels_agreeing": "name_id",
+   "labels_against": "folder_id",
+   "labels_values": "file name: F191D05; folder: F195D01"
+  },
+  {
+   "investigation": "PSI-69",
+   "file_name": "PSI-69_Raw Data__ISS_20090625_153031_256R002.mpg",
+   "test_id": "FLEX-13",
+   "labels_agreeing": "name_id",
+   "labels_against": "folder_id",
+   "labels_values": "file name: 256R002; folder: 256R001"
+  },
+  {
+   "investigation": "PSI-159",
+   "file_name": "PSI-159_Raw Data_vlc-record-2021-05-05-16h29m30s-udp____211125A2.ts",
+   "test_id": "CFIG-N-21125A2",
+   "labels_agreeing": "folder_id",
+   "labels_against": "name_id_unreadable_or_mistyped",
+   "labels_values": "file name: 211125A2 (not a valid test point); folder: 21125A2"
+  },
+  {
+   "investigation": "PSI-159",
+   "file_name": "PSI-159_Raw Data_vlc-record-2021-06-23-14h52m10s-udp____2117A4.ts",
+   "test_id": "CFIG-N-21174A4",
+   "labels_agreeing": "folder_id",
+   "labels_against": "name_id_unreadable_or_mistyped",
+   "labels_values": "file name: 2117A4 (not a valid test point); folder: 21174A4"
+  }
+ ],
+ "tests_with_video_by_best_link_state": {
+  "two_labels_agree": 463,
+  "one_label": 344,
+  "labels_disagree_only": 6,
+  "tests_reached_at_test_scope": 813,
+  "by_investigation": {
+   "PSI-10": {
+    "one_label": 306
+   },
+   "PSI-25": {
+    "labels_disagree": 2,
+    "one_label": 20,
+    "two_labels_agree": 101
+   },
+   "PSI-39": {
+    "labels_disagree": 1,
+    "one_label": 3,
+    "two_labels_agree": 46
+   },
+   "PSI-69": {
+    "labels_disagree": 1,
+    "one_label": 4,
+    "two_labels_agree": 3
+   },
+   "PSI-159": {
+    "labels_disagree": 2,
+    "one_label": 11,
+    "two_labels_agree": 313
+   }
+  },
+  "tests_with_labels_disagree_only": [
+   "BASS2-B17",
+   "BASS2-O10",
+   "CFI-1323",
+   "CFIG-N-21125A2",
+   "CFIG-N-21174A4",
+   "FLEX-13"
+  ]
+ },
+ "counted_tests_with_video_by_question": {
+  "P1": {
+   "question": "Flammability limit",
+   "tests": 133,
+   "two_labels_agree": 99,
+   "one_label": 18,
+   "labels_disagree_only": 2,
+   "no_video_tied_to_the_test": 14,
+   "no_video_tied_by_investigation": {
+    "PSI-25": 6,
+    "PSI-99": 8
+   }
+  },
+  "P2": {
+   "question": "Ignition",
+   "tests": 0,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree_only": 0,
+   "no_video_tied_to_the_test": 0,
+   "no_video_tied_by_investigation": {}
+  },
+  "P3": {
+   "question": "Flame spread and growth",
+   "tests": 2,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree_only": 0,
+   "no_video_tied_to_the_test": 2,
+   "no_video_tied_by_investigation": {
+    "PSI-98": 2
+   }
+  },
+  "S1": {
+   "question": "Extinction conditions",
+   "tests": 298,
+   "two_labels_agree": 19,
+   "one_label": 10,
+   "labels_disagree_only": 1,
+   "no_video_tied_to_the_test": 268,
+   "no_video_tied_by_investigation": {
+    "PSI-25": 3,
+    "PSI-69": 265
+   }
+  },
+  "D1": {
+   "question": "Combustion products",
+   "tests": 122,
+   "two_labels_agree": 98,
+   "one_label": 16,
+   "labels_disagree_only": 2,
+   "no_video_tied_to_the_test": 6,
+   "no_video_tied_by_investigation": {
+    "PSI-25": 6
+   }
+  },
+  "D2": {
+   "question": "Smoke",
+   "tests": 0,
+   "two_labels_agree": 0,
+   "one_label": 0,
+   "labels_disagree_only": 0,
+   "no_video_tied_to_the_test": 0,
+   "no_video_tied_by_investigation": {}
+  }
+ },
+ "videos_tied_to_counted_tests": {
+  "files": 298,
+  "bytes": 17993880758,
+  "by_investigation": {
+   "PSI-25": 289,
+   "PSI-69": 9
+  }
+ },
+ "bass2_by_clip_kind": {
+  "main: excerpt or other named clip": {
+   "files": 7,
+   "bytes": 226328298,
+   "tests": 5
+  },
+  "main: ignition attempt": {
+   "files": 5,
+   "bytes": 145791486,
+   "tests": 3
+  },
+  "main: part of a recording": {
+   "files": 2,
+   "bytes": 101068017,
+   "tests": 1
+  },
+  "main: portion during loss of signal": {
+   "files": 7,
+   "bytes": 127092674,
+   "tests": 6
+  },
+  "main: whole recording": {
+   "files": 114,
+   "bytes": 7547979401,
+   "tests": 114
+  },
+  "other: post-burn picture": {
+   "files": 3,
+   "bytes": 4492854,
+   "tests": 2
+  },
+  "other: rack, monitor or other camera": {
+   "files": 4,
+   "bytes": 59808704,
+   "tests": 3
+  },
+  "other: second view": {
+   "files": 102,
+   "bytes": 9044985674,
+   "tests": 94
+  },
+  "other: still sequence": {
+   "files": 52,
+   "bytes": 450216042,
+   "tests": 50
+  }
+ },
+ "scenarios": {
+  "iss": {
+   "by_question_and_placement": {
+    "P1": {
+     "outside_by_recorded_value": {
+      "tests": 78,
+      "two_labels_agree": 57,
+      "one_label": 14,
+      "labels_disagree_only": 2,
+      "no_video_tied_to_the_test": 5
+     },
+     "oxygen_inside_pressure_not_in_table": {
+      "tests": 55,
+      "two_labels_agree": 42,
+      "one_label": 4,
+      "labels_disagree_only": 0,
+      "no_video_tied_to_the_test": 9
+     }
+    },
+    "P3": {
+     "oxygen_inside_pressure_not_in_table": {
+      "tests": 2,
+      "two_labels_agree": 0,
+      "one_label": 0,
+      "labels_disagree_only": 0,
+      "no_video_tied_to_the_test": 2
+     }
+    },
+    "S1": {
+     "inside": {
+      "tests": 56,
+      "two_labels_agree": 2,
+      "one_label": 0,
+      "labels_disagree_only": 0,
+      "no_video_tied_to_the_test": 54
+     },
+     "outside_by_recorded_value": {
+      "tests": 235,
+      "two_labels_agree": 14,
+      "one_label": 6,
+      "labels_disagree_only": 1,
+      "no_video_tied_to_the_test": 214
+     },
+     "oxygen_inside_pressure_not_in_table": {
+      "tests": 7,
+      "two_labels_agree": 3,
+      "one_label": 4,
+      "labels_disagree_only": 0,
+      "no_video_tied_to_the_test": 0
+     }
+    },
+    "D1": {
+     "outside_by_recorded_value": {
+      "tests": 77,
+      "two_labels_agree": 56,
+      "one_label": 14,
+      "labels_disagree_only": 2,
+      "no_video_tied_to_the_test": 5
+     },
+     "oxygen_inside_pressure_not_in_table": {
+      "tests": 45,
+      "two_labels_agree": 42,
+      "one_label": 2,
+      "labels_disagree_only": 0,
+      "no_video_tied_to_the_test": 1
+     }
+    }
+   },
+   "shortlists": {
+    "P1": {
+     "file": "video/data/shortlist_iss_P1_main_view.csv",
+     "counted_tests_inside_or_oxygen_inside": {
+      "tests": 55,
+      "two_labels_agree": 42,
+      "one_label": 4,
+      "labels_disagree_only": 0,
+      "no_video_tied_to_the_test": 9,
+      "by_investigation": {
+       "PSI-25": 47,
+       "PSI-99": 8
+      }
+     },
+     "tests_with_a_listed_file": 45,
+     "tests_without_a_listed_file": [
+      "BASS2-F2",
+      "BASS2-M3",
+      "SAFFIRE-2-2-1",
+      "SAFFIRE-2-2-2",
+      "SAFFIRE-2-2-3",
+      "SAFFIRE-2-2-4",
+      "SAFFIRE-2-2-5",
+      "SAFFIRE-2-2-6",
+      "SAFFIRE-2-2-7",
+      "SAFFIRE-2-2-8"
+     ],
+     "files": 49,
+     "bytes": 3515643202,
+     "by_link_state": {
+      "labels_disagree": 1,
+      "one_label": 4,
+      "two_labels_agree": 44
+     },
+     "by_clip_kind": {
+      "portion during loss of signal": {
+       "files": 5,
+       "bytes": 108675176
+      },
+      "whole recording": {
+       "files": 44,
+       "bytes": 3406968026
+      }
+     },
+     "transcribed": {
+      "files": 7,
+      "bytes": 648490745
+     },
+     "not_transcribed": {
+      "files": 42,
+      "bytes": 2867152457
+     }
+    },
+    "S1": {
+     "file": "video/data/shortlist_iss_S1_main_view.csv",
+     "counted_tests_inside_or_oxygen_inside": {
+      "tests": 63,
+      "two_labels_agree": 5,
+      "one_label": 4,
+      "labels_disagree_only": 0,
+      "no_video_tied_to_the_test": 54,
+      "by_investigation": {
+       "PSI-25": 7,
+       "PSI-69": 56
+      }
+     },
+     "tests_with_a_listed_file": 9,
+     "tests_without_a_listed_file": [
+      "FLEX-1",
+      "FLEX-144",
+      "FLEX-145",
+      "FLEX-146",
+      "FLEX-148",
+      "FLEX-149",
+      "FLEX-150",
+      "FLEX-168",
+      "FLEX-169",
+      "FLEX-170",
+      "FLEX-180",
+      "FLEX-181",
+      "FLEX-182",
+      "FLEX-187",
+      "FLEX-188",
+      "FLEX-196",
+      "FLEX-197",
+      "FLEX-198",
+      "FLEX-199",
+      "FLEX-2",
+      "FLEX-200",
+      "FLEX-201",
+      "FLEX-202",
+      "FLEX-203",
+      "FLEX-204",
+      "FLEX-205",
+      "FLEX-206",
+      "FLEX-207",
+      "FLEX-208",
+      "FLEX-222",
+      "FLEX-223",
+      "FLEX-224",
+      "FLEX-225",
+      "FLEX-228",
+      "FLEX-229",
+      "FLEX-230",
+      "FLEX-231",
+      "FLEX-273",
+      "FLEX-274",
+      "FLEX-3",
+      "FLEX-35",
+      "FLEX-4",
+      "FLEX-46",
+      "FLEX-47",
+      "FLEX-48",
+      "FLEX-49",
+      "FLEX-5",
+      "FLEX-50",
+      "FLEX-51",
+      "FLEX-53",
+      "FLEX-6",
+      "FLEX-7",
+      "FLEX-8",
+      "FLEX-9"
+     ],
+     "files": 10,
+     "bytes": 728227964,
+     "by_link_state": {
+      "one_label": 4,
+      "two_labels_agree": 6
+     },
+     "by_clip_kind": {
+      "portion during loss of signal": {
+       "files": 1,
+       "bytes": 14026261
+      },
+      "recording": {
+       "files": 2,
+       "bytes": 65710958
+      },
+      "whole recording": {
+       "files": 7,
+       "bytes": 648490745
+      }
+     },
+     "transcribed": {
+      "files": 7,
+      "bytes": 648490745
+     },
+     "not_transcribed": {
+      "files": 3,
+      "bytes": 79737219
+     }
+    },
+    "D1": {
+     "file": "video/data/shortlist_iss_D1_main_view.csv",
+     "counted_tests_inside_or_oxygen_inside": {
+      "tests": 45,
+      "two_labels_agree": 42,
+      "one_label": 2,
+      "labels_disagree_only": 0,
+      "no_video_tied_to_the_test": 1,
+      "by_investigation": {
+       "PSI-25": 45
+      }
+     },
+     "tests_with_a_listed_file": 43,
+     "tests_without_a_listed_file": [
+      "BASS2-F2",
+      "BASS2-M3"
+     ],
+     "files": 47,
+     "bytes": 3409470024,
+     "by_link_state": {
+      "labels_disagree": 1,
+      "one_label": 2,
+      "two_labels_agree": 44
+     },
+     "by_clip_kind": {
+      "portion during loss of signal": {
+       "files": 5,
+       "bytes": 108675176
+      },
+      "whole recording": {
+       "files": 42,
+       "bytes": 3300794848
+      }
+     },
+     "transcribed": {
+      "files": 5,
+      "bytes": 542317567
+     },
+     "not_transcribed": {
+      "files": 42,
+      "bytes": 2867152457
+     }
+    }
+   },
+   "tests_inside_the_ranges": {
+    "tests": 179,
+    "two_labels_agree": 41,
+    "one_label": 54,
+    "labels_disagree_only": 0,
+    "no_video_tied_to_the_test": 84,
+    "by_investigation": {
+     "PSI-10": 71,
+     "PSI-159": 27,
+     "PSI-39": 25,
+     "PSI-69": 56
+    },
+    "counted_for_a_question": 56,
+    "counted_with_a_video": 2,
+    "videos": {
+     "files": 104,
+     "bytes": 26486002930,
+     "by_link_state": {
+      "one_label": {
+       "files": 54,
+       "bytes": 10151015256
+      },
+      "two_labels_agree": {
+       "files": 50,
+       "bytes": 16334987674
+      }
+     }
+    },
+    "two_labels_agree_files": "see video_links.csv"
+   }
+  },
+  "lunar_habitat": {
+   "by_question_and_placement": {
+    "P1": {
+     "outside_by_recorded_value": {
+      "tests": 133,
+      "two_labels_agree": 99,
+      "one_label": 18,
+      "labels_disagree_only": 2,
+      "no_video_tied_to_the_test": 14
+     }
+    },
+    "P3": {
+     "outside_by_recorded_value": {
+      "tests": 2,
+      "two_labels_agree": 0,
+      "one_label": 0,
+      "labels_disagree_only": 0,
+      "no_video_tied_to_the_test": 2
+     }
+    },
+    "S1": {
+     "inside": {
+      "tests": 17,
+      "two_labels_agree": 0,
+      "one_label": 0,
+      "labels_disagree_only": 0,
+      "no_video_tied_to_the_test": 17
+     },
+     "outside_by_recorded_value": {
+      "tests": 281,
+      "two_labels_agree": 19,
+      "one_label": 10,
+      "labels_disagree_only": 1,
+      "no_video_tied_to_the_test": 251
+     }
+    },
+    "D1": {
+     "outside_by_recorded_value": {
+      "tests": 122,
+      "two_labels_agree": 98,
+      "one_label": 16,
+      "labels_disagree_only": 2,
+      "no_video_tied_to_the_test": 6
+     }
+    }
+   },
+   "shortlists": {},
+   "tests_inside_the_ranges": {
+    "tests": 26,
+    "two_labels_agree": 8,
+    "one_label": 0,
+    "labels_disagree_only": 0,
+    "no_video_tied_to_the_test": 18,
+    "by_investigation": {
+     "PSI-159": 9,
+     "PSI-69": 17
+    },
+    "counted_for_a_question": 17,
+    "counted_with_a_video": 0,
+    "videos": {
+     "files": 8,
+     "bytes": 2640554564,
+     "by_link_state": {
+      "two_labels_agree": {
+       "files": 8,
+       "bytes": 2640554564
+      }
+     }
+    },
+    "two_labels_agree_files": [
+     {
+      "test_id": "CFIG-N-21106F1",
+      "file_name": "PSI-159_Raw Data_vlc-record-2021-04-16-19h19m26s-udp____21106F1.ts",
+      "bytes": 323223888
+     },
+     {
+      "test_id": "CFIG-N-21106F2",
+      "file_name": "PSI-159_Raw Data_vlc-record-2021-04-16-19h37m22s-udp____21106F2.ts",
+      "bytes": 317097344
+     },
+     {
+      "test_id": "CFIG-N-21106F3",
+      "file_name": "PSI-159_Raw Data_vlc-record-2021-04-16-19h56m20s-udp____21106F3.ts",
+      "bytes": 249043788
+     },
+     {
+      "test_id": "CFIG-N-21106F5",
+      "file_name": "PSI-159_Raw Data_vlc-record-2021-04-16-20h51m27s-udp____21106F5.ts",
+      "bytes": 178367820
+     },
+     {
+      "test_id": "CFIG-N-21153A4",
+      "file_name": "PSI-159_Raw Data_vlc-record-2021-06-02-17h41m30s-udp____21153A4.ts",
+      "bytes": 220311372
+     },
+     {
+      "test_id": "CFIG-N-21153A5",
+      "file_name": "PSI-159_Raw Data_vlc-record-2021-06-02-17h51m51s-udp____21153A5.ts",
+      "bytes": 685075760
+     },
+     {
+      "test_id": "CFIG-N-21153F1",
+      "file_name": "PSI-159_Raw Data_vlc-record-2021-06-02-17h05m11s-udp____21153F1.ts",
+      "bytes": 305884648
+     },
+     {
+      "test_id": "CFIG-N-21174B1",
+      "file_name": "PSI-159_Raw Data_vlc-record-2021-06-23-15h32m06s-udp____21174B1.ts",
+      "bytes": 361549944
+     }
+    ]
+   }
+  }
+ }
+}

@@ -1,22 +1,24 @@
 # NASA's on-screen readings from BASS-II video (PSI-25), transcribed by the team: 19 clips, one row per second
 
+These are values copied once per second from NASA's on-screen display by code an AI assistant wrote. They are not measurements and not NASA files. No row is labelled as ignition, flame-out or blowoff. The last value in a clip, or its largest value, is not the flow at any event; the flow at blowoff is only what NASA's table states (for O9: "blowoff pt 4.0").
+
 Source: the text overlay in NASA's own BASS-II videos (FUEL, AIR, FAN, RAD, clock). The team read the numbers off the picture with a fixed-font template reader. This is a transcription of NASA's display. It is not a NASA data file, and it contains no team measurement.
 
-**Disclosure.** Transcribed by code that an AI assistant (Claude) wrote; not a NASA data file; not reviewed by a person beyond the by-eye samples named here: 80 random frames and 106 frames chosen as hard cases, read by eye in the pilot's two review passes. The files were written by `video/read_overlay.py` (see `video/README.md`).
+**Disclosure.** Transcribed by code that an AI assistant (Claude) wrote; not a NASA data file. Checked by AI sessions: an AI assistant (Claude) read 186 frames by eye before seeing the reader's values (80 random frames and 106 frames chosen as hard cases, in the pilot's two review passes; see "How it was checked" in `video/README.md`). A person: none yet. The files were written by `video/read_overlay.py` (see `video/README.md`).
 
 "By eye" means that an AI assistant (Claude) looked at each frame image and wrote the numbers down before it saw the reader's values. No person has checked a frame.
 
 ## Caveats
 
 1. Covers 19 clips only: B21, M17, O4, O7, O8a, O8b, O9, O11, O12, O14, O19, P1, P5, P9, P13a, P13b, P22a, P22b, P25. Not checked on any other clip.
-2. Checked by eye on 186 frames (80 random, 106 chosen as hard cases): about 750 values compared, none wrong. From the random frames alone, fewer than about 1 value in 100 should be wrong.
+2. Checked by eye on 186 frames (80 random, 106 chosen as hard cases): about 750 values compared, none wrong. From the 380 random values alone (80 frames, so not independent draws), fewer than about 1 value in 100 should be wrong (95%).
 3. An empty cell means not read. It never means zero, and nothing is filled in. Cells are empty when the reader was unsure, when the picture behind the text is bright, or when NASA's feed shows the still-camera screen, a blue screen or colour bars instead of the experiment (O14 957-975 s, O19 533-651 s, P22b 422-450 s, P5 895-996 s, P9 796 s to the end).
 4. One value per second. NASA states the display refreshes at 5 Hz, so faster changes are not in this file.
 5. FAN is fan voltage x 10 (NASA ReadMe; nominal maximum 122). The screen itself shows 123 to 125 in 16 rows. Rows flagged half_updated show a frame caught while the display was changing (O9 at 576 s reads 198, between 98 and 102; two clock values). The same can happen unnoticed in any field while its value is changing.
 6. AIR is NASA's duct flow reading in cm/s. NASA states its response time is about 1 minute. Read it only where FAN has been steady for several minutes; during and just after a fan change it lags far behind. At the lowest fan settings it reads 0, which means below what it can show, not proven still air.
 7. RAD is NASA's radiometer reading, which NASA describes as uncalibrated. The screen shows two decimals; the last one is cut off by the edge of the picture, so this file gives one decimal, cut not rounded (0.99 appears as 0.9). 4.1 means saturated (988 rows, 828 of them in P5). In M17, P5 and P22a the crew changed the gain during the test and the reading jumps about five-fold with no change in the flame (M17: 4.1 to 1.0 at 421 s, 0.5 to 2.4 at 1325 s). Do not compare RAD between tests or across such a jump. RAD also rises with the igniter alone (O12 never ignited and reads up to 1.8).
 8. FUEL is copied as shown. The NASA documents we hold do not say what it measures in these solid-fuel tests.
-9. t_video_s is seconds from the start of the clip. clock_hhmmss is the on-screen clock (GMT). The on-screen date is one day later than the real date (NASA ReadMe).
+9. t_video_s is seconds from the start of the clip. clock_hhmmss is the on-screen clock (GMT). NASA's ReadMe: "Video display is one day later than actual date due to a leap year the on-board computer did not account for." Observed on 3 July 2014 clips; February 2014 clips not checked. No date is shifted by code.
 10. Not in this file: when the flame was present or went out, flow speed at blowoff or extinction, calibrated radiation. Our automatic flame signal from picture brightness failed its check and was removed.
 
 ## Files

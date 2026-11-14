@@ -1,0 +1,20 @@
+# Video design prototype: what these files are
+
+Built by code that an AI assistant (Claude) wrote, from PSI's file listing of 14 November 2026 and the team's test tables (`data/pipeline/tests.csv`, `need_tests.csv`, `scenario_tests.csv`) and NASA's experimental tables under `data/psi/experimental_tables/`. Checked by AI sessions (two review passes and a recount by separate code, `docs/video_design/design.md` section 4); not reviewed by a person. The files were copied unchanged from the design job's scratch folder in build step 1 of `docs/video_design/design.md`; a header line was not added to them, because it would change the checksums that later files quote (for example `video/data/psi_video_names_2026-11-14.csv` quotes the sha256 of `video_index_names.csv`). This README is their provenance note.
+
+A tie says which NASA recording belongs to which test row, by the labels named; it is not a measurement, and no file here holds a value read from a video. A research exploration aid, not safety guidance.
+
+| File | What it is | sha256 (15 November 2026) |
+|---|---|---|
+| `video_names.py` | The design job's names step: reads every PSI video name and folder from the saved listing and ties it, by name rules only, to rows of NASA's experimental tables. No video is opened. | `64ac3a0d40148f9f9f2ff4b6a8362d06b6b4638bdee41e3dc3e2dc561bc7e3b6` |
+| `video_index_names.csv` | Written by `video_names.py`: one row per file with a video extension in PSI's listing of 14 November 2026 (2,623 files, 426,053,691,302 bytes): names, folders, sizes, PSI file ids, identifiers, clip words and ties. Copied, with a provenance line, to `video/data/psi_video_names_2026-11-14.csv`. | `5c79d8d63e4f98a4fa220938d9fd921687f118bc1f60ed32b4af330947c973bb` |
+| `video_index_summary.json` | Totals and per-investigation counts of `video_index_names.csv` (ties, patterns, extensions). | `75ef0b4837c58616e28d3686ae7fd671960e67ba48e58d9267f493d7af6f197f` |
+| `recount.py` | A second recount by another method (plain substring search of table test codes in file names). | `a37295d222b91f28ed2a2cab656038229ef80f7ebe2d2674470fe9eb11b27393` |
+| `video_final.py` | The design's final recount: link states, counts per question and placement, the ISS flammability shortlist, from `video_index_names.csv` and the team's test tables. | `269d5721479a73b3c0a8c8d714130ed9b366ffa6466f8ddc205cd409abd4e523` |
+| `video_final.json` | Written by `video_final.py`: the figures of the design. | `2986eeb2fa9381c139f4f36e2b621795df4a480183fa30dc3e1622e06dd0a2f2` |
+| `video_links_states.csv` | Written by `video_final.py`: tie scope, link state, test and labels of each of the 2,623 videos. `video/test_index_by_name.py` compares `video/data/video_links.csv` with it. | `3020c39850f6ad0743768ade8177d269b84170c24b2998be82b5d6d7ddcbfdba` |
+| `shortlist_iss_P1_main_view.csv` | Written by `video_final.py`: the 49 main-view files of the ISS flammability tests. | `c2146f5738fa967c3a53aa9a00d48c3977feed70bf637de4f083c436d1703e9a` |
+| `need_video_map.csv` | Per question, investigation and variable: tests in scope, tests with a video tied by name, files and bytes, and the form a video could carry ("nothing" for most variables). | `4c10445e105087fcf5e285655c3a95a4323a31b1fdbf4088a158252fa14860c1` |
+| `video_sample.csv` | The design job's sample of 37 files (one for each of 37 name groups): container headers of all 37 and three frames of 22, read by range requests to PSI; the bytes and seconds each read cost. The picture descriptions were written by an AI agent (Claude) that opened each frame image; no person has checked them. The frame images are not in the repository. | `0bd47faa0167ea4759b3dd376ee4a42086d96caf247e84d886d5afbd04ce75a1` |
+
+The three `.py` files start with the AI-generated code comment. `video_final.json` has a `_meta.made_by` field and the shortlist a one-line header, both saying AI-generated and not human-reviewed; the other CSV and JSON files carry no provenance line of their own. This README is the companion document of all of them.

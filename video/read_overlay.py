@@ -326,7 +326,8 @@ def _worker(args):
 
 
 def run_reading(settings, clips_dir, jobs):
-    todo, missing, wrong = [], [], []
+    todo, missing, wrong, other_size = [], [], [], []
+    want_size = (int(settings["video"]["width"]), int(settings["video"]["height"]))
     for c in settings["clips"]:
         p = os.path.join(clips_dir, c["file"])
         if not os.path.exists(p):
@@ -334,11 +335,18 @@ def run_reading(settings, clips_dir, jobs):
         elif c.get("bytes") and os.path.getsize(p) != c["bytes"]:
             wrong.append((c["file"], os.path.getsize(p), c["bytes"]))
         else:
-            todo.append((p, c, settings["_path"]))
+            size = probe_size(p)
+            if size != want_size:
+                # Another layout (for example BASS or SPICE): skip this clip and go on with the batch.
+                other_size.append({"file": c["file"], "frame_size": list(size), "settings_frame_size": list(want_size)})
+            else:
+                todo.append((p, c, settings["_path"]))
     for name in missing:
         print("not present, skipped:", name, file=sys.stderr)
     for name, got, want in wrong:
         print(f"size differs from settings ({got} != {want} bytes), skipped: {name}", file=sys.stderr)
+    for o in other_size:
+        print(f"frame size {tuple(o['frame_size'])} differs from settings {want_size}, skipped: {o['file']}", file=sys.stderr)
     results = {}
     if jobs > 1 and len(todo) > 1:
         from concurrent.futures import ProcessPoolExecutor
@@ -355,7 +363,7 @@ def run_reading(settings, clips_dir, jobs):
             print(f"{short}: {info['rows']} rows, {info['rows_all_values']} with FUEL, AIR, FAN, RAD and clock, "
                   f"{info['rows_overlay_absent']} overlay absent, flagged {len(info['rows_flagged'])}, {info['seconds']} s",
                   flush=True)
-    return results, missing, wrong
+    return results, missing, wrong, other_size
 
 
 def ffmpeg_version():
@@ -367,7 +375,7 @@ def ffmpeg_version():
 
 def cmd_read(settings, state, clips_dir, out_dir, jobs):
     os.makedirs(out_dir, exist_ok=True)
-    results, missing, wrong = run_reading(settings, clips_dir, jobs)
+    results, missing, wrong, other_size = run_reading(settings, clips_dir, jobs)
     order = [c["short"] for c in settings["clips"] if c["short"] in results]
     for short in order:
         with open(os.path.join(out_dir, f"{short}.csv"), "w", newline="", encoding="utf-8") as fh:
@@ -380,6 +388,7 @@ def cmd_read(settings, state, clips_dir, out_dir, jobs):
         "ffmpeg": ffmpeg_version(), "numpy": np.__version__, "python": sys.version.split()[0],
         "clips": [{k: v for k, v in results[s][1].items() if k != "seconds"} for s in order],
         "clips_not_present": missing, "clips_wrong_size": [w[0] for w in wrong],
+        "clips_other_frame_size": other_size,
     }
     with open(os.path.join(out_dir, "reading_manifest.json"), "w", encoding="utf-8", newline="\n") as fh:
         json.dump(manifest, fh, indent=1)
@@ -392,7 +401,7 @@ def cmd_read(settings, state, clips_dir, out_dir, jobs):
 
 
 def cmd_verify(settings, clips_dir, ref_dir, jobs):
-    results, missing, wrong = run_reading(settings, clips_dir, jobs)
+    results, missing, wrong, other_size = run_reading(settings, clips_dir, jobs)
     ndiff, nfiles, nrows = 0, 0, 0
     for c in settings["clips"]:
         ref = os.path.join(ref_dir, f"{c['short']}.csv")

@@ -163,6 +163,38 @@ class ReaderTests(unittest.TestCase):
             self.assertEqual(m["clips"], [])
             self.assertEqual(m["about"], self.settings["disclosure"])
 
+    @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "needs ffmpeg and ffprobe")
+    def test_clip_of_another_frame_size_is_skipped_and_reported(self):
+        """A made-up 320x240 clip (another layout) is skipped and listed in the manifest; the batch goes on
+        and reads the made-up clip of the settings' frame size (a test pattern, so no values are read)."""
+        import subprocess
+        w, h = self.settings["video"]["width"], self.settings["video"]["height"]
+        with tempfile.TemporaryDirectory() as d, tempfile.TemporaryDirectory() as out:
+            clips_dir = os.path.join(d, "clips")
+            os.makedirs(clips_dir)
+            with open(SETTINGS, encoding="utf-8") as fh:
+                s = json.load(fh)
+            s["reader_state"]["file"] = os.path.normpath(os.path.join(HERE, "settings", s["reader_state"]["file"]))
+            first, second = s["clips"][0], s["clips"][1]
+            for clip, size in ((first, "320x240"), (second, f"{w}x{h}")):
+                p = os.path.join(clips_dir, clip["file"])
+                subprocess.run(["ffmpeg", "-v", "error", "-f", "lavfi", "-i", f"testsrc=size={size}:rate=10:duration=2",
+                                "-pix_fmt", "yuv420p", "-y", p], check=True)
+                clip["bytes"] = os.path.getsize(p)
+            s["clips"] = [first, second]
+            sp = os.path.join(d, "s.json")
+            with open(sp, "w", encoding="utf-8") as fh:
+                json.dump(s, fh)
+            rc = ro.main(["--settings", sp, "--clips", clips_dir, "--out", out, "--jobs", "1"])
+            self.assertEqual(rc, 0)
+            with open(os.path.join(out, "reading_manifest.json"), encoding="utf-8") as fh:
+                m = json.load(fh)
+            self.assertEqual(m["clips_other_frame_size"],
+                             [{"file": first["file"], "frame_size": [320, 240], "settings_frame_size": [w, h]}])
+            self.assertEqual([c["short"] for c in m["clips"]], [second["short"]])
+            self.assertTrue(os.path.exists(os.path.join(out, second["short"] + ".csv")))
+            self.assertFalse(os.path.exists(os.path.join(out, first["short"] + ".csv")))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

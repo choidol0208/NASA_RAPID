@@ -1,0 +1,697 @@
+{
+ "_about": "AI-generated settings file: written with an AI assistant (Claude) during the NASA Space Apps Challenge 2026 hackathon. It holds every rule video/index_by_name.py uses to read a PSI video file name, to tie it to a test of NASA's tables, and to name its link state. The rules were taken from the design job's prototype (docs/video_design/prototype/video_names.py and video_final.py) and the design (docs/video_design/design.md sections 4 and 7). Checked by AI sessions; a person: none yet. A tie says which recording belongs to a test row; it is not a measurement.",
+ "listing": {
+  "file": "video/data/psi_video_names_2026-11-14.csv",
+  "what": "One row per video file in PSI's public file listing of 14 November 2026 for the 24 combustion investigations (2,623 files with a video extension). Columns: investigation, category, folder, file name, bytes, extension, name pattern, identifiers read from the name and folder, clip words, and the tie the design job's names step made against NASA's experimental tables.",
+  "copied_from": "docs/video_design/prototype/video_index_names.csv",
+  "provenance_line_prefix": "#"
+ },
+ "tests_tables": {
+  "tests": "data/pipeline/tests.csv",
+  "need_tests": "data/pipeline/need_tests.csv",
+  "scenario_tests": "data/pipeline/scenario_tests.csv"
+ },
+ "transcribed_clips_from": "video/settings/bass2.json (clips[].file)",
+ "how_this_command_uses_the_listing": [
+  "The two labels (the NASA identifier in the file name and the PSI folder label) are read again with the rules under 'investigations' for every investigation that has a label rule (BASS-II, CFI, FLEX and the six ACME investigations), including the 2013-2014 FLEX test points (rule 'also_read'). Every value read must equal the value the saved listing holds; any difference stops the build.",
+  "The day keys that the day ties and the 'day' column use are read again with the rules under 'day_label' (ACME, CFI, BASS, SLICE, SPICE) and 'recording_start' (every stream recording, which SAME-R uses as its day key); any difference from the saved listing stops the build. SAME (PSI-102) has no rule: its two clips carry no identifier. video_links_summary.json, checks, counts per key how many values were compared and lists the identifier keys that are taken from the saved listing without being read again.",
+  "The clip words are read again from every name with the rules under 'clip_words'; any difference from the saved listing stops the build.",
+  "Which table row an identifier points to (tie scope and test) is taken from the saved listing, because it was looked up in NASA's experimental tables (columns such as CIR, FLEX Identifier, GMT and Sample # that the team's tests.csv does not carry). Every test it names must be a row of tests.csv; for BASS-II and the ACME per-test tables the test id formed from the identifier must equal it.",
+  "Link states, counts and shortlists are derived here, by code, from those values and the three test tables."
+ ],
+ "bare_name": {
+  "prefix_pattern": "^PSI-\\d+_(Raw Data|Presentations|Reference Data|Engineering Documents|Analyzed Data|Science Documents)_",
+  "meaning": "PSI puts the accession and the folder category in front of every file name. They are removed before a rule is applied; the extension is removed after the last dot.",
+  "ground": "the team's reading of the names"
+ },
+ "not_a_test_recording": {
+  "categories": [
+   "Presentations",
+   "Reference Data",
+   "Engineering Documents"
+  ],
+  "name_pattern": "(?i)wo66\\d+|Interviews",
+  "meaning": "A file in these categories, or whose name carries a work-order number (wo66...) or the word Interviews, is an outreach, reference or engineering clip. No label is read from it and it is tied to no test.",
+  "ground": "the team's reading of the names"
+ },
+ "recording_start": {
+  "saved_key": "recording_start",
+  "on": "stem",
+  "pattern": "v[il]c-record-(\\d{4})-(\\d{2})-(\\d{2})-(\\d{2})h(\\d{2})m(\\d{2})s",
+  "value": "{1}-{2}-{3} {4}:{5}:{6}",
+  "meaning": "the start of a stream recording made with VLC, as written in the name (vic-record is read as a typo of vlc-record); read for every video, outreach clips included. SAME-R (PSI-101) uses its date as the day key.",
+  "ground": "the team's reading of the names"
+ },
+ "clip_words": {
+  "_what": "Words in a bare name that say what the clip is. A word is set when its pattern matches the bare name without extension; the two marked folder_too also match the folder. Ground for all: the team's reading of the names; no NASA document says what these words mean, except that the BASS-II ReadMe says the Misc video folder holds backup test recordings and recordings of crew operations.",
+  "rules": [
+   {
+    "word": "second_view",
+    "pattern": "2ND[_ ]VIEW",
+    "meaning": "a second camera view of the test"
+   },
+   {
+    "word": "still_sequence",
+    "pattern": "Still[_ ]Sequence",
+    "meaning": "a video of the still camera's playback (BASS-II); not the test picture"
+   },
+   {
+    "word": "loss_of_signal_portion",
+    "pattern": "LOS[_ -]Portion|LOS\\b|during-LOS|-LOS",
+    "meaning": "a portion recorded during loss of signal; 'loss of signal' is the team's reading of LOS, no document opened"
+   },
+   {
+    "word": "ignition_attempt",
+    "pattern": "Ignition[_ ]Attempts?",
+    "meaning": "a clip of one ignition attempt"
+   },
+   {
+    "word": "part_of_recording",
+    "pattern": "Part-\\d|pt\\d|(?<=\\d)p\\d(?![0-9])",
+    "meaning": "one part of a recording split into files"
+   },
+   {
+    "word": "shifted_video",
+    "pattern": "shifted-video",
+    "meaning": "a re-timed copy (word in the name; what was shifted is not stated)"
+   },
+   {
+    "word": "post_burn_picture",
+    "pattern": "post-burn-picture",
+    "meaning": "a picture of the sample after the burn"
+   },
+   {
+    "word": "rack_or_monitor_view",
+    "pattern": "rack-video|camera-monitor",
+    "meaning": "a view of the rack or of a camera monitor"
+   },
+   {
+    "word": "flame_blowoff_clip",
+    "pattern": "Flame-Blowoff",
+    "meaning": "a short clip named after a blowoff"
+   },
+   {
+    "word": "igniter_check",
+    "pattern": "IgniterCheck|igniter burnout",
+    "meaning": "an igniter check, not a test"
+   },
+   {
+    "word": "radiometer_point",
+    "pattern": "(?<=\\d{5})RAD\\d|(?<=\\d{5})R\\d(?![0-9])",
+    "meaning": "an ACME radiometer point after the test day"
+   },
+   {
+    "word": "failed_or_aborted",
+    "pattern": "failed|aborted|extinguished early|DROPLET LOSS",
+    "meaning": "the name says the run failed, was aborted or lost its droplet"
+   },
+   {
+    "word": "camera_view_named",
+    "pattern": "Droplet[_ ]?(Movie )?View|Flame[_ ]?(Movie )?View|MDCA|HiBMS2|HiMS2|SCIENCE[- ]STATION|PD STATION",
+    "meaning": "the name is a camera or station name"
+   },
+   {
+    "word": "downlink_recording",
+    "pattern": "DOWNLINK",
+    "meaning": "the name says downlink video"
+   },
+   {
+    "word": "stream_recording",
+    "pattern": "v[il]c-record|udp",
+    "meaning": "a stream recording made with VLC (vlc-record-YYYY-MM-DD-HHhMMmSSs is the start of the recording); team reading"
+   },
+   {
+    "word": "ground_1g",
+    "pattern": "(?<![A-Za-z])1g(?![A-Za-z])|MFCCalib",
+    "folder_too": true,
+    "meaning": "a ground (1 g) or flow-controller calibration clip"
+   },
+   {
+    "word": "calibration",
+    "pattern": "[Cc]alib|CAL\\d|(?<=\\d{3})R\\d{2}(?![0-9])",
+    "folder_too": true,
+    "meaning": "a calibration clip"
+   },
+   {
+    "word": "outreach_or_interview",
+    "pattern": "(?i)wo66\\d+|Interviews",
+    "meaning": "an outreach clip or interview"
+   },
+   {
+    "word": "engineering_test",
+    "pattern": "Resistive Heater Coil",
+    "meaning": "an engineering test of hardware"
+   }
+  ]
+ },
+ "clip_kinds": {
+  "_what": "The clip kind from the name, from the clip words. First rule that applies wins. 'Main view' means the test picture of the main camera, by the words in the file name: not a second view, not a still-camera sequence, not a post-burn picture, not a rack, monitor or other-camera clip. Portions recorded during loss of signal stay in the main view. Ground: docs/video_design/design.md section 2 (the corrected main-view definition) and the team's reading of the names; no picture is looked at.",
+  "rules": [
+   {
+    "words_any": [
+     "second_view"
+    ],
+    "view": "other",
+    "kind": "second view"
+   },
+   {
+    "words_any": [
+     "still_sequence"
+    ],
+    "view": "other",
+    "kind": "still sequence"
+   },
+   {
+    "words_any": [
+     "post_burn_picture"
+    ],
+    "view": "other",
+    "kind": "post-burn picture"
+   },
+   {
+    "words_any": [
+     "rack_or_monitor_view"
+    ],
+    "name_pattern": "lab-camera|over-the-shoulder",
+    "view": "other",
+    "kind": "rack, monitor or other camera"
+   },
+   {
+    "words_any": [
+     "camera_view_named"
+    ],
+    "view": "other",
+    "kind": "named camera view"
+   },
+   {
+    "words_any": [
+     "outreach_or_interview"
+    ],
+    "view": "other",
+    "kind": "outreach or interview"
+   },
+   {
+    "words_any": [
+     "calibration",
+     "ground_1g"
+    ],
+    "view": "other",
+    "kind": "calibration or ground clip"
+   },
+   {
+    "words_any": [
+     "engineering_test"
+    ],
+    "view": "other",
+    "kind": "engineering test"
+   },
+   {
+    "words_any": [
+     "igniter_check"
+    ],
+    "view": "other",
+    "kind": "igniter check"
+   },
+   {
+    "words_any": [
+     "loss_of_signal_portion"
+    ],
+    "view": "main",
+    "kind": "portion during loss of signal"
+   },
+   {
+    "words_any": [
+     "ignition_attempt"
+    ],
+    "view": "main",
+    "kind": "ignition attempt"
+   },
+   {
+    "words_any": [
+     "part_of_recording"
+    ],
+    "view": "main",
+    "kind": "part of a recording"
+   },
+   {
+    "investigation": "PSI-25",
+    "words_any": [
+     "shifted_video",
+     "flame_blowoff_clip",
+     "stream_recording"
+    ],
+    "view": "main",
+    "kind": "excerpt or other named clip"
+   },
+   {
+    "investigation": "PSI-25",
+    "name_not_pattern": "BASS_GMT\\d+_SAMPLE_\\d+_TEST",
+    "view": "main",
+    "kind": "excerpt or other named clip"
+   },
+   {
+    "investigation": "PSI-25",
+    "view": "main",
+    "kind": "whole recording"
+   },
+   {
+    "view": "main",
+    "kind": "recording"
+   }
+  ]
+ },
+ "investigations": {
+  "PSI-25": {
+   "name": "BASS-II",
+   "name_label": [
+    {
+     "pattern": "(?i)BASS_GMT_?(?P<gmt_day>\\d+)_SAMPLE_?(?P<sample>\\d+)_TEST[_ -]?(?P<test>[BFMOPT]\\d+[ab]?)",
+     "parts": {
+      "gmt_day": "day of year of the recording (GMT)",
+      "sample": "sample number",
+      "test": "test number: initial of the PI's name, number from the initial matrix, and a or b for a second run of the same sample on the same day"
+     },
+     "written": "BASS_GMT{day}_SAMPLE_{sample}_TEST[_]{test}[_descriptor]"
+    },
+    {
+     "pattern": "(?:^|[-_])(?:Test-)?(?P<test>[BFMOPT]\\d+[ab]?)(?=[-_.]|experiment|$)",
+     "parts": {
+      "test": "test number as above"
+     },
+     "also": {
+      "gmt_day": "GMT(\\d+)"
+     },
+     "written": "{test}-{words} or {words}-GMT{day}-Test-{test}"
+    }
+   ],
+   "folder_label": {
+    "pattern": "/(?P<test>[BFMOPT]\\d+)$",
+    "on": "folder",
+    "parts": {
+     "test": "test number without the run letter"
+    },
+    "ground": "the team's reading of the folder names; the ReadMe speaks of file names only"
+   },
+   "saved_keys": {
+    "name_id": "test",
+    "folder_id": "folder_test",
+    "gmt_day": "gmt_day",
+    "sample": "sample"
+   },
+   "test_id_from_identifier": "BASS2-{test}",
+   "run_letter": "When the name carries the run letter a or b and the folder names the same test without it, the folder names both runs of the sample; the folder is then not a second label for the run, and the link is one_label with the reason printed.",
+   "day_and_sample_check": "The day and sample in the name are compared with the GMT and Sample # columns of the tied row of NASA's BASS-II table (data/psi/experimental_tables/PSI-25_Experimental table_BASS-II.csv). The result was computed by the design job's names step and is taken from the saved listing (identifier check_gmt_sample). A mismatch makes the link labels_disagree; a match adds no label, because in NASA's table 14 pairs of day and sample belong to two tests each.",
+   "ground": [
+    {
+     "file": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
+     "place": "section 'Columns in test matrix', field 'Videos'",
+     "quote": "Videos:   most test videos have the test number (PI initial+ # from test matrix)  In the Misc video folder, there are backup test recordings, recordings of crew operations, etc."
+    },
+    {
+     "file": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
+     "place": "section 'Columns in test matrix', field 'Test number'",
+     "quote": "Test number:   Initial of PI name followed by test number from the initial matrix.   If multiple runs with same sample on same day, a and b are used to designate."
+    }
+   ]
+  },
+  "PSI-10": {
+   "name": "ACME Flame Design",
+   "rule": "acme"
+  },
+  "PSI-159": {
+   "name": "CFI-G",
+   "rule": "acme",
+   "name_unreadable_pattern": "udp_+\\d{4,6}[A-Z]\\d",
+   "name_unreadable_meaning": "When the tie rests on the folder and the name carries a test-point-like code after udp_ that is not a valid test point (for example 211125A2 or 2117A4), the name counts as a label against the folder.",
+   "name_unreadable_ground": "the team's reading of the names"
+  },
+  "PSI-20": {
+   "name": "ACME BRE",
+   "rule": "acme"
+  },
+  "PSI-21": {
+   "name": "ACME CLD Flame",
+   "rule": "acme"
+  },
+  "PSI-22": {
+   "name": "ACME E-FIELD Flames",
+   "rule": "acme"
+  },
+  "PSI-23": {
+   "name": "ACME s-Flame",
+   "rule": "acme"
+  },
+  "PSI-39": {
+   "name": "CFI",
+   "name_label": [
+    {
+     "pattern": "(?i)(?<![A-Za-z0-9])F(\\d{3})([A-E])(\\d{2})",
+     "parts": {
+      "F": "letter F",
+      "ddd": "three digits; digits 2 to 4 of the code equal the day of year in 86 of 87 table rows (team check)",
+      "A-E": "letter",
+      "nn": "number"
+     },
+     "written": "FLEX-{flex}_{date}-{time}_{cir} or vlc-record-{date}-{time}-udp_{cir}[ words]"
+    }
+   ],
+   "folder_label": {
+    "pattern": "(?i)(?<![A-Za-z0-9])F(\\d{3})([A-E])(\\d{2})",
+    "on": "folder",
+    "parts": {
+     "code": "the same CIR test point"
+    }
+   },
+   "saved_keys": {
+    "name_id": "cir_testpoint",
+    "folder_id": "folder_cir"
+   },
+   "upper_case": true,
+   "test_id_from_identifier": null,
+   "lookup": "The CIR test point is looked up in the CIR column of NASA's CFI table; that column is not in tests.csv, so the row found is taken from the saved listing.",
+   "ground": "the team's reading of the names; no ReadMe. The CIR test point was checked against the CIR column of NASA's table.",
+   "day_label": [
+    {
+     "saved_key": "cir_day",
+     "from_labels": [
+      "name_id",
+      "folder_id"
+     ],
+     "take": [
+      1,
+      4
+     ],
+     "compare_only_where_saved": true,
+     "meaning": "digits 2 to 4 of the CIR test point (name, else folder); the saved listing holds it only where the test point itself is not a table row"
+    }
+   ]
+  },
+  "PSI-69": {
+   "name": "FLEX",
+   "name_label": [
+    {
+     "pattern": "(?<![0-9A-Z])(?P<testpoint>\\d{3}[RF]\\d{3})(?![0-9])",
+     "parts": {
+      "testpoint": "FLEX test point as written in the FLEX Identifier column of NASA's table (three digits, R or F, three digits)"
+     },
+     "written": "_ISS_{YYYYMMDD}_{hhmmss} {testpoint} Movie"
+    }
+   ],
+   "folder_label": {
+    "pattern": "(?i)FLEX[- ](\\d{3})(?:_(\\d{2}_\\w{3}_\\d{4})_(\\w+?)_(?P<testpoint>\\w+))?$",
+    "on": "folder_leaf",
+    "parts": {
+     "FLEX nnn": "the folder's FLEX number; never used as a label, because folder numbers do not follow the table's 'FLEX Test #' (team check on 9 folders)",
+     "dd_Mon_yyyy": "a date",
+     "fuel": "the fuel",
+     "testpoint": "the test point"
+    }
+   },
+   "also_read": [
+    {
+     "label": "name_id_2013",
+     "pattern": "(?<![A-Z0-9])[CXNH]\\d{3}[HMR]\\d{2}(?:-?[A-D])?(?![0-9])",
+     "on": "bare name without extension",
+     "parts": "a 2013-2014 FLEX test point: C, X, N or H, three digits, H, M or R, two digits, an optional camera or run letter A to D",
+     "meaning": "read only to show that the name carries an identifier; NASA's FLEX table (2009 to 2011) does not list it, so the video is id_not_in_table",
+     "ground": "the team's reading of the names (the pattern of docs/video_design/prototype/video_names.py)"
+    }
+   ],
+   "saved_keys": {
+    "name_id": "testpoint",
+    "folder_id": "folder_testpoint",
+    "name_id_2013": "testpoint_2013"
+   },
+   "test_id_from_identifier": null,
+   "lookup": "The test point is looked up in the FLEX Identifier column of NASA's FLEX table; that column is not in tests.csv, so the row found is taken from the saved listing. 163 names carry 2013-2014 test points (saved identifier testpoint_2013); NASA's table ends in 2011, so they are id_not_in_table.",
+   "ground": "the team's reading of the names. The design (docs/video_design/design.md section 4) reports that NASA's PSI-69_Raw Data_256R002_Readme.txt names one file of the _ISS_ pattern as the ISS video of test point 256R002; that file was not opened in this build."
+  },
+  "PSI-26": {
+   "name": "BASS",
+   "rule": "day_only",
+   "written": "{YYYYMMDD} {hh.mm.ss} iss0{expedition}m{nn}{ddd}{hhmm}",
+   "day_key": "actual_date",
+   "meaning": "the date in the name is the date on the video; the test day was computed as that date minus one day and looked up in the Date and GMT columns of NASA's BASS table. Day tie only.",
+   "ground": "column names 'Actual Date' and 'Date on videos and images' of NASA's As-Run Test Matrix (PSI-26_Science Documents_As Run_Test Matrix.xlsx), as reported by the design; the meaning of the iss035m code is from memory, not opened. The design asks the data role to replace 'name date minus one day' by a lookup in that column.",
+   "day_label": [
+    {
+     "saved_key": "date_on_video",
+     "on": "stem",
+     "anchored": true,
+     "pattern": "^(\\d{4})(\\d{2})(\\d{2})[ .](\\d{2})[.](\\d{2})[. ](\\d{2})",
+     "value": "{1}-{2}-{3}",
+     "meaning": "the date in the file name"
+    },
+    {
+     "saved_key": "actual_date",
+     "on": "stem",
+     "anchored": true,
+     "pattern": "^(\\d{4})(\\d{2})(\\d{2})[ .](\\d{2})[.](\\d{2})[. ](\\d{2})",
+     "value": "{1}-{2}-{3}",
+     "minus_days": 1,
+     "meaning": "the date in the file name minus one day (see 'meaning' above)"
+    }
+   ]
+  },
+  "PSI-101": {
+   "name": "SAME-R",
+   "rule": "day_only",
+   "written": "{n} {material} vlc-record-{date}-{time}-udp_{ip} _{port}-",
+   "day_key": "recording_start",
+   "meaning": "recording date and material, looked up in the Date and Sample Type columns of NASA's table. Day ties only.",
+   "ground": "the team's reading of the names; no document"
+  },
+  "PSI-106": {
+   "name": "SLICE",
+   "rule": "day_only",
+   "written": "DIMSG{n}M_1 or 16 hex digits, in folders UT_ddd_ddd or ..._ddd",
+   "day_key": [
+    "folder_day",
+    "folder_day_range"
+   ],
+   "meaning": "the folder gives a day or a range of days of year. Day ties only.",
+   "ground": "the team's reading of the names; no document",
+   "day_label": [
+    {
+     "saved_key": "folder_day_range",
+     "on": "folder",
+     "pattern": "UT_(\\d{3})_(\\d{3})",
+     "value": "{1}-{2}",
+     "meaning": "a range of days of year in the folder name"
+    },
+    {
+     "saved_key": "folder_day",
+     "on": "folder",
+     "pattern": "_(\\d{3})$",
+     "value": "{1}",
+     "only_if_missing": "folder_day_range",
+     "unless_words": [
+      "ground_1g"
+     ],
+     "meaning": "one day of year at the end of the folder name, not for the ground (1 g) folder"
+    }
+   ]
+  },
+  "PSI-107": {
+   "name": "SPICE",
+   "rule": "day_only",
+   "written": "GMT{day}_{hh.mm}, SPICE_GMT{day}_Ign{n}[a|b], SPICE_GMT{year}_{day}_video",
+   "day_key": "gmt_day",
+   "meaning": "GMT day of year, looked up in the GMT date column of NASA's SPICE table. Day ties only.",
+   "ground": "the team's reading of the names; no document",
+   "day_label": [
+    {
+     "saved_key": "gmt_day",
+     "on": "stem",
+     "anchored": true,
+     "pattern": "^GMT(\\d+)_\\d{2}\\.\\d{2}$",
+     "value": "{1}"
+    },
+    {
+     "saved_key": "gmt_day",
+     "on": "stem",
+     "anchored": true,
+     "pattern": "^SPICE_GMT(\\d+)_Ign\\d+[ab]?$",
+     "value": "{1}"
+    },
+    {
+     "saved_key": "gmt_day",
+     "on": "stem",
+     "anchored": true,
+     "pattern": "^SPICE_GMT\\d{4}_(\\d{3})_video$",
+     "value": "{1}"
+    }
+   ]
+  },
+  "PSI-102": {
+   "name": "SAME",
+   "rule": "day_only",
+   "day_key": null,
+   "meaning": "two outreach clips; no rule",
+   "ground": "the team's reading of the names"
+  }
+ },
+ "acme": {
+  "_for": [
+   "PSI-10",
+   "PSI-159",
+   "PSI-20",
+   "PSI-21",
+   "PSI-22",
+   "PSI-23"
+  ],
+  "testpoint_pattern": "(?<![0-9])(?P<yy>1[7-9]|2[0-2])(?P<ddd>\\d{3}) ?(?P<x>[A-Z])(?P<n>\\d{1,2})(?P<suffix>_\\d)?(?![0-9])",
+  "parts": {
+   "yy": "two-digit year (2017 to 2022)",
+   "ddd": "day of year, 1 to 366",
+   "x": "letter",
+   "n": "test number of that day, one or two digits",
+   "suffix": "optional _n"
+  },
+  "written": "{testpoint}-vlc-record-{date}-{time}-udp_{port} or vlc-record-{date}-{time}-udp_{testpoint}[_suffix]",
+  "name_label": "every test point in the bare name without extension, joined by commas",
+  "folder_label": "the first test point in the last folder name, else in the folder name before it",
+  "saved_keys": {
+   "name_id": "testpoint",
+   "folder_id": "folder_testpoint"
+  },
+  "day_key": "test_day_yyddd",
+  "day_label": [
+   {
+    "saved_key": "test_day_yyddd",
+    "from_labels": [
+     "name_id",
+     "folder_id"
+    ],
+    "take": [
+     0,
+     5
+    ],
+    "meaning": "the first five digits (YYDDD) of the first test point in the name, else in the folder"
+   },
+   {
+    "saved_key": "test_day_yyddd",
+    "on": "stem",
+    "pattern": "(?<![0-9])(1[7-9]|2[0-2])(\\d{3})RAD\\d+[ab]?",
+    "value": "{1}{2}",
+    "meaning": "the day before a radiometer point (YYDDDRADn)"
+   },
+   {
+    "saved_key": "test_day_yyddd",
+    "on": "stem",
+    "pattern": "(?<![0-9])(1[7-9]|2[0-2])(\\d{3})_IgniterCheck",
+    "value": "{1}{2}",
+    "meaning": "the day before _IgniterCheck"
+   },
+   {
+    "saved_key": "test_day_yyddd",
+    "on": "folder",
+    "pattern": "(?<![0-9])(1[7-9]|2[0-2])(\\d{3})(?![0-9])",
+    "value": "{1}{2}",
+    "day_of_year_group": 2,
+    "meaning": "a five-digit YYDDD in the folder path"
+   }
+  ],
+  "test_id_from_identifier": "the test id ends with the test point (PSI-10 and PSI-159 tables have one row per test point; ACME BRE, CLD Flame, E-FIELD and s-Flame tables have one row per test day, so their videos reach a day only)",
+  "ground": "The design (docs/video_design/design.md section 4) reports that the ACME BRE Readme (PSI-20_Science Documents_ACME_BRE_Readme.docx) says test names are formatted YYDDDX#; that is the design's report, not a quotation, and the document was not opened in this build. Applying it to Flame Design (PSI-10) and CFI-G (PSI-159) is the team's reading of the names; the PSI-10 as-run file carries testpointName:19137K1 (design section 4)."
+ },
+ "tie_scopes": {
+  "single_test": "test",
+  "run": "run",
+  "day": "day",
+  "several_days": "several_days",
+  "none": "none"
+ },
+ "identifier_keys_that_name_no_test_or_day": {
+  "keys": [
+   "recording_start",
+   "work_order",
+   "folder_flex_test"
+  ],
+  "meaning": "A video tied to nothing is id_not_in_table when the reading found an identifier of a test or a day that NASA's table does not list; it is none when the only identifiers are these: the start time of a stream recording, a work-order number, or a FLEX folder number (not used as a label, see PSI-69)."
+ },
+ "link_states": {
+  "_ground": "the link states of the adopted design (docs/raw_data_design/design.md section 3.1, link 4) as applied to video in docs/video_design/design.md section 4; the phrases are the design's.",
+  "order_for_best": [
+   "two_labels_agree",
+   "one_label",
+   "labels_disagree"
+  ],
+  "two_labels_agree": {
+   "meaning": "the file name and the PSI folder name the same test",
+   "phrase": "video of this test (file name and PSI folder name the same test)"
+  },
+  "one_label": {
+   "meaning": "only one label names the test",
+   "phrase": "tied by the {label} only",
+   "phrase_run_letter": "tied by the file name only: the folder, the sample and the day name both runs of this sample"
+  },
+  "labels_disagree": {
+   "meaning": "name, folder or table point to different rows; listed, never resolved",
+   "phrase": "tied by {label}; {other} disagrees"
+  },
+  "day_only": {
+   "meaning": "the name reaches a test day, a folder of several days, or the runs of one sample on one day",
+   "phrase": "a video of that test day ({n} tests that day; which one is not known)"
+  },
+  "id_not_in_table": {
+   "meaning": "the name carries an identifier NASA's table does not list",
+   "phrase": "carries an identifier that NASA's table does not list"
+  },
+  "none": {
+   "meaning": "outreach, calibration or engineering clips with no identifier of a test or day",
+   "phrase": "not tied to a test"
+  }
+ },
+ "label_names": {
+  "name_id": "file name",
+  "folder_id": "folder name",
+  "name_gmt_or_sample_vs_table": "the day or sample in the file name against NASA's table",
+  "name_id_unreadable_or_mistyped": "a file name whose test point is not a valid one"
+ },
+ "questions": {
+  "P1": "Flammability limit",
+  "P2": "Ignition",
+  "P3": "Flame spread and growth",
+  "S1": "Extinction conditions",
+  "D1": "Combustion products",
+  "D2": "Smoke"
+ },
+ "demo_scenarios": [
+  "iss",
+  "lunar_habitat"
+ ],
+ "scenario_names": {
+  "iss": "ISS",
+  "lunar_habitat": "lunar habitat"
+ },
+ "placement": {
+  "_ground": "the placement rule of docs/raw_data_design/prototype/chain_proto.py, as used in docs/video_design/prototype/video_final.py",
+  "rules": [
+   {
+    "when": "oxygen out or pressure out",
+    "placement": "outside_by_recorded_value"
+   },
+   {
+    "when": "oxygen in and pressure in",
+    "placement": "inside"
+   },
+   {
+    "when": "oxygen in and pressure not_recorded",
+    "placement": "oxygen_inside_pressure_not_in_table"
+   },
+   {
+    "when": "oxygen not_ambient",
+    "placement": "oxygen_of_oxidizer_stream"
+   },
+   {
+    "when": "otherwise",
+    "placement": "cannot_be_placed_from_table"
+   }
+  ],
+  "shortlist_placements": [
+   "inside",
+   "oxygen_inside_pressure_not_in_table"
+  ]
+ }
+}
