@@ -127,6 +127,9 @@ class States:
                 for k in ("name_pattern", "files_in_listing", "bytes_in_listing"):
                     if e[k] != g[k]:
                         sys.exit(f"{where}: {k} differs from its group")
+                if e.get("link_kind") not in self.meta["link_kind"] or not isinstance(e.get("differs_from_definition"), list) \
+                        or any(c not in self.meta["differs_from_definition"] for c in e["differs_from_definition"]):
+                    sys.exit(f"{where}: link_kind or differs_from_definition not in _meta")
 
     # ------------------------------------------------------------ per cell
     def _cell(self, inv, var):
@@ -148,7 +151,8 @@ class States:
             kinds = list(dict.fromkeys(e["column_is"] for e in entries))
             all_files = all(e["sampling"] != "one file of the group was opened" for e in entries)
             cell["remainder"] = {"state": COL, "column_is": kinds, "entries": entries, "groups": groups,
-                                 "all_files": all_files}
+                                 "all_files": all_files, "differs": self.codes(entries),
+                                 "link_kinds": list(dict.fromkeys(e["link_kind"] for e in entries))}
         elif (inv, var) in self.docs:
             cell["remainder"] = {"state": "documented_only", "documented_by": self.docs[(inv, var)], "groups": []}
         else:
@@ -157,6 +161,11 @@ class States:
                       for u in spec.get("unopened_groups", [])]
             cell["remainder"] = {"state": "not_in_sampled_files", "groups": groups}
         return cell
+
+    def codes(self, entries):
+        """The codes of differs_from_definition of a set of entries, in the order of _meta."""
+        have = {c for e in entries for c in e["differs_from_definition"]}
+        return [c for c in self.meta["differs_from_definition"] if c in have]
 
     def unopened_text(self, inv, groups):
         k = self.kinds.get(inv, {})
@@ -205,6 +214,9 @@ class States:
                     item["bytes"] = sum(g["bytes"] or 0 for g in rem["groups"])
                     if st == "documented_only":
                         item["documented_by"] = rem["documented_by"]
+                    if st == COL:
+                        item["differs_from_definition"] = rem["differs"]
+                        item["link_kind"] = rem["link_kinds"]
                 item["sentence"] = self.sentence(inv, st, rem)
                 items[key] = item
             items[key]["tests"] += 1
@@ -238,7 +250,8 @@ def gap_state_rows(S):
             c = S.cells[(inv, var)]
             base = {"investigation_id": inv, "variable": var, "tests_in_table": c["n"], "tests_mapped": c["N"],
                     "column_is": "", "entries": 0, "file_groups": "", "files": "", "bytes": "",
-                    "headers_as_written": "", "link_to_table_row": "", "sampling": "", "documented_by": ""}
+                    "headers_as_written": "", "link_to_table_row": "", "link_kind": "", "differs_from_definition": "",
+                    "sampling": "", "documented_by": ""}
             if c["no_test_table"]:
                 rows.append({**base, "state": "no_test_table", "tests_in_state": 0})
                 continue
@@ -257,6 +270,7 @@ def gap_state_rows(S):
                 r.update(column_is="+".join(rem["column_is"]), entries=len(es),
                          headers_as_written=" | ".join(e["header_as_written"] for e in es),
                          link_to_table_row=" | ".join(dict.fromkeys(e["link_to_table_row"] for e in es)),
+                         link_kind=" | ".join(rem["link_kinds"]), differs_from_definition=codes_text(rem["differs"]),
                          sampling=" | ".join(dict.fromkeys(e["sampling"] for e in es)))
             if rem["state"] == "documented_only":
                 r["documented_by"] = " | ".join(rem["documented_by"])
@@ -333,7 +347,9 @@ def queue_rows(S, need_tests):
                     kinds = list(dict.fromkeys(e["column_is"] for e in es))
                     rows.append({**base, "file_group": g["group"], "name_pattern": g["name_pattern"],
                                  "kind": "+".join(kinds),
-                                 "retrievable_by_reading": "yes" if any(k in READABLE for k in kinds) else "no",
+                                 "retrievable_by_reading": "yes" if any(qualifies(e) for e in es) else "no",
+                                 "differs_from_definition": codes_text(S.codes(es)),
+                                 "link_kind": " | ".join(dict.fromkeys(e["link_kind"] for e in es)),
                                  "headers_as_written": " | ".join(e["header_as_written"] for e in es),
                                  "files": g["files"], "bytes": "" if g["bytes"] is None else g["bytes"],
                                  "link_to_table_row": " | ".join(dict.fromkeys(e["link_to_table_row"] for e in es)),
@@ -341,13 +357,25 @@ def queue_rows(S, need_tests):
             else:
                 for g in rem["groups"]:
                     rows.append({**base, "file_group": g["group"], "name_pattern": g["name_pattern"],
-                                 "kind": g["kind"], "retrievable_by_reading": "no", "headers_as_written": "",
+                                 "kind": g["kind"], "retrievable_by_reading": "no", "differs_from_definition": "",
+                                 "link_kind": "", "headers_as_written": "",
                                  "files": g["files"], "bytes": g["bytes"], "link_to_table_row": "not evident",
                                  "sampling": "not opened or not readable"})
     rows.sort(key=queue_key)
     for i, r in enumerate(rows, 1):
         r["rank"] = i
     return rows
+
+
+def qualifies(e):
+    """An entry from which a value per test could be read without a choice that
+    no file makes: a sensor series or a value per test, no code of
+    differs_from_definition, and a literal key or label to a table row."""
+    return e["column_is"] in READABLE and not e["differs_from_definition"] and e["link_kind"] == "literal_key_or_label"
+
+
+def codes_text(codes):
+    return ";".join(codes) if codes else "none"
 
 
 def in_scope(t, need):
@@ -395,7 +423,8 @@ def effect(S, raw_values, tests_by_id, scenarios, coverage, factor, need_tests):
                 sc[s["id"]] = {"min_in_range": in_range(lo, rng), "max_in_range": in_range(hi, rng)}
         saffire.append({"test_id": r["test_id"], "investigation_id": r["investigation_id"],
                         "psi_file_id": r["psi_file_id"], "n_readings": int(r["n_readings"]),
-                        "min_as_stored_psia": r["min"], "max_as_stored_psia": r["max"],
+                        "min_as_stored_psia": r["min"], "min_row": int(r["min_row"]),
+                        "max_as_stored_psia": r["max"], "max_row": int(r["max_row"]),
                         "min_kpa": lo, "max_kpa": hi, "pressure_kpa_in_tests_csv": t["pressure_kpa"] or None,
                         "bin_of_min": b_lo, "bin_of_max": b_hi, "same_bin": b_lo == b_hi,
                         "scenario_pressure_ranges": sc,
@@ -408,6 +437,16 @@ def effect(S, raw_values, tests_by_id, scenarios, coverage, factor, need_tests):
     scope_ids = {t["test_id"] for t in scope}
     req_ok = {t["test_id"] for t in scope if all(not S.empty(t.get(v)) for v in d2["conditions_required"])}
     classes = E["same_statistic_classes"]
+    all_headers = {h for hs in classes.values() for h in hs}
+    tied = sorted({r["test_id"] for r in raw_values if r["extraction"] == "same_particle_size_statistics" and r["test_id"]})
+    positive = set()
+    for r in raw_values:
+        if r["extraction"] == "same_particle_size_statistics" and r["test_id"] and r["header_as_written"] in all_headers:
+            try:
+                if float(r["value"]) > 0:
+                    positive.add(r["test_id"])
+            except ValueError:
+                pass
     stats = []
     for name, headers in classes.items():
         values = {}
@@ -421,20 +460,29 @@ def effect(S, raw_values, tests_by_id, scenarios, coverage, factor, need_tests):
             if v != 0:
                 values.setdefault(r["test_id"], set()).add((r["psi_file_id"], r["value"]))
         with_value = sorted(set(values) & scope_ids)
-        files_differ = []
+        files_differ, within_file, by_file = [], [], {}
         for t in with_value:
             per_file = {}
             for fid, val in values[t]:
                 per_file.setdefault(fid, set()).add(val)
+            for fid in per_file:
+                by_file[fid] = by_file.get(fid, 0) + 1
             if len(per_file) > 1 and len({frozenset(v) for v in per_file.values()}) > 1:
                 files_differ.append(t)
+            if any(len(v) > 1 for v in per_file.values()):
+                within_file.append(t)
+        names = {r["psi_file_id"]: r["psi_file_name"] for r in raw_values if r["extraction"] == "same_particle_size_statistics"}
         units = sorted({r["unit_as_written"] or "not written" for r in raw_values
                         if r["extraction"] == "same_particle_size_statistics" and r["header_as_written"] in headers})
         stats.append({"statistic": name, "headers_as_written": headers, "units_as_written": units,
                       "d2_tests_in_scope_of_linked_investigations": len(scope),
                       "tests_with_a_stored_nonzero_value": len(with_value),
                       "of_which_meet_every_required_condition": len(set(with_value) & req_ok),
-                      "tests_whose_files_hold_different_values": len(files_differ)})
+                      "tests_whose_files_hold_different_values": len(files_differ),
+                      "tests_whose_files_hold_different_values_ids": files_differ,
+                      "tests_with_more_than_one_value_in_one_file": len(within_file),
+                      "tests_with_a_value_per_file": [{"psi_file_id": f, "psi_file_name": names[f], "tests": n}
+                                                      for f, n in sorted(by_file.items(), key=lambda x: names[x[0]])]})
     counted_d2 = sum(1 for r in need_tests if r["need_id"] == "D2" and r["objective_link"] == "stated")
     return {"_meta": {"generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
                       "written_by": "pipeline/raw_gaps.py", "rule": E["rule"],
@@ -450,6 +498,9 @@ def effect(S, raw_values, tests_by_id, scenarios, coverage, factor, need_tests):
                                      "d2_counted_tests_now": counted_d2,
                                      "d2_tests_in_scope_of_linked_investigations": len(scope),
                                      "d2_tests_of_linked_investigations_meeting_every_required_condition": len(req_ok),
+                                     "tied_tests": len(tied),
+                                     "tied_tests_without_a_positive_value": sorted(set(tied) - positive),
+                                     "statistic_names": E["statistic_names"], "files_differ": E["files_differ"],
                                      "statistics": stats, "would_the_count_change": E["d2_count"]},
             "not_adopted": E["not_adopted"]}
 
@@ -463,13 +514,14 @@ def main():
     S = States(inputs, tests, text_empty)
 
     gcols = ["investigation_id", "variable", "state", "tests_in_state", "tests_in_table", "tests_mapped", "column_is",
-             "entries", "file_groups", "files", "bytes", "headers_as_written", "link_to_table_row", "sampling", "documented_by"]
+             "entries", "file_groups", "files", "bytes", "headers_as_written", "link_to_table_row", "link_kind",
+             "differs_from_definition", "sampling", "documented_by"]
     write_csv(os.path.join(OUT, "gap_states.csv"), gcols, gap_state_rows(S))
     ncols = ["scenario_id", "need_id", "role", "variable", "state", "column_is", "in_scope_tests", "counted_tests",
              "in_scope_tests_in_state", "counted_tests_in_state", "counted_unmatched_for_lack_of_this_variable"]
     write_csv(os.path.join(OUT, "need_gap_states.csv"), ncols, need_gap_rows(S, scenarios, need_tests, scen_tests))
     qcols = ["rank", "investigation_id", "variable", "state", "file_group", "name_pattern", "kind", "retrievable_by_reading",
-             "headers_as_written", "tests_without_value", "tests_lacking_value", "counted_tests_lacking_value", "needs_counting_them",
+             "differs_from_definition", "link_kind", "headers_as_written", "tests_without_value", "tests_lacking_value", "counted_tests_lacking_value", "needs_counting_them",
              "files", "bytes", "link_to_table_row", "sampling"]
     write_csv(os.path.join(OUT, "retrieval_queue.csv"), qcols, queue_rows(S, need_tests))
 

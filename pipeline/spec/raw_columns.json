@@ -6,7 +6,7 @@
   "opened_note": "read by an AI agent from one sample file; other files of the group were not opened",
   "read_rule": "Every entry was read by an AI agent from one sample file per group; other files of the group were not opened. Archives (.zip) and videos were not downloaded or opened. No value was read into a standard variable: a mapping names a header, never a value.",
   "mapping_by": "AI reading of the header, not confirmed by a document",
-  "mapping_rule": "A header is mapped to a standard variable only when its text names the variable's quantity (unit differences are noted). A column of a different quantity, location or event, or a column with no values in the sampled file, is not a column for the variable: it is listed under 'related_columns_not_mapped' with the reason, and is not counted. Where several statistics exist for one variable, each is listed with its header and the note says they are different statistics. 'column_is' is one of the words of '_meta.column_is', decided from the file and the checker review.",
+  "mapping_rule": "A header is mapped to a standard variable only when its text names the variable's quantity (unit differences are noted). A column of a different quantity, location or event, or a column with no values in the sampled file, is not a column for the variable: it is listed under 'related_columns_not_mapped' with the reason, and is not counted. Where several statistics exist for one variable, each is listed with its header and the note says they are different statistics. 'column_is' is one of the words of '_meta.column_is', decided from the file and the checker review. The header is compared with the meaning of the variable in spec/variables.json, including its moment and volume (second checker review, 2026-11-14): a header of another quantity (a sensor series of CO2 against carbon dioxide added before the test) or another moment that the definition excludes (a final flow against the flow at the start) is not an entry; a header of the quantity that differs in a way listed in _meta.differs_from_definition stays an entry and carries the code.",
   "forms": {
    "time_series_per_file": "a time series in each file; the survey links a file to a test or a sample",
    "one_value_per_row_or_key": "one value per row or per key line",
@@ -1215,7 +1215,7 @@
   "psi69_video_count": "PSI-69: 229 listing rows have a video extension (228 .mp4, 1 .mpg). 46 of them repeat an earlier row with the same file id, and raw_inventory.json counts a repeated row once ('counting_rule'), so the count used here is 183 video files (182 .mp4, 1 .mpg), which is also the number of distinct names.",
   "caution_files": "Headers only were copied from the downloaded files. No value and no other cell text of a downloaded file is in this spec.",
   "counting_rule": "files_in_listing and bytes_in_listing of a group are recounted from data/psi/file_listings/<investigation>.json: every listed file (counted once per file id) whose name matches name_regex, less exclude_ids. Where a group has no name_regex the survey count is kept and bytes_in_listing is null (count_basis says which). files_in_listing_survey keeps a survey count that differs from the recount.",
-  "entry_rule": "An entry is a header, key or label of an opened sample file whose text names the quantity of a standard variable (unit differences noted) and that holds values in the sampled file. A phrase in running text, a caption, an axis title, a picture, a number inside a text cell, a header whose unit or quantity the file does not define (FLOW_NOZZLE_x_SPEED(N/A)), and a column the file itself calls a range requirement or a calibration of another quantity are not entries; they are listed under related_columns_not_mapped with the reason. An entry never gives a value to tests.csv.",
+  "entry_rule": "An entry is a header, key or label of an opened sample file whose text names the quantity of a standard variable (unit differences noted) and that holds values in the sampled file. A phrase in running text, a caption, an axis title, a picture, a number inside a text cell (a column whose cells are text such as '12 w' or '5 and 10' is not an entry), a header whose unit or quantity the file does not define (FLOW_NOZZLE_x_SPEED(N/A)), and a column the file itself calls a range requirement or a calibration of another quantity are not entries; they are listed under related_columns_not_mapped with the reason. An entry never gives a value to tests.csv.",
   "entry_fields": {
    "investigation_id": "PSI investigation",
    "group": "file group id of the investigation",
@@ -1239,7 +1239,9 @@
    "opened": "date",
    "sampling": "how many files of the group were read",
    "note": "what the file says or does not say",
-   "header_found_in_reopened_file": "the header was found again when the file was re-opened"
+   "header_found_in_reopened_file": "the header was found again when the file was re-opened",
+   "differs_from_definition": "list of codes of _meta.differs_from_definition: how the header differs from the meaning of the standard variable in spec/variables.json; empty when no difference was found",
+   "link_kind": "one of _meta.link_kind: the kind of evidence in link_to_table_row"
   },
   "unread_kinds": {
    "scanned_pdf_no_text_layer": "downloaded; the PDF has no text layer (pdftotext returns almost nothing); no OCR was run",
@@ -1270,9 +1272,9 @@
    "arithmetic": "The conversion of the lowest and the highest reading (reading x factor, rounded to 4 decimals) is the only arithmetic. No mean, no value at ignition and no interpolation is computed.",
    "same_bin": "The lowest and the highest reading fall in the same pressure bin. The series does not say which reading is the pressure of the test.",
    "different_bin": "The lowest and the highest reading fall in different pressure bins, so the series does not determine a bin.",
-   "choice": "Which reading would stand for a test (the first, the lowest, the one at ignition) is a choice that no file makes; no column of the workbooks marks ignition.",
+   "choice": "Which reading would stand for a test (the first, the lowest, the one at ignition) is a choice that no file makes; no column of the workbooks states when the flame ignited. The sensor workbooks have igniter channels (for example 'Igniter Current', 'Igniter Voltage', 'Igniter Power Enable'), which were not read.",
    "same_statistic_classes": {
-    "count_or_arithmetic_mean_diameter_m1_m0": [
+    "m1_m0_under_amd_or_cmd_labels": [
      "M1/M0 (micro-m)--AMD",
      "M1/M0 (micro-m)--CMD",
      "AMD",
@@ -1288,7 +1290,39 @@
     ]
    },
    "d2_count": "The count of D2 does not change: no value is adopted, so tests.csv holds no smoke_particle_size_um and D2 keeps no counted test. If one statistic were adopted as smoke_particle_size_um, a D2 test would be counted only where it also meets every required condition (fuel_material, flow_cms, aging_time_s) under a supported link; 'statistics' gives that number per statistic. Headers without a unit (AMD, CMD, Hatch Choate Dg) would also need a unit stated by a document, and the investigators name more than one statistic, so choosing one is part of the decision.",
-   "not_adopted": "Not adopted: a decision of the team's human lead."
+   "not_adopted": "Not adopted: a decision of the team's human lead.",
+   "statistic_names": "The keys of same_statistic_classes are the team's short names for groups of stored headers. The cells say only 'M1/M0 (micro-m)--AMD' or '--CMD'; where both labels exist for one test inside the results workbook the stored values are equal, which is why they are one group; what AMD and CMD stand for is not written in the workbook. 'Hatch Choate Dg' has no unit in any header; sheet 'ICES 2012 Paper data table' holds 0.09 in M5 (Hatch Choate Dg) next to 90 in Q5 ('Geom.Mean Diam. (nm)'), and the workbook does not state the unit. A key is a stored header name, not the quantity smoke_particle_size_um.",
+   "files_differ": "For every test with stored values in both the results workbook and the TEM workbook the values of the same statistic differ: the TEM cells are cached values of external references to a version of the results workbook that is not in PSI ([2]SAME R Results), and its 'Hatch Choate Dg' column O refers to column BM, which in the PSI results workbook is headed 'Hatch Choate Sigma g' (BM2), not 'Hatch Choate Dg' (BN2). A test counts as having a value if one positive value is stored in either file, whether or not the files agree."
+  },
+  "differs_from_definition": {
+   "reading_not_marked": "a sensor series over a logging window; no column of the file marks the reading that the variable's definition names (the start of the test) or that would stand for one test, so a value per test needs a choice that no file makes",
+   "moment_not_as_defined": "the header names the quantity at another moment than the definition (at ignition, where the definition says at the start of the test)",
+   "location_not_stated": "the header stands under a label of another volume (the ISS cabin), and the file does not say that the test volume had this value",
+   "magnitude_not_as_unit_written": "the cells hold numbers whose magnitude does not fit the unit the header writes (fractions under a percent header)",
+   "unit_not_written": "the header and its unit cell give no unit",
+   "one_of_several_statistics": "the file holds several statistics of the quantity under different headers; the variable does not name one, so choosing one is a decision"
+  },
+  "link_kind": {
+   "literal_key_or_label": "a key or a label printed in the opened file, or in its name, equals the value of a column of the experimental table for one row (sample label, test number, identifier); the files of the group that were not opened were not checked",
+   "not_settled": "the tie holds for some opened files and not for others, or the key is not unique in the table",
+   "no_per_test_row": "the experimental table has no per-test row (one row per test day), so no file can be tied to a test row",
+   "not_evident": "the file prints no key that ties it to a row"
+  },
+  "review_2026_11_14_second": {
+   "what": "Second checker review (two independent checkers, model output), each point verified against the sampled files by the data role.",
+   "entries_before": 60,
+   "entries_removed": 6,
+   "entries_after": 54,
+   "removed": [
+    "PSI-98, PSI-99, PSI-100 sample_sensors 'CO2': a sensor series of the CO2 concentration; co2_pct is carbon dioxide added before the test",
+    "PSI-39 cfi_data_summary 'Ignition Power ( W )' and 'Ignition Time ( ms )': text cells in sheet 'Igniter'",
+    "PSI-26 planned_matrix 'Ignition time - seconds': text cells with two numbers; the header does not say igniter on-time"
+   ],
+   "changed": [
+    "PSI-21 tp_settings and PSI-22 voltage_sweep flow_cms: the Ignition keys are the entry, the Final keys are related columns",
+    "PSI-23 as_run: the sample file of the entry is 20155C1.txt, the file that holds the key",
+    "every entry carries differs_from_definition and link_kind"
+   ]
   }
  },
  "investigations": [
@@ -1838,8 +1872,10 @@
      "mapping_by": "AI reading of the header, not confirmed by a document",
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
-     "note": "a value without a formula in each event row of sheet 'EventData'; the file does not say where the value comes from; unit psia; a row can cover several tests",
-     "header_found_in_reopened_file": true
+     "note": "column S of sheet 'EventData': 'Chamber Pressure' (S2), 'Pstart (psia)' (S3), 'FCU_MP_PT28' (S4); a value without a formula in each event row; the numeric cells of the sample range from 0.21 (S116) to 44.2 (S216) psia, so the column holds evacuated and filled states of the chamber as well; the file does not say which row, if any, is the ambient of a test; a row can cover several tests",
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     }
    ],
    "related_columns_not_mapped": [
@@ -2417,8 +2453,10 @@
      "mapping_by": "AI reading of the header, not confirmed by a document",
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
-     "note": "a value without a formula in each event row of sheet 'EventData'; the file does not say where the value comes from; unit psia; a row can cover several tests",
-     "header_found_in_reopened_file": true
+     "note": "column S of sheet 'EventData': 'Chamber Pressure' (S2), 'Pstart (psia)' (S3), 'FCU_MP_PT28' (S4); a value without a formula in each event row; the numeric cells of the sample range from 0.19 (S107) to 45.01 (S184) psia, so the column holds evacuated and filled states of the chamber as well; the file does not say which row, if any, is the ambient of a test; a row can cover several tests",
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     }
    ],
    "related_columns_not_mapped": [
@@ -2930,7 +2968,7 @@
      "sample_file_id": "66eb9295c6ad4bdc12fa0262",
      "sample_bytes": 1644,
      "where": "key line",
-     "header_as_written": "velocityAirFinalMPerSec / velocityMixFinalMPerSec",
+     "header_as_written": "velocityAirIgnitionMPerSec / velocityMixIgnitionMPerSec",
      "header_kind": "key in a text file",
      "unit_as_written": "MPerSec in the key name (m/s)",
      "standard_variable": "flow_cms",
@@ -2941,8 +2979,12 @@
      "mapping_by": "AI reading of the header, not confirmed by a document",
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
-     "note": "unit m/s in the key name",
-     "header_found_in_reopened_file": true
+     "note": "unit m/s in the key name; the file has a flow at ignition and a final flow for air and for the mix (keys ...IgnitionMPerSec and ...FinalMPerSec), and the two can differ in one file (PSI-21 18003A2.txt: velocityAirIgnitionMPerSec 0.2, velocityAirFinalMPerSec 0.4); the file does not say that the flow at ignition is the flow the test starts with",
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "moment_not_as_defined"
+     ],
+     "link_kind": "no_per_test_row"
     },
     {
      "investigation_id": "PSI-21",
@@ -2967,7 +3009,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "unit ms in the key name",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "no_per_test_row"
     },
     {
      "investigation_id": "PSI-21",
@@ -2991,8 +3035,12 @@
      "mapping_by": "AI reading of the header, not confirmed by a document",
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
-     "note": "the survey reports that the chamber calculator names FCU_MP_PT28 as the chamber pressure source; unit psia; 16 files only",
-     "header_found_in_reopened_file": true
+     "note": "the file has pressure columns FCU_MP_PT1 to FCU_MP_PT33 (not all numbers) and FCU_PT16_INDEX_n, all in PSIA, and does not say which one is the chamber; the PSI-21 chamber calculator workbook (group chamber_calculator, 'Final ACME Chamber Calculator - 2021-02-03 to 2021-03-09.xlsx', sheet 'EventData') writes 'Chamber Pressure' (S2), 'Pstart (psia)' (S3) and 'FCU_MP_PT28' (S4) above its start-pressure column, which is why PT28 is the entry; 72 data rows in the sample; 16 files only",
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "reading_not_marked"
+     ],
+     "link_kind": "no_per_test_row"
     }
    ],
    "related_columns_not_mapped": [
@@ -3073,6 +3121,16 @@
      "not_mapped_because": "A timestamp of the step 'Extinction detected' ('***' where the step did not occur), written as a key in a text file. It says at most whether extinction was detected, not how the test ended.",
      "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same file kind as the PSI-10 and PSI-159 TP files the checker re-opened",
      "was_mapped_before_2026_11_14_review": true,
+     "round": 1
+    },
+    {
+     "group": "tp_settings",
+     "header_as_written": "velocityAirFinalMPerSec / velocityMixFinalMPerSec",
+     "for_variable": "flow_cms",
+     "column_is": "setting_or_set_point",
+     "not_mapped_because": "the flow after the change from the ignition value; flow_cms is the imposed flow at the start of the test (variables.json)",
+     "decided_by": "data role re-check of the sampled file on 2026-11-14 after the second checker review (header, cell types and cell positions counted; no value copied)",
+     "was_mapped_before_2026_11_14_second_review": true,
      "round": 1
     }
    ],
@@ -3447,7 +3505,7 @@
      "sample_file_id": "6851e6430eb4c08676004bc2",
      "sample_bytes": 1709,
      "where": "key line",
-     "header_as_written": "velocityMixFinalMPerSec / velocityAirFinalMPerSec",
+     "header_as_written": "velocityAirIgnitionMPerSec / velocityMixIgnitionMPerSec",
      "header_kind": "key in a text file",
      "unit_as_written": "MPerSec in the key name (m/s)",
      "standard_variable": "flow_cms",
@@ -3458,8 +3516,12 @@
      "mapping_by": "AI reading of the header, not confirmed by a document",
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
-     "note": "unit m/s in the key name",
-     "header_found_in_reopened_file": true
+     "note": "unit m/s in the key name; the file has a flow at ignition and a final flow for air and for the mix (keys ...IgnitionMPerSec and ...FinalMPerSec), and the two can differ in one file (PSI-21 18003A2.txt: velocityAirIgnitionMPerSec 0.2, velocityAirFinalMPerSec 0.4); the file does not say that the flow at ignition is the flow the test starts with",
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "moment_not_as_defined"
+     ],
+     "link_kind": "no_per_test_row"
     },
     {
      "investigation_id": "PSI-22",
@@ -3484,7 +3546,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "unit ms in the key name",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "no_per_test_row"
     }
    ],
    "related_columns_not_mapped": [
@@ -3514,6 +3578,16 @@
      "not_mapped_because": "A timestamp of the step 'Extinction detected' ('***' where the step did not occur), written as a key in a text file. It says at most whether extinction was detected, not how the test ended.",
      "decided_by": "team check of the sampled file on 2026-11-14 (header positions, empty cells and formula cells counted; no value copied); same file kind as the PSI-10 and PSI-159 TP files the checker re-opened",
      "was_mapped_before_2026_11_14_review": true,
+     "round": 1
+    },
+    {
+     "group": "voltage_sweep",
+     "header_as_written": "velocityMixFinalMPerSec / velocityAirFinalMPerSec",
+     "for_variable": "flow_cms",
+     "column_is": "setting_or_set_point",
+     "not_mapped_because": "the flow after the change from the ignition value; flow_cms is the imposed flow at the start of the test (variables.json)",
+     "decided_by": "data role re-check of the sampled file on 2026-11-14 after the second checker review (header, cell types and cell positions counted; no value copied)",
+     "was_mapped_before_2026_11_14_second_review": true,
      "round": 1
     }
    ],
@@ -3952,9 +4026,9 @@
      "name_pattern": "as run<test id>.txt and <test id>.txt",
      "files_in_listing": 393,
      "bytes_in_listing": 744651,
-     "sample_file": "PSI-23_Raw Data_as run20155A1.txt",
-     "sample_file_id": "6841ce1b6daf91e274cecbbe",
-     "sample_bytes": 1554,
+     "sample_file": "PSI-23_Raw Data_20155C1.txt",
+     "sample_file_id": "6841ce1d6daf91e274cecbd2",
+     "sample_bytes": 1926,
      "where": "key line",
      "header_as_written": "igniterIgnitionDurationMs",
      "header_kind": "key in a text file",
@@ -3967,8 +4041,10 @@
      "mapping_by": "AI reading of the header, not confirmed by a document",
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
-     "note": "unit ms in the key name; present in 20155C1.txt, absent from as run20155A1.txt",
-     "header_found_in_reopened_file": true
+     "note": "unit ms in the key name; the key is in 20155C1.txt (the second sample of the group) and not in as run20155A1.txt; the group name pattern covers both name forms",
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "no_per_test_row"
     }
    ],
    "related_columns_not_mapped": [
@@ -4249,7 +4325,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "the sheet labels the column 'example of how to estimate flow'; only the first block is filled, a fan calibration dated 2014-04-01; not an imposed flow per test",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     }
    ],
    "related_columns_not_mapped": [
@@ -4635,8 +4713,13 @@
      "mapping_by": "AI reading of the header, not confirmed by a document",
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
-     "note": "under the group label 'ISS environment', which is the cabin; the file does not say that the test volume had the same atmosphere; written as a fraction",
-     "header_found_in_reopened_file": true
+     "note": "under the group label 'ISS environment', which is the cabin; the file does not say that the test volume had the same atmosphere; the header writes '% by volume', and the 123 numeric cells of sheet 'as run matrix' column AA (number format 0.000) range from 0.159 (AA102) to 0.227 (AA58, stored with more digits), magnitudes of a fraction, not of a percent; the file does not state the factor",
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "location_not_stated",
+      "magnitude_not_as_unit_written"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-26",
@@ -4661,32 +4744,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "under the group label 'ISS environment', which is the cabin; the file does not say that the test volume had the same pressure; unit atm",
-     "header_found_in_reopened_file": true
-    },
-    {
-     "investigation_id": "PSI-26",
-     "group": "planned_matrix",
-     "round": 1,
-     "name_pattern": "Planned_Test Matrix.xlsx (Science Documents)",
-     "files_in_listing": 1,
-     "bytes_in_listing": 20976,
-     "sample_file": "PSI-26_Science Documents_Planned_Test Matrix.xlsx",
-     "sample_file_id": "67dafcf8c3501a37c2c60dc7",
-     "sample_bytes": 20976,
-     "where": "header row",
-     "header_as_written": "Ignition time   -  seconds",
-     "header_kind": "column header",
-     "unit_as_written": "seconds",
-     "standard_variable": "ignition_time_s",
-     "column_is": "setting_or_set_point",
-     "has_values": true,
-     "form": "one_value_per_row_or_key",
-     "link_to_table_row": "'Test Point' looks like the table 'Test #' (not checked row by row)",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "opened": "2026-11-14",
-     "sampling": "one file of the group was opened",
-     "note": "planned test points, not runs; the values are written as ranges of seconds, not single numbers; not linked to table rows one by one",
-     "header_found_in_reopened_file": null
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "location_not_stated"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-26",
@@ -4711,7 +4773,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "planned air flow per matrix row of a 2010 plan; not a recorded value and not tied to a flown test",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "not_evident"
     }
    ],
    "related_columns_not_mapped": [
@@ -4887,6 +4951,16 @@
      "group": "r2_talk_2013_fabric",
      "round": 2,
      "decided_by": "second-round survey (model output), re-read on 2026-11-14"
+    },
+    {
+     "group": "planned_matrix",
+     "header_as_written": "Ignition time   -  seconds",
+     "for_variable": "ignition_time_s",
+     "column_is": "setting_or_set_point",
+     "not_mapped_because": "the 53 filled cells under the header are text with two numbers each, not single numbers; the header does not say whether it is the igniter on-time (variables.json) or the time to ignition; planned test points, not runs",
+     "decided_by": "data role re-check of the sampled file on 2026-11-14 after the second checker review (header, cell types and cell positions counted; no value copied)",
+     "was_mapped_before_2026_11_14_second_review": true,
+     "round": 1
     }
    ],
    "unopened_groups": [
@@ -5440,7 +5514,7 @@
      "sample_file": "PSI-39_Science Documents_CFI_DataSummary_Spreadsheet_Jan2021.xlsx",
      "sample_file_id": "683f4b7cda33c6f4c4cec615",
      "sample_bytes": 208743,
-     "where": "sheet 'DATA; Igniter', header row",
+     "where": "sheet 'DATA', header row",
      "header_as_written": "Dext, hot ( mm )",
      "header_kind": "column header",
      "unit_as_written": "mm",
@@ -5453,7 +5527,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "hot-flame extinction diameter only; the cool-flame column is listed under related_columns_not_mapped",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-39",
@@ -5465,7 +5541,7 @@
      "sample_file": "PSI-39_Science Documents_CFI_DataSummary_Spreadsheet_Jan2021.xlsx",
      "sample_file_id": "683f4b7cda33c6f4c4cec615",
      "sample_bytes": 208743,
-     "where": "sheet 'DATA; Igniter', header row",
+     "where": "sheet 'DATA', header row",
      "header_as_written": "HF Burn Time",
      "header_kind": "column header",
      "unit_as_written": "not written",
@@ -5478,57 +5554,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "hot-flame burn time; unit not written",
-     "header_found_in_reopened_file": true
-    },
-    {
-     "investigation_id": "PSI-39",
-     "group": "cfi_data_summary",
-     "round": 1,
-     "name_pattern": "CFI_DataSummary_Spreadsheet_Jan2021.xlsx (Science Documents)",
-     "files_in_listing": 1,
-     "bytes_in_listing": 208743,
-     "sample_file": "PSI-39_Science Documents_CFI_DataSummary_Spreadsheet_Jan2021.xlsx",
-     "sample_file_id": "683f4b7cda33c6f4c4cec615",
-     "sample_bytes": 208743,
-     "where": "sheet 'DATA; Igniter', header row",
-     "header_as_written": "Ignition Power ( W )",
-     "header_kind": "column header",
-     "unit_as_written": "W",
-     "standard_variable": "ignition_power_w",
-     "column_is": "setting_or_set_point",
-     "has_values": true,
-     "form": "one_value_per_row_or_key",
-     "link_to_table_row": "column 'Flex Number'; sheet 'Master Sheet' has the 10 columns of the experimental table (reading.json)",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "opened": "2026-11-14",
-     "sampling": "one file of the group was opened",
-     "note": "sheet 'Igniter'",
-     "header_found_in_reopened_file": true
-    },
-    {
-     "investigation_id": "PSI-39",
-     "group": "cfi_data_summary",
-     "round": 1,
-     "name_pattern": "CFI_DataSummary_Spreadsheet_Jan2021.xlsx (Science Documents)",
-     "files_in_listing": 1,
-     "bytes_in_listing": 208743,
-     "sample_file": "PSI-39_Science Documents_CFI_DataSummary_Spreadsheet_Jan2021.xlsx",
-     "sample_file_id": "683f4b7cda33c6f4c4cec615",
-     "sample_bytes": 208743,
-     "where": "sheet 'DATA; Igniter', header row",
-     "header_as_written": "Ignition Time ( ms )",
-     "header_kind": "column header",
-     "unit_as_written": "ms",
-     "standard_variable": "ignition_time_s",
-     "column_is": "setting_or_set_point",
-     "has_values": true,
-     "form": "one_value_per_row_or_key",
-     "link_to_table_row": "column 'Flex Number'; sheet 'Master Sheet' has the 10 columns of the experimental table (reading.json)",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "opened": "2026-11-14",
-     "sampling": "one file of the group was opened",
-     "note": "sheet 'Igniter'; unit ms",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "unit_not_written"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-39",
@@ -5553,7 +5583,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "the table has oxygen, nitrogen and helium columns and no carbon dioxide column; the value is a mole fraction, not percent",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-39",
@@ -5578,7 +5610,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "a second file with this quantity besides the data summary workbook; whether the two agree was not checked",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-39",
@@ -5603,7 +5637,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "same key as the .txt sheet",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-39",
@@ -5628,7 +5664,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "written as D with the subscript 'ext' in the rtf markup",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-39",
@@ -5653,7 +5691,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "a label with a number in a figure annotation; whether it is measured or set is not written",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-39",
@@ -5678,7 +5718,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "the page also has a label 'Dext, cool' (not mapped)",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     }
    ],
    "related_columns_not_mapped": [
@@ -5726,6 +5768,26 @@
      "group": "r2_mdca_settings",
      "round": 2,
      "decided_by": "second-round survey (model output), re-read on 2026-11-14"
+    },
+    {
+     "group": "cfi_data_summary",
+     "header_as_written": "Ignition Power ( W )",
+     "for_variable": "ignition_power_w",
+     "column_is": "setting_or_set_point",
+     "not_mapped_because": "sheet 'Igniter': the cells under the header are text with the unit written in the cell (for example a number followed by ' w' or ' ms'; 224 and 224 filled cells, 3 'n/a'), not numbers",
+     "decided_by": "data role re-check of the sampled file on 2026-11-14 after the second checker review (header, cell types and cell positions counted; no value copied)",
+     "was_mapped_before_2026_11_14_second_review": true,
+     "round": 1
+    },
+    {
+     "group": "cfi_data_summary",
+     "header_as_written": "Ignition Time ( ms )",
+     "for_variable": "ignition_time_s",
+     "column_is": "setting_or_set_point",
+     "not_mapped_because": "sheet 'Igniter': the cells under the header are text with the unit written in the cell (for example a number followed by ' w' or ' ms'; 224 and 224 filled cells, 3 'n/a'), not numbers",
+     "decided_by": "data role re-check of the sampled file on 2026-11-14 after the second checker review (header, cell types and cell positions counted; no value copied)",
+     "was_mapped_before_2026_11_14_second_review": true,
+     "round": 1
     }
    ],
    "unopened_groups": [
@@ -6753,7 +6815,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "a line of the per-test sheet",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "not_settled"
     },
     {
      "investigation_id": "PSI-69",
@@ -6778,7 +6842,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "under the block 'AMBIENT ENVIRONMENT' of the per-test sheet; unit atm",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "not_settled"
     },
     {
      "investigation_id": "PSI-69",
@@ -6803,7 +6869,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "under the block 'AMBIENT ENVIRONMENT' of the per-test sheet; a fraction",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "not_settled"
     },
     {
      "investigation_id": "PSI-69",
@@ -6828,7 +6896,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "under the block 'AMBIENT ENVIRONMENT' of the per-test sheet; a fraction",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "not_settled"
     },
     {
      "investigation_id": "PSI-69",
@@ -6853,7 +6923,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "under the block 'AMBIENT ENVIRONMENT' of the per-test sheet; a fraction",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "not_settled"
     },
     {
      "investigation_id": "PSI-69",
@@ -6878,7 +6950,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "unit not written; W is assumed from the word 'Wattage'",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "unit_not_written"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-69",
@@ -6903,7 +6979,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "unit ms in the key name",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-69",
@@ -6928,7 +7006,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "the table holds this variable for 197 of 274 tests; the file does not say whether it is the visible flame extinction diameter",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-69",
@@ -6953,7 +7033,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "the table holds this variable for 197 of 274 tests; the file does not say whether it is the visible flame extinction diameter",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-69",
@@ -6978,7 +7060,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "the table holds this variable for 197 of 274 tests; the file does not say whether it is the visible flame extinction diameter",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "not_settled"
     },
     {
      "investigation_id": "PSI-69",
@@ -7003,7 +7087,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "the table holds this variable for 197 of 274 tests; the file does not say whether it is the visible flame extinction diameter",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     }
    ],
    "related_columns_not_mapped": [
@@ -7375,32 +7461,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
-    },
-    {
-     "investigation_id": "PSI-98",
-     "group": "sample_sensors",
-     "round": 1,
-     "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
-     "files_in_listing": 2,
-     "bytes_in_listing": 49959496,
-     "sample_file": "PSI-98_Raw Data_Saffire-I Sample 2 Sensor Data Complete TM graphs.xlsx",
-     "sample_file_id": "683f4a53746db1c87dcebebc",
-     "sample_bytes": 24892655,
-     "where": "sheet 'Calibrated Data', header row",
-     "header_as_written": "CO2",
-     "header_kind": "column header with the unit in the next row",
-     "unit_as_written": "% (unit row)",
-     "standard_variable": "co2_pct",
-     "column_is": "sensor_reading_series",
-     "has_values": true,
-     "form": "time_series_per_file",
-     "link_to_table_row": "sample number in the name equals table 'Sample Number' S1/S2 by label; no shared key column",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "opened": "2026-11-14",
-     "sampling": "one file of the group was opened",
-     "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "reading_not_marked"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-98",
@@ -7425,7 +7490,11 @@
      "opened": "2026-11-14",
      "sampling": "all files of the group: column 'Ambient Pressure' of sheet 'Calibrated Data' was read in full in every file (data/pipeline/raw_values.csv)",
      "note": "sheet 'Calibrated Data'; unit row 'PSIA'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "reading_not_marked"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-98",
@@ -7450,7 +7519,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "unit row 'cm/sec'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "reading_not_marked"
+     ],
+     "link_kind": "literal_key_or_label"
     }
    ],
    "related_columns_not_mapped": [
@@ -7498,6 +7571,34 @@
      "not_mapped_because": "The first or last row of a whole time series. The file does not say that this row is the state before or after the burn; taking it would be a team computation on the series.",
      "decided_by": "checker re-opening of 2026-11-14 (model output)",
      "was_mapped_before_2026_11_14_review": true,
+     "round": 1
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "CO2",
+     "for_variable": "co2_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "a sensor series of the CO2 concentration in the module during the logging window; co2_pct is carbon dioxide added to the atmosphere before the test (variables.json), a different quantity",
+     "decided_by": "data role re-check of the sampled file on 2026-11-14 after the second checker review (header, cell types and cell positions counted; no value copied)",
+     "was_mapped_before_2026_11_14_second_review": true,
+     "round": 1
+    },
+    {
+     "group": "telemetry",
+     "header_as_written": "PCM Press (psi)",
+     "for_variable": "pressure_kpa",
+     "column_is": "unclear",
+     "not_mapped_because": "a pressure header of the telemetry workbook ('PCM Press', unit psi); the header lines kept in this spec do not say what PCM is or that it is the ambient pressure of the sample; a possible second pressure series, whose values were not read",
+     "decided_by": "data role re-check of the header lines kept in this spec on 2026-11-14 after the second checker review (no file re-opened, no value read)",
+     "round": 1
+    },
+    {
+     "group": "telemetry",
+     "header_as_written": "PCM Press/Temp (psi/K)",
+     "for_variable": "pressure_kpa",
+     "column_is": "unclear",
+     "not_mapped_because": "a pressure header of the telemetry workbook ('PCM Press', unit psi); the header lines kept in this spec do not say what PCM is or that it is the ambient pressure of the sample; a possible second pressure series, whose values were not read",
+     "decided_by": "data role re-check of the header lines kept in this spec on 2026-11-14 after the second checker review (no file re-opened, no value read)",
      "round": 1
     }
    ],
@@ -7765,32 +7866,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
-    },
-    {
-     "investigation_id": "PSI-99",
-     "group": "sample_sensors",
-     "round": 1,
-     "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
-     "files_in_listing": 9,
-     "bytes_in_listing": 168667527,
-     "sample_file": "PSI-99_Raw Data_Saffire Sensor Data Sample 6.xlsx",
-     "sample_file_id": "6840cdcc4a0e24d624cebd09",
-     "sample_bytes": 12086208,
-     "where": "sheet 'Calibrated Data', header row",
-     "header_as_written": "CO2",
-     "header_kind": "column header with the unit in the next row",
-     "unit_as_written": "% (unit row)",
-     "standard_variable": "co2_pct",
-     "column_is": "sensor_reading_series",
-     "has_values": true,
-     "form": "time_series_per_file",
-     "link_to_table_row": "sample number N in the name; table 'Sample Number' is 2-N (digit position, not identical strings)",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "opened": "2026-11-14",
-     "sampling": "one file of the group was opened",
-     "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "reading_not_marked"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-99",
@@ -7815,7 +7895,11 @@
      "opened": "2026-11-14",
      "sampling": "all files of the group: column 'Ambient Pressure' of sheet 'Calibrated Data' was read in full in every file (data/pipeline/raw_values.csv)",
      "note": "sheet 'Calibrated Data'; unit row 'PSIA'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "reading_not_marked"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-99",
@@ -7840,7 +7924,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "unit row 'cm/sec'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "reading_not_marked"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-99",
@@ -7865,7 +7953,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "pre-flight design values of planned samples; several differ from the table cells, and S8 reads 10 mm where the table cell points to a figure; a plan, not a record of what was burned",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-99",
@@ -7890,7 +7980,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "planned values; the table holds 9 of 9 and the planned S6 and S9 differ from the table cells",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     }
    ],
    "related_columns_not_mapped": [
@@ -7975,6 +8067,16 @@
      "group": "r2_tm_graphs",
      "round": 2,
      "decided_by": "second-round survey (model output), re-read on 2026-11-14"
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "CO2",
+     "for_variable": "co2_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "a sensor series of the CO2 concentration in the module during the logging window; co2_pct is carbon dioxide added to the atmosphere before the test (variables.json), a different quantity",
+     "decided_by": "data role re-check of the sampled file on 2026-11-14 after the second checker review (header, cell types and cell positions counted; no value copied)",
+     "was_mapped_before_2026_11_14_second_review": true,
+     "round": 1
     }
    ],
    "unopened_groups": [
@@ -8297,32 +8399,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
-    },
-    {
-     "investigation_id": "PSI-100",
-     "group": "sample_sensors",
-     "round": 1,
-     "name_pattern": "Saffire sensor workbook per sample (sheet Calibrated Data)",
-     "files_in_listing": 2,
-     "bytes_in_listing": 27909445,
-     "sample_file": "PSI-100_Raw Data_Saffire III Sample 2 Sensors.xlsx",
-     "sample_file_id": "6841ac3f8970fb41b9cebb7d",
-     "sample_bytes": 5361279,
-     "where": "sheet 'Calibrated Data', header row",
-     "header_as_written": "CO2",
-     "header_kind": "column header with the unit in the next row",
-     "unit_as_written": "% (unit row)",
-     "standard_variable": "co2_pct",
-     "column_is": "sensor_reading_series",
-     "has_values": true,
-     "form": "time_series_per_file",
-     "link_to_table_row": "'Sample 2' to table 'S2' by reading of the names; no file states it",
-     "mapping_by": "AI reading of the header, not confirmed by a document",
-     "opened": "2026-11-14",
-     "sampling": "one file of the group was opened",
-     "note": "sheet 'Calibrated Data'; unit row '%'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "reading_not_marked"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-100",
@@ -8347,7 +8428,11 @@
      "opened": "2026-11-14",
      "sampling": "all files of the group: column 'Ambient Pressure' of sheet 'Calibrated Data' was read in full in every file (data/pipeline/raw_values.csv)",
      "note": "sheet 'Calibrated Data'; unit row 'PSIA'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "reading_not_marked"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-100",
@@ -8372,7 +8457,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "unit row 'cm/sec'; one file per sample (the survey links a sample to a test)",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "reading_not_marked"
+     ],
+     "link_kind": "literal_key_or_label"
     }
    ],
    "related_columns_not_mapped": [
@@ -8430,6 +8519,52 @@
      "group": "r2_raw_telemetry_csv",
      "round": 2,
      "decided_by": "second-round survey (model output), re-read on 2026-11-14"
+    },
+    {
+     "group": "sample_sensors",
+     "header_as_written": "CO2",
+     "for_variable": "co2_pct",
+     "column_is": "sensor_reading_series",
+     "not_mapped_because": "a sensor series of the CO2 concentration in the module during the logging window; co2_pct is carbon dioxide added to the atmosphere before the test (variables.json), a different quantity",
+     "decided_by": "data role re-check of the sampled file on 2026-11-14 after the second checker review (header, cell types and cell positions counted; no value copied)",
+     "was_mapped_before_2026_11_14_second_review": true,
+     "round": 1
+    },
+    {
+     "group": "telemetry",
+     "header_as_written": "PCM Press EPS1 (psi)",
+     "for_variable": "pressure_kpa",
+     "column_is": "unclear",
+     "not_mapped_because": "a pressure header of the telemetry workbook ('PCM Press', unit psi); the header lines kept in this spec do not say what PCM is or that it is the ambient pressure of the sample; a possible second pressure series, whose values were not read",
+     "decided_by": "data role re-check of the header lines kept in this spec on 2026-11-14 after the second checker review (no file re-opened, no value read)",
+     "round": 1
+    },
+    {
+     "group": "telemetry",
+     "header_as_written": "PCM Press EPS2 (Psi)",
+     "for_variable": "pressure_kpa",
+     "column_is": "unclear",
+     "not_mapped_because": "a pressure header of the telemetry workbook ('PCM Press', unit psi); the header lines kept in this spec do not say what PCM is or that it is the ambient pressure of the sample; a possible second pressure series, whose values were not read",
+     "decided_by": "data role re-check of the header lines kept in this spec on 2026-11-14 after the second checker review (no file re-opened, no value read)",
+     "round": 1
+    },
+    {
+     "group": "telemetry",
+     "header_as_written": "PCM Press EPS3 (PSI)",
+     "for_variable": "pressure_kpa",
+     "column_is": "unclear",
+     "not_mapped_because": "a pressure header of the telemetry workbook ('PCM Press', unit psi); the header lines kept in this spec do not say what PCM is or that it is the ambient pressure of the sample; a possible second pressure series, whose values were not read",
+     "decided_by": "data role re-check of the header lines kept in this spec on 2026-11-14 after the second checker review (no file re-opened, no value read)",
+     "round": 1
+    },
+    {
+     "group": "telemetry",
+     "header_as_written": "PCM Press/Temp (psi/K)",
+     "for_variable": "pressure_kpa",
+     "column_is": "unclear",
+     "not_mapped_because": "a pressure header of the telemetry workbook ('PCM Press', unit psi); the header lines kept in this spec do not say what PCM is or that it is the ambient pressure of the sample; a possible second pressure series, whose values were not read",
+     "decided_by": "data role re-check of the header lines kept in this spec on 2026-11-14 after the second checker review (no file re-opened, no value read)",
+     "round": 1
     }
    ],
    "unopened_groups": [
@@ -8854,7 +8989,11 @@
      "opened": "2026-11-14",
      "sampling": "all files of the group (one workbook): every cell under the size-statistic headers was read (data/pipeline/raw_values.csv)",
      "note": "sheets 'SAME R Results' and 'Reduced data sheet'; one of three different size statistics in this file, each under its own header; they give different numbers for the same row and are not one variable; the checker found zeros in 23 to 24 rows of each of the three columns on sheet 'Reduced data sheet'; written 'M1/M0 (micro-m)--CMD' on the sheets DBP, Pyrell, Lampwick, Silicone, Teflon and Kapton",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "one_of_several_statistics"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-101",
@@ -8879,7 +9018,11 @@
      "opened": "2026-11-14",
      "sampling": "all files of the group (one workbook): every cell under the size-statistic headers was read (data/pipeline/raw_values.csv)",
      "note": "sheets 'SAME R Results' and 'Reduced data sheet'; one of three different size statistics in this file, each under its own header; they give different numbers for the same row and are not one variable; the checker found zeros in 23 to 24 rows of each of the three columns on sheet 'Reduced data sheet'",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "one_of_several_statistics"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-101",
@@ -8904,7 +9047,12 @@
      "opened": "2026-11-14",
      "sampling": "all files of the group (one workbook): every cell under the size-statistic headers was read (data/pipeline/raw_values.csv)",
      "note": "sheets 'SAME R Results' and 'Reduced data sheet'; one of three different size statistics in this file, each under its own header; they give different numbers for the same row and are not one variable; the checker found zeros in 23 to 24 rows of each of the three columns on sheet 'Reduced data sheet'",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "one_of_several_statistics",
+      "unit_not_written"
+     ],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-101",
@@ -8929,7 +9077,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "planned target values of the pre-flight SAME matrix (the document says the matrix may change); not a measured result and not a record of SAME-R",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "not_evident"
     }
    ],
    "related_columns_not_mapped": [
@@ -9399,7 +9549,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "one value per material and aging state, not per test; one of three statistics of the same table; unit nm, the variable is in micrometre",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "one_of_several_statistics"
+     ],
+     "link_kind": "not_evident"
     },
     {
      "investigation_id": "PSI-102",
@@ -9424,7 +9578,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "one value per material and aging state, not per test; one of three statistics of the same table",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "one_of_several_statistics"
+     ],
+     "link_kind": "not_evident"
     },
     {
      "investigation_id": "PSI-102",
@@ -9449,7 +9607,11 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "one value per material and aging state, not per test; one of three statistics of the same table",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [
+      "one_of_several_statistics"
+     ],
+     "link_kind": "not_evident"
     },
     {
      "investigation_id": "PSI-102",
@@ -9474,7 +9636,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "nominal setting per material; the DBP row holds no number; the setting used in each flight test was not found",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     }
    ],
    "related_columns_not_mapped": [
@@ -10136,7 +10300,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "unit Pa in the next row; the sheet does not say whether the value is a reading or a nominal set point",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-107",
@@ -10161,7 +10327,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "unit cm/s in the next row; it may be computed from the 'Air' display setting, and the sheet does not say how",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     },
     {
      "investigation_id": "PSI-107",
@@ -10186,7 +10354,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "air velocity at probe positions in the duct for fan dial settings from a ground test; not a value of any flight test",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "not_evident"
     }
    ],
    "related_columns_not_mapped": [
@@ -10869,7 +11039,9 @@
      "opened": "2026-11-14",
      "sampling": "one file of the group was opened",
      "note": "unit ms in the key name",
-     "header_found_in_reopened_file": true
+     "header_found_in_reopened_file": true,
+     "differs_from_definition": [],
+     "link_kind": "literal_key_or_label"
     }
    ],
    "related_columns_not_mapped": [

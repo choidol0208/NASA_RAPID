@@ -4660,6 +4660,8 @@ def o_cells(ctx):
                         byg = {e["group"]: e for e in es}
                         r.update(state="column_in_sampled_raw_file",
                                  column_is="+".join(dict.fromkeys(e["column_is"] for e in es)),
+                                 link_kind=" | ".join(dict.fromkeys(e["link_kind"] for e in es)),
+                                 differs=o_codes(ctx, es),
                                  groups=gs, files=sum(byg[g]["files_in_listing"] for g in gs),
                                  bytes=sum(byg[g]["bytes_in_listing"] or 0 for g in gs), entries=len(es),
                                  all_files=all(e["sampling"] != O_ONE_FILE for e in es))
@@ -4673,6 +4675,19 @@ def o_cells(ctx):
                 out[key] = cell
         return out
     return ctx._get("o_cells", load)
+
+
+def o_codes(ctx, entries):
+    """differs_from_definition of a set of entries as the CSV files write it: the codes in the order of
+    _meta.differs_from_definition joined by ';', or 'none'."""
+    order = list(ctx.spec("raw_columns")["_meta"]["differs_from_definition"])
+    have = {c for e in entries for c in e["differs_from_definition"]}
+    return ";".join(c for c in order if c in have) or "none"
+
+
+def o_qualifies(e):
+    return (e["column_is"] in O_READABLE and not e["differs_from_definition"]
+            and e["link_kind"] == "literal_key_or_label")
 
 
 def o_test_state(ctx, test, var):
@@ -4714,8 +4729,11 @@ def check_o1(ctx):
             if w["state"] in ("column_in_sampled_raw_file", "not_in_sampled_files"):
                 if h["file_groups"] != " | ".join(w["groups"]) or (w["groups"] and (int(h["files"]) != w["files"] or int(h["bytes"]) != w["bytes"])):
                     res.fail(problem="file groups, files or bytes differ", pair=key, state=w["state"])
-            if w["state"] == "column_in_sampled_raw_file" and (h["column_is"] != w["column_is"] or int(h["entries"]) != w["entries"]):
-                res.fail(problem="column_is or entries differ", pair=key, file=h["column_is"], expected=w["column_is"])
+            if w["state"] == "column_in_sampled_raw_file" and (h["column_is"] != w["column_is"] or int(h["entries"]) != w["entries"]
+                                                               or h["link_kind"] != w["link_kind"] or h["differs_from_definition"] != w["differs"]):
+                res.fail(problem="column_is, entries, link_kind or differs_from_definition differ", pair=key,
+                         file=(h["column_is"], h["link_kind"], h["differs_from_definition"]),
+                         expected=(w["column_is"], w["link_kind"], w["differs"]))
             if w["state"] == "documented_only" and h["documented_by"] != " | ".join(w["documented_by"]):
                 res.fail(problem="documented_by differs", pair=key)
         if sum(int(h["tests_in_state"]) for h in have) != (want[0]["N"]):
@@ -4787,7 +4805,8 @@ def check_o2(ctx):
        "retrieval_queue.csv: one row per investigation, variable and file group for the variables in state column (one "
        "row per group with an entry) or not_in_sampled_files (one row per unopened group of the spec), only where a test "
        "of an investigation linked as supported to a need that uses the variable lacks the value; the numbers are "
-       "recounted; retrievable_by_reading is yes only for a sensor series or a value per test in a results file; the "
+       "recounted; retrievable_by_reading is yes only where an entry of the group is a sensor series or a value per test "
+       "in a results file, carries no code of differs_from_definition and has link_kind literal_key_or_label; the "
        "rows are sorted by the stated rule and ranked 1..n.")
 def check_o3(ctx):
     res = Result()
@@ -4821,11 +4840,14 @@ def check_o3(ctx):
                 es = [e for e in spec[inv]["entries"] if e["standard_variable"] == var and e["group"] == gid]
                 kinds = list(dict.fromkeys(e["column_is"] for e in es))
                 kind, files, byts = "+".join(kinds), es[0]["files_in_listing"], es[0]["bytes_in_listing"]
-                yes = "yes" if any(k in O_READABLE for k in kinds) else "no"
+                yes = "yes" if any(o_qualifies(e) for e in es) else "no"
+                differs, lk = o_codes(ctx, es), " | ".join(dict.fromkeys(e["link_kind"] for e in es))
             else:
                 u = next(u for u in spec[inv]["unopened_groups"] if u["group"] == gid)
                 kind, files, byts, yes = u["kind"], u["files_in_listing"], u["bytes_in_listing"], "no"
+                differs, lk = "", ""
             want[(inv, var, gid)] = {"state": rem["state"], "kind": kind, "retrievable_by_reading": yes,
+                                     "differs_from_definition": differs, "link_kind": lk,
                                      "tests_without_value": str(len(empty)), "tests_lacking_value": str(len(lack)),
                                      "counted_tests_lacking_value": str(len(cnt)), "files": str(files),
                                      "bytes": "" if byts is None else str(byts)}
@@ -4850,7 +4872,8 @@ def check_o3(ctx):
 @check("O4_raw_values",
        "raw_values.csv: every row names a PSI file id of the listing of its investigation with the listed name and "
        "bytes; a test_id is given only with literal link evidence and exists in tests.csv for the same investigation; "
-       "a series row has n_readings >= 1 and min <= first, last <= max as stored numbers.")
+       "a series row has n_readings >= 1, min <= first, last <= max as stored numbers, and the rows of the lowest and "
+       "the highest reading inside its first and last row.")
 def check_o4(ctx):
     res = Result()
     if not ctx.has("raw_values.csv"):
@@ -4876,6 +4899,11 @@ def check_o4(ctx):
             lo, hi = float(r["min"]), float(r["max"])
             if int(r["n_readings"]) < 1 or not (lo <= float(r["first_value"]) <= hi and lo <= float(r["last_value"]) <= hi):
                 res.fail(problem="series numbers inconsistent", test_id=r["test_id"])
+            first, last = int(r["first_row"]), int(r["last_row"])
+            if not (first <= int(r["min_row"]) <= last and first <= int(r["max_row"]) <= last):
+                res.fail(problem="row of the lowest or highest reading outside the series", test_id=r["test_id"])
+        elif r["min_row"] or r["max_row"]:
+            res.fail(problem="min_row or max_row on a row that is not a series", cell=r["cell_or_range"])
         by[r["extraction"]] = by.get(r["extraction"], 0) + 1
     res.numbers = {"rows": len(rows), "by_extraction": by, "files": len({r["psi_file_id"] for r in rows}),
                    "rows_with_test_id": sum(1 for r in rows if r["test_id"]),
@@ -4887,7 +4915,8 @@ def check_o4(ctx):
        "spec/raw_columns.json: every group with a name_regex has the files and bytes that the regex gives on the saved "
        "listing (less exclude_ids); every sample and entry file id is in the listing with the listed name and bytes; "
        "every entry carries the name pattern, files and bytes of its group, a standard variable of a need, a column_is "
-       "and header_kind of _meta, has_values true, and a link_to_table_row.")
+       "and header_kind of _meta, has_values true, a link_to_table_row, a link_kind of _meta and a list of codes of "
+       "_meta.differs_from_definition.")
 def check_o5(ctx):
     res = Result()
     raw = ctx.spec("raw_columns")
@@ -4929,7 +4958,9 @@ def check_o5(ctx):
                 res.fail(problem="entry sample not as in the listing", **k)
             if e["standard_variable"] not in need_vars or e["column_is"] not in meta["column_is"] \
                     or e["header_kind"] not in meta["header_kinds"] or e["has_values"] is not True \
-                    or not e.get("link_to_table_row") or e.get("mapping_by") != meta["mapping_by"]:
+                    or not e.get("link_to_table_row") or e.get("mapping_by") != meta["mapping_by"] \
+                    or e.get("link_kind") not in meta["link_kind"] or not isinstance(e.get("differs_from_definition"), list) \
+                    or any(c not in meta["differs_from_definition"] for c in e["differs_from_definition"]):
                 res.fail(problem="entry field outside the vocabulary or missing", **k)
     res.checked = groups_n + entries_n
     res.numbers = {"groups_recounted": groups_n, "entries": entries_n,
@@ -4976,7 +5007,8 @@ def check_o7(ctx):
         lo, hi = round(float(r["min"]) * factor, 4), round(float(r["max"]) * factor, 4)
         bl = next((b["id"] for b in bins if in_range(lo, b)), None)
         bh = next((b["id"] for b in bins if in_range(hi, b)), None)
-        if t is None or (t["min_kpa"], t["max_kpa"], t["bin_of_min"], t["bin_of_max"], t["same_bin"]) != (lo, hi, bl, bh, bl == bh):
+        if t is None or (t["min_kpa"], t["max_kpa"], t["bin_of_min"], t["bin_of_max"], t["same_bin"], t["min_row"], t["max_row"]) \
+                != (lo, hi, bl, bh, bl == bh, int(r["min_row"]), int(r["max_row"])):
             res.fail(problem="Saffire conversion or bin differs", test_id=r["test_id"])
             continue
         for sc in ctx.spec("scenarios")["scenarios"]:
@@ -4988,20 +5020,38 @@ def check_o7(ctx):
     scope = {t["test_id"]: t for t in ctx.tests if t["fuel_phase"] in d2["scope"]["fuel_phase"] and t["investigation_id"] in sup}
     req = {i for i, t in scope.items() if all(not o_blank(t.get(v)) for v in d2["conditions_required"])}
     stats = {s["statistic"]: s for s in eff["same_r_particle_size"]["statistics"]}
+    same = [r for r in rows if r["extraction"] == "same_particle_size_statistics"]
+    every = {h for hs in E["same_statistic_classes"].values() for h in hs}
+    tied = {r["test_id"] for r in same if r["test_id"]}
+    pos = set()
+    for r in same:
+        if r["test_id"] and r["header_as_written"] in every:
+            try:
+                if float(r["value"]) > 0:
+                    pos.add(r["test_id"])
+            except ValueError:
+                pass
+    sr = eff["same_r_particle_size"]
+    if (sr.get("tied_tests"), sr.get("tied_tests_without_a_positive_value")) != (len(tied), sorted(tied - pos)):
+        res.fail(problem="tied tests or tied tests without a positive value differ")
     for name, headers in E["same_statistic_classes"].items():
         res.checked += 1
-        tid = set()
-        for r in rows:
-            if r["extraction"] == "same_particle_size_statistics" and r["test_id"] in scope and r["header_as_written"] in headers:
+        vals = {}
+        for r in same:
+            if r["test_id"] in scope and r["header_as_written"] in headers:
                 try:
                     if float(r["value"]) != 0:
-                        tid.add(r["test_id"])
+                        vals.setdefault(r["test_id"], {}).setdefault(r["psi_file_id"], set()).add(r["value"])
                 except ValueError:
                     pass
+        tid = set(vals)
+        differ = sorted(t for t, pf in vals.items() if len(pf) > 1 and len({frozenset(v) for v in pf.values()}) > 1)
+        within = sum(1 for pf in vals.values() if any(len(v) > 1 for v in pf.values()))
         s = stats.get(name, {})
-        if (s.get("tests_with_a_stored_nonzero_value"), s.get("of_which_meet_every_required_condition")) != (len(tid), len(tid & req)):
-            res.fail(problem="SAME-R count differs", statistic=name, file=(s.get("tests_with_a_stored_nonzero_value"),
-                     s.get("of_which_meet_every_required_condition")), recount=(len(tid), len(tid & req)))
+        got = (s.get("tests_with_a_stored_nonzero_value"), s.get("of_which_meet_every_required_condition"),
+               s.get("tests_whose_files_hold_different_values_ids"), s.get("tests_with_more_than_one_value_in_one_file"))
+        if got != (len(tid), len(tid & req), differ, within):
+            res.fail(problem="SAME-R count differs", statistic=name, file=got, recount=(len(tid), len(tid & req), differ, within))
     counted_d2 = sum(1 for r in ctx.table("need_tests.csv") if r["need_id"] == "D2" and r["objective_link"] == "stated")
     if eff["same_r_particle_size"]["d2_counted_tests_now"] != counted_d2:
         res.fail(problem="D2 counted tests differ")

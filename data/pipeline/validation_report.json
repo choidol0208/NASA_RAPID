@@ -1564,9 +1564,9 @@
     "rows": 722,
     "rows_by_state": {
      "in_table": 93,
-     "column_in_sampled_raw_file": 30,
+     "column_in_sampled_raw_file": 24,
      "documented_only": 1,
-     "not_in_sampled_files": 250,
+     "not_in_sampled_files": 256,
      "no_test_table": 348
     }
    },
@@ -1592,18 +1592,18 @@
   },
   {
    "id": "O3_retrieval_queue",
-   "verifies": "retrieval_queue.csv: one row per investigation, variable and file group for the variables in state column (one row per group with an entry) or not_in_sampled_files (one row per unopened group of the spec), only where a test of an investigation linked as supported to a need that uses the variable lacks the value; the numbers are recounted; retrievable_by_reading is yes only for a sensor series or a value per test in a results file; the rows are sorted by the stated rule and ranked 1..n.",
+   "verifies": "retrieval_queue.csv: one row per investigation, variable and file group for the variables in state column (one row per group with an entry) or not_in_sampled_files (one row per unopened group of the spec), only where a test of an investigation linked as supported to a need that uses the variable lacks the value; the numbers are recounted; retrievable_by_reading is yes only where an entry of the group is a sensor series or a value per test in a results file, carries no code of differs_from_definition and has link_kind literal_key_or_label; the rows are sorted by the stated rule and ranked 1..n.",
    "status": "PASS",
    "numbers": {
     "rows": 135,
-    "retrievable_by_reading": 14
+    "retrievable_by_reading": 3
    },
    "failures": 0,
    "failing_examples": []
   },
   {
    "id": "O4_raw_values",
-   "verifies": "raw_values.csv: every row names a PSI file id of the listing of its investigation with the listed name and bytes; a test_id is given only with literal link evidence and exists in tests.csv for the same investigation; a series row has n_readings >= 1 and min <= first, last <= max as stored numbers.",
+   "verifies": "raw_values.csv: every row names a PSI file id of the listing of its investigation with the listed name and bytes; a test_id is given only with literal link evidence and exists in tests.csv for the same investigation; a series row has n_readings >= 1, min <= first, last <= max as stored numbers, and the rows of the lowest and the highest reading inside its first and last row.",
    "status": "PASS",
    "numbers": {
     "rows": 9764,
@@ -1620,11 +1620,11 @@
   },
   {
    "id": "O5_raw_columns_spec",
-   "verifies": "spec/raw_columns.json: every group with a name_regex has the files and bytes that the regex gives on the saved listing (less exclude_ids); every sample and entry file id is in the listing with the listed name and bytes; every entry carries the name pattern, files and bytes of its group, a standard variable of a need, a column_is and header_kind of _meta, has_values true, and a link_to_table_row.",
+   "verifies": "spec/raw_columns.json: every group with a name_regex has the files and bytes that the regex gives on the saved listing (less exclude_ids); every sample and entry file id is in the listing with the listed name and bytes; every entry carries the name pattern, files and bytes of its group, a standard variable of a need, a column_is and header_kind of _meta, has_values true, a link_to_table_row, a link_kind of _meta and a list of codes of _meta.differs_from_definition.",
    "status": "PASS",
    "numbers": {
     "groups_recounted": 211,
-    "entries": 60,
+    "entries": 54,
     "entries_round_2": 19
    },
    "failures": 0,
@@ -1648,7 +1648,7 @@
     "saffire_tests": 13,
     "same_bin": 13,
     "same_r": {
-     "count_or_arithmetic_mean_diameter_m1_m0": 105,
+     "m1_m0_under_amd_or_cmd_labels": 105,
      "diameter_of_average_mass": 105,
      "hatch_choate_dg": 99
     },
