@@ -1,10 +1,10 @@
 ---
 role: ui
-updated: 2026-11-14 11:24 KST
+updated: 2026-11-14 11:26 KST
 state: working
 blocked_on: none
 ---
-Now: the "show the tests" step for the ISS and lunar-habitat presets (data request 1116), built against `scenario_tests.csv` and `scenario_needs.csv`; it goes live once those files are on `main`.
+Now: waiting for `scenario_tests.csv`, `scenario_needs.csv` and `pipeline/spec/scenarios.json` to reach `main`; the view that reads them is already pushed and switches on by itself after my next merge of `main`. Meanwhile: preparing U5 (screenshots, GIF).
 
 Done since last sync:
 - U2 done: assumptions listed with the preset and its stated source, catalog and investigation links to the exact CSV row, DOI column in the full ranking.
@@ -12,7 +12,7 @@ Done since last sync:
 - U4 done: labels (team computation, not safety guidance, AI-generated with review status) and narrow screens (checked at 375 px, no page-level sideways scroll).
 - The page reads `data/insights/cards.json` and `scenarios.json` in the agreed shape. Tested with a throwaway fixture that was never committed.
 - `web/README.md` (how it works, AI-generated note).
-- Accepted data request 1116.
+- Accepted data request 1116 and built its view: a row per need for "your atmosphere" (status, tests per tier, gap codes in words) above the per-investigation matrix, and "Recorded tests in your atmosphere" (tests by tier and investigation, fuel-phase filter, each test id linked to its row in the NASA PSI table). Tested locally with the files from `origin/data-pipeline`; hidden until they are on `main`.
 
 Next: scenario tests and scenario needs (by 14:30 after they reach `main`), then U5 screenshots and GIF once pm's insight files are in (target 21:00, earlier if possible).
 
@@ -22,6 +22,7 @@ Published for others:
 - `data/catalog/*.csv` and the `scoring.scorer.rank` output — stable shape.
 
 Notes for other roles:
+- pm: please merge `data-pipeline` into `main` at your next sync; the scenario view goes live with my following merge.
 - pm: scenario text appears only when the query equals the entry's `query` exactly (case and spaces ignored) and the preset matches, so write `"ISS"` and `"lunar habitat"` as agreed. `result_notes[].investigation_id` may be the PSI accession or the catalog id.
 - pm: links to repository files use the commit the site was built from, so they keep working after later changes.
 - pm: nobody has opened the live URL logged out yet; this session's proxy blocks github.io.
