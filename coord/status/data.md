@@ -1,15 +1,16 @@
 ---
 role: data
-updated: 2026-11-14 15:22 KST
+updated: 2026-11-14 15:45 KST
 state: working
 blocked_on: none
 ---
-Now: step B of proposal 1503 (pm: go with changes, confirmed by the human lead 15:14): answer files `data/pipeline/answers/<scenario>__<need>.json` with four rungs (recorded at the condition, recorded near it, published by NASA and the investigators, not known) and a rule-chosen top line; fixed sentences only. Target 17:30. Then the field names go to ui in a request. D5 when `ai/review/review_sheet.csv` lands.
+Now: waiting for `ai/review/review_sheet.csv` (D5, verdicts by 18:15). The three scenario CSVs are frozen from 17:30 as agreed; no change to them is planned. An experiment of the data side's human lead (published relations checked against the tables, and their stated validity ranges checked against a scenario) is being tried on a separate branch `data-lab`; it is not for merging, and a review request follows only if it is good enough.
 
 Done since last sync (details: request 20261114-1442-data-to-all "Counts changed after a literature check"):
 - **Literature check of four open points** (commit `a5a9e87`; 66 documents in `references.json`, quotes verbatim): (1) links between a need and an investigation now rest on a purpose sentence of the investigators or of a NASA project document, with a verdict, and only `supported` links count; (2) pressure is a required condition of P1 and S1 by definition, met by a sentence about the whole table where the table has no pressure, never by a created value; (3) the SAME "weight loss rate" is a planned target value, so D2 has no counted test; (4) oxygen cells with two numbers give the value the investigators name as the initial oxygen, or none; no midpoint.
 - Counted tests now: P1 133, P2 0, P3 2, S1 298, D1 122 (BASS-II, by the investigators' stated purpose), D2 0. Solid fuels at 19 to 23% oxygen: 61 recorded tests (was 62).
-- Checker: 46 of 46 checks pass.
+- Step B of proposal 1503 is done (commit `0508bc6`, checker `bcb628e`): `data/pipeline/answers/<scenario>__<need>.json` (36) and `index.json`; four rungs, fixed sentences, rule-chosen top line. Rebuild after `run.py`: `python3 pipeline/findings.py`, `python3 pipeline/answers.py`. Field names for ui: request 1531 (ui: done).
+- Checker: 59 of 59 checks pass; it now also covers the published findings, the answer files and the raw inventory.
 - Step A of proposal 1503 is on `data-pipeline` (commit `50d0bae`): `data/pipeline/findings.csv` (211 published statements from 180 reference items, tagged by need and by the conditions their own words state) and `findings_by_environment.json` (per scenario and need: at the environment, about one of its conditions, general). Rebuild: `python3 pipeline/findings.py`. Quotes of documents, not results of the pipeline; tagging by an AI reading.
 - Raw-data inventory for pm (request 1449, done): `data/pipeline/raw_inventory.json`, `pipeline/raw_inventory.py`, `scripts/psi_whats_new.py`. 60,866 files, 13.47 TB; kinds decided from file names only.
 - Prose pass (commit `c05f277`): questions, reasons, notes and README say no more than the quoted sources; `needs.json` `_meta.authorship` lists twelve points that are the team's own construction and what the documents back. P2 and S1 questions reworded (S1 now names pressure). `P3.spread_rate` and `P3.burn_length` show the Saffire-II values as recorded outside the stated objective. No count changed.

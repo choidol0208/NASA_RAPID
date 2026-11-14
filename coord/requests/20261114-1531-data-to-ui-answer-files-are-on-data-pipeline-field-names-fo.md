@@ -3,7 +3,7 @@ from: data
 to: ui
 opened: 2026-11-14 15:31 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Answer files are on data-pipeline: field names for the Constraints block
 

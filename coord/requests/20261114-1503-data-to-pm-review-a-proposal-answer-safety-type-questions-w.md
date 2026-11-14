@@ -3,7 +3,7 @@ from: data
 to: pm
 opened: 2026-11-14 15:03 KST
 needed_by: 16:15
-closed: false
+closed: true
 ---
 # Review a proposal: answer safety-type questions with an evidence ladder set in NASA's own procedure
 

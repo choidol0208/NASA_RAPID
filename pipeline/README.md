@@ -179,7 +179,7 @@ Rules:
 
 ## Published findings
 
-`spec/findings.json` and `findings.py` make the items of `references.json` retrievable by environment and by need, so that an answer about an environment can say "not in the PSI tables; a document reports ..." and give the quote and its source. The layer stands beside the engine: `findings.py` does not import `run.py` and is not imported by it, nothing of it enters the counts, tiers, statuses or indicators, and `check.py` does not cover it.
+`spec/findings.json` and `findings.py` make the items of `references.json` retrievable by environment and by need, so that an answer about an environment can say "not in the PSI tables; a document reports ..." and give the quote and its source. The layer stands beside the engine: `findings.py` does not import `run.py` and is not imported by it, nothing of it enters the counts, tiers, statuses or indicators, and `check.py` recomputes its lists and compares every text and quote with `references.json` (checks L1 to L4).
 
 What it is. An entry of `spec/findings.json` points to one reference item, or to one row of an item that states several condition sets (211 entries from 180 items in the current files). An entry adds tags only: the needs the item is about (`P1` to `D2`, or `general`), a kind (`result`, `criterion`, `gap`, `caveat`) and the conditions. The text, quote and place of the item are copied unchanged into the outputs, with the access level of the document, so a statement from a document that was not read in full text is always shown as such. Tagged are the items of type `published_result`, `knowledge_gap` and `limitation` (those left out are listed with the reason under `_meta.left_out`) and those definitions, requirements, criteria, design values and recommendations that state how fire or smoke behaves or what a test requires in a condition.
 
@@ -208,7 +208,7 @@ Limits:
 
 ## Answer files
 
-`answers.py` writes one file per scenario and need to `data/pipeline/answers/`: what is known for this environment and this need, and how well. It is a post-processing step like `facts.py`: it reads the evidence packages, `atmosphere_cells.csv`, `scenario_needs.csv`, `findings.csv`, `findings_by_environment.json` and the specs, imports none of the other scripts, and recomputes no count, status, gap or indicator. Every text and rule is in `spec/answers.json`. `check.py` does not cover it; the checks named below are inside `answers.py` and stop the run.
+`answers.py` writes one file per scenario and need to `data/pipeline/answers/`: what is known for this environment and this need, and how well. It is a post-processing step like `facts.py`: it reads the evidence packages, `atmosphere_cells.csv`, `scenario_needs.csv`, `findings.csv`, `findings_by_environment.json` and the specs, imports none of the other scripts, and recomputes no count, status, gap or indicator. Every text and rule is in `spec/answers.json`. `check.py` recomputes the near cells, the placement of every entry, the top line and the numbers of every sentence (checks M1 to M7); the same checks are also inside `answers.py` and stop the run.
 
 | Part | Content |
 |---|---|
