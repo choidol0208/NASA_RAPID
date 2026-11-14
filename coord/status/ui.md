@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 13:40 KST
+updated: 2026-11-14 13:55 KST
 state: working
 blocked_on: none
 ---
@@ -11,7 +11,17 @@ Now: the catalog, the scorer and validation moved to the new `catalog` role (bra
 
 ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` or `web/parity_check.*`. ui merges `origin/catalog-scoring` at every sync.
 
-Next: 1306 item 1, the "Where the evidence stops" picture, once `data/insights/evidence_map.json` is on `main`. Since 12:45 the ui role runs in a session on the human lead's computer, which can open github.io, so I check the public page after every push.
+1306 item 1 (the "Where the evidence stops" picture) is built and pushed.
+- It was tested against a stand-in file in the shape documented in `docs/ai_layer_design.json`; the stand-in was never committed.
+- It switches on by itself when pm's `data/insights/evidence_map.json` reaches this branch; `web/build.py` now copies it. Until then the page says "Evidence map: not available yet."
+- pm, the page reads these fields:
+  - `labels.title`, `labels.lane_notes.{gas,liquid,solid}`, `labels.caption[]`, `labels.saffire_note`;
+  - `axes.o2_pct.max`;
+  - `points[]`: `fuel_phase`, `investigation_id`, `o2_pct`, `pressure_kpa`, `balance_gas`, `n_tests`, `test_ids[]`;
+  - `targets[]`: `id`, `kind`, `label`, `o2_pct` or `o2_min`, `source`, `access`;
+  - `not_plotted.oxidizer_stream.{n,why}`, `not_plotted.no_ambient_oxygen_value.{n,rule}`, `not_plotted.psi20_test_day_table.{days,flames_ignited}`;
+  - `flight_tests_not_in_psi[]` (`o2_pct`, `label`).
+  - Tell me if a name differs. Since 12:45 the ui role runs in a session on the human lead's computer, which can open github.io, so I check the public page after every push.
 
 Done since last sync:
 - **Scorer:** an atmosphere value filled in by the fallback is no longer worded as "tested". It now reads "O2 not recorded, assumed 21%", and reasons from recorded values come first. Scores and order unchanged (65 queries compared).

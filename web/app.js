@@ -692,6 +692,131 @@ function renderCoverage(out, pipe) {
     ". Counts: ", link(REPO + FILE, FILE), ", built from ", link(REPO + "data/pipeline/tests.csv", "data/pipeline/tests.csv"), " by the team's pipeline."));
 }
 
+// ------------------------------------------------------------------ evidence map (pm role, data/insights/evidence_map.json)
+// One oxygen axis, three lanes, one dot per group of recorded tests. Every number and label is read
+// from the file; the page only draws it and marks the oxygen value the query was read as.
+const SVGNS = "http://www.w3.org/2000/svg";
+function sv(tag, attrs = {}, ...kids) {
+  const el = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) if (v !== null && v !== undefined && v !== false) el.setAttribute(k, v);
+  for (const kid of kids.flat()) if (kid !== null && kid !== undefined && kid !== false) el.append(typeof kid === "string" ? document.createTextNode(kid) : kid);
+  return el;
+}
+const LANES = [["gas", "Gas flames"], ["liquid", "Fuel droplets"], ["solid", "Solid fuels"]];
+function testHref(id) {
+  const t = testsIndex && testsIndex.get(id);
+  if (t && t.source_file && /^\d+$/.test(t.source_row)) return `${REPO}data/psi/experimental_tables/${encodeURIComponent(t.source_file)}?plain=1#L${t.source_row}`;
+  if (t) return `${REPO}data/pipeline/tests.csv?plain=1#L${t._line}`;
+  return `${REPO}data/pipeline/tests.csv`;
+}
+const targetO2 = (t) => (typeof t.o2_pct === "number" ? t.o2_pct : typeof t.o2_min === "number" ? t.o2_min : null);
+const BALANCE = { co2_added: "carbon dioxide added", he_added: "helium added", n2_only: "nitrogen balance", not_recorded: "balance gas not recorded" };
+
+async function renderEvidenceMap(out, pipe) {
+  const box = $("#stops-map");
+  box.replaceChildren();
+  const em = pipe.evidenceMap;
+  const pts = em && Array.isArray(em.points) ? em.points.filter((p) => typeof p.o2_pct === "number") : [];
+  if (!pts.length) { box.append(h("p", { class: "gap" }, "Evidence map: not available yet.")); return; }
+  try { await loadTestsIndex(); } catch (e) { /* dot links then point to tests.csv */ }
+  const labels = em.labels || {};
+  const targets = (Array.isArray(em.targets) ? em.targets : []).filter((t) => targetO2(t) !== null);
+  const flights = Array.isArray(em.flight_tests_not_in_psi) ? em.flight_tests_not_in_psi.filter((t) => typeof t.o2_pct === "number") : [];
+  const userO2 = typeof out.scenario.o2_pct === "number" ? out.scenario.o2_pct : null;
+  const axisMax = (em.axes && em.axes.o2_pct && em.axes.o2_pct.max) || 45;
+  const top = Math.max(axisMax, ...pts.map((p) => p.o2_pct), ...targets.map(targetO2), ...flights.map((t) => t.o2_pct), userO2 || 0);
+  const xmax = Math.min(100, Math.ceil(top / 5) * 5 + (top >= axisMax ? 5 : 0));
+  const W = 760, L = 112, R = 20, T = 44, LH = 62, B = 36, H = T + LANES.length * LH + B;
+  const x = (o2) => L + ((W - L - R) * o2) / xmax;
+  const svg = sv("svg", { viewBox: `0 0 ${W} ${H}`, class: "emap", role: "img",
+    "aria-label": `${labels.title || "Evidence map"}: recorded tests by oxygen in three lanes${userO2 !== null ? `, your input at ${userO2}% oxygen` : ""}` });
+  const step = xmax > 50 ? 10 : 5;
+  for (let v = 0; v <= xmax; v += step) {
+    svg.append(sv("line", { x1: x(v), x2: x(v), y1: T, y2: T + LANES.length * LH, class: "emap-grid" }),
+      sv("text", { x: x(v), y: T + LANES.length * LH + 16, class: "emap-tick", "text-anchor": "middle" }, `${v}%`));
+  }
+  svg.append(sv("text", { x: L + (W - L - R) / 2, y: H - 4, class: "emap-axis", "text-anchor": "middle" }, "Oxygen in the surrounding atmosphere, as recorded"));
+  const lanePts = {};
+  LANES.forEach(([id, name], i) => {
+    const y0 = T + i * LH;
+    const mine = pts.filter((p) => p.fuel_phase === id);
+    lanePts[id] = mine;
+    const n = mine.reduce((a, p) => a + (+p.n_tests || 0), 0);
+    svg.append(sv("rect", { x: L, y: y0, width: W - L - R, height: LH, class: i % 2 ? "emap-lane alt" : "emap-lane" }),
+      sv("text", { x: 6, y: y0 + LH / 2 - 2, class: "emap-lane-name" }, name),
+      sv("text", { x: 6, y: y0 + LH / 2 + 14, class: "emap-lane-n" }, `${n} recorded tests`));
+    mine.forEach((p, k) => {
+      const hollow = p.balance_gas === "co2_added" || p.balance_gas === "he_added";
+      const r = Math.min(8, 2.2 + 1.3 * Math.sqrt(+p.n_tests || 1));
+      const cy = y0 + 10 + ((k * 37) % (LH - 20));
+      const tip = `${p.investigation_id}: ${+p.n_tests || 1} test${+p.n_tests === 1 ? "" : "s"} at ${p.o2_pct}% O2, ${p.pressure_kpa === null || p.pressure_kpa === undefined ? "pressure not recorded" : p.pressure_kpa + " kPa"}, ${BALANCE[p.balance_gas] || p.balance_gas || "balance gas not recorded"}`;
+      const first = Array.isArray(p.test_ids) && p.test_ids.length ? p.test_ids[0] : null;
+      svg.append(sv("a", { href: first ? testHref(first) : `https://psi.nasa.gov/physci/repo/data/investigations/${p.investigation_id}`, target: "_blank", rel: "noopener" },
+        sv("circle", { cx: x(p.o2_pct), cy, r, class: hollow ? "emap-dot hollow" : "emap-dot" }, sv("title", {}, tip))));
+    });
+    if (id === "solid" && mine.length) {
+      const hi = Math.max(...mine.map((p) => p.o2_pct));
+      svg.append(sv("line", { x1: x(hi), x2: x(hi), y1: y0 + 4, y2: y0 + LH - 4, class: "emap-end" }),
+        sv("text", { x: x(hi) + 6, y: y0 + LH / 2 + 4, class: "emap-end-label" }, `highest recorded: ${hi}%`));
+    }
+  });
+  targets.forEach((t, i) => {
+    const tx = x(targetO2(t));
+    const onYou = userO2 !== null && Math.abs(targetO2(t) - userO2) < 0.5; // keep the number readable beside the input line
+    svg.append(sv("line", { x1: tx, x2: tx, y1: T - 4, y2: T + LANES.length * LH, class: "emap-target" }),
+      sv("text", { x: onYou ? tx - 8 : tx, y: T - 7, class: "emap-target-n", "text-anchor": onYou ? "end" : "middle" }, String(i + 1)));
+  });
+  flights.forEach((t) => svg.append(sv("rect", { x: x(t.o2_pct) - 4, y: T + 2 * LH + LH - 14, width: 8, height: 8, class: "emap-flight" },
+    sv("title", {}, `${t.label || "NASA flight test"}: ${t.o2_pct}% O2 (published by NASA, not in PSI; not counted)`))));
+  if (userO2 !== null) {
+    const ux = x(Math.min(userO2, xmax));
+    svg.append(sv("line", { x1: ux, x2: ux, y1: 6, y2: T + LANES.length * LH, class: "emap-you" }),
+      sv("text", { x: ux + (ux > W - 150 ? -6 : 6), y: 16, class: "emap-you-label", "text-anchor": ux > W - 150 ? "end" : "start" }, `your input: ${userO2}% O2`));
+  }
+
+  const head = h("p", { class: "emap-title" }, h("b", {}, labels.title || "Where the PSI test tables stop"), " ", computedTag());
+  const counts = h("ul", { class: "emap-counts" });
+  for (const [id, name] of LANES) {
+    const mine = lanePts[id] || [];
+    const total = mine.reduce((a, p) => a + (+p.n_tests || 0), 0);
+    const li = h("li", {}, h("b", {}, `${name}: `));
+    if (userO2 !== null) {
+      const at = mine.filter((p) => p.o2_pct >= userO2);
+      const n = at.reduce((a, p) => a + (+p.n_tests || 0), 0);
+      const byInv = new Map();
+      for (const p of at) { const e = byInv.get(p.investigation_id) || { n: 0, id: null }; e.n += +p.n_tests || 0; e.id = e.id || (p.test_ids || [])[0]; byInv.set(p.investigation_id, e); }
+      li.append(`${n} of ${total} recorded tests at or above ${userO2}% oxygen`,
+        ...(byInv.size ? [" (", ...[...byInv].flatMap(([inv, e], i) => [i ? ", " : "", link(e.id ? testHref(e.id) : `https://psi.nasa.gov/physci/repo/data/investigations/${inv}`, `${inv} ${e.n}`)]), ")"] : []), ".");
+    } else li.append(`${total} recorded tests.`);
+    const note = labels.lane_notes && labels.lane_notes[id];
+    if (note) li.append(" ", h("span", { class: "gap" }, note[0].toUpperCase() + note.slice(1) + "."));
+    counts.append(li);
+  }
+  const marks = targets.length ? h("ol", { class: "emap-targets" }, targets.map((t) =>
+    h("li", {}, t.label || t.id, " ", h("span", { class: "gap" }, `(${String(t.kind || "").replace(/_/g, " ")}; ${t.source || "source not given"}${t.access ? ", " + t.access : ""}). A mark, not a limit.`)))) : null;
+  const np = em.not_plotted || {};
+  const missing = [];
+  if (np.oxidizer_stream && np.oxidizer_stream.n) missing.push(`${np.oxidizer_stream.n} tests whose oxygen value is a burner's oxidizer stream${np.oxidizer_stream.why ? ": " + np.oxidizer_stream.why : ""}`);
+  if (np.no_ambient_oxygen_value && np.no_ambient_oxygen_value.n) missing.push(`${np.no_ambient_oxygen_value.n} tests with no surrounding-atmosphere oxygen value${np.no_ambient_oxygen_value.rule ? ": " + np.no_ambient_oxygen_value.rule : ""}`);
+  if (np.psi20_test_day_table && np.psi20_test_day_table.days) missing.push(`ACME-BRE (PSI-20): a test-day table (${np.psi20_test_day_table.days} days${np.psi20_test_day_table.flames_ignited ? ", " + np.psi20_test_day_table.flames_ignited + " flames ignited" : ""}), not single tests`);
+  const wrap = h("div", { class: "emap-wrap" }, svg);
+  box.append(...[head,
+    userO2 === null ? h("p", { class: "warn" }, "Your input has no oxygen value, so it is not marked. Add one, for example 30% O2.") : null,
+    wrap,
+    h("p", { class: "gap emap-legend" }, "Filled dot: tests in nitrogen balance or balance not recorded. Hollow dot: carbon dioxide or helium added. Dot size grows with the number of tests. Each dot links to its row in the NASA table.",
+      flights.length ? " Small squares: " + (labels.saffire_note || "published by NASA, not in PSI (checked 14 Nov 2026)") + "; never counted." : ""),
+    counts, marks,
+    missing.length ? h("p", { class: "gap" }, "Not in the picture: ", missing.join("; "), ".") : null,
+    Array.isArray(labels.caption) && labels.caption.length ? h("p", { class: "gap" }, labels.caption.join(" ")) : null,
+    h("p", { class: "gap" }, "Points: ", link(REPO + "data/insights/evidence_map.json", "data/insights/evidence_map.json"), ", built by team code from ",
+      link(REPO + "data/pipeline/tests.csv", "data/pipeline/tests.csv"), ".")].filter(Boolean));
+  // On a narrow screen the picture scrolls inside its box: start with the input's marker in view.
+  if (userO2 !== null && wrap.scrollWidth > wrap.clientWidth) {
+    const frac = x(Math.min(userO2, xmax)) / W;
+    wrap.scrollLeft = Math.max(0, frac * wrap.scrollWidth - wrap.clientWidth / 2);
+  }
+}
+
 function show(id, on) { $(id).hidden = !on; }
 function setStatus(text, kind) {
   const s = $("#status");
@@ -739,6 +864,7 @@ async function main() {
   const [sn, ss, stHead] = await Promise.all([optText("data/scenario_needs.csv"), loadJSON("data/scenario_spec.json", null),
     fetch("data/scenario_tests.csv", { method: "HEAD" }).then((r) => r.ok).catch(() => false)]);
   pipe.scenarioNeeds = sn ? parseRows(sn) : null;
+  pipe.evidenceMap = await loadJSON("data/insights/evidence_map.json", null);
   pipe.scenarioSpec = ss && Array.isArray(ss.scenarios) ? ss : null;
   pipe.hasScenarioTests = Boolean(stHead && pipe.scenarioSpec);
   // line numbers in the CSV files (header is line 1), for links to the exact source row
@@ -772,6 +898,7 @@ async function main() {
     renderNeeds(out, pipe, false);
     renderCoverage(out, pipe);
     renderTests(out, pipe, cat);
+    renderEvidenceMap(out, pipe);
     show("#top", true); show("#all", true); show("#needs", true); show("#stops", true);
   }
 
