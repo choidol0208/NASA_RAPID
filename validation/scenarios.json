@@ -103,6 +103,12 @@
      "why_ko": "'liquid fuel'은 액체로 읽고, 달 기지라서 부분중력 경고가 함께 나와야 한다.",
      "expect": {"status": "ok", "scenario": {"fuel_phase": "liquid"}, "warnings_include": ["partial_gravity"],
                 "top1_in": ["FLEX", "FLEX-2", "CFI"]}},
+    {"id": "F05", "group": "fuel_phase", "query": "inert gas suppression ISS",
+     "why_ko": "소화에 쓰는 불활성 기체는 연료가 아니다. 'gas'라는 단어만으로 연료를 기체로 읽으면 안 된다.",
+     "expect": {"status": "ok", "scenario": {"fuel_phase": null, "concern": "suppression"}}},
+    {"id": "F06", "group": "fuel_phase", "query": "combustion gas detection",
+     "why_ko": "연소 생성 기체의 감지는 감지 질문이다. 연료를 기체로 읽지 않고, 감지 조사(SAME, SAME-R)가 1위여야 한다.",
+     "expect": {"status": "ok", "scenario": {"fuel_phase": null, "concern": "detection"}, "top1_in": ["SAME", "SAME-R"]}},
 
     {"id": "T01", "group": "trap", "query": "spacesuit",
      "why_ko": "우주복 100% 산소는 PSI 주변 대기 시험의 최고치(40%)를 넘는다. 외삽 경고가 반드시 나와야 하고, 가장 높은 산소에서 시험한 조사(ACME-BRE, ACME-CFI-G)가 보여야 한다. 역화염의 산화제 흐름(최대 85%)은 대기가 아니라 비교하지 않는다.",
