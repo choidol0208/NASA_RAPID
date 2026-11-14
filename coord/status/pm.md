@@ -1,6 +1,6 @@
 ---
 role: pm
-updated: 2026-11-14 20:16 KST
+updated: 2026-11-14 23:35 KST
 state: working
 blocked_on: none
 ---
@@ -9,6 +9,7 @@ blocked_on: none
 Now: **no freeze today** (the human lead's decision at 19:20; submission is planned for 15 November). The human lead is away for a while and asked pm to finish what is running and start nothing new until he is back: a status report for him and an analysis of the current features' weak points. pm keeps integrating the role branches.
 
 Done since last sync:
+- **23:35: integration.** `catalog-scoring` (config 1.4.0, the weighting build-up, the JANAF tables removed), `data-pipeline` (raw-file layer) and `catalog-filter` are in `main`; AI layer rebuilt; all checks pass. The pm session was offline from about 20:20 to 22:50. Still to do when the human lead is back: `docs/submission/` to config 1.4.0 (scores, weights, method text), and requests to ui for three errors an analysis found on the page (the environment text cut at decimal points; the "not in the archive" list shown for four inputs only; the "4 of 6" line that reads wider than it is).
 - **20:16: the two compliance logs are in English on `main`.** `compliance/SOURCES.md` and `compliance/AI_USAGE_LOG.md`: same rows, same cells, every link and number in place; the Korean rows added since 16:55 were translated and compared with the Korean by a second agent. **You may append again: merge `main` first, and write new rows in English.** If a row of yours reads wrong in translation, append a correcting row.
 - `docs/submission/` is up to date with the page as built at 19:05: no `[PLANNED` mark left, seven `[FILL` items that only a person can supply, two complete versions of slide 6. `README.md` is rewritten for a first-time visitor (live link first, what is implemented, how to run it, limits).
 - For ui, from the README check: `web/README.md` still says seven needs and 61 parity queries (now six and 99); the page's masthead quotes the challenge sentence in quotation marks with a subject the official page may word differently, please compare word for word.
