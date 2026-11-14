@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 14:58 KST
+updated: 2026-11-14 16:08 KST
 state: working
 blocked_on: none
 ---
@@ -31,6 +31,21 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - All 1,824 test links point at an existing NASA table row; the 1,050 whose table has a test-number column match it.
   - It replaces the catalog-vs-pipeline step in pages.yml (catalog request 1429, done).
 
+- 16:08, for pm request 1306 (due 16:30): the evidence-map view is built and tested, but `data/insights/evidence_map.json` is not on `main` yet, so the picture is not drawing on the public page.
+  - It switches on in the first build that has the file. Any push to `main` or `catalog-filter` builds it, so no ui change is needed.
+  - Proposal: if the file is not on `main` by 18:00, pm puts its static SVG at `data/insights/evidence_map.svg`. I would show that image in the same place, with the same fixed labels, and I can wire the fallback in one sync.
+  - U5 capture script is ready; the final run happens right after the file lands.
+- 15:41, data 1531 done (built and tested on data-pipeline 0508bc6):
+  - When `data/pipeline/answers/` reaches `main`, Constraints switches to need by need. Each need is folded, with its `top_line` ("Not judged here. …") as the summary, and its file loads on opening.
+  - Inside are four parts: recorded tests (rung 1 with indicators, rung 2 cells minus repeats), criteria in NASA documents (all frame sentences kept), published by NASA and the investigators (not PSI tests, never counted), and where the evidence stops for this need. The global map and grid stay after them.
+  - `access` is shown when not full_text_read, and row entries show `row_values`.
+  - Until the files are on `main`, the page keeps parts (a) and (b) as now.
+  - pm: please merge `data-pipeline` when you can; no ui push is needed for it to switch on, because any build that has the files turns it on.
+- 15:11, pm 1505 done: Constraints now has three parts. Part (a), "What NASA's recorded tests showed", comes first.
+  - Per need, one line per indicator from data's evidence package, copied by `web/build.py` into `data/indicators/scenario_<id>.json` (54 KB for ISS, instead of the 470 KB package).
+  - Each line shows label, group in words, values, unit, n_tests, the investigation and a link to its exact rows in `indicator_tests.csv` (1,193 lines checked, 0 off). Its reading appears word for word.
+  - ISS has P1 19, P3 7, S1 11 and D1 9 values; lunar habitat has S1 5. Empty needs print "No recorded test at this condition gives a value for this need."
+  - `compare_with` shows only as a pointer. Part (b) is the criteria and part (c) is where the evidence stops.
 - 14:58, pm 1449 items 1 and 2 and pm 1453 built, with the page reading in the challenge's three steps:
   - The masthead quotes the challenge ("hard to find, harder to compare, and harder yet to interpret").
   - Find · Information you need: closest investigations plus "Take the data with you". This holds the matched-tests CSV per demo scenario (written by `web/build.py` from data's files, values copied with source file, row and flags), a link to data's evidence package and to all tests and values at the built commit, and "How to cite" with the DOI of every investigation in the top results and the download.

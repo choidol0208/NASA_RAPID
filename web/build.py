@@ -98,9 +98,66 @@ def main():
             OPTIONAL_BUILT.append(f"data/export/scenario_{sid}_matched_tests.csv")
             if os.path.exists(os.path.join(ROOT, f"data/pipeline/evidence/scenario_{sid}.json")):
                 OPTIONAL_BUILT.append(f"repo:data/pipeline/evidence/scenario_{sid}.json")  # linked in the repository
-    og = os.path.join(HERE, "media", "02_lunar_top.png")
-    if os.path.exists(og):  # link preview image; retaken with the final page at U5
-        shutil.copy(og, os.path.join(DIST, "og.png"))
+    # Indicators per need for each demo scenario (pm request 1505), copied from data's evidence
+    # packages, with the lines of their tests in data/pipeline/indicator_tests.csv for links.
+    it_path = os.path.join(ROOT, "data/pipeline/indicator_tests.csv")
+    it_lines = {}
+    if os.path.exists(it_path):
+        with open(it_path, encoding="utf-8-sig", newline="") as fh:
+            rd = csv.reader(fh)
+            head = next(rd)
+            ii, gi = head.index("indicator_id"), head.index("group")
+            start = rd.line_num + 1
+            for row in rd:
+                key = (row[ii], row[gi])
+                lo, hi = it_lines.get(key, (start, start))
+                it_lines[key] = (min(lo, start), max(hi, rd.line_num))
+                start = rd.line_num + 1
+    for sid in sorted(DASH_SCENARIOS):
+        pkg = os.path.join(ROOT, f"data/pipeline/evidence/scenario_{sid}.json")
+        if not os.path.exists(pkg):
+            continue
+        needs = json.load(open(pkg, encoding="utf-8-sig")).get("needs", [])
+        pairs = needs.items() if isinstance(needs, dict) else [(b.get("need_id"), b) for b in needs]
+        out = {}
+        for nid, blk in pairs:
+            rows = []
+            for ind in blk.get("indicators") or []:
+                r = dict(ind)
+                span = it_lines.get((ind.get("indicator_id", ""), ind.get("group", "")))
+                if span:
+                    r["tests_lines"] = list(span)
+                rows.append(r)
+            out[nid] = rows
+        os.makedirs(os.path.join(DIST, "data", "indicators"), exist_ok=True)
+        with open(os.path.join(DIST, "data", "indicators", f"scenario_{sid}.json"), "w", encoding="utf-8") as fh:
+            json.dump({"source": f"data/pipeline/evidence/scenario_{sid}.json", "needs": out}, fh, ensure_ascii=False)
+        OPTIONAL_BUILT.append(f"data/indicators/scenario_{sid}.json")
+    # data's answer files (request 1531): one per scenario and need, fixed sentences in four rungs.
+    # Copied unchanged; a small index per scenario carries each need's top line, so the page loads a
+    # need's file only when its section is opened.
+    ans_dir = os.path.join(ROOT, "data/pipeline/answers")
+    if os.path.isdir(ans_dir):
+        os.makedirs(os.path.join(DIST, "data", "answers"), exist_ok=True)
+        for sid in sorted(DASH_SCENARIOS):
+            index = {}
+            for name in sorted(os.listdir(ans_dir)):
+                if not (name.startswith(sid + "__") and name.endswith(".json")):
+                    continue
+                need = name[len(sid) + 2:-5]
+                shutil.copy(os.path.join(ans_dir, name), os.path.join(DIST, "data", "answers", name))
+                doc = json.load(open(os.path.join(ans_dir, name), encoding="utf-8-sig"))
+                index[need] = {"file": f"data/answers/{name}", "top_line": (doc.get("top_line") or {}).get("text", ""),
+                               "source": f"data/pipeline/answers/{name}"}
+            if index:
+                with open(os.path.join(DIST, "data", "answers", f"{sid}_index.json"), "w", encoding="utf-8") as fh:
+                    json.dump(index, fh, ensure_ascii=False)
+                OPTIONAL_BUILT.append(f"data/answers/{sid}_index.json")
+    # Link preview image: web/media/og.png (1200 x 630, written by capture_media.mjs), else the old draft.
+    for og in (os.path.join(HERE, "media", "og.png"), os.path.join(HERE, "media", "02_lunar_top.png")):
+        if os.path.exists(og):
+            shutil.copy(og, os.path.join(DIST, "og.png"))
+            break
     # The commit the site was built from, so links to source files and rows point at
     # exactly the files the page reads (GITHUB_SHA in Actions, git HEAD locally).
     sha = os.environ.get("GITHUB_SHA")
