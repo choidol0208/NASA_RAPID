@@ -239,7 +239,7 @@
         "flow_state": "ventilated",
         "gravity": "lunar"
       },
-      "source": "Challenge text: lunar bases and pressurized rovers at >=30% O2 and <=10.2 psi (70.3 kPa). Ventilation assumed."
+      "source": "Challenge statement (Flame in Freefall, 'Spacesuits and oxygen concentration'): Moon Base and pressurized-rover atmosphere likely at 30% O2 or more and 10.2 psi (70.3 kPa) or less. Ventilation assumed."
     },
     "mars_habitat": {
       "label_en": "Mars habitat",
@@ -270,7 +270,7 @@
         "o2_pct": 100.0,
         "pressure_kpa": 29.6
       },
-      "source": "Challenge text: spacesuits at 4.3 psi (29.6 kPa), 100% O2."
+      "source": "Challenge statement (Flame in Freefall, 'Spacesuits and oxygen concentration'): spacesuits at 100% O2 and 4.3 psi (29.6 kPa)."
     },
     "earth": {
       "label_en": "Earth sea level",
@@ -671,6 +671,17 @@
       },
       {
         "keys": [
+          "droplet",
+          "droplets",
+          "fuel droplet",
+          "액적",
+          "연료 방울"
+        ],
+        "fuel_phase": "liquid",
+        "sample_geometry": "droplet"
+      },
+      {
+        "keys": [
           "fuel leak",
           "liquid fuel",
           "oil",
@@ -741,8 +752,25 @@
       {
         "keys": [
           "gas leak",
+          "gas jet",
+          "gas jets",
+          "jet flame",
+          "jet flames",
+          "gaseous fuel",
+          "gas fuel",
+          "fuel gas",
+          "gas flame",
+          "gas fire",
+          "gas burner",
+          "flammable gas",
           "가스 누출",
-          "가스"
+          "가스 화재",
+          "가스 화염",
+          "가스 불꽃",
+          "가연성 가스",
+          "연료 가스",
+          "기체 연료",
+          "제트 화염"
         ],
         "fuel_class": "gaseous_hydrocarbon",
         "fuel_phase": "gas"
@@ -784,11 +812,11 @@
     "out_of_scope": "Rocket and propellant fire safety is outside the scope of PSI combustion research.",
     "partial_gravity": "PSI has no partial-gravity (lunar or Martian) combustion data. All results here are microgravity tests; they are not bounds for lunar or Martian gravity. NASA names partial-gravity material flammability a major gap (OCHMO-TB-008).",
     "earth_gravity": "PSI results are microgravity tests. Only some investigations report 1g comparisons.",
-    "o2_above_all": "O2 is above the highest O2 tested in microgravity in PSI ({max_o2}% in {max_cfg}, {ref}). Any conclusion is an extrapolation.",
+    "o2_above_all": "O2 is above the highest surrounding-atmosphere O2 tested in microgravity in PSI ({max_o2}% in {max_cfg}). Any conclusion is an extrapolation.",
     "o2_above_result": "User O2 {user}% is above this configuration's tested maximum ({max}%): the real fire may be more severe than tested.",
     "outside_range": "Outside the tested range for: {dims}.",
     "gas_for_solid": "Evidence comes from gaseous-fuel tests; apply to solid materials with caution.",
-    "oxidizer_stream": "O2 range here is the oxidizer stream of an inverse flame, not the surrounding atmosphere.",
+    "oxidizer_stream": "O2 here is the oxidizer stream of an inverse flame, not the surrounding atmosphere, so it is not compared with your O2 (scored as unknown).",
     "not_reported": "Catalog does not report: {dims} (scored as unknown).",
     "ground_analysis": "Ground analysis or modelling that reuses flight data, not a flight experiment.",
     "need_input": "Tell me at least an environment (ISS, lunar habitat, spacesuit) or a material (cotton fabric, PMMA, heptane).",

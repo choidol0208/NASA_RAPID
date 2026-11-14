@@ -143,7 +143,42 @@ td.psi { white-space: nowrap; }
 .mini span { width: 16px; height: 16px; border-radius: 3px; display: inline-block; }
 
 /* needs view */
-.needs, .coverage { margin: 40px 0; }
+.needs, .stops { margin: 40px 0; }
+.stops .gaps, .stops .coverage { margin: 22px 0 0; }
+/* ISS and lunar habitat side by side */
+.compare { margin: 18px 0 22px; }
+.compare-table th, .compare-table td { border-right: 1px solid var(--grid); }
+.compare-table thead th { white-space: normal; vertical-align: bottom; min-width: 92px; font-size: 0.88rem; }
+.compare-table tbody th { white-space: nowrap; background: var(--white); }
+.compare-table tr.is-you th { background: var(--blue-soft); }
+.compare-table td.st a { font: 700 1.25rem var(--display); }
+.compare-go { font-size: 0.85rem; padding: 3px 8px; margin-left: 6px; }
+.compare-caveats { margin: 4px 0 0; padding-left: 18px; font-size: 0.88rem; }
+/* evidence map: no green-to-red, no safe/unsafe colours */
+.emap-title { margin: 0 0 8px; font-size: 1.05rem; }
+.emap-wrap { overflow-x: auto; background: var(--white); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 4px; }
+.emap { display: block; width: 100%; min-width: 620px; height: auto; font-family: var(--body); }
+.emap-lane { fill: #f7f8fa; }
+.emap-lane.alt { fill: #eef1f6; }
+.emap-grid { stroke: #d9dde4; stroke-width: 1; }
+.emap-tick, .emap-lane-n { font-size: 11px; fill: var(--ink-2); }
+.emap-axis { font-size: 12px; fill: var(--ink-2); }
+.emap-lane-name { font-size: 13px; font-weight: 700; fill: var(--ink); }
+.emap-dot { fill: var(--blue); fill-opacity: 0.55; stroke: var(--blue); stroke-width: 0.8; }
+.emap-dot.hollow { fill: var(--white); fill-opacity: 1; stroke-width: 1.4; }
+a:hover .emap-dot, a:focus .emap-dot { stroke: var(--ink); stroke-width: 2; }
+.emap-end { stroke: var(--ink); stroke-width: 2; }
+.emap-end-label { font-size: 11px; font-weight: 700; fill: var(--ink); }
+.emap-target { stroke: var(--amber); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.emap-target-n { font-size: 11px; font-weight: 700; fill: var(--amber); }
+.emap-flight { fill: none; stroke: var(--amber); stroke-width: 1.5; }
+.emap-you { stroke: var(--ink); stroke-width: 2.5; }
+.emap-you-label { font-size: 12px; font-weight: 700; fill: var(--ink); }
+.emap-counts { margin: 10px 0 6px; padding-left: 20px; }
+.emap-counts li { margin: 3px 0; }
+.emap-targets { margin: 6px 0; padding-left: 22px; font-size: 0.92rem; }
+.emap-legend { margin: 6px 0 0; }
+.stops .gaps > h3, .stops .coverage > h3 { font: 700 1.45rem var(--display); margin: 0 0 4px; }
 .intro { margin: 0 0 14px; max-width: 75ch; }
 .needs-table th, .needs-table td { border-right: 1px solid var(--grid); }
 .needs-table thead th { white-space: normal; vertical-align: bottom; min-width: 92px; }
@@ -207,6 +242,7 @@ td.is-target { outline: 3px solid var(--ink); outline-offset: -3px; }
 /* scenario row and tests */
 .needs-table tr.scenario-row th, .needs-table tr.scenario-row td { border-bottom: 3px solid var(--ink); }
 .needs-table tr.scenario-row th small { display: block; font-size: 0.78rem; color: var(--ink-2); white-space: normal; max-width: 220px; }
+.needs-table tr.scenario-row th small.caveat { margin-top: 4px; color: var(--red, #9a2b1f); }
 td.st small.gaps-codes { margin-top: 3px; font-style: italic; }
 .tests { margin: 40px 0; }
 .tests .presets { margin: 0 0 12px; }

@@ -139,6 +139,91 @@ class Ranking(unittest.TestCase):
             self.assertLessEqual(r["score"], 100)
 
 
+class AssumedAtmosphereWording(unittest.TestCase):
+    """A value filled in by the atmosphere fallback was not recorded, so it is never worded as 'tested'."""
+
+    def test_bass_c01_iss_cotton_not_tested(self):
+        out = scorer.rank("ISS cotton fabric")
+        rows = [r for r in out["ranking"] + out["results"] if r["config_id"] == "BASS-C01"]
+        self.assertTrue(rows, "BASS-C01 should be ranked for 'ISS cotton fabric'")
+        for r in rows:
+            self.assertIn("O2", r["assumed_dims"])
+            self.assertNotIn("tested 21%", r["why"])
+            self.assertNotIn("tested 21%", r["main_gap"])
+
+    def test_no_assumed_value_worded_as_tested(self):
+        for q in ("ISS cotton fabric", "lunar habitat", "heptane droplet ISS", "smoke detector on ISS", "ISS"):
+            for r in scorer.rank(q)["ranking"]:
+                text = r["why"] + " " + r["main_gap"]
+                if "O2" in r["assumed_dims"]:
+                    self.assertNotIn("O2 tested", text, (q, r["config_id"]))
+                if "pressure" in r["assumed_dims"]:
+                    self.assertNotIn("pressure tested", text, (q, r["config_id"]))
+
+    def test_recorded_reasons_come_first(self):
+        for r in scorer.rank("ISS cotton fabric")["ranking"]:
+            assumed = {"o2"} if "O2" in r["assumed_dims"] else set()
+            if "pressure" in r["assumed_dims"]:
+                assumed.add("pressure")
+            recorded = [d for d in r["contributions"] if d not in r["unknown_dims"] and d not in assumed]
+            if assumed and len(recorded) >= 2:
+                self.assertNotRegex(r["why"].split(";")[0], r"^(O2|pressure) match", r["config_id"])
+
+
+class OxidizerStream(unittest.TestCase):
+    """The O2 of an inverse flame is its burner stream, not an atmosphere: never matched with the user's O2."""
+
+    def test_stream_o2_is_unknown(self):
+        p = CFG["similarity"]["o2"]
+        self.assertIsNone(scorer.s_o2(21, {"o2_min_pct": "18", "o2_max_pct": "85", "o2_reference": "oxidizer_stream"}, p))
+        self.assertEqual(scorer.s_o2(21, {"o2_min_pct": "18", "o2_max_pct": "85", "o2_reference": "ambient"}, p), 1.0)
+
+    def test_stream_configs_not_matched_on_o2(self):
+        streams = {c["config_id"] for c in CFGS if c["o2_reference"] == "oxidizer_stream"}
+        self.assertTrue(streams)
+        for r in scorer.rank("50% O2")["ranking"]:
+            if r["config_id"] in streams:
+                self.assertIn("o2", r["unknown_dims"])
+                codes = [w["code"] for w in r["warnings"]]
+                self.assertIn("oxidizer_stream", codes)
+                self.assertNotIn("o2_above_result", codes)
+
+    def test_o2_above_all_uses_ambient_maximum(self):
+        ambient_max = max(float(c["o2_max_pct"]) for c in CFGS if c["o2_max_pct"] and c["o2_reference"] != "oxidizer_stream")
+        self.assertEqual(ambient_max, 40.0)
+        w = [x for x in scorer.rank("50% O2")["warnings"] if x["code"] == "o2_above_all"]
+        self.assertEqual(len(w), 1)
+        self.assertIn("40%", w[0]["message"])
+        self.assertFalse([x for x in scorer.rank("39% O2")["warnings"] if x["code"] == "o2_above_all"])
+
+
+class OpenRangeWording(unittest.TestCase):
+    """A range with one recorded end is worded as such: PSI-26 says 'up to 40 cm/s', never 'at 40 cm/s'."""
+
+    def test_fmt_range_ends(self):
+        f = lambda lo, hi: scorer._fmt_range({"a": lo, "b": hi}, "a", "b", " cm/s")
+        self.assertEqual(f("", "40"), "up to 40 cm/s")
+        self.assertEqual(f("5", ""), "at least 5 cm/s")
+        self.assertEqual(f("5", "10"), "5–10 cm/s")
+        self.assertEqual(f("20", "20"), "20 cm/s")
+        self.assertEqual(f("", ""), "not reported")
+
+    def test_bass_flow_up_to_40(self):
+        bass = [c for c in CFGS if c["investigation_id"] == "BASS"]
+        self.assertTrue(bass and all(not c["flow_min_cms"] and c["flow_max_cms"] == "40" for c in bass))
+        shown = 0
+        for q in ("fabric 20 cm/s", "PMMA 10 cm/s ISS", "nitrogen extinguish fabric fire ISS", "ISS cotton fabric"):
+            for r in scorer.rank(q)["ranking"]:
+                if r["investigation_id"] != "BASS":
+                    continue
+                text = r["why"] + " " + r["main_gap"]
+                self.assertNotIn("at 40 cm/s", text, (q, r["config_id"]))
+                shown += "up to 40 cm/s" in text
+        self.assertGreater(shown, 0, "no BASS reason mentions its flow; pick another query")
+        # The range used for similarity is unchanged: 40 cm/s is still a full match at 40.
+        self.assertEqual(scorer._range(bass[0], "flow_min_cms", "flow_max_cms"), (40.0, 40.0))
+
+
 class CatalogIntegrity(unittest.TestCase):
     def test_counts_and_links(self):
         self.assertEqual(len(INV), 24)

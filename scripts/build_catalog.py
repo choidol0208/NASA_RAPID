@@ -70,6 +70,54 @@ def col(rows, j):
     return [r[j] if j < len(r) else "" for r in rows]
 
 
+def unique_rows(rows):
+    """Drop rows that repeat an earlier row cell for cell (same test entered twice).
+    Returns (distinct rows, number dropped). Same rule as the data pipeline."""
+    seen, out = set(), []
+    for r in rows:
+        k = tuple(c.strip() for c in r)
+        if k not in seen:
+            seen.add(k)
+            out.append(r)
+    return out, len(rows) - len(out)
+
+
+BASS2_TUNNEL_MAX_CMS = 40.0  # PSI-25 record, approach: "airflow speeds up to 40 cm/s"
+
+
+def bass2_air(cell):
+    """Air speeds (cm/s) in one BASS-II 'Air display' cell, as the team reads the column:
+    - numbers outside brackets only: bracketed numbers, "max(47)" included, and numbers
+      after "pot"/"pots" are fan or potentiometer readings (the table's own convention);
+    - nothing above the 40 cm/s that the PSI-25 record gives as the tunnel's limit: fan
+      readings (40.5 to 62) also appear in the air column (rows 53, 54, 63, 117)."""
+    s = re.sub(r"\([^)]*\)", " ", cell)
+    s = re.split(r"(?i)\bpots?\b", s)[0]
+    vals = [float(x) for x in re.findall(r"\d+\.?\d*", s)]
+    return [v for v in vals if v <= BASS2_TUNNEL_MAX_CMS]
+
+
+def bass2_family(material):
+    """Sample family of one BASS-II row ('Fuel Sample Material'); one configuration per family."""
+    m = material.lower()
+    if "sibal" in m:
+        return "sibal"
+    if "nomex" in m:
+        return "nomex"
+    if "rod" in m:
+        return "rod"
+    if "spher" in m or "wax" in m or "candle" in m:
+        return "other"
+    if "film" in m or "micron" in m or re.search(r"0\.[1-4] mm", m):
+        return "film"
+    return "slab"
+
+
+# Configuration id -> BASS-II sample family (the fl("B2_<family>", ...) keys in CONFIGS below).
+BASS2_CONFIG_FAMILY = {"BASS-II-C01": "film", "BASS-II-C02": "slab", "BASS-II-C03": "rod",
+                       "BASS-II-C04": "sibal", "BASS-II-C05": "nomex", "BASS-II-C06": "other"}
+
+
 # ----------------------------------------------------------------- computed table facts
 def facts():
     f = {}
@@ -89,8 +137,9 @@ def facts():
         )
     # CFI (PSI-39)
     _, rows = load_table("PSI-39_Experimental table_CFI.csv")
+    rows, cfi_dup = unique_rows(rows)
     patm = [num(re.sub(r"[^\d.]", "", r[4])) for r in rows]
-    f["CFI"] = dict(n=len(rows), p=rng(patm, ATM_KPA, 1),
+    f["CFI"] = dict(n=len(rows), dup=cfi_dup, p=rng(patm, ATM_KPA, 1),
                     o2=rng([num(r[5]) for r in rows], 100, 0),
                     he=rng([num(r[7]) for r in rows], 100, 0))
     # Flame Design (PSI-10)
@@ -118,7 +167,11 @@ def facts():
                       mats=sorted(set(r[0].strip() for r in rows)))
     # SPICE (PSI-107)
     _, rows = load_table("PSI-107_Experimental table_Spice.csv")
-    f["SPICE"] = dict(n=len(rows), fuels=sorted(set(r[3].strip() for r in rows)))
+    rows, spice_dup = unique_rows(rows)
+    air = [num(r[8]) for r in rows if len(r) > 8]
+    f["SPICE"] = dict(n=len(rows), dup=spice_dup, fuels=sorted(set(r[3].strip() for r in rows)),
+                      air=rng([a for a in air if a is not None and a >= 0], 1, 2),
+                      air_negative=sorted(a for a in air if a is not None and a < 0))
     # ACME day tables: sum of "Flames Ignited"
     for key, name, j in (("BRE", "PSI-20_Experimental table_ACME BRE.csv", 6),
                          ("CLD", "PSI-21_Experimental table_CLD Flame.csv", 6),
@@ -128,29 +181,13 @@ def facts():
         f[key] = dict(flames=int(sum(num(r[j]) or 0 for r in rows if j < len(r))))
     # BASS-II (PSI-25): group the 129 tests by sample family
     _, rows = load_table("PSI-25_Experimental table_BASS-II.csv")
-
-    def fam(m):
-        m = m.lower()
-        if "sibal" in m:
-            return "sibal"
-        if "nomex" in m:
-            return "nomex"
-        if "rod" in m:
-            return "rod"
-        if "spher" in m or "wax" in m or "candle" in m:
-            return "other"
-        if "film" in m or "micron" in m or re.search(r"0\.[1-4] mm", m):
-            return "film"
-        return "slab"
-
     groups = {}
     for r in rows:
-        groups.setdefault(fam(r[5]), []).append(r)
+        groups.setdefault(bass2_family(r[5]), []).append(r)
     for g, rs in groups.items():
-        air = [float(x) for r in rs for x in re.findall(r"\d+\.?\d*", r[8])]
-        air = [a for a in air if a <= 40]  # wind tunnel limit stated in the record: 40 cm/s
+        air = [a for r in rs for a in bass2_air(r[8])]
         f[f"B2_{g}"] = dict(n=len(rs), o2=rng([num(r[11]) for r in rs], 1, 1),
-                            air=rng(air, 1, 0), pis=sorted(set(r[0] for r in rs)))
+                            air=rng(air, 1, 1), pis=sorted(set(r[0] for r in rs)))
     # BASS (PSI-26): sample families (table has no flow or O2 columns)
     _, rows = load_table("PSI-26_Experimental table_BASS.csv")
 
@@ -220,7 +257,7 @@ INV = {
     research_focus="ignition; flame_spread; extinction_limit; flammability_boundary", fire_safety_role="prevention",
     fire_scenario_tags="cabin_material", has_1g_comparison="Y",
     key_findings="Hypothesis tested: with adequate ventilation, materials burn as well or better in microgravity than in normal gravity, so the upward 1g test may not be conservative in space. Linked papers report a microgravity flammability boundary for PMMA rods and radiative extinction at low opposed-flow speed.",
-    notes="Wind tunnel flow up to 40 cm/s; O2 lowered below 21% by adding N2. 'Air display' is cm/s (team check of PSI-25 ReadMe)."),
+    notes="Wind tunnel flow up to 40 cm/s (record). The 'Air display' column also holds fan readings above 40 (rows 53, 54, 63, 117, 121), which are not read as air speed; the highest air value is 38.5 (row 72). O2 lowered below 21% by adding N2. 'Air display' is cm/s (team check of PSI-25 ReadMe)."),
  "PSI-26": dict(investigation_id="BASS", project_group="BASS", tier=1,
     objectives="Flammability of practical, thicker solids (SIBAL and Nomex fabric, PMMA slabs and spheres, wax, Ultem) in concurrent and opposed flow up to 40 cm/s, and effectiveness of an inert gas (N2) extinguishing agent.",
     research_focus="flame_spread; suppression; extinction_limit", fire_safety_role="prevention; suppression",
@@ -304,7 +341,7 @@ INV = {
     research_focus="smoke_soot; flame_structure", fire_safety_role="fundamental",
     fire_scenario_tags="gas_leak", has_1g_comparison="Y",
     key_findings="526 flames studied (record); burner diameters 0.41, 0.76, 1.6 mm; coflow 5.4–65 cm/s.",
-    notes="Table has 469 rows; air rate column includes values outside the record's 5.4–65 cm/s range."),
+    notes="Table has 469 rows, 34 of them exact repeats of an earlier row (435 distinct); the air rate column runs 0.66–85.28 cm/s (after 8 negative cells), wider than the record's 5.4–65 cm/s."),
  "PSI-115": dict(investigation_id="SAME-SIM", project_group="SAME", tier=3,
     objectives="Numerical simulation (DNS) of pyrolysis smoke particle growth (dibutyl phthalate) in 1g and microgravity in a SAME-like geometry.",
     research_focus="smoke_soot; detection", fire_safety_role="detection",
@@ -430,7 +467,11 @@ CONFIGS = [
      measured_outputs="video; flame_spread_rate; extinction_condition; gas_species; radiant_flux",
      flammability_boundary_reported="Y", extinction_mechanism="radiative_loss; blowoff",
      key_findings="Linked paper: microgravity flammability boundary for PMMA rods in axial stagnation flow (the 'Goldilocks' zone cited by PSI-62).",
-     test_count_config=F["B2_rod"]["n"], tests_table_ref="PSI-25_Experimental table_BASS-II.csv (Olson, Fernandez-Pello rods)"),
+     test_count_config=F["B2_rod"]["n"], tests_table_ref="PSI-25_Experimental table_BASS-II.csv (Olson, Fernandez-Pello rods)",
+     source_notes="Flow: 'Air display' column (cm/s per the PSI-25 ReadMe), numbers outside brackets; bracketed numbers and numbers after 'pot' are fan or potentiometer readings. "
+                  "Numbers above 40 are left out: the PSI-25 record gives 40 cm/s as the tunnel's limit, and rows 53, 54 and 63 carry fan readings (40.5 to 62) in the air column. "
+                  "Highest air value 38.5 (row 72, 'incr to max 38.5', flow restrictor out), then 28 (row 73) and 26.5 (row 74). "
+                  "The pipeline's flow_cms is each cell's starting flow (highest 20, row 48), so its range is narrower. Classification columns are team judgement."),
  cfg("BASS-II-C04", "PSI-25", "SIBAL cotton-fiberglass fabric strips (1–2 cm wide)",
      fuel_phase="solid", fuel_material="SIBAL (75% cotton, 25% fiberglass)", fuel_class="fabric", melt_behavior="chars", sooting_tendency="medium",
      sample_geometry="flat_sheet", width_mm="10–20", thermal_regime="thin", flame_type="diffusion",
@@ -439,7 +480,11 @@ CONFIGS = [
      atmosphere_basis="table (O2, flow); pressure not reported", gravity_level="microgravity",
      measured_outputs="video; flame_spread_rate; extinction_condition; gas_species; radiant_flux",
      flammability_boundary_reported="Y", test_count_config=F["B2_sibal"]["n"],
-     tests_table_ref="PSI-25_Experimental table_BASS-II.csv (T'ien SIBAL)"),
+     tests_table_ref="PSI-25_Experimental table_BASS-II.csv (T'ien SIBAL)",
+     source_notes="Flow: 'Air display' column read as for BASS-II-C03. Highest air value 29 (row 115, '9 29'). "
+                  "Rows 117 ('6 53') and 121 ('11 max(47)') hold numbers above the record's 40 cm/s limit and are not read as air speed: "
+                  "47 is in brackets, which the table uses for fan readings, and 53 is the size of the fan reading of row 121 (52). Lowest 1 cm/s; row 107 also records '<1'. "
+                  "The pipeline's flow_cms is each cell's starting flow (5 to 11). Classification columns are team judgement."),
  cfg("BASS-II-C05", "PSI-25", "Nomex III fabric",
      fuel_phase="solid", fuel_material="Nomex III", fuel_class="fabric", melt_behavior="chars", sooting_tendency="medium",
      sample_geometry="flat_sheet", thermal_regime="thin", flame_type="diffusion",
@@ -502,7 +547,9 @@ CONFIGS = [
      diluent_max_pct=fl("CFI", "he", 1), atmosphere_basis=B, gravity_level="microgravity", ignition_method="hot_wire",
      measured_outputs="video; burning_rate; extinction_condition; chemiluminescence; radiant_flux",
      flammability_boundary_reported="Y", test_count_config=F["CFI"]["n"],
-     tests_table_ref="PSI-39_Experimental table_CFI.csv"),
+     tests_table_ref="PSI-39_Experimental table_CFI.csv",
+     source_notes=f"Test count: {F['CFI']['n'] + F['CFI']['dup']} table rows less {F['CFI']['dup']} that repeat rows 24 to 31 cell for cell (rows 81 to 88: same Flex number, date, time and CIR id). "
+                  "Values from the PSI table as stated in atmosphere_basis; classification columns are team judgement."),
  cfg("DAFT-C01", "PSI-47", "Aerosol standard (Arizona Road Dust) counted by modified P-Trak and DustTrak",
      fuel_phase="aerosol", fuel_material="Arizona Road Dust (fine)", fuel_class="particulate", flame_type="none",
      flow_config="", atmosphere_basis=N, gravity_level="microgravity",
@@ -624,7 +671,9 @@ CONFIGS = [
      atmosphere_basis="table (air flow); O2 and pressure not reported", gravity_level="microgravity",
      measured_outputs="particle_size; detector_response; mass_loss", flammability_boundary_reported="N",
      key_findings="Conditions: 5–10 cm/s, weight-loss rate 1–2 mg/min, aging 1–20 min (table).",
-     test_count_config=8, tests_table_ref="PSI-102_Experimental table_SAME.csv"),
+     test_count_config=4, tests_table_ref="PSI-102_Experimental table_SAME.csv",
+     source_notes="Test count: rows 2 to 5 (samples 1 to 4, Teflon) record air flow, weight-loss rate and aging time. Rows 6 to 9 (Kapton, silicone rubber, lampwick, dibutyl phthalate) say 'same conditions as 1-4' and record no values, "
+                  "so they are not counted as separate tests (the table had been counted as 8). Classification columns are team judgement."),
  cfg("SLICE-C01", "PSI-106", "Coflow jet diffusion flames (methane, ethane, ethylene; N2-diluted)",
      fuel_phase="gas", fuel_material="methane (20–100% in N2); ethylene (20%, 100%); ethane", fuel_class="gaseous_hydrocarbon",
      sooting_tendency="medium", sample_geometry="jet_burner", flame_type="diffusion",
@@ -634,9 +683,13 @@ CONFIGS = [
  cfg("SPICE-C01", "PSI-107", "Jet diffusion flames in coflow at the smoke point",
      fuel_phase="gas", fuel_material=", ".join(F["SPICE"]["fuels"]), fuel_class="gaseous_hydrocarbon", sooting_tendency="high",
      sample_geometry="jet_burner", thickness_mm="0.41; 0.76; 1.6 (nozzle diameter)", flame_type="diffusion",
-     flow_config="coflow", flow_min_cms=5.4, flow_max_cms=65, atmosphere_basis="record (coflow 5.4–65 cm/s)", gravity_level="microgravity",
+     flow_config="coflow", flow_min_cms=fl("SPICE", "air", 0), flow_max_cms=fl("SPICE", "air", 1),
+     atmosphere_basis="table (air rate); O2 and pressure not reported", gravity_level="microgravity",
      measured_outputs="video; flame_length; smoke_point; radiant_flux", flammability_boundary_reported="N",
-     test_count_config=F["SPICE"]["n"], tests_table_ref="PSI-107_Experimental table_Spice.csv"),
+     test_count_config=F["SPICE"]["n"], tests_table_ref="PSI-107_Experimental table_Spice.csv",
+     source_notes=f"Flow: column 'Air Rate (cm/s)' of the {F['SPICE']['n']} distinct rows, {fl('SPICE', 'air', 0):g} to {fl('SPICE', 'air', 1):g} cm/s; "
+                  f"{len(F['SPICE']['air_negative'])} negative cells ({', '.join(f'{v:g}' for v in sorted(set(F['SPICE']['air_negative'])))}) are left out as unreadable. The record states coflow 5.4 to 65 cm/s. "
+                  f"Test count: {F['SPICE']['n'] + F['SPICE']['dup']} table rows less {F['SPICE']['dup']} that repeat an earlier row cell for cell (for example row 3 = row 2). Classification columns are team judgement."),
  cfg("SAME-SIM-C01", "PSI-115", "DNS of dibutyl phthalate smoke particle growth, 1g vs microgravity",
      fuel_phase="solid", fuel_material="dibutyl phthalate (pyrolysis vapor)", fuel_class="pyrolyzing_solid",
      sample_geometry="heated_sample", flame_type="none (pyrolysis smoke)", flow_config="concurrent",

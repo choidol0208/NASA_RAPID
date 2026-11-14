@@ -205,6 +205,10 @@ def _range(c, lo, hi):
 
 
 def s_o2(x, c, p):
+    # An inverse flame's O2 is the burner's oxidizer stream; the surrounding atmosphere is fuel and
+    # inert gas. It is not an atmosphere a crew breathes, so it is never matched with the user's O2.
+    if (c.get("o2_reference") or "") == "oxidizer_stream":
+        return None
     r = _range(c, "o2_min_pct", "o2_max_pct")
     if r is None:
         return None
@@ -392,10 +396,24 @@ def score_config(sc, c, cfg, weights, raw_S, caps):
 
 
 def _fmt_range(c, lo, hi, unit):
-    r = _range(c, lo, hi)
-    if r is None:
+    # Text only. When one end is not recorded, say so ("up to 40 cm/s" in the PSI-26 record is
+    # not "at 40 cm/s"). Similarity still uses _range, which treats the recorded end as both ends.
+    a, b = _f(c.get(lo)), _f(c.get(hi))
+    if a is None and b is None:
         return "not reported"
-    return f"{r[0]:g}{unit}" if r[0] == r[1] else f"{r[0]:g}–{r[1]:g}{unit}"
+    if a is None:
+        return f"up to {b:g}{unit}"
+    if b is None:
+        return f"at least {a:g}{unit}"
+    return f"{a:g}{unit}" if a == b else f"{a:g}–{b:g}{unit}"
+
+
+def _fmt_flow(c):
+    r = _fmt_range(c, "flow_min_cms", "flow_max_cms", " cm/s")
+    head = f"flow {c.get('flow_config') or 'n/a'}"
+    if r == "not reported":
+        return f"{head}, speed not reported"
+    return f"{head}, {r}" if r.startswith(("up to", "at least")) else f"{head} at {r}"
 
 
 def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
@@ -404,12 +422,19 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
     labels = {"o2": "O2", "pressure": "pressure", "flow": "flow", "fuel": "fuel", "geometry": "sample shape",
               "role": "research purpose", "diluent": "diluent"}
     known = [d for d in s["contributions"] if d not in s["unknown"]]
-    best = sorted(known, key=lambda d: -s["contributions"][d])[:2]
+    assumed = {"o2"} if "O2" in fallback else set()
+    if "pressure" in fallback:
+        assumed.add("pressure")
+    # Reasons come from recorded values first; an assumed (not recorded) value is a reason only if nothing else is left.
+    best = sorted(known, key=lambda d: (d in assumed, -s["contributions"][d]))[:2]
     gaps = sorted(known, key=lambda d: sim[d])[:1]
     detail = {
-        "o2": f"O2 tested {_fmt_range(c, 'o2_min_pct', 'o2_max_pct', '%')}",
-        "pressure": f"pressure tested {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}",
-        "flow": f"flow {c.get('flow_config') or 'n/a'} at {_fmt_range(c, 'flow_min_cms', 'flow_max_cms', ' cm/s')}",
+        # A value filled in by the atmosphere fallback was not recorded: never word it as "tested".
+        "o2": (f"O2 not recorded, assumed {_fmt_range(c, 'o2_min_pct', 'o2_max_pct', '%')}" if "O2" in fallback
+               else f"O2 tested {_fmt_range(c, 'o2_min_pct', 'o2_max_pct', '%')}"),
+        "pressure": (f"pressure not recorded, assumed {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}" if "pressure" in fallback
+                     else f"pressure tested {_fmt_range(c, 'pressure_min_kpa', 'pressure_max_kpa', ' kPa')}"),
+        "flow": _fmt_flow(c),
         "fuel": f"fuel {c.get('fuel_material')}",
         "geometry": f"{c.get('sample_geometry')} ({c.get('thermal_regime') or 'regime n/a'})",
         "role": f"role {c['_inv'].get('fire_safety_role')}",
@@ -418,7 +443,8 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
     why = "; ".join(f"{labels[d]} match {sim[d]:.2f} ({detail[d]})" for d in best)
     gap = "; ".join(f"{labels[d]} {sim[d]:.2f} ({detail[d]})" for d in gaps if sim[d] < 0.9)
     warns = []
-    o2max = _f(c.get("o2_max_pct"))
+    stream = (c.get("o2_reference") or "") == "oxidizer_stream"
+    o2max = None if stream else _f(c.get("o2_max_pct"))
     if sc.get("o2_pct") is not None and o2max is not None and sc["o2_pct"] > o2max:
         warns.append({"code": "o2_above_result", "message": W["o2_above_result"].format(user=f"{sc['o2_pct']:g}", max=f"{o2max:g}")})
     thr = cfg.get("outside_range_threshold", 0.9)
@@ -429,10 +455,11 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
         warns.append({"code": "outside_range", "message": W["outside_range"].format(dims=", ".join(out))})
     if sc.get("fuel_phase") == "solid" and (c.get("fuel_phase") or "").lower() == "gas":
         warns.append({"code": "gas_for_solid", "message": W["gas_for_solid"]})
-    if (c.get("o2_reference") or "") == "oxidizer_stream" and "o2" in sim:
+    if stream and "o2" in sim:
         warns.append({"code": "oxidizer_stream", "message": W["oxidizer_stream"]})
-    if s["unknown"]:
-        warns.append({"code": "not_reported", "message": W["not_reported"].format(dims=", ".join(labels[d] for d in s["unknown"]))})
+    missing = [d for d in s["unknown"] if not (stream and d == "o2")]  # O2 of a stream is recorded, just not comparable
+    if missing:
+        warns.append({"code": "not_reported", "message": W["not_reported"].format(dims=", ".join(labels[d] for d in missing))})
     if fallback:
         warns.append({"code": "fallback", "message": W["fallback"].format(dims=" and ".join(fallback))})
     if c["_inv"].get("platform") == "ground":
@@ -461,7 +488,9 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
         warnings.append({"code": "partial_gravity", "message": W["partial_gravity"]})
     elif g == "earth":
         warnings.append({"code": "earth_gravity", "message": W["earth_gravity"]})
-    o2s = [(_f(c.get("o2_max_pct")), c) for c in cfgs if _f(c.get("o2_max_pct")) is not None]
+    # Highest O2 of any surrounding atmosphere tested (oxidizer streams of inverse flames excluded).
+    o2s = [(_f(c.get("o2_max_pct")), c) for c in cfgs
+           if _f(c.get("o2_max_pct")) is not None and (c.get("o2_reference") or "") != "oxidizer_stream"]
     max_o2, max_c = max(o2s, key=lambda x: x[0])
     if sc.get("o2_pct") is not None and sc["o2_pct"] > max_o2:
         warnings.append({"code": "o2_above_all", "message": W["o2_above_all"].format(
