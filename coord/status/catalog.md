@@ -1,14 +1,14 @@
 ---
 role: catalog
-updated: 2026-11-14 20:03 KST
+updated: 2026-11-14 20:13 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Config 1.2.0 is live: ui merged it into `catalog-filter`, and Pages deploys from there again. **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **Config 1.3.0 is on `catalog-scoring`**; the live page has 1.2.0 through `catalog-filter` until ui merges again, and `main` has 1.1.0 until pm integrates (requests 1933 and 2008, no answer yet). **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
 
-**20:03 build-up, on `catalog-scoring` (no weight or score change yet):**
+**20:13 build-up, on `catalog-scoring`:**
 - `b353272` **Requirements layer.**
   - `rank()` returns `requirements`: one per condition the query sets, with its source (stated, implied by preset, derived, assumed) and the catalog columns that verify it.
   - Each result gets `compliance`: met, near, not_met, unverified or not_scored. Python and JS; parity 99 of 99 with both fields.
@@ -22,11 +22,15 @@ Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog
 - `0d1b086` **Expert stream.**
   - `scoring/expert_form.csv` holds the 51 AHP pairs for team members with combustion training. It shows the NASA evidence and hides the AI's answers.
   - `scoring/derive_expert_weights.py` computes each person's CR and the group geometric mean. Filled forms go in `scoring/expert_judgements/E1.csv` and so on, with no names.
-- `0d1b086` **Pooling** (`scoring/weight_streams.json`, `apply` false). A log-linear pool of judgement and FLEX data over o2, pressure, diluent and fuel for suppression.
-  - If applied, the weights become o2 .204, fuel .202, diluent .124, pressure .036.
-  - All 38 scenarios keep their top 3; scores move by at most 2.8 points.
-  - Applying it is the human lead's decision.
-- Checks: 54 of 54 unit tests, 38 of 38 scenarios, parity 99 of 99.
+- `99f8a25` **Config 1.3.0: pooling applied** (the human lead's decision, 20:06). `scoring/weight_streams.json` sets `apply` true.
+  - The suppression weights pool AHP and FLEX data (log-linear pool over o2, pressure, diluent and fuel): o2 .204, fuel .202, diluent .124, pressure .036; role, flow and geometry are unchanged.
+  - Prevention and detection keep the 1.2.0 weights.
+  - All 38 scenarios keep their top 3; suppression scores move by at most 2.8 points.
+- `6202f9a` **Atmosphere flame temperature** (check only, no score uses it): `scoring/flame_temperature.py` uses 13.1 kJ per g of O2 and NIST-JANAF enthalpies.
+  - The JANAF tables are in `scoring/reference/janaf/`; the human lead approved the download.
+  - On FLEX extinction, flame temperature alone gives R² .553, against .534 for O2 alone and .619 for O2 plus the diluent fractions. So O2 and diluent stay separate, and heat capacity alone is incomplete for helium.
+- **`scoring/BUILDUP.md` (new):** the five build-ups with their concepts and techniques, and about 40 references to papers, textbooks and NASA reports. Each reference has a DOI or an open NTRS/NIST link; a separate AI agent checked their bibliographic details.
+- Checks: 55 of 55 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean, `derive_weights.py --check` matches.
 
 **19:38 check of `main` and the live site against `catalog-scoring`:**
 - `git log origin/main..HEAD` on the catalog paths lists `11c307a` (config 1.2.0) and `3ef2ae8` (status). Both are covered by request 1933 to pm; no new request. `origin/catalog-filter` does not have them yet either.
@@ -66,14 +70,17 @@ Done since last sync:
   - ui 1933: check the page after integration and retake score captures at the final freeze; optional wording for the close call.
 
 Next:
-- After pm says the English compliance logs are on `main`: merge `main`, then append my rows to `AI_USAGE_LOG.md` (AHP and SMAA work, 19:00–19:36) and `SOURCES.md` (Saaty 1980; Lahdelma, Hokkanen and Salminen 1998; Barron and Barrett 1996, method references).
-- After pm's integration: check that `main` and the live site give the 1.2.0 scores for the four presets.
-- Extra day (as in my answer to 1920): more detection and suppression scenarios; a rank-1 acceptability field for close calls, if ui agrees; the human check of the verification sheet, which needs a person.
-- Weights change only through `scoring/ahp_judgements.json` and `scoring/derive_weights.py --write`, with the human lead's decision. After any change, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the numbers.
+- After pm says the English compliance logs are on `main`: merge `main`, then append my rows.
+  - `AI_USAGE_LOG.md`: AHP, SMAA, requirements layer, data stream, expert form, pooling, flame temperature; 19:00 to 20:13.
+  - `SOURCES.md`: the method and combustion references of `scoring/BUILDUP.md` section 7, and the NIST-JANAF tables.
+- After pm's integration: check that `main` and the live site give the 1.3.0 scores.
+- Needs a human: team members with combustion training fill in `scoring/expert_form.csv`. Using their judgements in the weights is the human lead's decision.
+- Next build-ups (in `BUILDUP.md`): a data-based diluent similarity (helium); a partial-gravity flow scale; material flammability properties.
+- Weights change only through the stream files and `scoring/derive_weights.py --write`, with the human lead's decision. After any change, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the numbers.
 
 Published for others:
-- `scoring/scoring_config.json` 1.2.0: the seven weights of each profile changed (AHP), plus the `_about` and `rationale` text; new section `requirements` (labels and verifying columns of the requirements layer). Other keys unchanged. `config_version` in `rank()` output is `1.2.0`.
-- `scoring.scorer.rank` and `web/scorer.js`: same scores; two additive output fields, `requirements` (top level) and `compliance` (per result), as described in request 2001.
+- `scoring/scoring_config.json` 1.3.0: profile weights from `derive_weights.py` (AHP; suppression pooled with FLEX), plus `_about` and `rationale` text; new section `requirements` (labels and verifying columns of the requirements layer). Other keys unchanged. `config_version` in `rank()` output is `1.3.0`.
+- `scoring.scorer.rank` and `web/scorer.js`: same code path; suppression scores follow the 1.3.0 weights. Two additive output fields, `requirements` (top level) and `compliance` (per result), as described in request 2001.
 - `data/catalog/*.csv`: unchanged since 19:00.
 
 Notes for other roles:
