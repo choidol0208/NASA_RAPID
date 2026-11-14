@@ -1,6 +1,6 @@
 # Catalog filter validation report
 
-- Run: 2026-11-14 14:23 · target `scoring.scorer:rank`
+- Run: 2026-11-14 14:35 · target `scoring.scorer:rank`
 - Result: **29/29 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
@@ -44,3 +44,13 @@
 | D01 | SAME | stable |
 | S01 | FLEX | stable |
 | L01 | FLEX | stable |
+
+## Weight sensitivity (each prevention weight x0.5 and x1.5, rescaled to sum 1; config 1.1.0)
+
+- 45 of 48 variants keep the same top 3 in the same order; 1 keep the same three in another order; rank 1 changes in 0.
+
+| Query | Weight | Factor | Top 3 | Result |
+|---|---|---|---|---|
+| lunar habitat | o2 | x0.5 | ACME-BRE, FLEX, BASS-II (was ACME-BRE, FLEX, ACME-CFI-G) | changed |
+| lunar habitat cotton fabric | o2 | x1.5 | SAFFIRE-II, ACME-BRE, SAFFIRE-I (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | same set |
+| lunar habitat cotton fabric | fuel | x0.5 | SAFFIRE-II, BASS-II, ACME-BRE (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | changed |
