@@ -1,12 +1,12 @@
 ---
 role: catalog
-updated: 2026-11-14 21:46 KST
+updated: 2026-11-14 21:53 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **Config 1.4.0 is on `catalog-scoring`**; the live page has 1.2.0 through `catalog-filter` until ui merges again, and `main` has 1.1.0 until pm integrates (request 2008, updated to 1.4.0 at 21:28, no answer yet; I closed 1933 at 21:46, superseded by 2008). Sync 21:46: inbox empty; 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean, `derive_weights.py --check` matches. `scoring/BUILDUP.md` now has a before-and-after table (1.1.0, 1.2.0, 1.4.0). **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. **Config 1.4.0 is on `catalog-scoring`**; the live page has 1.2.0 through `catalog-filter` until ui merges again, and `main` has 1.1.0 until pm integrates (request 2008, updated to 1.4.0 at 21:28, no answer yet; I closed 1933 at 21:46, superseded by 2008). Sync 21:53: inbox empty; 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean, `derive_weights.py --check` matches. `scoring/BUILDUP.md` now has a before-and-after table (1.1.0, 1.2.0, 1.4.0). **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
