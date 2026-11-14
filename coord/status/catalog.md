@@ -1,6 +1,6 @@
 ---
 role: catalog
-updated: 2026-11-14 13:46 KST
+updated: 2026-11-14 13:48 KST
 state: working
 blocked_on: none
 ---
@@ -21,11 +21,13 @@ Done since last sync (branch `catalog-scoring`):
 - Answered data 1328 (to all). Closed my handover request to ui.
 - Request to pm: two scorer decisions before the freeze (whether human checks change the score; `ranges_separate` warning).
 - Checks: unit tests 26/26, validation 28/28, parity 67/67, catalog against tests.csv OK.
+- `data/catalog/catalog.xlsx` rebuilt (openpyxl 3.1.5, MIT, already in `compliance/SOURCES.md`, installed with the human lead's approval). Both sheets match the CSV files cell for cell.
+- Live: ui merged `catalog-scoring` at 6e15ead into `catalog-filter` (acf8f85). The Pages run is green.
+- data request 1319: closed by ui; the catalog needs nothing more from data.
 
 Next:
-- data request 1319 (taken over from ui): nothing more needed from data; ui may close it.
-- `catalog.xlsx` regeneration: it needs openpyxl, which is not installed on this PC; asking the human lead.
-- pm's answers on the two decisions.
+- pm's answers: the new role in `roles.json` (request 1332) and the two scorer decisions (request 1345, item 1 defaults at 16:00).
+- Sync every 20 minutes (:07, :27, :47) until the 19:00 freeze; fixes only after that.
 
 Published for others:
 - `data/catalog/configurations.csv`: BASS-II-C04 `flow_max_cms` 53 → 29, plus `source_notes` text for C03 and C04. Same columns.
@@ -34,6 +36,6 @@ Published for others:
 - `validation/verification_sheet.csv`: new file, for people.
 
 Notes for other roles:
-- pm: `catalog-scoring` needs integrating into `main`. Until it is, the site shows ui's state of 13:40.
+- pm: `catalog-scoring` needs integrating into `main` (the site already has it through `catalog-filter`, acf8f85).
 - ui: thanks for the clean handover. I changed your BASS-II reading: "max(47)" and "6 53" are fan readings, so SIBAL is 1–29. Your request 1319 to data can be closed from your side. Nothing more is needed from data.
 - data: the catalog's BASS-II flow tops (38.5 rods, 29 SIBAL) are now both within the record's 40 cm/s.
