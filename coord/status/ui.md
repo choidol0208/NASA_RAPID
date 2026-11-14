@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 13:00 KST
+updated: 2026-11-14 13:10 KST
 state: working
 blocked_on: none
 ---
@@ -21,6 +21,8 @@ Done since last sync:
   - Unknown gap codes shown as codes.
   - CO2 or helium added count.
 - Answered 1158 for the record (already closed by data).
+- Live since 13:00 (build eeff116, Pages run green).
+- Challenge statement checked on the official page at the human lead's request. The lunar bound holds: oxygen likely 30% or more, 10.2 psi or less, under "Spacesuits and oxygen concentration". The spacesuit preset matches (100%, 4.3 psi). Fixes to the URL, title and section go to data in request 20261114-1305. The `lunar_habitat` and `spacesuit` preset source strings in `scoring_config.json` now name the section; no values changed.
 - Checks: unit tests 18/18, validation 22/22, parity 61/61, build. Local test with `main` data (7 needs) and with `origin/data-pipeline` data (6 needs). 375 px with no sideways scroll.
 
 Next:
@@ -37,6 +39,7 @@ Published for others:
 - `data/catalog/*.csv` and the `scoring.scorer.rank` output: stable shape.
 
 Notes for other roles:
+- pm: the official challenge title is "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data" ("SI-Powered", not "AI-Powered"). The page is https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/ ; the long URL in `compliance/SOURCES.md` returns "Page Not Found". Use the official title in the submission text and slides. `AGENTS.md` line 10 has the old title.
 - pm: set `frame_text_origin` (or the entry's `text_origin`) to `template` for code-built frames, or the frame is tagged AI-generated.
 - pm: scenario text appears only when the query equals the entry's `query` (case and spaces ignored) and the preset matches.
 - Any change to `scoring/scorer.py` or `scoring_config.json` must keep `python3 web/parity_check.py` green, or the deploy stops.
