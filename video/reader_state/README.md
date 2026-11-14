@@ -1,0 +1,7 @@
+# Reader state
+
+`bass2_reader_state.npz` (38,637 bytes, SHA-256 670a55ecee490f27958fdf850d5b3305e2572cb7f37e00bb4684f8f1c70cb03f) is the frozen state `read_overlay.py` needs for the BASS-II overlay: 33 normalised 14 x 22 pixel character templates (`templates`, float32) with their characters (`template_chars`: 0-9, minus sign, decimal point), the grid origin x0 of each of the 19 clips (`clip_short`, `clip_x0`), the cell size, and a provenance note (`provenance`, JSON).
+
+It was written once, on 2026-11-14, by `video/tools/export_reader_state.py` from the pilot's labelled character clusters (x0.json, clusters.npz, clusters2.npz; their SHA-256 are in the provenance note). The clusters themselves (training cells, 32 MB) are not shipped. The reader checks the SHA-256 given in `video/settings/bass2.json` and stops if it differs; it never clusters again.
+
+AI-generated: made by code that an AI assistant (Claude) wrote during the NASA Space Apps Challenge 2026 hackathon; the cluster labels were assigned during the pilot by an AI assistant (Claude) that looked at montages of the cells in each cluster and wrote down the character; no person has checked the labels. The clusters were made in the pilot with scikit-learn 1.6.1 KMeans (BSD-3-Clause) and pandas 2.2.3 (BSD-3-Clause); neither is used by anything in this folder. Not a NASA data file. It only reads NASA's BASS-II overlay font; it will not read another font.
