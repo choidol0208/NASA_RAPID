@@ -1,8 +1,8 @@
-# How the three sessions work together
+# How the role sessions work together
 
 *AI-generated (Claude Code) during the NASA Space Apps Challenge 2026 hackathon.*
 
-Three people each run their own Claude Code session. The sessions coordinate through files in this repository, so nobody has to relay messages by hand. `AGENTS.md` holds the rules of the competition and always wins over this file.
+The team runs one Claude Code session per role (four roles since 13:28 on 14 November). The sessions coordinate through files in this repository, so nobody has to relay messages by hand. `AGENTS.md` holds the rules of the competition and always wins over this file.
 
 ## Roles, branches, ownership
 
@@ -10,7 +10,8 @@ Three people each run their own Claude Code session. The sessions coordinate thr
 |---|---|---|
 | `pm` | `main` | project docs, `coord/board.md`, `coord/decisions.md`, `contracts/`, `ai/`, `data/insights/`, `docs/`, integration of everything into `main` |
 | `data` | `data-pipeline` | `pipeline/`, `data/psi/`, `data/derived/`, `data/pipeline/`, `reports/`, the fetch and profile scripts |
-| `ui` | `catalog-filter` | `data/catalog/`, `scoring/`, `validation/`, `presentation/`, the catalog scripts, the dashboard (`app/` or `web/`), `.github/` |
+| `ui` | `catalog-filter` | the dashboard (`web/` except the scorer port, `app/`), `presentation/`, `.github/` |
+| `catalog` | `catalog-scoring` | `data/catalog/`, `scoring/`, `validation/`, the catalog scripts, the scorer's JavaScript port and parity check (`web/scorer.js`, `web/parity_check.*`) |
 
 The exact lists are in `coord/roles.json`. Your role is the one word in `.role` at the repository root (not committed). If the file is missing, ask your human once and write it.
 
