@@ -407,6 +407,9 @@ def assemble():
             "tests": len(inv_tests),
             "variables": variable_facts(inv_tests, var_cols, numeric, units, kinds, statement_spec),
             "stated_needs": [{"need_id": k["need_id"], "need": need_names[k["need_id"]],
+                              "verdict": k["verdict"],
+                              "publication_item": k["publication_item"],
+                              "publication_quote": k["publication_quote"],
                               "record_field": k["record_field"], "quote": k["quote"]}
                              for need_id in need_order for k in links
                              if k["need_id"] == need_id and k["investigation_id"] == inv],

@@ -1,12 +1,17 @@
 ---
 role: data
-updated: 2026-11-14 13:28 KST
+updated: 2026-11-14 14:43 KST
 state: working
 blocked_on: none
 ---
-Now: waiting for D5 (`ai/review/review_sheet.csv`, about 15:40). The evidence layer is complete and checked; see request 20261114-1328 about the lunar-habitat pressure.
+Now: a prose-only pass that brings the questions, notes and README in line with the quotes of the literature check (no count changes); then D5 when `ai/review/review_sheet.csv` lands.
 
-Done since last sync (details and before/after numbers: request 20261114-1242-data-to-all "Audit fixes"):
+Done since last sync (details: request 20261114-1442-data-to-all "Counts changed after a literature check"):
+- **Literature check of four open points** (commit `a5a9e87`; 66 documents in `references.json`, quotes verbatim): (1) links between a need and an investigation now rest on a purpose sentence of the investigators or of a NASA project document, with a verdict, and only `supported` links count; (2) pressure is a required condition of P1 and S1 by definition, met by a sentence about the whole table where the table has no pressure, never by a created value; (3) the SAME "weight loss rate" is a planned target value, so D2 has no counted test; (4) oxygen cells with two numbers give the value the investigators name as the initial oxygen, or none; no midpoint.
+- Counted tests now: P1 133, P2 0, P3 2, S1 298, D1 122 (BASS-II, by the investigators' stated purpose), D2 0. Solid fuels at 19 to 23% oxygen: 61 recorded tests (was 62).
+- Checker: 46 of 46 checks pass.
+- Saffire raw data: per-sample sensor workbooks in PSI hold "Ambient Pressure" in psia (14.825 to 14.935 over the eleven samples of Saffire-I and -II); not mapped, carried as a sentence. See the answer to request 1431.
+Earlier today (request 20261114-1242-data-to-all "Audit fixes"):
 - Evidence layer is on `data-pipeline` (commit `a454a92` and later): `data/pipeline/evidence/` (6 scenarios, 20 oxygen x pressure cells, `index.json`), `atmosphere_cells.csv`, `investigation_facts.json`, `pipeline/check.py` with `validation_report.json`.
 - Three independent audits by sub-agents (counts recomputed from the raw tables without the pipeline; over-generalisation of the needs; citations against the documents) found real errors, now fixed: note and figure numbers read as values (Saffire-II spread rate 4.0 mm/s was the cell "Note 4"), BASS-II fan potentiometer settings read as flow, a maintenance row and 42 repeated rows counted as tests, paraffin labelled Japan wax, the lowest-oxygen BASS-II test dropped from P1, igniter settings treated as outcomes, objective links applied unevenly, 13 reference entries.
 - Need P4 removed (pm's decision). Six needs. 1,824 test rows (was 1,867).
@@ -21,11 +26,11 @@ Done since last sync (details and before/after numbers: request 20261114-1242-da
 
 Next: D5 (my half of the review sheet, verdicts by 18:15); D6 final pass on `compliance/SOURCES.md` (21:00); `reports/spot_check.csv` for a human.
 
-Counts pm asked for (after the 43 repeated or non-test rows were left out): tests with a recorded oxygen of the surrounding atmosphere (`o2_basis = ambient`): 879 = solid 140, liquid 353, gas 386. (Liquid was 361 before; 8 CFI rows repeated earlier rows.) A further 263 gas tests record the oxygen of an oxidizer stream, not of the atmosphere.
+Counts pm asked for: tests with a recorded oxygen of the surrounding atmosphere (`o2_basis = ambient`): 878 = solid 139, liquid 353, gas 386 (solid was 140 until Saffire-II sample 2-9 lost its single oxygen value at 14:30). (Liquid was 361 before; 8 CFI rows repeated earlier rows.) A further 263 gas tests record the oxygen of an oxidizer stream, not of the atmosphere.
 
 Challenge statement: ui checked it on the official page (request 1305); `CHALLENGE-2026` now has the official URL and title, `CH.moonbase` says "oxygen likely 30% or more", and there are new items `CH.spacesuit`, `CH.partial_gravity`, `CH.hardware`. `access` is `read_by_teammate`.
 
-Still open for the human review: the needs, their readings and the objective links are an AI draft not seen by a combustion specialist; whether pressure should be required for P1 (all 136 counted tests have no pressure in the table); whether the SAME "weight loss rate" is a result or a setting (it is the only outcome behind the 4 counted D2 tests); the three oxygen midpoints.
+Still open for the human review: the verdicts on the links are an AI reading of the documents listed in `references.json` (several papers were reached only as abstracts or text extractions; `access` says which); what remains the team's own construction is listed in `needs.json` `_meta.authorship`.
 
 Published for others (all written by `python3 pipeline/run.py`; shapes below are stable, I will only add columns):
 - NEW `data/pipeline/evidence/index.json`, `scenario_<id>.json`, `cell_<o2_bin>__<pressure_bin>.json` — shape in `pipeline/README.md` "Evidence packages". Per need: `status`, `counts`, `reading`, `objective`, `investigations`, `matched_tests` (values with unit and source column, source file and row), `matched_by_fuel_phase`, `usable_elsewhere`, `documented_elsewhere`, `indicators`, `gaps`, `statements`, `references`. Field names stable; fields may be added.

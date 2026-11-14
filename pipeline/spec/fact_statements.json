@@ -521,9 +521,24 @@
    "scope": "objective_link",
    "statements": [
     {
-     "id": "objective.link",
-     "when": [],
-     "text": "The team's needs list links need {link.need_id} ({link.need}) to this sentence in the {link.record_field} field of the PSI record of {investigation.investigation_id}: \"{link.quote}\""
+     "id": "objective.link.publication",
+     "when": [
+      {
+       "field": "link.publication_item",
+       "op": "nonempty"
+      }
+     ],
+     "text": "For need {link.need_id} ({link.need}), the team's needs list cites this purpose sentence of the investigators or of a NASA project document (reference item {link.publication_item}; verdict of the team's reading: {link.verdict}): \"{link.publication_quote}\""
+    },
+    {
+     "id": "objective.link.record",
+     "when": [
+      {
+       "field": "link.record_field",
+       "op": "nonempty"
+      }
+     ],
+     "text": "For need {link.need_id} ({link.need}), the {link.record_field} field of the PSI record of {investigation.investigation_id} holds this sentence (verdict of the team's reading of the publications: {link.verdict}): \"{link.quote}\""
     }
    ]
   },
@@ -543,7 +558,7 @@
        "op": "empty"
       }
      ],
-     "text": "The team's needs list links no sentence of the PSI record of {investigation.investigation_id} to an information need, so none of its test rows is counted for a need."
+     "text": "The team's needs list holds no purpose sentence that links {investigation.investigation_id} to an information need, so none of its test rows is counted for a need."
     }
    ]
   },
@@ -564,7 +579,7 @@
        "value": 0
       }
      ],
-     "text": "Need {need.need_id} ({need.need}) is stated as an objective in the PSI record. {need.usable_tests} of the {need.tests_in_scope with test row|test rows} within the scope of this need record every required condition variable and at least one outcome variable of the need."
+     "text": "Need {need.need_id} ({need.need}) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). {need.usable_tests} of the {need.tests_in_scope with test row|test rows} within the scope of this need record every required condition variable and at least one outcome variable of the need."
     },
     {
      "id": "need.stated.no_tests",
@@ -580,7 +595,7 @@
        "value": 0
       }
      ],
-     "text": "Need {need.need_id} ({need.need}) is stated as an objective in the PSI record. No test row of {investigation.investigation_id} records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: {need.statuses as pairs})."
+     "text": "Need {need.need_id} ({need.need}) is stated as a purpose of this investigation in a publication of the investigators or a NASA project document (verdict 'supported'). No test row of {investigation.investigation_id} records every required condition variable together with an outcome variable of the need (status per table in the capability matrix: {need.statuses as pairs})."
     },
     {
      "id": "need.not_stated.recorded",
@@ -596,7 +611,7 @@
        "value": 0
       }
      ],
-     "text": "{need.usable_tests with test row|test rows} of {investigation.investigation_id} record every required condition variable and at least one outcome variable of need {need.need_id} ({need.need}), but the team's needs list has no sentence of the PSI record that states this need as an objective. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
+     "text": "{need.usable_tests with test row|test rows} of {investigation.investigation_id} record every required condition variable and at least one outcome variable of need {need.need_id} ({need.need}), but the team's needs list has no supported purpose sentence for this need and this investigation. The pipeline reports these test rows as recorded outside the stated objective and does not count them for the need."
     }
    ]
   },

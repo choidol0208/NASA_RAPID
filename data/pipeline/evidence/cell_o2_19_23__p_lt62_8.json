@@ -47,7 +47,8 @@
     "pressure_only": 0,
     "counted_for": [
      "P1",
-     "S1"
+     "S1",
+     "D1"
     ]
    },
    {
@@ -66,9 +67,7 @@
     "atmosphere": 0,
     "oxygen_only": 1,
     "pressure_only": 0,
-    "counted_for": [
-     "S1"
-    ]
+    "counted_for": []
    },
    {
     "investigation_id": "PSI-98",
@@ -78,7 +77,6 @@
     "oxygen_only": 2,
     "pressure_only": 0,
     "counted_for": [
-     "P1",
      "P3"
     ]
    },
@@ -90,8 +88,7 @@
     "oxygen_only": 8,
     "pressure_only": 0,
     "counted_for": [
-     "P1",
-     "P3"
+     "P1"
     ]
    },
    {
@@ -113,7 +110,7 @@
    },
    {
     "id": "recorded.counted",
-    "text": "PSI-25 (solid): 0 tests recorded with oxygen and pressure both inside the ranges, 51 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: P1, S1.",
+    "text": "PSI-25 (solid): 0 tests recorded with oxygen and pressure both inside the ranges, 51 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: P1, S1, D1.",
     "investigation_id": "PSI-25",
     "fuel_phase": "solid"
    },
@@ -124,20 +121,20 @@
     "fuel_phase": "liquid"
    },
    {
-    "id": "recorded.counted",
-    "text": "PSI-69 (liquid): 0 tests recorded with oxygen and pressure both inside the ranges, 1 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: S1.",
+    "id": "recorded.not_counted",
+    "text": "PSI-69 (liquid): 0 tests recorded with oxygen and pressure both inside the ranges, 1 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. None of these tests is counted for a need.",
     "investigation_id": "PSI-69",
     "fuel_phase": "liquid"
    },
    {
     "id": "recorded.counted",
-    "text": "PSI-98 (solid): 0 tests recorded with oxygen and pressure both inside the ranges, 2 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: P1, P3.",
+    "text": "PSI-98 (solid): 0 tests recorded with oxygen and pressure both inside the ranges, 2 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: P3.",
     "investigation_id": "PSI-98",
     "fuel_phase": "solid"
    },
    {
     "id": "recorded.counted",
-    "text": "PSI-99 (solid): 0 tests recorded with oxygen and pressure both inside the ranges, 8 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: P1, P3.",
+    "text": "PSI-99 (solid): 0 tests recorded with oxygen and pressure both inside the ranges, 8 with oxygen inside the range and no pressure in the table, 0 with pressure inside the range and no oxygen in the table. Tests of this investigation are counted for: P1.",
     "investigation_id": "PSI-99",
     "fuel_phase": "solid"
    },
@@ -158,23 +155,23 @@
    "note": "The Saffire tables hold one oxygen level near cabin air per test (for Saffire-II derived by NASA from CO2 production, Note 1 of the table), and Saffire-III has no oxygen column. A limit cannot be located from one oxygen level. Pressure is not a required variable of this need, although the cited definition of a threshold holds at a given total pressure, flow and gravity level (ISO16697.threshold): the BASS-II and Saffire tables have no pressure column, so no counted test records a pressure. The BASS-II tests with an event word beside the flow settings are also counted for S1 (Extinction conditions); counts of different needs must not be added.",
    "status": "oxygen_only",
    "counts": {
-    "usable_tests": 135,
+    "usable_tests": 133,
     "atmosphere": 0,
-    "oxygen_only": 57,
+    "oxygen_only": 55,
     "pressure_only": 0,
     "other": 78,
-    "recorded_outside_objective": 0,
+    "recorded_outside_objective": 2,
     "matched_flow_in_range": 0,
     "matched_flow_not_recorded": 0,
     "matched_same_gravity": 0,
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {
-    "solid": 57
+    "solid": 55
    },
    "matched_ranges": {
     "o2_pct": {
-     "recorded": 57,
+     "recorded": 55,
      "min": 19.0,
      "max": 22.2,
      "unit": "% by volume"
@@ -196,50 +193,60 @@
      "said_in": "ICES19.pressure"
     },
     {
-     "source_id": "saffire1",
-     "investigation_id": "PSI-98",
-     "variable": "pressure_kpa",
-     "variable_label": "pressure",
-     "quote": "solid state sensors were used to measure pressure",
-     "said_in": "PSI-98.approach"
-    },
-    {
      "source_id": "saffire2",
      "investigation_id": "PSI-99",
      "variable": "pressure_kpa",
      "variable_label": "pressure",
-     "quote": "solid state sensors were used to measure pressure",
-     "said_in": "PSI-99.approach"
+     "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant.",
+     "said_in": "SAF17.pressure"
     }
    ],
    "objective": [
     {
      "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "BASS2TM.limits",
+     "publication_quote": "Many of the tests focused on finding a minimum O2 concentration or flow velocity where a material will burn in space, to compare with the Earth-based limits.",
      "record_field": "objective",
      "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
     },
     {
      "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "BASS2TM.limits",
+     "publication_quote": "Many of the tests focused on finding a minimum O2 concentration or flow velocity where a material will burn in space, to compare with the Earth-based limits.",
      "record_field": "objective",
      "quote": "Begin to bridge the gap between the normal gravity NASA-STD-6001 Test #1 method, ground-based microgravity tests, and actual material flammability in microgravity."
     },
     {
      "investigation_id": "PSI-26",
+     "verdict": "supported",
+     "publication_item": "RG.bass",
+     "publication_quote": "The BASS experiment will improve 1-g material fire safety rating tests and help to guide strategies for extinguishing accidental fires in microgravity.",
      "record_field": "objective",
      "quote": "Begin to bridge the gap between the normal gravity NASA-STD-6001 Test#1 method, ground-based microgravity tests, and actual material flammability in microgravity."
     },
     {
      "investigation_id": "PSI-98",
+     "verdict": "differs",
+     "publication_item": "SAF16.saffire1",
+     "publication_quote": "The objective of the Saffire-I experiment is to investigate flame spread and growth in low-gravity. Specifically, the experiment will determine if there is a limiting flame size when burning over a large surface and quantify the size and growth rate of the flames.",
      "record_field": "objective",
      "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test"
     },
     {
      "investigation_id": "PSI-99",
+     "verdict": "supported",
+     "publication_item": "SAF16.saffire2",
+     "publication_quote": "The objective of the tests to be conducted on Saffire-II is to investigate the low-gravity Maximum Oxygen Concentration (MOC) flammability limits in long-term low gravity.",
      "record_field": "objective",
      "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test"
     },
     {
      "investigation_id": "PSI-100",
+     "verdict": "differs",
+     "publication_item": "SAF16b.saffire13",
+     "publication_quote": "The objective of the Saffire-I and III tests will be to determine how rapidly a large-scale fire grows in low-gravity and whether it reaches a steady-state spread rate.",
      "record_field": "objective",
      "quote": "investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test"
     }
@@ -252,14 +259,6 @@
      "oxygen_only": 47,
      "pressure_only": 0,
      "other": 78
-    },
-    {
-     "investigation_id": "PSI-98",
-     "title": "Spacecraft Fire Safety Experiment-I",
-     "atmosphere": 0,
-     "oxygen_only": 2,
-     "pressure_only": 0,
-     "other": 0
     },
     {
      "investigation_id": "PSI-99",
@@ -293,6 +292,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -307,11 +311,6 @@
        "value": 0.1,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.0,
@@ -345,6 +344,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -359,11 +363,6 @@
        "value": 0.2,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.2,
@@ -397,6 +396,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -411,11 +415,6 @@
        "value": 0.2,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.3,
@@ -451,6 +450,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 2.0,
        "unit": "cm/s",
@@ -465,11 +469,6 @@
        "value": 0.3,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.1,
@@ -505,6 +504,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -519,11 +523,6 @@
        "value": 0.4,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.5,
@@ -559,6 +558,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -573,11 +577,6 @@
        "value": 0.1,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.2,
@@ -611,6 +610,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -625,11 +629,6 @@
        "value": 0.2,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "flow_event": {
        "value": "extinction",
@@ -670,6 +669,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -684,11 +688,6 @@
        "value": 0.2,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.2,
@@ -722,6 +721,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 2.0,
        "unit": "cm/s",
@@ -736,11 +740,6 @@
        "value": 0.1,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.4,
@@ -776,6 +775,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -790,11 +794,6 @@
        "value": 0.3,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.0,
@@ -828,6 +827,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -842,11 +846,6 @@
        "value": 0.2,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.3,
@@ -882,6 +881,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 3.0,
        "unit": "cm/s",
@@ -896,11 +900,6 @@
        "value": 0.1,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.1,
@@ -934,6 +933,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 2.0,
        "unit": "cm/s",
@@ -948,11 +952,6 @@
        "value": 0.4,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.1,
@@ -988,6 +987,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1002,11 +1006,6 @@
        "value": 0.2,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.5,
@@ -1040,6 +1039,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 2.0,
        "unit": "cm/s",
@@ -1054,11 +1058,6 @@
        "value": 0.1,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.1,
@@ -1094,6 +1093,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 9.5,
        "unit": "cm/s",
@@ -1103,11 +1107,6 @@
        "value": "fabric sheet",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.0,
@@ -1143,6 +1142,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 15.0,
        "unit": "cm/s",
@@ -1152,11 +1156,6 @@
        "value": "fabric sheet",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.0,
@@ -1192,6 +1191,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1206,11 +1210,6 @@
        "value": 1.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.3,
@@ -1244,6 +1243,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1258,11 +1262,6 @@
        "value": 4.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.5,
@@ -1296,6 +1295,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1310,11 +1314,6 @@
        "value": 5.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.5,
@@ -1348,6 +1347,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "sample_geometry": {
        "value": "slab",
        "unit": "",
@@ -1357,11 +1361,6 @@
        "value": 2.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.3,
@@ -1397,6 +1396,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 6.0,
        "unit": "cm/s",
@@ -1411,11 +1415,6 @@
        "value": 4.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.8,
@@ -1449,6 +1448,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1463,11 +1467,6 @@
        "value": 2.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.6,
@@ -1503,6 +1502,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1517,11 +1521,6 @@
        "value": 4.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.0,
@@ -1555,6 +1554,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1569,11 +1573,6 @@
        "value": 1.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.5,
@@ -1607,6 +1606,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1621,11 +1625,6 @@
        "value": 4.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.6,
@@ -1659,6 +1658,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -1673,11 +1677,6 @@
        "value": 3.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.0,
@@ -1711,6 +1710,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1725,11 +1729,6 @@
        "value": 5.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.1,
@@ -1763,6 +1762,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -1777,11 +1781,6 @@
        "value": 5.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 2.0,
@@ -1815,6 +1814,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -1829,11 +1833,6 @@
        "value": 3.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 3.2,
@@ -1869,6 +1868,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1883,11 +1887,6 @@
        "value": 1.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.1,
@@ -1921,6 +1920,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 10.0,
        "unit": "cm/s",
@@ -1935,11 +1939,6 @@
        "value": 2.0,
        "unit": "mm",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.9,
@@ -1975,6 +1974,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -1984,11 +1988,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.5,
@@ -2024,6 +2023,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 0.0,
        "unit": "cm/s",
@@ -2033,11 +2037,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.3,
@@ -2073,6 +2072,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -2082,11 +2086,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "flow_event": {
        "value": "extinction",
@@ -2128,6 +2127,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -2137,11 +2141,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "flow_event": {
        "value": "extinction",
@@ -2183,6 +2182,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 2.0,
        "unit": "cm/s",
@@ -2192,11 +2196,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.0,
@@ -2233,6 +2232,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 2.0,
        "unit": "cm/s",
@@ -2242,11 +2246,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.8,
@@ -2283,6 +2282,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -2292,11 +2296,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "flow_event": {
        "value": "extinction",
@@ -2336,6 +2335,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -2345,11 +2349,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "flow_event": {
        "value": "extinction",
@@ -2389,6 +2388,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 2.0,
        "unit": "cm/s",
@@ -2398,11 +2402,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 1.5,
@@ -2439,6 +2438,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -2448,11 +2452,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "flow_event": {
        "value": "extinction",
@@ -2494,6 +2493,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -2503,11 +2507,6 @@
        "value": "rod",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "flow_event": {
        "value": "extinction",
@@ -2549,6 +2548,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -2558,11 +2562,6 @@
        "value": "fabric sheet",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.1,
@@ -2596,6 +2595,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -2605,11 +2609,6 @@
        "value": "fabric sheet",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.1,
@@ -2643,6 +2642,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -2652,11 +2656,6 @@
        "value": "fabric sheet",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.1,
@@ -2690,6 +2689,11 @@
        "unit": "% by volume",
        "source_column": "Calibrated  initial O2 % by vol"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 5.0,
        "unit": "cm/s",
@@ -2699,11 +2703,6 @@
        "value": "fabric sheet",
        "unit": "",
        "source_column": "Fuel Sample Material"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "o2_consumed_pct_points": {
        "value": 0.2,
@@ -2716,124 +2715,6 @@
      ],
      "source_file": "PSI-25_Experimental table_BASS-II.csv",
      "source_row": 130
-    },
-    {
-     "test_id": "SAFFIRE-1-S1",
-     "investigation_id": "PSI-98",
-     "source_id": "saffire1",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "SIBAL Fabric",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "o2_pct": {
-       "value": 21.7,
-       "unit": "% by volume",
-       "source_column": "Percent O2"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "sample_geometry": {
-       "value": "sheet or slab",
-       "unit": "",
-       "source_column": "(constant in sources.json)"
-      },
-      "sample_thickness_mm": {
-       "value": 3.7,
-       "unit": "mm",
-       "source_column": "Sample Thickness (cm)"
-      },
-      "flow_direction": {
-       "value": "concurrent",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
-      },
-      "burn_time_s": {
-       "value": 420.0,
-       "unit": "s",
-       "source_column": "Burn Time (s)"
-      }
-     },
-     "flags": [
-      "o2_pct:range_in_source_start_value_named_in_publication"
-     ],
-     "source_file": "PSI-98_Experimental table_SAFFIRE-1.csv",
-     "source_row": 2
-    },
-    {
-     "test_id": "SAFFIRE-1-S2",
-     "investigation_id": "PSI-98",
-     "source_id": "saffire1",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "SIBAL Fabric",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "o2_pct": {
-       "value": 21.5,
-       "unit": "% by volume",
-       "source_column": "Percent O2"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "sample_geometry": {
-       "value": "sheet or slab",
-       "unit": "",
-       "source_column": "(constant in sources.json)"
-      },
-      "sample_thickness_mm": {
-       "value": 3.7,
-       "unit": "mm",
-       "source_column": "Sample Thickness (cm)"
-      },
-      "flow_direction": {
-       "value": "opposed",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
-      },
-      "burn_time_s": {
-       "value": 70.0,
-       "unit": "s",
-       "source_column": "Burn Time (s)"
-      }
-     },
-     "flags": [
-      "o2_pct:approximate_in_source"
-     ],
-     "source_file": "PSI-98_Experimental table_SAFFIRE-1.csv",
-     "source_row": 3
     },
     {
      "test_id": "SAFFIRE-2-2-1",
@@ -2857,6 +2738,11 @@
        "unit": "% by volume",
        "source_column": "Percent O2 (Note 1)"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -2876,11 +2762,6 @@
        "value": "concurrent",
        "unit": "concurrent | opposed",
        "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "burn_length_cm": {
        "value": 0.0,
@@ -2918,6 +2799,11 @@
        "unit": "% by volume",
        "source_column": "Percent O2 (Note 1)"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -2937,11 +2823,6 @@
        "value": "concurrent",
        "unit": "concurrent | opposed",
        "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "burn_length_cm": {
        "value": 0.0,
@@ -2979,6 +2860,11 @@
        "unit": "% by volume",
        "source_column": "Percent O2 (Note 1)"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -2998,11 +2884,6 @@
        "value": "concurrent",
        "unit": "concurrent | opposed",
        "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "burn_length_cm": {
        "value": 0.0,
@@ -3040,6 +2921,11 @@
        "unit": "% by volume",
        "source_column": "Percent O2 (Note 1)"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -3054,11 +2940,6 @@
        "value": "opposed",
        "unit": "concurrent | opposed",
        "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "burn_length_cm": {
        "value": 0.0,
@@ -3097,6 +2978,11 @@
        "unit": "% by volume",
        "source_column": "Percent O2 (Note 1)"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -3111,11 +2997,6 @@
        "value": "concurrent",
        "unit": "concurrent | opposed",
        "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "burn_time_s": {
        "value": 145.0,
@@ -3157,6 +3038,11 @@
        "unit": "% by volume",
        "source_column": "Percent O2 (Note 1)"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -3171,11 +3057,6 @@
        "value": "concurrent",
        "unit": "concurrent | opposed",
        "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "burn_time_s": {
        "value": 115.0,
@@ -3218,6 +3099,11 @@
        "unit": "% by volume",
        "source_column": "Percent O2 (Note 1)"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -3232,11 +3118,6 @@
        "value": "concurrent",
        "unit": "concurrent | opposed",
        "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "burn_time_s": {
        "value": 140.0,
@@ -3277,6 +3158,11 @@
        "unit": "% by volume",
        "source_column": "Percent O2 (Note 1)"
       },
+      "gravity_level": {
+       "value": "microgravity",
+       "unit": "microgravity | 1g | lunar | martian",
+       "source_column": "(constant in sources.json)"
+      },
       "flow_cms": {
        "value": 20.0,
        "unit": "cm/s",
@@ -3291,11 +3177,6 @@
        "value": "concurrent",
        "unit": "concurrent | opposed",
        "source_column": "Flow Direction"
-      },
-      "gravity_level": {
-       "value": "microgravity",
-       "unit": "microgravity | 1g | lunar | martian",
-       "source_column": "(constant in sources.json)"
       },
       "burn_time_s": {
        "value": 600.0,
@@ -3656,16 +3537,15 @@
      "group": "material_id=sibal;sample_geometry=sheet or slab",
      "variable": "o2_pct",
      "unit": "% by volume",
-     "n_tests": 4,
+     "n_tests": 2,
      "investigation_ids": [
-      "PSI-98",
       "PSI-99"
      ],
      "values": [
       {
        "stat": "min",
        "category": "",
-       "value": 21.5
+       "value": 22.1
       },
       {
        "stat": "max",
@@ -3683,8 +3563,6 @@
      "compare_with": [],
      "reading": "The range of initial oxygen over which this material and shape was tested. Not a flammability limit: a test at an oxygen level does not by itself show that the sample burned or went out there. For Saffire-I and Saffire-II the value is the oxygen the ISS reported when the vehicle departed, about one day before the tests, carried forward from the CO2 produced (SAF17.o2_initial_I, SAF17.o2_initial_II, SAF17.table1_note_i, PSISAF.delay); it is not a sensor reading at ignition. Where a Saffire cell holds two numbers, the value is the one the investigators name as the initial oxygen; a cell for which no publication names it has no value here.",
      "test_ids": [
-      "SAFFIRE-1-S1",
-      "SAFFIRE-1-S2",
       "SAFFIRE-2-2-5",
       "SAFFIRE-2-2-6"
      ]
@@ -4132,13 +4010,13 @@
    "gaps": [
     {
      "code": "pressure:not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 135 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 133 tests counted for this need."
     }
    ],
    "statements": [
     {
      "id": "status.oxygen_only",
-     "text": "57 of the 135 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
+     "text": "55 of the 133 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
     },
     {
      "id": "need.reading",
@@ -4146,27 +4024,27 @@
     },
     {
      "id": "tiers.counts",
-     "text": "The 135 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 57 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 78 with none of these matches."
+     "text": "The 133 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 55 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 78 with none of these matches."
     },
     {
      "id": "cell.oxygen_only_repeats",
-     "text": "The 57 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
+     "text": "The 55 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
     },
     {
      "id": "matched.investigations",
-     "text": "The 57 matched tests come from PSI-25, PSI-98, PSI-99."
+     "text": "The 55 matched tests come from PSI-25, PSI-99."
     },
     {
      "id": "matched.fuel_phase",
-     "text": "The 57 matched tests by fuel phase: solid 57."
+     "text": "The 55 matched tests by fuel phase: solid 55."
     },
     {
      "id": "matched.oxygen",
-     "text": "Oxygen of the 57 matched tests: recorded in 57, from 19 to 22.2 % by volume."
+     "text": "Oxygen of the 55 matched tests: recorded in 55, from 19 to 22.2 % by volume."
     },
     {
      "id": "matched.pressure_not_in_table",
-     "text": "Pressure of the 57 matched tests: not in the experimental tables."
+     "text": "Pressure of the 55 matched tests: not in the experimental tables."
     },
     {
      "id": "flow.not_specified",
@@ -4175,6 +4053,10 @@
     {
      "id": "gravity.not_specified",
      "text": "This environment sets no gravity level, so the gravity level of the tests was not compared with one."
+    },
+    {
+     "id": "outside_objective",
+     "text": "2 other tests record every required condition and at least one outcome variable of this need but come from investigations whose PSI record does not state this need as an objective. These tests are not counted for this need and are not in its counts."
     },
     {
      "id": "elsewhere.oxygen",
@@ -4190,7 +4072,7 @@
     },
     {
      "id": "gap.pressure.not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 135 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 133 tests counted for this need."
     },
     {
      "id": "documented.elsewhere",
@@ -4200,13 +4082,7 @@
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-98 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-98.approach). The sentence is not used as a value of any test.",
-     "source_id": "saffire1",
-     "variable": "pressure_kpa"
-    },
-    {
-     "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-99 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-99.approach). The sentence is not used as a value of any test.",
+     "text": "The experimental table of PSI-99 holds no pressure. A NASA record or a paper of the investigators says: \"All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant.\" (source: SAF17.pressure). The sentence is not used as a value of any test.",
      "source_id": "saffire2",
      "variable": "pressure_kpa"
     },
@@ -4254,7 +4130,7 @@
     },
     {
      "id": "indicator.summary",
-     "text": "Initial oxygen of the tests run (material sibal, sample shape sheet or slab): min 21.5 % by volume, max 22.1 % by volume, over 4 tests with a recorded value, from PSI-98, PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
+     "text": "Initial oxygen of the tests run (material sibal, sample shape sheet or slab): min 22.1 % by volume, max 22.1 % by volume, over 2 tests with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "P1.o2_tested",
      "group": "material_id=sibal;sample_geometry=sheet or slab"
     },
@@ -4501,6 +4377,50 @@
      "url": "https://hdl.handle.net/2346/84505",
      "access": "full_text_read",
      "quote": "Pressure was not varied from 1 atmosphere."
+    },
+    {
+     "item_id": "ISO16697.scope",
+     "type": "definition",
+     "text": "The oxygen concentration threshold is determined at a given constant total pressure, temperature, convective flow and gravity level.",
+     "where": "Clause 1 Scope (the same sentence is the ISO catalogue abstract, with 'ISO/TS 16697:2012' in place of 'This Technical Specification')",
+     "title": "Space systems - Safety and compatibility of materials - Method to determine the flammability thresholds of materials",
+     "version": "ISO/TS 16697:2012 (status: withdrawn)",
+     "url": "https://www.iso.org/standard/57450.html",
+     "access": "abstract_only",
+     "quote": "This Technical Specification provides a method to determine the oxygen concentration threshold when a material exposed to a standard ignition source self-extinguishes at a given constant total pressure, temperature, convective flow, and gravity-level conditions."
+    },
+    {
+     "item_id": "ICES14.onlyvalid",
+     "type": "limitation",
+     "text": "Test 1 is pass-fail and is only valid at the atmosphere tested.",
+     "where": "I: Introduction, p. 2 (sentence before, which opens with a drop capital: '[T]EST 1 of STD-6001[1] is an upward flame spread test to determine if a material is safe to use in a particular environment.')",
+     "title": "Applying Flammability Limit Probabilities and the Normoxic Upward Limiting Pressure Concept to NASA STD-6001 Test 1 (Olson, Beeson, Fernandez-Pello)",
+     "version": "ICES-2014-179 (13-17 July 2014, Tucson, Arizona)",
+     "url": "https://ntrs.nasa.gov/citations/20150004099",
+     "access": "full_text_read",
+     "quote": "It is pass-fail and is only valid at the atmosphere tested."
+    },
+    {
+     "item_id": "SAF17.pressure",
+     "type": "published_result",
+     "text": "All Saffire-I and Saffire-II tests were performed at normal pressure (1 atm); the pressure increase due to combustion was insignificant.",
+     "where": "Section II Experiment, p. 4",
+     "title": "Results of Large-Scale Spacecraft Flammability Tests (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+     "version": "ICES-2017-224 (16-20 July 2017, Charleston, South Carolina)",
+     "url": "https://hdl.handle.net/2346/73020",
+     "access": "full_text_read",
+     "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant."
+    },
+    {
+     "item_id": "PSISAF.pressure_column",
+     "type": "published_result",
+     "text": "NASA PSI raw data hold, for each Saffire-I and Saffire-II sample, a sensor workbook whose sheet 'Calibrated Data' has a column 'Ambient Pressure' with unit 'PSIA'. Lowest and highest cell of the column per sample, and the cell in the first row where 'Igniter Current' exceeds 1 A, are in 'values' (psia, as stored).",
+     "where": "Column header in sheet 'Calibrated Data' (row 1; the unit row below it reads 'PSIA') of the eleven workbooks 'PSI-98_Raw Data_Saffire-I Sample 1 Sensor Data Complete TM graphs.xlsx', '... Sample 2 ...' and 'PSI-99_Raw Data_Saffire Sensor Data Sample 1.xlsx' to '... Sample 9.xlsx'. Cell values per sample: 'values' of this item (section 1.2a of the report lit1_pressure.md).",
+     "title": "NASA PSI, Saffire-I (PSI-98) and Saffire-II (PSI-99): telemetry graph documents, operations notes and Readme",
+     "version": "PSI-98 version 4, PSI-99 version 5 (files version 1)",
+     "url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99",
+     "access": "full_text_read",
+     "quote": "Ambient Pressure"
     }
    ]
   },
@@ -4542,6 +4462,9 @@
    "objective": [
     {
      "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "ICES19.goal",
+     "publication_quote": "The overall goal of BASS -II is to study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low velocity forced convective flows in microgravity.",
      "record_field": "objective",
      "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
     }
@@ -4634,25 +4557,25 @@
    "note": "Oxygen is not a required variable of this need, although a listed abstract relates spread rate to flow velocity, oxygen concentration and pressure (SAE2008.spread). Among the mapped tables only the Saffire-II table has a spread-rate column; the Saffire-I tests are counted on a burn time alone. The BASS-II table has no flow-direction column, so its tests are not counted here; the PSI-25 record says \"Flame appearance, flame growth, and spread rates were determined in both the opposed and concurrent flow\" (approach field), and these rates are not in the experimental table.",
    "status": "oxygen_only",
    "counts": {
-    "usable_tests": 11,
+    "usable_tests": 2,
     "atmosphere": 0,
-    "oxygen_only": 10,
+    "oxygen_only": 2,
     "pressure_only": 0,
-    "other": 1,
-    "recorded_outside_objective": 0,
+    "other": 0,
+    "recorded_outside_objective": 9,
     "matched_flow_in_range": 0,
     "matched_flow_not_recorded": 0,
     "matched_same_gravity": 0,
     "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {
-    "solid": 10
+    "solid": 2
    },
    "matched_ranges": {
     "o2_pct": {
-     "recorded": 10,
+     "recorded": 2,
      "min": 21.5,
-     "max": 22.1,
+     "max": 21.7,
      "unit": "% by volume"
     },
     "pressure_kpa": {
@@ -4668,36 +4591,40 @@
      "investigation_id": "PSI-98",
      "variable": "pressure_kpa",
      "variable_label": "pressure",
-     "quote": "solid state sensors were used to measure pressure",
-     "said_in": "PSI-98.approach"
-    },
-    {
-     "source_id": "saffire2",
-     "investigation_id": "PSI-99",
-     "variable": "pressure_kpa",
-     "variable_label": "pressure",
-     "quote": "solid state sensors were used to measure pressure",
-     "said_in": "PSI-99.approach"
+     "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant.",
+     "said_in": "SAF17.pressure"
     }
    ],
    "objective": [
     {
      "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "BASS2TM.growth",
+     "publication_quote": "Flame growth rates are also of interest, to determine how quickly a fire in space can grow and if the flames reach a finite size or continue to grow. This has implications for firefighting strategies in spacecraft.",
      "record_field": "objective",
      "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
     },
     {
      "investigation_id": "PSI-98",
+     "verdict": "supported",
+     "publication_item": "SAF16.saffire1",
+     "publication_quote": "The objective of the Saffire-I experiment is to investigate flame spread and growth in low-gravity. Specifically, the experiment will determine if there is a limiting flame size when burning over a large surface and quantify the size and growth rate of the flames.",
      "record_field": "objective",
      "quote": "determine how rapidly a large scale fire grows in low-gravity"
     },
     {
      "investigation_id": "PSI-99",
+     "verdict": "differs",
+     "publication_item": "SAF16b.saffire2",
+     "publication_quote": "Quantifying the difference in flammability limits for large samples is the objective of the Saffire-II experiments.",
      "record_field": "objective",
      "quote": "determine how rapidly a large scale fire grows in low-gravity"
     },
     {
      "investigation_id": "PSI-100",
+     "verdict": "supported",
+     "publication_item": "SAF16b.saffire13",
+     "publication_quote": "The objective of the Saffire-I and III tests will be to determine how rapidly a large-scale fire grows in low-gravity and whether it reaches a steady-state spread rate.",
      "record_field": "objective",
      "quote": "determine how rapidly a large scale fire grows in low-gravity"
     }
@@ -4710,14 +4637,6 @@
      "oxygen_only": 2,
      "pressure_only": 0,
      "other": 0
-    },
-    {
-     "investigation_id": "PSI-99",
-     "title": "Spacecraft Fire Experiment-II",
-     "atmosphere": 0,
-     "oxygen_only": 8,
-     "pressure_only": 0,
-     "other": 1
     }
    ],
    "matched_tests": [
@@ -4828,463 +4747,10 @@
      ],
      "source_file": "PSI-98_Experimental table_SAFFIRE-1.csv",
      "source_row": 3
-    },
-    {
-     "test_id": "SAFFIRE-2-2-1",
-     "investigation_id": "PSI-99",
-     "source_id": "saffire2",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "Silicone",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "flow_direction": {
-       "value": "concurrent",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "o2_pct": {
-       "value": 21.5,
-       "unit": "% by volume",
-       "source_column": "Percent O2 (Note 1)"
-      },
-      "sample_thickness_mm": {
-       "value": 0.27,
-       "unit": "mm",
-       "source_column": "Samle Thickness"
-      },
-      "sample_width_cm": {
-       "value": 5.0,
-       "unit": "cm",
-       "source_column": "Sample Width (cm)"
-      },
-      "burn_length_cm": {
-       "value": 0.0,
-       "unit": "cm",
-       "source_column": "?-g Burn Length"
-      }
-     },
-     "flags": [
-      "o2_pct:approximate_in_source",
-      "burn_time_s:text_in_source",
-      "burn_length_cm:approximate_in_source"
-     ],
-     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
-     "source_row": 2
-    },
-    {
-     "test_id": "SAFFIRE-2-2-2",
-     "investigation_id": "PSI-99",
-     "source_id": "saffire2",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "Silicone",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "flow_direction": {
-       "value": "concurrent",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "o2_pct": {
-       "value": 22.1,
-       "unit": "% by volume",
-       "source_column": "Percent O2 (Note 1)"
-      },
-      "sample_thickness_mm": {
-       "value": 0.61,
-       "unit": "mm",
-       "source_column": "Samle Thickness"
-      },
-      "sample_width_cm": {
-       "value": 5.0,
-       "unit": "cm",
-       "source_column": "Sample Width (cm)"
-      },
-      "burn_length_cm": {
-       "value": 0.0,
-       "unit": "cm",
-       "source_column": "?-g Burn Length"
-      }
-     },
-     "flags": [
-      "o2_pct:approximate_in_source",
-      "burn_time_s:text_in_source",
-      "burn_length_cm:approximate_in_source"
-     ],
-     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
-     "source_row": 3
-    },
-    {
-     "test_id": "SAFFIRE-2-2-3",
-     "investigation_id": "PSI-99",
-     "source_id": "saffire2",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "Silicone",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "flow_direction": {
-       "value": "concurrent",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "o2_pct": {
-       "value": 22.1,
-       "unit": "% by volume",
-       "source_column": "Percent O2 (Note 1)"
-      },
-      "sample_thickness_mm": {
-       "value": 1.03,
-       "unit": "mm",
-       "source_column": "Samle Thickness"
-      },
-      "sample_width_cm": {
-       "value": 5.0,
-       "unit": "cm",
-       "source_column": "Sample Width (cm)"
-      },
-      "burn_length_cm": {
-       "value": 0.0,
-       "unit": "cm",
-       "source_column": "?-g Burn Length"
-      }
-     },
-     "flags": [
-      "o2_pct:approximate_in_source",
-      "burn_time_s:text_in_source",
-      "burn_length_cm:approximate_in_source"
-     ],
-     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
-     "source_row": 4
-    },
-    {
-     "test_id": "SAFFIRE-2-2-4",
-     "investigation_id": "PSI-99",
-     "source_id": "saffire2",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "Silicone",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "flow_direction": {
-       "value": "opposed",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "o2_pct": {
-       "value": 22.1,
-       "unit": "% by volume",
-       "source_column": "Percent O2 (Note 1)"
-      },
-      "sample_width_cm": {
-       "value": 5.0,
-       "unit": "cm",
-       "source_column": "Sample Width (cm)"
-      },
-      "burn_length_cm": {
-       "value": 0.0,
-       "unit": "cm",
-       "source_column": "?-g Burn Length"
-      }
-     },
-     "flags": [
-      "o2_pct:approximate_in_source",
-      "sample_thickness_mm:decimal_point_unclear_in_source",
-      "burn_time_s:text_in_source",
-      "burn_length_cm:approximate_in_source"
-     ],
-     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
-     "source_row": 5
-    },
-    {
-     "test_id": "SAFFIRE-2-2-5",
-     "investigation_id": "PSI-99",
-     "source_id": "saffire2",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "Cotton-Fiberglass (SIBAL)",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "flow_direction": {
-       "value": "concurrent",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "o2_pct": {
-       "value": 22.1,
-       "unit": "% by volume",
-       "source_column": "Percent O2 (Note 1)"
-      },
-      "sample_width_cm": {
-       "value": 5.0,
-       "unit": "cm",
-       "source_column": "Sample Width (cm)"
-      },
-      "spread_rate_mm_s": {
-       "value": 2.1,
-       "unit": "mm/s",
-       "source_column": "?-g Spread Length"
-      },
-      "burn_length_cm": {
-       "value": 29.0,
-       "unit": "cm",
-       "source_column": "?-g Burn Length"
-      },
-      "burn_time_s": {
-       "value": 145.0,
-       "unit": "s",
-       "source_column": "Burn Time (s)"
-      }
-     },
-     "flags": [
-      "o2_pct:approximate_in_source",
-      "sample_thickness_mm:decimal_point_unclear_in_source"
-     ],
-     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
-     "source_row": 6
-    },
-    {
-     "test_id": "SAFFIRE-2-2-6",
-     "investigation_id": "PSI-99",
-     "source_id": "saffire2",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "Cotton-Fiberglass (SIBAL)",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "flow_direction": {
-       "value": "concurrent",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "o2_pct": {
-       "value": 22.1,
-       "unit": "% by volume",
-       "source_column": "Percent O2 (Note 1)"
-      },
-      "sample_width_cm": {
-       "value": 5.0,
-       "unit": "cm",
-       "source_column": "Sample Width (cm)"
-      },
-      "spread_rate_mm_s": {
-       "value": 2.6,
-       "unit": "mm/s",
-       "source_column": "?-g Spread Length"
-      },
-      "burn_length_cm": {
-       "value": 29.0,
-       "unit": "cm",
-       "source_column": "?-g Burn Length"
-      },
-      "burn_time_s": {
-       "value": 115.0,
-       "unit": "s",
-       "source_column": "Burn Time (s)"
-      }
-     },
-     "flags": [
-      "fuel_material:blank_in_source_value_of_row_above_used",
-      "o2_pct:approximate_in_source",
-      "sample_thickness_mm:decimal_point_unclear_in_source"
-     ],
-     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
-     "source_row": 7
-    },
-    {
-     "test_id": "SAFFIRE-2-2-7",
-     "investigation_id": "PSI-99",
-     "source_id": "saffire2",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "PMMA & Nomex",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "flow_direction": {
-       "value": "concurrent",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "o2_pct": {
-       "value": 22.1,
-       "unit": "% by volume",
-       "source_column": "Percent O2 (Note 1)"
-      },
-      "sample_width_cm": {
-       "value": 5.0,
-       "unit": "cm",
-       "source_column": "Sample Width (cm)"
-      },
-      "burn_time_s": {
-       "value": 140.0,
-       "unit": "s",
-       "source_column": "Burn Time (s)"
-      }
-     },
-     "flags": [
-      "o2_pct:approximate_in_source",
-      "sample_thickness_mm:several_values_in_source",
-      "sample_length_cm:several_values_in_source",
-      "burn_length_cm:see_note_in_source",
-      "burn_length_cm:several_values_in_source",
-      "spread_rate_mm_s:text_in_source"
-     ],
-     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
-     "source_row": 8
-    },
-    {
-     "test_id": "SAFFIRE-2-2-8",
-     "investigation_id": "PSI-99",
-     "source_id": "saffire2",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "not_recorded",
-     "fuel_phase": "solid",
-     "values": {
-      "fuel_material": {
-       "value": "PMMA",
-       "unit": "",
-       "source_column": "Material"
-      },
-      "flow_cms": {
-       "value": 20.0,
-       "unit": "cm/s",
-       "source_column": "Air Flow (cm/s)"
-      },
-      "flow_direction": {
-       "value": "concurrent",
-       "unit": "concurrent | opposed",
-       "source_column": "Flow Direction"
-      },
-      "o2_pct": {
-       "value": 22.1,
-       "unit": "% by volume",
-       "source_column": "Percent O2 (Note 1)"
-      },
-      "sample_width_cm": {
-       "value": 5.0,
-       "unit": "cm",
-       "source_column": "Sample Width (cm)"
-      },
-      "burn_length_cm": {
-       "value": 10.0,
-       "unit": "cm",
-       "source_column": "?-g Burn Length"
-      },
-      "burn_time_s": {
-       "value": 600.0,
-       "unit": "s",
-       "source_column": "Burn Time (s)"
-      }
-     },
-     "flags": [
-      "o2_pct:range_in_source_start_value_named_in_publication",
-      "sample_thickness_mm:see_note_in_source",
-      "burn_length_cm:see_note_in_source",
-      "burn_length_cm:approximate_in_source",
-      "spread_rate_mm_s:see_note_in_source"
-     ],
-     "source_file": "PSI-99_Experimental table_SAFFIRE-2.csv",
-     "source_row": 9
     }
    ],
    "usable_elsewhere": {
-    "tests": 1,
+    "tests": 0,
     "o2_pct": {
      "recorded": 0,
      "min": null,
@@ -5298,255 +4764,10 @@
      "max": null,
      "unit": "kPa"
     },
-    "investigation_ids": [
-     "PSI-99"
-    ]
+    "investigation_ids": []
    },
    "indicators": [
     {
-     "indicator_id": "P3.spread_rate",
-     "need_id": "P3",
-     "label": "Flame spread rate in microgravity",
-     "template": "summary",
-     "population": "usable",
-     "group": "material_id=sibal;flow_direction=concurrent",
-     "variable": "spread_rate_mm_s",
-     "unit": "mm/s",
-     "n_tests": 2,
-     "investigation_ids": [
-      "PSI-99"
-     ],
-     "values": [
-      {
-       "stat": "min",
-       "category": "",
-       "value": 2.1
-      },
-      {
-       "stat": "max",
-       "category": "",
-       "value": 2.6
-      }
-     ],
-     "definition_ref": [
-      "SAE2008.spread",
-      "CP2003.response"
-     ],
-     "compare_with": [],
-     "reading": "Spread rate as written in the table. Cells with text instead of a number are not counted. The values are from the Saffire-II table (PSI-99); the published rates of SAF.result are for Saffire-I, whose table has no spread-rate column.",
-     "test_ids": [
-      "SAFFIRE-2-2-5",
-      "SAFFIRE-2-2-6"
-     ]
-    },
-    {
-     "indicator_id": "P3.burn_length",
-     "need_id": "P3",
-     "label": "Length burned in microgravity",
-     "template": "summary",
-     "population": "usable",
-     "group": "material_id=pmma;flow_direction=concurrent",
-     "variable": "burn_length_cm",
-     "unit": "cm",
-     "n_tests": 1,
-     "investigation_ids": [
-      "PSI-99"
-     ],
-     "values": [
-      {
-       "stat": "min",
-       "category": "",
-       "value": 10.0
-      },
-      {
-       "stat": "max",
-       "category": "",
-       "value": 10.0
-      }
-     ],
-     "definition_ref": [
-      "6001B.T1.pass"
-     ],
-     "compare_with": [],
-     "reading": "Burn length as written in the column \"?-g Burn Length\" of the Saffire-II table (first character unreadable in the PSI file). Cells written \"~ 0\" are read as 0. Two PMMA cells, \"~ 10 cm (note 3)\" and \"~ 10 cm (note 4)\", are read as 10 and carry the flag burn_length_cm:see_note_in_source; Note 3 of the table says \"This is the length of fuel with significant visible damage.\" The cell \"5 cm & 0 (note 2)\" gives no value. The 15 cm criterion of NASA-STD-6001B Test 1 is defined for a 30 cm specimen in normal gravity without air flow; these tests were not run under that standard and are not judged against it.",
-     "test_ids": [
-      "SAFFIRE-2-2-8"
-     ]
-    },
-    {
-     "indicator_id": "P3.burn_length",
-     "need_id": "P3",
-     "label": "Length burned in microgravity",
-     "template": "summary",
-     "population": "usable",
-     "group": "material_id=sibal;flow_direction=concurrent",
-     "variable": "burn_length_cm",
-     "unit": "cm",
-     "n_tests": 2,
-     "investigation_ids": [
-      "PSI-99"
-     ],
-     "values": [
-      {
-       "stat": "min",
-       "category": "",
-       "value": 29.0
-      },
-      {
-       "stat": "max",
-       "category": "",
-       "value": 29.0
-      }
-     ],
-     "definition_ref": [
-      "6001B.T1.pass"
-     ],
-     "compare_with": [],
-     "reading": "Burn length as written in the column \"?-g Burn Length\" of the Saffire-II table (first character unreadable in the PSI file). Cells written \"~ 0\" are read as 0. Two PMMA cells, \"~ 10 cm (note 3)\" and \"~ 10 cm (note 4)\", are read as 10 and carry the flag burn_length_cm:see_note_in_source; Note 3 of the table says \"This is the length of fuel with significant visible damage.\" The cell \"5 cm & 0 (note 2)\" gives no value. The 15 cm criterion of NASA-STD-6001B Test 1 is defined for a 30 cm specimen in normal gravity without air flow; these tests were not run under that standard and are not judged against it.",
-     "test_ids": [
-      "SAFFIRE-2-2-5",
-      "SAFFIRE-2-2-6"
-     ]
-    },
-    {
-     "indicator_id": "P3.burn_length",
-     "need_id": "P3",
-     "label": "Length burned in microgravity",
-     "template": "summary",
-     "population": "usable",
-     "group": "material_id=silicone;flow_direction=concurrent",
-     "variable": "burn_length_cm",
-     "unit": "cm",
-     "n_tests": 3,
-     "investigation_ids": [
-      "PSI-99"
-     ],
-     "values": [
-      {
-       "stat": "min",
-       "category": "",
-       "value": 0.0
-      },
-      {
-       "stat": "max",
-       "category": "",
-       "value": 0.0
-      }
-     ],
-     "definition_ref": [
-      "6001B.T1.pass"
-     ],
-     "compare_with": [],
-     "reading": "Burn length as written in the column \"?-g Burn Length\" of the Saffire-II table (first character unreadable in the PSI file). Cells written \"~ 0\" are read as 0. Two PMMA cells, \"~ 10 cm (note 3)\" and \"~ 10 cm (note 4)\", are read as 10 and carry the flag burn_length_cm:see_note_in_source; Note 3 of the table says \"This is the length of fuel with significant visible damage.\" The cell \"5 cm & 0 (note 2)\" gives no value. The 15 cm criterion of NASA-STD-6001B Test 1 is defined for a 30 cm specimen in normal gravity without air flow; these tests were not run under that standard and are not judged against it.",
-     "test_ids": [
-      "SAFFIRE-2-2-1",
-      "SAFFIRE-2-2-2",
-      "SAFFIRE-2-2-3"
-     ]
-    },
-    {
-     "indicator_id": "P3.burn_length",
-     "need_id": "P3",
-     "label": "Length burned in microgravity",
-     "template": "summary",
-     "population": "usable",
-     "group": "material_id=silicone;flow_direction=opposed",
-     "variable": "burn_length_cm",
-     "unit": "cm",
-     "n_tests": 1,
-     "investigation_ids": [
-      "PSI-99"
-     ],
-     "values": [
-      {
-       "stat": "min",
-       "category": "",
-       "value": 0.0
-      },
-      {
-       "stat": "max",
-       "category": "",
-       "value": 0.0
-      }
-     ],
-     "definition_ref": [
-      "6001B.T1.pass"
-     ],
-     "compare_with": [],
-     "reading": "Burn length as written in the column \"?-g Burn Length\" of the Saffire-II table (first character unreadable in the PSI file). Cells written \"~ 0\" are read as 0. Two PMMA cells, \"~ 10 cm (note 3)\" and \"~ 10 cm (note 4)\", are read as 10 and carry the flag burn_length_cm:see_note_in_source; Note 3 of the table says \"This is the length of fuel with significant visible damage.\" The cell \"5 cm & 0 (note 2)\" gives no value. The 15 cm criterion of NASA-STD-6001B Test 1 is defined for a 30 cm specimen in normal gravity without air flow; these tests were not run under that standard and are not judged against it.",
-     "test_ids": [
-      "SAFFIRE-2-2-4"
-     ]
-    },
-    {
-     "indicator_id": "P3.burn_time",
-     "need_id": "P3",
-     "label": "Burn time",
-     "template": "summary",
-     "population": "usable",
-     "group": "material_id=pmma;flow_direction=concurrent",
-     "variable": "burn_time_s",
-     "unit": "s",
-     "n_tests": 1,
-     "investigation_ids": [
-      "PSI-99"
-     ],
-     "values": [
-      {
-       "stat": "min",
-       "category": "",
-       "value": 600.0
-      },
-      {
-       "stat": "max",
-       "category": "",
-       "value": 600.0
-      }
-     ],
-     "definition_ref": [
-      "CP2003.response"
-     ],
-     "compare_with": [],
-     "reading": "Burn time as written in the table.",
-     "test_ids": [
-      "SAFFIRE-2-2-8"
-     ]
-    },
-    {
-     "indicator_id": "P3.burn_time",
-     "need_id": "P3",
-     "label": "Burn time",
-     "template": "summary",
-     "population": "usable",
-     "group": "material_id=pmma_nomex;flow_direction=concurrent",
-     "variable": "burn_time_s",
-     "unit": "s",
-     "n_tests": 1,
-     "investigation_ids": [
-      "PSI-99"
-     ],
-     "values": [
-      {
-       "stat": "min",
-       "category": "",
-       "value": 140.0
-      },
-      {
-       "stat": "max",
-       "category": "",
-       "value": 140.0
-      }
-     ],
-     "definition_ref": [
-      "CP2003.response"
-     ],
-     "compare_with": [],
-     "reading": "Burn time as written in the table.",
-     "test_ids": [
-      "SAFFIRE-2-2-7"
-     ]
-    },
-    {
      "indicator_id": "P3.burn_time",
      "need_id": "P3",
      "label": "Burn time",
@@ -5555,16 +4776,15 @@
      "group": "material_id=sibal;flow_direction=concurrent",
      "variable": "burn_time_s",
      "unit": "s",
-     "n_tests": 3,
+     "n_tests": 1,
      "investigation_ids": [
-      "PSI-98",
-      "PSI-99"
+      "PSI-98"
      ],
      "values": [
       {
        "stat": "min",
        "category": "",
-       "value": 115.0
+       "value": 420.0
       },
       {
        "stat": "max",
@@ -5578,9 +4798,7 @@
      "compare_with": [],
      "reading": "Burn time as written in the table.",
      "test_ids": [
-      "SAFFIRE-1-S1",
-      "SAFFIRE-2-2-5",
-      "SAFFIRE-2-2-6"
+      "SAFFIRE-1-S1"
      ]
     },
     {
@@ -5621,13 +4839,13 @@
    "gaps": [
     {
      "code": "pressure:not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 11 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 2 tests counted for this need."
     }
    ],
    "statements": [
     {
      "id": "status.oxygen_only",
-     "text": "10 of the 11 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
+     "text": "2 of the 2 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
     },
     {
      "id": "need.reading",
@@ -5635,27 +4853,27 @@
     },
     {
      "id": "tiers.counts",
-     "text": "The 11 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 10 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 1 with none of these matches."
+     "text": "The 2 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 2 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 0 with none of these matches."
     },
     {
      "id": "cell.oxygen_only_repeats",
-     "text": "The 10 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
+     "text": "The 2 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
     },
     {
      "id": "matched.investigations",
-     "text": "The 10 matched tests come from PSI-98, PSI-99."
+     "text": "The 2 matched tests come from PSI-98."
     },
     {
      "id": "matched.fuel_phase",
-     "text": "The 10 matched tests by fuel phase: solid 10."
+     "text": "The 2 matched tests by fuel phase: solid 2."
     },
     {
      "id": "matched.oxygen",
-     "text": "Oxygen of the 10 matched tests: recorded in 10, from 21.5 to 22.1 % by volume."
+     "text": "Oxygen of the 2 matched tests: recorded in 2, from 21.5 to 21.7 % by volume."
     },
     {
      "id": "matched.pressure_not_in_table",
-     "text": "Pressure of the 10 matched tests: not in the experimental tables."
+     "text": "Pressure of the 2 matched tests: not in the experimental tables."
     },
     {
      "id": "flow.not_specified",
@@ -5666,12 +4884,8 @@
      "text": "This environment sets no gravity level, so the gravity level of the tests was not compared with one."
     },
     {
-     "id": "elsewhere.oxygen_not_recorded",
-     "text": "Oxygen of the 1 counted test not matched to this environment: no oxygen concentration of the surrounding atmosphere is recorded."
-    },
-    {
-     "id": "elsewhere.pressure_not_recorded",
-     "text": "Pressure of the 1 counted test not matched to this environment: no pressure is recorded."
+     "id": "outside_objective",
+     "text": "9 other tests record every required condition and at least one outcome variable of this need but come from investigations whose PSI record does not state this need as an objective. These tests are not counted for this need and are not in its counts."
     },
     {
      "id": "need.note",
@@ -5679,65 +4893,17 @@
     },
     {
      "id": "gap.pressure.not_recorded",
-     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 11 tests counted for this need."
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 2 tests counted for this need."
     },
     {
      "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-98 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-98.approach). The sentence is not used as a value of any test.",
+     "text": "The experimental table of PSI-98 holds no pressure. A NASA record or a paper of the investigators says: \"All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant.\" (source: SAF17.pressure). The sentence is not used as a value of any test.",
      "source_id": "saffire1",
      "variable": "pressure_kpa"
     },
     {
-     "id": "documented.elsewhere",
-     "text": "The experimental table of PSI-99 holds no pressure. A NASA record or a paper of the investigators says: \"solid state sensors were used to measure pressure\" (source: PSI-99.approach). The sentence is not used as a value of any test.",
-     "source_id": "saffire2",
-     "variable": "pressure_kpa"
-    },
-    {
      "id": "indicator.summary",
-     "text": "Flame spread rate in microgravity (material sibal, flow direction concurrent): min 2.1 mm/s, max 2.6 mm/s, over 2 tests with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
-     "indicator_id": "P3.spread_rate",
-     "group": "material_id=sibal;flow_direction=concurrent"
-    },
-    {
-     "id": "indicator.summary",
-     "text": "Length burned in microgravity (material pmma, flow direction concurrent): min 10 cm, max 10 cm, over 1 test with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
-     "indicator_id": "P3.burn_length",
-     "group": "material_id=pmma;flow_direction=concurrent"
-    },
-    {
-     "id": "indicator.summary",
-     "text": "Length burned in microgravity (material sibal, flow direction concurrent): min 29 cm, max 29 cm, over 2 tests with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
-     "indicator_id": "P3.burn_length",
-     "group": "material_id=sibal;flow_direction=concurrent"
-    },
-    {
-     "id": "indicator.summary",
-     "text": "Length burned in microgravity (material silicone, flow direction concurrent): min 0 cm, max 0 cm, over 3 tests with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
-     "indicator_id": "P3.burn_length",
-     "group": "material_id=silicone;flow_direction=concurrent"
-    },
-    {
-     "id": "indicator.summary",
-     "text": "Length burned in microgravity (material silicone, flow direction opposed): min 0 cm, max 0 cm, over 1 test with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
-     "indicator_id": "P3.burn_length",
-     "group": "material_id=silicone;flow_direction=opposed"
-    },
-    {
-     "id": "indicator.summary",
-     "text": "Burn time (material pmma, flow direction concurrent): min 600 s, max 600 s, over 1 test with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
-     "indicator_id": "P3.burn_time",
-     "group": "material_id=pmma;flow_direction=concurrent"
-    },
-    {
-     "id": "indicator.summary",
-     "text": "Burn time (material pmma_nomex, flow direction concurrent): min 140 s, max 140 s, over 1 test with a recorded value, from PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
-     "indicator_id": "P3.burn_time",
-     "group": "material_id=pmma_nomex;flow_direction=concurrent"
-    },
-    {
-     "id": "indicator.summary",
-     "text": "Burn time (material sibal, flow direction concurrent): min 115 s, max 420 s, over 3 tests with a recorded value, from PSI-98, PSI-99. Tests in this figure: those matched to this environment among the tests counted for this need.",
+     "text": "Burn time (material sibal, flow direction concurrent): min 420 s, max 420 s, over 1 test with a recorded value, from PSI-98. Tests in this figure: those matched to this environment among the tests counted for this need.",
      "indicator_id": "P3.burn_time",
      "group": "material_id=sibal;flow_direction=concurrent"
     },
@@ -5803,24 +4969,23 @@
    "note": "The one investigation of an extinguishing agent on solid fuels, PSI-26, has an experimental table with sample names only. The counted solid-fuel tests are BASS-II tests with an event word beside the flow settings (extinction, blowoff, no ignition, not sustained); they are also counted for P1 (Flammability limit), and counts of different needs must not be added. Every counted test with added carbon dioxide or helium is a FLEX droplet test. The PSI-69 objective names CO2, He and SF6; the FLEX table has no SF6 column. The other investigations linked to this need add no counted test: PSI-10 and PSI-39 have no column mapped to an outcome variable of this need, and the tables of PSI-20, 21, 23 and 68 are not one row per test.",
    "status": "oxygen_only",
    "counts": {
-    "usable_tests": 299,
+    "usable_tests": 298,
     "atmosphere": 0,
-    "oxygen_only": 8,
+    "oxygen_only": 7,
     "pressure_only": 0,
     "other": 291,
     "recorded_outside_objective": 272,
     "matched_flow_in_range": 0,
     "matched_flow_not_recorded": 0,
     "matched_same_gravity": 0,
-    "matched_added_gas": 1
+    "matched_added_gas": 0
    },
    "matched_by_fuel_phase": {
-    "liquid": 1,
     "solid": 7
    },
    "matched_ranges": {
     "o2_pct": {
-     "recorded": 8,
+     "recorded": 7,
      "min": 19.3,
      "max": 20.9,
      "unit": "% by volume"
@@ -5845,51 +5010,81 @@
    "objective": [
     {
      "investigation_id": "PSI-69",
+     "verdict": "supported",
+     "publication_item": "FLEX.objective2",
+     "publication_quote": "Quantify the suppressant efficacy of various gaseous suppressants over the range of candidate atmospheric pressures and O2 concentrations.",
      "record_field": "objective",
      "quote": "measure the effectiveness of various gaseous fire suppressants such as CO2, He, and SF6"
     },
     {
      "investigation_id": "PSI-69",
+     "verdict": "supported",
+     "publication_item": "FLEX.objective2",
+     "publication_quote": "Quantify the suppressant efficacy of various gaseous suppressants over the range of candidate atmospheric pressures and O2 concentrations.",
      "record_field": "objective",
      "quote": "map the flammability limits of liquid fuels in microgravity environments"
     },
     {
      "investigation_id": "PSI-26",
+     "verdict": "supported",
+     "publication_item": "RG.bass",
+     "publication_quote": "The BASS experiment will improve 1-g material fire safety rating tests and help to guide strategies for extinguishing accidental fires in microgravity.",
      "record_field": "objective",
      "quote": "Assess the effectiveness of an inert, gaseous extinguishing agent (similar to that used on ISS) in putting out flames over different materials, geometries, preheating, and flow."
     },
     {
      "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "ICES19.goal",
+     "publication_quote": "The overall goal of BASS -II is to study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low velocity forced convective flows in microgravity.",
      "record_field": "objective",
      "quote": "Study the ignition, flame growth, flame spread, and extinction limits for solid fuels burning in low-velocity forced flows in microgravity."
     },
     {
      "investigation_id": "PSI-39",
+     "verdict": "topic_only",
+     "publication_item": "",
+     "publication_quote": "",
      "record_field": "objective",
      "quote": "Investigate the relationship between droplet size, pressure, and flame extinction"
     },
     {
      "investigation_id": "PSI-10",
+     "verdict": "topic_only",
+     "publication_item": "ACME14.flamedesign",
+     "publication_quote": "The primary goal of the Flame Design experiment is to improve our understanding of soot inception and control in order to enable the optimization of oxygen enriched combustion and the “design” of non-premixed flames that are both robust and soot free.",
      "record_field": "objective",
      "quote": "Obtain extinction limits as functions of Zst, amount of N2, and pressure for normal and inverse spherical C2H4 and CH4 flames."
     },
     {
      "investigation_id": "PSI-20",
+     "verdict": "differs",
+     "publication_item": "ACME14.bre",
+     "publication_quote": "Unlike the other current ACME experiments, the Burning Rate Emulator (BRE) experiment is focused on spacecraft fire prevention.",
      "record_field": "objective",
      "quote": "Consider the conditions of Objectives 1 – 2 for extinction limits."
     },
     {
      "investigation_id": "PSI-21",
+     "verdict": "topic_only",
+     "publication_item": "",
+     "publication_quote": "",
      "record_field": "objective",
      "quote": "through measurement of flame shape, lift-off heights, temperatures and extinction limits"
     },
     {
      "investigation_id": "PSI-23",
+     "verdict": "topic_only",
+     "publication_item": "",
+     "publication_quote": "",
      "record_field": "objective",
      "quote": "Determine the quasi-steady convective/chemical-kinetic extinction limits"
     },
     {
      "investigation_id": "PSI-68",
+     "verdict": "topic_only",
+     "publication_item": "RG.flex2",
+     "publication_quote": "FLEX is motivated by the need to better identify and predict limiting oxygen indices (LOIs) and inert-gas suppressant efficacy. The FLEX–2 experiments are motivated by the need to better understand droplet combustion as it applies to the fundamental problems of energy conversion and utilization where liquid hydrocarbon fuels are a predominant source of energy in the world.",
      "record_field": "objective",
      "quote": "Study flame extinction mechanisms and their boundaries."
     }
@@ -5907,7 +5102,7 @@
      "investigation_id": "PSI-69",
      "title": "Flame Extinguishment Experiment",
      "atmosphere": 0,
-     "oxygen_only": 1,
+     "oxygen_only": 0,
      "pressure_only": 0,
      "other": 273
     }
@@ -6232,55 +5427,6 @@
      ],
      "source_file": "PSI-25_Experimental table_BASS-II.csv",
      "source_row": 80
-    },
-    {
-     "test_id": "FLEX-114",
-     "investigation_id": "PSI-69",
-     "source_id": "flex",
-     "tier": "oxygen_only",
-     "o2_match": "in",
-     "pressure_match": "not_recorded",
-     "flow_match": "not_specified",
-     "gravity_match": "not_specified",
-     "added_gas": "co2_or_helium",
-     "fuel_phase": "liquid",
-     "values": {
-      "fuel_material": {
-       "value": "methanol",
-       "unit": "",
-       "source_column": "Fuel"
-      },
-      "o2_pct": {
-       "value": 20.0,
-       "unit": "% by volume",
-       "source_column": "O initial ambient composition; mole fraction"
-      },
-      "co2_pct": {
-       "value": 35.0,
-       "unit": "% by volume",
-       "source_column": "CO initial ambient composition; mole fraction"
-      },
-      "he_pct": {
-       "value": 0.0,
-       "unit": "% by volume",
-       "source_column": "He initial ambient composition; mole fraction"
-      },
-      "test_end": {
-       "value": "extinction",
-       "unit": "as recorded; CFI-G codes SE/FT written out",
-       "source_column": "Test end"
-      },
-      "extinction_diameter_mm": {
-       "value": 1.68,
-       "unit": "mm",
-       "source_column": "Visible flame extinction diameter; mm"
-      }
-     },
-     "flags": [
-      "pressure_kpa:out_of_range"
-     ],
-     "source_file": "PSI-69_Experimental table_FLEX.csv",
-     "source_row": 115
     }
    ],
    "usable_elsewhere": {
@@ -6303,119 +5449,17 @@
      "PSI-69"
     ]
    },
-   "indicators": [
-    {
-     "indicator_id": "S1.test_end",
-     "need_id": "S1",
-     "label": "How the tests ended",
-     "template": "count_by",
-     "population": "usable",
-     "group": "fuel_phase=liquid;material_id=methanol",
-     "variable": "test_end",
-     "unit": "as recorded; CFI-G codes SE/FT written out",
-     "n_tests": 1,
-     "investigation_ids": [
-      "PSI-69"
-     ],
-     "values": [
-      {
-       "stat": "count",
-       "category": "extinction",
-       "value": 1
-      }
-     ],
-     "definition_ref": [
-      "FLEX.loi",
-      "FLEX.objectives"
-     ],
-     "compare_with": [],
-     "reading": "Number of tests by the word in the \"Test end\" column of the FLEX table: extinction, disruption or completion. The table does not define the words. \"Extinction\" is how a droplet burn ended, with or without carbon dioxide or helium added; it is not a count of flames put out by an agent.",
-     "test_ids": [
-      "FLEX-114"
-     ]
-    },
-    {
-     "indicator_id": "S1.o2_by_test_end",
-     "need_id": "S1",
-     "label": "Initial oxygen by how the test ended",
-     "template": "summary",
-     "population": "usable",
-     "group": "fuel_phase=liquid;material_id=methanol;test_end=extinction",
-     "variable": "o2_pct",
-     "unit": "% by volume",
-     "n_tests": 1,
-     "investigation_ids": [
-      "PSI-69"
-     ],
-     "values": [
-      {
-       "stat": "min",
-       "category": "",
-       "value": 20.0
-      },
-      {
-       "stat": "max",
-       "category": "",
-       "value": 20.0
-      }
-     ],
-     "definition_ref": [
-      "FLEX.loi"
-     ],
-     "compare_with": [
-      "MST14.loi"
-     ],
-     "reading": "Range of ambient oxygen of the tests that ended in each way. Tests with carbon dioxide or helium added and tests with neither are in the same group, while the published values (MST14.loi) are given separately for oxygen/nitrogen and for carbon dioxide added: a minimum here is not one of those values. Not the limiting oxygen index: the LOI is found from extinction diameters, which this indicator does not use.",
-     "test_ids": [
-      "FLEX-114"
-     ]
-    },
-    {
-     "indicator_id": "S1.co2_added",
-     "need_id": "S1",
-     "label": "Carbon dioxide added to the atmosphere",
-     "template": "summary",
-     "population": "usable",
-     "group": "material_id=methanol",
-     "variable": "co2_pct",
-     "unit": "% by volume",
-     "n_tests": 1,
-     "investigation_ids": [
-      "PSI-69"
-     ],
-     "values": [
-      {
-       "stat": "min",
-       "category": "",
-       "value": 35.0
-      },
-      {
-       "stat": "max",
-       "category": "",
-       "value": 35.0
-      }
-     ],
-     "definition_ref": [
-      "FLEX.mec",
-      "TB008.ventilation"
-     ],
-     "compare_with": [],
-     "reading": "Range of carbon dioxide concentration in the tests where it was added as a suppressant. Not a minimum extinction concentration.",
-     "test_ids": [
-      "FLEX-114"
-     ]
-    }
-   ],
+   "indicators": [],
    "gaps": [
     {
      "code": "pressure:no_usable_test_in_range",
-     "text": "Pressure gap: none of the 299 tests counted for this need was recorded with pressure inside the pressure range of this environment."
+     "text": "Pressure gap: none of the 298 tests counted for this need was recorded with pressure inside the pressure range of this environment."
     }
    ],
    "statements": [
     {
      "id": "status.oxygen_only",
-     "text": "8 of the 299 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
+     "text": "7 of the 298 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
     },
     {
      "id": "need.reading",
@@ -6423,31 +5467,27 @@
     },
     {
      "id": "tiers.counts",
-     "text": "The 299 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 8 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 291 with none of these matches."
+     "text": "The 298 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 7 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 291 with none of these matches."
     },
     {
      "id": "cell.oxygen_only_repeats",
-     "text": "The 8 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
+     "text": "The 7 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
     },
     {
      "id": "matched.investigations",
-     "text": "The 8 matched tests come from PSI-25, PSI-69."
+     "text": "The 7 matched tests come from PSI-25."
     },
     {
      "id": "matched.fuel_phase",
-     "text": "The 8 matched tests by fuel phase: liquid 1, solid 7."
+     "text": "The 7 matched tests by fuel phase: solid 7."
     },
     {
      "id": "matched.oxygen",
-     "text": "Oxygen of the 8 matched tests: recorded in 8, from 19.3 to 20.9 % by volume."
+     "text": "Oxygen of the 7 matched tests: recorded in 7, from 19.3 to 20.9 % by volume."
     },
     {
      "id": "matched.pressure_not_in_table",
-     "text": "Pressure of the 8 matched tests: not in the experimental tables."
-    },
-    {
-     "id": "matched.added_gas",
-     "text": "1 of the 8 tests with oxygen inside the range and pressure inside the range or not in the table has carbon dioxide or helium added to the atmosphere."
+     "text": "Pressure of the 7 matched tests: not in the experimental tables."
     },
     {
      "id": "flow.not_specified",
@@ -6475,31 +5515,13 @@
     },
     {
      "id": "gap.pressure.no_usable_test_in_range",
-     "text": "Pressure gap: none of the 299 tests counted for this need was recorded with pressure inside the pressure range of this environment."
+     "text": "Pressure gap: none of the 298 tests counted for this need was recorded with pressure inside the pressure range of this environment."
     },
     {
      "id": "documented.elsewhere",
      "text": "The experimental table of PSI-25 holds no pressure. A NASA record or a paper of the investigators says: \"Pressure was not varied from 1 atmosphere.\" (source: ICES19.pressure). The sentence is not used as a value of any test.",
      "source_id": "bass2",
      "variable": "pressure_kpa"
-    },
-    {
-     "id": "indicator.count_by",
-     "text": "How the tests ended (fuel phase liquid, material methanol): extinction in 1 test, over 1 test with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need.",
-     "indicator_id": "S1.test_end",
-     "group": "fuel_phase=liquid;material_id=methanol"
-    },
-    {
-     "id": "indicator.summary",
-     "text": "Initial oxygen by how the test ended (fuel phase liquid, material methanol, test end extinction): min 20 % by volume, max 20 % by volume, over 1 test with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need.",
-     "indicator_id": "S1.o2_by_test_end",
-     "group": "fuel_phase=liquid;material_id=methanol;test_end=extinction"
-    },
-    {
-     "id": "indicator.summary",
-     "text": "Carbon dioxide added to the atmosphere (material methanol): min 35 % by volume, max 35 % by volume, over 1 test with a recorded value, from PSI-69. Tests in this figure: those matched to this environment among the tests counted for this need.",
-     "indicator_id": "S1.co2_added",
-     "group": "material_id=methanol"
     }
    ],
    "references": [
@@ -6623,6 +5645,28 @@
      "url": "https://ntrs.nasa.gov/citations/20150023456",
      "access": "full_text_read",
      "quote": null
+    },
+    {
+     "item_id": "CP2004.supp.q3",
+     "type": "knowledge_gap",
+     "text": "Organizing question 3 for fire suppression: the oxygen mole fraction and absolute pressure below which a fire cannot exist.",
+     "where": "Ruff, Fire Suppression and Response, slide p. 852",
+     "title": "Strategic Research to Enable NASA's Exploration Missions Conference and Workshop: Presentations (Nahra, ed.); presentations 'Fire Prevention, Detection, and Suppression', 'Fire Suppression and Response' and 'Research Plan for Fire Signatures and Detection' (Ruff) and 'Organizing Questions for Reduced-Gravity Flammability' (Miller and NASA/NCMR project scientists)",
+     "version": "NASA/CP-2004-213205/VOL1, August 2004 (conference of June 22-23, 2004, Cleveland)",
+     "url": "https://ntrs.nasa.gov/citations/20040142351",
+     "access": "full_text_read",
+     "quote": "What are the O2 mole fraction and absolute pressure below which a fire cannot exist?"
+    },
+    {
+     "item_id": "ICES19.pressure",
+     "type": "published_result",
+     "text": "BASS-II varied oxygen from 13% to 22% by nitrogen dilution of the ISS atmosphere in the glovebox working volume; pressure was not varied from 1 atmosphere.",
+     "where": "Section II",
+     "title": "Flammability Limits from BASS-II Testing in Microgravity Compared to Normal Gravity Limits (Olson, Ferkul, Fernandez-Pello, Miller, Wichman, Bhattacharjee, T'ien)",
+     "version": "ICES-2019-101 (7-11 July 2019, Boston)",
+     "url": "https://hdl.handle.net/2346/84505",
+     "access": "full_text_read",
+     "quote": "Pressure was not varied from 1 atmosphere."
     }
    ]
   },
@@ -6632,25 +5676,27 @@
    "pillar": "detection",
    "reading": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations.",
    "note": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The material is the only required variable, so the status conditions_only says only that the sample is named.",
-   "status": "not_measured",
+   "status": "oxygen_only",
    "counts": {
-    "usable_tests": 0,
+    "usable_tests": 122,
     "atmosphere": 0,
-    "oxygen_only": 0,
+    "oxygen_only": 45,
     "pressure_only": 0,
-    "other": 0,
-    "recorded_outside_objective": 122,
+    "other": 77,
+    "recorded_outside_objective": 0,
     "matched_flow_in_range": 0,
     "matched_flow_not_recorded": 0,
     "matched_same_gravity": 0,
     "matched_added_gas": 0
    },
-   "matched_by_fuel_phase": {},
+   "matched_by_fuel_phase": {
+    "solid": 45
+   },
    "matched_ranges": {
     "o2_pct": {
-     "recorded": 0,
-     "min": null,
-     "max": null,
+     "recorded": 45,
+     "min": 19.0,
+     "max": 22.2,
      "unit": "% by volume"
     },
     "pressure_kpa": {
@@ -6660,16 +5706,2384 @@
      "unit": "kPa"
     }
    },
-   "documented_elsewhere": [],
-   "objective": [],
-   "investigations": [],
-   "matched_tests": [],
+   "documented_elsewhere": [
+    {
+     "source_id": "bass2",
+     "investigation_id": "PSI-25",
+     "variable": "pressure_kpa",
+     "variable_label": "pressure",
+     "quote": "Pressure was not varied from 1 atmosphere.",
+     "said_in": "ICES19.pressure"
+    }
+   ],
+   "objective": [
+    {
+     "investigation_id": "PSI-25",
+     "verdict": "supported",
+     "publication_item": "BASS2TM.products",
+     "publication_quote": "To evaluate the levels of combustion products produced during microgravity fires, BASS–II requested the use of available onboard sensors to measure the O2 depletion and the completeness of combustion (CO and CO2) for microgravity combustion tests under spacecraft ventilation flow rates to provide scientific data on the stoichiometry of the diffusion flame reactions and heat release rates (HHRs).",
+     "record_field": "",
+     "quote": ""
+    }
+   ],
+   "investigations": [
+    {
+     "investigation_id": "PSI-25",
+     "title": "Burning and Suppression of Solids - II",
+     "atmosphere": 0,
+     "oxygen_only": 45,
+     "pressure_only": 0,
+     "other": 77
+    }
+   ],
+   "matched_tests": [
+    {
+     "test_id": "BASS2-B1",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 6.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.0,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 2
+    },
+    {
+     "test_id": "BASS2-B10",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 23.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.11,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.02091,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 11
+    },
+    {
+     "test_id": "BASS2-B11",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 46.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.14,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03286,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "flow_min_cms:below_1_cms_in_source"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 12
+    },
+    {
+     "test_id": "BASS2-B12",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 2.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 16.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.05,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.032,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 13
+    },
+    {
+     "test_id": "BASS2-B13",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 61.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.32,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.01906,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 14
+    },
+    {
+     "test_id": "BASS2-B15",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 22.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.1,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.022,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 16
+    },
+    {
+     "test_id": "BASS2-B21",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.8,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 19.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.08,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.02375,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "flow_min_cms:cell_says_flow_went_lower_than_written"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 22
+    },
+    {
+     "test_id": "BASS2-B22",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.7,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 11.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.06,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.01833,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 23
+    },
+    {
+     "test_id": "BASS2-B3",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 2.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 7.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.06,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.01167,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 4
+    },
+    {
+     "test_id": "BASS2-B4",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 11.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.07,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.01571,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 5
+    },
+    {
+     "test_id": "BASS2-B5",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 12.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.0,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 6
+    },
+    {
+     "test_id": "BASS2-B6",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 3.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 0.3,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.08,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.00038,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 7
+    },
+    {
+     "test_id": "BASS2-B7",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 2.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 16.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.06,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.02667,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 8
+    },
+    {
+     "test_id": "BASS2-B8",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 131.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.25,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.0524,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 9
+    },
+    {
+     "test_id": "BASS2-B9",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 2.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "film",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 10.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.02,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      }
+     },
+     "flags": [
+      "flow_min_cms:below_1_cms_in_source"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 10
+    },
+    {
+     "test_id": "BASS2-F1",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "Nomex III fabric",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 9.5,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "fabric sheet",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 2.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": -0.01,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      }
+     },
+     "flags": [
+      "co2_produced_pct_points:final_below_initial"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 24
+    },
+    {
+     "test_id": "BASS2-F2",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "Nomex III fabric",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 15.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "fabric sheet",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": -23.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.02,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      }
+     },
+     "flags": [
+      "co_produced_ppm:final_below_initial"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 25
+    },
+    {
+     "test_id": "BASS2-M1",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 60.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.16,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.0375,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 28
+    },
+    {
+     "test_id": "BASS2-M10",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.1,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 537.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 1.23,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.04366,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 37
+    },
+    {
+     "test_id": "BASS2-M11",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 531.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 1.1,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.04827,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 38
+    },
+    {
+     "test_id": "BASS2-M12",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.7,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 428.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 1.0,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.0428,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "flow_min_cms:below_1_cms_in_source"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 39
+    },
+    {
+     "test_id": "BASS2-M13",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.8,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 6.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 487.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 1.39,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03504,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 40
+    },
+    {
+     "test_id": "BASS2-M14",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 198.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.53,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03736,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "flow_min_cms:approximate_in_source"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 41
+    },
+    {
+     "test_id": "BASS2-M15",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 219.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.73,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 42
+    },
+    {
+     "test_id": "BASS2-M16",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 19.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 303.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.8,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03787,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 43
+    },
+    {
+     "test_id": "BASS2-M19",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 19.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 354.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 1.25,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.02832,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 46
+    },
+    {
+     "test_id": "BASS2-M2",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 20.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 313.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.87,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03598,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 29
+    },
+    {
+     "test_id": "BASS2-M3",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.8,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 289.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.85,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.034,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 30
+    },
+    {
+     "test_id": "BASS2-M4",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.8,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 559.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 1.73,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03231,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 31
+    },
+    {
+     "test_id": "BASS2-M5",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 20.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co2_produced_pct_points": {
+       "value": 2.78,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      }
+     },
+     "flags": [
+      "co_final_ppm:lower_bound_in_source"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 32
+    },
+    {
+     "test_id": "BASS2-M6",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 21.8,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 344.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.89,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03865,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 33
+    },
+    {
+     "test_id": "BASS2-M8",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 19.1,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 10.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "slab",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 415.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.84,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.0494,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "flow_min_cms:cell_says_flow_went_lower_than_written"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 35
+    },
+    {
+     "test_id": "BASS2-O1",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 20.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "rod",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 52.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.41,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.01268,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 48
+    },
+    {
+     "test_id": "BASS2-O2",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 22.2,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 0.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "rod",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 24.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.15,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.016,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 49
+    },
+    {
+     "test_id": "BASS2-P13a",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.7,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "rod",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 412.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 1.27,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03244,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme",
+      "flow_min_cms:cell_says_flow_went_lower_than_written"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 86
+    },
+    {
+     "test_id": "BASS2-P13b",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.6,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "rod",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 67.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.21,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.0319,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme",
+      "flow_min_cms:cell_says_flow_went_lower_than_written"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 87
+    },
+    {
+     "test_id": "BASS2-P18",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 2.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "rod",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 25.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.86,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.00291,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme",
+      "flow_min_cms:cell_says_flow_went_lower_than_written"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 92
+    },
+    {
+     "test_id": "BASS2-P20",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 19.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 2.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "rod",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 76.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.71,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.0107,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme",
+      "flow_min_cms:cell_says_flow_went_lower_than_written"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 94
+    },
+    {
+     "test_id": "BASS2-P24",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 19.0,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 2.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "rod",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 234.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 1.04,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.0225,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme",
+      "flow_min_cms:cell_says_flow_went_lower_than_written"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 100
+    },
+    {
+     "test_id": "BASS2-P25",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.9,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "rod",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 162.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.62,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.02613,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme",
+      "flow_min_cms:cell_says_flow_went_lower_than_written"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 101
+    },
+    {
+     "test_id": "BASS2-P5",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "PMMA",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 19.3,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "rod",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 525.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 1.35,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03889,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [
+      "fuel_material:not_written_in_cell_named_in_readme",
+      "flow_min_cms:cell_says_flow_went_lower_than_written"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 80
+    },
+    {
+     "test_id": "BASS2-T25",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.8,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "fabric sheet",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 18.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.03,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 125
+    },
+    {
+     "test_id": "BASS2-T26",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.8,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "fabric sheet",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 25.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.07,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      },
+      "co_to_co2_molar_ratio": {
+       "value": 0.03571,
+       "unit": "mol/mol",
+       "source_column": "(derived: co_produced_ppm * 1e-4 / co2_produced_pct_points)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 126
+    },
+    {
+     "test_id": "BASS2-T27",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.7,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "fabric sheet",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 10.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.01,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      }
+     },
+     "flags": [],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 127
+    },
+    {
+     "test_id": "BASS2-T29",
+     "investigation_id": "PSI-25",
+     "source_id": "bass2",
+     "tier": "oxygen_only",
+     "o2_match": "in",
+     "pressure_match": "not_recorded",
+     "flow_match": "not_specified",
+     "gravity_match": "not_specified",
+     "added_gas": "not_recorded",
+     "fuel_phase": "solid",
+     "values": {
+      "fuel_material": {
+       "value": "SIBAL fabric (75% cotton, 25% fiberglass)",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "o2_pct": {
+       "value": 20.7,
+       "unit": "% by volume",
+       "source_column": "Calibrated  initial O2 % by vol"
+      },
+      "flow_cms": {
+       "value": 5.0,
+       "unit": "cm/s",
+       "source_column": "Air display"
+      },
+      "sample_geometry": {
+       "value": "fabric sheet",
+       "unit": "",
+       "source_column": "Fuel Sample Material"
+      },
+      "co_produced_ppm": {
+       "value": 11.0,
+       "unit": "ppm",
+       "source_column": "(derived: co_final_ppm - co_initial_ppm)"
+      },
+      "co2_produced_pct_points": {
+       "value": 0.03,
+       "unit": "percentage points",
+       "source_column": "(derived: co2_final_pct - co2_initial_pct)"
+      }
+     },
+     "flags": [
+      "flow_min_cms:potentiometer_or_bracketed_values_in_cell_not_read"
+     ],
+     "source_file": "PSI-25_Experimental table_BASS-II.csv",
+     "source_row": 130
+    }
+   ],
    "usable_elsewhere": {
-    "tests": 0,
+    "tests": 77,
     "o2_pct": {
-     "recorded": 0,
-     "min": null,
-     "max": null,
+     "recorded": 77,
+     "min": 13.6,
+     "max": 18.9,
      "unit": "% by volume",
      "not_ambient": 0
     },
@@ -6679,7 +8093,9 @@
      "max": null,
      "unit": "kPa"
     },
-    "investigation_ids": []
+    "investigation_ids": [
+     "PSI-25"
+    ]
    },
    "indicators": [
     {
@@ -7120,30 +8536,72 @@
    ],
    "gaps": [
     {
-     "code": "need:no_usable_test",
-     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
+     "code": "pressure:not_recorded",
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 122 tests counted for this need."
     }
    ],
    "statements": [
     {
-     "id": "status.not_measured",
-     "text": "No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective."
+     "id": "status.oxygen_only",
+     "text": "45 of the 122 tests counted for this need were recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
     },
     {
      "id": "need.reading",
      "text": "A test recorded for this need holds the material and the difference between the final and the initial CO or CO2 reading. No test is counted, because no PSI record states the need. The gas readings are those of the on-board sensors of the experiment (ICES19.sensors), not cabin concentrations."
     },
     {
-     "id": "outside_objective",
-     "text": "122 other tests record every required condition and at least one outcome variable of this need but come from investigations whose PSI record does not state this need as an objective. These tests are not counted for this need and are not in its counts."
+     "id": "tiers.counts",
+     "text": "The 122 counted tests by match with this environment: 0 with oxygen and pressure both inside the ranges; 45 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 77 with none of these matches."
+    },
+    {
+     "id": "cell.oxygen_only_repeats",
+     "text": "The 45 tests with oxygen inside the range and no pressure in the table are counted in the same way in every pressure bin of this oxygen bin."
+    },
+    {
+     "id": "matched.investigations",
+     "text": "The 45 matched tests come from PSI-25."
+    },
+    {
+     "id": "matched.fuel_phase",
+     "text": "The 45 matched tests by fuel phase: solid 45."
+    },
+    {
+     "id": "matched.oxygen",
+     "text": "Oxygen of the 45 matched tests: recorded in 45, from 19 to 22.2 % by volume."
+    },
+    {
+     "id": "matched.pressure_not_in_table",
+     "text": "Pressure of the 45 matched tests: not in the experimental tables."
+    },
+    {
+     "id": "flow.not_specified",
+     "text": "This environment sets no flow range, so the flow speed of the tests was not compared with one."
+    },
+    {
+     "id": "gravity.not_specified",
+     "text": "This environment sets no gravity level, so the gravity level of the tests was not compared with one."
+    },
+    {
+     "id": "elsewhere.oxygen",
+     "text": "Oxygen of the 77 counted tests not matched to this environment: recorded in 77 tests, from 13.6 to 18.9 % by volume."
+    },
+    {
+     "id": "elsewhere.pressure_not_recorded",
+     "text": "Pressure of the 77 counted tests not matched to this environment: no pressure is recorded."
     },
     {
      "id": "need.note",
      "text": "The difference between two CO or CO2 readings is not the amount produced by one test: many BASS-II tests start with a CO reading above zero. The material is the only required variable, so the status conditions_only says only that the sample is named."
     },
     {
-     "id": "gap.need.no_usable_test",
-     "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests recorded outside the stated objective."
+     "id": "gap.pressure.not_recorded",
+     "text": "Pressure gap: the experimental tables hold no pressure value for any of the 122 tests counted for this need."
+    },
+    {
+     "id": "documented.elsewhere",
+     "text": "The experimental table of PSI-25 holds no pressure. A NASA record or a paper of the investigators says: \"Pressure was not varied from 1 atmosphere.\" (source: ICES19.pressure). The sentence is not used as a value of any test.",
+     "source_id": "bass2",
+     "variable": "pressure_kpa"
     },
     {
      "id": "indicator.summary",
@@ -7329,11 +8787,17 @@
    "objective": [
     {
      "investigation_id": "PSI-102",
+     "verdict": "supported",
+     "publication_item": "SAME.goal",
+     "publication_quote": "The goal of SAME was to generate repeatable smoke and obtain particle size statistics on-orbit without relying exclusively upon sample return to Earth.",
      "record_field": "objective",
      "quote": "relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment"
     },
     {
      "investigation_id": "PSI-101",
+     "verdict": "supported",
+     "publication_item": "SAME12.objective",
+     "publication_quote": "The objective of this work was to make sufficient measurements of smoke from spacecraft fires to enable improved design of future detectors.",
      "record_field": "objective",
      "quote": "relate the droplet size distribution to the smoke generation and smoke transport conditions in the experiment"
     }

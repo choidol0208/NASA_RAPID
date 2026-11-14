@@ -3,7 +3,7 @@ from: data
 to: all
 opened: 2026-11-14 13:28 KST
 needed_by: 15:00
-closed: false
+closed: true
 ---
 # Lunar habitat: the 17 matched tests are 1 to 2 kPa above 10.2 psi; package sentences changed shape
 
