@@ -1058,11 +1058,15 @@ function renderAiUse(ai, onQuery) {
   const rb = ai.robust;
   if (rb && Array.isArray(rb.runs) && rb.runs.length) {
     const qs = rb.runs.map((x) => x.query).filter(Boolean);
+    const runVersions = [...new Set(rb.runs.map((x) => x.config_version).filter(Boolean))];
+    const stale = ai.configVersion && runVersions.length && !runVersions.includes(ai.configVersion);
     parts.push(h("div", { class: "ai-part" },
       h("h3", {}, "3. Does the ranking depend on the team's weights?"),
       rb.label ? h("p", { class: "gap" }, rb.label) : null,
-      h("p", {}, "Each result card of these queries shows its line, under \"Weight check\": ",
-        ...qs.flatMap((x, i) => [i ? ", " : "", h("a", { href: "?q=" + encodeURIComponent(x), "data-q": x }, x)]), "."),
+      stale
+        ? h("p", {}, `This sampling was run on scoring configuration ${runVersions.join(", ")}; the ranking on this page uses ${ai.configVersion}. Its lines are not shown on the result cards until it is run again on ${ai.configVersion}.`)
+        : h("p", {}, "Each result card of these queries shows its line, under \"Weight check\": ",
+          ...qs.flatMap((x, i) => [i ? ", " : "", h("a", { href: "?q=" + encodeURIComponent(x), "data-q": x }, x)]), "."),
       h("p", { class: "gap" }, "Sampling: ", link(REPO + "data/insights/robustness.json", "data/insights/robustness.json"), " ", countTag())));
   }
   body.replaceChildren(...parts);
@@ -1323,7 +1327,9 @@ async function main() {
     show("#top", true); show("#all", true); show("#needs", true); show("#stops", true); // #answers, #shown and #criteria are set by renderAnswers()
   }
 
-  renderAiUse({ quality: aiQuality, readiness: aiReadiness, robust: aiRobust }, (q2) => { run(q2); $("#top").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  // Static links to repository files point at the built commit (like every other source link).
+  document.querySelectorAll("a[data-repo-path]").forEach((a) => { a.href = REPO + a.dataset.repoPath; a.target = "_blank"; a.rel = "noopener"; });
+  renderAiUse({ quality: aiQuality, readiness: aiReadiness, robust: aiRobust, configVersion: config.version }, (q2) => { run(q2); $("#top").scrollIntoView({ behavior: "smooth", block: "start" }); });
   $("#ask-form").addEventListener("submit", (e) => { e.preventDefault(); run($("#q").value.trim()); });
   // "How the score works" links open the folded method text.
   document.querySelectorAll('a[href="#method"]').forEach((a) => a.addEventListener("click", () => { const d = $("#method details"); if (d) d.open = true; }));

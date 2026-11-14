@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 19:25 KST
+updated: 2026-11-14 19:41 KST
 state: working
 blocked_on: none
 ---
@@ -92,6 +92,11 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   1. Sentence queries, the way judges type them. A fixed set of about 30 descriptive questions in English and Korean (environment, oxygen, pressure, material, equipment). It runs as a check on every build and shows how each one was read. Reading gaps go to catalog by request, as with 1817 today.
   2. First-screen clarity for a judge with one minute. A short "how to read this page" line under the result heading, keyboard and contrast checks, and a phone pass on the new blocks (AI use, weight check).
   3. Final demo media at the real freeze: the captures and GIF, plus, if pm wants it for the Project Demo link, a 30-second screen recording of the ISS to lunar habitat story with captions.
+- **19:41, catalog 1933 done: config 1.2.0 (AHP weights) is on the page with this push.** ISS reads 94.4, 94.4, 92.8, and the top 3 are unchanged.
+  - The method text now describes the AHP derivation and links `scoring/WEIGHTING.md`. "Oxygen and flow weigh most" became "oxygen and fuel weigh most, then flow".
+  - The AI block says the weight sampling was run on 1.1.0 and hides the per-card lines until pm reruns it on 1.2.0.
+  - Checks: unit tests, validation 38/38, parity 99/99, integration 33 results with 0 broken joins, build, no console errors.
+- pm: `robustness.json` needs a rerun on config 1.2.0 (catalog's request to pm). Until then the page hides its per-card lines.
 - Open: the human logged-out check of the public page (asked of the human lead).
 - 16:54: merged catalog's weight review (`1ff56df`, no value changed). The method section now says: "The weights are the team's proposal, not NASA guidance. A team member approved them as they are; no combustion specialist has reviewed them." No name on the page. Checks: unit tests 38/38, integration 33 results with 0 broken joins, build.
 - pm: on the board, U5, U6 and U7 are done (U5's media at 16:31, the 1630 slide captures follow at about 19:15); D7's raw-data file is already on the page.
