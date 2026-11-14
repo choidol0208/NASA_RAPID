@@ -118,15 +118,17 @@ def report_lines(res):
 
 STREAMS = os.path.join(HERE, "weight_streams.json")
 EXPERT = os.path.join(HERE, "expert_weights.json")
+LITERATURE = os.path.join(HERE, "literature_weights.json")
 DATA = os.path.join(HERE, "data_weights.json")
 
 
 def final_weights(res, streams_path=STREAMS):
     """Combine the streams named in scoring/weight_streams.json into the weights the scorer uses.
 
-    - Judgement stream: the group weights of the team's experts (scoring/expert_weights.json) for a profile
-      whose group matrix is consistent, if "judgement.prefer" is "expert"; otherwise the AHP derivation above
-      (the AI session's judgements).
+    - Judgement stream: "judgement.prefer" is a stream name or a list tried in order: "expert" (the group
+      weights of team members, scoring/expert_weights.json) or "literature" (judgements filled in from cited
+      sources, scoring/literature_weights.json). The first one with a consistent matrix for the profile is
+      used; if none, the AHP derivation above (the AI session's judgements from the NASA records).
     - Data stream: for a profile listed under "data", the weights of the listed dimensions are pooled with
       the data shares of scoring/data_weights.json by a log-linear (geometric) opinion pool,
       s_d proportional to s_judgement_d^(1 - lambda) * s_data_d^lambda, inside the subset; the subset keeps the
@@ -135,14 +137,21 @@ def final_weights(res, streams_path=STREAMS):
     """
     st = json.load(open(streams_path, encoding="utf-8")) if os.path.exists(streams_path) else {}
     expert = json.load(open(EXPERT, encoding="utf-8")).get("group", {}) if os.path.exists(EXPERT) else {}
+    literature = json.load(open(LITERATURE, encoding="utf-8")).get("group", {}) if os.path.exists(LITERATURE) else {}
     data = json.load(open(DATA, encoding="utf-8")).get("responses", {}) if os.path.exists(DATA) else {}
     out = {}
     for prof, r in res.items():
         w, sources = dict(r["weights"]), ["AHP, AI-session judgements (scoring/ahp_judgements.json)"]
         if st.get("apply"):
-            g = expert.get(prof)
-            if st.get("judgement", {}).get("prefer") == "expert" and g and g.get("consistent"):
-                w, sources = dict(g["weights"]), [f"AHP, judgements of {len(g['people'])} team members (scoring/expert_weights.json)"]
+            prefer = st.get("judgement", {}).get("prefer", "expert")
+            order = prefer if isinstance(prefer, list) else [prefer]
+            for kind in order:  # the first stream in the list that has consistent weights for this profile
+                g = expert.get(prof) if kind == "expert" else literature.get(prof) if kind == "literature" else None
+                if g and g.get("consistent"):
+                    w = dict(g["weights"])
+                    sources = ([f"AHP, judgements of {len(g['people'])} team members (scoring/expert_weights.json)"] if kind == "expert"
+                               else ["AHP, literature-based judgements compiled by an AI session from cited sources (scoring/literature_weights.json)"])
+                    break
             spec = st.get("data", {}).get(prof)
             if spec and spec["response"] in data:
                 dims = [d for d in spec["dimensions"] if w.get(d, 0) > 0]

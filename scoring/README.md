@@ -2,7 +2,7 @@
 
 > **How it works, in one document:** `scoring/METHOD.md` (weighting rules, validation, data preprocessing).
 
-> AI-generated code and data: written with Claude (an AI assistant) on 2026-11-14. Catalog values are `ai_extracted`; a person still has to compare them with the originals. Scores and rankings are the team's method, not NASA's conclusion. The values of config 1.3.0 were approved by a team member: the AHP judgements behind the weights (`scoring/WEIGHTING.md`), the pooling of the suppression weights with NASA FLEX data (`scoring/BUILDUP.md`), and the other values (`scoring/PARAMETER_REVIEW.md`).
+> AI-generated code and data: written with Claude (an AI assistant) on 2026-11-14. Catalog values are `ai_extracted`; a person still has to compare them with the originals. Scores and rankings are the team's method, not NASA's conclusion. The values of config 1.4.0 were approved by a team member: the literature-based judgements behind the weights and the pooling of the suppression weights with NASA FLEX data (`scoring/BUILDUP.md`), and the other values (`scoring/PARAMETER_REVIEW.md`).
 
 From the environment and conditions a user gives, the filter finds the most similar PSI test configurations and picks the top 1 to 3 investigations. Code computes the scores, so the same input always gives the same result. A language model may explain a result; it never produces or changes a score.
 
@@ -16,10 +16,11 @@ From the environment and conditions a user gives, the filter finds the most simi
 | `data/catalog/data_dictionary.csv` | Column name, meaning, allowed values, where it is used |
 | `scoring/scoring_config.json` | Weight profiles, similarity scales, presets, keywords, warning texts. The dashboard reads the same file. Korean keywords are user input; `keywords._gloss_ko` gives their English |
 | `scoring/scorer.py` | Reading the query, scoring, picking the top 1 to 3 (standard library only) |
-| `scoring/test_scorer.py` | 55 unit tests, hand-calculated examples included |
+| `scoring/test_scorer.py` | 56 unit tests, hand-calculated examples included |
 | `scoring/ahp_judgements.json` | The 51 pairwise judgements (AHP) behind the profile weights, each with its basis |
 | `scoring/derive_weights.py` | Derives the profile weights from the judgements (eigenvector, consistency ratio) and pools them with the streams in `scoring/weight_streams.json`; `--check` and `--write` |
 | `scoring/derive_data_weights.py` | NASA data stream: relative importance of each condition in the FLEX measurements (LMG, bootstrap), with theory checks; writes `scoring/data_weights.json` |
+| `scoring/literature_evidence.json`, `scoring/derive_literature_weights.py` | Literature stream (used in 1.4.0): evidence classes per question type with cited sources, turned into the 51 AHP judgements (`scoring/literature_judgements.csv`) and weights (`scoring/literature_weights.json`) |
 | `scoring/derive_expert_weights.py`, `scoring/expert_form.csv` | Expert stream: the AHP form for team members with combustion training, and group aggregation; writes `scoring/expert_weights.json` |
 | `scoring/flame_temperature.py` | Atmosphere flame temperature (oxygen consumption, NIST-JANAF enthalpies in `scoring/reference/janaf/`) and its check on FLEX |
 | `scoring/BUILDUP.md` | The build-up of the weighting model: what was added, the concepts and techniques, and the papers and textbooks behind them |
@@ -96,15 +97,15 @@ Dimensions the user did not give are left out of the score, and the remaining we
 7. **Ties:** scores within 3 points count as tied and are ordered by evidence quality and by whether a 1 g comparison exists.
 8. **Reasons:** the reason text says "tested" only for values from an experimental table. Values from the record text, a test matrix or a team reading say so, and assumed values read "not recorded, assumed". When oxygen and pressure are both ranges, a result carries `ranges_separate`.
 
-## Checks (2026-11-14, config 1.3.0)
+## Checks (2026-11-14, config 1.4.0)
 
 - Validation scenarios 38 of 38 pass.
-- Unit tests 55 of 55 pass.
-- AHP consistency ratio 0.012, 0.014 and 0.006 (limit 0.10); the config holds exactly the derived weights.
+- Unit tests 56 of 56 pass.
+- AHP consistency ratio of the literature judgements 0, 0.009 and 0.008 (limit 0.10); the config holds exactly the derived weights.
 - Python and JavaScript give the same results on 99 of 99 queries.
-- Each weight of each profile halved and raised by half: 147 of 152 variants keep the same top 3, and rank 1 changes in 1.
-- SMAA with only the order of importance: rank 1 holds in every draw for 9 of 12 queries; `lunar habitat cotton fabric` has no clear winner.
-- Each other value halved and raised by half: 127 of 136 runs keep the same top 3. The `lunar habitat` preset never changes; `ISS` changes only at rank 3.
+- Each weight of each profile halved and raised by half: 146 of 152 variants keep the same top 3, and rank 1 changes in 1.
+- SMAA with only the order of importance: rank 1 holds in every draw for 8 of 12 queries; `lunar habitat cotton fabric` has no clear winner.
+- Each other value halved and raised by half: 129 of 136 runs keep the same top 3. The `ISS` and `lunar habitat` presets never change.
 - Against the NASA sources: 107 ranking values written in the source and 8 team readings; 24 of 24 range ends match; 135 of 135 numbers in the shown text are written in the source.
 
 The expected answers were written by an AI session for the team; their review by combustion researchers is the next step. Details are in `validation/report.md` and `validation/catalog_source_check.md`.
