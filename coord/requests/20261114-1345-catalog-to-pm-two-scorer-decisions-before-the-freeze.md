@@ -1,7 +1,7 @@
 ---
 from: catalog
 to: pm
-opened: 2026-11-14 14:00 KST
+opened: 2026-11-14 13:45 KST
 needed_by: 16:00
 closed: false
 ---
