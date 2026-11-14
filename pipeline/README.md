@@ -2,12 +2,12 @@
 
 *AI-generated (Claude Code) during the NASA Space Apps Challenge 2026 hackathon. The spec files are drafts and have not been reviewed by a combustion expert.*
 
-The pipeline starts from the question side: what does spacecraft fire safety need to know, and which recorded variables can answer it? It then checks every NASA PSI experimental table against that list. It links tests to questions; it does not answer the questions and draws no conclusion from the values.
+The pipeline starts from the question side: six questions about spacecraft fire safety that the team wrote from the documents in `spec/references.json` (no fire-safety engineer was asked), each with the recorded variables a test must hold to be counted for it. It then checks every NASA PSI experimental table against that list. It links tests to questions; it does not answer the questions and draws no conclusion from the values.
 
 ```
-spec/needs.json      what fire safety needs to know (6 questions: prevention, detection, suppression)
+spec/needs.json      6 fire-safety questions written by the team (prevention, detection, suppression)
         │             each need = required condition variables + any-of outcome variables + scope
-spec/references.json standards, requirements and published results each need rests on (21 documents)
+spec/references.json standards, requirements and published results each need rests on (22 documents)
         │
 spec/coverage.json   bin edges of the coverage grid (oxygen, pressure), placed around named atmospheres
         │
@@ -37,7 +37,7 @@ Run: `python3 pipeline/run.py` (after `python3 scripts/fetch_psi.py`).
 | `need_tests.csv` | For each need, the tests that record its variables, with `objective_link` |
 | `coverage_grid.csv` | Recorded tests per fuel phase, oxygen basis, oxygen bin and pressure bin; `not_recorded` is its own bin |
 | `scenario_tests.csv` | Scenario × test: whether the recorded oxygen, pressure, flow and gravity fall in the scenario ranges; match tier |
-| `scenario_needs.csv` | Scenario × need: usable tests by match tier, investigations, status, and gap codes |
+| `scenario_needs.csv` | Scenario × need: counted tests (column `usable_tests`) by match tier, investigations, status, and gap codes |
 | `indicators.csv` | Per need and group: count, min, median, max of a recorded variable, with the indicator's reading and reference items |
 | `indicator_tests.csv` | The tests behind every indicator row |
 | `objective_links.csv` | Need × investigation: the sentence in the PSI record that states the need as an objective |
@@ -50,16 +50,16 @@ Run: `python3 pipeline/run.py` (after `python3 scripts/fetch_psi.py`).
 | `investigation_facts.json` | Per investigation (24): tables, test rows, recorded range or value counts of every variable, stated needs with the record sentence, counted tests per need, flags, unmapped columns, and fixed sentences filled with these numbers (`facts.py`, templates in `spec/fact_statements.json`) |
 | `validation_report.json` | Result of `python3 pipeline/check.py`: every output recomputed from the raw tables and the spec rules by code that does not import the engine |
 
-Status in the capability matrix: `measured`, `partial` (an outcome exists but a required condition is missing), `conditions_only`, `none`, `out_of_scope`, `not_test_level` (the table's rows are not individual tests).
+Status in the capability matrix: `measured`, `partial` (an outcome exists but a required condition is missing), `conditions_only`, `none`, `out_of_scope`, `not_test_level` (the table's rows are not individual tests). `measured` is a status name, not a judgement: it says that every required condition and at least one outcome variable has a value in the table, not that the question of the need was measured or answered.
 
 ## Rules the engine follows
 
-- A value is copied from a NASA source cell, multiplied by a unit factor declared in `sources.json`, or computed by a formula in `variables.json`. Nothing is estimated.
+- A value is copied from a NASA source cell, multiplied by a unit factor declared in `sources.json`, or computed by a formula in `variables.json`. The values that are not literally in a cell, and the choices made when reading a cell, are listed below; no other value is added.
 - A cell that a rule cannot read stays empty and gets a flag (`variable:reason`). Problems are flagged, not fixed. A number is never taken from a pointer such as "Note 4" or "See Fig. 5"; a cell with several numbers, or a number whose decimal point is unclear ("037 mm"), gives no value.
 - Every value keeps its source file, row and column.
 - To add a table, a variable or a need, edit the spec files; `run.py` does not change.
 
-Values that are not literally in a NASA cell, all flagged on the test:
+Values that are not literally in a NASA cell. The first three kinds are flagged on the test:
 
 | What | Where | Flag |
 |---|---|---|
@@ -69,17 +69,23 @@ Values that are not literally in a NASA cell, all flagged on the test:
 | Shape words ("film", "slab", "rod", "fabric sheet") chosen by keyword from the sample cell | BASS and BASS-II | none; the keywords are in `sources.json` (`sample_keywords`) |
 | Constants of a whole table (gravity level, fuel phase, oxygen basis) | `sources.json` `constants` | source column reads "(constant in sources.json)" |
 
+Readings that take a number written in the cell and still involve a choice: a value written with "~" ("~ 21.5", "~ 0") is read as the number (flag `<variable>:approximate_in_source`); a length followed by a note pointer ("~ 10 cm (note 3)") is read as the number (flag `burn_length_cm:see_note_in_source`); the flow at the start of a BASS-II test is the first number of the "Air display" cell, and where the cell says the flow was reduced further ("5 down to ext") the test carries `flow_min_cms:cell_says_flow_went_lower_than_written`.
+
 Rows that are not read: a row with a required cell empty, a row named in `sources.json` as not a test (one maintenance entry in PSI-26), and a row that repeats an earlier row cell for cell (8 in PSI-39, 34 in PSI-107). `run_report.json` lists them.
 
 ## Why a test counts for a need
 
-Recording the right variables is not enough to be counted. A test is counted for a need only if a sentence in the `objective` field of the PSI record of its investigation names the topic of the need as something the investigation set out to determine. The sentence is copied into `needs.json` (`stated_by`) and the engine checks that it is in the record. `capability_matrix.csv` and `need_tests.csv` carry `objective_link` (`stated` or `not_stated`). Scenario counts and indicators use `stated` tests; the others are reported next to them as recorded outside the stated objective.
+Recording the right variables is not enough to be counted. A test is counted for a need only if a sentence in the `objective` field of the PSI record of its investigation names the topic of the need as something the investigation set out to determine. The sentence is copied into `needs.json` (`stated_by`) and the engine checks that it is in the record. `capability_matrix.csv` and `need_tests.csv` carry `objective_link` (`stated` or `not_stated`). Scenario counts and indicators use `stated` tests; the others are reported next to them as recorded outside the stated objective. Two kinds of indicator are declared exceptions in `indicators.json`: the three D1 indicators use every test that records the variables (population `recorded`), because no record states D1, and `D2.flow` and `D2.aging` use the tests of stating investigations that record the required conditions, with or without an outcome (population `in_scope`).
+
+In file columns and field names the counted tests are called `usable_tests` and the population `usable`. The names are kept for the other sessions. They mean counted under the two rules above (variables recorded, topic named in the record), not that a test can answer the question.
+
+One sentence of the PSI-25 record is the link for P1, P2, P3 and S1, and the BASS-II tests with an event word beside the flow settings are counted under both P1 and S1. Counts of different needs must not be added.
 
 This link is a property of the catalogue text and was made by the team. It does not show that a test can or cannot inform the need. The combustion-products need (D1) has no record that names a gas species as something to determine; the BASS-II CO and CO2 readings are reported as recorded outside the stated objective, with the investigators' own description of the sensor (`ICES19.sensors`).
 
 Each need has a `reading`: what a counted test records and what the count does not mean (for example, a test counted for "Extinction conditions" records how the burn ended, which may be disruption or completion and not extinction). It is shown wherever the count is shown.
 
-The needs themselves are the team's wording. `needs.json` says which parts come from NASA documents and lists the areas NASA names that the PSI tables cannot address (`not_covered`), and the PSI records that make a fire-safety statement but contribute no counted test.
+The needs themselves are the team's wording. `needs.json` says which parts come from NASA documents, lists areas named in the reference items that the mapped tables cannot address (`not_covered`), and says which PSI records contribute no counted test and why (`not_counted_but_fire_safety`; the table is at the end of this file).
 
 ## Indicators
 
@@ -87,7 +93,7 @@ The needs themselves are the team's wording. `needs.json` says which parts come 
 
 ## Scenarios
 
-A scenario is a set of ranges (`scenarios.json`), not a prediction. A test is marked `in`, `out` or `not_recorded` for each variable. Tier `atmosphere` means oxygen and pressure are both recorded and inside the ranges; `oxygen_only` means oxygen is inside and the table records no pressure. Status per need: `in_atmosphere`, `oxygen_only`, `pressure_only`, `other_atmosphere`, `not_measured`. Gap codes say which variable (oxygen, pressure, flow, gravity) has no usable test in range or is not in the table. "Not recorded" always means that the experimental table holds no value; where a NASA record or a paper of the investigators says something about the missing variable, the sentence is carried next to the gap (`documented_elsewhere` in `sources.json`) and is never used as a value. Each test is also marked for carbon dioxide or helium added to the atmosphere (`added_gas`); the mark does not change the tier. A scenario can point to records or table cells that name its atmosphere and are not in the counts (`see_also`). All PSI tests in the tables are microgravity tests, so a lunar or Martian scenario always carries a gravity gap.
+A scenario is a set of ranges (`scenarios.json`), not a prediction. A test is marked `in`, `out` or `not_recorded` for each variable. Tier `atmosphere` means oxygen and pressure are both recorded and inside the ranges; `oxygen_only` means oxygen is inside and the table records no pressure. Status per need: `in_atmosphere`, `oxygen_only`, `pressure_only`, `other_atmosphere`, `not_measured`. The status names are kept for the other sessions and say less than they seem to: `in_atmosphere` says only that at least one counted test has oxygen and pressure inside the ranges, whatever its fuel, flow, gravity or added gas; `not_measured` says that the need has no counted test, while tests recorded outside the stated objective may exist (D1). Gap codes say which variable (oxygen, pressure, flow, gravity) has no usable test in range or is not in the table. "Not recorded" always means that the experimental table holds no value; where a NASA record or a paper of the investigators says something about the missing variable, the sentence is carried next to the gap (`documented_elsewhere` in `sources.json`) and is never used as a value. Each test is also marked for carbon dioxide or helium added to the atmosphere (`added_gas`); the mark does not change the tier. A scenario can point to records or table cells that name its atmosphere and are not in the counts (`see_also`). All PSI tests in the tables are microgravity tests, so a lunar or Martian scenario always carries a gravity gap.
 
 ## Evidence packages
 
@@ -121,7 +127,7 @@ Rules:
 
 ## References
 
-`references.json` lists each document with the items taken from it: requirements, acceptance criteria, definitions, exposure limits, design values, knowledge gaps and published results. Each item records where in the document it is, and how the document was read (`full_text_read`, `abstract_only`, `cited_not_read`, `read_from_copy`). The pipeline does not compute with these values and does not judge any test against them. Crew exposure limits (SMAC) apply to cabin air, not to a test chamber.
+`references.json` lists each document with the items taken from it: requirements, acceptance criteria, definitions, exposure limits, design values, knowledge gaps and published results. Each item records where in the document it is, and how the document was read (`full_text_read`, `abstract_only`, `cited_not_read`, `read_from_copy`). The pipeline does not compute with these values and does not judge any test against them. Some documents were read as an abstract only, through a citation or from a copy; `need_references.csv` and the evidence packages carry the `access` value of every item. Crew exposure limits (SMAC) were established for human spaceflight (`SMAC.scope`); the pipeline does not compare a sensor reading of an experiment with them.
 
 ## Checking
 
@@ -137,3 +143,36 @@ Rules:
 - Oxygen and pressure in range do not make a test representative of a habitat: the counted tests in elevated oxygen and reduced pressure are fuel droplets and burner flames in microgravity, some with carbon dioxide or helium added.
 - The needs, their required variables, their scope and the link between a record sentence and a need are a team draft, not a NASA standard, and have not been reviewed by a combustion specialist.
 - The challenge statement was read from a copy; the lunar-habitat bound (30% oxygen or more, 10.2 psi or less) has not been checked on the official page.
+- Five of the six needs are limited to solid fuels by the team (`scope`). Of the 1,824 test rows, 1,095 are gas-fuel rows, 353 liquid-fuel rows and 376 solid-fuel rows. Liquid-fuel and gas-fuel rows can be counted for S1 only, and no gas-fuel row is counted for any need. 414 rows are counted for at least one need; they come from five investigations (PSI-25, 69, 98, 99, 102). A record that names a topic for another fuel phase stays outside, for example PSI-10 ("Evaluate whether pseudo-flammability limits can be obtained for these flames").
+- The one PSI investigation of an extinguishing agent on solid fuels (PSI-26, BASS) has an experimental table with sample names only. For the extinction need (S1) the counted solid-fuel tests are BASS-II tests with an event word beside the flow settings, and every counted test with added carbon dioxide or helium is a FLEX droplet test. In the FLEX table "extinction" is one of the recorded ways a droplet burn ends, with or without an added gas.
+- The cited definition of a flammability threshold holds at a given total pressure, flow and gravity level (`ISO16697.threshold`). Pressure is not a required variable of need P1, and no counted test of P1 records a pressure.
+- The ISS ranges are bins, not an ISS operating range: 19 to 23% oxygen and 85.8 to below 116.8 kPa. No reference item gives an ISS operating range for oxygen or pressure. The scenarios below 62.8 kPa accept any recorded pressure below that edge.
+- The variables `o2_consumed_pct_points`, `co2_produced_pct_points` and `co_produced_ppm` are differences between a final and an initial sensor reading. The names say "consumed" and "produced"; the values are not amounts consumed or produced by one test, and many BASS-II tests start with a CO reading above zero.
+- The SAME table does not say whether its "Weight loss rate (mg/min)" is a set value or a result; the pipeline lists it as the outcome of need D2. The aging time of D2 merges two source columns, "Aging Duration (minutes)" (SAME) and "Net aging time (sec)" (SAME-R).
+- `reports/indicators_ko.json` holds Korean labels and readings written for an earlier wording of `indicators.json`; the English texts in `spec/` are the authority.
+
+## Investigations with no counted test
+
+Five of the 24 PSI records contribute counted tests (PSI-25, 69, 98, 99, 102). The other 19 contribute none. "Linked" means that `needs.json` (`stated_by`) links a sentence of the record's `objective` field to the need. The last column quotes fire-safety wording of the record where there is any; it is a property of the catalogue text, not a judgement of the investigation.
+
+| Record | Linked to | Why no test is counted | Fire-safety wording in the record (field) |
+|---|---|---|---|
+| PSI-10 Flame Design | S1 | no column mapped to an outcome variable of S1 | the words "fire" and "safety" do not occur |
+| PSI-20 ACME BRE | S1 | table is one row per test day | "BRE yielded important data relevant to spacecraft fire safety." (`researchImpacts`) |
+| PSI-21 CLD Flame | S1 | table is one row per test day | "an understanding of those factors that affect flame extinction in diffusion flames is critical in the suppression of fires" (`researchImpacts`) |
+| PSI-22 E-FIELD Flames | none | table is one row per test day | none: "The E-FIELD Flames research is not being conducted to serve any space applications" (`researchImpacts`) |
+| PSI-23 s-Flame | S1 | table is one row per test day | the words "fire" and "safety" do not occur |
+| PSI-26 BASS | P1, S1 | table lists samples only: no oxygen column, no outcome column | "Spacecraft Fire Safety" (`subResearchArea`) |
+| PSI-39 CFI | S1 | no column mapped to an outcome variable of S1 | "support the design of safer spacecraft systems" (`researchImpacts`) |
+| PSI-47 DAFT | none | table is one row per sampling session | "Spacecraft Fire Safety" (`subResearchArea`) |
+| PSI-60 SPICE analysis | none | no experimental table | "the results support safer fire detection, suppression, and cleaner combustion technologies" (`researchImpacts`) |
+| PSI-62 flame-spread model | none | no experimental table | "enable accurate prediction of flammability limits for spacecraft materials" (`objective`) |
+| PSI-68 FLEX-2 | S1 | table is one row per fuel with planned ranges | "Spacecraft Fire Safety" (`subResearchArea`) |
+| PSI-100 Saffire-III | P1, P3 | no oxygen column and no outcome column | "Spacecraft Fire Safety" (`subResearchArea`) |
+| PSI-101 SAME-R | D2 | no mass loss rate column, so no outcome of D2 | "Spacecraft Fire Safety" (`subResearchArea`) |
+| PSI-106 SLICE | none | table is one row per test day | "Insights into flame stability and behavior to enhance fire safety" (`researchImpacts`) |
+| PSI-107 SPICE | none | rows are flow settings of gas jet flames; outside the solid-fuel scope of D2 | "Fire Safety" (`subResearchArea`); "help design safer spacecraft environments" (`researchImpacts`) |
+| PSI-115 SAME data study | none | no experimental table | "This would directly lead to better smoke detection devices" (`researchImpacts`) |
+| PSI-117 cool-flame study | none | no experimental table | "Potential to improve spacecraft fire-safety modeling" (`researchImpacts`) |
+| PSI-142 cool-flame transitions | none | table is an index of figures in publications | "Spacecraft Fire Safety" (`subResearchArea`) |
+| PSI-159 CFI-G | none | its tests record the S1 variables and are reported as recorded outside the stated objective | the words "fire" and "safety" do not occur |

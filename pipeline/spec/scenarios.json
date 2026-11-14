@@ -1,7 +1,7 @@
 {
  "_meta": {
   "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
-  "purpose": "Crewed environments to check the recorded tests against. For each scenario the pipeline marks, per test, whether the recorded oxygen, pressure, flow and gravity fall inside the scenario's ranges, and then counts, per information need, the usable tests by how well they match. It does not predict behaviour in the scenario; it reports which recorded tests were run in comparable conditions and which conditions were never recorded.",
+  "purpose": "Crewed environments to check the recorded tests against. For each scenario the pipeline marks, per test, whether the recorded oxygen, pressure, flow and gravity fall inside the scenario's ranges, and then counts, per information need, the counted tests (field usable_tests) by tier. The tier compares two variables, oxygen and pressure; fuel, flow, gravity and added gas are reported next to it. It does not predict behaviour in the scenario; it reports which tests have recorded oxygen and pressure inside the ranges and which variables the tables do not hold.",
   "match_values": {
    "in": "recorded and inside the range",
    "out": "recorded and outside the range",
@@ -10,7 +10,7 @@
    "not_specified": "the scenario sets no range for this variable"
   },
   "tier_rule": "atmosphere = oxygen in and pressure in; oxygen_only = oxygen in and pressure not recorded; pressure_only = pressure in and oxygen not recorded; other = anything else. Flow and gravity are reported next to the tier and do not change it.",
-  "status_rule": "Per scenario and need, over the tests usable for the need (need_tests.csv): in_atmosphere if any test has tier atmosphere; else oxygen_only; else pressure_only; else other_atmosphere if any usable test exists; else not_measured. A scenario without oxygen and pressure ranges gets atmosphere_not_specified.",
+  "status_rule": "Per scenario and need, over the tests counted for the need (need_tests.csv with objective_link 'stated'; the field is named usable_tests): in_atmosphere if any test has tier atmosphere; else oxygen_only; else pressure_only; else other_atmosphere if any usable test exists; else not_measured. A scenario without oxygen and pressure ranges gets atmosphere_not_specified. The status names are kept for the other sessions: in_atmosphere says only that at least one counted test has oxygen and pressure inside the ranges, whatever its fuel, flow, gravity or added gas; not_measured says that the need has no counted test, while tests recorded outside the stated objective may exist.",
   "ids": "Scenario ids and nominal values are the same as the presets in scoring/scoring_config.json (ui role). The engine reports a mismatch in run_report.json.",
   "evidence_rule": "Only tests whose investigation states the need as an objective (needs.json 'stated_by') are counted. tests_recorded_outside_objective counts the other tests that record the needed variables.",
   "added_gas": "Each test is also marked for gases added to the atmosphere: 'none' (carbon dioxide and helium both recorded as 0), 'co2_or_helium' (either above 0), 'not_recorded'. The mark does not change the tier; the number of matched tests with an added gas is reported next to it.",
@@ -46,7 +46,7 @@
     "EAWG.atmospheres",
     "ICES19.issflow"
    ],
-   "note": "Oxygen and pressure ranges are the coverage bins around 21% and 101.3 kPa (coverage.json). Flow is the normal ISS ventilation range. The ranges set no balance gas: the count of matched tests with carbon dioxide or helium added to the atmosphere is given next to the tier."
+   "note": "Oxygen and pressure ranges are the coverage bins around 21% and 101.3 kPa (coverage.json): 19 to 23% oxygen and 85.8 to below 116.8 kPa. The oxygen range is the +/-2.0 point control box that EAWG.atmospheres recommends around its own nominal atmospheres, used here as a bin; the pressure range is the team's bin and is wider than the +/-0.2 psia box of the same item. No reference item gives an ISS operating range for oxygen or pressure. Flow is the normal ISS ventilation range (ICES19.issflow). The ranges set no balance gas: the count of matched tests with carbon dioxide or helium added to the atmosphere is given next to the tier."
   },
   {
    "id": "lunar_habitat",
@@ -74,7 +74,7 @@
     "TB14639.worstcase",
     "TB008.gaps"
    ],
-   "note": "The challenge text gives 30% oxygen or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa. No flow range is given for this environment. The pair is a bound taken from the challenge statement, which was read from a copy and not checked on the official page; NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
+   "note": "The challenge text gives 30% oxygen or more and 10.2 psi (70.3 kPa) or less. Oxygen is capped at 36% (highest design value 34% plus 2 points); the cap is the team's and is not in the challenge text, so a test above 36% oxygen is marked outside the range. Pressure uses the coverage bins around and below 70.3 kPa, because tests set to 0.7 atm are recorded at 70.2 to 72.6 kPa; the range therefore reaches up to 85.8 kPa, above the 70.3 kPa of the bound, and the FLEX tests matched on oxygen and pressure are recorded at 71.2 to 72.4 kPa in the current tables. No flow range is given for this environment. The pair is a bound taken from the challenge statement, which was read from a copy and not checked on the official page; NASA Task Book 14639 names 30% oxygen at 10.2 psia as the most severe test environment (TB14639.worstcase). Nominal values are the bound, not a design point.",
    "see_also": [
     {
      "investigation_id": "PSI-20",
@@ -109,7 +109,7 @@
    "basis": [
     "TB008.gaps"
    ],
-   "note": "The challenge text gives no Mars atmosphere, so no oxygen or pressure range is set. Only the gravity gap can be reported."
+   "note": "The challenge text gives no Mars atmosphere, and the team did not use the working-group recommendation for surface habitats (8.0 psia or 7.6 psia with 32% oxygen, EAWG.atmospheres), so no oxygen or pressure range is set. Only the gravity gap can be reported."
   },
   {
    "id": "spacesuit",
@@ -134,7 +134,7 @@
     "SMAC.atmospheres",
     "EAWG.atmospheres"
    ],
-   "note": "4.3 psia (29.6 kPa), 100% oxygen. The oxygen range 95 to 100% and the pressure bin below 62.8 kPa are the team's choice. No gravity level is set."
+   "note": "4.3 psia (29.6 kPa), 100% oxygen. These two values are not in the cited reference items (SMAC.atmospheres lists 14.7, 10.2 and 8.2 psia; EAWG.atmospheres lists cabin atmospheres), so they have no checked source in references.json. The oxygen range 95 to 100% and the pressure bin below 62.8 kPa are the team's choice: any recorded pressure below 62.8 kPa is inside the range. No gravity level is set."
   },
   {
    "id": "exploration_8_2_34",
@@ -160,7 +160,7 @@
     "SMAC.atmospheres",
     "EAWG.atmospheres"
    ],
-   "note": "8.2 psia (56.5 kPa), 34% oxygen. Oxygen is 34 +/- 2 points (the EAWG control box applied to 34%); pressure is the coverage bin below 62.8 kPa. No gravity level is set. Not a scorer preset.",
+   "note": "8.2 psia (56.5 kPa), 34% oxygen. Oxygen is 34 +/- 2 points (the EAWG control box applied to 34%); pressure is the coverage bin below 62.8 kPa, so any recorded pressure below 62.8 kPa is inside the range. The 62.8 kPa edge is the midpoint between 8.0 psia (55.2 kPa) and 10.2 psia (70.3 kPa), not between 8.2 psia and 10.2 psia. No gravity level is set. Not a scorer preset.",
    "see_also": [
     {
      "investigation_id": "PSI-20",
@@ -199,7 +199,7 @@
     "EAWG.atmospheres",
     "SMAC.atmospheres"
    ],
-   "note": "10.2 psia (70.3 kPa), 26.5% oxygen, one of the atmospheres recommended by the Exploration Atmospheres Working Group. Oxygen is 26.5 +/- 2 points (the EAWG control box); pressure is the coverage bin around 70.3 kPa. No gravity level is set. Not a scorer preset.",
+   "note": "10.2 psia (70.3 kPa), 26.5% oxygen, one of the atmospheres recommended by the Exploration Atmospheres Working Group. Oxygen is 26.5 +/- 2 points (the EAWG control box); pressure is the coverage bin around 70.3 kPa (62.8 to below 85.8 kPa). No gravity level is set. Not a scorer preset.",
    "see_also": [
     {
      "investigation_id": "PSI-20",

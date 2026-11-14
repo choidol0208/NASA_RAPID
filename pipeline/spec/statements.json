@@ -2,7 +2,7 @@
  "_meta": {
   "generated_by": "AI-generated (Claude Code), 2026-11-14. Not human-reviewed.",
   "purpose": "The fixed English sentences of the evidence packages (data/pipeline/evidence/). pipeline/evidence.py fills the placeholders with numbers that are already in the package and writes the sentences next to them. No sentence is written by a language model and no sentence holds a number that is not a field of the same block.",
-  "wording_rule": "A sentence says what was recorded and what was not, with the number of tests behind it and the unit of every value. It does not judge a material, an atmosphere or the amount of evidence. A sentence about tests recorded outside the stated objective says that they are not counted for the need.",
+  "wording_rule": "A sentence says what was recorded and what was not, with the number of tests behind it and the unit of every value. It does not judge a material, an atmosphere or the amount of evidence. A sentence about tests recorded outside the stated objective says that they are not counted for the need. In the sentences 'counted' names the tests of the field usable_tests: tests that record every required condition and at least one outcome variable of the need and come from an investigation whose PSI record states the need. The field and the population value keep the name 'usable'.",
   "format": {
    "text": "'{field}' is replaced by the value of the field. '[field|one|many]' is replaced by 'one' if the field equals 1 and by 'many' otherwise. A field that is not listed under 'fields' for the section, or that is empty when the sentence is used, stops the run.",
    "when": "A list of conditions [field, operator, value]; the sentence is used only if all hold. Operators: ==, !=, >, >=, <, <= (the table OPS of run.py). An empty value (null) can only be compared with == and !=.",
@@ -40,8 +40,8 @@
  },
  "indicator_text": {
   "population": {
-   "usable": "the tests usable for this need",
-   "recorded": "all tests that record the variables this need requires, including tests that are not counted as evidence because their investigation does not state this need as an objective",
+   "usable": "the tests counted for this need",
+   "recorded": "all tests that record the variables this need requires, including tests that are not counted for the need because the PSI record of their investigation does not state it as an objective",
    "in_scope": "the tests within the scope of this need that record every required condition, with or without an outcome, from investigations that state this need as an objective"
   },
   "group_item": "{name} = {value}",
@@ -132,7 +132,7 @@
       "in_atmosphere"
      ]
     ],
-    "text": "{atmosphere} of the {usable_tests} [usable_tests|test|tests] usable for this need [atmosphere|was|were] recorded with oxygen and pressure both inside the ranges of this environment."
+    "text": "{atmosphere} of the {usable_tests} [usable_tests|test|tests] counted for this need [atmosphere|was|were] recorded with oxygen and pressure both inside the ranges of this environment."
    },
    {
     "id": "status.oxygen_only",
@@ -143,7 +143,7 @@
       "oxygen_only"
      ]
     ],
-    "text": "{oxygen_only} of the {usable_tests} [usable_tests|test|tests] usable for this need [oxygen_only|was|were] recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No usable test was recorded with oxygen and pressure both inside the ranges."
+    "text": "{oxygen_only} of the {usable_tests} [usable_tests|test|tests] counted for this need [oxygen_only|was|were] recorded with oxygen inside the range of this environment; the experimental tables of these tests hold no pressure value. No counted test was recorded with oxygen and pressure both inside the ranges."
    },
    {
     "id": "status.pressure_only",
@@ -154,7 +154,7 @@
       "pressure_only"
      ]
     ],
-    "text": "{pressure_only} of the {usable_tests} [usable_tests|test|tests] usable for this need [pressure_only|was|were] recorded with pressure inside the range of this environment; the experimental tables of these tests hold no oxygen value. No usable test was recorded with oxygen inside the range together with a pressure inside the range or with no pressure in the table."
+    "text": "{pressure_only} of the {usable_tests} [usable_tests|test|tests] counted for this need [pressure_only|was|were] recorded with pressure inside the range of this environment; the experimental tables of these tests hold no oxygen value. No counted test was recorded with oxygen inside the range together with a pressure inside the range or with no pressure in the table."
    },
    {
     "id": "status.other_atmosphere",
@@ -165,7 +165,7 @@
       "other_atmosphere"
      ]
     ],
-    "text": "None of the {usable_tests} [usable_tests|test|tests] usable for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
+    "text": "None of the {usable_tests} [usable_tests|test|tests] counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table."
    },
    {
     "id": "status.not_measured",
@@ -176,7 +176,7 @@
       "not_measured"
      ]
     ],
-    "text": "No test in the mapped PSI tables is usable for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective."
+    "text": "No test in the mapped PSI tables is counted for this need: no test both records every required condition and at least one outcome variable of the need and comes from an investigation whose PSI record states the need as an objective."
    },
    {
     "id": "status.atmosphere_not_specified",
@@ -187,7 +187,7 @@
       "atmosphere_not_specified"
      ]
     ],
-    "text": "This environment sets no oxygen range and no pressure range. The {usable_tests} [usable_tests|test|tests] usable for this need [usable_tests|was|were] not compared with an atmosphere."
+    "text": "This environment sets no oxygen range and no pressure range. The {usable_tests} [usable_tests|test|tests] counted for this need [usable_tests|was|were] not compared with an atmosphere."
    }
   ],
   "need": [
@@ -216,7 +216,7 @@
       "atmosphere_not_specified"
      ]
     ],
-    "text": "The {usable_tests} usable [usable_tests|test|tests] by match with this environment: {atmosphere} with oxygen and pressure both inside the ranges; {oxygen_only} with oxygen inside the range and no pressure in the table; {pressure_only} with pressure inside the range and no oxygen in the table; {other} with none of these matches."
+    "text": "The {usable_tests} counted [usable_tests|test|tests] by match with this environment: {atmosphere} with oxygen and pressure both inside the ranges; {oxygen_only} with oxygen inside the range and no pressure in the table; {pressure_only} with pressure inside the range and no oxygen in the table; {other} with none of these matches."
    },
    {
     "id": "cell.oxygen_only_repeats",
@@ -356,7 +356,7 @@
       0
      ]
     ],
-    "text": "{recorded_outside_objective} other [recorded_outside_objective|test records|tests record] every required condition and at least one outcome variable of this need but [recorded_outside_objective|comes from an investigation|come from investigations] whose PSI record does not state this need as an objective. [recorded_outside_objective|This test is|These tests are] not counted for this need and [recorded_outside_objective|is|are] not in the usable-test counts."
+    "text": "{recorded_outside_objective} other [recorded_outside_objective|test records|tests record] every required condition and at least one outcome variable of this need but [recorded_outside_objective|comes from an investigation|come from investigations] whose PSI record does not state this need as an objective. [recorded_outside_objective|This test is|These tests are] not counted for this need and [recorded_outside_objective|is|are] not in its counts."
    },
    {
     "id": "elsewhere.oxygen",
@@ -372,7 +372,7 @@
       0
      ]
     ],
-    "text": "Oxygen of the {other} usable [other|test|tests] not matched to this environment: recorded in {elsewhere_o2_recorded} [elsewhere_o2_recorded|test|tests], from {elsewhere_o2_min} to {elsewhere_o2_max} {elsewhere_o2_unit}."
+    "text": "Oxygen of the {other} counted [other|test|tests] not matched to this environment: recorded in {elsewhere_o2_recorded} [elsewhere_o2_recorded|test|tests], from {elsewhere_o2_min} to {elsewhere_o2_max} {elsewhere_o2_unit}."
    },
    {
     "id": "elsewhere.oxygen_not_recorded",
@@ -388,7 +388,7 @@
       0
      ]
     ],
-    "text": "Oxygen of the {other} usable [other|test|tests] not matched to this environment: no oxygen concentration of the surrounding atmosphere is recorded."
+    "text": "Oxygen of the {other} counted [other|test|tests] not matched to this environment: no oxygen concentration of the surrounding atmosphere is recorded."
    },
    {
     "id": "elsewhere.oxygen_not_ambient",
@@ -399,7 +399,7 @@
       0
      ]
     ],
-    "text": "{elsewhere_o2_not_ambient} of the usable tests not matched to this environment [elsewhere_o2_not_ambient|records|record] an oxygen value that describes a gas stream and not the surrounding atmosphere; [elsewhere_o2_not_ambient|this value is|these values are] not in the oxygen figures of this block."
+    "text": "{elsewhere_o2_not_ambient} of the counted tests not matched to this environment [elsewhere_o2_not_ambient|records|record] an oxygen value that describes a gas stream and not the surrounding atmosphere; [elsewhere_o2_not_ambient|this value is|these values are] not in the oxygen figures of this block."
    },
    {
     "id": "elsewhere.pressure",
@@ -415,7 +415,7 @@
       0
      ]
     ],
-    "text": "Pressure of the {other} usable [other|test|tests] not matched to this environment: recorded in {elsewhere_pressure_recorded} [elsewhere_pressure_recorded|test|tests], from {elsewhere_pressure_min} to {elsewhere_pressure_max} {elsewhere_pressure_unit}."
+    "text": "Pressure of the {other} counted [other|test|tests] not matched to this environment: recorded in {elsewhere_pressure_recorded} [elsewhere_pressure_recorded|test|tests], from {elsewhere_pressure_min} to {elsewhere_pressure_max} {elsewhere_pressure_unit}."
    },
    {
     "id": "elsewhere.pressure_not_recorded",
@@ -431,7 +431,7 @@
       0
      ]
     ],
-    "text": "Pressure of the {other} usable [other|test|tests] not matched to this environment: no pressure is recorded."
+    "text": "Pressure of the {other} counted [other|test|tests] not matched to this environment: no pressure is recorded."
    },
    {
     "id": "need.note",
@@ -450,37 +450,37 @@
     "id": "gap.oxygen.not_recorded",
     "code": "oxygen:not_recorded",
     "when": [],
-    "text": "Oxygen gap: the experimental tables hold no oxygen value for any of the {usable_tests} [usable_tests|test|tests] usable for this need."
+    "text": "Oxygen gap: the experimental tables hold no oxygen value for any of the {usable_tests} [usable_tests|test|tests] counted for this need."
    },
    {
     "id": "gap.oxygen.no_usable_test_in_range",
     "code": "oxygen:no_usable_test_in_range",
     "when": [],
-    "text": "Oxygen gap: none of the {usable_tests} [usable_tests|test|tests] usable for this need was recorded with oxygen inside the oxygen range of this environment."
+    "text": "Oxygen gap: none of the {usable_tests} [usable_tests|test|tests] counted for this need was recorded with oxygen inside the oxygen range of this environment."
    },
    {
     "id": "gap.pressure.not_recorded",
     "code": "pressure:not_recorded",
     "when": [],
-    "text": "Pressure gap: the experimental tables hold no pressure value for any of the {usable_tests} [usable_tests|test|tests] usable for this need."
+    "text": "Pressure gap: the experimental tables hold no pressure value for any of the {usable_tests} [usable_tests|test|tests] counted for this need."
    },
    {
     "id": "gap.pressure.no_usable_test_in_range",
     "code": "pressure:no_usable_test_in_range",
     "when": [],
-    "text": "Pressure gap: none of the {usable_tests} [usable_tests|test|tests] usable for this need was recorded with pressure inside the pressure range of this environment."
+    "text": "Pressure gap: none of the {usable_tests} [usable_tests|test|tests] counted for this need was recorded with pressure inside the pressure range of this environment."
    },
    {
     "id": "gap.flow.not_recorded",
     "code": "flow:not_recorded",
     "when": [],
-    "text": "Flow gap: the experimental tables hold no flow speed for any of the {usable_tests} [usable_tests|test|tests] usable for this need."
+    "text": "Flow gap: the experimental tables hold no flow speed for any of the {usable_tests} [usable_tests|test|tests] counted for this need."
    },
    {
     "id": "gap.flow.no_usable_test_in_range",
     "code": "flow:no_usable_test_in_range",
     "when": [],
-    "text": "Flow gap: none of the {usable_tests} [usable_tests|test|tests] usable for this need was recorded with a flow speed inside the flow range of this environment."
+    "text": "Flow gap: none of the {usable_tests} [usable_tests|test|tests] counted for this need was recorded with a flow speed inside the flow range of this environment."
    },
    {
     "id": "gap.gravity.no_usable_test_at_level",
@@ -492,13 +492,13 @@
       null
      ]
     ],
-    "text": "Gravity gap: none of the {usable_tests} [usable_tests|test|tests] usable for this need is recorded at the gravity level of this environment ({gravity_level})."
+    "text": "Gravity gap: none of the {usable_tests} [usable_tests|test|tests] counted for this need is recorded at the gravity level of this environment ({gravity_level})."
    },
    {
     "id": "gap.need.no_usable_test",
     "code": "need:no_usable_test",
     "when": [],
-    "text": "Need gap: there is no usable test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
+    "text": "Need gap: there is no counted test, so nothing was compared with the oxygen, pressure, flow or gravity of this environment."
    }
   ],
   "indicator": [
@@ -513,7 +513,7 @@
     ],
     "each_value": "{stat} {value} {unit}",
     "join": ", ",
-    "text": "{label} ({group_text}): {values}, over {n_tests} [n_tests|test|tests] with a recorded value, from {investigation_ids}. Tests counted: those matched to this environment among {population_text}. {reading}"
+    "text": "{label} ({group_text}): {values}, over {n_tests} [n_tests|test|tests] with a recorded value, from {investigation_ids}. Tests in this figure: those matched to this environment among {population_text}. {reading}"
    },
    {
     "id": "indicator.count_by",
@@ -526,7 +526,7 @@
     ],
     "each_value": "{category} in {value} [value|test|tests]",
     "join": ", ",
-    "text": "{label} ({group_text}): {values}, over {n_tests} [n_tests|test|tests] with a recorded value, from {investigation_ids}. Tests counted: those matched to this environment among {population_text}. {reading}"
+    "text": "{label} ({group_text}): {values}, over {n_tests} [n_tests|test|tests] with a recorded value, from {investigation_ids}. Tests in this figure: those matched to this environment among {population_text}. {reading}"
    },
    {
     "id": "indicator.count",
@@ -537,7 +537,7 @@
       "count"
      ]
     ],
-    "text": "{label} ({group_text}): {n_tests} [n_tests|test|tests], from {investigation_ids}. Tests counted: those matched to this environment among {population_text}. {reading}"
+    "text": "{label} ({group_text}): {n_tests} [n_tests|test|tests], from {investigation_ids}. Tests in this figure: those matched to this environment among {population_text}. {reading}"
    }
   ],
   "documented": [

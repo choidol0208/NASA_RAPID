@@ -1087,10 +1087,10 @@
    "verifies": "Every row of indicators.csv (value, n_tests, investigations, texts) equals the recomputation of its template over its population, filter and grouping (indicators.json), and no row is missing.",
    "status": "PASS",
    "numbers": {
-    "rows_recomputed": 171,
-    "rows_in_file": 171,
-    "indicators_with_rows": 19,
-    "indicators_in_spec": 19
+    "rows_recomputed": 165,
+    "rows_in_file": 165,
+    "indicators_with_rows": 18,
+    "indicators_in_spec": 18
    },
    "failures": 0,
    "failing_examples": []
@@ -1100,8 +1100,8 @@
    "verifies": "indicator_tests.csv lists exactly the tests behind each indicator row, with the value each test contributes.",
    "status": "PASS",
    "numbers": {
-    "rows_recomputed": 1472,
-    "rows_in_file": 1472
+    "rows_recomputed": 1458,
+    "rows_in_file": 1458
    },
    "failures": 0,
    "failing_examples": []
@@ -1111,7 +1111,7 @@
    "verifies": "Every reference item id used in needs.json, indicators.json and scenarios.json exists in references.json.",
    "status": "PASS",
    "numbers": {
-    "uses": 99,
+    "uses": 95,
     "distinct_items_used": 51,
     "items_defined": 60
    },
@@ -1209,7 +1209,7 @@
    "verifies": "The indicators of every need block equal the need's indicators recomputed over the tests of their population whose tier in this environment is atmosphere, oxygen_only or pressure_only.",
    "status": "PASS",
    "numbers": {
-    "indicator_groups": 454
+    "indicator_groups": 432
    },
    "failures": 0,
    "failing_examples": []
@@ -1219,8 +1219,8 @@
    "verifies": "Every number written in a statement of an evidence package is a field of the same need block (for an indicator sentence: of its indicator entry), or one of the two sums that statements.json declares.",
    "status": "PASS",
    "numbers": {
-    "numbers_in_statements": 4870,
-    "statements": 1782,
+    "numbers_in_statements": 5886,
+    "statements": 1812,
     "numbers_that_are_a_declared_sum_not_a_stored_field": 15,
     "numbers_found_only_in_matched_tests_indicators_or_references": 0
    },
@@ -1235,7 +1235,7 @@
    "verifies": "No statement of an evidence package contains the words safe, unsafe, flammable, sufficient, representative, proves or confirms (outside a need name or an indicator reading copied from the spec).",
    "status": "PASS",
    "numbers": {
-    "sentences": 1990
+    "sentences": 2020
    },
    "failures": 0,
    "failing_examples": []
