@@ -63,6 +63,10 @@ def my_role():
     return role
 
 
+def fetch_all(check=True):
+    """Fetch every branch explicitly. A single-branch clone would otherwise never update the other role branches."""
+    sh("fetch", "--quiet", "origin", "+refs/heads/*:refs/remotes/origin/*", check=check)
+
 def remote_refs():
     out = sh("for-each-ref", "--format=%(refname:short)", "refs/remotes/origin").split()
     return [r for r in out if r not in ("origin", "origin/HEAD")]
@@ -143,7 +147,7 @@ def load_requests(me):
 
 def cmd_brief(_):
     me = my_role()
-    sh("fetch", "--quiet", "origin", check=False)
+    fetch_all(check=False)
     branch = sh("branch", "--show-current").strip()
     print(f"# Coordination brief  |  role: {me}  |  branch: {branch}  |  {now():%Y-%m-%d %H:%M} KST")
     expected = ROLES[me]["branch"]
@@ -282,7 +286,7 @@ def cmd_pull(args):
         if args[0] not in ROLES:
             sys.exit("usage: coord.py pull [" + "|".join(ROLES) + "]")
         target = ROLES[args[0]]["branch"]
-    sh("fetch", "--quiet", "origin")
+    fetch_all()
     require_clean()
     if f"origin/{target}" not in remote_refs():
         sys.exit(f"origin/{target} does not exist yet.")
@@ -295,7 +299,7 @@ def cmd_integrate(_):
         sys.exit("Only the pm role integrates into main.")
     if sh("branch", "--show-current").strip() != MAIN:
         sys.exit(f"Check out {MAIN} first.")
-    sh("fetch", "--quiet", "origin")
+    fetch_all()
     require_clean()
     failed = []
     for role, info in ROLES.items():

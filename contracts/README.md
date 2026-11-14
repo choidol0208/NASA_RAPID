@@ -13,7 +13,7 @@ Authority: `pipeline/README.md`.
 | `data/psi/manifest.json` | The 24 investigations: accession, acronym, title, DOI, license, experimental-table files | ui, pm |
 | `data/psi/catalog/PSI-<n>.json` | Full PSI record of one investigation: `objective`, `approach`, `hypothesis`, `researchImpacts`, `publications`, `projectType` and more | ui (catalog build), pm (summaries) |
 | `data/psi/experimental_tables/*.csv` | The 22 NASA tables, unchanged | ui (catalog build) |
-| `pipeline/spec/needs.json` | The 7 fire-safety information needs (`P1`–`P4` prevention, `S1` suppression, `D1`–`D2` detection): question, required conditions, outcomes, scope | ui (needs view), pm |
+| `pipeline/spec/needs.json` | The fire-safety information needs (`P1`–`P3` prevention, `S1` suppression, `D1`–`D2` detection; `P4` is being removed, see `coord/decisions.md`): question, required conditions, outcomes, scope, the objective sentence that backs each (`stated_by`) | ui (needs view), pm |
 | `pipeline/spec/variables.json` | Standard variables, units, valid ranges, derived formulas | ui, pm |
 | `data/pipeline/tests.csv` | One row per test (1,867). Keys `test_id`, `investigation_id`, `source_id`; conditions such as `fuel_material`, `fuel_phase`, `o2_pct`, `o2_basis`, `pressure_kpa`, `flow_cms`, `gravity_level`; outcomes; `flags`, `source_file`, `source_row` | ui (raw-data step, Coverage view), pm |
 | `data/pipeline/values_long.csv` | One row per value with `source_file`, `source_row`, `source_column` | ui (show where a value comes from) |
@@ -80,7 +80,7 @@ One entry per preset scenario. Order of writing: `iss` and `lunar_habitat` (the 
 | `query` | string | exactly the string the page passes to `rank()`: `"ISS"`, `"lunar habitat"`, `"spacesuit"`, `"Mars base"` |
 | `ranking_source` | string | always `scoring.scorer.rank`; the page computes the ranking live and scores are not copied here |
 | `result_notes` | array of `{ "investigation_id", "text", "sources" }` | plain-language explanation of why a result ranks where it does. A note whose investigation is not in the live top 3 is shown under "Other investigations" |
-| `needs` | array of `{ "need_id", "statement", "sources" }` | one per need id (`P1`–`P4`, `S1`, `D1`, `D2`): what the recorded tests can and cannot say for this scenario |
+| `needs` | array of `{ "need_id", "statement", "sources" }` | one per need id in `needs.json` (`P1`–`P3`, `S1`, `D1`, `D2`): what the recorded tests can and cannot say for this scenario, counted from `scenario_needs.csv` (tests with a stated objective only) |
 | `gaps` | array of `{ "text", "needed_data" }` | what PSI does not contain for this scenario |
 | `ai_generated`, `model`, `reviewed_by`, `updated` | as above | |
 
