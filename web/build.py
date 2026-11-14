@@ -133,6 +133,14 @@ def main():
         with open(os.path.join(DIST, "data", "indicators", f"scenario_{sid}.json"), "w", encoding="utf-8") as fh:
             json.dump({"source": f"data/pipeline/evidence/scenario_{sid}.json", "needs": out}, fh, ensure_ascii=False)
         OPTIONAL_BUILT.append(f"data/indicators/scenario_{sid}.json")
+    # Raw-data line per investigation (pm request 1449, item 3): data's fixed sentence from the PSI file listing.
+    ri = os.path.join(ROOT, "data/pipeline/raw_inventory.json")
+    if os.path.exists(ri):
+        inv = json.load(open(ri, encoding="utf-8-sig")).get("investigations", [])
+        sentences = {e["investigation_id"]: e.get("sentence", "") for e in inv if e.get("sentence")}
+        with open(os.path.join(DIST, "data", "raw_inventory_sentences.json"), "w", encoding="utf-8") as fh:
+            json.dump({"source": "data/pipeline/raw_inventory.json", "sentences": sentences}, fh, ensure_ascii=False)
+        OPTIONAL_BUILT.append("data/raw_inventory_sentences.json")
     # data's answer files (request 1531): one per scenario and need, fixed sentences in four rungs.
     # Copied unchanged; a small index per scenario carries each need's top line, so the page loads a
     # need's file only when its section is opened.

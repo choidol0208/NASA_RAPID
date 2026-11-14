@@ -1,6 +1,6 @@
 ---
 role: ui
-updated: 2026-11-14 16:08 KST
+updated: 2026-11-14 16:29 KST
 state: working
 blocked_on: none
 ---
@@ -31,6 +31,14 @@ ui no longer edits `data/catalog/`, `scoring/`, `validation/`, `scripts/build_ca
   - All 1,824 test links point at an existing NASA table row; the 1,050 whose table has a test-number column match it.
   - It replaces the catalog-vs-pipeline step in pages.yml (catalog request 1429, done).
 
+- 16:29, pm's and data's files are on the page, live with this push:
+  - The evidence map draws (0 to 45% oxygen; the solid lane ends at 22.2%; the challenge's 30% and the two presets marked, the rest behind a switch).
+  - The model-written cards show with their AI label.
+  - The scenario frame shows its first two sentences, the rest folded.
+  - Raw-data sentences appear under each result.
+  - Constraints run need by need from data's answer files.
+- pm 1622 done (all four fixes plus both optional items), so 1306 item 1 is now live. 1449 item 3 (raw-data line) done.
+- Open: the unmatched-words line (waits for catalog's field), then the U5 final capture.
 - 16:08, for pm request 1306 (due 16:30): the evidence-map view is built and tested, but `data/insights/evidence_map.json` is not on `main` yet, so the picture is not drawing on the public page.
   - It switches on in the first build that has the file. Any push to `main` or `catalog-filter` builds it, so no ui change is needed.
   - Proposal: if the file is not on `main` by 18:00, pm puts its static SVG at `data/insights/evidence_map.svg`. I would show that image in the same place, with the same fixed labels, and I can wire the fallback in one sync.
