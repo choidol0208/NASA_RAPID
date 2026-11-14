@@ -1,0 +1,606 @@
+{
+ "_about": "AI-generated settings file: written with an AI assistant (Claude) during the NASA Space Apps Challenge 2026 hackathon. It describes where NASA's BASS-II video overlay sits and how video/read_overlay.py reads it. Readings made with it are transcribed by code that an AI assistant wrote; not a NASA data file; not reviewed by a person beyond the by-eye samples named in video/README.md. \"By eye\" means that an AI assistant (Claude) looked at each frame image and wrote the numbers down before it saw the reader's values. No person has checked a frame.",
+ "disclosure": "Transcribed by code that an AI assistant wrote; not a NASA data file; not reviewed by a person beyond the by-eye samples named in video/data/team_transcription_bass2_onscreen_readings/README.md. \"By eye\" means that an AI assistant (Claude) looked at each frame image and wrote the numbers down before it saw the reader's values. No person has checked a frame. Checked only on the 19 BASS-II clips named in video/settings/bass2.json.",
+ "experiment": {
+  "name": "BASS-II",
+  "title": "Burning and Suppression of Solids - II",
+  "psi_accession": "PSI-25",
+  "psi_investigation_version": 4,
+  "doi": "10.60555/4qc4-de67",
+  "doi_url": "https://doi.org/10.60555/4qc4-de67",
+  "licence": "CC0-1.0",
+  "licence_source": "data/psi/manifest.json (PSI investigation record)",
+  "nasa_documents_used": [
+   "PSI-25_Science Documents_BASS-II_ReadMe.docx (short phrases and paraphrases in fields[].nasa_readme)"
+  ],
+  "nasa_table_source": "PSI-25_Experimental table_BASS-II.csv (data/psi/experimental_tables/)"
+ },
+ "psi": {
+  "base_url": "https://psi.nasa.gov/geode-py/ws",
+  "listing": "POST {base_url}/files/v2 with JSON {folder: '<accession>/', fileType: 'study', studyId: '<accession>', version: <investigation version>, obfuscationcode: ''}",
+  "download": "GET {base_url}/studies/<accession>/download?file=<file>&version=<file version>&redirect=false returns a signed link"
+ },
+ "clips": [
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT216_SAMPLE_174_TEST_B21.mp4",
+   "short": "B21",
+   "psi_version": 2,
+   "bytes": 20112760,
+   "nasa_table_test": "B21",
+   "recording_gmt_day": 216,
+   "recording_date": "2014-08-04",
+   "nasa_table_fan_display": "53 and down",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT196_SAMPLE_166_TEST_M17.mp4",
+   "short": "M17",
+   "psi_version": 2,
+   "bytes": 188454727,
+   "nasa_table_test": "M17",
+   "recording_gmt_day": 196,
+   "recording_date": "2014-07-15",
+   "nasa_table_fan_display": "Fan pot 3.7 1.7 1.5 1.3 0.8 0.6 0.5 0.3ext",
+   "nasa_table_air_display": "10 5 3 0ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT189_SAMPLE_216_TEST_O4.mp4",
+   "short": "O4",
+   "psi_version": 2,
+   "bytes": 146711131,
+   "nasa_table_test": "O4",
+   "recording_gmt_day": 189,
+   "recording_date": "2014-07-08",
+   "nasa_table_fan_display": "5 0.7 0.5 0.4 0.36 ext",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT177_SAMPLE_214_TEST_O7.mp4",
+   "short": "O7",
+   "psi_version": 2,
+   "bytes": 87589566,
+   "nasa_table_test": "O7",
+   "recording_gmt_day": 177,
+   "recording_date": "2014-06-26",
+   "nasa_table_fan_display": "5 .36 .32 ..305 blowoff fan max 10",
+   "nasa_table_air_display": "",
+   "table_outcome_team_reading": "blowoff"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT177_SAMPLE_208_TEST_O8a.mp4",
+   "short": "O8a",
+   "psi_version": 2,
+   "bytes": 51121188,
+   "nasa_table_test": "O8a",
+   "recording_gmt_day": 177,
+   "recording_date": "2014-06-26",
+   "nasa_table_fan_display": "5 .36 .32 .31 extinguished",
+   "nasa_table_air_display": "",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT177_SAMPLE_208_TEST_O8b.mp4",
+   "short": "O8b",
+   "psi_version": 2,
+   "bytes": 56114010,
+   "nasa_table_test": "O8b",
+   "recording_gmt_day": 177,
+   "recording_date": "2014-06-26",
+   "nasa_table_fan_display": "5 .36 .32 .31 blowoff fan pot 6.0",
+   "nasa_table_air_display": "",
+   "table_outcome_team_reading": "blowoff"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT177_SAMPLE_209_TEST_O9.mp4",
+   "short": "O9",
+   "psi_version": 2,
+   "bytes": 61078814,
+   "nasa_table_test": "O9",
+   "recording_gmt_day": 177,
+   "recording_date": "2014-06-26",
+   "nasa_table_fan_display": "5 .36 .32 blowoff pt 4.0",
+   "nasa_table_air_display": "",
+   "table_outcome_team_reading": "blowoff"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT189_SAMPLE_184_TEST_O11.mp4",
+   "short": "O11",
+   "psi_version": 2,
+   "bytes": 120784326,
+   "nasa_table_test": "O11",
+   "recording_gmt_day": 189,
+   "recording_date": "2014-07-08",
+   "nasa_table_fan_display": "ign 5 0.36 0.32 0.31 0.305 blowoff 6.0",
+   "nasa_table_air_display": "5 down then blowoff",
+   "table_outcome_team_reading": "blowoff"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT189_SAMPLE_217_TEST_O12.mp4",
+   "short": "O12",
+   "psi_version": 2,
+   "bytes": 58379498,
+   "nasa_table_test": "O12",
+   "recording_gmt_day": 189,
+   "recording_date": "2014-07-08",
+   "nasa_table_fan_display": "pots 1.4 3 0.9 0.7",
+   "nasa_table_air_display": "no ign at any flow",
+   "table_outcome_team_reading": "no_ignition"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT213_SAMPLE_183_TEST_O14.mp4",
+   "short": "O14",
+   "psi_version": 2,
+   "bytes": 110402103,
+   "nasa_table_test": "O14",
+   "recording_gmt_day": 213,
+   "recording_date": "2014-08-01",
+   "nasa_table_fan_display": "52 and down",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT213_SAMPLE_213_TEST_O19.mp4",
+   "short": "O19",
+   "psi_version": 2,
+   "bytes": 109651737,
+   "nasa_table_test": "O19",
+   "recording_gmt_day": 213,
+   "recording_date": "2014-08-01",
+   "nasa_table_fan_display": "52 and down",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT167_SAMPLE_185_TEST_P1.mp4",
+   "short": "P1",
+   "psi_version": 2,
+   "bytes": 53049877,
+   "nasa_table_test": "P1",
+   "recording_gmt_day": 167,
+   "recording_date": "2014-06-16",
+   "nasa_table_fan_display": "",
+   "nasa_table_air_display": "5 2 slow decr to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT195_SAMPLE_202_TEST_P5.mp4",
+   "short": "P5",
+   "psi_version": 2,
+   "bytes": 184104096,
+   "nasa_table_test": "P5",
+   "recording_gmt_day": 195,
+   "recording_date": "2014-07-14",
+   "nasa_table_fan_display": "Fan pot 1.5 (5cm/s) 0.9 0.4 0.36 0.32 0.308 0.3 0.29 0.28 0 ext",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT195_SAMPLE_202_TEST_P9.mp4",
+   "short": "P9",
+   "psi_version": 2,
+   "bytes": 109313158,
+   "nasa_table_test": "P9",
+   "recording_gmt_day": 195,
+   "recording_date": "2014-07-14",
+   "nasa_table_fan_display": "Fan pot 1.5 (5cm/s) 0.9 0.4 0.36 0.32 0.3 0.28 ext",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT195_SAMPLE_203_TEST_P13a.mp4",
+   "short": "P13a",
+   "psi_version": 2,
+   "bytes": 177851046,
+   "nasa_table_test": "P13a",
+   "recording_gmt_day": 195,
+   "recording_date": "2014-07-14",
+   "nasa_table_fan_display": "Fan pot 1.1 (5cm/s) 0.4 0.36 0.32 0.3 0.28 0.26 0 ext",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT195_SAMPLE_203_TEST_P13b.mp4",
+   "short": "P13b",
+   "psi_version": 2,
+   "bytes": 56412853,
+   "nasa_table_test": "P13b",
+   "recording_gmt_day": 195,
+   "recording_date": "2014-07-14",
+   "nasa_table_fan_display": "Fan pot 1.3 (5cm/s) 0.4 0.36 0.32 ext",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT189_SAMPLE_200_TEST_P22a.mp4",
+   "short": "P22a",
+   "psi_version": 2,
+   "bytes": 32998129,
+   "nasa_table_test": "P22a",
+   "recording_gmt_day": 189,
+   "recording_date": "2014-07-08",
+   "nasa_table_fan_display": "5 0.36 0.32 ext after some time",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT189_SAMPLE_200_TEST_P22b.mp4",
+   "short": "P22b",
+   "psi_version": 2,
+   "bytes": 73175049,
+   "nasa_table_test": "P22b",
+   "recording_gmt_day": 189,
+   "recording_date": "2014-07-08",
+   "nasa_table_fan_display": "5 p.36 0.34 0.33 0.32 0.31 ext",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  },
+  {
+   "file": "PSI-25_Raw Data_BASS_GMT189_SAMPLE_217_TEST_P25.mp4",
+   "short": "P25",
+   "psi_version": 2,
+   "bytes": 103836812,
+   "nasa_table_test": "P25",
+   "recording_gmt_day": 189,
+   "recording_date": "2014-07-08",
+   "nasa_table_fan_display": "5 p.36 0.34 0.33 0.32 0.31 ext",
+   "nasa_table_air_display": "5 down to ext",
+   "table_outcome_team_reading": "extinction"
+  }
+ ],
+ "video": {
+  "width": 720,
+  "height": 480
+ },
+ "sampling": {
+  "ffmpeg_fps": 2,
+  "keep_every_nth": 2,
+  "seconds_per_row": 1.0,
+  "note": "One frame per second: ffmpeg's fps=2 filter is applied and every second frame it emits is kept (t = 0, 1, 2, ... s). This is the frame choice of the checked pilot; ffmpeg's fps=1 filter picks different frames, so it is not used."
+ },
+ "strip": {
+  "rows": [
+   30,
+   86
+  ],
+  "cols": [
+   140,
+   720
+  ],
+  "gray_weights": [
+   0.299,
+   0.587,
+   0.114
+  ],
+  "note": "Frame pixels. Only this strip of each frame is used; the rest of the picture is never read."
+ },
+ "grid": {
+  "pitch_px": 28.65,
+  "cell_w": 22,
+  "cell_h": 14,
+  "lines": {
+   "hdr": 3,
+   "num": 21,
+   "date": 39
+  },
+  "note": "Fixed-pitch character grid. Cell k of a line starts at frame column x0 + k * pitch; x0 is measured per clip and frozen in the reader state (159.0 to 161.25 px for these 19 clips). frame_px_box_at_x0_160 in each field is [left, top, right, bottom) in frame pixels at x0 = 160, for reading only.",
+  "origin_search": {
+   "from_px": 148.0,
+   "to_px": 172.0,
+   "step_px": 0.25,
+   "line": "hdr",
+   "on_cells": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    7,
+    8,
+    11,
+    12,
+    13,
+    16,
+    17,
+    18
+   ],
+   "off_cells": [
+    4,
+    5,
+    9,
+    10,
+    14,
+    15
+   ],
+   "note": "Used only for a clip the reader state has no x0 for: maximise mean(on) - mean(off) of the clip-averaged header line."
+  }
+ },
+ "matching": {
+  "min_corr": 0.8,
+  "margin": 0.05,
+  "shift_px": [
+   -1,
+   0,
+   1
+  ],
+  "blank": {
+   "line": "hdr",
+   "ref_cells": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "ratio": 0.35
+  },
+  "note": "Each cell is compared (normalised correlation, every shift in shift_px in x and y) with every template. The best character is kept when its correlation >= min_corr and beats the best other character by margin. Otherwise the cell is blank if its mean is below ratio x the mean of the header reference cells, else unreadable. A field with any blank inside or any unreadable cell, or whose text does not match its format, is left empty."
+ },
+ "overlay_present": {
+  "line": "hdr",
+  "on_cells": [
+   0,
+   1,
+   2,
+   3,
+   6,
+   7,
+   8,
+   11,
+   12,
+   13
+  ],
+  "off_cells": [
+   4,
+   5,
+   9,
+   10,
+   14,
+   15
+  ],
+  "factor": 2.0,
+  "offset": 10.0,
+  "rule": "overlay_present = mean(on cells) > factor * mean(off cells) + offset, on the header line (FUEL AIR FAN RAD)",
+  "missing_overlay": "Rule for a missing overlay: overlay_present is reported, but values are not erased because of it. Each field must pass its own character test, which fails on the still-camera screen, blue screen, colour bars or black, so those rows come out empty. Known weakness: on 7 rows (B21 0, 163, 164 s; O8a 80, 81 s; O19 988 s; P5 1608 s) the overlay is on screen over a bright picture, overlay_present is False, and only the fields that passed their own test (RAD, clock, on O19 also FUEL and AIR) are filled."
+ },
+ "fields": [
+  {
+   "column": "FUEL",
+   "kind": "number",
+   "line": "num",
+   "cells": [
+    1,
+    2,
+    3
+   ],
+   "format": "^-?\\d{1,2}$",
+   "frame_px_box_at_x0_160": [
+    189,
+    51,
+    268,
+    65
+   ],
+   "nasa_readme": null,
+   "note": "Copied as shown. The NASA documents held by the team do not say what FUEL measures in these solid-fuel tests."
+  },
+  {
+   "column": "AIR_cm_s",
+   "kind": "number",
+   "line": "num",
+   "cells": [
+    5,
+    6,
+    7,
+    8
+   ],
+   "format": "^-?\\d{1,3}$",
+   "frame_px_box_at_x0_160": [
+    303,
+    51,
+    411,
+    65
+   ],
+   "nasa_readme": {
+    "file": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
+    "quote": "flow speed measured in the duct",
+    "paraphrase": "in cm/s, on the video display; response time about 1 min, so the reading is steady only after a long time at one flow setting"
+   }
+  },
+  {
+   "column": "FAN_display",
+   "kind": "number",
+   "line": "num",
+   "cells": [
+    10,
+    11,
+    12,
+    13
+   ],
+   "format": "^\\d{2,3}$",
+   "frame_px_box_at_x0_160": [
+    446,
+    51,
+    554,
+    65
+   ],
+   "nasa_readme": {
+    "file": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
+    "quote": "instantaneous fan voltagex10",
+    "paraphrase": "on the video display; maximum 122, that is 12.2 V"
+   }
+  },
+  {
+   "column": "RAD_trunc1",
+   "kind": "number",
+   "line": "num",
+   "cells": [
+    16,
+    17,
+    18
+   ],
+   "format": "^\\d\\.\\d$",
+   "frame_px_box_at_x0_160": [
+    618,
+    51,
+    698,
+    65
+   ],
+   "nasa_readme": {
+    "file": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
+    "quote": "Uncalibrated radiometer gain",
+    "paraphrase": "the radiometer is shown on the video; gain adjusted to avoid saturation; useful for relative readings; video display data rate 5 Hz"
+   },
+   "note": "Only the first three characters (d.d) are read. The second decimal sits in cell 19, which the right edge of the picture cuts; the value is therefore cut, not rounded."
+  },
+  {
+   "column": "clock_hhmmss",
+   "kind": "clock_hhmmss",
+   "line": "date",
+   "cells": [
+    9,
+    10,
+    12,
+    13,
+    15,
+    16
+   ],
+   "frame_px_box_at_x0_160": [
+    418,
+    69,
+    640,
+    83
+   ],
+   "nasa_readme": {
+    "file": "PSI-25_Science Documents_BASS-II_ReadMe.docx",
+    "quote": "one day later than actual date",
+    "paraphrase": "the video display date is off by one day because the on-board computer missed a leap year; ISS runs on GMT"
+   },
+   "note": "Six digits HHMMSS written only when all six are read and form a valid time (hours < 24, minutes and seconds < 60). The date on the same line is not read."
+  }
+ ],
+ "clock_check": {
+  "column": "clock_hhmmss",
+  "tolerance_s": 1.5,
+  "rule": "Offset = clock seconds - t_video_s on every row with a clock; a row is on the line when its offset is within tolerance_s of the clip's median offset. Used by the flag rules and reported per clip. A clock that passes midnight inside a clip is not handled."
+ },
+ "flags": [
+  {
+   "flag": "half_updated",
+   "type": "above_max",
+   "column": "FAN_display",
+   "max": 125,
+   "reason": "NASA's ReadMe gives 122 as the maximum; the screen itself shows 123 to 125 in 16 rows that were checked by eye (by an AI assistant; no person has checked a frame). A higher value is a frame caught while the display was changing (O9 576 s shows 198, between 98 and 102). The value is kept as shown and flagged."
+  },
+  {
+   "flag": "half_updated",
+   "type": "clock_isolated_off_line",
+   "column": "clock_hhmmss",
+   "reason": "A clock value off the line while the rows just before and after are both read and on the line is a frame caught while the clock was changing (O11 923 s shows 14:45:59 between 14:44:59 and 14:45:00; P22b 411 s shows 16:57:29 between 16:57:19 and 16:57:20). The first and last rows of a clip are never flagged by this rule."
+  }
+ ],
+ "columns": [
+  "t_video_s",
+  "clock_hhmmss",
+  "overlay_present",
+  "FUEL",
+  "AIR_cm_s",
+  "FAN_display",
+  "RAD_trunc1",
+  "flag"
+ ],
+ "reader_state": {
+  "file": "../reader_state/bass2_reader_state.npz",
+  "sha256": "670a55ecee490f27958fdf850d5b3305e2572cb7f37e00bb4684f8f1c70cb03f",
+  "note": "Path relative to this settings file. Frozen templates (one normalised 14 x 22 pixel image per template, with its character) and the grid origin x0 of each clip. The reader checks the SHA-256 and stops if it differs; it never clusters again.",
+  "build": {
+   "tool": "video/tools/export_reader_state.py (run once on 2026-11-14)",
+   "source": "the pilot's reader state: x0.json, clusters.npz (K=48, random_state=0), clusters2.npz (K=32, random_state=0); not shipped",
+   "member_min_corr": 0.85,
+   "min_members": 5,
+   "rounds": [
+    {
+     "clusters_file": "clusters.npz",
+     "labels": {
+      "0": [
+       12,
+       17
+      ],
+      "1": [
+       5,
+       14,
+       19,
+       37,
+       40
+      ],
+      "2": [
+       11,
+       24,
+       25
+      ],
+      "3": [
+       6,
+       26
+      ],
+      "4": [
+       1,
+       16,
+       32
+      ],
+      "5": [
+       0,
+       8,
+       31
+      ],
+      "6": [
+       2
+      ],
+      "7": [
+       13
+      ],
+      "8": [
+       34
+      ],
+      "9": [
+       23
+      ],
+      "-": [
+       9,
+       43
+      ],
+      ".": [
+       7
+      ]
+     }
+    },
+    {
+     "clusters_file": "clusters2.npz",
+     "labels": {
+      "6": [
+       1,
+       22,
+       27
+      ],
+      "7": [
+       4
+      ],
+      "0": [
+       5
+      ],
+      "9": [
+       13
+      ],
+      "8": [
+       16
+      ],
+      "4": [
+       12
+      ]
+     }
+    }
+   ],
+   "x0_file": "x0.json",
+   "note": "Cluster ids were labelled during the pilot by an AI assistant (Claude) that looked at montages of real cells; no person has checked the labels. A template is the mean of the cluster members whose correlation with the cluster centre exceeds member_min_corr, kept only with at least min_members such members. The ids refer to those exact cluster files: re-clustering would renumber them."
+  }
+ }
+}

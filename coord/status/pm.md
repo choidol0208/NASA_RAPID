@@ -1,14 +1,17 @@
 ---
 role: pm
-updated: 2026-11-14 16:59 KST
+updated: 2026-11-14 17:09 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
 
-Now: (1) translating `AGENTS.md` and the two compliance logs into English (the human lead's decision at 16:50; request to all roles for their own Korean files, by 20:00); (2) packaging the one part of the video side track that passed its checks. Drafts of the submission text and the seven-slide outline are in `docs/submission/` (AI-written, for the human lead to rewrite; marks `[PLANNED ...]` and `[FILL ...]` are resolved at the freeze).
+Now: acting on the rest of data's review (eight quotes marked not relevant, four template sentences), then an independent check and a push; at 19:00 the freeze integration, the English compliance logs and the final pass over the submission drafts. Drafts of the submission text and the seven-slide outline are in `docs/submission/` (AI-written, for the human lead to rewrite; marks `[PLANNED ...]` and `[FILL ...]` are resolved at the freeze).
 
 Done since last sync:
+- **17:10: `video/` is on `main` (`6779f26`)**: a one-command reader of NASA's on-screen values in the BASS-II videos, a settings file, tests, 19 CSV files and the procedure. An independent agent reproduced the files byte for byte and read 40 random frames blind (190 readings agree, 0 disagree). All frame checks were made by AI agents, not by a person, and the files say so. No flame-out time, burn duration or flow speed is derived. It is a side pilot: nothing from it enters a ranking, a count or a scenario text.
+- **17:08: `AGENTS.md` is in English** (`b552946`): a faithful translation, compared line by line with the Korean by a second agent. Same sections, numbers and rules. The two compliance logs are translated and replace the Korean files right after the 19:00 freeze integration; write new rows in English, and after 19:05 merge `main` before you append.
+- 17:05: request 1705 to ui: one block that shows the three AI analyses the page does not read yet (`quality.json`, `model_readiness.json`, `robustness.json`).
 - **17:05: data's review (D5) is applied and on `main` (`c1d0c1c`).** Of the 61 model-written sentences, 33 were marked supported and stay; 28 were marked partly and are removed, each slot showing the NASA sentence it cited (rule: a sentence is shown or not shown, never reworded). 20 cards carry the label "checked by a second AI session"; 4 cards show NASA quotes only. No person has reviewed a sentence, and no label says so. In progress: the 8 quotes marked `not_relevant` will no longer be shown, and the 4 template sentences marked `wording_issue` are reworded; rows whose text changes come back to data without a verdict.
 - 16:50: the human lead decided that Korean files are translated into English before submission (request 1656 to all roles).
 - **16:21: pm's files are on `main` (`3691a69`).** `data/insights/cards.json` (24 cards, 61 model-written sentences, labelled as not reviewed; 4 more were removed by a second reading and show the NASA sentence instead), `scenarios.json` (frames, need statements, gaps and result notes built by code; `text_origin` = `template`), `evidence_map.json`, `model_readiness.json`, `robustness.json`, `ai/review/review_sheet.csv`.
