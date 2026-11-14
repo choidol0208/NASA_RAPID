@@ -175,6 +175,16 @@ class AssumedAtmosphereWording(unittest.TestCase):
                 if "pressure" in r["assumed_dims"]:
                     self.assertNotIn("pressure tested", text, (q, r["config_id"]))
 
+    def test_confidence_ignores_assumed_values(self):
+        w = CFG["profiles"]["prevention"]["weights"]
+        for r in scorer.rank("ISS cotton fabric")["ranking"]:
+            assumed = {"O2": "o2", "pressure": "pressure"}
+            lost = sum(w[assumed[x]] for x in r["assumed_dims"]) + sum(w[d] for d in r["unknown_dims"])
+            self.assertAlmostEqual(r["coverage"], round(1.0 - lost, 2), places=2, msg=r["config_id"])
+        rows = {r["config_id"]: r for r in scorer.rank("ISS cotton fabric")["results"]}
+        if "BASS-C01" in rows:  # O2 and pressure both assumed: never "high"
+            self.assertNotEqual(rows["BASS-C01"]["confidence"], "high")
+
     def test_recorded_reasons_come_first(self):
         for r in scorer.rank("ISS cotton fabric")["ranking"]:
             assumed = {"o2"} if "O2" in r["assumed_dims"] else set()

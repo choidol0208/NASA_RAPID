@@ -364,7 +364,8 @@ def similarities(sc, c, cfg):
     return S, fallback, speed_in_range, c
 
 
-def score_config(sc, c, cfg, weights, raw_S, caps):
+def score_config(sc, c, cfg, weights, raw_S, caps, assumed=()):
+    """assumed: dimensions whose catalog value was filled by the atmosphere fallback ("o2", "pressure")."""
     sim = cfg["similarity"]
     S, unknown = {}, []
     for d, v in raw_S.items():
@@ -388,7 +389,9 @@ def score_config(sc, c, cfg, weights, raw_S, caps):
     M = evidence(c, cfg["evidence"])
     score = 100.0 * M * gate * raw
     full = sum(v for k, v in weights.items() if v > 0 and (k != "diluent" or sc["concern"] == "suppression"))
-    known_w = sum(weights[d] for d in w if d not in unknown)
+    # Confidence counts only what was compared with a recorded value: an assumed (fallback) value
+    # is scored, but it is not evidence that the configuration matches.
+    known_w = sum(weights[d] for d in w if d not in unknown and d not in assumed)
     coverage = known_w / full if full else 0.0
     return dict(score=score, raw=raw, gate=gate, evidence=M, similarity=S, weights=w,
                 unknown=unknown, coverage=coverage,
@@ -509,7 +512,8 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
             caps[d] = max(known)
     scored = []
     for c, S, fallback, speed, c_eff in pre:
-        s = score_config(sc, c, cfg, weights, S, caps)
+        assumed = {{"O2": "o2", "pressure": "pressure"}[x] for x in fallback}
+        s = score_config(sc, c, cfg, weights, S, caps, assumed)
         why, gap, warns = explain(sc, c_eff, s, cfg, fallback, speed)
         scored.append(dict(
             config_id=c["config_id"], investigation_id=c["investigation_id"], psi_accession=c["psi_accession"],

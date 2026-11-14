@@ -268,7 +268,7 @@ function similarities(sc, c, cfg) {
   if (sc.concern === "suppression" && sc.diluent) S.diluent = sDiluent(sc.diluent, ce, sim.diluent);
   return [S, fallback, speed, ce];
 }
-function scoreConfig(sc, c, cfg, weights, rawS, caps) {
+function scoreConfig(sc, c, cfg, weights, rawS, caps, assumed = []) { // assumed: fallback dims ("o2", "pressure")
   const sim = cfg.similarity;
   const S = {}, unknown = [];
   for (const [d, v] of Object.entries(rawS)) {
@@ -295,7 +295,8 @@ function scoreConfig(sc, c, cfg, weights, rawS, caps) {
   let full = 0;
   for (const [k, v] of Object.entries(weights)) if (v > 0 && (k !== "diluent" || sc.concern === "suppression")) full += v;
   let knownW = 0;
-  for (const d of Object.keys(w)) if (!unknown.includes(d)) knownW += weights[d];
+  // Confidence counts only what was compared with a recorded value (mirrors score_config).
+  for (const d of Object.keys(w)) if (!unknown.includes(d) && !assumed.includes(d)) knownW += weights[d];
   const coverage = full ? knownW / full : 0.0;
   const contributions = {};
   for (const d of Object.keys(w)) contributions[d] = w[d] * S[d];
@@ -399,7 +400,8 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
       if (known.length) caps[d] = Math.max(...known);
     }
     const scored = pre.map(([c, S, fallback, speed, ce]) => {
-      const s = scoreConfig(sc, c, cfg, weights, S, caps);
+      const assumed = fallback.map((x) => ({ O2: "o2", pressure: "pressure" })[x]);
+      const s = scoreConfig(sc, c, cfg, weights, S, caps, assumed);
       const [why, gap, warns] = explain(sc, ce, s, cfg, fallback, speed);
       return {
         config_id: c.config_id, investigation_id: c.investigation_id, psi_accession: c.psi_accession,
