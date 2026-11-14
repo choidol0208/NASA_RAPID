@@ -151,8 +151,10 @@ function sO2(x, c, p) {
   if (!r) return null;
   const [lo, hi] = r;
   if (lo <= x && x <= hi) return 1.0;
-  if (x > hi) return Math.exp(-(x - hi) / p.above_scale_pct);
-  return Math.exp(-(lo - x) / p.below_scale_pct);
+  // Distance on the log of the O2 ratio (mirrors s_o2; scoring/MODEL_BASIS.md).
+  if (x > hi) return Math.exp(-Math.log(x / hi) / p.above_scale_ln);
+  if (x <= 0) return 0.0;
+  return Math.exp(-Math.log(lo / x) / p.below_scale_ln);
 }
 function logGauss(x, lo, hi, sigma, offset = 0.0) {
   if (lo <= x && x <= hi) return 1.0;
@@ -234,7 +236,15 @@ function sRole(concern, c, p) {
 function sDiluent(dil, c, p) {
   const cd = split(c.diluent);
   if (!cd.length) return p.none;
-  return cd.includes(String(dil).toLowerCase()) ? p.same : p.other_inert;
+  const d = String(dil).toLowerCase();
+  if (cd.includes(d)) return p.same;
+  // Another inert: compared by molar heat capacity (mirrors s_diluent).
+  const cp = {};
+  for (const [k, v] of Object.entries(p.molar_cp_298K_kJ_per_kmolK || {})) cp[k.toLowerCase()] = v;
+  const u = get(cp, d, null);
+  const k = get(p, "cp_ratio_exponent", 1);
+  const vals = u === null ? [] : cd.filter((x) => x in cp).map((x) => Math.pow(Math.min(u, cp[x]) / Math.max(u, cp[x]), k));
+  return vals.length ? Math.max(...vals) : p.other_inert;
 }
 function evidence(c, e) {
   const inv = c._inv;
