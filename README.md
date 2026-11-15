@@ -4,6 +4,8 @@ Fire Evidence Explorer is a web page: you describe a crewed environment, and it 
 
 **Live page:** https://choidol0208.github.io/NASA_RAPID/
 
+**Download (release):** [**with the local language model, recommended**](https://github.com/choidol0208/NASA_RAPID/releases/latest/download/fire-evidence-explorer-with-local-model.zip) · [rule-based, no model](https://github.com/choidol0208/NASA_RAPID/releases/latest/download/fire-evidence-explorer-rule-based.zip) · [release page](https://github.com/choidol0208/NASA_RAPID/releases/latest). Unzip, then run the script named in `START_HERE.md`; the model itself (about 13 GB) is fetched on the first start after asking. The live page needs no download.
+
 **The finding in one line:** for a lunar habitat (30% oxygen or more and 70.3 kPa or less), NASA's PSI tables hold no counted fire test, and the recorded solid-fuel tests end at 22.2% oxygen. [See where the evidence stops](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat%20cotton%20fabric&tab=stops).
 
 **Where SI (AI) is used:** an AI assistant extracted the catalog values from NASA's records (marked on every result card); a local language model wrote the summary sentences on the cards (70 written, 33 shown after checks, each citing NASA text); a conversational assistant answers on a local install and is replayed as recorded answers on the live page. Every count, rank and score is computed by plain code.
@@ -11,8 +13,6 @@ Fire Evidence Explorer is a web page: you describe a crewed environment, and it 
 **Demo links:** [Lunar habitat, cotton fabric](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat%20cotton%20fabric) · [Lunar habitat](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat) · [ISS cabin](https://choidol0208.github.io/NASA_RAPID/?q=ISS) · [How it works](https://choidol0208.github.io/NASA_RAPID/how.html)
 
 **Slides:** [docs/submission/slides.pdf](docs/submission/slides.pdf) (seven slides, the demo link of the submission; source and build script in `docs/submission/deck/`)
-
-**Download:** two archives in the [latest release](https://github.com/choidol0208/NASA_RAPID/releases/latest), one per way of running it on your own computer; the one with the local model is recommended (see "Download" below). The live page needs no download.
 
 **Start here:** open the "Lunar habitat, cotton fabric" demo, then the tab "What was found" (what NASA's documents report per question, then "ISS and lunar habitat, side by side") and the tab "Where the evidence stops". For the lunar habitat (30% oxygen or more and at or below 70.3 kPa), PSI has no counted test.
 
@@ -28,7 +28,7 @@ It is a research exploration tool. It is not operational fire-safety guidance, a
 
 Captures of the team's own page as it is now (not AI-generated images). The four of the public page were taken with headless Chrome at 1,440 px on 15 November 2026 at 22:09 KST, for the example "lunar habitat cotton fabric"; the one of the conversation was taken from the local install at 20:11 KST by `docs/submission/deck/capture.mjs`.
 
-**The SI assistant answering (animation, local install with the language model).** A request is typed; the dashboard appears at once; the assistant shows its steps while the model works, then the answer with a citation on every sentence; a follow-up is asked. A recording of the team's own page on 15 November 2026 at about 23:15 KST (`docs/readme/record_demo.mjs`, `docs/readme/make_gif.py`); frames are skipped while a step runs, so it plays faster than the one to two minutes an answer takes.
+**The SI assistant answering (animation, local install with the language model).** A request is typed; the dashboard appears at once; the assistant shows its steps while the model works, then the answer with a citation on every sentence; a follow-up is asked. A recording of the team's own page on 15 November 2026 at about 23:15 KST (`docs/readme/record_demo.mjs`, `docs/readme/make_gif.py`); the recording script plays the visitor (it draws the pointer, types and clicks); the page, the steps and the answers are what the local install showed. The waiting is shortened, so it plays faster than the one to two minutes an answer takes.
 
 ![Animation: a request is typed on the start page, the SI assistant works through its steps and shows a cited answer, then answers a follow-up](docs/readme/assistant_demo.gif)
 

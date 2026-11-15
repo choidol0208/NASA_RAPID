@@ -4,32 +4,27 @@
 
     python3 docs/readme/make_gif.py <folder with the frames and frames.json> <out.gif>
 
-Keeps the start page, the typed request, one frame per change of the assistant's steps, each finished answer and
-the typed follow-up. Nothing is drawn onto the frames. Needs Pillow.
+Every frame of the recording is used, each shown for the time frames.json gives it ("ms"). The frames are not
+edited here; the pointer in them was drawn into the page by the recording script. Needs FFmpeg on the PATH.
 """
 import json
 import os
+import subprocess
 import sys
 
-from PIL import Image
-
-src, out = sys.argv[1], sys.argv[2]
+src, out = os.path.abspath(sys.argv[1]), sys.argv[2]
 meta = json.load(open(os.path.join(src, "frames.json")))
-keep, last_text = [], None
-for f in meta["frames"]:
-    st = f.get("state")
-    if st is None:                       # start page, typed request, typed follow-up
-        keep.append((f, 1600)); last_text = None
-    elif f["label"].endswith("(done)"):
-        keep.append((f, 6000)); last_text = None
-    elif st.get("text") != last_text:    # a step finished or started
-        keep.append((f, 1000)); last_text = st.get("text")
-W = 800
-frames, durations = [], []
-for f, ms in keep:
-    im = Image.open(os.path.join(src, f["file"])).convert("RGB")
-    im = im.resize((W, round(im.height * W / im.width)), Image.LANCZOS)
-    frames.append(im.quantize(colors=128, method=Image.MEDIANCUT, dither=Image.Dither.NONE))
-    durations.append(ms)
-frames[0].save(out, save_all=True, append_images=frames[1:], duration=durations, loop=0, optimize=True, disposal=1)
-print(f"{out}: {len(frames)} of {len(meta['frames'])} frames, {sum(durations) / 1000:.0f} s, {os.path.getsize(out):,} bytes, {frames[0].size}")
+frames = meta["frames"]
+lines = []
+for f in frames:
+    lines.append(f"file '{os.path.join(src, f['file'])}'")
+    lines.append(f"duration {f['ms'] / 1000:.3f}")
+lines.append(f"file '{os.path.join(src, frames[-1]['file'])}'")   # the concat demuxer needs the last file once more
+lst = os.path.join(src, "list.txt")
+open(lst, "w").write("\n".join(lines) + "\n")
+vf = ("scale=800:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=160:stats_mode=diff[p];"
+      "[b][p]paletteuse=dither=none:diff_mode=rectangle")
+subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-vf", vf,
+                "-fps_mode", "vfr", "-loop", "0", out], check=True)
+total = sum(f["ms"] for f in frames) / 1000
+print(f"{out}: {len(frames)} frames, {total:.0f} s, {os.path.getsize(out):,} bytes")
