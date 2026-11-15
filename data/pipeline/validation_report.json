@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 82,
+  "PASS": 83,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 82
+  "checks": 83
  },
  "checks": [
   {
@@ -1812,6 +1812,21 @@
      "two_labels_agree": 463,
      "one_label": 344,
      "labels_disagree": 6
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "Q5_gravity_basis",
+   "verifies": "gravity_level: microgravity for 1,824 of 1,824 tests of tests.csv over the 14 tables whose constants set it (sources.json); each of these tables names its basis, the PSI record field Comment[Flight Platform], with the value as written: 'International Space Station (ISS)' for 11 of the 12 investigations and 'Cygnus Spacecraft' for PSI-99 (addendum 01:40 e of pm request 20261115-0035).",
+   "status": "PASS",
+   "numbers": {
+    "tests": 1824,
+    "tables": 14,
+    "flight_platform": {
+     "International Space Station (ISS)": 11,
+     "Cygnus Spacecraft": 1
     }
    },
    "failures": 0,

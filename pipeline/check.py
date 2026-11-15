@@ -6458,6 +6458,32 @@ def check_s3(ctx):
     return res
 
 
+
+@check("Q5_gravity_basis",
+       "gravity_level: microgravity for 1,824 of 1,824 tests of tests.csv over the 14 tables whose constants set it "
+       "(sources.json); each of these tables names its basis, the PSI record field Comment[Flight Platform], with the "
+       "value as written: 'International Space Station (ISS)' for 11 of the 12 investigations and 'Cygnus Spacecraft' "
+       "for PSI-99 (addendum 01:40 e of pm request 20261115-0035).")
+def check_q5(ctx):
+    res = Result()
+    g = collections.Counter(t["gravity_level"] for t in ctx.tests)
+    files = {t["source_file"] for t in ctx.tests}
+    srcs = [s for s in ctx.sources if (s.get("constants") or {}).get("gravity_level")]
+    vals = {}
+    for s in srcs:
+        res.checked += 1
+        b = s.get("gravity_level_basis") or {}
+        if b.get("record_field") != "Comment[Flight Platform]" or not b.get("value_as_written") or not b.get("archive"):
+            res.fail(problem="table without a gravity basis", source=s["id"])
+        vals[s["investigation_id"]] = b.get("value_as_written")
+    want = {i: ("Cygnus Spacecraft" if i == "PSI-99" else "International Space Station (ISS)") for i in vals}
+    if dict(g) != {"microgravity": 1824} or len(files) != 14 or len(srcs) != 14 or len(vals) != 12 or vals != want:
+        res.fail(problem="gravity fixture not reproduced", gravity=dict(g), tables=len(files), sources=len(srcs), values=vals)
+    res.numbers = {"tests": sum(g.values()), "tables": len(files),
+                   "flight_platform": dict(collections.Counter(vals.values()))}
+    return res
+
+
 # ----------------------------------------------------------------------------
 # running
 # ----------------------------------------------------------------------------
