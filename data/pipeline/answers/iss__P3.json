@@ -39,7 +39,7 @@
  },
  "top_line": {
   "id": "tests.oxygen_only+published.here",
-  "text": "Not judged here. No test counted for this need was recorded with oxygen and pressure both inside the ranges of this environment; of the 2 counted tests, 2 were recorded with oxygen inside the range and no pressure in the table, and 0 with pressure inside the range and no oxygen in the table. Published results and caveats quoted for this need or for fire safety in general: 8 at the oxygen and pressure of this environment and 29 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+  "text": "Not judged here. No test counted for this need was recorded with oxygen and pressure both inside the ranges of this environment; of the 2 counted tests, 2 were recorded with oxygen inside the range and no pressure in the table, and 0 with pressure inside the range and no oxygen in the table. Published results and caveats quoted for this need or for fire safety in general: 16 at the oxygen and pressure of this environment and 48 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
   "fields": {
    "status": "oxygen_only",
    "usable_tests": 2,
@@ -48,9 +48,9 @@
    "pressure_only": 0,
    "matched": 2,
    "n_near_cells": 2,
-   "n_at": 8,
-   "n_about": 29,
-   "n_published_here": 37
+   "n_at": 16,
+   "n_about": 48,
+   "n_published_here": 64
   }
  },
  "frame": {
@@ -1192,10 +1192,10 @@
  },
  "rung3_published": {
   "counts": {
-   "n_at": 8,
-   "n_about": 29,
-   "n_general": 8,
-   "n_listed": 45,
+   "n_at": 16,
+   "n_about": 48,
+   "n_general": 10,
+   "n_listed": 74,
    "n_not_full_text": 6
   },
   "at_the_environment": [
@@ -1464,6 +1464,170 @@
     "item_note": "Flight-level value given in the paper on samples 8 and 9; no separate value for sample 9. Olson et al. 2023 (CNF-2023-SAFFIRE) lists 103 kPa for the same flight."
    },
    {
+    "finding_id": "ICES20407.optimal_baffle",
+    "item_id": "ICES20407.optimal_baffle",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "In ISS tests in microgravity of concurrent, purely forced flow flame spread over thin SIBAL cotton-fiberglass fabric between two parallel baffles, with the glovebox at the ISS ambient values of 1.0 atm and ~22% O2, at an imposed flow of 7 cm/s the flame length first increased and then decreased as the inter-baffle distance D was reduced from no baffles (equivalent to D = 7.6 cm) to D = 2.0 cm; the maximum flame length occurred at around D = 4.0 cm, where the spread rate also reached its maximum for all baffle types.",
+    "quote": "The maximum flame length occurs at around D = 4.0 cm.",
+    "where": "II, p. 4; III.B Effects of Flow Confinement, pp. 6-7 (PDF pages 6-7); Conclusion 3, p. 9",
+    "reference_id": "ICES-2020-407",
+    "title": "Effects of Confinement on Flame Spread in Microgravity (Li, Liao, Ferkul, Johnston, Bunnell)",
+    "version": "ICES-2020-407 (NTRS 20205004657; 10 pages)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20205004657",
+    "conditions": {
+     "o2_pct_min": 22.0,
+     "o2_pct_max": 22.0,
+     "pressure_kpa_min": 101.325,
+     "pressure_kpa_max": 101.325,
+     "pressure_as_written": "1.0 atm",
+     "gravity_level": "microgravity",
+     "flow_cms": "7",
+     "fuel_phase": null,
+     "material": "SIBAL cotton-fiberglass fabric"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 22,
+      "as_written": "~22% O2",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 101.325,
+      "as_written": "1.0 atm",
+      "relation": "inside"
+     },
+     "gravity_level": {
+      "finding": [
+       "microgravity"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [],
+    "condition_words": {
+     "flow": [
+      "concurrent, purely forced flow"
+     ]
+    },
+    "item_note": "The confinement tests used the BASS flow duct retrofitted with baffles; the paper is not listed in a PSI record of this catalogue. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "'~22%' is normalized as 22; the paper gives a daily variation of 21.3% to 22.9% in the glovebox."
+   },
+   {
+    "finding_id": "ICES20407.steady_vs_growing",
+    "item_id": "ICES20407.steady_vs_growing",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "In ISS tests in microgravity of concurrent, purely forced flow flame spread over thin SIBAL cotton-fiberglass fabric between two parallel baffles, with the glovebox at the ISS ambient values of 1.0 atm and ~22% O2, when the imposed flow velocity was less than 15 cm/s steady state flame spread was observed for most of the tests; above 15 cm/s the flame continually grew and did not reach a steady state, except when the inter-baffle distance was small (< 3 cm). The paper notes that this observation might be specific to the tested sample length.",
+    "quote": "the flame continually grows and does not reach a steady state except when the inter-baffle distance is small (< 3 cm)",
+    "where": "II, pp. 4-5 (PDF page 5); Conclusion 2, p. 9",
+    "reference_id": "ICES-2020-407",
+    "title": "Effects of Confinement on Flame Spread in Microgravity (Li, Liao, Ferkul, Johnston, Bunnell)",
+    "version": "ICES-2020-407 (NTRS 20205004657; 10 pages)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20205004657",
+    "conditions": {
+     "o2_pct_min": 22.0,
+     "o2_pct_max": 22.0,
+     "pressure_kpa_min": 101.325,
+     "pressure_kpa_max": 101.325,
+     "pressure_as_written": "1.0 atm",
+     "gravity_level": "microgravity",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "SIBAL cotton-fiberglass fabric"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 22,
+      "as_written": "~22% O2",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 101.325,
+      "as_written": "1.0 atm",
+      "relation": "inside"
+     },
+     "gravity_level": {
+      "finding": [
+       "microgravity"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [],
+    "condition_words": {
+     "flow": [
+      "concurrent, purely forced flow"
+     ]
+    },
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "'~22%' is normalized as 22; the paper gives a daily variation of 21.3% to 22.9% in the glovebox."
+   },
+   {
+    "finding_id": "SAF45.iv2_v3_no_spread#IV-2",
+    "item_id": "SAF45.iv2_v3_no_spread",
+    "row": "IV-2",
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "Preliminary result: in the two concurrent PMMA samples of Saffire IV and V (IV-2: two-sided, 1 cm thick, at 100.0 kPa and 22.0 mol % oxygen; V-3: one-sided, 0.5 cm thick, at 71.3 kPa and 25.4 mol % oxygen; air flow 20 cm/s), the flames did not spread appreciably and remained fixed at the leading edge of the sample, advancing through surface regression only.",
+    "quote": "Both concurrent samples (IV-2 and V-3) did not spread appreciably and instead remained fixed at the leading edge of the sample",
+    "where": "III.D, p. 8; conditions in Table 1 and Figure 2, p. 3",
+    "reference_id": "ICES-2021-266",
+    "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+    "version": "ICES-2021-266 (12-15 July 2021)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011521",
+    "conditions": {
+     "o2_pct_min": 22.0,
+     "o2_pct_max": 22.0,
+     "pressure_kpa_min": 100.0,
+     "pressure_kpa_max": 100.0,
+     "pressure_as_written": "100.0 kPa",
+     "gravity_level": null,
+     "flow_cms": "20",
+     "fuel_phase": null,
+     "material": "2-sided PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 22.0,
+      "as_written": "22.0 mol % oxygen",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 100.0,
+      "as_written": "100.0 kPa",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "concurrent PMMA samples"
+     ]
+    },
+    "row_values": {
+     "flight_sample": "IV-2",
+     "material": "2-sided PMMA",
+     "thickness_cm": 1,
+     "flow_cms": 20,
+     "pressure_kpa": 100.0,
+     "o2_pct": 22.0
+    },
+    "item_note": "Materials as printed in Table 1 ('2-sided PMMA', '1 sided PMMA'); thicknesses from the Figure 2 labels. The paper adds that this is typical for thick fuels in low gravity but different from normal gravity. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person."
+   },
+   {
     "finding_id": "SAF45.table2#I-1, II-5, II-6, III-1",
     "item_id": "SAF45.table2",
     "row": "I-1, II-5, II-6, III-1",
@@ -1549,6 +1713,286 @@
      "gravity_level"
     ],
     "item_note": "Whole-number values; the paper does not say whether they are rounded or nominal. They are less precise than 21.7 / 22.1 / 21.2 given by the same group in ICES-2017-224 and Combustion and Flame 248 (2023)."
+   },
+   {
+    "finding_id": "SAF45.table2_flame_size#I-1",
+    "item_id": "SAF45.table2_flame_size",
+    "row": "I-1",
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "Preliminary result: Table 2 of the Saffire IV and V paper lists, for six thin samples of Saffire I to V (I-1, II-5, II-6, III-1 and IV-1 at 100 kPa; V-2 at 70.7 kPa), the steady state and maximum flame size with air flow, oxygen, pressure, material, duct height and sample size; the paper calls the steady state sizes the steady state flame lengths and states that under a variety of conditions concurrent flames spreading over thin fuels achieved a limiting size.",
+    "quote": "The steady state flame lengths are summarized in Table 2.",
+    "where": "III.C, Table 2 'Test Conditions and flame size for thin samples', p. 8",
+    "reference_id": "ICES-2021-266",
+    "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+    "version": "ICES-2021-266 (12-15 July 2021)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011521",
+    "conditions": {
+     "o2_pct_min": 21.0,
+     "o2_pct_max": 21.0,
+     "pressure_kpa_min": 100.0,
+     "pressure_kpa_max": 100.0,
+     "pressure_as_written": "100 kPa",
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "SIBAL"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 21,
+      "as_written": "21",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 100.0,
+      "as_written": "100 kPa",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "gravity_level"
+    ],
+    "row_values": {
+     "flight_sample": "I-1",
+     "flow_cms": 20,
+     "o2_pct": 21,
+     "pressure_kpa": 100,
+     "material": "SIBAL",
+     "steady_state_size_cm": 4,
+     "maximum_size_cm": 6.2,
+     "duct_height_cm": 46,
+     "sample_width_cm": 41,
+     "sample_length_cm": 94
+    },
+    "item_note": "Item SAF45.table2 holds the oxygen and pressure columns of the same table; this item holds all columns. Rows I-1 to III-1 are Saffire-I to -III (PSI-98, PSI-99, PSI-100); IV-1 and V-2 are Saffire IV and V, which are not PSI investigations. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+   },
+   {
+    "finding_id": "SAF45.table2_flame_size#II-5",
+    "item_id": "SAF45.table2_flame_size",
+    "row": "II-5",
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "Preliminary result: Table 2 of the Saffire IV and V paper lists, for six thin samples of Saffire I to V (I-1, II-5, II-6, III-1 and IV-1 at 100 kPa; V-2 at 70.7 kPa), the steady state and maximum flame size with air flow, oxygen, pressure, material, duct height and sample size; the paper calls the steady state sizes the steady state flame lengths and states that under a variety of conditions concurrent flames spreading over thin fuels achieved a limiting size.",
+    "quote": "The steady state flame lengths are summarized in Table 2.",
+    "where": "III.C, Table 2 'Test Conditions and flame size for thin samples', p. 8",
+    "reference_id": "ICES-2021-266",
+    "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+    "version": "ICES-2021-266 (12-15 July 2021)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011521",
+    "conditions": {
+     "o2_pct_min": 21.0,
+     "o2_pct_max": 21.0,
+     "pressure_kpa_min": 100.0,
+     "pressure_kpa_max": 100.0,
+     "pressure_as_written": "100 kPa",
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "SIBAL"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 21,
+      "as_written": "21",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 100.0,
+      "as_written": "100 kPa",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "gravity_level"
+    ],
+    "row_values": {
+     "flight_sample": "II-5",
+     "flow_cms": 20,
+     "o2_pct": 21,
+     "pressure_kpa": 100,
+     "material": "SIBAL",
+     "steady_state_size_cm": 4,
+     "maximum_size_cm": 4,
+     "duct_height_cm": 46,
+     "sample_width_cm": 5,
+     "sample_length_cm": 30
+    },
+    "item_note": "Item SAF45.table2 holds the oxygen and pressure columns of the same table; this item holds all columns. Rows I-1 to III-1 are Saffire-I to -III (PSI-98, PSI-99, PSI-100); IV-1 and V-2 are Saffire IV and V, which are not PSI investigations. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+   },
+   {
+    "finding_id": "SAF45.table2_flame_size#II-6",
+    "item_id": "SAF45.table2_flame_size",
+    "row": "II-6",
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "Preliminary result: Table 2 of the Saffire IV and V paper lists, for six thin samples of Saffire I to V (I-1, II-5, II-6, III-1 and IV-1 at 100 kPa; V-2 at 70.7 kPa), the steady state and maximum flame size with air flow, oxygen, pressure, material, duct height and sample size; the paper calls the steady state sizes the steady state flame lengths and states that under a variety of conditions concurrent flames spreading over thin fuels achieved a limiting size.",
+    "quote": "The steady state flame lengths are summarized in Table 2.",
+    "where": "III.C, Table 2 'Test Conditions and flame size for thin samples', p. 8",
+    "reference_id": "ICES-2021-266",
+    "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+    "version": "ICES-2021-266 (12-15 July 2021)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011521",
+    "conditions": {
+     "o2_pct_min": 21.0,
+     "o2_pct_max": 21.0,
+     "pressure_kpa_min": 100.0,
+     "pressure_kpa_max": 100.0,
+     "pressure_as_written": "100 kPa",
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "SIBAL"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 21,
+      "as_written": "21",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 100.0,
+      "as_written": "100 kPa",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "gravity_level"
+    ],
+    "row_values": {
+     "flight_sample": "II-6",
+     "flow_cms": 25,
+     "o2_pct": 21,
+     "pressure_kpa": 100,
+     "material": "SIBAL",
+     "steady_state_size_cm": 5,
+     "maximum_size_cm": 5,
+     "duct_height_cm": 46,
+     "sample_width_cm": 5,
+     "sample_length_cm": 30
+    },
+    "item_note": "Item SAF45.table2 holds the oxygen and pressure columns of the same table; this item holds all columns. Rows I-1 to III-1 are Saffire-I to -III (PSI-98, PSI-99, PSI-100); IV-1 and V-2 are Saffire IV and V, which are not PSI investigations. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+   },
+   {
+    "finding_id": "SAF45.table2_flame_size#III-1",
+    "item_id": "SAF45.table2_flame_size",
+    "row": "III-1",
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "Preliminary result: Table 2 of the Saffire IV and V paper lists, for six thin samples of Saffire I to V (I-1, II-5, II-6, III-1 and IV-1 at 100 kPa; V-2 at 70.7 kPa), the steady state and maximum flame size with air flow, oxygen, pressure, material, duct height and sample size; the paper calls the steady state sizes the steady state flame lengths and states that under a variety of conditions concurrent flames spreading over thin fuels achieved a limiting size.",
+    "quote": "The steady state flame lengths are summarized in Table 2.",
+    "where": "III.C, Table 2 'Test Conditions and flame size for thin samples', p. 8",
+    "reference_id": "ICES-2021-266",
+    "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+    "version": "ICES-2021-266 (12-15 July 2021)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011521",
+    "conditions": {
+     "o2_pct_min": 21.0,
+     "o2_pct_max": 21.0,
+     "pressure_kpa_min": 100.0,
+     "pressure_kpa_max": 100.0,
+     "pressure_as_written": "100 kPa",
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "SIBAL"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 21,
+      "as_written": "21",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 100.0,
+      "as_written": "100 kPa",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "gravity_level"
+    ],
+    "row_values": {
+     "flight_sample": "III-1",
+     "flow_cms": 25,
+     "o2_pct": 21,
+     "pressure_kpa": 100,
+     "material": "SIBAL",
+     "steady_state_size_cm": 5,
+     "maximum_size_cm": 8.2,
+     "duct_height_cm": 46,
+     "sample_width_cm": 41,
+     "sample_length_cm": 94
+    },
+    "item_note": "Item SAF45.table2 holds the oxygen and pressure columns of the same table; this item holds all columns. Rows I-1 to III-1 are Saffire-I to -III (PSI-98, PSI-99, PSI-100); IV-1 and V-2 are Saffire IV and V, which are not PSI investigations. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+   },
+   {
+    "finding_id": "SAF45.table2_flame_size#IV-1",
+    "item_id": "SAF45.table2_flame_size",
+    "row": "IV-1",
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "Preliminary result: Table 2 of the Saffire IV and V paper lists, for six thin samples of Saffire I to V (I-1, II-5, II-6, III-1 and IV-1 at 100 kPa; V-2 at 70.7 kPa), the steady state and maximum flame size with air flow, oxygen, pressure, material, duct height and sample size; the paper calls the steady state sizes the steady state flame lengths and states that under a variety of conditions concurrent flames spreading over thin fuels achieved a limiting size.",
+    "quote": "The steady state flame lengths are summarized in Table 2.",
+    "where": "III.C, Table 2 'Test Conditions and flame size for thin samples', p. 8",
+    "reference_id": "ICES-2021-266",
+    "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+    "version": "ICES-2021-266 (12-15 July 2021)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011521",
+    "conditions": {
+     "o2_pct_min": 22.0,
+     "o2_pct_max": 22.0,
+     "pressure_kpa_min": 100.0,
+     "pressure_kpa_max": 100.0,
+     "pressure_as_written": "100 kPa",
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "SIBAL"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 22,
+      "as_written": "22",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 100.0,
+      "as_written": "100 kPa",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "gravity_level"
+    ],
+    "row_values": {
+     "flight_sample": "IV-1",
+     "flow_cms": 20,
+     "o2_pct": 22,
+     "pressure_kpa": 100,
+     "material": "SIBAL",
+     "steady_state_size_cm": 8.5,
+     "maximum_size_cm": 11.0,
+     "duct_height_cm": 30,
+     "sample_width_cm": 41,
+     "sample_length_cm": 50
+    },
+    "item_note": "Item SAF45.table2 holds the oxygen and pressure columns of the same table; this item holds all columns. Rows I-1 to III-1 are Saffire-I to -III (PSI-98, PSI-99, PSI-100); IV-1 and V-2 are Saffire IV and V, which are not PSI investigations. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
    },
    {
     "finding_id": "SAF456.conditions#IV-1",
@@ -2418,6 +2862,1161 @@
     "item_note": "Nominal; applies to the SIBAL fabric concurrent-flow tests of that section."
    },
    {
+    "finding_id": "BASS2TM.rod_spread_limit",
+    "item_id": "BASS2TM.rod_spread_limit",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "In the BASS-II opposed-flow tests on black PMMA rods (6.35, 9.525 and 12.7 mm diameter), flame spread was observed at O2 concentrations as low as 17.5 percent in microgravity, while in normal gravity flame spread was not observed below 19 percent; the report attributes this probably to the lower opposed-flow velocity in the microgravity tests.",
+    "quote": "While in microgravity, flame spread was observed at O2 concentrations as low as 17.5 percent, in normal gravity, flame spread was not observed below 19 percent.",
+    "where": "4.1.2 Results, p. 50 (PDF page 58); Table 4.2, p. 48",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": "microgravity;normal",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "black PMMA rods"
+    },
+    "matched_on": {
+     "gravity_level": {
+      "finding": [
+       "microgravity",
+       "normal"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The O2 numbers are the lowest O2 with flame spread, results and not the atmosphere of one test. Tagged P1 (an oxygen threshold) and P3 (flame spread); the collecting agent proposed S1."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M1",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M1",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 21.9,
+     "o2_pct_max": 22.2,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       21.9,
+       22.2
+      ],
+      "as_written": "22.2",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M1",
+     "thickness_mm": 1,
+     "width_cm": 2.2,
+     "sides_burning": 1,
+     "flow_cms": [
+      9
+     ],
+     "spread_rate_mm_s": [
+      0.071
+     ],
+     "burn_time_min": 6.4,
+     "initial_o2_pct_by_vol": 22.2,
+     "final_o2_pct_by_vol": 21.9
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M10",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M10",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 18.6,
+     "o2_pct_max": 20.1,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       18.6,
+       20.1
+      ],
+      "as_written": "20.1",
+      "relation": "overlaps"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M10",
+     "thickness_mm": 4,
+     "width_cm": 1.2,
+     "sides_burning": 2,
+     "flow_cms": [
+      15,
+      10
+     ],
+     "spread_rate_mm_s": [
+      0.0373,
+      0.03
+     ],
+     "burn_time_min": 30.5,
+     "initial_o2_pct_by_vol": 20.1,
+     "final_o2_pct_by_vol": 18.6
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M11",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M11",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 18.5,
+     "o2_pct_max": 20.0,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       18.5,
+       20
+      ],
+      "as_written": "20",
+      "relation": "overlaps"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M11",
+     "thickness_mm": 5,
+     "width_cm": 1.2,
+     "sides_burning": 2,
+     "flow_cms": [
+      21,
+      15,
+      13
+     ],
+     "spread_rate_mm_s": [
+      0.048,
+      0.028,
+      0.022
+     ],
+     "burn_time_min": 28.5,
+     "initial_o2_pct_by_vol": 20,
+     "final_o2_pct_by_vol": 18.5
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M12",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M12",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 20.4,
+     "o2_pct_max": 21.7,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       20.4,
+       21.7
+      ],
+      "as_written": "21.7",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M12",
+     "thickness_mm": 2,
+     "width_cm": 2.2,
+     "sides_burning": 2,
+     "flow_cms": [
+      12,
+      10
+     ],
+     "spread_rate_mm_s": "Not tracked",
+     "burn_time_min": 16.2,
+     "initial_o2_pct_by_vol": 21.7,
+     "final_o2_pct_by_vol": 20.4
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M13",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M13",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 19.0,
+     "o2_pct_max": 20.8,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       19,
+       20.8
+      ],
+      "as_written": "20.8",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M13",
+     "thickness_mm": 4,
+     "width_cm": 2.2,
+     "sides_burning": 2,
+     "flow_cms": [
+      6,
+      5,
+      4
+     ],
+     "spread_rate_mm_s": [
+      0.047,
+      0.035,
+      0.033
+     ],
+     "burn_time_min": 20.5,
+     "initial_o2_pct_by_vol": 20.8,
+     "final_o2_pct_by_vol": 19
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M14",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M14",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 21.6,
+     "o2_pct_max": 22.2,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       21.6,
+       22.2
+      ],
+      "as_written": "22.2",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M14",
+     "thickness_mm": 2,
+     "width_cm": 2.2,
+     "sides_burning": 1,
+     "flow_cms": [
+      15,
+      14,
+      10
+     ],
+     "spread_rate_mm_s": [
+      0.0624,
+      0.055,
+      0.0353
+     ],
+     "burn_time_min": 15.4,
+     "initial_o2_pct_by_vol": 22.2,
+     "final_o2_pct_by_vol": 21.6
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M15",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M15",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 20.0,
+     "o2_pct_max": 21.0,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       20,
+       21
+      ],
+      "as_written": "21",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M15",
+     "thickness_mm": 4,
+     "width_cm": 2.2,
+     "sides_burning": 1,
+     "flow_cms": [
+      20
+     ],
+     "spread_rate_mm_s": [
+      0.045
+     ],
+     "burn_time_min": 22.0,
+     "initial_o2_pct_by_vol": 21,
+     "final_o2_pct_by_vol": 20
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M16",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M16",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 18.7,
+     "o2_pct_max": 19.2,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       18.7,
+       19.2
+      ],
+      "as_written": "19.2",
+      "relation": "overlaps"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M16",
+     "thickness_mm": 1,
+     "width_cm": 2.2,
+     "sides_burning": 2,
+     "flow_cms": [
+      5,
+      3,
+      2
+     ],
+     "spread_rate_mm_s": [
+      0.144,
+      0.1309,
+      0.1062
+     ],
+     "burn_time_min": 8.4,
+     "initial_o2_pct_by_vol": 19.2,
+     "final_o2_pct_by_vol": 18.7
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M19",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M19",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 17.4,
+     "o2_pct_max": 19.0,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       17.4,
+       19
+      ],
+      "as_written": "19",
+      "relation": "overlaps"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M19",
+     "thickness_mm": 4,
+     "width_cm": 2.2,
+     "sides_burning": 2,
+     "flow_cms": [
+      10,
+      6
+     ],
+     "spread_rate_mm_s": [
+      0.027,
+      0.0159
+     ],
+     "burn_time_min": 25.7,
+     "initial_o2_pct_by_vol": 19,
+     "final_o2_pct_by_vol": 17.4
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M2",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M2",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 21.2,
+     "o2_pct_max": 22.2,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       21.2,
+       22.2
+      ],
+      "as_written": "22.2",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M2",
+     "thickness_mm": 3,
+     "width_cm": 2.2,
+     "sides_burning": 1,
+     "flow_cms": [
+      20,
+      15
+     ],
+     "spread_rate_mm_s": [
+      0.052,
+      0.033
+     ],
+     "burn_time_min": 22.9,
+     "initial_o2_pct_by_vol": 22.2,
+     "final_o2_pct_by_vol": 21.2
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M3",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M3",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 19.7,
+     "o2_pct_max": 20.8,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       19.7,
+       20.8
+      ],
+      "as_written": "20.8",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M3",
+     "thickness_mm": 5,
+     "width_cm": 2.2,
+     "sides_burning": 1,
+     "flow_cms": [
+      10,
+      20
+     ],
+     "spread_rate_mm_s": [
+      0.029,
+      0.024
+     ],
+     "burn_time_min": 20.1,
+     "initial_o2_pct_by_vol": 20.8,
+     "final_o2_pct_by_vol": 19.7
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M4",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M4",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 19.8,
+     "o2_pct_max": 21.8,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       19.8,
+       21.8
+      ],
+      "as_written": "21.8",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M4",
+     "thickness_mm": 5,
+     "width_cm": 2.2,
+     "sides_burning": 2,
+     "flow_cms": [
+      5,
+      3
+     ],
+     "spread_rate_mm_s": [
+      0.045,
+      0.033
+     ],
+     "burn_time_min": 19.8,
+     "initial_o2_pct_by_vol": 21.8,
+     "final_o2_pct_by_vol": 19.8
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M5",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M5",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 19.0,
+     "o2_pct_max": 22.2,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       19,
+       22.2
+      ],
+      "as_written": "22.2",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M5",
+     "thickness_mm": 3,
+     "width_cm": 2.2,
+     "sides_burning": 2,
+     "flow_cms": [
+      10
+     ],
+     "spread_rate_mm_s": [
+      0.071
+     ],
+     "burn_time_min": 27.2,
+     "initial_o2_pct_by_vol": 22.2,
+     "final_o2_pct_by_vol": 19
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M6",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M6",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 20.7,
+     "o2_pct_max": 21.8,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       20.7,
+       21.8
+      ],
+      "as_written": "21.8",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M6",
+     "thickness_mm": 1,
+     "width_cm": 2.2,
+     "sides_burning": 2,
+     "flow_cms": [
+      10,
+      8
+     ],
+     "spread_rate_mm_s": "Not tracked",
+     "burn_time_min": 16.8,
+     "initial_o2_pct_by_vol": 21.8,
+     "final_o2_pct_by_vol": 20.7
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.table5_1#M8",
+    "item_id": "BASS2TM.table5_1",
+    "row": "M8",
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+    "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+    "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": 18.2,
+     "o2_pct_max": 19.1,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       18.2,
+       19.1
+      ],
+      "as_written": "19.1",
+      "relation": "overlaps"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "condition_words": {
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "row_values": {
+     "sample": "M8",
+     "thickness_mm": 2,
+     "width_cm": 1.2,
+     "sides_burning": 2,
+     "flow_cms": [
+      10,
+      6,
+      5
+     ],
+     "spread_rate_mm_s": [
+      0.057,
+      0.056,
+      0.04
+     ],
+     "burn_time_min": 25.2,
+     "initial_o2_pct_by_vol": 19.1,
+     "final_o2_pct_by_vol": 18.2
+    },
+    "item_note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+   },
+   {
+    "finding_id": "BASS2TM.thin_pmma_spread_vs_1g",
+    "item_id": "BASS2TM.thin_pmma_spread_vs_1g",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "In the BASS-II opposed-flow tests on 100-µm-thick PMMA sheet, the highest spread rate in microgravity was 2.2 mm/s, with the opposing flow velocity varied from about 40 cm/s to about 1 cm/s; the average spread rate of the normal-gravity (downward) experiments, run at 101 kPa and 21 percent O2, was 2.0 mm/s. The report states the two are about the same.",
+    "quote": "The highest spread rate in the microgravity environment, 2.2 mm/s, is about the same as the downward spread rate.",
+    "where": "2.3.5, p. 38 (PDF page 46) and 2.3.7 Results and Discussion, pp. 40-41 (PDF pages 48-49)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": "microgravity;normal",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "100-µm-thick PMMA sheet"
+    },
+    "matched_on": {
+     "gravity_level": {
+      "finding": [
+       "microgravity",
+       "normal"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa"
+    ],
+    "condition_words": {
+     "oxygen_pressure": [
+      "run at 101 kPa and 21 percent O2"
+     ],
+     "flow": [
+      "opposed-flow tests"
+     ]
+    },
+    "item_note": "The 101 kPa and 21 percent O2 are stated for the downward (normal-gravity) experiments only. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The 101 kPa and 21 percent O2 are written for the normal-gravity part of the comparison only and are kept as words."
+   },
+   {
+    "finding_id": "SAF17S.flame_length_plateau",
+    "item_id": "SAF17S.flame_length_plateau",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "Saffire-I (40.6-cm-wide SIBAL cotton-fiberglass fabric, 20 cm/s flow, initial oxygen 21.7% by ISS reading): for the concurrent flame the length reached a plateau value of around 40 mm, while the opposed-flow flame was a bit shorter at 24 mm.",
+    "quote": "For the concurrent flame, the length reaches a plateau value of around 40 mm, while the opposed-flow flame is a bit shorter at 24 mm.",
+    "where": "Slide 21 'SIBAL Fabric Results (con't)'; conditions on slide 14",
+    "reference_id": "NTRS-20170008805",
+    "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+    "version": "2017 (36 slides)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20170008805",
+    "conditions": {
+     "o2_pct_min": 21.7,
+     "o2_pct_max": 21.7,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": "20",
+     "fuel_phase": null,
+     "material": "SIBAL cotton-fiberglass fabric"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 21.7,
+      "as_written": "initial oxygen 21.7%",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "item_note": "The same slide gives the spread rates 1.8 and 1.3 mm/s (item SAF.result). Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "A flame length plateau is tagged P3 (fire growth). The oxygen is the initial ISS reading."
+   },
+   {
+    "finding_id": "SAF17S.narrow_sample_spread",
+    "item_id": "SAF17S.narrow_sample_spread",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "At the same flow speed of 20 cm/s, the flame spread rate of the 5-cm-wide SIBAL fabric sample (Saffire-2) was marginally faster than that of the 40.6-cm-wide sample (Saffire-1): 2.1 compared to 1.8 mm/s; the slide attributes this partly to the slightly higher starting oxygen percentage (22.1% vs. 21.7%) and says the narrow sample might also have spread faster because of larger side entrainment effects.",
+    "quote": "The flame spread rate for the 5-cm-wide sample is marginally faster compared to the spread rate for the 40.6-cm-wide sample",
+    "where": "Slide 21 'SIBAL Fabric Results (con't)'; samples on slides 9 and 14",
+    "reference_id": "NTRS-20170008805",
+    "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+    "version": "2017 (36 slides)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20170008805",
+    "conditions": {
+     "o2_pct_min": 21.7,
+     "o2_pct_max": 22.1,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": "20",
+     "fuel_phase": null,
+     "material": "SIBAL fabric"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       21.7,
+       22.1
+      ],
+      "as_written": "22.1% vs. 21.7%",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "item_note": "The slide does not name the Saffire-2 sample of the 2.1 mm/s value (slide 9: samples 2-5 and 2-6 were fabric; 2-6 ran at 25 cm/s). Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The two starting oxygen values of a comparison are normalized as a range, as for SAF.starting_o2."
+   },
+   {
     "finding_id": "SAF17S.o2_I",
     "item_id": "SAF17S.o2_I",
     "row": null,
@@ -2959,6 +4558,42 @@
     "tagging_note": "85% is the oxygen of a burner stream, not of an atmosphere; it is kept as words."
    },
    {
+    "finding_id": "ICES15.hrr",
+    "item_id": "ICES15.hrr",
+    "row": null,
+    "kind": "result",
+    "applies": "general",
+    "list": "general",
+    "text": "Computed by the authors, not a measurement: using Huggett's oxygen consumption calorimetry (13.1 kJ/g O2) and the burn time of each test, the paper estimates the BASS-II heat release rate to be typically well below 100 W, increasing with ambient oxygen; one long opposed thick slab test released close to 100 W and a brief concurrent rod test almost 110 W.",
+    "quote": "we estimate the heat release rate to be typically well below 100 W",
+    "where": "III, text beside Figure 8, p. 7",
+    "reference_id": "ICES-2015-196",
+    "title": "Results from on-board CSA-CP and CDM Sensor Readings during the Burning and Suppression of Solids - II (BASS-II) Experiment in the Microgravity Science Glovebox (MSG) (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "ICES-2015-196 (12-16 July 2015, Bellevue, Washington; NTRS 20150019858)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20150019858",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": null
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "A heat release estimate names no gas, smoke, spread, ignition or extinction; tagged general (the collecting agent proposed D1)."
+   },
+   {
     "finding_id": "SAF17.sensors",
     "item_id": "SAF17.sensors",
     "row": null,
@@ -3067,6 +4702,47 @@
       "reduced-pressure exploration atmospheres"
      ]
     }
+   },
+   {
+    "finding_id": "SAF17S.silicone_no_spread",
+    "item_id": "SAF17S.silicone_no_spread",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "None of the Saffire-2 silicone samples (sheets 0.27, 0.61, 1.03 and 0.37 mm thick, samples 2-1 to 2-4) burned: when the igniter was powered off a tiny gas phase flame remained but did not spread and quickly extinguished; the slide notes that even the thin sample had been entirely consumed in normal gravity.",
+    "quote": "When the igniter was powered off, a tiny gas phase flame remained but did not spread and quickly extinguished.",
+    "where": "Slide 12 'Saffire-2; Silicone Results'; thicknesses on slide 9",
+    "reference_id": "NTRS-20170008805",
+    "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+    "version": "2017 (36 slides)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20170008805",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "silicone"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": true,
+    "condition_words": {
+     "gravity": [
+      "entirely consumed in normal gravity"
+     ]
+    },
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "Tagged P1 (flammability of a material) and P3 (no flame spread). 'normal gravity' is written for the comparison only."
    },
    {
     "finding_id": "THOMSEN18.care",
@@ -3220,11 +4896,11 @@
    },
    {
     "id": "rung3.counts",
-    "text": "Results and caveats listed: 8 at the oxygen and pressure of this environment; 29 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 8 stated without an oxygen, pressure or gravity level that can be compared."
+    "text": "Results and caveats listed: 16 at the oxygen and pressure of this environment; 48 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 10 stated without an oxygen, pressure or gravity level that can be compared."
    },
    {
     "id": "rung3.access",
-    "text": "6 of the 45 listed come from a document that was not read in full text; each entry gives the access level of its document."
+    "text": "6 of the 74 listed come from a document that was not read in full text; each entry gives the access level of its document."
    },
    {
     "id": "rung3.limits",
@@ -3448,7 +5124,7 @@
   {
    "rung": "top",
    "id": "tests.oxygen_only+published.here",
-   "text": "Not judged here. No test counted for this need was recorded with oxygen and pressure both inside the ranges of this environment; of the 2 counted tests, 2 were recorded with oxygen inside the range and no pressure in the table, and 0 with pressure inside the range and no oxygen in the table. Published results and caveats quoted for this need or for fire safety in general: 8 at the oxygen and pressure of this environment and 29 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+   "text": "Not judged here. No test counted for this need was recorded with oxygen and pressure both inside the ranges of this environment; of the 2 counted tests, 2 were recorded with oxygen inside the range and no pressure in the table, and 0 with pressure inside the range and no oxygen in the table. Published results and caveats quoted for this need or for fire safety in general: 16 at the oxygen and pressure of this environment and 48 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
    "sources": [
     "#top_line.fields"
    ]
@@ -3637,7 +5313,7 @@
   {
    "rung": "3",
    "id": "rung3.counts",
-   "text": "Results and caveats listed: 8 at the oxygen and pressure of this environment; 29 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 8 stated without an oxygen, pressure or gravity level that can be compared.",
+   "text": "Results and caveats listed: 16 at the oxygen and pressure of this environment; 48 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 10 stated without an oxygen, pressure or gravity level that can be compared.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.iss.needs.P3",
     "data/pipeline/findings_by_environment.json#environments.iss.needs.general"
@@ -3646,7 +5322,7 @@
   {
    "rung": "3",
    "id": "rung3.access",
-   "text": "6 of the 45 listed come from a document that was not read in full text; each entry gives the access level of its document.",
+   "text": "6 of the 74 listed come from a document that was not read in full text; each entry gives the access level of its document.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.iss.needs.P3",
     "data/pipeline/findings_by_environment.json#environments.iss.needs.general"
@@ -3802,6 +5478,6 @@
    "no_record": "iss__P3.no_record",
    "caveats": "iss__P3.caveats"
   },
-  "headline": "3 quoted results tagged for this question: 0 at the oxygen and pressure of this environment, 1 about one of its stated conditions, 2 stated without these conditions, 0 at other stated conditions; 2 with printed values. 44 more tagged for all questions: 8 at the oxygen and pressure of this environment, 28 about one of its stated conditions. 2 tests counted, 0 inside the oxygen and pressure ranges of this environment by recorded values."
+  "headline": "41 quoted results tagged for this question: 8 at the oxygen and pressure of this environment, 20 about one of its stated conditions, 3 stated without these conditions, 10 at other stated conditions; 40 with printed values. 45 more tagged for all questions: 8 at the oxygen and pressure of this environment, 28 about one of its stated conditions. 2 tests counted, 0 inside the oxygen and pressure ranges of this environment by recorded values."
  }
 }

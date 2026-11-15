@@ -39,7 +39,7 @@
  },
  "top_line": {
   "id": "tests.in_atmosphere+published.here",
-  "text": "Not judged here. 56 of the 298 tests counted for this need were recorded with oxygen and pressure both inside the ranges of this environment; 7 more with oxygen inside the range and no pressure in the table, and 0 more with pressure inside the range and no oxygen in the table. Published results and caveats quoted for this need or for fire safety in general: 8 at the oxygen and pressure of this environment and 28 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+  "text": "Not judged here. 56 of the 298 tests counted for this need were recorded with oxygen and pressure both inside the ranges of this environment; 7 more with oxygen inside the range and no pressure in the table, and 0 more with pressure inside the range and no oxygen in the table. Published results and caveats quoted for this need or for fire safety in general: 8 at the oxygen and pressure of this environment and 34 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
   "fields": {
    "status": "in_atmosphere",
    "usable_tests": 298,
@@ -49,8 +49,8 @@
    "matched": 63,
    "n_near_cells": 4,
    "n_at": 8,
-   "n_about": 28,
-   "n_published_here": 36
+   "n_about": 34,
+   "n_published_here": 42
   }
  },
  "frame": {
@@ -1616,9 +1616,9 @@
  "rung3_published": {
   "counts": {
    "n_at": 8,
-   "n_about": 28,
-   "n_general": 11,
-   "n_listed": 47,
+   "n_about": 34,
+   "n_general": 18,
+   "n_listed": 60,
    "n_not_full_text": 6
   },
   "at_the_environment": [
@@ -2036,6 +2036,152 @@
    }
   ],
   "about_a_stated_condition": [
+   {
+    "finding_id": "MIST03.flight",
+    "item_id": "MIST03.flight",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "Preliminary result: in 32 tests in microgravity of the Water-Mist Fire Suppression Experiment on the STS-107 Space Shuttle mission (propane-air mixtures at stoichiometries of 0.6, 0.7, 1.0 and 1.3; water mass fractions from 0 up to 0.40; mean droplet sizes of 20 and 30 µm), the leanest propane-air flames showed progressively lower burning velocities with increasing water loadings and decreasing droplet size, with final extinction at the highest water concentrations; the paper prints no concentration at which extinction occurred.",
+    "quote": "Preliminary results show that the leanest propane-air flames exhibit progressively lower burning velocities with increasing water loadings and decreasing droplet size (as predicted by the model) with final extinction at the highest water concentrations.",
+    "where": "Experimental and Numerical Results, p. 283",
+    "reference_id": "CP-2003-212376-MIST",
+    "title": "The Water-Mist Fire Suppression Experiment (Mist): Preliminary Results From The STS-107 Mission (Abbud-Madrid, McKinnon, Amon, Gokoglu)",
+    "version": "2003 (NTRS 20040053582)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20040053582",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": "microgravity",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": null
+    },
+    "matched_on": {
+     "gravity_level": {
+      "finding": [
+       "microgravity"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa"
+    ],
+    "condition_words": {
+     "agent": [
+      "water mass fractions from 0 up to 0.40"
+     ]
+    },
+    "item_note": "STS-107 Mist is not a PSI investigation of this catalogue. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person."
+   },
+   {
+    "finding_id": "HAMINS03.n2",
+    "item_id": "HAMINS03.n2",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "In counterflow methane-air non-premixed flames with nitrogen added to the fuel stream, measured in microgravity in the 2.2 s drop facility at NASA Glenn for strain rates of 7 s-1 through 50 s-1, the maximum nitrogen volume fraction in the fuel stream needed for extinction was 0.855 ± 0.016 at a strain rate of 15 s-1.",
+    "quote": "The maximum nitrogen volume fraction in the fuel stream, Ca,ext, needed for extinction was found to be 0.855 ± 0.016 at a strain rate of 15 s-1",
+    "where": "Experimental Method and Results and Discussion, pp. 273-274; Figure 1, p. 275",
+    "reference_id": "CP-2003-212376-NIST",
+    "title": "Suppression and Structure of Low Strain Rate Nonpremixed Flames (Hamins, Bundy, Park, Lee, Logue)",
+    "version": "2003 (NTRS 20040053579)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20040053579",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": "microgravity",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": null
+    },
+    "matched_on": {
+     "gravity_level": {
+      "finding": [
+       "microgravity"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa"
+    ],
+    "condition_words": {
+     "fuel": [
+      "counterflow methane-air non-premixed flames"
+     ]
+    },
+    "item_note": "NIST drop-tower measurements; not a PSI investigation of this catalogue. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person."
+   },
+   {
+    "finding_id": "CFI14.helium",
+    "item_id": "CFI14.helium",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "For FLEX n-octane droplets in microgravity at 1 atm and an oxygen mole fraction held at 0.21, with helium replacing nitrogen at 0, 15, 50 and 75% by volume (tests R298, R694, R698, R707), the burning rate constants of the two stages rose with helium (0.48 and 0.38, 0.54 and 0.43, 0.63 and 0.53 mm2/s for the first three), the burning times were considerably shortened, cool flame extinction in R298 occurred at 30.5 seconds, and at 75% helium (R707, D0 2.49 mm) first stage burning was almost eliminated.",
+    "quote": "When helium dilution was increased to 75% by volume in test R707 for D0 of 2.49 mm first stage burning is almost eliminated",
+    "where": "3.2 N-octane Results, pp. 5-6; Figure 2 caption",
+    "reference_id": "CSSCI-2014-COOLFLAME",
+    "title": "Cool-flame extinction during n-alkane droplet combustion in microgravity (Nayagam, Dietrich, Hicks, Williams)",
+    "version": "March 16-18, 2014 (NTRS 20140006750); conference version of the Combustion and Flame paper listed in PSI-39",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20140006750",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": 101.325,
+     "pressure_kpa_max": 101.325,
+     "pressure_as_written": "1 atm",
+     "gravity_level": "microgravity",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "n-octane"
+    },
+    "matched_on": {
+     "pressure_kpa": {
+      "finding": 101.325,
+      "as_written": "1 atm",
+      "relation": "inside"
+     },
+     "gravity_level": {
+      "finding": [
+       "microgravity"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [
+     "o2_pct"
+    ],
+    "condition_words": {
+     "oxygen": [
+      "oxygen mole fraction held at 0.21"
+     ],
+     "diluent": [
+      "helium replacing nitrogen at 0, 15, 50 and 75% by volume"
+     ]
+    },
+    "item_note": "R298 rates are printed as hot-flame and cool-flame burning rates; R694 and R698 as first and second stage. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The oxygen is written as a mole fraction (0.21) and is kept as words; the rule 'oxygen' normalizes percentages only."
+   },
    {
     "finding_id": "SAF17.o2_initial_I",
     "item_id": "SAF17.o2_initial_I",
@@ -2841,6 +2987,160 @@
     "item_note": "Nominal; applies to the SIBAL fabric concurrent-flow tests of that section."
    },
    {
+    "finding_id": "NCM13.de_air",
+    "item_id": "NCM13.de_air",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "A FLEX methanol droplet in microgravity of 2.75 mm initial diameter, burning in air at one atmospheric pressure (1 atm in the Figure 2 caption), went out at a droplet diameter of 1.10 mm, the extinction diameter (run 204).",
+    "quote": "which occurs at a droplet diameter of 1.10 mm, called the extinction diameter De",
+    "where": "3.1 Burning Rates, p. 5; Figure 2 caption, p. 6",
+    "reference_id": "NCM-2013-FLEX-METHANOL",
+    "title": "Methanol Droplet Combustion in Oxygen-Inert Environments in Microgravity (Nayagam, Dietrich, Hicks, Williams)",
+    "version": "2013 (NTRS 20130014061; GRC-E-DAA-TN9229)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20130014061",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": 101.325,
+     "pressure_kpa_max": 101.325,
+     "pressure_as_written": "1 atm",
+     "gravity_level": "microgravity",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "methanol"
+    },
+    "matched_on": {
+     "pressure_kpa": {
+      "finding": 101.325,
+      "as_written": "1 atm",
+      "relation": "inside"
+     },
+     "gravity_level": {
+      "finding": [
+       "microgravity"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [
+     "o2_pct"
+    ],
+    "condition_words": {
+     "oxygen": [
+      "burning in air"
+     ]
+    },
+    "item_note": "Two values in the same paper: the text describes run 204 as 'air (20% O2 and 79% N2)', the Figure 2 caption as '21% O2 and 79% N2 at 1 atm'. Both are kept as printed. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The paper prints 20% and 21% O2 for this run; no oxygen is normalized."
+   },
+   {
+    "finding_id": "NCM13.radiative",
+    "item_id": "NCM13.radiative",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "In the FLEX methanol droplet tests in microgravity, radiative extinction was generally observed for larger droplets at lower oxygen concentrations, when the flame is large in size and lies farther away from the droplet surface; flame extinctions in both modes (diffusive and radiative) were observed.",
+    "quote": "this process is generally observed for larger droplets at lower oxygen concentrations when the flame is large in size",
+    "where": "3.3 Flame Extinction, p. 9; Figure 5",
+    "reference_id": "NCM-2013-FLEX-METHANOL",
+    "title": "Methanol Droplet Combustion in Oxygen-Inert Environments in Microgravity (Nayagam, Dietrich, Hicks, Williams)",
+    "version": "2013 (NTRS 20130014061; GRC-E-DAA-TN9229)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20130014061",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": "microgravity",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "methanol"
+    },
+    "matched_on": {
+     "gravity_level": {
+      "finding": [
+       "microgravity"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa"
+    ],
+    "condition_words": {
+     "oxygen": [
+      "lower oxygen concentrations"
+     ]
+    },
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person."
+   },
+   {
+    "finding_id": "ZHAO15.quench_speed",
+    "item_id": "ZHAO15.quench_speed",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "In BASS and BASS-II tests on thin cotton-fiberglass (SIBAL) fabric in concurrent, purely forced flow in microgravity, at ambient O2 molar fractions of 16% to 21% and 1 atm, low-speed flame quenching extinction limits were found by decreasing the flow during some tests: the quenching speeds were between 1 and 5 cm/s, higher in lower oxygen.",
+    "quote": "The quenching speeds were found to be between 1 and 5 cm/s with higher speed in lower oxygen atmosphere.",
+    "where": "Abstract, p. 1; 2 Experiment, p. 2; 3 Results and Discussion and Figure 7, pp. 3-7",
+    "reference_id": "NTRS-20150008962",
+    "title": "Concurrent flame growth, spread and extinction over composite fabric samples in low speed purely forced flow in microgravity (Zhao, T'ien, Ferkul, Olson)",
+    "version": "2015 (NTRS 20150008962; 9 pages)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20150008962",
+    "conditions": {
+     "o2_pct_min": 16.0,
+     "o2_pct_max": 21.0,
+     "pressure_kpa_min": 101.325,
+     "pressure_kpa_max": 101.325,
+     "pressure_as_written": "1 atm",
+     "gravity_level": "microgravity",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "cotton-fiberglass (SIBAL) fabric"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": [
+       16,
+       21
+      ],
+      "as_written": "ambient O2 molar fractions of 16% to 21%",
+      "relation": "overlaps"
+     },
+     "pressure_kpa": {
+      "finding": 101.325,
+      "as_written": "1 atm",
+      "relation": "inside"
+     },
+     "gravity_level": {
+      "finding": [
+       "microgravity"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [],
+    "condition_words": {
+     "flow": [
+      "concurrent, purely forced flow"
+     ]
+    },
+    "item_note": "The paper reports 27 BASS-II fabric tests, including 6 quenching tests, and four selected BASS tests (p. 3). Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "Tagged S1 by the words 'quenching extinction limits'; the collecting agent proposed P3."
+   },
+   {
     "finding_id": "SAF17S.o2_I",
     "item_id": "SAF17S.o2_I",
     "row": null,
@@ -3379,6 +3679,77 @@
     "tagging_note": "85% is the oxygen of a burner stream, not of an atmosphere; it is kept as words."
    },
    {
+    "finding_id": "CFI14.scaling",
+    "item_id": "CFI14.scaling",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "The paper concludes that the cool flame extinction diameters of the n-alkane droplets vary as oxygen molar concentration to the power -3/4 for oxygen/nitrogen mixtures; when nitrogen is replaced by either helium or carbon dioxide the extinction diameter does not follow this trend.",
+    "quote": "The cool flame extinction diameters vary as oxygen molar concentration to the power -3/4 for oxygen/nitrogen mixture.",
+    "where": "4 Concluding Remarks, p. 9",
+    "reference_id": "CSSCI-2014-COOLFLAME",
+    "title": "Cool-flame extinction during n-alkane droplet combustion in microgravity (Nayagam, Dietrich, Hicks, Williams)",
+    "version": "March 16-18, 2014 (NTRS 20140006750); conference version of the Combustion and Flame paper listed in PSI-39",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20140006750",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "n-alkane"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person."
+   },
+   {
+    "finding_id": "ICES15.hrr",
+    "item_id": "ICES15.hrr",
+    "row": null,
+    "kind": "result",
+    "applies": "general",
+    "list": "general",
+    "text": "Computed by the authors, not a measurement: using Huggett's oxygen consumption calorimetry (13.1 kJ/g O2) and the burn time of each test, the paper estimates the BASS-II heat release rate to be typically well below 100 W, increasing with ambient oxygen; one long opposed thick slab test released close to 100 W and a brief concurrent rod test almost 110 W.",
+    "quote": "we estimate the heat release rate to be typically well below 100 W",
+    "where": "III, text beside Figure 8, p. 7",
+    "reference_id": "ICES-2015-196",
+    "title": "Results from on-board CSA-CP and CDM Sensor Readings during the Burning and Suppression of Solids - II (BASS-II) Experiment in the Microgravity Science Glovebox (MSG) (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "ICES-2015-196 (12-16 July 2015, Bellevue, Washington; NTRS 20150019858)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20150019858",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": null
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "A heat release estimate names no gas, smoke, spread, ignition or extinction; tagged general (the collecting agent proposed D1)."
+   },
+   {
     "finding_id": "SAF17.sensors",
     "item_id": "SAF17.sensors",
     "row": null,
@@ -3653,6 +4024,201 @@
     "tagging_note": "'1 atm' is written for the carbon-dioxide values only and is kept as words. The LOI numbers are results, written as fractions."
    },
    {
+    "finding_id": "BASS2TM.blowoff",
+    "item_id": "BASS2TM.blowoff",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "The report concludes for the BASS-II PMMA rod tests that blowoff extinction limits from the ISS experiments agree well with the limits of 5.18-s drop tests in the Zero Gravity Research Facility.",
+    "quote": "Blowoff extinction limits from the ISS experiments agree well with Zero Gravity Research Facility 5.18-s drop test limits.",
+    "where": "6.1.6 Conclusions, p. 89 (PDF page 97)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA rod"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person."
+   },
+   {
+    "finding_id": "BASS2TM.extvel",
+    "item_id": "BASS2TM.extvel",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "In BASS-II tests on thin PMMA sheets with the opposed flow reduced until the flame went out, the extinction velocities were about 1 cm/s for 100, 200 and 300 µm and about 1.5 cm/s for 400 µm thickness; the report notes significant uncertainties in these values because the flow calibration at such low velocity has high error bars.",
+    "quote": "the extinction velocities are found to be about 1 cm/s for 100, 200, and 300 μm and about 1.5 cm/s for 400 μm.",
+    "where": "2.1.2.1 Extinction Velocity, p. 13 (PDF page 21); the same text in 2.2.5, p. 23 (PDF page 31)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "thin PMMA sheets"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": true,
+    "condition_words": {
+     "flow": [
+      "opposed flow reduced until the flame went out"
+     ]
+    },
+    "item_note": "The passage states no oxygen and no pressure for these tests. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person."
+   },
+   {
+    "finding_id": "BASS2TM.extvel_model",
+    "item_id": "BASS2TM.extvel_model",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "Computed by the authors, not a measurement: in the investigators' computational model of opposed-flow flame spread over 100-µm-thick PMMA sheet, the extinction velocity is 3.5 cm/s at 16 percent O2 as opposed to 1.5 cm/s at 21 percent O2; the computations at 21 percent use a 21/79 O2/N2 mixture at 1 atm.",
+    "quote": "The extinction velocity is found to be 3.5 cm/s as opposed to 1.5 cm/s at 21 percent O2.",
+    "where": "2.2.6 Computational Results, pp. 25-26 (PDF pages 33-34); Figure 2.12",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "100-µm-thick PMMA sheet"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": true,
+    "condition_words": {
+     "oxygen": [
+      "at 16 percent O2 as opposed to 1.5 cm/s at 21 percent O2"
+     ],
+     "pressure": [
+      "21/79 O2/N2 mixture at 1 atm"
+     ]
+    },
+    "item_note": "The report says the computed values closely match the experimental results (Figure 2.12 caption); the measured values are in BASS2TM.extvel and BASS2TM.extvel_o2. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "Two oxygen levels are compared; the 1 atm is written for the 21 percent computations only. Both are kept as words."
+   },
+   {
+    "finding_id": "TP216046.diffusive_contam",
+    "item_id": "TP216046.diffusive_contam",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "The report states that the diffusive extinction droplet diameters (smaller diameters) of methanol were minimally influenced by the presence of the fuel needle contaminant, and that radiative extinction droplet diameters (larger diameters) were not influenced by it.",
+    "quote": "The diffusive extinction droplet diameters (smaller diameters) for methanol (where there is no disruption) were minimally influenced by the presence of the contaminant.",
+    "where": "5.2 Fuel Needle Contamination, assertions (6) and (7), p. 17 (PDF page 23)",
+    "reference_id": "NASA-TP-2015-216046",
+    "title": "Detailed Results From the Flame Extinguishment Experiment (FLEX) March 2009 to December 2011",
+    "version": "NASA/TP-2015-216046, November 2015",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20150023456",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "methanol"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person."
+   },
+   {
+    "finding_id": "TP216046.disruptive",
+    "item_id": "TP216046.disruptive",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "In the initial FLEX tests, which focused on ambient conditions with higher oxygen mole fractions, the science team noticed as testing progressed a propensity for the droplets to burn disruptively and not exhibit flame extinction at a finite-sized droplet diameter; the latter half of the test matrix focused on lower oxygen mole fractions, where both diffusive and radiative extinction occurred (Table IV for methanol, Table V for heptane).",
+    "quote": "As testing progressed, however, the science team noticed a propensity for the droplets to burn disruptively and not exhibit flame extinction (at a finite-sized droplet diameter).",
+    "where": "4.1 Test Matrix, pp. 10-11 (PDF pages 16-17)",
+    "reference_id": "NASA-TP-2015-216046",
+    "title": "Detailed Results From the Flame Extinguishment Experiment (FLEX) March 2009 to December 2011",
+    "version": "NASA/TP-2015-216046, November 2015",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20150023456",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": null
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": true,
+    "condition_words": {
+     "oxygen": [
+      "higher oxygen mole fractions",
+      "lower oxygen mole fractions"
+     ]
+    },
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person."
+   },
+   {
     "finding_id": "THOMSEN18.care",
     "item_id": "THOMSEN18.care",
     "row": null,
@@ -3736,11 +4302,11 @@
    },
    {
     "id": "rung3.counts",
-    "text": "Results and caveats listed: 8 at the oxygen and pressure of this environment; 28 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 11 stated without an oxygen, pressure or gravity level that can be compared."
+    "text": "Results and caveats listed: 8 at the oxygen and pressure of this environment; 34 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 18 stated without an oxygen, pressure or gravity level that can be compared."
    },
    {
     "id": "rung3.access",
-    "text": "6 of the 47 listed come from a document that was not read in full text; each entry gives the access level of its document."
+    "text": "6 of the 60 listed come from a document that was not read in full text; each entry gives the access level of its document."
    },
    {
     "id": "rung3.limits",
@@ -3982,7 +4548,7 @@
   {
    "rung": "top",
    "id": "tests.in_atmosphere+published.here",
-   "text": "Not judged here. 56 of the 298 tests counted for this need were recorded with oxygen and pressure both inside the ranges of this environment; 7 more with oxygen inside the range and no pressure in the table, and 0 more with pressure inside the range and no oxygen in the table. Published results and caveats quoted for this need or for fire safety in general: 8 at the oxygen and pressure of this environment and 28 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+   "text": "Not judged here. 56 of the 298 tests counted for this need were recorded with oxygen and pressure both inside the ranges of this environment; 7 more with oxygen inside the range and no pressure in the table, and 0 more with pressure inside the range and no oxygen in the table. Published results and caveats quoted for this need or for fire safety in general: 8 at the oxygen and pressure of this environment and 34 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
    "sources": [
     "#top_line.fields"
    ]
@@ -4215,7 +4781,7 @@
   {
    "rung": "3",
    "id": "rung3.counts",
-   "text": "Results and caveats listed: 8 at the oxygen and pressure of this environment; 28 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 11 stated without an oxygen, pressure or gravity level that can be compared.",
+   "text": "Results and caveats listed: 8 at the oxygen and pressure of this environment; 34 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 18 stated without an oxygen, pressure or gravity level that can be compared.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.iss.needs.S1",
     "data/pipeline/findings_by_environment.json#environments.iss.needs.general"
@@ -4224,7 +4790,7 @@
   {
    "rung": "3",
    "id": "rung3.access",
-   "text": "6 of the 47 listed come from a document that was not read in full text; each entry gives the access level of its document.",
+   "text": "6 of the 60 listed come from a document that was not read in full text; each entry gives the access level of its document.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.iss.needs.S1",
     "data/pipeline/findings_by_environment.json#environments.iss.needs.general"
@@ -4347,6 +4913,6 @@
    "no_record": "iss__S1.no_record",
    "caveats": "iss__S1.caveats"
   },
-  "headline": "4 quoted results tagged for this question: 0 at the oxygen and pressure of this environment, 0 about one of its stated conditions, 4 stated without these conditions, 0 at other stated conditions; 1 with printed values. 44 more tagged for all questions: 8 at the oxygen and pressure of this environment, 28 about one of its stated conditions. 298 tests counted, 56 inside the oxygen and pressure ranges of this environment by recorded values."
+  "headline": "23 quoted results tagged for this question: 0 at the oxygen and pressure of this environment, 6 about one of its stated conditions, 10 stated without these conditions, 7 at other stated conditions; 17 with printed values. 45 more tagged for all questions: 8 at the oxygen and pressure of this environment, 28 about one of its stated conditions. 298 tests counted, 56 inside the oxygen and pressure ranges of this environment by recorded values."
  }
 }

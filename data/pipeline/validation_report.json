@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 94,
+  "PASS": 95,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 94
+  "checks": 95
  },
  "notes": [
   {
@@ -1156,7 +1156,7 @@
    "numbers": {
     "uses": 193,
     "distinct_items_used": 128,
-    "items_defined": 334
+    "items_defined": 400
    },
    "failures": 0,
    "failing_examples": []
@@ -1376,11 +1376,11 @@
    "verifies": "Every entry of spec/findings.json points to an item of references.json; findings.csv has one row per entry, and its text, quote, where, title, version, access, url and reference id are those of the item and its document, its kind, needs and condition columns those of the entry; the 'findings' of findings_by_environment.json carry the same text, quote, place and document.",
    "status": "PASS",
    "numbers": {
-    "spec_entries": 211,
-    "items": 180,
-    "csv_rows": 211,
-    "json_findings": 211,
-    "fields_compared": 6963
+    "spec_entries": 334,
+    "items": 246,
+    "csv_rows": 334,
+    "json_findings": 334,
+    "fields_compared": 11022
    },
    "failures": 0,
    "failing_examples": []
@@ -1390,9 +1390,9 @@
    "verifies": "Every normalized number of an entry (oxygen, pressure, flow; each end of a range) follows from its condition_basis: literally present in the basis words or values, or, for a pressure, a number of the basis times the factor of its unit (1 psi = 6.894757 kPa, 1 atm = 101.325 kPa), rounded to 3 decimals. The basis words are in the item's text or quote, a values key exists, and a gravity level or fuel phase has a word of its vocabulary behind it.",
    "status": "PASS",
    "numbers": {
-    "normalized_numbers": 177,
-    "by_unit_factor": 22,
-    "literally_in_basis": 155,
+    "normalized_numbers": 347,
+    "by_unit_factor": 48,
+    "literally_in_basis": 299,
     "levels_or_phases_whose_vocabulary_word_starts_a_longer_word": 1
    },
    "failures": 0,
@@ -1408,11 +1408,11 @@
    "numbers": {
     "blocks": 42,
     "listed": {
-     "at_environment": 16,
-     "about_a_stated_condition_of_the_environment": 92,
-     "general": 918
+     "at_environment": 34,
+     "about_a_stated_condition_of_the_environment": 125,
+     "general": 1290
     },
-    "other_conditions": 402
+    "other_conditions": 735
    },
    "failures": 0,
    "failing_examples": []
@@ -1472,7 +1472,7 @@
    "status": "PASS",
    "numbers": {
     "answer_files": 36,
-    "entries_placed": 1766,
+    "entries_placed": 2219,
     "entries_whose_list_field_is_not_the_list_name": 0
    },
    "failures": 0,
@@ -2005,8 +2005,8 @@
    "verifies": "material_published.csv: every value equals the value at the same place of the item's 'values' in references.json, every table of a per-material shape is listed, and a literal match is given only where the material names are equal after removing case, spaces and hyphens.",
    "status": "PASS",
    "numbers": {
-    "rows": 71,
-    "items": 3
+    "rows": 254,
+    "items": 10
    },
    "failures": 0,
    "failing_examples": []
@@ -2030,9 +2030,9 @@
    "verifies": "results_by_need.json: every finding, item and entry points to an existing item of references.json; its text and quote equal the item's; every entry's source (document, title, version, where, url, access) is that of the item and its document; the findings of kind result, criterion and caveat are those of findings.csv with the same kind, needs and conditions; an entry from a document not read in full carries its access label; criteria items tied by the spec are of a criterion type and tied by needs.json or process.json.",
    "status": "PASS",
    "numbers": {
-    "findings": 156,
-    "items": 130,
-    "entries": 2676
+    "findings": 279,
+    "items": 196,
+    "entries": 3462
    },
    "failures": 0,
    "failing_examples": []
@@ -2042,16 +2042,16 @@
    "verifies": "Every printed value of results_by_need.json (findings and items) equals the value at its path in the item's 'values' of references.json, written as held; the paths of a finding are those its entry of spec/findings.json selects (own walk of 'values'); results_flat.csv has one row per result and printed value (one empty row for a result without printed values) with the finding's conditions and source.",
    "status": "PASS",
    "numbers": {
-    "printed_values_of_findings": 172,
-    "flat_rows": 197,
-    "flat_rows_with_value": 162
+    "printed_values_of_findings": 745,
+    "flat_rows": 779,
+    "flat_rows_with_value": 735
    },
    "failures": 0,
    "failing_examples": []
   },
   {
    "id": "U3_results_order",
-   "verifies": "In every block, the entries of found, criteria and caveats are exactly the findings of that kind tagged for the need (or for all needs, in the second list), each in the group findings_by_environment.json lists it under (other_conditions when it lists it nowhere), and they follow the stated order: group, names a material first, item id, order of findings.csv.",
+   "verifies": "In every block, the entries of found, criteria and caveats are exactly the findings of that kind tagged for the need (or for all needs, in the second list), each in the group findings_by_environment.json lists it under (other_conditions when it lists it nowhere), and they follow the stated order: group, measured or not labelled before computed, simulated or preliminary (result_kind of the item), names a material first, item id, order of findings.csv.",
    "status": "PASS",
    "numbers": {
     "lists": 216
@@ -2065,16 +2065,29 @@
    "status": "PASS",
    "numbers": {
     "blocks": 36,
-    "results": 89,
+    "results": 212,
     "per_need": {
-     "P1": 29,
-     "P2": 1,
-     "P3": 3,
-     "S1": 4,
-     "D1": 3,
-     "D2": 7,
-     "general": 44
+     "P1": 35,
+     "P2": 8,
+     "P3": 41,
+     "S1": 23,
+     "D1": 18,
+     "D2": 47,
+     "general": 45
     }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "U5_results_kind_and_relation",
+   "verifies": "Every reference item that carries 'result_kind' has one of the values of spec/results.json; an item whose kind is not measured begins its text with the label of its kind, and that text is the text of its findings and item views in results_by_need.json (the rendered sentence); results_by_need.json and results_flat.csv carry the item's result_kind, investigation and relation; an item with 'relation' has 'investigation' null; an item whose 'investigation' is not null names only PSI investigations of the catalogue (sources.json) and has no 'relation'; an item with the field 'investigation' whose text names an experiment of the list 'non_psi_experiment_words' has 'investigation' null (no result of a non-PSI experiment is attributed to a PSI investigation); in every found list no measured or unlabelled result follows a labelled one of the same group.",
+   "status": "PASS",
+   "numbers": {
+    "items_with_result_kind": 66,
+    "with_relation": 19,
+    "attributed_to_psi": 45,
+    "labelled_not_measured": 13
    },
    "failures": 0,
    "failing_examples": []

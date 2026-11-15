@@ -39,7 +39,7 @@
  },
  "top_line": {
   "id": "tests.not_measured+published.here",
-  "text": "Not judged here. The PSI experimental tables hold no test counted for this need. Published results and caveats quoted for this need or for fire safety in general: 8 at the oxygen and pressure of this environment and 28 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+  "text": "Not judged here. The PSI experimental tables hold no test counted for this need. Published results and caveats quoted for this need or for fire safety in general: 10 at the oxygen and pressure of this environment and 28 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
   "fields": {
    "status": "not_measured",
    "usable_tests": 0,
@@ -48,9 +48,9 @@
    "pressure_only": 0,
    "matched": 0,
    "n_near_cells": 0,
-   "n_at": 8,
+   "n_at": 10,
    "n_about": 28,
-   "n_published_here": 36
+   "n_published_here": 38
   }
  },
  "frame": {
@@ -1075,10 +1075,10 @@
  },
  "rung3_published": {
   "counts": {
-   "n_at": 8,
+   "n_at": 10,
    "n_about": 28,
-   "n_general": 7,
-   "n_listed": 43,
+   "n_general": 13,
+   "n_listed": 51,
    "n_not_full_text": 5
   },
   "at_the_environment": [
@@ -1347,6 +1347,60 @@
     "item_note": "Flight-level value given in the paper on samples 8 and 9; no separate value for sample 9. Olson et al. 2023 (CNF-2023-SAFFIRE) lists 103 kPa for the same flight."
    },
    {
+    "finding_id": "ICES20407.no_ignition_D1",
+    "item_id": "ICES20407.no_ignition_D1",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "In ISS tests in microgravity of concurrent, purely forced flow flame spread over thin SIBAL cotton-fiberglass fabric between two parallel baffles, with the glovebox at the ISS ambient values of 1.0 atm and ~22% O2 (imposed flows of 5 to 28 cm/s), ignition was not achieved for any baffle type at an inter-baffle distance of D = 1.0 cm.",
+    "quote": "At D = 1.0 cm, ignition was not achieved for any baffle types.",
+    "where": "II, p. 4; III.B Effects of Flow Confinement, p. 7 (PDF page 7)",
+    "reference_id": "ICES-2020-407",
+    "title": "Effects of Confinement on Flame Spread in Microgravity (Li, Liao, Ferkul, Johnston, Bunnell)",
+    "version": "ICES-2020-407 (NTRS 20205004657; 10 pages)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20205004657",
+    "conditions": {
+     "o2_pct_min": 22.0,
+     "o2_pct_max": 22.0,
+     "pressure_kpa_min": 101.325,
+     "pressure_kpa_max": 101.325,
+     "pressure_as_written": "1.0 atm",
+     "gravity_level": "microgravity",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "SIBAL cotton-fiberglass fabric"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 22,
+      "as_written": "~22% O2",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 101.325,
+      "as_written": "1.0 atm",
+      "relation": "inside"
+     },
+     "gravity_level": {
+      "finding": [
+       "microgravity"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [],
+    "condition_words": {
+     "flow": [
+      "concurrent, purely forced flow"
+     ]
+    },
+    "item_note": "Two statements of the same paper differ: p. 6 says that at D = 1.0 cm 'the flame quenches immediately after ignition energy is removed', and the abstract says the flame 'fails to ignite or extinguishes' at small distances (~1 cm). All are kept as printed. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "'~22%' is normalized as 22; the paper gives a daily variation of 21.3% to 22.9% in the glovebox."
+   },
+   {
     "finding_id": "SAF45.table2#I-1, II-5, II-6, III-1",
     "item_id": "SAF45.table2",
     "row": "I-1, II-5, II-6, III-1",
@@ -1493,6 +1547,61 @@
     },
     "item_note": "The table is printed with one column per flight/sample and one row per quantity; row labels as printed: Flight/Sample, Material, Length (cm), Air Flow Rate (cm/s), Flow Direction, Ambient Pressure (kPa), Oxygen Concentration (mol %), Free volume (m3). 'flight' and 'sample' are the two halves of the printed 'Flight/Sample' label. The paper does not say whether the pressure and oxygen values are set points, values measured at ignition or averages; the body says only that the spacecraft was vented to the requested pressure and oxygen was released 'to bring the spacecraft to the desired condition (Table 1)' (p. 3). The table lists only the samples considered in this paper, not every Saffire IV-VI sample; the Saffire VI Nomex sample (test 1) did not ignite and is not in the table.",
     "tagging_note": "The item states no gravity level, so none is tagged; the entry can be listed for an environment of any gravity level. The item's note says the paper does not say whether the pressure and oxygen are set points, values at ignition or averages."
+   },
+   {
+    "finding_id": "MIST13.sim_ignition_0g_1g",
+    "item_id": "MIST13.sim_ignition_0g_1g",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "Numerical simulation, not a measurement: in the MIST project's model of a PMMA sample under an external radiant heat flux of 16 kW/m2, with ambient pressure 100 kPa, oxygen concentration 21% and air flow velocity 0.4 m/s, ignition occurred significantly earlier at 0-g than at 1-g conditions (596 s compared to 774 s).",
+    "quote": "ignition occurs significantly earlier at 0-g than at 1-g conditions (596 s compared to 774 s)",
+    "where": "Modeling task, report p. 10 (PDF page 11); Figures 12 and 13 captions (PDF page 12)",
+    "reference_id": "NTRS-20150023467",
+    "title": "Material Ignition and Suppression Test (MIST) in Space Exploration Atmospheres, Summary of Research (Fernandez-Pello, principal investigator)",
+    "version": "2013 (NTRS 20150023467; grantee report, 14 PDF pages)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20150023467",
+    "conditions": {
+     "o2_pct_min": 21.0,
+     "o2_pct_max": 21.0,
+     "pressure_kpa_min": 100.0,
+     "pressure_kpa_max": 100.0,
+     "pressure_as_written": "ambient pressure 100 kPa",
+     "gravity_level": "microgravity;normal",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 21,
+      "as_written": "oxygen concentration 21%",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 100.0,
+      "as_written": "ambient pressure 100 kPa",
+      "relation": "inside"
+     },
+     "gravity_level": {
+      "finding": [
+       "microgravity",
+       "normal"
+      ],
+      "scenario": "microgravity",
+      "relation": "same"
+     }
+    },
+    "not_stated": [],
+    "condition_words": {
+     "flow": [
+      "air flow velocity 0.4 m/s"
+     ]
+    },
+    "item_note": "The experimental ignition results of the report are graphs only (no printed values) and were not used. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "Conditions of a simulated case, not of a test."
    }
   ],
   "about_a_stated_condition": [
@@ -2800,6 +2909,42 @@
     "tagging_note": "85% is the oxygen of a burner stream, not of an atmosphere; it is kept as words."
    },
    {
+    "finding_id": "ICES15.hrr",
+    "item_id": "ICES15.hrr",
+    "row": null,
+    "kind": "result",
+    "applies": "general",
+    "list": "general",
+    "text": "Computed by the authors, not a measurement: using Huggett's oxygen consumption calorimetry (13.1 kJ/g O2) and the burn time of each test, the paper estimates the BASS-II heat release rate to be typically well below 100 W, increasing with ambient oxygen; one long opposed thick slab test released close to 100 W and a brief concurrent rod test almost 110 W.",
+    "quote": "we estimate the heat release rate to be typically well below 100 W",
+    "where": "III, text beside Figure 8, p. 7",
+    "reference_id": "ICES-2015-196",
+    "title": "Results from on-board CSA-CP and CDM Sensor Readings during the Burning and Suppression of Solids - II (BASS-II) Experiment in the Microgravity Science Glovebox (MSG) (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "ICES-2015-196 (12-16 July 2015, Bellevue, Washington; NTRS 20150019858)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20150019858",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": null
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "A heat release estimate names no gas, smoke, spread, ignition or extinction; tagged general (the collecting agent proposed D1)."
+   },
+   {
     "finding_id": "SAF17.sensors",
     "item_id": "SAF17.sensors",
     "row": null,
@@ -2910,6 +3055,78 @@
     }
    },
    {
+    "finding_id": "BASS2TM.rod_ignition_delay",
+    "item_id": "BASS2TM.rod_ignition_delay",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "In the BASS-II tests on PMMA rods ignited with a hot wire, ignition generally occurred at a forced flow of 5 cm/s; at higher O2 concentrations ignition occurred within approximately 40 s, below an initial O2 concentration of 16 percent the ignition delay time increased significantly, and larger rods took longer to ignite, especially at lower O2 concentrations (up to 230 s).",
+    "quote": "At higher O2 concentrations, ignition occurred within approximately 40 s. Below an initial O2 concentration of 16 percent, the ignition delay time increased significantly.",
+    "where": "6.1.3, p. 67 (PDF page 75) and 6.1.4.1 Ignition Delay Time, p. 68 (PDF page 76)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": "5",
+     "fuel_phase": null,
+     "material": "PMMA rods"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "The report states that the igniter was positioned and activated manually, so there is some inherent scatter in the ignition time. The delay is defined in item BASS2TM.igndelay. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The O2 numbers (16 percent, 'higher', 'lower') describe where the delay changed; they are results, not the atmosphere of one test, and are not normalized."
+   },
+   {
+    "finding_id": "BASS2TM.rod_ignition_limit",
+    "item_id": "BASS2TM.rod_ignition_limit",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "In the BASS-II PMMA rod tests, below an initial O2 concentration of about 14.5 percent a sustained ignition could not be achieved, although flames were observed while the igniter was on; at very low O2, ignition times up to 500 s did not give a sustained flame with the initial flow varied from 2 to 10 cm/s. Flames ignited at a higher O2 survived to final O2 concentrations as low as 13.6 percent.",
+    "quote": "Below an initial O2 concentration of ~14.5 percent O2, a sustained ignition could not be achieved even though flames were observed when the igniter was on",
+    "where": "6.1.3, p. 67 (PDF page 75) and 6.1.4.1 Ignition Delay Time, p. 68 (PDF page 76)",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA rod"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "The 13.6 percent here is a final O2 reading of flames ignited at a higher O2 (p. 68). Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The O2 numbers are reported limits and final readings, not the atmosphere of a test, and are not normalized. Tagged P2 (ignition); the item also states an oxygen limit for ignition."
+   },
+   {
     "finding_id": "RG.ignite",
     "item_id": "RG.ignite",
     "row": null,
@@ -2947,6 +3164,114 @@
       "low gravity"
      ]
     }
+   },
+   {
+    "finding_id": "SAF17S.saffire1_ignition",
+    "item_id": "SAF17S.saffire1_ignition",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "Saffire-1 ignition power (40.6-cm-wide SIBAL fabric): 165 W for 8 s, 4.1 W/cm per unit fuel width.",
+    "quote": "Saffire 1: 165 W (for 8 s); 4.1 W/cm (per unit fuel width)",
+    "where": "Slide 8 'Configurations'",
+    "reference_id": "NTRS-20170008805",
+    "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+    "version": "2017 (36 slides)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20170008805",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "SIBAL fabric"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "States the igniter, a reported test condition."
+   },
+   {
+    "finding_id": "SAF17S.saffire2_ignition",
+    "item_id": "SAF17S.saffire2_ignition",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "Saffire-2 ignition power for all samples except the thick PMMA: 80 W for 9.2 s, 16 W/cm per unit fuel width; the ignition energy and time for samples 2-1 through 2-7 were chosen to mimic the NASA 6001 Test 1 ignition, 736 J applied uniformly for 9.2 s.",
+    "quote": "chosen to mimic the NASA 6001 Test 1 ignition, 736 J applied uniformly for 9.2 s",
+    "where": "Slide 8 'Configurations' (power, time, power per width); slide 10 'Saffire-2 Description (con't)' (quote, 736 J)",
+    "reference_id": "NTRS-20170008805",
+    "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+    "version": "2017 (36 slides)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20170008805",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": null
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Slide 8 was read on 2026-11-15 with pdftotext -layout, where the picture labels ('SIBAL fabric', 'Thin PMMA/Nomex', 'Thick PMMA') stand between the heading and the value lines, and on a 70 dpi rendering of the slide, which shows the lines '80 W (for 9.2 s); 16 W/cm (per unit fuel width)' and '97 W (for 30 s); 19.5 W/cm (per unit fuel width)' under their headings. The quote is from slide 10, whose text layer is not interleaved. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "States the igniter, not an observation of ignition; tagged result as a reported test condition (rule 'kind')."
+   },
+   {
+    "finding_id": "SAF17S.saffire2_thick_pmma_ignition",
+    "item_id": "SAF17S.saffire2_thick_pmma_ignition",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "Saffire-2 ignition power for the thick PMMA samples: 97 W for 30 s, 19.5 W/cm per unit fuel width; samples 2-8 and 2-9 had slightly more powerful igniters (97 W instead of 80 W) and were left on longer (30 s instead of 9.2 s) to assure ignition of these thick fuels.",
+    "quote": "Samples 2-8 and 2-9 had slightly more powerful igniters (97 W instead of 80 W)",
+    "where": "Slide 8 'Configurations'; slide 10 'Saffire-2 Description (con't)' (quote)",
+    "reference_id": "NTRS-20170008805",
+    "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+    "version": "2017 (36 slides)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20170008805",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "thick PMMA"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Slide 8 was read on 2026-11-15 with pdftotext -layout, where the picture labels ('SIBAL fabric', 'Thin PMMA/Nomex', 'Thick PMMA') stand between the heading and the value lines, and on a 70 dpi rendering of the slide, which shows the lines '80 W (for 9.2 s); 16 W/cm (per unit fuel width)' and '97 W (for 30 s); 19.5 W/cm (per unit fuel width)' under their headings. The quote is from slide 10. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "States the igniter, a reported test condition."
    },
    {
     "finding_id": "THOMSEN18.care",
@@ -3032,11 +3357,11 @@
    },
    {
     "id": "rung3.counts",
-    "text": "Results and caveats listed: 8 at the oxygen and pressure of this environment; 28 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 7 stated without an oxygen, pressure or gravity level that can be compared."
+    "text": "Results and caveats listed: 10 at the oxygen and pressure of this environment; 28 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 13 stated without an oxygen, pressure or gravity level that can be compared."
    },
    {
     "id": "rung3.access",
-    "text": "5 of the 43 listed come from a document that was not read in full text; each entry gives the access level of its document."
+    "text": "5 of the 51 listed come from a document that was not read in full text; each entry gives the access level of its document."
    },
    {
     "id": "rung3.limits",
@@ -3204,7 +3529,7 @@
   {
    "rung": "top",
    "id": "tests.not_measured+published.here",
-   "text": "Not judged here. The PSI experimental tables hold no test counted for this need. Published results and caveats quoted for this need or for fire safety in general: 8 at the oxygen and pressure of this environment and 28 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+   "text": "Not judged here. The PSI experimental tables hold no test counted for this need. Published results and caveats quoted for this need or for fire safety in general: 10 at the oxygen and pressure of this environment and 28 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
    "sources": [
     "#top_line.fields"
    ]
@@ -3274,7 +3599,7 @@
   {
    "rung": "3",
    "id": "rung3.counts",
-   "text": "Results and caveats listed: 8 at the oxygen and pressure of this environment; 28 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 7 stated without an oxygen, pressure or gravity level that can be compared.",
+   "text": "Results and caveats listed: 10 at the oxygen and pressure of this environment; 28 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 13 stated without an oxygen, pressure or gravity level that can be compared.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.iss.needs.P2",
     "data/pipeline/findings_by_environment.json#environments.iss.needs.general"
@@ -3283,7 +3608,7 @@
   {
    "rung": "3",
    "id": "rung3.access",
-   "text": "5 of the 43 listed come from a document that was not read in full text; each entry gives the access level of its document.",
+   "text": "5 of the 51 listed come from a document that was not read in full text; each entry gives the access level of its document.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.iss.needs.P2",
     "data/pipeline/findings_by_environment.json#environments.iss.needs.general"
@@ -3431,6 +3756,6 @@
    "no_record": "iss__P2.no_record",
    "caveats": "iss__P2.caveats"
   },
-  "headline": "1 quoted result tagged for this question: 0 at the oxygen and pressure of this environment, 0 about one of its stated conditions, 1 stated without these conditions, 0 at other stated conditions; 0 with printed values. 44 more tagged for all questions: 8 at the oxygen and pressure of this environment, 28 about one of its stated conditions. 0 tests counted, 0 inside the oxygen and pressure ranges of this environment by recorded values."
+  "headline": "8 quoted results tagged for this question: 2 at the oxygen and pressure of this environment, 0 about one of its stated conditions, 6 stated without these conditions, 0 at other stated conditions; 7 with printed values. 45 more tagged for all questions: 8 at the oxygen and pressure of this environment, 28 about one of its stated conditions. 0 tests counted, 0 inside the oxygen and pressure ranges of this environment by recorded values."
  }
 }

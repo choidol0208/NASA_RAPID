@@ -39,7 +39,8 @@ FLAT_COLUMNS = ("finding_id", "item_id", "finding_row", "needs", "values_scope",
                 "material_as_printed", "material_from", "quantity", "column", "value_as_printed", "unit",
                 "unit_from", "values_from", "o2_pct_min", "o2_pct_max", "pressure_kpa_min", "pressure_kpa_max",
                 "pressure_as_written", "gravity_level", "flow_cms", "fuel_phase", "material_stated_by_finding",
-                "reference_id", "title", "version", "where", "url", "access")
+                "reference_id", "title", "version", "where", "url", "access", "result_kind", "investigation", "relation")
+ITEM_FIELDS = ("result_kind", "investigation", "relation")  # added 2026-11-15; held only by items added that day
 PILE_FIELDS = ("pile", "role", "variable", "investigation_id", "placement", "o2_match", "pressure_match", "location",
                "row_kind", "state", "in_scope_tests", "counted_tests", "file_groups", "files", "bytes", "files_opened",
                "values_as_written", "pile3_ground")
@@ -290,6 +291,9 @@ def build():
                 v["values_from"] = it["values_from"]
             if it.get("note"):
                 v["item_note"] = it["note"]
+            for k in ITEM_FIELDS:
+                if k in it:
+                    v[k] = it[k]
             used_items[iid] = (v, flat)
         return used_items[iid]
 
@@ -322,9 +326,17 @@ def build():
         }
         if f.get("tagging_note"):
             findings_out[fid]["tagging_note"] = f["tagging_note"]
+        for k in ITEM_FIELDS:
+            if k in it:
+                findings_out[fid][k] = it[k]
 
     groups = rs["order_rule"]["groups"]
     gindex = {g["id"]: i for i, g in enumerate(groups)}
+    after_measured = set(rs["result_kind"]["after_measured"])
+
+    def kind_rank(iid):
+        """0 for an item labelled measured or not labelled; 1 for computed, simulated or preliminary."""
+        return 1 if items[iid][1].get("result_kind") in after_measured else 0
 
     def placed_entries(env, nid, kind):
         """The findings of one kind for a need (tagged for it or for all needs), in the groups of findings_by_environment."""
@@ -352,11 +364,15 @@ def build():
                     ent["flow"] = e["flow"]
                 if fid in moved:
                     ent["moved_for_gravity"] = moved[fid]
+                if "result_kind" in items[r["item_id"]][1]:
+                    ent["result_kind"] = items[r["item_id"]][1]["result_kind"]
+                if "relation" in items[r["item_id"]][1]:
+                    ent["relation"] = items[r["item_id"]][1]["relation"]
                 if r["access"] != "full_text_read":
                     ent["access_label"] = access_text[r["access"]]
                 out.append(ent)
-        out.sort(key=lambda x: (gindex[x["group"]], 0 if x["names_material"] else 1, x["item_id"],
-                                order[x["finding_id"]]))
+        out.sort(key=lambda x: (gindex[x["group"]], kind_rank(x["item_id"]), 0 if x["names_material"] else 1,
+                                x["item_id"], order[x["finding_id"]]))
         return out
 
     def group_counts(entries):
@@ -521,6 +537,7 @@ def build():
                                    "'documents' (key: document_id). Entries of the blocks refer to them by id and "
                                    "carry their source (item id, document title, version, where, url, access).",
             "order_rule": rs["order_rule"],
+            "result_kind": {k: rs["result_kind"][k] for k in ("note", "values", "after_measured", "labels")},
             "printed_values": rs["sentences"]["printed_values"],
             "values_rules": rs["values_rules"],
             "units": rs["units"]["note"],
@@ -549,7 +566,8 @@ def flat_rows(doc, items, docs):
                 "values_from": it.get("values_from", ""),
                 "material_stated_by_finding": f["conditions"]["material"],
                 "reference_id": did, "title": d["title"], "version": d["version"], "where": it["where"],
-                "url": d["url"], "access": d["access"]}
+                "url": d["url"], "access": d["access"], "result_kind": it.get("result_kind", ""),
+                "investigation": ";".join(it.get("investigation") or []), "relation": it.get("relation", "")}
         base.update({c: f["conditions"][c] for c in COND_COLS if c != "material"})
         pv = f["printed_values"] or [None]
         for v in pv:
@@ -618,6 +636,9 @@ def summary(doc, flat, rs, refs, findings_spec, needs_spec):
             "per_material_as_printed": per_mat,
             "values_scope": {s: sum(1 for f in results.values() if f["values_scope"] == s)
                              for s in sorted({f["values_scope"] for f in results.values()})},
+            "per_result_kind": {k: sum(1 for f in results.values() if f.get("result_kind", "not labelled") == k)
+                                for k in sorted({f.get("result_kind", "not labelled") for f in results.values()})},
+            "with_relation_not_psi": sum(1 for f in results.values() if f.get("relation")),
         },
         "needs_without_quoted_result": [n for n in [x["id"] for x in needs_spec["needs"]] if per_need[n]["results"] == 0],
         "not_structured": {
