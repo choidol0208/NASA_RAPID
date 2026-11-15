@@ -829,3 +829,71 @@ th { background: var(--paper); font: 600 13px/1.4 var(--display); color: var(--i
 /* ---- The assistant at work (15 November, 18:40): where a local server answers, the assistant's card is the first
    thing under the request header, above the key-figure tiles. The public page keeps it under the tab's content. */
 .is-query main > #assistant:is([data-mode="live"], [data-mode="no_model"], [data-mode="mock"]) { order: -1; margin-top: var(--s4); }
+
+/* ---- Wayfinding (15 November, 19:40; the human lead: "everything looks alike, I cannot tell at once where to look
+   for what", and "the How it works button is not seen at once"). Each tab has its own colour, an icon and one line
+   that says what it holds; the tab's section titles and the key-figure tile that leads to it carry the same colour.
+   The button to the method page is the one filled, light control in the dark bar. */
+:root {
+  --t-closest: #2346c4; --t-closest-soft: #edf1ff;
+  --t-found: #17794a; --t-found-soft: #e7f5ed;
+  --t-data: #6a3fbf; --t-data-soft: #f2ecfc;
+  --t-stops: #ad4e08; --t-stops-soft: #fdf0e1;
+  --t-all: #475264; --t-all-soft: #eceff3;
+}
+.tabs a[data-tab="closest"], html[data-tab="closest"] { --c: var(--t-closest); --c-soft: var(--t-closest-soft); }
+.tabs a[data-tab="found"], html[data-tab="found"] { --c: var(--t-found); --c-soft: var(--t-found-soft); }
+.tabs a[data-tab="data"], html[data-tab="data"] { --c: var(--t-data); --c-soft: var(--t-data-soft); }
+.tabs a[data-tab="stops"], html[data-tab="stops"] { --c: var(--t-stops); --c-soft: var(--t-stops-soft); }
+.tabs a[data-tab="all"], html[data-tab="all"] { --c: var(--t-all); --c-soft: var(--t-all-soft); }
+
+.tabs { padding: var(--s2) 0; }
+.tabs-in { gap: var(--s2); }
+.tabs a { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 9px; row-gap: 3px; flex: 1 1 0; min-width: 0;
+  padding: 9px 12px 10px; background: var(--white); border: 1px solid var(--line); border-radius: 10px; color: var(--ink); white-space: normal; }
+.tabs a:hover { border-color: var(--c); background: var(--c-soft); color: var(--ink); }
+.tabs a[aria-current="page"] { border-color: var(--c); background: var(--c-soft); box-shadow: inset 0 -3px 0 var(--c); color: var(--ink); }
+.tab-ico { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: var(--c-soft); color: var(--c); }
+.tabs a[aria-current="page"] .tab-ico { background: var(--c); color: var(--white); }
+.tab-name { font: 700 15px/1.2 var(--display); color: var(--ink); }
+.tab-desc { grid-column: 1 / -1; font: 400 12.5px/1.35 var(--body); color: var(--ink-3); }
+.tabs a[aria-current="page"] .tab-desc { color: var(--ink-2); }
+.tabs-stuck .tab-desc { display: none; }
+.tabs-stuck .tabs a { padding: 6px 12px; flex: 1 1 auto; }
+.tabs-stuck .tab-name { white-space: nowrap; }
+@media (max-width: 1000px) {
+  .tab-desc { display: none; }
+  .tabs a { flex: none; padding: 7px 12px; }
+  .tab-name { white-space: nowrap; }
+}
+@media (max-width: 720px) {
+  .tabs { padding: 6px 0; }
+  .tabs a { padding: 6px 10px; column-gap: 7px; }
+  .tab-ico { width: 24px; height: 24px; border-radius: 7px; }
+  .tab-ico svg { width: 16px; height: 16px; }
+  .tab-name { font-size: 14.5px; }
+}
+
+/* the open tab's colour on its section titles */
+.shell-on.is-query main > section[id]:not(#assistant):not(#how) h2[id$="-title"]:not(.visually-hidden) { position: relative; padding-left: 14px; }
+.shell-on.is-query main > section[id]:not(#assistant):not(#how) h2[id$="-title"]:not(.visually-hidden)::before { content: ""; position: absolute; left: 0; top: 0.14em; bottom: 0.14em; width: 4px; border-radius: 2px; background: var(--c, var(--blue)); }
+.shell-on.is-query main > section[id]:not(#assistant):not(#how) .kicker { color: var(--c, var(--ink-2)); }
+
+/* each key-figure tile in the colour of the tab it leads to */
+.shell-on .glance p:not(.typed-note) { border-top: 3px solid var(--tile, var(--line)); }
+.shell-on .glance p:nth-child(1):not(.typed-note) { --tile: var(--t-closest); }
+.shell-on .glance p:nth-child(2):not(.typed-note) { --tile: var(--t-found); }
+.shell-on .glance p.glance-piles { --tile: var(--t-data); }
+.shell-on .glance p:not(.typed-note) > b:first-child, .shell-on .glance p:nth-child(2):not(.typed-note)::before { color: var(--tile, var(--ink-3)); }
+
+/* the way to the method page */
+.appbar-nav a.appbar-how { gap: 7px; padding: 0 14px 0 11px; background: var(--white); color: var(--ink) !important; border: 1px solid var(--white); font-weight: 700; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
+.appbar-nav a.appbar-how:hover { background: #dfe6fb; border-color: #dfe6fb; }
+.appbar-nav a.appbar-how svg { color: var(--blue); }
+.masthead-how { display: inline-flex; align-items: center; gap: 8px; margin: var(--s3) auto 0; min-height: 38px; padding: 0 var(--s4); border: 1px solid #c6cfe6; border-radius: 999px;
+  background: var(--white); color: var(--blue-dark) !important; font: 600 14px/1.2 var(--display); text-decoration: none; box-shadow: var(--shadow); }
+.masthead-how:hover { border-color: var(--blue); background: #f3f6ff; }
+.is-query .masthead-how { display: none; }
+.how-strip .btn { background: var(--blue); border-color: var(--blue); color: var(--white) !important; }
+.how-strip .btn:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+@media print { .masthead-how { display: none !important; } }

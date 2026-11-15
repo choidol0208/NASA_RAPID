@@ -107,3 +107,15 @@ The page then renders with `style.css` alone: every section visible, one column.
 - `python3 web/build.py`, `python3 web/check_integration.py`, `python3 web/parity_check.py`.
 - One input (15 November, about 16:40 KST): in headless Chrome at 1440, 768 and 390 px, with the assistant server started with `AI_NO_MODEL_CALLS=1` (answers by team code; the same page flow as live) and with a plain static server on a copy of `web/dist` (recorded mode): the start page, a typed request, a follow-up, an example question, a page opened with `?q=ISS`, an example environment, a tab change and the back button, the recorded list, one recording opened, a typed request and a typed recorded question. No horizontal scroll and no console error from the page's code. The live path of the page was driven with the health reply rewritten to "live" and the answer delayed, without a model call; a real turn with the local model was not run for this change.
 - Checked in headless Chrome only, by AI sessions. Not checked: Safari, Firefox, a real phone, a screen reader. The shell side of the assistant widget's hooks was checked by calling them, and the widget itself in no-model and recorded mode. `capture_media.mjs` was edited (it opens the tab that holds the element it photographs; the first slide shows the start page) and passes a syntax check, but was not run: Playwright is not installed on the machine this was built on.
+
+## Wayfinding: a colour, an icon and one line per tab (15 November, 19:40)
+
+The human lead: the page is clean, but everything looks alike and it is not clear at once where to look for what; and the button to the method page is not seen at once.
+
+- **Tabs.** Each tab is a card with an icon, its name and one line that says what it holds ("The experiments nearest your case", "What tests and documents report", "NASA's tables, archive files, or no record", "Where the recorded tests end", "The full ranked list"). Each has its own colour (`--t-closest`, `--t-found`, `--t-data`, `--t-stops`, `--t-all` in `shell.css`). The names and lines are in `TABS` in `shell.js`.
+- **The open tab's colour** is on its section titles (a bar before the title, the kicker), through `data-tab` on the root element, which `shell.js` sets in `sync()`.
+- **Key-figure tiles** carry the colour of the tab they lead to: closest, found, data.
+- **While the bar is stuck** under the app bar the one-line descriptions fold away (`tabs-stuck` on the root). The bar's bottom margin takes the folded height, so the content under it does not move. Under 1000 px the descriptions are not shown and the tabs scroll sideways.
+- **"How it works"** is the one filled, light control in the dark app bar, with an icon. The start page has a second, labelled button under "About this page", and the button of the strip at the foot of the dashboard is filled.
+
+Checked in a browser at 1280 px and 375 px: no sideways scroll; the section under the bar does not move when the bar sticks; the descriptions come back at the resting place.

@@ -10,13 +10,22 @@
 
   // ---- the tab map: section id -> tab. A section can also name its tab itself with data-tab="<name>".
   // A section that is in neither stays visible under every tab (nothing is hidden by accident).
+  // name, label, one line that says what the tab holds (shown on the tab; 15 November, wayfinding)
   var TABS = [
-    ["closest", "Closest investigations"],
-    ["found", "What was found"],
-    ["data", "Where the data are"],
-    ["stops", "Where the evidence stops"],
-    ["all", "All investigations"]
+    ["closest", "Closest investigations", "The experiments nearest your case"],
+    ["found", "What was found", "What tests and documents report"],
+    ["data", "Where the data are", "NASA's tables, archive files, or no record"],
+    ["stops", "Where the evidence stops", "Where the recorded tests end"],
+    ["all", "All investigations", "The full ranked list"]
   ];
+  // one icon per tab (static markup; stroke follows the tab's colour)
+  var TAB_ICON = {
+    closest: '<circle cx="10" cy="10" r="7"/><circle cx="10" cy="10" r="2.6"/>',
+    found: '<path d="M5.5 2.8h6.2l2.8 2.8v11.6h-9z"/><path d="M8 9.2h4.4M8 12.4h4.4"/>',
+    data: '<ellipse cx="10" cy="5" rx="5.8" ry="2.4"/><path d="M4.2 5v10c0 1.3 2.6 2.4 5.8 2.4s5.8-1.1 5.8-2.4V5M4.2 10c0 1.3 2.6 2.4 5.8 2.4s5.8-1.1 5.8-2.4"/>',
+    stops: '<path d="M2.8 10h8.4M8.2 6.6 11.6 10l-3.4 3.4M15.6 3.8v12.4"/>',
+    all: '<path d="M7.6 5h9M7.6 10h9M7.6 15h9M3.6 5h.01M3.6 10h.01M3.6 15h.01"/>'
+  };
   var TAB_OF = {
     read: "closest", top: "closest",
     "results-first": "found", results: "found", needs: "found", tests: "found", answers: "found", shown: "found", criteria: "found",
@@ -208,7 +217,11 @@
     tabs.append(tabsIn);
     var tabLinks = {};
     TABS.forEach(function (t) {
-      var a = el("a", { href: "?tab=" + t[0], "data-tab": t[0] }, [t[1]]);
+      var ico = el("span", { "class": "tab-ico", "aria-hidden": "true" });
+      ico.innerHTML = '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" ' +
+        'stroke-linecap="round" stroke-linejoin="round">' + TAB_ICON[t[0]] + "</svg>";
+      var a = el("a", { href: "?tab=" + t[0], "data-tab": t[0] },
+        [ico, el("span", { "class": "tab-name" }, [t[1]]), el("span", { "class": "tab-desc" }, [t[2]])]);
       tabLinks[t[0]] = a;
       tabsIn.append(a);
     });
@@ -392,6 +405,9 @@
         a.setAttribute("href", u.search);
       });
       secs.forEach(function (s) { s.classList.toggle("tab-off", ok && tabOf(s) !== state.tab); hookScroll(s); });
+      // the open tab's name on the root: its sections carry the tab's colour (web/shell.css, "Wayfinding")
+      var curTab = ok && state.tab ? state.tab : "";
+      if ((root.getAttribute("data-tab") || "") !== curTab) root.setAttribute("data-tab", curTab);
       document.title = (landing ? "" : (q.value.trim() || query() || "").trim() + " · ") + "Fire Evidence Explorer" +
         (landing ? ": the closest NASA microgravity fire investigations, and where the evidence stops" : "");
       syncLinks();
@@ -405,8 +421,26 @@
         for (var d = arrived.closest("details"); d; d = d.parentElement && d.parentElement.closest("details")) d.open = true;
         settleOn(arrived);
       } else resettle();
+      stick();
       if (!loading && !state.booted) { state.booted = true; route(false); }
     }
+    // The tab bar shows each tab's one-line description at its resting place and folds it away while the bar is
+    // stuck under the app bar. The bar keeps its place in the layout (the margin takes the folded height), so the
+    // content under it does not jump.
+    var tabsFull = 0;
+    function stick() {
+      if (tabs.hidden) { if (root.classList.contains("tabs-stuck")) { root.classList.remove("tabs-stuck"); tabs.style.marginBottom = ""; } return; }
+      var top = anchor.getBoundingClientRect().top + (parseFloat(getComputedStyle(tabs).marginTop) || 0);
+      var stuck = top < (appbar ? appbar.offsetHeight : 0) - 1;
+      if (stuck === root.classList.contains("tabs-stuck")) return;
+      if (stuck) tabsFull = tabs.offsetHeight;
+      root.classList.toggle("tabs-stuck", stuck);
+      tabs.style.marginBottom = stuck ? Math.max(0, tabsFull - tabs.offsetHeight) + "px" : "";
+      measure();
+    }
+    window.addEventListener("scroll", stick, { passive: true });
+    window.addEventListener("resize", function () { root.classList.remove("tabs-stuck"); tabs.style.marginBottom = ""; stick(); });
+
     var queued = false;
     function later() { if (!queued) { queued = true; setTimeout(function () { queued = false; sync(); }, 0); } }
 
