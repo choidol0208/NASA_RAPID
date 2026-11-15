@@ -312,12 +312,12 @@ WORDING = {
         "model_head": "Enough for a model?",
         "model": "{labels_pass} of {labels} outcome labels in NASA's tables gives a first sign that a simple model beats guessing; no model shipped.",
         "next_head": "Next",
-        "next": ["Review by combustion researchers", "A person's spot check of file links", "The assistant's measured results"],
+        "next": ["Review by combustion researchers", "A person's spot check of file links", "A re-measurement of the assistant"],
         "caption_read": "Recorded tests by oxygen, all pressures; solid fuels end at {solid_o2}%. Gas-flame tests at {o2}% or more are recorded, none counted at {kpa} kPa or less (slide 4). Squares: Saffire flight samples from a paper, not in PSI, not counted. Numbered dashed lines: cited atmospheres (listed on the page).",
         "link_label": "Public page, opens without a login",
         "method_label": "Method: how AI is used and checked, how the score works",
         "footer": "Research exploration tool built on NASA PSI data. References: the NASA PSI dataset DOI on every result; the full list is on the project page. Map: Team RAPID's plot from NASA PSI tables, a capture of the team's own page ({capture_date}); not AI-generated.",
-        "note": "A research exploration tool built on NASA PSI data. Every test here ran in microgravity. The challenge suggests the two ends of the gravity scale could bound partial gravity; NASA drop-tower tests found lower oxygen limits at lunar gravity than at both, so we do not treat them as bounds. Next: review by combustion researchers and the assistant's measured results.",
+        "note": "A research exploration tool built on NASA PSI data. Every test here ran in microgravity. The challenge suggests the two ends of the gravity scale could bound partial gravity; NASA drop-tower tests found lower oxygen limits at lunar gravity than at both, so we do not treat them as bounds. Next: review by combustion researchers and re-measuring the assistant.",
     },
 }
 
