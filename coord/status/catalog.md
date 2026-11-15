@@ -1,20 +1,20 @@
 ---
 role: catalog
-updated: 2026-11-15 12:34 KST
+updated: 2026-11-15 15:04 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-**Sync 12:34:**
-- Merged `main`: pm brought the submission drafts up to config 1.5.1 (`c9fc71c`). Nothing new on `catalog-filter`.
-- I checked the ranking numbers that `docs/submission/submission_text.md` quotes against `rank()`, and they all match:
-  - lunar habitat: FLEX 75.2, ACME-CFI-G 71.6, ACME-BRE 73.6;
-  - ISS: BASS-II 93.4, SAFFIRE-I 92.1, SAFFIRE-II 92.1;
-  - BASS and SAFFIRE-III at 93.4 with a recorded share of 0.33, in places 4 and 5.
-- pm 1012 is still `accepted`; I close it when pm answers `done`. Inbox empty.
+**Sync 15:04:**
+- Merged `main` and `catalog-filter`: data's results layer (`pipeline/results.py`, `pipeline/spec/results.json`) and ui's compliance rows.
+- No change to the catalog, the scorer or the reading-order inputs. All three branches run config 1.5.1.
+- Closed my request 1012 to pm. pm's answer still says `accepted`, but the deliverables are on `main`:
+  - the AI layer was rebuilt on 1.5.1 (11:40);
+  - the submission drafts quote the 1.5.1 top 3s (`c9fc71c`), checked against `rank()` at 12:34.
+- Inbox empty.
 - Checks: 76 unit tests, 43 of 43 scenarios, parity 104 of 104, source check clean, reading order up to date.
-- Waiting on the human lead for review items B1–B5. No config change before 18:00 without that decision.
+- Waiting on the human lead for review items B1–B5. No config change after 18:00 without that decision.
 
 **10:13: config 1.5.1 on `catalog-scoring` (weights unchanged since 1.4.0).**
 - **1.5.0 (09:52):** the combined model of the catalog and the data role's raw-file method, at the human lead's request. Reasoning: `scoring/METHOD.md` 1.7, `scoring/BUILDUP.md` B7.
@@ -38,7 +38,7 @@ blocked_on: none
   - weights match the derivation; reading order up to date.
 - **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 12:34: `main`, `catalog-filter` and `catalog-scoring` all run config 1.5.1.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 15:04: `main`, `catalog-filter` and `catalog-scoring` all run config 1.5.1.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
