@@ -1,14 +1,14 @@
 ---
 role: catalog
-updated: 2026-11-15 15:07 KST
+updated: 2026-11-15 15:14 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-**Sync 15:07:**
-- Merged `catalog-filter`: data's published results (`7ddec90`, 54 files), through ui's merge. Nothing new on `main`.
-- No change to `data/catalog/`, `scoring/`, `web/scorer.js` or the reading-order inputs. All three branches run config 1.5.1.
+**Sync 15:14:**
+- Merged `main` (pm's integration at 15:08: `data/insights/` rebuilt) and `catalog-filter` (ui status).
+- No change to the catalog, the scorer or the reading-order inputs. All three branches run config 1.5.1.
 - Inbox and outbox empty.
 - Checks: 76 unit tests, 43 of 43 scenarios, parity 104 of 104, source check clean, reading order up to date.
 - Waiting on the human lead for review items B1–B5. No config change after 18:00 without that decision.
@@ -35,7 +35,7 @@ blocked_on: none
   - weights match the derivation; reading order up to date.
 - **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 15:07: `main`, `catalog-filter` and `catalog-scoring` all run config 1.5.1.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 15:14: `main`, `catalog-filter` and `catalog-scoring` all run config 1.5.1.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
