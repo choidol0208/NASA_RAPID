@@ -679,7 +679,9 @@ def build(root):
         for w in BANNED + forbidden:
             if re.search(rf"\b{re.escape(w)}\b", s, re.I):
                 raise PileError(f"banned word {w!r} in: {s[:120]}")
-        if re.search(r"\bNone\b|\{|\}", s):
+        # an unfilled slot: a brace left from a template, or a Python None printed where a value belongs
+        # ("None of the 17 …" is a sentence, so "None" followed by " of" is allowed)
+        if re.search(r"\{|\}|\bNone\b(?! of\b)", s):
             raise PileError(f"unfilled slot in: {s[:120]}")
     return out
 
