@@ -1,10 +1,19 @@
 ---
 role: catalog
-updated: 2026-11-15 16:33 KST
+updated: 2026-11-15 16:56 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
+
+**16:56: config 1.5.3 (pm 1648, challenge-fit check; weights unchanged; no demo top-3 change).**
+- `partial_gravity` notice with its NASA source (Olson and Ferkul 2012, Table I, checked; OCHMO-TB-008) and the challenge's future sources (LUCI, FM2, E-FIELD).
+- `not_understood` names what the ranking reads. "artemis" is no longer a lunar alias. "combustion chamber" is in scope.
+- Mars hint with the sourced 8.0 psia / 32% O2 example. pm's "34% at 8.2 psi" is not the atmosphere that TP-2010-216134 recommends.
+- `o2_above_all` names both 85% oxidizer streams. SLICE hardware comes from the PSI-106 record text.
+- Answered 1648 `done`. Merged `main` and `catalog-filter`.
+- pm 1619 and 1520 are open (by 17:30).
+- Checks: 83 unit tests, 45 of 45 scenarios, parity 106 of 106, source check clean, integration 0 broken joins.
 
 **Sync 16:33:**
 - Merged `main` (pm: "match score" in the texts) and `catalog-filter` (ui's 1619 work).
@@ -62,7 +71,7 @@ blocked_on: none
   - weights match the derivation; reading order up to date.
 - **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 16:33: `main`, `catalog-filter` and `catalog-scoring` all run config 1.5.2.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 16:56: `main` and `catalog-filter` run config 1.5.2; `catalog-scoring` runs 1.5.3.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
@@ -149,7 +158,7 @@ Next:
 - Weights change only through the stream files and `scoring/derive_weights.py --write`, with the human lead's decision. After any change, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the numbers.
 
 Published for others:
-- `scoring/scoring_config.json` 1.5.2. Weights are unchanged from 1.4.0: AHP over literature-based judgements; suppression pooled with FLEX. New since 1.4.0:
+- `scoring/scoring_config.json` 1.5.3. Weights are unchanged from 1.4.0: AHP over literature-based judgements; suppression pooled with FLEX. New since 1.4.0:
   - `similarity.role.signatures` (keywords, outputs, stated purpose, `not_from_a_fire`);
   - `keywords.signature`;
   - a generic `solid` material entry;
