@@ -30,7 +30,9 @@
   "unverified": "ISO 14624-1, ISO/TS 16697, ASTM D2863 and SAE 2008-01-2055 were not read in full (see 'access'). CHALLENGE-2026 was checked on the official page by another session of the team (access 'read_by_teammate').",
   "item_types_note": "'stated_objective' is a sentence in which the investigators or a NASA project document state the purpose of an experiment; needs.json links a need to an investigation through such items.",
   "item_types_added_2026_11_15": "'measure' is a sentence of a NASA document that names a mitigation (a way to reduce or control a fire hazard) for the case the sentence describes; 'process' is a sentence that states how the fire-safety work is organised (order, basis, submission). Both carry the quote as 'text'. The team recommends nothing by listing them.",
-  "quote_note_2026_11_15": "The 25 items added on 2026-11-15 (documents NASA-STD-I-6001B, NASA-STD-6016C, JSC-29353B and new items of OCHMO-TB-008, NASA-STD-3001-V2, NASA-TP-2010-216134) were searched in a text extraction of the downloaded document and found verbatim; each is at most 40 words. Not checked by a person."
+  "quote_note_2026_11_15": "The 25 items added on 2026-11-15 (documents NASA-STD-I-6001B, NASA-STD-6016C, JSC-29353B and new items of OCHMO-TB-008, NASA-STD-3001-V2, NASA-TP-2010-216134) were searched in a text extraction of the downloaded document and found verbatim; each is at most 40 words. Not checked by a person.",
+  "item_fields_added_2026_11_15_results": "Items added on 2026-11-15 as published results carry three more fields. 'result_kind': measured (reported as a measurement or an observation of a test), computed_by_authors (a value the authors computed or estimated from their data or a model), simulation (the result of a numerical simulation), preliminary (the document or the passage calls the results preliminary); an item whose kind is not measured begins its 'text' with the label of its kind. 'investigation': the PSI investigations of this catalogue whose tests the item reports, or null when the experiment is not a PSI investigation of this catalogue or the document does not tie the result to one. 'relation': set when the experiment is not a PSI investigation of this catalogue (Saffire IV to VI, LUCI, the STS-107 water-mist experiment, the NIST drop-tower tests, the ISS confinement tests, the MIST simulation); such an item has investigation null. Items added earlier do not carry these fields.",
+  "quote_note_2026_11_15_results": "The 66 published results added on 2026-11-15 were collected by three AI agents from NTRS full texts and re-checked by a second AI agent against the text of the downloaded PDF (pdftotext; slide 8 of NTRS-20170008805 also on a rendering): every quote was found as a contiguous passage (line breaks and hyphenation aside) and every number of 'values' on the cited pages. Quotes follow the earlier classification: documents of kind 'paper' (conference papers, slides, journal articles, the grantee report) 25 words or fewer, NASA reports and NASA conference publications 40 words or fewer. Values are as printed; a number whose printed form has trailing zeros or a thousands comma is held as text. Where documents or passages print different values for the same quantity the items keep each value and say so in 'note'. Not checked by a person."
  },
  "references": [
   {
@@ -1898,6 +1900,37 @@
       "o2_pct"
      ],
      "quote": "A principle objective was to determine the limiting oxygen index (LOI), the oxygen percentage below which combustion would not occur. This objective reflected the FLEX focus on investigating fire safety in spacecraft."
+    },
+    {
+     "id": "TP216046.disruptive",
+     "type": "published_result",
+     "text": "In the initial FLEX tests, which focused on ambient conditions with higher oxygen mole fractions, the science team noticed as testing progressed a propensity for the droplets to burn disruptively and not exhibit flame extinction at a finite-sized droplet diameter; the latter half of the test matrix focused on lower oxygen mole fractions, where both diffusive and radiative extinction occurred (Table IV for methanol, Table V for heptane).",
+     "where": "4.1 Test Matrix, pp. 10-11 (PDF pages 16-17)",
+     "variables": [
+      "extinction_diameter_mm",
+      "o2_pct"
+     ],
+     "quote": "As testing progressed, however, the science team noticed a propensity for the droplets to burn disruptively and not exhibit flame extinction (at a finite-sized droplet diameter).",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-69"
+     ]
+    },
+    {
+     "id": "TP216046.diffusive_contam",
+     "type": "published_result",
+     "text": "The report states that the diffusive extinction droplet diameters (smaller diameters) of methanol were minimally influenced by the presence of the fuel needle contaminant, and that radiative extinction droplet diameters (larger diameters) were not influenced by it.",
+     "where": "5.2 Fuel Needle Contamination, assertions (6) and (7), p. 17 (PDF page 23)",
+     "variables": [
+      "extinction_diameter_mm"
+     ],
+     "quote": "The diffusive extinction droplet diameters (smaller diameters) for methanol (where there is no disruption) were minimally influenced by the presence of the contaminant.",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-69"
+     ]
     }
    ]
   },
@@ -2116,6 +2149,168 @@
      },
      "quote": "Table 1. Saffire IV-VI Sample Test Conditions considered in this paper.",
      "note": "The table is printed with one column per flight/sample and one row per quantity; row labels as printed: Flight/Sample, Material, Length (cm), Air Flow Rate (cm/s), Flow Direction, Ambient Pressure (kPa), Oxygen Concentration (mol %), Free volume (m3). 'flight' and 'sample' are the two halves of the printed 'Flight/Sample' label. The paper does not say whether the pressure and oxygen values are set points, values measured at ignition or averages; the body says only that the spacecraft was vented to the requested pressure and oxygen was released 'to bring the spacecraft to the desired condition (Table 1)' (p. 3). The table lists only the samples considered in this paper, not every Saffire IV-VI sample; the Saffire VI Nomex sample (test 1) did not ignite and is not in the table."
+    },
+    {
+     "id": "SAF456.table2",
+     "type": "published_result",
+     "text": "Preliminary result: Table 2 of the Saffire VI paper lists, for samples IV-1, V-2, VI-2, VI-3 and VI-4, the burn duration, the heat release from oxygen-consumption and fuel-consumption calorimetry, the maximum temperatures at the flow unit outlet and at the far-field device, and the increase of CO2 (ppm and partial pressure) and of CO at the far-field device inlet; CO2 rose by 1390 to 8539 ppm and CO by 80 to 320 ppm, the largest rises being those of the two PMMA samples VI-3 and VI-4. Test conditions from Table 1: IV-1 at 100.0 kPa and 22.0 mol % oxygen; V-2 at 70.7 kPa and 26.2 mol %; VI-2 at 54.1 kPa and 31.0 mol %; VI-3 at 54.6 kPa and 30.3 mol %; VI-4 at 55.2 kPa and 28.8 mol %; air flow 20 cm/s.",
+     "where": "Table 2 'Saffire IV-VI Heat release and increase of carbon oxides', p. 6; conditions in Table 1, p. 3",
+     "variables": [
+      "co_produced_ppm",
+      "co2_produced_pct_points",
+      "o2_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "rows": [
+       {
+        "flight_sample": "IV-1",
+        "material": "SIBAL",
+        "burn_duration_s": 130,
+        "average_heat_release_w_fuel_consumption": "3,150",
+        "total_heat_release_kj_fuel_consumption": 409,
+        "max_temp_degc_sfu_outlet": 45,
+        "max_temp_degc_ffd": 25,
+        "ffd_inlet_co2_increase_ppm": 1390,
+        "co2_partial_pressure_increase_mmhg": 1.03,
+        "ffd_inlet_co_increase_ppm": 80,
+        "pressure_kpa": 100.0,
+        "o2_pct": 22.0,
+        "flow_cms": 20
+       },
+       {
+        "flight_sample": "V-2",
+        "material": "Cotton Jersey",
+        "burn_duration_s": 200,
+        "average_heat_release_w_fuel_consumption": "2,800",
+        "total_heat_release_kj_fuel_consumption": 560,
+        "max_temp_degc_sfu_outlet": 46,
+        "max_temp_degc_ffd": 23,
+        "ffd_inlet_co2_increase_ppm": 2360,
+        "co2_partial_pressure_increase_mmhg": 1.26,
+        "ffd_inlet_co_increase_ppm": 83,
+        "pressure_kpa": 70.7,
+        "o2_pct": 26.2,
+        "flow_cms": 20
+       },
+       {
+        "flight_sample": "VI-2",
+        "material": "SIBAL",
+        "burn_duration_s": 112,
+        "peak_heat_release_w_o2_consumption": 3217,
+        "total_heat_release_kj_o2_consumption": 580,
+        "average_heat_release_w_fuel_consumption": "3,650",
+        "total_heat_release_kj_fuel_consumption": 409,
+        "max_temp_degc_sfu_outlet": 48,
+        "max_temp_degc_ffd": 20,
+        "ffd_inlet_co2_increase_ppm": 2800,
+        "co2_partial_pressure_increase_mmhg": 1.15,
+        "ffd_inlet_co_increase_ppm": 120,
+        "pressure_kpa": 54.1,
+        "o2_pct": 31.0,
+        "flow_cms": 20
+       },
+       {
+        "flight_sample": "VI-3",
+        "material": "2-sided PMMA",
+        "burn_duration_s": 780,
+        "peak_heat_release_w_o2_consumption": 3080,
+        "total_heat_release_kj_o2_consumption": 1280,
+        "max_temp_degc_sfu_outlet": 77,
+        "max_temp_degc_ffd": 21,
+        "ffd_inlet_co2_increase_ppm": 8539,
+        "co2_partial_pressure_increase_mmhg": 3.51,
+        "ffd_inlet_co_increase_ppm": 308,
+        "pressure_kpa": 54.6,
+        "o2_pct": 30.3,
+        "flow_cms": 20
+       },
+       {
+        "flight_sample": "VI-4",
+        "material": "1-sided PMMA",
+        "burn_duration_s": 1200,
+        "peak_heat_release_w_o2_consumption": 1507,
+        "total_heat_release_kj_o2_consumption": 830,
+        "max_temp_degc_sfu_outlet": 57,
+        "max_temp_degc_ffd": 21,
+        "ffd_inlet_co2_increase_ppm": 8117,
+        "co2_partial_pressure_increase_mmhg": 3.37,
+        "ffd_inlet_co_increase_ppm": 320,
+        "pressure_kpa": 55.2,
+        "o2_pct": 28.8,
+        "flow_cms": 20
+       }
+      ]
+     },
+     "quote": "Table 2. Saffire IV-VI Heat release and increase of carbon oxides",
+     "note": "Cells as printed in Table 2 (materials as printed in Table 2; the fuel-consumption heat release printed with a thousands comma); empty cells of the table ('data were not available', footnote) are left out. pressure_kpa, o2_pct and flow_cms are copied from Table 1 of the same paper (held in item SAF456.conditions). The flow of VI-3 was changed from 20 to 5 cm/s at 1120 s (Figure 5 caption). Saffire IV to VI are not PSI investigations. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "preliminary",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "SAF456.limits_exceeded",
+     "type": "published_result",
+     "text": "Preliminary result: the paper states that the allowable CO2 level, which it gives as a 1-hour average CO2 partial pressure of no more than 3 mm Hg, was exceeded by both PMMA tests on Saffire VI (CO2 partial pressure increases of 3.51 and 3.37 mmHg in Table 2), and that the carbon monoxide levels were well above the 24-hour SMAC of 100 ppm and quite close to the 1-hour SMAC of 425 ppm (CO increases of 308 and 320 ppm in Table 2).",
+     "where": "III, p. 5; Table 2, p. 6",
+     "variables": [
+      "co_produced_ppm",
+      "co2_produced_pct_points"
+     ],
+     "values": {
+      "co2_partial_pressure_limit_1_hour_average_mmhg": 3,
+      "co_smac_24_hour_ppm": 100,
+      "co_smac_1_hour_ppm": 425,
+      "co2_partial_pressure_increase_mmhg_vi_3": 3.51,
+      "co2_partial_pressure_increase_mmhg_vi_4": 3.37,
+      "co_increase_ppm_vi_3": 308,
+      "co_increase_ppm_vi_4": 320
+     },
+     "quote": "the allowable CO2 level was exceeded by both of the PMMA tests on Saffire VI.",
+     "note": "The paper cites the CO2 limit to a standard printed as 'NASA-STD-30018' and the CO SMAC values to its reference 7. The comparison is the paper's; the team compares nothing. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "preliminary",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "SAF456.alarm",
+     "type": "published_result",
+     "text": "Preliminary result: in Saffire VI-3 (two-sided PMMA; 54.6 kPa and 30.3 mol % oxygen in Table 1), with 1 mg/m3 selected as a relatively tight alarm threshold, the far-field detector reached that threshold at 981 seconds; the paper states that by this point much of the hazardous gas release had occurred. The duct flow was changed from 20 cm/s to 5 cm/s at 1120 s.",
+     "where": "III, Figure 7 and text, p. 5; IV. Conclusion, p. 6",
+     "variables": [
+      "smoke_mg_m3"
+     ],
+     "values": {
+      "alarm_threshold_mg_m3": 1,
+      "time_s_to_alarm_threshold": 981,
+      "flow_change_time_s": 1120
+     },
+     "quote": "Selecting 1 mg/m3 as a relatively tight alarm threshold, the FFD detector reached that threshold at 981 seconds.",
+     "note": "The Conclusion repeats it: 'a typical alarm threshold was only achieved at 981 seconds. By this time most of the hazardous gas release had occurred.' The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "preliminary",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "SAF456.hazard",
+     "type": "published_result",
+     "text": "Preliminary result: the paper concludes, from fires of 1.5 to 3.2 kW in unmanned spacecraft with free air volumes of 17 to 19 cubic meters, that the temperature increased significantly only very near the fire, that carbon monoxide and carbon dioxide rose significantly, and that the human hazard from a fire in a spacecraft is very similar to terrestrial fires, where the heat is not the principal hazard and the smoke and gaseous products are a much greater concern.",
+     "where": "IV. Conclusion, p. 6",
+     "values": {
+      "fire_size_kw_range": [
+       1.5,
+       3.2
+      ],
+      "free_volume_m3_range": [
+       17,
+       19
+      ]
+     },
+     "quote": "the heat from the fire is not the principal hazard and rather the smoke and gaseous products are a much greater concern",
+     "note": "The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "preliminary",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
     }
    ],
    "note": "Saffire IV to VI are not in NASA PSI; published results listed for context, not reproduced by the pipeline. Table 1 was read on 2026-11-14 from the PDF linked on the NTRS citation page (Saffire-ICES-2024-ICES-365-accepted final.pdf), both from the text layer (pdftotext -layout) and from a 200 dpi rendering of page 3; the two readings agree in every cell. AI-read, not checked by a human."
@@ -2313,6 +2508,136 @@
       "o2_final_pct"
      ],
      "quote": "Table I. Summary of Samples, Test Conditions, and Selected Results"
+    },
+    {
+     "id": "SAF17S.flame_length_plateau",
+     "type": "published_result",
+     "text": "Saffire-I (40.6-cm-wide SIBAL cotton-fiberglass fabric, 20 cm/s flow, initial oxygen 21.7% by ISS reading): for the concurrent flame the length reached a plateau value of around 40 mm, while the opposed-flow flame was a bit shorter at 24 mm.",
+     "where": "Slide 21 'SIBAL Fabric Results (con't)'; conditions on slide 14",
+     "variables": [
+      "o2_pct",
+      "flow_cms"
+     ],
+     "values": {
+      "flame_length_mm_concurrent_as_written": "around 40",
+      "flame_length_mm_opposed": 24
+     },
+     "quote": "For the concurrent flame, the length reaches a plateau value of around 40 mm, while the opposed-flow flame is a bit shorter at 24 mm.",
+     "note": "The same slide gives the spread rates 1.8 and 1.3 mm/s (item SAF.result). Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-98"
+     ]
+    },
+    {
+     "id": "SAF17S.narrow_sample_spread",
+     "type": "published_result",
+     "text": "At the same flow speed of 20 cm/s, the flame spread rate of the 5-cm-wide SIBAL fabric sample (Saffire-2) was marginally faster than that of the 40.6-cm-wide sample (Saffire-1): 2.1 compared to 1.8 mm/s; the slide attributes this partly to the slightly higher starting oxygen percentage (22.1% vs. 21.7%) and says the narrow sample might also have spread faster because of larger side entrainment effects.",
+     "where": "Slide 21 'SIBAL Fabric Results (con't)'; samples on slides 9 and 14",
+     "variables": [
+      "spread_rate_mm_s",
+      "o2_pct",
+      "flow_cms"
+     ],
+     "values": {
+      "spread_rate_mm_s_5_cm_wide": 2.1,
+      "spread_rate_mm_s_40_6_cm_wide": 1.8,
+      "flow_cms": 20
+     },
+     "quote": "The flame spread rate for the 5-cm-wide sample is marginally faster compared to the spread rate for the 40.6-cm-wide sample",
+     "note": "The slide does not name the Saffire-2 sample of the 2.1 mm/s value (slide 9: samples 2-5 and 2-6 were fabric; 2-6 ran at 25 cm/s). Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-98",
+      "PSI-99"
+     ]
+    },
+    {
+     "id": "SAF17S.saffire2_ignition",
+     "type": "published_result",
+     "text": "Saffire-2 ignition power for all samples except the thick PMMA: 80 W for 9.2 s, 16 W/cm per unit fuel width; the ignition energy and time for samples 2-1 through 2-7 were chosen to mimic the NASA 6001 Test 1 ignition, 736 J applied uniformly for 9.2 s.",
+     "where": "Slide 8 'Configurations' (power, time, power per width); slide 10 'Saffire-2 Description (con't)' (quote, 736 J)",
+     "variables": [
+      "ignition_power_w",
+      "ignition_time_s"
+     ],
+     "values": {
+      "ignition_power_w": 80,
+      "ignition_time_s": 9.2,
+      "ignition_power_w_per_cm_fuel_width": 16,
+      "ignition_energy_j": 736
+     },
+     "quote": "chosen to mimic the NASA 6001 Test 1 ignition, 736 J applied uniformly for 9.2 s",
+     "note": "Slide 8 was read on 2026-11-15 with pdftotext -layout, where the picture labels ('SIBAL fabric', 'Thin PMMA/Nomex', 'Thick PMMA') stand between the heading and the value lines, and on a 70 dpi rendering of the slide, which shows the lines '80 W (for 9.2 s); 16 W/cm (per unit fuel width)' and '97 W (for 30 s); 19.5 W/cm (per unit fuel width)' under their headings. The quote is from slide 10, whose text layer is not interleaved. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-99"
+     ]
+    },
+    {
+     "id": "SAF17S.saffire2_thick_pmma_ignition",
+     "type": "published_result",
+     "text": "Saffire-2 ignition power for the thick PMMA samples: 97 W for 30 s, 19.5 W/cm per unit fuel width; samples 2-8 and 2-9 had slightly more powerful igniters (97 W instead of 80 W) and were left on longer (30 s instead of 9.2 s) to assure ignition of these thick fuels.",
+     "where": "Slide 8 'Configurations'; slide 10 'Saffire-2 Description (con't)' (quote)",
+     "variables": [
+      "ignition_power_w",
+      "ignition_time_s"
+     ],
+     "values": {
+      "ignition_power_w": 97,
+      "ignition_time_s": 30,
+      "ignition_power_w_per_cm_fuel_width": 19.5
+     },
+     "quote": "Samples 2-8 and 2-9 had slightly more powerful igniters (97 W instead of 80 W)",
+     "note": "Slide 8 was read on 2026-11-15 with pdftotext -layout, where the picture labels ('SIBAL fabric', 'Thin PMMA/Nomex', 'Thick PMMA') stand between the heading and the value lines, and on a 70 dpi rendering of the slide, which shows the lines '80 W (for 9.2 s); 16 W/cm (per unit fuel width)' and '97 W (for 30 s); 19.5 W/cm (per unit fuel width)' under their headings. The quote is from slide 10. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-99"
+     ]
+    },
+    {
+     "id": "SAF17S.saffire1_ignition",
+     "type": "published_result",
+     "text": "Saffire-1 ignition power (40.6-cm-wide SIBAL fabric): 165 W for 8 s, 4.1 W/cm per unit fuel width.",
+     "where": "Slide 8 'Configurations'",
+     "variables": [
+      "ignition_power_w",
+      "ignition_time_s"
+     ],
+     "values": {
+      "ignition_power_w": 165,
+      "ignition_time_s": 8,
+      "ignition_power_w_per_cm_fuel_width": 4.1
+     },
+     "quote": "Saffire 1: 165 W (for 8 s); 4.1 W/cm (per unit fuel width)",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-98"
+     ]
+    },
+    {
+     "id": "SAF17S.silicone_no_spread",
+     "type": "published_result",
+     "text": "None of the Saffire-2 silicone samples (sheets 0.27, 0.61, 1.03 and 0.37 mm thick, samples 2-1 to 2-4) burned: when the igniter was powered off a tiny gas phase flame remained but did not spread and quickly extinguished; the slide notes that even the thin sample had been entirely consumed in normal gravity.",
+     "where": "Slide 12 'Saffire-2; Silicone Results'; thicknesses on slide 9",
+     "variables": [
+      "sample_thickness_mm"
+     ],
+     "values": {
+      "silicone_thickness_mm": [
+       0.27,
+       0.61,
+       1.03,
+       0.37
+      ]
+     },
+     "quote": "When the igniter was powered off, a tiny gas phase flame remained but did not spread and quickly extinguished.",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-99"
+     ]
     }
    ],
    "note": "Read on 2026-11-14 from the PDF (text layer and renderings of slides 9, 14 and 29 at 90-110 dpi). The text layer drops the subscript 2 of note i; the rendering shows 'CO2' and 'O2'. AI-read, not checked by a human."
@@ -2487,6 +2812,157 @@
      },
      "quote": "Table 2 Test Conditions and flame size for thin samples",
      "note": "Whole-number values; the paper does not say whether they are rounded or nominal. They are less precise than 21.7 / 22.1 / 21.2 given by the same group in ICES-2017-224 and Combustion and Flame 248 (2023)."
+    },
+    {
+     "id": "SAF45.table2_flame_size",
+     "type": "published_result",
+     "text": "Preliminary result: Table 2 of the Saffire IV and V paper lists, for six thin samples of Saffire I to V (I-1, II-5, II-6, III-1 and IV-1 at 100 kPa; V-2 at 70.7 kPa), the steady state and maximum flame size with air flow, oxygen, pressure, material, duct height and sample size; the paper calls the steady state sizes the steady state flame lengths and states that under a variety of conditions concurrent flames spreading over thin fuels achieved a limiting size.",
+     "where": "III.C, Table 2 'Test Conditions and flame size for thin samples', p. 8",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "flow_cms"
+     ],
+     "values": {
+      "rows": [
+       {
+        "flight_sample": "I-1",
+        "flow_cms": 20,
+        "o2_pct": 21,
+        "pressure_kpa": 100,
+        "material": "SIBAL",
+        "steady_state_size_cm": 4,
+        "maximum_size_cm": 6.2,
+        "duct_height_cm": 46,
+        "sample_width_cm": 41,
+        "sample_length_cm": 94
+       },
+       {
+        "flight_sample": "II-5",
+        "flow_cms": 20,
+        "o2_pct": 21,
+        "pressure_kpa": 100,
+        "material": "SIBAL",
+        "steady_state_size_cm": 4,
+        "maximum_size_cm": 4,
+        "duct_height_cm": 46,
+        "sample_width_cm": 5,
+        "sample_length_cm": 30
+       },
+       {
+        "flight_sample": "II-6",
+        "flow_cms": 25,
+        "o2_pct": 21,
+        "pressure_kpa": 100,
+        "material": "SIBAL",
+        "steady_state_size_cm": 5,
+        "maximum_size_cm": 5,
+        "duct_height_cm": 46,
+        "sample_width_cm": 5,
+        "sample_length_cm": 30
+       },
+       {
+        "flight_sample": "III-1",
+        "flow_cms": 25,
+        "o2_pct": 21,
+        "pressure_kpa": 100,
+        "material": "SIBAL",
+        "steady_state_size_cm": 5,
+        "maximum_size_cm": 8.2,
+        "duct_height_cm": 46,
+        "sample_width_cm": 41,
+        "sample_length_cm": 94
+       },
+       {
+        "flight_sample": "IV-1",
+        "flow_cms": 20,
+        "o2_pct": 22,
+        "pressure_kpa": 100,
+        "material": "SIBAL",
+        "steady_state_size_cm": 8.5,
+        "maximum_size_cm": 11.0,
+        "duct_height_cm": 30,
+        "sample_width_cm": 41,
+        "sample_length_cm": 50
+       },
+       {
+        "flight_sample": "V-2",
+        "flow_cms": 20,
+        "o2_pct": 26.2,
+        "pressure_kpa": 70.7,
+        "material": "Cotton jersey",
+        "steady_state_size_cm": 10.0,
+        "maximum_size_cm": 14.0,
+        "duct_height_cm": 30,
+        "sample_width_cm": 41,
+        "sample_length_cm": 50
+       }
+      ]
+     },
+     "quote": "The steady state flame lengths are summarized in Table 2.",
+     "note": "Item SAF45.table2 holds the oxygen and pressure columns of the same table; this item holds all columns. Rows I-1 to III-1 are Saffire-I to -III (PSI-98, PSI-99, PSI-100); IV-1 and V-2 are Saffire IV and V, which are not PSI investigations. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "preliminary",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "SAF45.v3_pmma_flame_length",
+     "type": "published_result",
+     "text": "Preliminary result: in Saffire V-3, a one-sided PMMA sample (0.5 cm thick, 18 cm long) in concurrent air flow of 20 cm/s at 71.3 kPa, the flame (in 25.4% oxygen) grew to 11 cm after 450 seconds; the paper states that in these cases the flame length reached an upper limit, contrary to similar 1-g tests that did not reach a steady length.",
+     "where": "III.D, pp. 8-9; conditions in Table 1 and Figure 2, p. 3",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "flow_cms"
+     ],
+     "values": {
+      "flame_length_cm": 11,
+      "time_s": 450,
+      "o2_pct": 25.4,
+      "pressure_kpa": 71.3,
+      "flow_cms": 20
+     },
+     "quote": "In Saffire V-3, the one-sided PMMA sample flame (in 25.4% oxygen) grew to 11 cm after 450 seconds.",
+     "note": "Pressure and flow are from Table 1 (V-3: 71.3 kPa, 25.4 mol %, 20 cm/s, concurrent); thickness from the Figure 2 label '1-sided PMMA (0.5 cm thick.)'. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "preliminary",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "SAF45.iv2_v3_no_spread",
+     "type": "published_result",
+     "text": "Preliminary result: in the two concurrent PMMA samples of Saffire IV and V (IV-2: two-sided, 1 cm thick, at 100.0 kPa and 22.0 mol % oxygen; V-3: one-sided, 0.5 cm thick, at 71.3 kPa and 25.4 mol % oxygen; air flow 20 cm/s), the flames did not spread appreciably and remained fixed at the leading edge of the sample, advancing through surface regression only.",
+     "where": "III.D, p. 8; conditions in Table 1 and Figure 2, p. 3",
+     "variables": [
+      "o2_pct",
+      "pressure_kpa",
+      "flow_cms"
+     ],
+     "values": {
+      "rows": [
+       {
+        "flight_sample": "IV-2",
+        "material": "2-sided PMMA",
+        "thickness_cm": 1,
+        "flow_cms": 20,
+        "pressure_kpa": 100.0,
+        "o2_pct": 22.0
+       },
+       {
+        "flight_sample": "V-3",
+        "material": "1 sided PMMA",
+        "thickness_cm": 0.5,
+        "flow_cms": 20,
+        "pressure_kpa": 71.3,
+        "o2_pct": 25.4
+       }
+      ]
+     },
+     "quote": "Both concurrent samples (IV-2 and V-3) did not spread appreciably and instead remained fixed at the leading edge of the sample",
+     "note": "Materials as printed in Table 1 ('2-sided PMMA', '1 sided PMMA'); thicknesses from the Figure 2 labels. The paper adds that this is typical for thick fuels in low gravity but different from normal gravity. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "preliminary",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
     }
    ],
    "note": "Read on 2026-11-14 from the PDF linked on the NTRS citation page (text layer and a 100 dpi rendering of p. 8). AI-read, not checked by a human."
@@ -3704,6 +4180,121 @@
      },
      "quote": "The model assumes the work volume is at constant",
      "note": "Model assumption and calculation input, not measurements. The paper reports oxygen, CO and CO2 sensor readings; it reports no pressure reading."
+    },
+    {
+     "id": "ICES15.co_per_co2",
+     "type": "published_result",
+     "text": "In the BASS-II PMMA tests (microgravity combustion tests in the glovebox), the concurrent rods produced on average 550 ppm of CO for every 1% of CO2, the opposed thick slabs on average 370 ppm of CO for every 1% of CO2, and the opposed rods had a very non-linear response.",
+     "where": "III, text beside Figure 6, p. 6",
+     "variables": [
+      "co_produced_ppm",
+      "co2_produced_pct_points"
+     ],
+     "values": {
+      "co_ppm_per_1_percent_co2_concurrent_rods": 550,
+      "co_ppm_per_1_percent_co2_opposed_thick_slabs": 370
+     },
+     "quote": "The concurrent rods produced on average 550 ppm of CO for every 1% of CO2.",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "ICES15.stoich",
+     "type": "published_result",
+     "text": "The BASS-II data, taken over a wide range of initial oxygen concentrations, forced opposed or concurrent flow velocities and sample geometries, agree very well with the PMMA stoichiometric ratio (6O2 : 5 CO2), which the paper takes to indicate that the vast majority of the oxygen consumed went into carbon dioxide; one outlier at 2.8% CO2 had the CO sensor over-ranged (> 1000 ppm).",
+     "where": "III, Eq. (3) and Figure 5, p. 6",
+     "variables": [
+      "o2_consumed_pct_points",
+      "co2_produced_pct_points"
+     ],
+     "values": {
+      "stoichiometric_ratio_as_written": "6O2 : 5 CO2",
+      "outlier_co2_change_percent_by_volume": 2.8,
+      "co_sensor_over_range_ppm_as_written": "> 1000"
+     },
+     "quote": "the vast majority of the oxygen consumed did indeed go into carbon dioxide",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "ICES15.coratio_flue",
+     "type": "published_result",
+     "text": "The paper plots the CO/CO2 ratio of the BASS-II tests against the initial oxygen concentration and states that for efficiently burned flue gases the ratio is on the order of 0.002, that most of the BASS-II data are an order of magnitude above that, and that this indicates microgravity flames are not very efficient.",
+     "where": "III, text beside Figure 7, p. 7",
+     "variables": [
+      "co_to_co2_molar_ratio"
+     ],
+     "values": {
+      "co_to_co2_ratio_flue_gas_order": 0.002
+     },
+     "quote": "For efficiently burned flue gasses (boilers, furnaces, etc.), this ratio is on the order of 0.002.",
+     "note": "Item ICES19.coratio holds the BASS-II ratio range of another paper. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "ICES15.hrr",
+     "type": "published_result",
+     "text": "Computed by the authors, not a measurement: using Huggett's oxygen consumption calorimetry (13.1 kJ/g O2) and the burn time of each test, the paper estimates the BASS-II heat release rate to be typically well below 100 W, increasing with ambient oxygen; one long opposed thick slab test released close to 100 W and a brief concurrent rod test almost 110 W.",
+     "where": "III, text beside Figure 8, p. 7",
+     "values": {
+      "huggett_constant_kj_per_g_o2": 13.1,
+      "heat_release_w_typical_as_written": "well below 100",
+      "heat_release_w_long_opposed_thick_slab_as_written": "close to 100",
+      "heat_release_w_brief_concurrent_rod_as_written": "almost 110"
+     },
+     "quote": "we estimate the heat release rate to be typically well below 100 W",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "computed_by_authors",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "ICES15.phi",
+     "type": "published_result",
+     "text": "Computed by the authors, not a measurement: from the mass loss and oxygen consumption of 19 usable returned samples, the paper estimates the BASS-II global equivalence ratio to be 1.3 on average (fuel rich), and states that the flames were under-ventilated, with some fuel ending up as soot, some as CO and some as unburned hydrocarbons.",
+     "where": "IV. Global Equivalence Ratio, pp. 7-8; V. Conclusions, p. 9",
+     "values": {
+      "global_equivalence_ratio": 1.3,
+      "samples_used": 19,
+      "slope_o2_percent_by_vol_per_g_fuel": 0.4582
+     },
+     "quote": "the global equivalence ratio for the tests is estimated to be 1.3 on average, which indicates the flames were burning fuel rich",
+     "note": "The calculation uses V = 250,000 cc, P = 1 atm and T = 300 K (inputs, not measurements; see item ICES15.cstr). Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "computed_by_authors",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "ICES15.us_lab_co",
+     "type": "published_result",
+     "text": "Computed by the authors, not a measurement: the paper estimates that the combustion products of a fire of the scale of a BASS-II test, diluted within the US Lab (106 m3 pressurized volume), would give CO levels of only 1.5 ppm, and compares this with SMAC values of 10 ppm for long term exposure and 55 ppm for 1 hour.",
+     "where": "III, text beside Figure 7, p. 7",
+     "variables": [
+      "co_produced_ppm"
+     ],
+     "values": {
+      "co_us_lab_estimate_ppm": 1.5,
+      "us_lab_pressurized_volume_m3": 106,
+      "smac_long_term_ppm": 10,
+      "smac_1_hour_ppm": 55
+     },
+     "quote": "even within just the US Lab (106 m3 pressurized volume), the CO levels in the lab would only be 1.5 ppm",
+     "note": "The comparison with SMAC values is the paper's; the team compares nothing. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "computed_by_authors",
+     "investigation": [
+      "PSI-25"
+     ]
     }
    ],
    "note": "Listed in the publications field of PSI-25. The introduction is set in a narrow column beside a figure; the quotes join the printed lines of one sentence."
@@ -3874,6 +4465,587 @@
      ],
      "quote": "BASS–II utilized the gaseous nitrogen (GN2) available on International Space Station (ISS) to vitiate the atmosphere in the Microgravity Science Glovebox (MSG) from standard ISS “air” down to the low O2 flammability limits.",
      "note": "States no pressure."
+    },
+    {
+     "id": "BASS2TM.table5_1",
+     "type": "published_result",
+     "text": "BASS-II opposed-flow tests on flat PMMA samples, Table 5.1: for each of the 20 tests the thickness (1 to 5 mm), width, one or two sides burning, opposed-flow velocity, flame spread rate, burn time and initial and final O2 (vol%) as printed; where a test lists several velocities, the spread rates are printed in the same order.",
+     "where": "5.3 Experimental Setup and Summary, p. 56 (PDF page 64); Table 5.1, p. 57 (PDF page 65)",
+     "variables": [
+      "spread_rate_mm_s",
+      "flow_cms",
+      "o2_pct",
+      "sample_thickness_mm"
+     ],
+     "values": {
+      "rows": [
+       {
+        "sample": "M1",
+        "thickness_mm": 1,
+        "width_cm": 2.2,
+        "sides_burning": 1,
+        "flow_cms": [
+         9
+        ],
+        "spread_rate_mm_s": [
+         0.071
+        ],
+        "burn_time_min": 6.4,
+        "initial_o2_pct_by_vol": 22.2,
+        "final_o2_pct_by_vol": 21.9
+       },
+       {
+        "sample": "M2",
+        "thickness_mm": 3,
+        "width_cm": 2.2,
+        "sides_burning": 1,
+        "flow_cms": [
+         20,
+         15
+        ],
+        "spread_rate_mm_s": [
+         0.052,
+         0.033
+        ],
+        "burn_time_min": 22.9,
+        "initial_o2_pct_by_vol": 22.2,
+        "final_o2_pct_by_vol": 21.2
+       },
+       {
+        "sample": "M3",
+        "thickness_mm": 5,
+        "width_cm": 2.2,
+        "sides_burning": 1,
+        "flow_cms": [
+         10,
+         20
+        ],
+        "spread_rate_mm_s": [
+         0.029,
+         0.024
+        ],
+        "burn_time_min": 20.1,
+        "initial_o2_pct_by_vol": 20.8,
+        "final_o2_pct_by_vol": 19.7
+       },
+       {
+        "sample": "M4",
+        "thickness_mm": 5,
+        "width_cm": 2.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         5,
+         3
+        ],
+        "spread_rate_mm_s": [
+         0.045,
+         0.033
+        ],
+        "burn_time_min": 19.8,
+        "initial_o2_pct_by_vol": 21.8,
+        "final_o2_pct_by_vol": 19.8
+       },
+       {
+        "sample": "M5",
+        "thickness_mm": 3,
+        "width_cm": 2.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         10
+        ],
+        "spread_rate_mm_s": [
+         0.071
+        ],
+        "burn_time_min": 27.2,
+        "initial_o2_pct_by_vol": 22.2,
+        "final_o2_pct_by_vol": 19
+       },
+       {
+        "sample": "M6",
+        "thickness_mm": 1,
+        "width_cm": 2.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         10,
+         8
+        ],
+        "spread_rate_mm_s": "Not tracked",
+        "burn_time_min": 16.8,
+        "initial_o2_pct_by_vol": 21.8,
+        "final_o2_pct_by_vol": 20.7
+       },
+       {
+        "sample": "M7",
+        "thickness_mm": 1,
+        "width_cm": 1.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         10,
+         6,
+         5,
+         3
+        ],
+        "spread_rate_mm_s": [
+         0.106,
+         0.099,
+         0.083,
+         0.07
+        ],
+        "burn_time_min": 18.4,
+        "initial_o2_pct_by_vol": 18.9,
+        "final_o2_pct_by_vol": 18.4
+       },
+       {
+        "sample": "M8",
+        "thickness_mm": 2,
+        "width_cm": 1.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         10,
+         6,
+         5
+        ],
+        "spread_rate_mm_s": [
+         0.057,
+         0.056,
+         0.04
+        ],
+        "burn_time_min": 25.2,
+        "initial_o2_pct_by_vol": 19.1,
+        "final_o2_pct_by_vol": 18.2
+       },
+       {
+        "sample": "M9",
+        "thickness_mm": 3,
+        "width_cm": 1.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         14
+        ],
+        "spread_rate_mm_s": [
+         0.025
+        ],
+        "burn_time_min": 16.8,
+        "initial_o2_pct_by_vol": 18,
+        "final_o2_pct_by_vol": 17.6
+       },
+       {
+        "sample": "M10",
+        "thickness_mm": 4,
+        "width_cm": 1.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         15,
+         10
+        ],
+        "spread_rate_mm_s": [
+         0.0373,
+         0.03
+        ],
+        "burn_time_min": 30.5,
+        "initial_o2_pct_by_vol": 20.1,
+        "final_o2_pct_by_vol": 18.6
+       },
+       {
+        "sample": "M11",
+        "thickness_mm": 5,
+        "width_cm": 1.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         21,
+         15,
+         13
+        ],
+        "spread_rate_mm_s": [
+         0.048,
+         0.028,
+         0.022
+        ],
+        "burn_time_min": 28.5,
+        "initial_o2_pct_by_vol": 20,
+        "final_o2_pct_by_vol": 18.5
+       },
+       {
+        "sample": "M12",
+        "thickness_mm": 2,
+        "width_cm": 2.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         12,
+         10
+        ],
+        "spread_rate_mm_s": "Not tracked",
+        "burn_time_min": 16.2,
+        "initial_o2_pct_by_vol": 21.7,
+        "final_o2_pct_by_vol": 20.4
+       },
+       {
+        "sample": "M13",
+        "thickness_mm": 4,
+        "width_cm": 2.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         6,
+         5,
+         4
+        ],
+        "spread_rate_mm_s": [
+         0.047,
+         0.035,
+         0.033
+        ],
+        "burn_time_min": 20.5,
+        "initial_o2_pct_by_vol": 20.8,
+        "final_o2_pct_by_vol": 19
+       },
+       {
+        "sample": "M14",
+        "thickness_mm": 2,
+        "width_cm": 2.2,
+        "sides_burning": 1,
+        "flow_cms": [
+         15,
+         14,
+         10
+        ],
+        "spread_rate_mm_s": [
+         0.0624,
+         0.055,
+         0.0353
+        ],
+        "burn_time_min": 15.4,
+        "initial_o2_pct_by_vol": 22.2,
+        "final_o2_pct_by_vol": 21.6
+       },
+       {
+        "sample": "M15",
+        "thickness_mm": 4,
+        "width_cm": 2.2,
+        "sides_burning": 1,
+        "flow_cms": [
+         20
+        ],
+        "spread_rate_mm_s": [
+         0.045
+        ],
+        "burn_time_min": 22.0,
+        "initial_o2_pct_by_vol": 21,
+        "final_o2_pct_by_vol": 20
+       },
+       {
+        "sample": "M16",
+        "thickness_mm": 1,
+        "width_cm": 2.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         5,
+         3,
+         2
+        ],
+        "spread_rate_mm_s": [
+         0.144,
+         0.1309,
+         0.1062
+        ],
+        "burn_time_min": 8.4,
+        "initial_o2_pct_by_vol": 19.2,
+        "final_o2_pct_by_vol": 18.7
+       },
+       {
+        "sample": "M17",
+        "thickness_mm": 2,
+        "width_cm": 2.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         5,
+         4,
+         3
+        ],
+        "spread_rate_mm_s": [
+         0.053,
+         0.042,
+         0.026
+        ],
+        "burn_time_min": 30.7,
+        "initial_o2_pct_by_vol": 18.8,
+        "final_o2_pct_by_vol": 17.1
+       },
+       {
+        "sample": "M18",
+        "thickness_mm": 3,
+        "width_cm": 2.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         10,
+         8
+        ],
+        "spread_rate_mm_s": [
+         0.026,
+         0.013
+        ],
+        "burn_time_min": 25.5,
+        "initial_o2_pct_by_vol": 17.9,
+        "final_o2_pct_by_vol": 16.8
+       },
+       {
+        "sample": "M19",
+        "thickness_mm": 4,
+        "width_cm": 2.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         10,
+         6
+        ],
+        "spread_rate_mm_s": [
+         0.027,
+         0.0159
+        ],
+        "burn_time_min": 25.7,
+        "initial_o2_pct_by_vol": 19,
+        "final_o2_pct_by_vol": 17.4
+       },
+       {
+        "sample": "M20",
+        "thickness_mm": 5,
+        "width_cm": 2.2,
+        "sides_burning": 2,
+        "flow_cms": [
+         10
+        ],
+        "spread_rate_mm_s": [
+         0.012
+        ],
+        "burn_time_min": 16.5,
+        "initial_o2_pct_by_vol": 18,
+        "final_o2_pct_by_vol": 17.4
+       }
+      ]
+     },
+     "quote": "A total of 20 PMMA flat samples were burnt during the BASS–II experimentation (Table 5.1). The sample thickness varied from 1 to 5 mm thick.",
+     "note": "The table prints widths of 1.2 and 2.2 cm; the text of 5.3 says the samples were 'either 1 or 2 cm wide' and that 'The airflow was always opposed.' No pressure is stated in 5.3. 'Not tracked' is printed for M6 and M12. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "BASS2TM.thin_pmma_spread_vs_1g",
+     "type": "published_result",
+     "text": "In the BASS-II opposed-flow tests on 100-µm-thick PMMA sheet, the highest spread rate in microgravity was 2.2 mm/s, with the opposing flow velocity varied from about 40 cm/s to about 1 cm/s; the average spread rate of the normal-gravity (downward) experiments, run at 101 kPa and 21 percent O2, was 2.0 mm/s. The report states the two are about the same.",
+     "where": "2.3.5, p. 38 (PDF page 46) and 2.3.7 Results and Discussion, pp. 40-41 (PDF pages 48-49)",
+     "variables": [
+      "spread_rate_mm_s",
+      "flow_cms"
+     ],
+     "values": {
+      "highest_spread_rate_mm_s_microgravity": 2.2,
+      "average_spread_rate_mm_s_normal_gravity": 2.0,
+      "opposing_flow_as_written": "about 40 cm/s to about 1 cm/s",
+      "pressure_kpa_normal_gravity": 101,
+      "o2_pct_normal_gravity": 21
+     },
+     "quote": "The highest spread rate in the microgravity environment, 2.2 mm/s, is about the same as the downward spread rate.",
+     "note": "The 101 kPa and 21 percent O2 are stated for the downward (normal-gravity) experiments only. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "BASS2TM.rod_ignition_delay",
+     "type": "published_result",
+     "text": "In the BASS-II tests on PMMA rods ignited with a hot wire, ignition generally occurred at a forced flow of 5 cm/s; at higher O2 concentrations ignition occurred within approximately 40 s, below an initial O2 concentration of 16 percent the ignition delay time increased significantly, and larger rods took longer to ignite, especially at lower O2 concentrations (up to 230 s).",
+     "where": "6.1.3, p. 67 (PDF page 75) and 6.1.4.1 Ignition Delay Time, p. 68 (PDF page 76)",
+     "variables": [
+      "ignition_time_s",
+      "o2_pct"
+     ],
+     "values": {
+      "ignition_delay_s_higher_o2_as_written": "within approximately 40 s",
+      "initial_o2_pct_below_which_delay_increased": 16,
+      "ignition_delay_s_larger_rods_up_to": 230,
+      "flow_cms_at_ignition": 5
+     },
+     "quote": "At higher O2 concentrations, ignition occurred within approximately 40 s. Below an initial O2 concentration of 16 percent, the ignition delay time increased significantly.",
+     "note": "The report states that the igniter was positioned and activated manually, so there is some inherent scatter in the ignition time. The delay is defined in item BASS2TM.igndelay. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "BASS2TM.rod_ignition_limit",
+     "type": "published_result",
+     "text": "In the BASS-II PMMA rod tests, below an initial O2 concentration of about 14.5 percent a sustained ignition could not be achieved, although flames were observed while the igniter was on; at very low O2, ignition times up to 500 s did not give a sustained flame with the initial flow varied from 2 to 10 cm/s. Flames ignited at a higher O2 survived to final O2 concentrations as low as 13.6 percent.",
+     "where": "6.1.3, p. 67 (PDF page 75) and 6.1.4.1 Ignition Delay Time, p. 68 (PDF page 76)",
+     "variables": [
+      "o2_pct",
+      "ignition_time_s"
+     ],
+     "values": {
+      "initial_o2_pct_ignition_limit_approx": 14.5,
+      "ignition_time_s_tried_up_to": 500,
+      "initial_flow_cms_tried": [
+       2,
+       10
+      ],
+      "final_o2_pct_lowest_after_ignition_at_higher_o2": 13.6
+     },
+     "quote": "Below an initial O2 concentration of ~14.5 percent O2, a sustained ignition could not be achieved even though flames were observed when the igniter was on",
+     "note": "The 13.6 percent here is a final O2 reading of flames ignited at a higher O2 (p. 68). Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "BASS2TM.rod_quench_flame_aspect",
+     "type": "published_result",
+     "text": "In the BASS-II PMMA rod quenching test at the lowest O2 (rod radius 0.476 cm), with the O2 going from an initial setting of 14.8 percent to a final reading of 13.6 percent (by volume) and the flow decreased in steps, the rod regression reached an apparently steady-state rate of 0.0385 mm/s and the flame aspect ratio (L/W) decreased incrementally to 0.5 at extinction.",
+     "where": "6.1.4.2 Quenching Extinction, pp. 69-70 (PDF pages 77-78); Figure 6.4",
+     "variables": [
+      "o2_pct",
+      "flow_cms"
+     ],
+     "values": {
+      "flame_aspect_ratio_l_over_w_at_extinction": 0.5,
+      "rod_regression_rate_mm_s": 0.0385,
+      "rod_radius_cm": 0.476,
+      "initial_o2_pct_by_vol_setting": 14.8,
+      "final_o2_pct_by_vol_reading": 13.6
+     },
+     "quote": "The aspect ratio (L/W) decreases incrementally to 0.5 at extinction, indicating a hemispherical flame at the quenching limit.",
+     "note": "The report adds that the flame length stopped growing at the 2- to 1.5-cm/s flow change and that quenching occurred over 100 s after the last flow change. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "BASS2TM.extvel",
+     "type": "published_result",
+     "text": "In BASS-II tests on thin PMMA sheets with the opposed flow reduced until the flame went out, the extinction velocities were about 1 cm/s for 100, 200 and 300 µm and about 1.5 cm/s for 400 µm thickness; the report notes significant uncertainties in these values because the flow calibration at such low velocity has high error bars.",
+     "where": "2.1.2.1 Extinction Velocity, p. 13 (PDF page 21); the same text in 2.2.5, p. 23 (PDF page 31)",
+     "variables": [
+      "flow_cms",
+      "sample_thickness_mm"
+     ],
+     "values": {
+      "extinction_flow_cms_100_um": "about 1",
+      "extinction_flow_cms_200_um": "about 1",
+      "extinction_flow_cms_300_um": "about 1",
+      "extinction_flow_cms_400_um": "about 1.5"
+     },
+     "quote": "the extinction velocities are found to be about 1 cm/s for 100, 200, and 300 μm and about 1.5 cm/s for 400 μm.",
+     "note": "The passage states no oxygen and no pressure for these tests. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "BASS2TM.extvel_o2",
+     "type": "published_result",
+     "text": "At a lower O2 level of about 16 percent, the BASS-II extinction velocities over thin PMMA were about 2.6 cm/s for 100 µm (sample 20 mm wide) and about 4 cm/s for 200 µm (sample 10 mm wide); the report states that the extinction velocity significantly increases as the O2 level decreases, and that the data at the lower O2 level are few.",
+     "where": "2.1.2.1 Extinction Velocity, p. 15 (PDF page 23); the same text in 2.2.5, p. 25",
+     "variables": [
+      "flow_cms",
+      "o2_pct"
+     ],
+     "values": {
+      "o2_pct_as_written": "about 16",
+      "extinction_flow_cms_100_um": "about 2.6",
+      "extinction_flow_cms_200_um": "about 4",
+      "sample_width_mm_100_um": 20,
+      "sample_width_mm_200_um": 10
+     },
+     "quote": "Tests were also conducted at a lower O2 level of about 16 percent for two different thicknesses and the extinction velocities were found to be about 2.6 cm/s for 100 μm and about 4 cm/s for 200 μm.",
+     "note": "The report's words on the amount of data: 'Even though there is insufficient data at the lower O2 level, it is clear that the extinction velocity significantly increases as the O2 level' decreases. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "BASS2TM.extvel_model",
+     "type": "published_result",
+     "text": "Computed by the authors, not a measurement: in the investigators' computational model of opposed-flow flame spread over 100-µm-thick PMMA sheet, the extinction velocity is 3.5 cm/s at 16 percent O2 as opposed to 1.5 cm/s at 21 percent O2; the computations at 21 percent use a 21/79 O2/N2 mixture at 1 atm.",
+     "where": "2.2.6 Computational Results, pp. 25-26 (PDF pages 33-34); Figure 2.12",
+     "variables": [
+      "flow_cms",
+      "o2_pct"
+     ],
+     "values": {
+      "extinction_flow_cms_at_16_percent_o2": 3.5,
+      "extinction_flow_cms_at_21_percent_o2": 1.5
+     },
+     "quote": "The extinction velocity is found to be 3.5 cm/s as opposed to 1.5 cm/s at 21 percent O2.",
+     "note": "The report says the computed values closely match the experimental results (Figure 2.12 caption); the measured values are in BASS2TM.extvel and BASS2TM.extvel_o2. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "computed_by_authors",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "BASS2TM.rod_spread_limit",
+     "type": "published_result",
+     "text": "In the BASS-II opposed-flow tests on black PMMA rods (6.35, 9.525 and 12.7 mm diameter), flame spread was observed at O2 concentrations as low as 17.5 percent in microgravity, while in normal gravity flame spread was not observed below 19 percent; the report attributes this probably to the lower opposed-flow velocity in the microgravity tests.",
+     "where": "4.1.2 Results, p. 50 (PDF page 58); Table 4.2, p. 48",
+     "variables": [
+      "o2_pct",
+      "spread_rate_mm_s"
+     ],
+     "values": {
+      "min_o2_pct_flame_spread_observed_microgravity": 17.5,
+      "o2_pct_below_which_no_spread_normal_gravity": 19
+     },
+     "quote": "While in microgravity, flame spread was observed at O2 concentrations as low as 17.5 percent, in normal gravity, flame spread was not observed below 19 percent.",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "BASS2TM.rod_min_o2",
+     "type": "published_result",
+     "text": "For the BASS-II concurrent-flow PMMA rod tests, the report gives the minimum O2 concentration of the flammability boundary as 13.5 percent O2 at a stretch rate a of 8 to 12 s-1, lower than the upward flame spread limit of 15.4 percent O2 observed in normal gravity with an additional 4-cm/s forced flow.",
+     "where": "6.1.4.4 Flammability Boundary, p. 76 (PDF page 84); Figures 6.9 and 6.10",
+     "variables": [
+      "o2_pct"
+     ],
+     "values": {
+      "min_o2_pct_flammability_boundary": 13.5,
+      "stretch_rate_per_s_range": [
+       8,
+       12
+      ],
+      "upward_spread_limit_o2_pct_normal_gravity": 15.4
+     },
+     "quote": "The minimum O2 concentration of 13.5 percent O2 at a of 8 to 12 s–1 is significantly lower than the observed upward flame spread limit of 15.4 percent O2",
+     "note": "Different value in another document: ICES-2019-BASS2 (item ICES19.limits) prints 13.6% O2 as the minimum oxygen concentration in the flammability boundary from the concurrent rod tests; this report prints 13.5 percent. Both are kept as printed. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
+    },
+    {
+     "id": "BASS2TM.blowoff",
+     "type": "published_result",
+     "text": "The report concludes for the BASS-II PMMA rod tests that blowoff extinction limits from the ISS experiments agree well with the limits of 5.18-s drop tests in the Zero Gravity Research Facility.",
+     "where": "6.1.6 Conclusions, p. 89 (PDF page 97)",
+     "variables": [
+      "flow_cms"
+     ],
+     "values": {
+      "drop_test_duration_s": 5.18
+     },
+     "quote": "Blowoff extinction limits from the ISS experiments agree well with Zero Gravity Research Facility 5.18-s drop test limits.",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25"
+     ]
     }
    ],
    "note": "Listed in the publications field of PSI-25 as 'BASS-II Summary Report'."
@@ -3937,6 +5109,189 @@
      "text": "Knowledge stated as needed: low-g combustion particulate, for the design of smoke detectors.",
      "where": "I. Introduction, p. 2",
      "quote": "direct knowledge of low-g combustion particulate is needed for more confident design of smoke detectors for spacecraft"
+    },
+    {
+     "id": "SAME2.table1",
+     "type": "published_result",
+     "text": "SAME-2 moment-instrument results for baseline runs (Table 1, diameters in micrometers): for Kapton, lampwick, silicone, Teflon and Pyrell, unaged and aged 720 s, the geometric mean diameter (0.042 to 0.293 µm), the count mean diameter, the diameter of average mass and the geometric standard deviation. The baseline air flow rate was 8 cm/s.",
+     "where": "II.C Experimental Results and Table 1, p. 7",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "rows": [
+       {
+        "material": "Kapton",
+        "aging": "Unaged",
+        "geometric_mean_diameter_um": 0.042,
+        "count_mean_diameter_um": 0.056,
+        "diameter_of_average_mass_um": 0.101,
+        "sigma_g": 2.154
+       },
+       {
+        "material": "Kapton",
+        "aging": "Aged 720 s",
+        "geometric_mean_diameter_um": 0.089,
+        "count_mean_diameter_um": 0.109,
+        "diameter_of_average_mass_um": 0.161,
+        "sigma_g": 1.872
+       },
+       {
+        "material": "Lampwick",
+        "aging": "Unaged",
+        "geometric_mean_diameter_um": "0.090",
+        "count_mean_diameter_um": 0.128,
+        "diameter_of_average_mass_um": 0.258,
+        "sigma_g": 2.312
+       },
+       {
+        "material": "Lampwick",
+        "aging": "Aged 720 s",
+        "geometric_mean_diameter_um": 0.229,
+        "count_mean_diameter_um": 0.276,
+        "diameter_of_average_mass_um": 0.398,
+        "sigma_g": 1.834
+       },
+       {
+        "material": "Silicone",
+        "aging": "Unaged",
+        "geometric_mean_diameter_um": 0.128,
+        "count_mean_diameter_um": 0.196,
+        "diameter_of_average_mass_um": 0.465,
+        "sigma_g": "2.530"
+       },
+       {
+        "material": "Silicone",
+        "aging": "Aged 720 s",
+        "geometric_mean_diameter_um": 0.269,
+        "count_mean_diameter_um": 0.355,
+        "diameter_of_average_mass_um": 0.619,
+        "sigma_g": 2.108
+       },
+       {
+        "material": "Teflon",
+        "aging": "Unaged",
+        "geometric_mean_diameter_um": 0.081,
+        "count_mean_diameter_um": 0.101,
+        "diameter_of_average_mass_um": "0.170",
+        "sigma_g": 2.198
+       },
+       {
+        "material": "Teflon",
+        "aging": "Aged 720 s",
+        "geometric_mean_diameter_um": "0.070",
+        "count_mean_diameter_um": 0.105,
+        "diameter_of_average_mass_um": 0.232,
+        "sigma_g": 2.442
+       },
+       {
+        "material": "Pyrell",
+        "aging": "Unaged",
+        "geometric_mean_diameter_um": 0.149,
+        "count_mean_diameter_um": 0.204,
+        "diameter_of_average_mass_um": 0.384,
+        "sigma_g": 2.211
+       },
+       {
+        "material": "Pyrell",
+        "aging": "Aged 720 s",
+        "geometric_mean_diameter_um": 0.293,
+        "count_mean_diameter_um": 0.359,
+        "diameter_of_average_mass_um": 0.539,
+        "sigma_g": 1.892
+       }
+      ]
+     },
+     "quote": "Diameter results for baseline runs for each material (Diameters are in micrometers).",
+     "note": "Numbers with trailing zeros are held as printed text. Different values for the same materials in other documents, kept apart and as printed: Kapton geometric mean 0.042 µm unaged here (AIAA-2012-3536 Table 1, SAME-2), 47 nm on the 'SAME-1&R Results' slide (NTRS-20150010172), 0.080 µm in the SAME-1 Table 1 (AIAA-2009-SAME1); Kapton count mean 0.056 µm here, arithmetic mean 62 nm on the slide, 0.105 µm in AIAA-2009-SAME1 and 114 nm count mean in AIAA-2008-806 Table 1. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-101"
+     ]
+    },
+    {
+     "id": "SAME2.abstract_range",
+     "type": "published_result",
+     "text": "The SAME-2 paper reports that the majority of the average smoke particle sizes were in the 200 nm to 400 nm range, with the quiescent cases producing some cases with substantially larger particles.",
+     "where": "Abstract, p. 1",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "average_particle_size_nm_range": [
+       200,
+       400
+      ]
+     },
+     "quote": "the majority of the average smoke particle sizes were found to be in the 200 nm to 400 nm range",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-101"
+     ]
+    },
+    {
+     "id": "SAME2.zeroflow30",
+     "type": "published_result",
+     "text": "In SAME-2, for all of the materials the diameter of average mass was 30 % to 40 % larger for the zero-flow tests than for the flow tests; the zero flow condition was examined in 11 tests by modifying the valve operation.",
+     "where": "II.C.4 Impact of flow on particle morphology, p. 11",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "diameter_of_average_mass_percent_larger_range": [
+       30,
+       40
+      ],
+      "zero_flow_tests": 11
+     },
+     "quote": "the diameter of average mass is 30 % to 40 % larger for the zero-flow tests compared to the flow tests",
+     "note": "The conclusions of the same paper (item SAME2.zeroflow23) print '2 to 3 times larger' for zero flow against the nominal 8 cm/s; both are kept as printed. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-101"
+     ]
+    },
+    {
+     "id": "SAME2.zeroflow23",
+     "type": "published_result",
+     "text": "The conclusions of the SAME-2 paper state that the zero flow conditions produced smoke particles that were 2 to 3 times larger than those produced at the nominal 8 cm/s flow rate; the sentence does not name the diameter measure.",
+     "where": "III. Conclusions, p. 12",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "size_ratio_zero_flow_to_nominal_range": [
+       2,
+       3
+      ],
+      "nominal_flow_cms": 8
+     },
+     "quote": "The zero flow conditions produced smoke particles that were 2 to 3 times larger than those produced at the nominal 8 cm/s flow rate.",
+     "note": "Section II.C.4 of the same paper (item SAME2.zeroflow30) prints '30 % to 40 % larger' for the diameter of average mass; both are kept as printed. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-101"
+     ]
+    },
+    {
+     "id": "SAME2.concentrations",
+     "type": "published_result",
+     "text": "For typical SAME-2 runs the smoke particle concentrations were a few million particles per cc and the mass concentrations 2 to 15 mg/m3, with some runs having fewer particles.",
+     "where": "II.C Experimental Results, p. 7",
+     "values": {
+      "particle_concentration_as_written": "a few million particles / cc",
+      "mass_concentration_mg_m3_range": [
+       2,
+       15
+      ]
+     },
+     "quote": "the particle concentrations were a few million particles / cc and the mass concentrations were 2 to 15 mg/m3",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-101"
+     ]
     }
    ]
   },
@@ -4049,6 +5404,126 @@
      "text": "What the droplet extinction diameter is said to measure.",
      "where": "1 Introduction, p. 2",
      "quote": "the droplet extinction diameter provides a stringent measurement of chemical-kinetic characteristic times"
+    },
+    {
+     "id": "CFI14.o2series",
+     "type": "published_result",
+     "text": "For FLEX n-decane droplets in microgravity at 0.5 atm pressure (R377: 4.03 mm, 21% O2; R374: 3.79 mm, 25% O2; R379: 3.86 mm, 17% O2; R383: 3.14 mm, 14% O2), the authors summarize that reducing the ambient oxygen concentration leads to earlier hot and cool flame extinctions: the R377 flame extinguished abruptly at around 14.6 seconds, R379 had radiative extinction at 7 seconds, and the R374 droplet micro-exploded 26 seconds after ignition.",
+     "where": "3.1 N-decane Results, pp. 3-4; Figure 1 caption",
+     "variables": [
+      "o2_pct",
+      "burning_rate_mm2_s"
+     ],
+     "values": {
+      "rows": [
+       {
+        "sample": "R377",
+        "initial_diameter_mm": 4.03,
+        "o2_pct": 21,
+        "n2_pct": 79,
+        "burning_rate_constant_mm2_s_first_stage": 0.41,
+        "burning_rate_constant_mm2_s_second_stage": 0.33,
+        "flame_extinction_time_s_as_written": "around 14.6 seconds"
+       },
+       {
+        "sample": "R374",
+        "initial_diameter_mm": 3.79,
+        "o2_pct": 25,
+        "n2_pct": 75,
+        "burning_rate_constant_mm2_s": 0.52,
+        "micro_explosion_time_s_after_ignition": 26
+       },
+       {
+        "sample": "R379",
+        "initial_diameter_mm": 3.86,
+        "o2_pct": 17,
+        "n2_pct": 83,
+        "burning_rate_constant_mm2_s_first_stage": 0.31,
+        "burning_rate_constant_mm2_s_second_stage": 0.27,
+        "radiative_extinction_time_s": 7
+       },
+       {
+        "sample": "R383",
+        "initial_diameter_mm": 3.14,
+        "o2_pct": 14,
+        "n2_pct": 96,
+        "burning_rate_constant_mm2_s_hot_flame": 0.29,
+        "burning_rate_constant_mm2_s_cool_flame": 0.25
+       }
+      ]
+     },
+     "quote": "reducing the ambient oxygen concentration leads to earlier hot and cool flame extinctions.",
+     "note": "The Figure 1 caption prints R383 as '14%O2 and 96%N2' (as printed). The paper names the tests as part of FLEX; the document entry notes that the journal version is listed in PSI-39. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-69"
+     ]
+    },
+    {
+     "id": "CFI14.helium",
+     "type": "published_result",
+     "text": "For FLEX n-octane droplets in microgravity at 1 atm and an oxygen mole fraction held at 0.21, with helium replacing nitrogen at 0, 15, 50 and 75% by volume (tests R298, R694, R698, R707), the burning rate constants of the two stages rose with helium (0.48 and 0.38, 0.54 and 0.43, 0.63 and 0.53 mm2/s for the first three), the burning times were considerably shortened, cool flame extinction in R298 occurred at 30.5 seconds, and at 75% helium (R707, D0 2.49 mm) first stage burning was almost eliminated.",
+     "where": "3.2 N-octane Results, pp. 5-6; Figure 2 caption",
+     "variables": [
+      "he_pct",
+      "burning_rate_mm2_s"
+     ],
+     "values": {
+      "rows": [
+       {
+        "sample": "R298",
+        "initial_diameter_mm": 3.6,
+        "he_pct": 0,
+        "burning_rate_constant_mm2_s_hot_flame": 0.48,
+        "burning_rate_constant_mm2_s_cool_flame": 0.38,
+        "cool_flame_extinction_time_s": 30.5
+       },
+       {
+        "sample": "R694",
+        "initial_diameter_mm": 3.37,
+        "he_pct": 15,
+        "burning_rate_constant_mm2_s_first_stage": 0.54,
+        "burning_rate_constant_mm2_s_second_stage": 0.43
+       },
+       {
+        "sample": "R698",
+        "initial_diameter_mm": 3.6,
+        "he_pct": 50,
+        "burning_rate_constant_mm2_s_first_stage": 0.63,
+        "burning_rate_constant_mm2_s_second_stage": 0.53
+       },
+       {
+        "sample": "R707",
+        "initial_diameter_mm": 2.49,
+        "he_pct": 75
+       }
+      ]
+     },
+     "quote": "When helium dilution was increased to 75% by volume in test R707 for D0 of 2.49 mm first stage burning is almost eliminated",
+     "note": "R298 rates are printed as hot-flame and cool-flame burning rates; R694 and R698 as first and second stage. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-69"
+     ]
+    },
+    {
+     "id": "CFI14.scaling",
+     "type": "published_result",
+     "text": "The paper concludes that the cool flame extinction diameters of the n-alkane droplets vary as oxygen molar concentration to the power -3/4 for oxygen/nitrogen mixtures; when nitrogen is replaced by either helium or carbon dioxide the extinction diameter does not follow this trend.",
+     "where": "4 Concluding Remarks, p. 9",
+     "variables": [
+      "extinction_diameter_mm",
+      "o2_pct"
+     ],
+     "values": {
+      "exponent_of_oxygen_molar_concentration": "-3/4"
+     },
+     "quote": "The cool flame extinction diameters vary as oxygen molar concentration to the power -3/4 for oxygen/nitrogen mixture.",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-69"
+     ]
     }
    ],
    "note": "Conference version of a paper listed in the publications field of PSI-39; the journal version was not reached."
@@ -4815,6 +6290,798 @@
      "where": "4.0 Flammability Assessment Guidelines, page 4; PDF page 13",
      "quote": "When the results of the flammability configuration analysis are inconclusive, the hardware configuration (or a simulated configuration with acceptable fidelity) may be tested for flammability to determine acceptability.",
      "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    }
+   ]
+  },
+  {
+   "id": "NTRS-20150008962",
+   "kind": "paper",
+   "title": "Concurrent flame growth, spread and extinction over composite fabric samples in low speed purely forced flow in microgravity (Zhao, T'ien, Ferkul, Olson)",
+   "issuer": "9th U.S. National Combustion Meeting, Cincinnati, Ohio, May 17-20, 2015; copy on the NASA Technical Reports Server",
+   "version": "2015 (NTRS 20150008962; 9 pages)",
+   "url": "https://ntrs.nasa.gov/citations/20150008962",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20150008962/downloads/20150008962.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record (as recorded by the collecting agent): distribution PUBLIC; copyright determination PUBLIC_USE_PERMITTED. The PDF prints no licence. Conference paper: quotes of 25 words or fewer.",
+   "items": [
+    {
+     "id": "ZHAO15.quench_speed",
+     "type": "published_result",
+     "text": "In BASS and BASS-II tests on thin cotton-fiberglass (SIBAL) fabric in concurrent, purely forced flow in microgravity, at ambient O2 molar fractions of 16% to 21% and 1 atm, low-speed flame quenching extinction limits were found by decreasing the flow during some tests: the quenching speeds were between 1 and 5 cm/s, higher in lower oxygen.",
+     "where": "Abstract, p. 1; 2 Experiment, p. 2; 3 Results and Discussion and Figure 7, pp. 3-7",
+     "variables": [
+      "flow_cms",
+      "o2_pct"
+     ],
+     "values": {
+      "quenching_flow_cms_low": 1,
+      "quenching_flow_cms_high": 5
+     },
+     "quote": "The quenching speeds were found to be between 1 and 5 cm/s with higher speed in lower oxygen atmosphere.",
+     "note": "The paper reports 27 BASS-II fabric tests, including 6 quenching tests, and four selected BASS tests (p. 3). Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-25",
+      "PSI-26"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ICES-2020-407",
+   "kind": "paper",
+   "title": "Effects of Confinement on Flame Spread in Microgravity (Li, Liao, Ferkul, Johnston, Bunnell)",
+   "issuer": "International Conference on Environmental Systems (the NTRS record names the 50th ICES, July 2021)",
+   "version": "ICES-2020-407 (NTRS 20205004657; 10 pages)",
+   "url": "https://ntrs.nasa.gov/citations/20205004657",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20205004657/downloads/ICES-2020-407-final.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record (as recorded by the collecting agent): distribution PUBLIC; copyright determination GOV_PERMITTED. The PDF prints no licence. Conference paper: quotes of 25 words or fewer.",
+   "items": [
+    {
+     "id": "ICES20407.optimal_baffle",
+     "type": "published_result",
+     "text": "In ISS tests in microgravity of concurrent, purely forced flow flame spread over thin SIBAL cotton-fiberglass fabric between two parallel baffles, with the glovebox at the ISS ambient values of 1.0 atm and ~22% O2, at an imposed flow of 7 cm/s the flame length first increased and then decreased as the inter-baffle distance D was reduced from no baffles (equivalent to D = 7.6 cm) to D = 2.0 cm; the maximum flame length occurred at around D = 4.0 cm, where the spread rate also reached its maximum for all baffle types.",
+     "where": "II, p. 4; III.B Effects of Flow Confinement, pp. 6-7 (PDF pages 6-7); Conclusion 3, p. 9",
+     "variables": [
+      "flow_cms",
+      "spread_rate_mm_s"
+     ],
+     "values": {
+      "baffle_distance_cm_max_flame_length": 4.0,
+      "baffle_distance_cm_max_spread_rate": 4.0,
+      "no_baffle_equivalent_distance_cm": 7.6,
+      "imposed_flow_cms": 7
+     },
+     "quote": "The maximum flame length occurs at around D = 4.0 cm.",
+     "note": "The confinement tests used the BASS flow duct retrofitted with baffles; the paper is not listed in a PSI record of this catalogue. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "ICES20407.no_ignition_D1",
+     "type": "published_result",
+     "text": "In ISS tests in microgravity of concurrent, purely forced flow flame spread over thin SIBAL cotton-fiberglass fabric between two parallel baffles, with the glovebox at the ISS ambient values of 1.0 atm and ~22% O2 (imposed flows of 5 to 28 cm/s), ignition was not achieved for any baffle type at an inter-baffle distance of D = 1.0 cm.",
+     "where": "II, p. 4; III.B Effects of Flow Confinement, p. 7 (PDF page 7)",
+     "variables": [
+      "flow_cms"
+     ],
+     "values": {
+      "baffle_distance_cm": 1.0
+     },
+     "quote": "At D = 1.0 cm, ignition was not achieved for any baffle types.",
+     "note": "Two statements of the same paper differ: p. 6 says that at D = 1.0 cm 'the flame quenches immediately after ignition energy is removed', and the abstract says the flame 'fails to ignite or extinguishes' at small distances (~1 cm). All are kept as printed. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "ICES20407.steady_vs_growing",
+     "type": "published_result",
+     "text": "In ISS tests in microgravity of concurrent, purely forced flow flame spread over thin SIBAL cotton-fiberglass fabric between two parallel baffles, with the glovebox at the ISS ambient values of 1.0 atm and ~22% O2, when the imposed flow velocity was less than 15 cm/s steady state flame spread was observed for most of the tests; above 15 cm/s the flame continually grew and did not reach a steady state, except when the inter-baffle distance was small (< 3 cm). The paper notes that this observation might be specific to the tested sample length.",
+     "where": "II, pp. 4-5 (PDF page 5); Conclusion 2, p. 9",
+     "variables": [
+      "flow_cms"
+     ],
+     "values": {
+      "flow_cms_threshold": 15,
+      "small_baffle_distance_cm_as_written": "< 3"
+     },
+     "quote": "the flame continually grows and does not reach a steady state except when the inter-baffle distance is small (< 3 cm)",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    }
+   ]
+  },
+  {
+   "id": "ASGSR-2025-LUCI",
+   "kind": "paper",
+   "title": "Lunar Combustion Investigation: Flammability Results from a Rotating Sounding Rocket, presentation slides (Ferkul, Johnston, Kralik, Liao)",
+   "issuer": "2025 Annual Meeting of the American Society for Gravitational and Space Research, Phoenix, Arizona, December 3-6, 2025",
+   "version": "2025 (NTRS 20250010653; slides; PDF page = slide number)",
+   "url": "https://ntrs.nasa.gov/citations/20250010653",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20250010653/downloads/ASGSR%202025-LUCI-Ferkul-Presentation-v2-20250010653.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record (as recorded by the collecting agent): distribution PUBLIC; copyright determination GOV_PERMITTED. The slides print no licence. Quotes of 25 words or fewer.",
+   "items": [
+    {
+     "id": "LUCI25.sibal_spread",
+     "type": "published_result",
+     "text": "In the Lunar Combustion Investigation (LUCI) on a spinning New Shepard sounding rocket, where centrifugal acceleration gave simulated Lunar gravity and the samples burned in air at normal pressure, a 5-cm-wide SIBAL cotton-fiberglass fabric burning downward had a flame base spread rate of .92 mm/s and a flame tip spread rate of 1.1 mm/s; the spread rates of char front, flame base and flame tip were all linear (steady state spread).",
+     "where": "Slide 19 'LUCI: SIBAL fabric'; sample on slide 4; burning direction on slide 16; flight on slide 12",
+     "variables": [
+      "spread_rate_mm_s"
+     ],
+     "values": {
+      "flame_base_spread_rate_mm_s": ".92",
+      "flame_tip_spread_rate_mm_s": 1.1
+     },
+     "quote": "Flame base spread rate = .92 mm/s.",
+     "note": "The value is printed '.92'. The slides read state no oxygen value for this sample. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "LUCI25.pmma_rod_spread",
+     "type": "published_result",
+     "text": "In the Lunar Combustion Investigation (LUCI) on a spinning New Shepard sounding rocket, where centrifugal acceleration gave simulated Lunar gravity and the samples burned in air at normal pressure, a 4-mm-diameter PMMA rod burning upward had an approximately linear flame tip spread, with a flame spread rate of 1.5 mm/s; the flame base spread rate was not constant and steady spread was not achieved (total base spread of ~6cm until extinction), and the chamber O2 decreased from 20% to 14.3%.",
+     "where": "Slides 20-22 'LUCI: PMMA Sample'; sample on slide 4; burning direction on slide 16",
+     "variables": [
+      "spread_rate_mm_s",
+      "o2_pct"
+     ],
+     "values": {
+      "flame_spread_rate_mm_s": 1.5,
+      "total_base_spread_until_extinction_cm_as_written": "~6cm",
+      "chamber_o2_pct_start": 20,
+      "chamber_o2_pct_lowest": 14.3
+     },
+     "quote": "Flame spread rate = 1.5 mm/s.",
+     "note": "Slide 21 prints 'Flame tip spread is approximately linear.' above 'Flame spread rate = 1.5 mm/s.' and does not say more about which spread the value refers to. Slide 22: the O2 rose back to 15.8% after a decrease in gravity at 125 s. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    }
+   ]
+  },
+  {
+   "id": "NTRS-20150023467",
+   "kind": "paper",
+   "title": "Material Ignition and Suppression Test (MIST) in Space Exploration Atmospheres, Summary of Research (Fernandez-Pello, principal investigator)",
+   "issuer": "University of California, Berkeley; final summary of research of NASA grant NNX10AE01G (1 January 2010 - 31 May 2013)",
+   "version": "2013 (NTRS 20150023467; grantee report, 14 PDF pages)",
+   "url": "https://ntrs.nasa.gov/citations/20150023467",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20150023467/downloads/20150023467.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record (as recorded by the collecting agent): distribution PUBLIC; copyright determination PUBLIC_USE_PERMITTED. The PDF prints no licence. Grantee report, not a NASA report series: quotes of 25 words or fewer.",
+   "items": [
+    {
+     "id": "MIST13.sim_ignition_0g_1g",
+     "type": "published_result",
+     "text": "Numerical simulation, not a measurement: in the MIST project's model of a PMMA sample under an external radiant heat flux of 16 kW/m2, with ambient pressure 100 kPa, oxygen concentration 21% and air flow velocity 0.4 m/s, ignition occurred significantly earlier at 0-g than at 1-g conditions (596 s compared to 774 s).",
+     "where": "Modeling task, report p. 10 (PDF page 11); Figures 12 and 13 captions (PDF page 12)",
+     "variables": [
+      "ignition_time_s"
+     ],
+     "values": {
+      "ignition_time_s_0g": 596,
+      "ignition_time_s_1g": 774,
+      "radiant_heat_flux_kw_m2": 16,
+      "pressure_kpa": 100,
+      "o2_pct": 21,
+      "air_flow_m_s": 0.4
+     },
+     "quote": "ignition occurs significantly earlier at 0-g than at 1-g conditions (596 s compared to 774 s)",
+     "note": "The experimental ignition results of the report are graphs only (no printed values) and were not used. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "simulation",
+     "investigation": null,
+     "relation": "numerical simulation of a NASA-funded project, not a PSI investigation of this catalogue"
+    }
+   ]
+  },
+  {
+   "id": "NCM-2013-FLEX-METHANOL",
+   "kind": "paper",
+   "title": "Methanol Droplet Combustion in Oxygen-Inert Environments in Microgravity (Nayagam, Dietrich, Hicks, Williams)",
+   "issuer": "8th U.S. National Combustion Meeting, May 19-22, 2013, paper 070HE-0303; NASA GRC",
+   "version": "2013 (NTRS 20130014061; GRC-E-DAA-TN9229)",
+   "url": "https://ntrs.nasa.gov/citations/20130014061",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20130014061/downloads/20130014061.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record (as recorded by the collecting agent): distribution PUBLIC; copyright determination PUBLIC_USE_PERMITTED. The PDF prints no licence. Conference paper: quotes of 25 words or fewer.",
+   "items": [
+    {
+     "id": "NCM13.loi",
+     "type": "published_result",
+     "text": "In FLEX tests in microgravity of methanol droplets burning in oxygen-nitrogen-carbon dioxide and oxygen-nitrogen-helium mixtures at 0.7 and 1 atmospheric pressures, the experiments show a limiting oxygen index for methanol in these diluent gases of around 12% to 13% oxygen by volume.",
+     "where": "Abstract, p. 1",
+     "variables": [
+      "o2_pct"
+     ],
+     "values": {
+      "limiting_oxygen_index_o2_pct_by_vol_low": 12,
+      "limiting_oxygen_index_o2_pct_by_vol_high": 13
+     },
+     "quote": "the limiting oxygen index for methanol in these diluent gases is around 12% to 13% oxygen by volume.",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-69"
+     ]
+    },
+    {
+     "id": "NCM13.radiative",
+     "type": "published_result",
+     "text": "In the FLEX methanol droplet tests in microgravity, radiative extinction was generally observed for larger droplets at lower oxygen concentrations, when the flame is large in size and lies farther away from the droplet surface; flame extinctions in both modes (diffusive and radiative) were observed.",
+     "where": "3.3 Flame Extinction, p. 9; Figure 5",
+     "variables": [
+      "extinction_diameter_mm"
+     ],
+     "quote": "this process is generally observed for larger droplets at lower oxygen concentrations when the flame is large in size",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-69"
+     ]
+    },
+    {
+     "id": "NCM13.de_runs",
+     "type": "published_result",
+     "text": "FLEX methanol droplets in microgravity burning at 0.7 atm in 21% O2 with 30% CO2 (run 110, initial diameter 2.83 mm) and with 30% He (run 263, initial diameter 2.67 mm), the remaining diluent being nitrogen in both cases, had extinction diameters of 1.57 mm and 1.42 mm, respectively.",
+     "where": "3.1 Burning Rates, p. 5; Figure 2 caption, p. 6",
+     "variables": [
+      "extinction_diameter_mm",
+      "o2_pct",
+      "co2_pct",
+      "he_pct",
+      "pressure_kpa"
+     ],
+     "values": {
+      "extinction_diameter_mm_run_110": 1.57,
+      "extinction_diameter_mm_run_263": 1.42,
+      "initial_diameter_mm_run_110": 2.83,
+      "initial_diameter_mm_run_263": 2.67
+     },
+     "quote": "The extinction diameters De for run #110 and #263 were 1.57 mm and 1.42 mm, respectively.",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-69"
+     ]
+    },
+    {
+     "id": "NCM13.de_air",
+     "type": "published_result",
+     "text": "A FLEX methanol droplet in microgravity of 2.75 mm initial diameter, burning in air at one atmospheric pressure (1 atm in the Figure 2 caption), went out at a droplet diameter of 1.10 mm, the extinction diameter (run 204).",
+     "where": "3.1 Burning Rates, p. 5; Figure 2 caption, p. 6",
+     "variables": [
+      "extinction_diameter_mm",
+      "o2_pct"
+     ],
+     "values": {
+      "initial_diameter_mm": 2.75,
+      "extinction_diameter_mm": "1.10",
+      "o2_pct_as_printed_in_text": 20,
+      "o2_pct_as_printed_in_figure_2_caption": 21
+     },
+     "quote": "which occurs at a droplet diameter of 1.10 mm, called the extinction diameter De",
+     "note": "Two values in the same paper: the text describes run 204 as 'air (20% O2 and 79% N2)', the Figure 2 caption as '21% O2 and 79% N2 at 1 atm'. Both are kept as printed. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-69"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ASGSR-2020-COOLFLAME-INERT",
+   "kind": "paper",
+   "title": "Effects of Ambient Inert Gas Properties on Cool-Flame Combustion of Normal-Alkane Droplets in Microgravity, presentation slides (Nayagam, Dietrich, Williams)",
+   "issuer": "Annual Meeting of the American Society for Gravitational and Space Research (virtual), November 5-6, 2020; NASA GRC",
+   "version": "2020 (NTRS 20205008449; slides)",
+   "url": "https://ntrs.nasa.gov/citations/20205008449",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20205008449/downloads/Effects%20of%20ambient%20inert%20gas%20properties%20-Combustion%20Science-Nayagam-FAW.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record (as recorded by the collecting agent): distribution PUBLIC; copyright determination PUBLIC_USE_PERMITTED. The slides print no licence. Quotes of 25 words or fewer.",
+   "items": [
+    {
+     "id": "ASGSR20.xenon",
+     "type": "published_result",
+     "text": "The slides conclude, for normal-alkane droplets burning in microgravity, that xenon decreases burning rates substantially but can sustain cool flames at much lower oxygen concentrations than helium; no value is printed on the conclusions slide.",
+     "where": "Summary & Conclusions slide, PDF page 10",
+     "variables": [
+      "o2_pct"
+     ],
+     "quote": "Xenon decreases burning rates substantially, but can sustain cool flames at much lower oxygen concentrations compared to helium.",
+     "note": "The slides discuss FLEX, FLEX-2 and CFI droplet tests; the item is not attributed to one PSI investigation. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null
+    }
+   ]
+  },
+  {
+   "id": "CP-2003-212376-MIST",
+   "kind": "nasa_report",
+   "title": "The Water-Mist Fire Suppression Experiment (Mist): Preliminary Results From The STS-107 Mission (Abbud-Madrid, McKinnon, Amon, Gokoglu)",
+   "issuer": "Seventh International Workshop on Microgravity Combustion and Chemically Reacting Systems, NASA/CP-2003-212376/REV1, pp. 281-284 (Colorado School of Mines; NASA GRC)",
+   "version": "2003 (NTRS 20040053582)",
+   "url": "https://ntrs.nasa.gov/citations/20040053582",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20040053582/downloads/20040053582.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record (as recorded by the collecting agent): distribution PUBLIC; copyright determination GOV_PUBLIC_USE_PERMITTED. The PDF prints no licence. NASA conference publication: quotes of 40 words or fewer.",
+   "items": [
+    {
+     "id": "MIST03.flight",
+     "type": "published_result",
+     "text": "Preliminary result: in 32 tests in microgravity of the Water-Mist Fire Suppression Experiment on the STS-107 Space Shuttle mission (propane-air mixtures at stoichiometries of 0.6, 0.7, 1.0 and 1.3; water mass fractions from 0 up to 0.40; mean droplet sizes of 20 and 30 µm), the leanest propane-air flames showed progressively lower burning velocities with increasing water loadings and decreasing droplet size, with final extinction at the highest water concentrations; the paper prints no concentration at which extinction occurred.",
+     "where": "Experimental and Numerical Results, p. 283",
+     "values": {
+      "tests": 32,
+      "equivalence_ratios": [
+       0.6,
+       0.7,
+       1.0,
+       1.3
+      ],
+      "water_mass_fraction_as_written": "0 up to 0.40",
+      "mean_droplet_size_um": [
+       20,
+       30
+      ]
+     },
+     "quote": "Preliminary results show that the leanest propane-air flames exhibit progressively lower burning velocities with increasing water loadings and decreasing droplet size (as predicted by the model) with final extinction at the highest water concentrations.",
+     "note": "STS-107 Mist is not a PSI investigation of this catalogue. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "preliminary",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    }
+   ]
+  },
+  {
+   "id": "CP-2003-212376-NIST",
+   "kind": "nasa_report",
+   "title": "Suppression and Structure of Low Strain Rate Nonpremixed Flames (Hamins, Bundy, Park, Lee, Logue)",
+   "issuer": "Seventh International Workshop on Microgravity Combustion and Chemically Reacting Systems, NASA/CP-2003-212376/REV1, pp. 273-275 (National Institute of Standards and Technology)",
+   "version": "2003 (NTRS 20040053579)",
+   "url": "https://ntrs.nasa.gov/citations/20040053579",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20040053579/downloads/20040053579.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record (as recorded by the collecting agent): distribution PUBLIC; copyright determination GOV_PUBLIC_USE_PERMITTED. The PDF prints no licence. NASA conference publication: quotes of 40 words or fewer.",
+   "items": [
+    {
+     "id": "HAMINS03.n2",
+     "type": "published_result",
+     "text": "In counterflow methane-air non-premixed flames with nitrogen added to the fuel stream, measured in microgravity in the 2.2 s drop facility at NASA Glenn for strain rates of 7 s-1 through 50 s-1, the maximum nitrogen volume fraction in the fuel stream needed for extinction was 0.855 ± 0.016 at a strain rate of 15 s-1.",
+     "where": "Experimental Method and Results and Discussion, pp. 273-274; Figure 1, p. 275",
+     "values": {
+      "max_n2_volume_fraction_in_fuel_stream_for_extinction": 0.855,
+      "uncertainty": 0.016,
+      "strain_rate_per_s": 15,
+      "strain_rates_tested_per_s": [
+       7,
+       50
+      ]
+     },
+     "quote": "The maximum nitrogen volume fraction in the fuel stream, Ca,ext, needed for extinction was found to be 0.855 ± 0.016 at a strain rate of 15 s-1",
+     "note": "NIST drop-tower measurements; not a PSI investigation of this catalogue. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    }
+   ]
+  },
+  {
+   "id": "ICES-2021-SAFFIRE-PRODUCTS-SLIDES",
+   "kind": "paper",
+   "title": "Evaluation of Combustion Products from Large-Scale Spacecraft Fires during the Saffire-IV and Saffire-V Experiments, presentation slides (Fortenberry, Casteel, Graf, Easton, Niehaus, Meyer, Urban, Ruff)",
+   "issuer": "50th International Conference on Environmental Systems, 12-14 July 2021",
+   "version": "2021 (NTRS 20210017343, file 'ICES 2021 Platform v2.pdf'; 22 PDF pages, slide numbers printed on the pages)",
+   "url": "https://ntrs.nasa.gov/citations/20210017343",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20210017343/downloads/ICES%202021%20Platform%20v2.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record: distribution PUBLIC; copyright determination MAY_INCLUDE_COPYRIGHT_MATERIAL; third-party material: 'Slides 6-8 contain diagrams made by ZIN Technologies.' Only text and numbers of other slides are used. Quotes of 25 words or fewer.",
+   "items": [
+    {
+     "id": "SAF45P.acid",
+     "type": "published_result",
+     "text": "In Saffire-IV and V, 0.59 g HCl (Saffire-IV) and 0.31 g HF (Saffire-V) were released in the cabin as tracer gases, and no acid gas was observed at the far-field diagnostics unit during either acid release event; HCl was observed during the Saffire-IV event 4 burn (SIBAL burn plus 0.59 g HCl release), and the slides give adsorption of the acid onto cabin surfaces as one possible explanation.",
+     "where": "Printed slides 14 and 15 (PDF pages 17 and 18)",
+     "variables": [
+      "hcl_ppm",
+      "hf_ppm"
+     ],
+     "values": {
+      "hcl_released_g": 0.59,
+      "hf_released_g": 0.31
+     },
+     "quote": "However, no acid gas was observed at the FFD during either acid release event!",
+     "note": "A tracer release, not a burn; no acid gas yield of a burn is printed. Saffire-IV and V are not PSI investigations. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "SAF45P.mixing",
+     "type": "published_result",
+     "text": "In the Saffire-IV and V tracer gas releases (CO2 measured at several locations in the Cygnus vehicle), the vehicle was approximately fully mixed at all locations by 400-500 elapsed seconds in Saffire-IV and by 300-400 elapsed seconds in Saffire-V; the slides attribute the difference to trash packing.",
+     "where": "Printed slides 12 and 13 (PDF pages 12 and 16)",
+     "values": {
+      "fully_mixed_time_s_saffire_iv_as_written": "400-500",
+      "fully_mixed_time_s_saffire_v_as_written": "300-400"
+     },
+     "quote": "Vehicle is ~fully mixed at all locations by 300-400 elapsed seconds",
+     "note": "The Saffire-IV slide prints 'Vehicle is ~fully mixed at all locations by 400-500 elapsed seconds'. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "SAF45P.particles",
+     "type": "published_result",
+     "text": "In all five Saffire-IV and V burn events the particle mass concentration at the far-field unit was dominated by submicron particles (PM1), which the slides call consistent with observations for flaming combustion; PMMA events produced higher concentrations of larger particles (dp > 4 µm) than cotton-containing samples, and the slides state that clogging of the flow unit outlet screen means the far-field measurements 'likely missed a significant fraction of larger particles'.",
+     "where": "Printed slide 16 (PDF page 19)",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "burn_events": 5,
+      "larger_particle_diameter_um_as_written": "> 4"
+     },
+     "quote": "Particle mass concentration dominated by submicron particles (PM1) in all five burn events",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    },
+    {
+     "id": "SAF45P.smokeeater",
+     "type": "published_result",
+     "text": "Little CO was removed by the smoke eater during the Saffire-IV and V burn events; the slides list catalyst fouling, bed packing integrity, CO concentrations at the far-field unit too low for substantial catalyst activity, and CO sensor problems as potential explanations, and the conclusions call it still under investigation.",
+     "where": "Printed slides 17 and 18 (PDF pages 20 and 21)",
+     "variables": [
+      "co_produced_ppm"
+     ],
+     "quote": "Little CO removed by the smoke eater during Saffire-IV and V burn events",
+     "note": "No amount of CO removed is printed. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null,
+     "relation": "related NASA experiment, not a PSI investigation of this catalogue"
+    }
+   ]
+  },
+  {
+   "id": "NTRS-20150010172",
+   "kind": "paper",
+   "title": "Particle Morphology Results from the Smoke Aerosol Measurement Experiment-Reflight, presentation slides (Urban, Ruff, Greenberg, Meyer, Cleary, Yang, Mulholland, Yuan, Bryg)",
+   "issuer": "AIAA Aerospace Sciences Meeting (NTRS meeting record: Nashville, January 9-12, 2012; the slide footer reads '49th AIAA Aerospace Sciences Meeting, January 2011')",
+   "version": "January 12, 2012 (NTRS 20150010172; slides)",
+   "url": "https://ntrs.nasa.gov/citations/20150010172",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20150010172/downloads/20150010172.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record: distribution PUBLIC; copyright determination PUBLIC_USE_PERMITTED. Quotes of 25 words or fewer.",
+   "items": [
+    {
+     "id": "SAME1R.slide27",
+     "type": "published_result",
+     "text": "A slide titled 'SAME-1&R Results' lists, for Kapton, lamp wick, silicone, Teflon and Pyrell, unaged and aged, the geometric mean diameter, arithmetic mean diameter and diameter of average mass in nm and the geometric standard deviation; the slide states no flow, heating temperature or aging time.",
+     "where": "Slide 27",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "rows": [
+       {
+        "material": "Kapton",
+        "geometric_mean_diameter_nm": 47,
+        "arithmetic_mean_diameter_nm": 62,
+        "diameter_of_average_mass_nm": 106,
+        "sigma_g": 2.07
+       },
+       {
+        "material": "Kapton aged",
+        "geometric_mean_diameter_nm": 102,
+        "arithmetic_mean_diameter_nm": 121,
+        "diameter_of_average_mass_nm": 169,
+        "sigma_g": 1.79
+       },
+       {
+        "material": "Lamp wick",
+        "geometric_mean_diameter_nm": 103,
+        "arithmetic_mean_diameter_nm": 142,
+        "diameter_of_average_mass_nm": 271,
+        "sigma_g": 2.23
+       },
+       {
+        "material": "Lamp wick aged",
+        "geometric_mean_diameter_nm": 269,
+        "arithmetic_mean_diameter_nm": 308,
+        "diameter_of_average_mass_nm": 401,
+        "sigma_g": 1.67
+       },
+       {
+        "material": "Silicone",
+        "geometric_mean_diameter_nm": 152,
+        "arithmetic_mean_diameter_nm": 221,
+        "diameter_of_average_mass_nm": 468,
+        "sigma_g": 2.38
+       },
+       {
+        "material": "Silicone aged",
+        "geometric_mean_diameter_nm": 320,
+        "arithmetic_mean_diameter_nm": 400,
+        "diameter_of_average_mass_nm": 628,
+        "sigma_g": 1.96
+       },
+       {
+        "material": "Teflon",
+        "geometric_mean_diameter_nm": 93,
+        "arithmetic_mean_diameter_nm": 111,
+        "diameter_of_average_mass_nm": 173,
+        "sigma_g": 2.08
+       },
+       {
+        "material": "Teflon aged",
+        "geometric_mean_diameter_nm": 80,
+        "arithmetic_mean_diameter_nm": 115,
+        "diameter_of_average_mass_nm": 237,
+        "sigma_g": 2.34
+       },
+       {
+        "material": "Pyrell",
+        "geometric_mean_diameter_nm": 177,
+        "arithmetic_mean_diameter_nm": 227,
+        "diameter_of_average_mass_nm": 377,
+        "sigma_g": 2.03
+       },
+       {
+        "material": "Pyrell aged",
+        "geometric_mean_diameter_nm": 348,
+        "arithmetic_mean_diameter_nm": 400,
+        "diameter_of_average_mass_nm": 529,
+        "sigma_g": "1.70"
+       }
+      ]
+     },
+     "quote": "SAME-1&R Results",
+     "note": "Row labels as printed ('Kapton aged' and so on). Different values for the same materials in other documents, kept apart and as printed: Kapton geometric mean 0.042 µm unaged here (AIAA-2012-3536 Table 1, SAME-2), 47 nm on the 'SAME-1&R Results' slide (NTRS-20150010172), 0.080 µm in the SAME-1 Table 1 (AIAA-2009-SAME1); Kapton count mean 0.056 µm here, arithmetic mean 62 nm on the slide, 0.105 µm in AIAA-2009-SAME1 and 114 nm count mean in AIAA-2008-806 Table 1. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-101",
+      "PSI-102"
+     ]
+    },
+    {
+     "id": "SAME1R.aging",
+     "type": "published_result",
+     "text": "For spacecraft materials in SAME, smoke number counts decreased by a factor of 1.7 to 2.7 over 800 seconds of aging; the measured and predicted number decreases agree within about 20 %, and the diameter of average mass within 4 %.",
+     "where": "Slide 31 'SAME Aging Results'",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "number_count_decrease_factor_range": [
+       1.7,
+       2.7
+      ],
+      "aging_time_s": 800,
+      "number_decrease_agreement_percent": 20,
+      "diameter_of_average_mass_agreement_percent": 4
+     },
+     "quote": "For spacecraft materials, number counts decreased by a factor of 1.7 to 2.7 over 800 seconds.",
+     "note": "The same slide: 'In all cases, aging resulted in approximately a factor of two decrease in number concentration and a factor of two increase in the number mean diameter with the exception of teflon'. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-101",
+      "PSI-102"
+     ]
+    },
+    {
+     "id": "SAME1R.detector",
+     "type": "published_result",
+     "text": "The SAME slides conclude that the ISS detector showed a relatively weak signal for some Teflon runs, which the slide puts down to the particle size, and that dependence on a single angle scattering device will be difficult.",
+     "where": "Slide 32 'Conclusions'",
+     "variables": [
+      "particle_nm"
+     ],
+     "quote": "The ISS detector showed a relatively weak signal for some Teflon runs doubtless a result of the particle size.",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-101",
+      "PSI-102"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "AIAA-2008-806",
+   "kind": "paper",
+   "title": "Spacecraft Fire Detection: Smoke Properties and Transport in Low-Gravity (Urban, Ruff, Brooker, Cleary, Yang, Mulholland, Yuan)",
+   "issuer": "46th AIAA Aerospace Sciences Meeting and Exhibit, Reno, Nevada, 7-10 January 2008",
+   "version": "AIAA-2008-806 (NTRS 20080012612)",
+   "url": "https://ntrs.nasa.gov/citations/20080012612",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20080012612/downloads/20080012612.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record: distribution PUBLIC; copyright determination PUBLIC_USE_PERMITTED. Quotes of 25 words or fewer.",
+   "items": [
+    {
+     "id": "AIAA08.table1",
+     "type": "published_result",
+     "text": "Early SAME flight results (Table 1): count mean diameters for baseline runs of 263 nm (silicone rubber), 223 nm (Teflon), 248 nm (lamp wick) and 114 nm (Kapton), being 53%, 65% and 58% larger than in comparable 1-g tests for silicone rubber, lamp wick and Kapton; no percentage is printed for Teflon. Only results of the zeroth and first moment instruments were presented at that time.",
+     "where": "II.C Experimental Results and Table 1, p. 6",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "rows": [
+       {
+        "material": "Silicone Rubber",
+        "count_mean_diameter_nm": 263,
+        "count_mean_diameter_percent_larger_than_1g": 53
+       },
+       {
+        "material": "Teflon™",
+        "count_mean_diameter_nm": 223
+       },
+       {
+        "material": "Lamp wick",
+        "count_mean_diameter_nm": 248,
+        "count_mean_diameter_percent_larger_than_1g": 65
+       },
+       {
+        "material": "Kapton™",
+        "count_mean_diameter_nm": 114,
+        "count_mean_diameter_percent_larger_than_1g": 58
+       }
+      ]
+     },
+     "quote": "Table 1: Count Mean Diameters for Baseline",
+     "note": "Material names as printed in the table. The Teflon percentage cell is empty in the table (a superscript 15 beside it in the text layer is a reference mark). Different values for the same materials in other documents, kept apart and as printed: Kapton geometric mean 0.042 µm unaged here (AIAA-2012-3536 Table 1, SAME-2), 47 nm on the 'SAME-1&R Results' slide (NTRS-20150010172), 0.080 µm in the SAME-1 Table 1 (AIAA-2009-SAME1); Kapton count mean 0.056 µm here, arithmetic mean 62 nm on the slide, 0.105 µm in AIAA-2009-SAME1 and 114 nm count mean in AIAA-2008-806 Table 1. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-102"
+     ]
+    },
+    {
+     "id": "AIAA08.conclusion",
+     "type": "published_result",
+     "text": "The paper concludes that smoke particulate produced in low-gravity was typically 50% larger in count mean diameter than in similar conditions in normal gravity, and that the resultant sizes were all below 300 nm.",
+     "where": "IV. Conclusion, p. 8",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "count_mean_diameter_percent_larger_typical": 50,
+      "all_sizes_below_nm": 300
+     },
+     "quote": "Smoke particulate produced in low-gravity was found to be typically 50% large in count mean diameter than similar conditions in normal gravity.",
+     "note": "The quote keeps the printed '50% large'. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-102"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "AIAA-2009-SAME1",
+   "kind": "paper",
+   "title": "Properties of Smoke from Overheated Materials in Low-Gravity (Urban, Ruff, Sheredy, Cleary, Yang, Mulholland, Yuan)",
+   "issuer": "47th AIAA Aerospace Sciences Meeting (NTRS meeting record: Orlando, 5-8 January 2009)",
+   "version": "2009 (NTRS 20120012884; E-18270)",
+   "url": "https://ntrs.nasa.gov/citations/20120012884",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20120012884/downloads/20120012884.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record: distribution PUBLIC; copyright determination PUBLIC_USE_PERMITTED. Quotes of 25 words or fewer. SAME-FSR-2010 (Final Science Report, held) reprints an AIAA 2009 paper with this title in its appendices; this entry is the separate NTRS record.",
+   "items": [
+    {
+     "id": "AIAA09.table1",
+     "type": "published_result",
+     "text": "SAME-1 flight Table 1 gives, for baseline runs, the geometric mean, arithmetic mean and average-mass diameters in micrometers: Kapton 0.080, 0.105 and 0.172; lamp wick 0.186, 0.227 and 0.420; silicone 0.189 with the other two printed N/A (the silicone results did not converge); Teflon 0.159, 0.205 and 0.219.",
+     "where": "II.C Experimental Results and Table 1, p. 6",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "rows": [
+       {
+        "material": "Kapton",
+        "geometric_mean_diameter_um": "0.080",
+        "arithmetic_mean_diameter_um": 0.105,
+        "diameter_of_average_mass_um": 0.172
+       },
+       {
+        "material": "Lamp wick",
+        "geometric_mean_diameter_um": 0.186,
+        "arithmetic_mean_diameter_um": 0.227,
+        "diameter_of_average_mass_um": "0.420"
+       },
+       {
+        "material": "Silicone",
+        "geometric_mean_diameter_um": 0.189,
+        "arithmetic_mean_diameter_um": "N/A",
+        "diameter_of_average_mass_um": "N/A"
+       },
+       {
+        "material": "Teflon",
+        "geometric_mean_diameter_um": 0.159,
+        "arithmetic_mean_diameter_um": 0.205,
+        "diameter_of_average_mass_um": 0.219
+       }
+      ]
+     },
+     "quote": "Diameter results from baseline runs. The Silicone results did not converge for these conditions",
+     "note": "Numbers with trailing zeros are held as printed text. Different values for the same materials in other documents, kept apart and as printed: Kapton geometric mean 0.042 µm unaged here (AIAA-2012-3536 Table 1, SAME-2), 47 nm on the 'SAME-1&R Results' slide (NTRS-20150010172), 0.080 µm in the SAME-1 Table 1 (AIAA-2009-SAME1); Kapton count mean 0.056 µm here, arithmetic mean 62 nm on the slide, 0.105 µm in AIAA-2009-SAME1 and 114 nm count mean in AIAA-2008-806 Table 1. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-102"
+     ]
+    },
+    {
+     "id": "AIAA09.detector",
+     "type": "published_result",
+     "text": "The SAME-1 paper states that the small diameters for Kapton and Teflon will make detection of this smoke challenging for light scattering devices, while the DustTrak results for lamp wick and silicone showed substantial portions of the particle distribution with aerodynamic diameters larger than 1 micrometer.",
+     "where": "II.C Experimental Results, p. 6",
+     "variables": [
+      "particle_nm"
+     ],
+     "quote": "The small diameters for the Kapton and Teflon will make detection of this smoke challenging for light scattering devices",
+     "note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": [
+      "PSI-102"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "NTRS-20140006585",
+   "kind": "paper",
+   "title": "Evaluation of Low-Gravity Smoke Particulate for Spacecraft Fire Detection, presentation slides (Urban, Ruff, Greenberg, Meyer, Mulholland, Yuan, Bryg, Cleary, Yang)",
+   "issuer": "U.S. National Combustion Meeting, Park City, Utah, May 19-22, 2013 (NTRS meeting record; slide footers name the 49th and 50th AIAA Aerospace Sciences Meetings)",
+   "version": "May 19-22, 2013 (NTRS 20140006585; GRC-E-DAA-TN9488; slides)",
+   "url": "https://ntrs.nasa.gov/citations/20140006585",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20140006585/downloads/20140006585.pdf",
+   "access": "full_text_read",
+   "note": "Full text read by an AI agent on 2026-11-15 (text extraction of the NTRS PDF); the items were re-checked against the PDF text by a second AI agent. Not checked by a person.",
+   "copyright_note": "NTRS record: distribution PUBLIC; copyright determination PUBLIC_USE_PERMITTED. Quotes of 25 words or fewer.",
+   "items": [
+    {
+     "id": "USNCM13.mass1um",
+     "type": "published_result",
+     "text": "Conclusions slide of the low-gravity smoke particulate slides: particle sizes ranged from 100 to 600 nm; for lampwick and silicone approximately 40% of the aerosol mass had aerodynamic diameters greater than 1 µm; ground based testing at 8 cm/s showed particle dimensions very close to the flight results.",
+     "where": "Slide 19 'Conclusions'",
+     "variables": [
+      "particle_nm"
+     ],
+     "values": {
+      "particle_size_nm_range": [
+       100,
+       600
+      ],
+      "aerosol_mass_percent_above_1_micrometre": 40,
+      "ground_test_flow_cms": 8
+     },
+     "quote": "For lampwick and silicone approximately 40% of the aerosol mass had aerodynamic diameters greater than 1 μm",
+     "note": "The slide does not name the SAME flight; the item is not attributed to one PSI investigation. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+     "result_kind": "measured",
+     "investigation": null
     }
    ]
   }

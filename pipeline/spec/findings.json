@@ -114,7 +114,8 @@
    "PSISAF.o2_traces": "Graph readings made by eye by an AI from images in PSI raw-data files; the item's note says they must be replaced by the telemetry numbers before any use as data. Not a statement of a publication.",
    "PSISAF.pressure_column": "Lowest and highest cells of a PSI raw-data column, extracted by the team; it is a reading of raw data, not a statement of a publication, and this layer says of its entries that they were not checked against the raw data.",
    "PSISAF.pressure_figures": "Says that the PSI telemetry documents contain a pressure graph; no value and no observation."
-  }
+  },
+  "tagging_added_2026_11_15": "The entries of the published results added to references.json on 2026-11-15 were tagged by an AI on 2026-11-15 with the rules above, from the words of the item; where the tag differs from the need proposed by the collecting agent, 'unsure' says so. Not checked by a human."
  },
  "findings": [
   {
@@ -1845,6 +1846,41 @@
    "unsure": "'1 atm' is written for the carbon-dioxide values only and is kept as words. The LOI numbers are results, written as fractions."
   },
   {
+   "item": "TP216046.disruptive",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {},
+   "condition_words": {
+    "oxygen": [
+     "higher oxygen mole fractions",
+     "lower oxygen mole fractions"
+    ]
+   }
+  },
+  {
+   "item": "TP216046.diffusive_contam",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "methanol"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "methanol"
+     }
+    ]
+   }
+  },
+  {
    "item": "RG.test1",
    "needs": [
     "P1"
@@ -2255,6 +2291,294 @@
     ]
    },
    "unsure": "The item states no gravity level, so none is tagged; the entry can be listed for an environment of any gravity level. The item's note says the paper does not say whether the pressure and oxygen are set points, values at ignition or averages."
+  },
+  {
+   "item": "SAF456.table2",
+   "row": "IV-1",
+   "row_source": "rows[0]",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 22.0,
+    "o2_as_written": "22.0",
+    "pressure_kpa": 100.0,
+    "pressure_as_written": "100.0 kPa",
+    "material": [
+     "SIBAL"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[0].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "100.0 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[0].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[0].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Oxygen and pressure are the Table 1 conditions of the sample."
+  },
+  {
+   "item": "SAF456.table2",
+   "row": "V-2",
+   "row_source": "rows[1]",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 26.2,
+    "o2_as_written": "26.2",
+    "pressure_kpa": 70.7,
+    "pressure_as_written": "70.7 kPa",
+    "material": [
+     "Cotton Jersey"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[1].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "70.7 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[1].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[1].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Oxygen and pressure are the Table 1 conditions of the sample."
+  },
+  {
+   "item": "SAF456.table2",
+   "row": "VI-2",
+   "row_source": "rows[2]",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 31.0,
+    "o2_as_written": "31.0",
+    "pressure_kpa": 54.1,
+    "pressure_as_written": "54.1 kPa",
+    "material": [
+     "SIBAL"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[2].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "54.1 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[2].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[2].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Oxygen and pressure are the Table 1 conditions of the sample."
+  },
+  {
+   "item": "SAF456.table2",
+   "row": "VI-3",
+   "row_source": "rows[3]",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 30.3,
+    "o2_as_written": "30.3",
+    "pressure_kpa": 54.6,
+    "pressure_as_written": "54.6 kPa",
+    "material": [
+     "2-sided PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[3].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "54.6 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[3].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[3].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Oxygen and pressure are the Table 1 conditions of the sample."
+  },
+  {
+   "item": "SAF456.table2",
+   "row": "VI-4",
+   "row_source": "rows[4]",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 28.8,
+    "o2_as_written": "28.8",
+    "pressure_kpa": 55.2,
+    "pressure_as_written": "55.2 kPa",
+    "material": [
+     "1-sided PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[4].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "55.2 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[4].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[4].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Oxygen and pressure are the Table 1 conditions of the sample."
+  },
+  {
+   "item": "SAF456.limits_exceeded",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "unsure": "Two samples (VI-3, VI-4) with different conditions; no condition is normalized."
+  },
+  {
+   "item": "SAF456.alarm",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 30.3,
+    "o2_as_written": "30.3 mol % oxygen",
+    "pressure_kpa": 54.6,
+    "pressure_as_written": "54.6 kPa",
+    "material": [
+     "two-sided PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "30.3 mol % oxygen"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "54.6 kPa"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "two-sided PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "changed from 20 cm/s to 5 cm/s at 1120 s"
+    ]
+   }
+  },
+  {
+   "item": "SAF456.hazard",
+   "needs": [
+    "D1",
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {},
+   "unsure": "Tagged D1 (gaseous products, CO, CO2) and D2 (smoke)."
   },
   {
    "item": "SAF17.o2_initial_I",
@@ -2731,6 +3055,166 @@
      "ISS reading"
     ]
    }
+  },
+  {
+   "item": "SAF17S.flame_length_plateau",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 21.7,
+    "o2_as_written": "initial oxygen 21.7%",
+    "flow_cms": 20,
+    "flow_as_written": "20 cm/s flow",
+    "material": [
+     "SIBAL cotton-fiberglass fabric"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "initial oxygen 21.7%"
+     }
+    ],
+    "flow_cms": [
+     {
+      "in": "text",
+      "words": "20 cm/s flow"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "SIBAL cotton-fiberglass fabric"
+     }
+    ]
+   },
+   "unsure": "A flame length plateau is tagged P3 (fire growth). The oxygen is the initial ISS reading."
+  },
+  {
+   "item": "SAF17S.narrow_sample_spread",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     21.7,
+     22.1
+    ],
+    "o2_as_written": "22.1% vs. 21.7%",
+    "flow_cms": 20,
+    "flow_as_written": "flow speed of 20 cm/s",
+    "material": [
+     "SIBAL fabric"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "22.1% vs. 21.7%"
+     }
+    ],
+    "flow_cms": [
+     {
+      "in": "text",
+      "words": "flow speed of 20 cm/s"
+     },
+     {
+      "in": "values",
+      "key": "flow_cms"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "SIBAL fabric"
+     }
+    ]
+   },
+   "unsure": "The two starting oxygen values of a comparison are normalized as a range, as for SAF.starting_o2."
+  },
+  {
+   "item": "SAF17S.saffire2_ignition",
+   "needs": [
+    "P2"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {},
+   "unsure": "States the igniter, not an observation of ignition; tagged result as a reported test condition (rule 'kind')."
+  },
+  {
+   "item": "SAF17S.saffire2_thick_pmma_ignition",
+   "needs": [
+    "P2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "thick PMMA"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "thick PMMA"
+     }
+    ]
+   },
+   "unsure": "States the igniter, a reported test condition."
+  },
+  {
+   "item": "SAF17S.saffire1_ignition",
+   "needs": [
+    "P2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "SIBAL fabric"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "SIBAL fabric"
+     }
+    ]
+   },
+   "unsure": "States the igniter, a reported test condition."
+  },
+  {
+   "item": "SAF17S.silicone_no_spread",
+   "needs": [
+    "P1",
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "silicone"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "silicone"
+     }
+    ]
+   },
+   "condition_words": {
+    "gravity": [
+     "entirely consumed in normal gravity"
+    ]
+   },
+   "unsure": "Tagged P1 (flammability of a material) and P3 (no flame spread). 'normal gravity' is written for the comparison only."
   },
   {
    "item": "SAF123.table1",
@@ -3214,6 +3698,452 @@
       "in": "text",
       "words": "V-2: 26.2%, 70.7 kPa"
      }
+    ]
+   }
+  },
+  {
+   "item": "SAF45.table2_flame_size",
+   "row": "I-1",
+   "row_source": "rows[0]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 21,
+    "o2_as_written": "21",
+    "pressure_kpa": 100.0,
+    "pressure_as_written": "100 kPa",
+    "material": [
+     "SIBAL"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[0].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "100 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[0].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[0].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+  },
+  {
+   "item": "SAF45.table2_flame_size",
+   "row": "II-5",
+   "row_source": "rows[1]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 21,
+    "o2_as_written": "21",
+    "pressure_kpa": 100.0,
+    "pressure_as_written": "100 kPa",
+    "material": [
+     "SIBAL"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[1].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "100 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[1].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[1].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+  },
+  {
+   "item": "SAF45.table2_flame_size",
+   "row": "II-6",
+   "row_source": "rows[2]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 21,
+    "o2_as_written": "21",
+    "pressure_kpa": 100.0,
+    "pressure_as_written": "100 kPa",
+    "material": [
+     "SIBAL"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[2].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "100 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[2].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[2].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+  },
+  {
+   "item": "SAF45.table2_flame_size",
+   "row": "III-1",
+   "row_source": "rows[3]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 21,
+    "o2_as_written": "21",
+    "pressure_kpa": 100.0,
+    "pressure_as_written": "100 kPa",
+    "material": [
+     "SIBAL"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[3].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "100 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[3].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[3].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+  },
+  {
+   "item": "SAF45.table2_flame_size",
+   "row": "IV-1",
+   "row_source": "rows[4]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 22,
+    "o2_as_written": "22",
+    "pressure_kpa": 100.0,
+    "pressure_as_written": "100 kPa",
+    "material": [
+     "SIBAL"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[4].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "100 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[4].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[4].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+  },
+  {
+   "item": "SAF45.table2_flame_size",
+   "row": "V-2",
+   "row_source": "rows[5]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 26.2,
+    "o2_as_written": "26.2",
+    "pressure_kpa": 70.7,
+    "pressure_as_written": "70.7 kPa",
+    "material": [
+     "Cotton jersey"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[5].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "70.7 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[5].pressure_kpa"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[5].material"
+     }
+    ]
+   },
+   "unsure": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+  },
+  {
+   "item": "SAF45.v3_pmma_flame_length",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 25.4,
+    "o2_as_written": "in 25.4% oxygen",
+    "pressure_kpa": 71.3,
+    "pressure_as_written": "71.3 kPa",
+    "flow_cms": 20,
+    "flow_as_written": "concurrent air flow of 20 cm/s",
+    "material": [
+     "one-sided PMMA sample"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "in 25.4% oxygen"
+     },
+     {
+      "in": "values",
+      "key": "o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "71.3 kPa"
+     },
+     {
+      "in": "values",
+      "key": "pressure_kpa"
+     }
+    ],
+    "flow_cms": [
+     {
+      "in": "text",
+      "words": "concurrent air flow of 20 cm/s"
+     },
+     {
+      "in": "values",
+      "key": "flow_cms"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "one-sided PMMA sample"
+     }
+    ]
+   },
+   "condition_words": {
+    "gravity": [
+     "similar 1-g tests"
+    ]
+   },
+   "unsure": "'1-g' is written for the comparison tests only and is kept as words; the item states no gravity level for V-3."
+  },
+  {
+   "item": "SAF45.iv2_v3_no_spread",
+   "row": "IV-2",
+   "row_source": "rows[0]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 22.0,
+    "o2_as_written": "22.0 mol % oxygen",
+    "pressure_kpa": 100.0,
+    "pressure_as_written": "100.0 kPa",
+    "flow_cms": 20,
+    "flow_as_written": "air flow 20 cm/s",
+    "material": [
+     "2-sided PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "22.0 mol % oxygen"
+     },
+     {
+      "in": "values",
+      "key": "rows[0].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "100.0 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[0].pressure_kpa"
+     }
+    ],
+    "flow_cms": [
+     {
+      "in": "text",
+      "words": "air flow 20 cm/s"
+     },
+     {
+      "in": "values",
+      "key": "rows[0].flow_cms"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[0].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "concurrent PMMA samples"
+    ]
+   }
+  },
+  {
+   "item": "SAF45.iv2_v3_no_spread",
+   "row": "V-3",
+   "row_source": "rows[1]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 25.4,
+    "o2_as_written": "25.4 mol % oxygen",
+    "pressure_kpa": 71.3,
+    "pressure_as_written": "71.3 kPa",
+    "flow_cms": 20,
+    "flow_as_written": "air flow 20 cm/s",
+    "material": [
+     "1 sided PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "25.4 mol % oxygen"
+     },
+     {
+      "in": "values",
+      "key": "rows[1].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "71.3 kPa"
+     },
+     {
+      "in": "values",
+      "key": "rows[1].pressure_kpa"
+     }
+    ],
+    "flow_cms": [
+     {
+      "in": "text",
+      "words": "air flow 20 cm/s"
+     },
+     {
+      "in": "values",
+      "key": "rows[1].flow_cms"
+     }
+    ],
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[1].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "concurrent PMMA samples"
     ]
    }
   },
@@ -3713,6 +4643,110 @@
    }
   },
   {
+   "item": "ICES15.co_per_co2",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "microgravity combustion tests"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   }
+  },
+  {
+   "item": "ICES15.stoich",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "oxygen": [
+     "a wide range of initial oxygen concentrations"
+    ]
+   }
+  },
+  {
+   "item": "ICES15.coratio_flue",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "gravity_level": [
+     "microgravity"
+    ]
+   },
+   "condition_basis": {
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "microgravity flames"
+     }
+    ]
+   }
+  },
+  {
+   "item": "ICES15.hrr",
+   "needs": [
+    "general"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {},
+   "unsure": "A heat release estimate names no gas, smoke, spread, ignition or extinction; tagged general (the collecting agent proposed D1)."
+  },
+  {
+   "item": "ICES15.phi",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {}
+  },
+  {
+   "item": "ICES15.us_lab_co",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {}
+  },
+  {
    "item": "BASS2TM.igndelay",
    "needs": [
     "P2"
@@ -3829,6 +4863,1171 @@
    }
   },
   {
+   "item": "BASS2TM.table5_1",
+   "row": "M1",
+   "row_source": "rows[0]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     21.9,
+     22.2
+    ],
+    "o2_as_written": "22.2",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[0].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[0].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M2",
+   "row_source": "rows[1]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     21.2,
+     22.2
+    ],
+    "o2_as_written": "22.2",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[1].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[1].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M3",
+   "row_source": "rows[2]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     19.7,
+     20.8
+    ],
+    "o2_as_written": "20.8",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[2].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[2].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M4",
+   "row_source": "rows[3]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     19.8,
+     21.8
+    ],
+    "o2_as_written": "21.8",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[3].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[3].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M5",
+   "row_source": "rows[4]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     19,
+     22.2
+    ],
+    "o2_as_written": "22.2",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[4].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[4].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M6",
+   "row_source": "rows[5]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     20.7,
+     21.8
+    ],
+    "o2_as_written": "21.8",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[5].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[5].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M7",
+   "row_source": "rows[6]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     18.4,
+     18.9
+    ],
+    "o2_as_written": "18.9",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[6].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[6].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M8",
+   "row_source": "rows[7]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     18.2,
+     19.1
+    ],
+    "o2_as_written": "19.1",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[7].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[7].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M9",
+   "row_source": "rows[8]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     17.6,
+     18
+    ],
+    "o2_as_written": "18",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[8].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[8].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M10",
+   "row_source": "rows[9]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     18.6,
+     20.1
+    ],
+    "o2_as_written": "20.1",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[9].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[9].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M11",
+   "row_source": "rows[10]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     18.5,
+     20
+    ],
+    "o2_as_written": "20",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[10].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[10].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M12",
+   "row_source": "rows[11]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     20.4,
+     21.7
+    ],
+    "o2_as_written": "21.7",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[11].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[11].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M13",
+   "row_source": "rows[12]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     19,
+     20.8
+    ],
+    "o2_as_written": "20.8",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[12].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[12].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M14",
+   "row_source": "rows[13]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     21.6,
+     22.2
+    ],
+    "o2_as_written": "22.2",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[13].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[13].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M15",
+   "row_source": "rows[14]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     20,
+     21
+    ],
+    "o2_as_written": "21",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[14].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[14].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M16",
+   "row_source": "rows[15]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     18.7,
+     19.2
+    ],
+    "o2_as_written": "19.2",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[15].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[15].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M17",
+   "row_source": "rows[16]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     17.1,
+     18.8
+    ],
+    "o2_as_written": "18.8",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[16].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[16].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M18",
+   "row_source": "rows[17]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     16.8,
+     17.9
+    ],
+    "o2_as_written": "17.9",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[17].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[17].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M19",
+   "row_source": "rows[18]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     17.4,
+     19
+    ],
+    "o2_as_written": "19",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[18].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[18].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.table5_1",
+   "row": "M20",
+   "row_source": "rows[19]",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     17.4,
+     18
+    ],
+    "o2_as_written": "18",
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[19].initial_o2_pct_by_vol"
+     },
+     {
+      "in": "values",
+      "key": "rows[19].final_o2_pct_by_vol"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The oxygen range runs from the final to the initial O2 of the row (two printed columns); 'o2_as_written' holds the initial cell. The item states no pressure and no gravity level."
+  },
+  {
+   "item": "BASS2TM.thin_pmma_spread_vs_1g",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "gravity_level": [
+     "microgravity",
+     "normal"
+    ],
+    "material": [
+     "100-µm-thick PMMA sheet"
+    ]
+   },
+   "condition_basis": {
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "highest spread rate in microgravity"
+     },
+     {
+      "level": "normal",
+      "in": "text",
+      "words": "normal-gravity (downward) experiments"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "100-µm-thick PMMA sheet"
+     }
+    ]
+   },
+   "condition_words": {
+    "oxygen_pressure": [
+     "run at 101 kPa and 21 percent O2"
+    ],
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The 101 kPa and 21 percent O2 are written for the normal-gravity part of the comparison only and are kept as words."
+  },
+  {
+   "item": "BASS2TM.rod_ignition_delay",
+   "needs": [
+    "P2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "flow_cms": 5,
+    "flow_as_written": "forced flow of 5 cm/s",
+    "material": [
+     "PMMA rods"
+    ]
+   },
+   "condition_basis": {
+    "flow_cms": [
+     {
+      "in": "text",
+      "words": "forced flow of 5 cm/s"
+     },
+     {
+      "in": "values",
+      "key": "flow_cms_at_ignition"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA rods"
+     }
+    ]
+   },
+   "unsure": "The O2 numbers (16 percent, 'higher', 'lower') describe where the delay changed; they are results, not the atmosphere of one test, and are not normalized."
+  },
+  {
+   "item": "BASS2TM.rod_ignition_limit",
+   "needs": [
+    "P2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "PMMA rod"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA rod"
+     }
+    ]
+   },
+   "unsure": "The O2 numbers are reported limits and final readings, not the atmosphere of a test, and are not normalized. Tagged P2 (ignition); the item also states an oxygen limit for ignition."
+  },
+  {
+   "item": "BASS2TM.rod_quench_flame_aspect",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     13.6,
+     14.8
+    ],
+    "o2_as_written": "from an initial setting of 14.8 percent to a final reading of 13.6 percent",
+    "material": [
+     "PMMA rod"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "from an initial setting of 14.8 percent to a final reading of 13.6 percent"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA rod"
+     }
+    ]
+   },
+   "unsure": "Tagged S1 by the words 'quenching' and 'extinction'; the collecting agent proposed P3."
+  },
+  {
+   "item": "BASS2TM.extvel",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "thin PMMA sheets"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "thin PMMA sheets"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed flow reduced until the flame went out"
+    ]
+   }
+  },
+  {
+   "item": "BASS2TM.extvel_o2",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 16,
+    "o2_as_written": "about 16 percent",
+    "material": [
+     "thin PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "about 16 percent"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "thin PMMA"
+     }
+    ]
+   }
+  },
+  {
+   "item": "BASS2TM.extvel_model",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "100-µm-thick PMMA sheet"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "100-µm-thick PMMA sheet"
+     }
+    ]
+   },
+   "condition_words": {
+    "oxygen": [
+     "at 16 percent O2 as opposed to 1.5 cm/s at 21 percent O2"
+    ],
+    "pressure": [
+     "21/79 O2/N2 mixture at 1 atm"
+    ]
+   },
+   "unsure": "Two oxygen levels are compared; the 1 atm is written for the 21 percent computations only. Both are kept as words."
+  },
+  {
+   "item": "BASS2TM.rod_spread_limit",
+   "needs": [
+    "P1",
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "gravity_level": [
+     "microgravity",
+     "normal"
+    ],
+    "material": [
+     "black PMMA rods"
+    ]
+   },
+   "condition_basis": {
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "17.5 percent in microgravity"
+     },
+     {
+      "level": "normal",
+      "in": "text",
+      "words": "in normal gravity flame spread was not observed"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "black PMMA rods"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "opposed-flow tests"
+    ]
+   },
+   "unsure": "The O2 numbers are the lowest O2 with flame spread, results and not the atmosphere of one test. Tagged P1 (an oxygen threshold) and P3 (flame spread); the collecting agent proposed S1."
+  },
+  {
+   "item": "BASS2TM.rod_min_o2",
+   "needs": [
+    "P1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "PMMA rod"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA rod"
+     }
+    ]
+   },
+   "condition_words": {
+    "gravity": [
+     "observed in normal gravity"
+    ],
+    "flow": [
+     "additional 4-cm/s forced flow"
+    ]
+   },
+   "unsure": "The O2 numbers are reported limits, not the atmosphere of a test. 'normal gravity' and the 4-cm/s flow are written for the comparison limit only. Tagged P1 as ICES19.limits; the collecting agent proposed S1."
+  },
+  {
+   "item": "BASS2TM.blowoff",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "PMMA rod"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA rod"
+     }
+    ]
+   }
+  },
+  {
    "item": "BASS13.nitrogen",
    "needs": [
     "S1"
@@ -3866,6 +6065,328 @@
    }
   },
   {
+   "item": "SAME2.table1",
+   "row": "Kapton Unaged",
+   "row_source": "rows[0]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Kapton"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[0].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "baseline air flow rate was 8 cm/s"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.table1",
+   "row": "Kapton Aged 720 s",
+   "row_source": "rows[1]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Kapton"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[1].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "baseline air flow rate was 8 cm/s"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.table1",
+   "row": "Lampwick Unaged",
+   "row_source": "rows[2]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Lampwick"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[2].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "baseline air flow rate was 8 cm/s"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.table1",
+   "row": "Lampwick Aged 720 s",
+   "row_source": "rows[3]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Lampwick"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[3].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "baseline air flow rate was 8 cm/s"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.table1",
+   "row": "Silicone Unaged",
+   "row_source": "rows[4]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Silicone"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[4].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "baseline air flow rate was 8 cm/s"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.table1",
+   "row": "Silicone Aged 720 s",
+   "row_source": "rows[5]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Silicone"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[5].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "baseline air flow rate was 8 cm/s"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.table1",
+   "row": "Teflon Unaged",
+   "row_source": "rows[6]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Teflon"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[6].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "baseline air flow rate was 8 cm/s"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.table1",
+   "row": "Teflon Aged 720 s",
+   "row_source": "rows[7]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Teflon"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[7].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "baseline air flow rate was 8 cm/s"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.table1",
+   "row": "Pyrell Unaged",
+   "row_source": "rows[8]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Pyrell"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[8].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "baseline air flow rate was 8 cm/s"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.table1",
+   "row": "Pyrell Aged 720 s",
+   "row_source": "rows[9]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Pyrell"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[9].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "baseline air flow rate was 8 cm/s"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.abstract_range",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {},
+   "condition_words": {
+    "flow": [
+     "the quiescent cases"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.zeroflow30",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {},
+   "condition_words": {
+    "flow": [
+     "zero-flow tests than for the flow tests"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.zeroflow23",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {},
+   "condition_words": {
+    "flow": [
+     "zero flow conditions",
+     "nominal 8 cm/s flow rate"
+    ]
+   }
+  },
+  {
+   "item": "SAME2.concentrations",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {}
+  },
+  {
    "item": "CFI14.extinction",
    "needs": [
     "S1"
@@ -3876,6 +6397,265 @@
    "condition_words": {
     "fuel": [
      "droplet extinction diameter"
+    ]
+   }
+  },
+  {
+   "item": "CFI14.o2series",
+   "row": "R377",
+   "row_source": "rows[0]",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 21,
+    "o2_as_written": "21",
+    "pressure_kpa": 50.663,
+    "pressure_as_written": "0.5 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "n-decane"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[0].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "0.5 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "n-decane droplets in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "n-decane"
+     }
+    ]
+   }
+  },
+  {
+   "item": "CFI14.o2series",
+   "row": "R374",
+   "row_source": "rows[1]",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 25,
+    "o2_as_written": "25",
+    "pressure_kpa": 50.663,
+    "pressure_as_written": "0.5 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "n-decane"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[1].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "0.5 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "n-decane droplets in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "n-decane"
+     }
+    ]
+   }
+  },
+  {
+   "item": "CFI14.o2series",
+   "row": "R379",
+   "row_source": "rows[2]",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 17,
+    "o2_as_written": "17",
+    "pressure_kpa": 50.663,
+    "pressure_as_written": "0.5 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "n-decane"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[2].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "0.5 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "n-decane droplets in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "n-decane"
+     }
+    ]
+   }
+  },
+  {
+   "item": "CFI14.o2series",
+   "row": "R383",
+   "row_source": "rows[3]",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 14,
+    "o2_as_written": "14",
+    "pressure_kpa": 50.663,
+    "pressure_as_written": "0.5 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "n-decane"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "values",
+      "key": "rows[3].o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "0.5 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "n-decane droplets in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "n-decane"
+     }
+    ]
+   }
+  },
+  {
+   "item": "CFI14.helium",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "pressure_kpa": 101.325,
+    "pressure_as_written": "1 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "n-octane"
+    ]
+   },
+   "condition_basis": {
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "1 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "n-octane droplets in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "n-octane"
+     }
+    ]
+   },
+   "condition_words": {
+    "oxygen": [
+     "oxygen mole fraction held at 0.21"
+    ],
+    "diluent": [
+     "helium replacing nitrogen at 0, 15, 50 and 75% by volume"
+    ]
+   },
+   "unsure": "The oxygen is written as a mole fraction (0.21) and is kept as words; the rule 'oxygen' normalizes percentages only."
+  },
+  {
+   "item": "CFI14.scaling",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "n-alkane"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "n-alkane"
+     }
     ]
    }
   },
@@ -4663,6 +7443,1221 @@
    "kind": "caveat",
    "conditions": {},
    "condition_basis": {}
+  },
+  {
+   "item": "ZHAO15.quench_speed",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": [
+     16,
+     21
+    ],
+    "o2_as_written": "ambient O2 molar fractions of 16% to 21%",
+    "pressure_kpa": 101.325,
+    "pressure_as_written": "1 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "cotton-fiberglass (SIBAL) fabric"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "ambient O2 molar fractions of 16% to 21%"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "1 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "purely forced flow in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "cotton-fiberglass (SIBAL) fabric"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "concurrent, purely forced flow"
+    ]
+   },
+   "unsure": "Tagged S1 by the words 'quenching extinction limits'; the collecting agent proposed P3."
+  },
+  {
+   "item": "ICES20407.optimal_baffle",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 22,
+    "o2_as_written": "~22% O2",
+    "pressure_kpa": 101.325,
+    "pressure_as_written": "1.0 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "SIBAL cotton-fiberglass fabric"
+    ],
+    "flow_cms": 7,
+    "flow_as_written": "imposed flow of 7 cm/s"
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "~22% O2"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "1.0 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "ISS tests in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "SIBAL cotton-fiberglass fabric"
+     }
+    ],
+    "flow_cms": [
+     {
+      "in": "text",
+      "words": "imposed flow of 7 cm/s"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "concurrent, purely forced flow"
+    ]
+   },
+   "unsure": "'~22%' is normalized as 22; the paper gives a daily variation of 21.3% to 22.9% in the glovebox."
+  },
+  {
+   "item": "ICES20407.no_ignition_D1",
+   "needs": [
+    "P2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 22,
+    "o2_as_written": "~22% O2",
+    "pressure_kpa": 101.325,
+    "pressure_as_written": "1.0 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "SIBAL cotton-fiberglass fabric"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "~22% O2"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "1.0 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "ISS tests in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "SIBAL cotton-fiberglass fabric"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "concurrent, purely forced flow"
+    ]
+   },
+   "unsure": "'~22%' is normalized as 22; the paper gives a daily variation of 21.3% to 22.9% in the glovebox."
+  },
+  {
+   "item": "ICES20407.steady_vs_growing",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 22,
+    "o2_as_written": "~22% O2",
+    "pressure_kpa": 101.325,
+    "pressure_as_written": "1.0 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "SIBAL cotton-fiberglass fabric"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "~22% O2"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "1.0 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "ISS tests in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "SIBAL cotton-fiberglass fabric"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "concurrent, purely forced flow"
+    ]
+   },
+   "unsure": "'~22%' is normalized as 22; the paper gives a daily variation of 21.3% to 22.9% in the glovebox."
+  },
+  {
+   "item": "LUCI25.sibal_spread",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "gravity_level": [
+     "lunar"
+    ],
+    "material": [
+     "SIBAL cotton-fiberglass fabric"
+    ]
+   },
+   "condition_basis": {
+    "gravity_level": [
+     {
+      "level": "lunar",
+      "in": "text",
+      "words": "simulated Lunar gravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "SIBAL cotton-fiberglass fabric"
+     }
+    ]
+   },
+   "condition_words": {
+    "pressure": [
+     "air at normal pressure"
+    ],
+    "direction": [
+     "burning downward"
+    ]
+   },
+   "unsure": "The gravity is simulated by centrifugal acceleration (11 RPM, effective radius 1.22 m, slide 12); the slides read print no g value. 'air at normal pressure' has no number and is kept as words."
+  },
+  {
+   "item": "LUCI25.pmma_rod_spread",
+   "needs": [
+    "P3"
+   ],
+   "kind": "result",
+   "conditions": {
+    "gravity_level": [
+     "lunar"
+    ],
+    "material": [
+     "PMMA rod"
+    ]
+   },
+   "condition_basis": {
+    "gravity_level": [
+     {
+      "level": "lunar",
+      "in": "text",
+      "words": "simulated Lunar gravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA rod"
+     }
+    ]
+   },
+   "condition_words": {
+    "pressure": [
+     "air at normal pressure"
+    ],
+    "oxygen": [
+     "chamber O2 decreased from 20% to 14.3%"
+    ],
+    "direction": [
+     "burning upward"
+    ]
+   },
+   "unsure": "The gravity is simulated by centrifugal acceleration (11 RPM, effective radius 1.22 m, slide 12); the slides read print no g value. 'air at normal pressure' has no number and is kept as words."
+  },
+  {
+   "item": "MIST13.sim_ignition_0g_1g",
+   "needs": [
+    "P2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 21,
+    "o2_as_written": "oxygen concentration 21%",
+    "pressure_kpa": 100.0,
+    "pressure_as_written": "ambient pressure 100 kPa",
+    "gravity_level": [
+     "microgravity",
+     "normal"
+    ],
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "oxygen concentration 21%"
+     },
+     {
+      "in": "values",
+      "key": "o2_pct"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "ambient pressure 100 kPa"
+     },
+     {
+      "in": "values",
+      "key": "pressure_kpa"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "earlier at 0-g"
+     },
+     {
+      "level": "normal",
+      "in": "text",
+      "words": "at 1-g conditions"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   },
+   "condition_words": {
+    "flow": [
+     "air flow velocity 0.4 m/s"
+    ]
+   },
+   "unsure": "Conditions of a simulated case, not of a test."
+  },
+  {
+   "item": "NCM13.loi",
+   "row": "0.7 atm",
+   "needs": [
+    "P1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "pressure_kpa": 70.927,
+    "pressure_as_written": "0.7 and 1 atmospheric pressures",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "methanol"
+    ]
+   },
+   "condition_basis": {
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "0.7 and 1 atmospheric pressures"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "FLEX tests in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "methanol"
+     }
+    ]
+   },
+   "unsure": "One entry for each of the two pressures written; the LOI is a result and is not normalized. Tagged P1; the collecting agent proposed S1."
+  },
+  {
+   "item": "NCM13.loi",
+   "row": "1 atm",
+   "needs": [
+    "P1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "pressure_kpa": 101.325,
+    "pressure_as_written": "0.7 and 1 atmospheric pressures",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "methanol"
+    ]
+   },
+   "condition_basis": {
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "0.7 and 1 atmospheric pressures"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "FLEX tests in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "methanol"
+     }
+    ]
+   },
+   "unsure": "One entry for each of the two pressures written; the LOI is a result and is not normalized."
+  },
+  {
+   "item": "NCM13.radiative",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "methanol"
+    ]
+   },
+   "condition_basis": {
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "droplet tests in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "methanol"
+     }
+    ]
+   },
+   "condition_words": {
+    "oxygen": [
+     "lower oxygen concentrations"
+    ]
+   }
+  },
+  {
+   "item": "NCM13.de_runs",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "o2_pct": 21,
+    "o2_as_written": "21% O2",
+    "pressure_kpa": 70.927,
+    "pressure_as_written": "0.7 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "methanol"
+    ]
+   },
+   "condition_basis": {
+    "o2_pct": [
+     {
+      "in": "text",
+      "words": "21% O2"
+     }
+    ],
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "0.7 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "methanol droplets in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "methanol"
+     }
+    ]
+   },
+   "condition_words": {
+    "diluent": [
+     "with 30% CO2",
+     "with 30% He"
+    ]
+   }
+  },
+  {
+   "item": "NCM13.de_air",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "pressure_kpa": 101.325,
+    "pressure_as_written": "1 atm",
+    "gravity_level": [
+     "microgravity"
+    ],
+    "material": [
+     "methanol"
+    ]
+   },
+   "condition_basis": {
+    "pressure_kpa": [
+     {
+      "in": "text",
+      "words": "1 atm"
+     }
+    ],
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "methanol droplet in microgravity"
+     }
+    ],
+    "material": [
+     {
+      "in": "text",
+      "words": "methanol"
+     }
+    ]
+   },
+   "condition_words": {
+    "oxygen": [
+     "burning in air"
+    ]
+   },
+   "unsure": "The paper prints 20% and 21% O2 for this run; no oxygen is normalized."
+  },
+  {
+   "item": "ASGSR20.xenon",
+   "needs": [
+    "P1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "gravity_level": [
+     "microgravity"
+    ]
+   },
+   "condition_basis": {
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "droplets burning in microgravity"
+     }
+    ]
+   },
+   "condition_words": {
+    "oxygen": [
+     "much lower oxygen concentrations"
+    ]
+   },
+   "unsure": "Tagged P1 (the oxygen at which a flame is sustained); the collecting agent proposed S1. A qualitative statement."
+  },
+  {
+   "item": "MIST03.flight",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "gravity_level": [
+     "microgravity"
+    ]
+   },
+   "condition_basis": {
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "32 tests in microgravity"
+     }
+    ]
+   },
+   "condition_words": {
+    "agent": [
+     "water mass fractions from 0 up to 0.40"
+    ]
+   }
+  },
+  {
+   "item": "HAMINS03.n2",
+   "needs": [
+    "S1"
+   ],
+   "kind": "result",
+   "conditions": {
+    "gravity_level": [
+     "microgravity"
+    ]
+   },
+   "condition_basis": {
+    "gravity_level": [
+     {
+      "level": "microgravity",
+      "in": "text",
+      "words": "measured in microgravity"
+     }
+    ]
+   },
+   "condition_words": {
+    "fuel": [
+     "counterflow methane-air non-premixed flames"
+    ]
+   }
+  },
+  {
+   "item": "SAF45P.acid",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {}
+  },
+  {
+   "item": "SAF45P.mixing",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {},
+   "unsure": "Transport of a tracer gas in the cabin; tagged D1 (gases)."
+  },
+  {
+   "item": "SAF45P.particles",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "PMMA"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "PMMA"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAF45P.smokeeater",
+   "needs": [
+    "D1"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {}
+  },
+  {
+   "item": "SAME1R.slide27",
+   "row": "Kapton",
+   "row_source": "rows[0]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Kapton"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[0].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAME1R.slide27",
+   "row": "Kapton aged",
+   "row_source": "rows[1]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Kapton aged"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[1].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAME1R.slide27",
+   "row": "Lamp wick",
+   "row_source": "rows[2]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Lamp wick"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[2].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAME1R.slide27",
+   "row": "Lamp wick aged",
+   "row_source": "rows[3]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Lamp wick aged"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[3].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAME1R.slide27",
+   "row": "Silicone",
+   "row_source": "rows[4]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Silicone"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[4].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAME1R.slide27",
+   "row": "Silicone aged",
+   "row_source": "rows[5]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Silicone aged"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[5].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAME1R.slide27",
+   "row": "Teflon",
+   "row_source": "rows[6]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Teflon"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[6].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAME1R.slide27",
+   "row": "Teflon aged",
+   "row_source": "rows[7]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Teflon aged"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[7].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAME1R.slide27",
+   "row": "Pyrell",
+   "row_source": "rows[8]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Pyrell"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[8].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAME1R.slide27",
+   "row": "Pyrell aged",
+   "row_source": "rows[9]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Pyrell aged"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[9].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "SAME1R.aging",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {}
+  },
+  {
+   "item": "SAME1R.detector",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Teflon"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "Teflon"
+     }
+    ]
+   }
+  },
+  {
+   "item": "AIAA08.table1",
+   "row": "Silicone Rubber",
+   "row_source": "rows[0]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Silicone Rubber"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[0].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "gravity": [
+     "comparable 1-g tests"
+    ]
+   }
+  },
+  {
+   "item": "AIAA08.table1",
+   "row": "Teflon™",
+   "row_source": "rows[1]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Teflon™"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[1].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "gravity": [
+     "comparable 1-g tests"
+    ]
+   }
+  },
+  {
+   "item": "AIAA08.table1",
+   "row": "Lamp wick",
+   "row_source": "rows[2]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Lamp wick"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[2].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "gravity": [
+     "comparable 1-g tests"
+    ]
+   }
+  },
+  {
+   "item": "AIAA08.table1",
+   "row": "Kapton™",
+   "row_source": "rows[3]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Kapton™"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[3].material"
+     }
+    ]
+   },
+   "condition_words": {
+    "gravity": [
+     "comparable 1-g tests"
+    ]
+   }
+  },
+  {
+   "item": "AIAA08.conclusion",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {},
+   "condition_basis": {},
+   "condition_words": {
+    "gravity": [
+     "produced in low-gravity",
+     "similar conditions in normal gravity"
+    ]
+   },
+   "unsure": "'low-gravity' is kept as words, so no level is normalized (rule 'gravity')."
+  },
+  {
+   "item": "AIAA09.table1",
+   "row": "Kapton",
+   "row_source": "rows[0]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Kapton"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[0].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "AIAA09.table1",
+   "row": "Lamp wick",
+   "row_source": "rows[1]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Lamp wick"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[1].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "AIAA09.table1",
+   "row": "Silicone",
+   "row_source": "rows[2]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Silicone"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[2].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "AIAA09.table1",
+   "row": "Teflon",
+   "row_source": "rows[3]",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Teflon"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "values",
+      "key": "rows[3].material"
+     }
+    ]
+   }
+  },
+  {
+   "item": "AIAA09.detector",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "Kapton",
+     "Teflon"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "Kapton"
+     },
+     {
+      "in": "text",
+      "words": "Teflon"
+     }
+    ]
+   }
+  },
+  {
+   "item": "USNCM13.mass1um",
+   "needs": [
+    "D2"
+   ],
+   "kind": "result",
+   "conditions": {
+    "material": [
+     "lampwick",
+     "silicone"
+    ]
+   },
+   "condition_basis": {
+    "material": [
+     {
+      "in": "text",
+      "words": "lampwick"
+     },
+     {
+      "in": "text",
+      "words": "silicone"
+     }
+    ]
+   }
   }
  ]
 }

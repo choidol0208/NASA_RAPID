@@ -5,7 +5,7 @@
   "templates": "A template holds no digit. {slot} is replaced by a count of the block; [slot|one|many] prints 'one' if the slot equals 1 and 'many' otherwise. The only text with digits is the label of pile 3, which carries the listing date as the team lead worded it."
  },
  "order_rule": {
-  "text": "Results are ranked by the conditions their own words state, against the ranges of the environment, with no weights and no assumed values: first the results that state an oxygen and a pressure inside the ranges of the environment; then those that state at least one of its conditions (oxygen, pressure, gravity level) inside its range and none outside; then those that state no oxygen, pressure or gravity level; last those listed for this environment under other conditions. Inside a group: a result that names a material comes first; then by item id; then in the order of findings.csv. The groups are those of findings_by_environment.json; this file does not place a result again.",
+  "text": "Results are ranked by the conditions their own words state, against the ranges of the environment, with no weights and no assumed values: first the results that state an oxygen and a pressure inside the ranges of the environment; then those that state at least one of its conditions (oxygen, pressure, gravity level) inside its range and none outside; then those that state no oxygen, pressure or gravity level; last those listed for this environment under other conditions. Inside a group: a result whose item is labelled measured (or carries no label) comes before a result labelled computed by the authors, simulation or preliminary (field result_kind of the item, see result_kind); then a result that names a material comes first; then by item id; then in the order of findings.csv. The groups are those of findings_by_environment.json; this file does not place a result again.",
   "groups": [
    {"id": "at_environment", "from": "at_environment", "label": "At the oxygen and pressure of this environment"},
    {"id": "about_a_stated_condition", "from": "about_a_stated_condition_of_the_environment", "label": "About one stated condition of this environment"},
@@ -13,11 +13,48 @@
    {"id": "other_conditions", "from": "other_conditions", "label": "At other stated conditions (not listed for this environment by findings_by_environment.json)"}
   ]
  },
+ "result_kind": {
+  "note": "Field 'result_kind' of a reference item (added 2026-11-15; items added earlier carry none and are ordered as measured). An item whose kind is not measured begins its text with the label of its kind; check U5 verifies it. 'relation' is set for an item whose experiment is not a PSI investigation of this catalogue; such an item has 'investigation' null.",
+  "values": ["measured", "computed_by_authors", "simulation", "preliminary"],
+  "after_measured": ["computed_by_authors", "simulation", "preliminary"],
+  "labels": {"computed_by_authors": "Computed by the authors, not a measurement:", "simulation": "Numerical simulation, not a measurement:", "preliminary": "Preliminary result:"},
+  "non_psi_experiment_words": ["Saffire IV", "Saffire V", "Saffire VI", "Saffire-IV", "Saffire-V", "Saffire-VI", "Lunar Combustion Investigation", "LUCI", "STS-107", "drop facility", "drop-tower", "baffles", "MIST project"]
+ },
  "criteria_item_types": ["requirement", "acceptance_criterion", "exposure_limit", "monitoring_range", "design_value"],
  "row_label_fields": ["material", "flight_sample", "flight", "sample", "file", "flow_direction"],
  "units": {
-  "note": "The unit of a printed value is taken from the item's 'values' field 'unit' where it has one; otherwise from the key of the value by the first rule below whose token is in the key (the keys are the team's names for the printed columns; the unit is the unit those names carry). A key that matches no rule has no unit.",
+  "note": "The unit of a printed value is taken from the item's 'values' field 'unit' where it has one; otherwise from the key of the value by the first rule below whose token is in the key (the keys are the team's names for the printed columns; the unit is the unit those names carry). A key that matches no rule has no unit. The rules from flow_cms to he_pct at the head of the list were added on 2026-11-15 for the keys of the items added that day; they leave the unit of every value held before unchanged.",
   "rules": [
+   ["flow_cms", "cm/s"],
+   ["rate_mm_s", "mm/s"],
+   ["mm2_s", "mm2/s"],
+   ["w_per_cm", "W/cm"],
+   ["power_w", "W"],
+   ["energy_j", "J"],
+   ["release_w", "W"],
+   ["kj_per_g_o2", "kJ/g O2"],
+   ["_kj", "kJ"],
+   ["_degc", "°C"],
+   ["_mmhg", "mmHg"],
+   ["kw_m2", "kW/m2"],
+   ["_kw", "kW"],
+   ["mg_m3", "mg/m3"],
+   ["_m_s", "m/s"],
+   ["width_mm", "mm"],
+   ["thickness_mm", "mm"],
+   ["diameter_mm", "mm"],
+   ["length_mm", "mm"],
+   ["_um", "µm"],
+   ["_nm", "nm"],
+   ["time_min", "min"],
+   ["time_s", "s"],
+   ["duration_s", "s"],
+   ["delay_s", "s"],
+   ["per_s", "s-1"],
+   ["released_g", "g"],
+   ["volume_m3", "m3"],
+   ["n2_pct", "% N2"],
+   ["he_pct", "% He"],
    ["spread_rate_mm_s", "mm/s"],
    ["moc_slope_pct_o2_per_psia", "% O2 per psia"],
    ["moc_vol_pct", "vol %"],
