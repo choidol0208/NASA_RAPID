@@ -122,5 +122,27 @@
   "number_rule": "A number of an item's text or quote is a token of the words that reads as a number (an optional sign, digits, an optional decimal part, an optional '%'), after the punctuation around it is removed. A token joined to letters by a hyphen (HT90-40, 0-g, 5-cm-wide) and a token after one of 'label_words' is a label, not a printed value. A number is 'not in values' if no number held by the item's values equals it.",
   "label_words": ["Table", "table", "TABLE", "section", "Section", "Eq.", "Fig.", "Figure", "Appendix", "sample", "samples", "Sample", "Samples", "Test", "test", "flight", "Flight"],
   "added_values_topics": "Values blocks were added by hand (field 'values_from' = 'item text') only to items without values whose text or quote prints a number about solid-material flammability limits, flame spread rates, extinction conditions, combustion products or smoke particle size, copying the number exactly as printed."
+ },
+ "top_five": {
+  "note": "Added 2026-11-15. Rule, templates and fixed sentences of pipeline/results_top.py, which writes data/pipeline/results_top.json and results_top.csv from results_by_need.json. No weights and no scores.",
+  "selection_rule": "Take the need's own results (the entries of found.entries, not the ones tagged for all questions). Order them by (1) condition group as in results_by_need.json: at the oxygen and pressure of the environment; about one stated condition; without these conditions stated; other conditions; (2) result_kind: measured (or no label) before computed_by_authors, then simulation, then preliminary; (3) results of a PSI investigation of this catalogue (no 'relation') before results carrying 'relation' (related NASA experiment); (4) results with printed values before results without; (5) item id; ties keep the order of found.entries. Then walk the order and take a result unless two results of the same document are already taken (so at most two per document), until five are taken. If fewer than five exist after the rule, take what exists; the header says how many are shown.",
+  "group_order": ["at_environment", "about_a_stated_condition", "stated_without_these_conditions", "other_conditions"],
+  "kind_order": ["measured", "computed_by_authors", "simulation", "preliminary"],
+  "take": 5,
+  "per_document": 2,
+  "max_value_cells": 6,
+  "line_template": "{text}",
+  "line_note": "The line is the item's team-worded text, whole and unchanged (no cut, whatever its length).",
+  "values_template": "{label}: {value} {unit}",
+  "values_label": "The row label, the key under which the printed column or quantity is held and the column, joined by ', ' (empty parts left out); the unit is left out where the value has none; cells are joined by '; '.",
+  "values_more": "and {n} more in the source table",
+  "conditions_fields": ["oxygen", "pressure", "gravity level", "flow", "material"],
+  "conditions_note": "From the finding's conditions: oxygen as '{min}% O2' or '{min} to {max}% O2', pressure as written, gravity level, flow as '{value} cm/s', material as written; a condition not stated is left out; parts joined by '; '.",
+  "source_template": "{title}, {version}, {where}",
+  "header_template": "{n} [n|quoted result|quoted results] for this question; showing {k}. {a} at the oxygen and pressure of this environment, {b} about one of its stated conditions.",
+  "no_result": "No quoted result is tagged for this question.",
+  "skip_reason": "two results of this document already taken",
+  "more_file": "data/pipeline/results_by_need.json",
+  "footer": "Quoted from NASA documents with the numbers as printed. Read by an AI agent, not checked by a person. The team compares nothing and recommends nothing."
  }
 }
