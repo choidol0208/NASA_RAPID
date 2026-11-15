@@ -18,7 +18,9 @@ Order (each step reads what the steps before it wrote):
                                          of ai/review/pm_prereview.json; rewrites ai/review/review_sheet.csv
   7 catalog audit ai/audit_catalog.py    data/insights/catalog_trace.json
   8 apply review  ai/apply_review.py     the verdicts of ai/review/review_sheet.csv; cards.json, quality.json
-  9 check         ai/check_all.py        every hard check; exit 1 on any failure
+  9 check         ai/check_all.py        every hard check; exit 1 on any failure. With --assistant-tests it
+                --assistant-tests        first runs the assistant's unit tests in ai/assistant/ (fake model,
+                                         no network, no model call; writes only to temporary folders)
 
 Step 2 overwrites cards.json with the quoted baseline, so steps 6 and 8 must run after it; that is why
 this script exists. Steps 4 and 5 read only data/pipeline/tests.csv, the catalog and scoring/; they were
@@ -47,7 +49,8 @@ STEPS = (
     ("apply cards (logged model output, no model call)", ["ai/apply_cards.py", "--quiet"]),
     ("catalog audit", ["ai/audit_catalog.py"]),
     ("apply review", ["ai/apply_review.py"]),
-    ("check", ["ai/check_all.py"]),
+    # the assistant's unit tests (fake model, no network) run inside the check step (check_all --assistant-tests)
+    ("check", ["ai/check_all.py", "--assistant-tests"]),
 )
 
 

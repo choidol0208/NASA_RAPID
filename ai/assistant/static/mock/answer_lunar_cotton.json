@@ -1,0 +1,1548 @@
+{
+ "version": "1",
+ "turn_id": "mock-lunar-cotton",
+ "kind": "answer",
+ "mode": "mock",
+ "request": {
+  "version": "1",
+  "intent": "find_investigations",
+  "asks_verdict": false,
+  "asks_prediction": false,
+  "environment": {
+   "preset": "lunar_habitat",
+   "label": "Lunar base or pressurized rover",
+   "o2_pct": 30.0,
+   "pressure_kpa": 70.3,
+   "gravity": "lunar",
+   "flow": "ventilated",
+   "scenario_id": "lunar_habitat",
+   "cell": null
+  },
+  "compare_with": [],
+  "item": {
+   "material": "cotton",
+   "words": "cotton seat covers",
+   "fuel_phase": "solid",
+   "query_word": "cotton",
+   "label": "cotton"
+  },
+  "equipment": null,
+  "questions": [],
+  "investigations": [],
+  "unresolved_names": [],
+  "tests": [],
+  "term": null,
+  "keywords": [],
+  "english": "The seat covers of a lunar base rover are cotton fabric; which NASA experiments are related?",
+  "sources": {
+   "intent": "message",
+   "environment.preset": "message",
+   "environment.o2_pct": "preset",
+   "environment.pressure_kpa": "preset",
+   "environment.gravity": "preset",
+   "environment.flow": "preset",
+   "item.material": "message"
+  },
+  "agreement": {
+   "intent": "agree",
+   "environment.preset": "agree",
+   "item.material": "agree",
+   "asks_verdict": "agree",
+   "asks_prediction": "agree",
+   "questions": "single"
+  },
+  "removed_ungrounded": [],
+  "unknown": [],
+  "assumptions": [
+   {
+    "field": "environment.o2_pct",
+    "text": "Oxygen: 30%, from the Lunar base or pressurized rover preset."
+   },
+   {
+    "field": "environment.pressure_kpa",
+    "text": "Pressure: 70.3 kPa, from the Lunar base or pressurized rover preset."
+   }
+  ],
+  "clarify": null,
+  "dashboard_q": "lunar habitat cotton"
+ },
+ "state": {
+  "version": "1",
+  "turn": 1,
+  "request": {
+   "version": "1",
+   "intent": "find_investigations",
+   "asks_verdict": false,
+   "asks_prediction": false,
+   "environment": {
+    "preset": "lunar_habitat",
+    "label": "Lunar base or pressurized rover",
+    "o2_pct": 30.0,
+    "pressure_kpa": 70.3,
+    "gravity": "lunar",
+    "flow": "ventilated",
+    "scenario_id": "lunar_habitat",
+    "cell": null
+   },
+   "compare_with": [],
+   "item": {
+    "material": "cotton",
+    "words": "cotton seat covers",
+    "fuel_phase": "solid",
+    "query_word": "cotton",
+    "label": "cotton"
+   },
+   "equipment": null,
+   "questions": [],
+   "investigations": [],
+   "unresolved_names": [],
+   "tests": [],
+   "term": null,
+   "keywords": [],
+   "english": "The seat covers of a lunar base rover are cotton fabric; which NASA experiments are related?",
+   "sources": {
+    "intent": "message",
+    "environment.preset": "message",
+    "environment.o2_pct": "preset",
+    "environment.pressure_kpa": "preset",
+    "environment.gravity": "preset",
+    "environment.flow": "preset",
+    "item.material": "message"
+   },
+   "agreement": {
+    "intent": "agree",
+    "environment.preset": "agree",
+    "item.material": "agree",
+    "asks_verdict": "agree",
+    "asks_prediction": "agree",
+    "questions": "single"
+   },
+   "removed_ungrounded": [],
+   "unknown": [],
+   "assumptions": [
+    {
+     "field": "environment.o2_pct",
+     "text": "Oxygen: 30%, from the Lunar base or pressurized rover preset."
+    },
+    {
+     "field": "environment.pressure_kpa",
+     "text": "Pressure: 70.3 kPa, from the Lunar base or pressurized rover preset."
+    }
+   ],
+   "clarify": null,
+   "dashboard_q": "lunar habitat cotton"
+  },
+  "pending_clarify": null,
+  "last_list": [
+   "PSI-99",
+   "PSI-98",
+   "PSI-20"
+  ],
+  "last_tests": []
+ },
+ "notices": [],
+ "answer": {
+  "origin": "model",
+  "sentences": [
+   {
+    "n": 1,
+    "text": "By the team's ranking, the investigations closest to a cotton fabric in a lunar base are SAFFIRE-II (PSI-99), SAFFIRE-I (PSI-98) and ACME BRE (PSI-20).",
+    "facts": [
+     "F1"
+    ],
+    "origin": "model",
+    "status": "repaired"
+   },
+   {
+    "n": 2,
+    "text": "Solid-fuel tests in the team's tables record the oxygen of the surrounding atmosphere for 139 of 376 tests, from 13.6 to 22.2%, so the 30% of this environment is above the highest recorded value.",
+    "facts": [
+     "F17"
+    ],
+    "origin": "model",
+    "status": "kept"
+   },
+   {
+    "n": 3,
+    "text": "Solid-fuel tests record pressure for 0 of 376 tests, so the 70.3 kPa of this environment is not comparable with a recorded value.",
+    "facts": [
+     "F18"
+    ],
+    "origin": "model",
+    "status": "kept"
+   },
+   {
+    "n": 4,
+    "text": "For extinction conditions, 17 of the 298 counted tests were recorded with oxygen and pressure both inside this environment's ranges, while none of the 133 tests counted for the flammability limit was.",
+    "facts": [
+     "F13",
+     "F10"
+    ],
+    "origin": "model",
+    "status": "kept"
+   }
+  ],
+  "removed": [
+   {
+    "text": "Every test in the tables ran in microgravity, so lunar gravity would make the cotton burn more slowly.",
+    "by": "checker",
+    "reason": "The facts say all tests are microgravity; they say nothing about how cotton burns in lunar gravity."
+   }
+  ]
+ },
+ "facts": [
+  {
+   "id": "F1",
+   "ref": "rank:lunar habitat cotton",
+   "tool": "rank_investigations",
+   "kind": "ranking",
+   "context": null,
+   "text": "Closest to this input by the team's ranking, in order: SAFFIRE-II (PSI-99), SAFFIRE-I (PSI-98), ACME BRE (PSI-20).",
+   "numbers": [
+    {
+     "value": 99,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 98,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 20,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "scoring/scoring_config.json",
+    "line": null,
+    "key": null
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/scoring/scoring_config.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-99",
+    "PSI-98",
+    "PSI-20"
+   ],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F2",
+   "ref": "configurations.csv#SAFFIRE-II-C02",
+   "tool": "rank_investigations",
+   "kind": "ranking",
+   "context": null,
+   "text": "SAFFIRE-II (PSI-99): closest configuration SIBAL fabric (0.37 mm), concurrent 20 cm/s; fuel match 1.00 (fuel SIBAL (75% cotton, 25% fiberglass)); flow match 0.90 (flow concurrent at 20 cm/s).",
+   "numbers": [
+    {
+     "value": 99,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0.37,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 20,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 1.0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 75,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 25,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0.9,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 20,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/catalog/configurations.csv",
+    "line": null,
+    "key": "SAFFIRE-II-C02"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/catalog/configurations.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-99"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F3",
+   "ref": "configurations.csv#SAFFIRE-I-C01",
+   "tool": "rank_investigations",
+   "kind": "ranking",
+   "context": null,
+   "text": "SAFFIRE-I (PSI-98): closest configuration Large SIBAL fabric (0.94 x 0.4 m), concurrent flow 20 cm/s; fuel match 1.00 (fuel SIBAL (75% cotton, 25% fiberglass)); flow match 0.90 (flow concurrent at 20 cm/s).",
+   "numbers": [
+    {
+     "value": 98,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0.94,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0.4,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 20,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 1.0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 75,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 25,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0.9,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 20,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/catalog/configurations.csv",
+    "line": null,
+    "key": "SAFFIRE-I-C01"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/catalog/configurations.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-98"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F4",
+   "ref": "configurations.csv#ACME-BRE-C01",
+   "tool": "rank_investigations",
+   "kind": "ranking",
+   "context": null,
+   "text": "ACME BRE (PSI-20): closest configuration Porous gas burner emulating a burning solid, quiescent ambient; O2 match 1.00 (O2 tested 21–40%); fuel match 0.50 (fuel methane; ethylene (100% or 50% in N2)).",
+   "numbers": [
+    {
+     "value": 20,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 1.0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 21,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 40,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0.5,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 100,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 50,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/catalog/configurations.csv",
+    "line": null,
+    "key": "ACME-BRE-C01"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/catalog/configurations.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-20"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F5",
+   "ref": "data/catalog/configurations.csv#SAFFIRE-II-C02",
+   "tool": "rank_investigations",
+   "kind": "ranking",
+   "context": null,
+   "text": "SAFFIRE-II (PSI-99): O2 0.24 (O2 tested 22.1%).",
+   "numbers": [
+    {
+     "value": 99,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0.24,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 22.1,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/catalog/configurations.csv",
+    "line": null,
+    "key": "SAFFIRE-II-C02"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/catalog/configurations.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-99"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F6",
+   "ref": "data/catalog/configurations.csv#SAFFIRE-I-C01",
+   "tool": "rank_investigations",
+   "kind": "ranking",
+   "context": null,
+   "text": "SAFFIRE-I (PSI-98): O2 0.22 (O2 tested 21.5–21.7%).",
+   "numbers": [
+    {
+     "value": 98,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0.22,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 21.5,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 21.7,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/catalog/configurations.csv",
+    "line": null,
+    "key": "SAFFIRE-I-C01"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/catalog/configurations.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-98"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F7",
+   "ref": "data/catalog/configurations.csv#ACME-BRE-C01",
+   "tool": "rank_investigations",
+   "kind": "ranking",
+   "context": null,
+   "text": "ACME BRE (PSI-20): sample shape 0.20 (porous_burner (regime n/a)).",
+   "numbers": [
+    {
+     "value": 20,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0.2,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/catalog/configurations.csv",
+    "line": null,
+    "key": "ACME-BRE-C01"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/catalog/configurations.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-20"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F8",
+   "ref": "scoring/scoring_config.json#warnings.partial_gravity",
+   "tool": "rank_investigations",
+   "kind": "limit",
+   "context": null,
+   "text": "PSI has no partial-gravity (lunar or Martian) combustion data. All results here are microgravity tests; they are not bounds for lunar or Martian gravity. NASA names partial-gravity material flammability a major gap (OCHMO-TB-008).",
+   "numbers": [
+    {
+     "value": 8,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "scoring/scoring_config.json",
+    "line": null,
+    "key": "warnings.partial_gravity"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/scoring/scoring_config.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F9",
+   "ref": "scoring/scoring_config.json#_about",
+   "tool": "rank_investigations",
+   "kind": "limit",
+   "context": null,
+   "text": "The ranking is the team's similarity score over the catalog, not NASA's conclusion and not a fire-safety judgement.",
+   "numbers": [],
+   "source": {
+    "file": "scoring/scoring_config.json",
+    "line": null,
+    "key": "_about"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/scoring/scoring_config.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F10",
+   "ref": "evidence/scenario_lunar_habitat.json#P1/status.other_atmosphere",
+   "tool": "counts_per_question",
+   "kind": "statement",
+   "context": "Lunar base or pressurized rover; Flammability limit (P1)",
+   "text": "None of the 133 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table.",
+   "numbers": [
+    {
+     "value": 133,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "needs.P1.statements[status.other_atmosphere]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F11",
+   "ref": "evidence/scenario_lunar_habitat.json#P2/status.not_measured",
+   "tool": "counts_per_question",
+   "kind": "statement",
+   "context": "Lunar base or pressurized rover; Ignition (P2)",
+   "text": "No test in the mapped PSI tables is counted for this need: no test meets every required condition, holds a value for at least one outcome variable of the need and comes from an investigation linked to the need by a supported purpose sentence of the investigators or of a NASA project document.",
+   "numbers": [],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "needs.P2.statements[status.not_measured]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F12",
+   "ref": "evidence/scenario_lunar_habitat.json#P3/status.other_atmosphere",
+   "tool": "counts_per_question",
+   "kind": "statement",
+   "context": "Lunar base or pressurized rover; Flame spread and growth (P3)",
+   "text": "None of the 2 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table.",
+   "numbers": [
+    {
+     "value": 2,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "needs.P3.statements[status.other_atmosphere]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F13",
+   "ref": "evidence/scenario_lunar_habitat.json#S1/status.in_atmosphere",
+   "tool": "counts_per_question",
+   "kind": "statement",
+   "context": "Lunar base or pressurized rover; Extinction conditions (S1)",
+   "text": "17 of the 298 tests counted for this need were recorded with oxygen and pressure both inside the ranges of this environment.",
+   "numbers": [
+    {
+     "value": 17,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 298,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "needs.S1.statements[status.in_atmosphere]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F14",
+   "ref": "evidence/scenario_lunar_habitat.json#D1/status.other_atmosphere",
+   "tool": "counts_per_question",
+   "kind": "statement",
+   "context": "Lunar base or pressurized rover; Combustion products (D1)",
+   "text": "None of the 122 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none was recorded inside one of the two ranges with the other value not in the table.",
+   "numbers": [
+    {
+     "value": 122,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "needs.D1.statements[status.other_atmosphere]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F15",
+   "ref": "evidence/scenario_lunar_habitat.json#D2/status.not_measured",
+   "tool": "counts_per_question",
+   "kind": "statement",
+   "context": "Lunar base or pressurized rover; Smoke generation conditions (D2)",
+   "text": "No test in the mapped PSI tables is counted for this need: no test meets every required condition, holds a value for at least one outcome variable of the need and comes from an investigation linked to the need by a supported purpose sentence of the investigators or of a NASA project document.",
+   "numbers": [],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "needs.D2.statements[status.not_measured]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F16",
+   "ref": "data/pipeline/evidence/scenario_lunar_habitat.json#limit",
+   "tool": "counts_per_question",
+   "kind": "limit",
+   "context": null,
+   "text": "A count says how many recorded tests hold the variables of a question; it is not a result for this environment and not a judgement of it.",
+   "numbers": [],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "limit"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F17",
+   "ref": "data/pipeline/tests.csv#fuel_phase=solid/o2_pct",
+   "tool": "tested_range",
+   "kind": "range",
+   "context": null,
+   "text": "Solid-fuel tests in the team's tables: oxygen of the surrounding atmosphere recorded for 139 of 376, from 13.6 to 22.2%; your 30% is above the highest recorded value.",
+   "numbers": [
+    {
+     "value": 139,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 13.6,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 22.2,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 30,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/tests.csv",
+    "line": null,
+    "key": "fuel_phase=solid/o2_pct"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F18",
+   "ref": "data/pipeline/tests.csv#fuel_phase=solid/pressure_kpa",
+   "tool": "tested_range",
+   "kind": "range",
+   "context": null,
+   "text": "Solid-fuel tests: pressure recorded for 0 of 376; your 70.3 kPa is not comparable, no value recorded.",
+   "numbers": [
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 70.3,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/tests.csv",
+    "line": null,
+    "key": "fuel_phase=solid/pressure_kpa"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F19",
+   "ref": "data/insights/model_readiness.json#not_covered",
+   "tool": "tested_range",
+   "kind": "limit",
+   "context": null,
+   "text": "No table has a partial-gravity test: every test row in the team's tests.csv is recorded at microgravity (gravity level set per table by the team from the PSI record). Microgravity and 1 g results are not bounds for lunar or Martian gravity.",
+   "numbers": [
+    {
+     "value": 1,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/insights/model_readiness.json",
+    "line": null,
+    "key": "not_covered"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/insights/model_readiness.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F20",
+   "ref": "data/pipeline/tests.csv#limit",
+   "tool": "tested_range",
+   "kind": "limit",
+   "context": null,
+   "text": "Lying inside the recorded span is not a result at your condition: the span says only where tests were run.",
+   "numbers": [],
+   "source": {
+    "file": "data/pipeline/tests.csv",
+    "line": null,
+    "key": "limit"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F21",
+   "ref": "evidence.json#PSI-26/APP-2",
+   "tool": "search_records",
+   "kind": "nasa_sentence",
+   "context": null,
+   "text": "BASS (PSI-26) record, planned approach: \"Custom-made fabric samples consisting of 75% cotton and 25% fiberglass (by mass) measuring were used as a fuel source as well as Nomex fabric and Ultem.\"",
+   "numbers": [
+    {
+     "value": 26,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 75,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 25,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/insights/evidence.json",
+    "line": null,
+    "key": "records.PSI-26.units.APP-2"
+   },
+   "source_keys": [],
+   "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-26",
+   "quote": true,
+   "field": "approach",
+   "investigation_ids": [
+    "PSI-26"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F22",
+   "ref": "evidence.json#PSI-98/APP-2",
+   "tool": "search_records",
+   "kind": "nasa_sentence",
+   "context": null,
+   "text": "SAFFIRE-I (PSI-98) record, planned approach: \"The sample material for Saffire-I is a composite fabric called Sibal consisting of cotton on a fiberglass substrate (75% cotton, 25% fiberglass by weight).\"",
+   "numbers": [
+    {
+     "value": 98,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 75,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 25,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/insights/evidence.json",
+    "line": null,
+    "key": "records.PSI-98.units.APP-2"
+   },
+   "source_keys": [],
+   "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98",
+   "quote": true,
+   "field": "approach",
+   "investigation_ids": [
+    "PSI-98"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F23",
+   "ref": "data/insights/evidence.json#units",
+   "tool": "search_records",
+   "kind": "limit",
+   "context": null,
+   "text": "A keyword search over the 556 numbered sentences of the 24 PSI records; a sentence that does not use these words is not found.",
+   "numbers": [
+    {
+     "value": 556,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 24,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/insights/evidence.json",
+    "line": null,
+    "key": "units"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/insights/evidence.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  }
+ ],
+ "panels": [
+  {
+   "id": "p1",
+   "type": "ranking",
+   "title": "Closest NASA investigations (team's ranking)",
+   "note": "The ranking is the team's similarity score over the catalog, not NASA's conclusion and not a fire-safety judgement.",
+   "columns": [
+    {
+     "key": "investigation",
+     "label": "investigation",
+     "kind": "text"
+    },
+    {
+     "key": "accession",
+     "label": "accession",
+     "kind": "text"
+    },
+    {
+     "key": "configuration",
+     "label": "configuration",
+     "kind": "text"
+    },
+    {
+     "key": "score",
+     "label": "team score (0 to 100)",
+     "kind": "number"
+    },
+    {
+     "key": "why",
+     "label": "why",
+     "kind": "text"
+    },
+    {
+     "key": "main_gap",
+     "label": "main gap",
+     "kind": "text"
+    },
+    {
+     "key": "record",
+     "label": "record",
+     "kind": "link"
+    }
+   ],
+   "rows": [
+    {
+     "investigation": "SAFFIRE-II",
+     "accession": "PSI-99",
+     "configuration": "SIBAL fabric (0.37 mm), concurrent 20 cm/s",
+     "score": 75.0,
+     "why": "fuel match 1.00 (fuel SIBAL (75% cotton, 25% fiberglass)); flow match 0.90 (flow concurrent at 20 cm/s)",
+     "main_gap": "O2 0.24 (O2 tested 22.1%)",
+     "record": {
+      "text": "PSI record",
+      "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99"
+     }
+    },
+    {
+     "investigation": "SAFFIRE-I",
+     "accession": "PSI-98",
+     "configuration": "Large SIBAL fabric (0.94 x 0.4 m), concurrent flow 20 cm/s",
+     "score": 74.5,
+     "why": "fuel match 1.00 (fuel SIBAL (75% cotton, 25% fiberglass)); flow match 0.90 (flow concurrent at 20 cm/s)",
+     "main_gap": "O2 0.22 (O2 tested 21.5–21.7%)",
+     "record": {
+      "text": "PSI record",
+      "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98"
+     }
+    },
+    {
+     "investigation": "ACME BRE",
+     "accession": "PSI-20",
+     "configuration": "Porous gas burner emulating a burning solid, quiescent ambient",
+     "score": 63.9,
+     "why": "O2 match 1.00 (O2 tested 21–40%); fuel match 0.50 (fuel methane; ethylene (100% or 50% in N2))",
+     "main_gap": "sample shape 0.20 (porous_burner (regime n/a))",
+     "record": {
+      "text": "PSI record",
+      "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-20"
+     }
+    }
+   ],
+   "download": null,
+   "dashboard_section": "#top",
+   "fact_ids": [
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9"
+   ]
+  },
+  {
+   "id": "p2",
+   "type": "counts",
+   "title": "Recorded tests per fire-safety question: Lunar base or pressurized rover",
+   "note": "A count says how many recorded tests hold the variables of a question; it is not a result for this environment and not a judgement of it.",
+   "columns": [
+    {
+     "key": "question",
+     "label": "question",
+     "kind": "text"
+    },
+    {
+     "key": "name",
+     "label": "name",
+     "kind": "text"
+    },
+    {
+     "key": "counted",
+     "label": "counted",
+     "kind": "number"
+    },
+    {
+     "key": "both_inside",
+     "label": "both inside",
+     "kind": "number"
+    },
+    {
+     "key": "oxygen_only",
+     "label": "oxygen only",
+     "kind": "number"
+    },
+    {
+     "key": "pressure_only",
+     "label": "pressure only",
+     "kind": "number"
+    },
+    {
+     "key": "elsewhere",
+     "label": "elsewhere",
+     "kind": "number"
+    },
+    {
+     "key": "status",
+     "label": "status",
+     "kind": "text"
+    }
+   ],
+   "rows": [
+    {
+     "question": "P1",
+     "name": "Flammability limit",
+     "counted": 133,
+     "both_inside": 0,
+     "oxygen_only": 0,
+     "pressure_only": 0,
+     "elsewhere": 133,
+     "status": "other_atmosphere"
+    },
+    {
+     "question": "P2",
+     "name": "Ignition",
+     "counted": 0,
+     "both_inside": 0,
+     "oxygen_only": 0,
+     "pressure_only": 0,
+     "elsewhere": 0,
+     "status": "not_measured"
+    },
+    {
+     "question": "P3",
+     "name": "Flame spread and growth",
+     "counted": 2,
+     "both_inside": 0,
+     "oxygen_only": 0,
+     "pressure_only": 0,
+     "elsewhere": 2,
+     "status": "other_atmosphere"
+    },
+    {
+     "question": "S1",
+     "name": "Extinction conditions",
+     "counted": 298,
+     "both_inside": 17,
+     "oxygen_only": 0,
+     "pressure_only": 0,
+     "elsewhere": 281,
+     "status": "in_atmosphere"
+    },
+    {
+     "question": "D1",
+     "name": "Combustion products",
+     "counted": 122,
+     "both_inside": 0,
+     "oxygen_only": 0,
+     "pressure_only": 0,
+     "elsewhere": 122,
+     "status": "other_atmosphere"
+    },
+    {
+     "question": "D2",
+     "name": "Smoke generation conditions",
+     "counted": 0,
+     "both_inside": 0,
+     "oxygen_only": 0,
+     "pressure_only": 0,
+     "elsewhere": 0,
+     "status": "not_measured"
+    }
+   ],
+   "download": null,
+   "dashboard_section": "#needs",
+   "fact_ids": [
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+    "F16"
+   ]
+  },
+  {
+   "id": "p3",
+   "type": "range",
+   "title": "Your values against the recorded tests",
+   "note": "Lying inside the recorded span is not a result at your condition: the span says only where tests were run. No table has a partial-gravity test: every test row in the team's tests.csv is recorded at microgravity (gravity level set per table by the team from the PSI record). Microgravity and 1 g results are not bounds for lunar or Martian gravity.",
+   "columns": [
+    {
+     "key": "phase",
+     "label": "fuel phase",
+     "kind": "text"
+    },
+    {
+     "key": "tests",
+     "label": "tests",
+     "kind": "number"
+    },
+    {
+     "key": "o2_recorded",
+     "label": "oxygen recorded",
+     "kind": "number"
+    },
+    {
+     "key": "o2_span",
+     "label": "oxygen span (%)",
+     "kind": "text"
+    },
+    {
+     "key": "your_o2",
+     "label": "your oxygen",
+     "kind": "number"
+    },
+    {
+     "key": "p_recorded",
+     "label": "pressure recorded",
+     "kind": "number"
+    },
+    {
+     "key": "p_span",
+     "label": "pressure span (kPa)",
+     "kind": "text"
+    },
+    {
+     "key": "your_p",
+     "label": "your pressure",
+     "kind": "number"
+    }
+   ],
+   "rows": [
+    {
+     "phase": "solid",
+     "tests": 376,
+     "o2_recorded": 139,
+     "o2_span": "13.6 to 22.2",
+     "your_o2": 30.0,
+     "p_recorded": 0,
+     "p_span": null,
+     "your_p": 70.3
+    }
+   ],
+   "download": null,
+   "dashboard_section": "#stops",
+   "fact_ids": [
+    "F17",
+    "F18",
+    "F19",
+    "F20"
+   ]
+  },
+  {
+   "id": "p4",
+   "type": "quotes",
+   "title": "NASA record sentences that use these words",
+   "note": "A keyword search over the 556 numbered sentences of the 24 PSI records; a sentence that does not use these words is not found.",
+   "columns": [
+    {
+     "key": "investigation",
+     "label": "investigation",
+     "kind": "text"
+    },
+    {
+     "key": "field",
+     "label": "field",
+     "kind": "text"
+    },
+    {
+     "key": "sentence",
+     "label": "sentence",
+     "kind": "text"
+    },
+    {
+     "key": "record",
+     "label": "record",
+     "kind": "link"
+    },
+    {
+     "key": "doi",
+     "label": "dataset DOI",
+     "kind": "text"
+    }
+   ],
+   "rows": [
+    {
+     "investigation": "BASS (PSI-26)",
+     "field": "planned approach",
+     "sentence": "Custom-made fabric samples consisting of 75% cotton and 25% fiberglass (by mass) measuring were used as a fuel source as well as Nomex fabric and Ultem.",
+     "record": {
+      "text": "PSI record",
+      "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-26"
+     },
+     "doi": "10.60555/58h4-dy80"
+    },
+    {
+     "investigation": "SAFFIRE-I (PSI-98)",
+     "field": "planned approach",
+     "sentence": "The sample material for Saffire-I is a composite fabric called Sibal consisting of cotton on a fiberglass substrate (75% cotton, 25% fiberglass by weight).",
+     "record": {
+      "text": "PSI record",
+      "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98"
+     },
+     "doi": "10.60555/0t15-1z43"
+    }
+   ],
+   "download": null,
+   "dashboard_section": null,
+   "fact_ids": [
+    "F21",
+    "F22",
+    "F23"
+   ]
+  }
+ ],
+ "followups": [
+  {
+   "text": "Where are the raw data of the tests for this environment?",
+   "request": null
+  },
+  {
+   "text": "What do NASA's records say about smoke detection?",
+   "request": null
+  },
+  {
+   "text": "Which criteria in NASA documents are about extinction?",
+   "request": null
+  }
+ ],
+ "clarify": null,
+ "dashboard": {
+  "q": "lunar habitat cotton",
+  "section": "#top"
+ },
+ "trace": {
+  "steps": [
+   {
+    "step": "understand",
+    "label": "Reading your request",
+    "summary": "Read 2 times (1 by the model, once by the rule parser); 6 of 6 fields agree.",
+    "ms": 4210,
+    "model_calls": 1,
+    "detail": {
+     "readings": [
+      {
+       "reader": "M1",
+       "valid": true,
+       "ms": 4190
+      },
+      {
+       "reader": "R",
+       "valid": true,
+       "ms": 12
+      }
+     ],
+     "agreement": {
+      "intent": "agree",
+      "environment.preset": "agree",
+      "item.material": "agree",
+      "asks_verdict": "agree",
+      "asks_prediction": "agree",
+      "questions": "single"
+     },
+     "removed_ungrounded": [],
+     "asked": false
+    }
+   },
+   {
+    "step": "plan",
+    "label": "Choosing what to look up",
+    "summary": "Looking up the team's ranking of the investigations, counts of recorded tests per fire-safety question, where your values lie against the recorded tests, a keyword search of the NASA record sentences.",
+    "ms": 3,
+    "model_calls": 0,
+    "detail": {
+     "tools": [
+      {
+       "tool": "rank_investigations",
+       "args": {
+        "q": "lunar habitat cotton"
+       },
+       "why": "intent find_investigations"
+      },
+      {
+       "tool": "counts_per_question",
+       "args": {
+        "env": "lunar_habitat",
+        "questions": []
+       },
+       "why": "intent find_investigations"
+      },
+      {
+       "tool": "tested_range",
+       "args": {
+        "env": "lunar_habitat",
+        "phase": "solid"
+       },
+       "why": "the environment has oxygen and pressure"
+      },
+      {
+       "tool": "search_records",
+       "args": {
+        "keywords": [
+         "cotton",
+         "fabric"
+        ],
+        "limit": 3
+       },
+       "why": "the request has keywords"
+      }
+     ],
+     "dashboard_mismatch": []
+    }
+   },
+   {
+    "step": "lookup",
+    "label": "Looking up the team's files",
+    "summary": "23 facts from 6 files.",
+    "ms": 141,
+    "model_calls": 0,
+    "detail": {
+     "tools": [
+      {
+       "tool": "rank_investigations",
+       "ms": 30,
+       "facts": 9,
+       "panels": 1
+      },
+      {
+       "tool": "counts_per_question",
+       "ms": 30,
+       "facts": 7,
+       "panels": 1
+      },
+      {
+       "tool": "tested_range",
+       "ms": 30,
+       "facts": 4,
+       "panels": 1
+      },
+      {
+       "tool": "search_records",
+       "ms": 30,
+       "facts": 3,
+       "panels": 1
+      }
+     ]
+    }
+   },
+   {
+    "step": "write",
+    "label": "Writing from the facts",
+    "summary": "5 sentences written by the local model.",
+    "ms": 9820,
+    "model_calls": 1,
+    "detail": {
+     "sentences": 5,
+     "valid": true
+    }
+   },
+   {
+    "step": "check",
+    "label": "Checking every sentence",
+    "summary": "5 sentences written, 1 removed by the checks, 1 repaired. Model check: 4 of 5 supported.",
+    "ms": 15240,
+    "model_calls": 2,
+    "detail": {
+     "gate_failures": [
+      {
+       "n": 1,
+       "gate": "banned",
+       "reason": "the word 'best'"
+      }
+     ],
+     "repair": true,
+     "checker": {
+      "yes": 4,
+      "no": 1
+     }
+    }
+   },
+   {
+    "step": "deliver",
+    "label": "Done",
+    "summary": "Done in 29.4 s with 4 model calls.",
+    "ms": 2,
+    "model_calls": 0
+   }
+  ],
+  "model_calls": 4,
+  "total_ms": 29416,
+  "cache": "miss",
+  "gate_report": {
+   "written": 5,
+   "repaired": 1,
+   "removed": 1,
+   "removed_by_gate": {},
+   "checker_no": 1,
+   "kept": 4,
+   "fallback": false,
+   "fallback_reason": null
+  },
+  "data_version": "mock",
+  "commit": "main"
+ },
+ "label": "Written by a local language model (gpt-oss:20b) from the facts shown, and checked by code. A research exploration tool, not safety guidance."
+}

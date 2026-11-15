@@ -1,0 +1,231 @@
+{
+ "version": "1",
+ "turn_id": "mock-clarify",
+ "kind": "clarify",
+ "mode": "mock",
+ "request": {
+  "version": "1",
+  "intent": "find_investigations",
+  "asks_verdict": false,
+  "asks_prediction": false,
+  "environment": {
+   "preset": null,
+   "label": null,
+   "o2_pct": null,
+   "pressure_kpa": null,
+   "gravity": null,
+   "flow": null,
+   "scenario_id": null,
+   "cell": null
+  },
+  "compare_with": [],
+  "item": {
+   "material": null,
+   "words": null,
+   "fuel_phase": null,
+   "query_word": null,
+   "label": null
+  },
+  "equipment": null,
+  "questions": [],
+  "investigations": [],
+  "unresolved_names": [],
+  "tests": [],
+  "term": null,
+  "keywords": [],
+  "english": "A rover.",
+  "sources": {
+   "intent": "message"
+  },
+  "agreement": {
+   "intent": "agree",
+   "environment.preset": "conflict"
+  },
+  "removed_ungrounded": [],
+  "unknown": [
+   "environment.preset"
+  ],
+  "assumptions": [],
+  "clarify": {
+   "field": "environment.preset",
+   "question": "I read this two ways: Lunar base or pressurized rover or Mars habitat. Which one do you mean?",
+   "options": [
+    {
+     "label": "Lunar base or pressurized rover",
+     "patch": {
+      "environment": {
+       "preset": "lunar_habitat"
+      }
+     }
+    },
+    {
+     "label": "Mars habitat",
+     "patch": {
+      "environment": {
+       "preset": "mars_habitat"
+      }
+     }
+    }
+   ]
+  },
+  "dashboard_q": ""
+ },
+ "state": {
+  "version": "1",
+  "turn": 1,
+  "request": {
+   "version": "1",
+   "intent": "find_investigations",
+   "asks_verdict": false,
+   "asks_prediction": false,
+   "environment": {
+    "preset": null,
+    "label": null,
+    "o2_pct": null,
+    "pressure_kpa": null,
+    "gravity": null,
+    "flow": null,
+    "scenario_id": null,
+    "cell": null
+   },
+   "compare_with": [],
+   "item": {
+    "material": null,
+    "words": null,
+    "fuel_phase": null,
+    "query_word": null,
+    "label": null
+   },
+   "equipment": null,
+   "questions": [],
+   "investigations": [],
+   "unresolved_names": [],
+   "tests": [],
+   "term": null,
+   "keywords": [],
+   "english": "A rover.",
+   "sources": {
+    "intent": "message"
+   },
+   "agreement": {
+    "intent": "agree",
+    "environment.preset": "conflict"
+   },
+   "removed_ungrounded": [],
+   "unknown": [
+    "environment.preset"
+   ],
+   "assumptions": [],
+   "clarify": {
+    "field": "environment.preset",
+    "question": "I read this two ways: Lunar base or pressurized rover or Mars habitat. Which one do you mean?",
+    "options": [
+     {
+      "label": "Lunar base or pressurized rover",
+      "patch": {
+       "environment": {
+        "preset": "lunar_habitat"
+       }
+      }
+     },
+     {
+      "label": "Mars habitat",
+      "patch": {
+       "environment": {
+        "preset": "mars_habitat"
+       }
+      }
+     }
+    ]
+   },
+   "dashboard_q": ""
+  },
+  "pending_clarify": {
+   "field": "environment.preset",
+   "question": "I read this two ways: Lunar base or pressurized rover or Mars habitat. Which one do you mean?"
+  },
+  "last_list": [],
+  "last_tests": []
+ },
+ "notices": [],
+ "answer": null,
+ "facts": [],
+ "panels": [],
+ "followups": [],
+ "clarify": {
+  "field": "environment.preset",
+  "question": "I read this two ways: Lunar base or pressurized rover or Mars habitat. Which one do you mean?",
+  "options": [
+   {
+    "label": "Lunar base or pressurized rover",
+    "patch": {
+     "environment": {
+      "preset": "lunar_habitat"
+     }
+    }
+   },
+   {
+    "label": "Mars habitat",
+    "patch": {
+     "environment": {
+      "preset": "mars_habitat"
+     }
+    }
+   }
+  ]
+ },
+ "dashboard": {
+  "q": "",
+  "section": null
+ },
+ "trace": {
+  "steps": [
+   {
+    "step": "understand",
+    "label": "Reading your request",
+    "summary": "Read 3 times (2 by the model, once by the rule parser); 1 of 2 fields agree.",
+    "ms": 8120,
+    "model_calls": 2,
+    "detail": {
+     "readings": [
+      {
+       "reader": "M1",
+       "valid": true,
+       "ms": 4010
+      },
+      {
+       "reader": "M2",
+       "valid": true,
+       "ms": 4090
+      },
+      {
+       "reader": "R",
+       "valid": true,
+       "ms": 9
+      }
+     ],
+     "agreement": {
+      "intent": "agree",
+      "environment.preset": "conflict"
+     },
+     "removed_ungrounded": [],
+     "asked": true
+    }
+   },
+   {
+    "step": "deliver",
+    "label": "Done",
+    "summary": "Done in 8.1 s with 2 model calls.",
+    "ms": 1,
+    "model_calls": 0
+   }
+  ],
+  "model_calls": 2,
+  "total_ms": 8121,
+  "cache": "miss",
+  "gate_report": null,
+  "data_version": "mock",
+  "commit": "main"
+ },
+ "label": "Written by a local language model (gpt-oss:20b) from the facts shown, and checked by code. A research exploration tool, not safety guidance."
+}

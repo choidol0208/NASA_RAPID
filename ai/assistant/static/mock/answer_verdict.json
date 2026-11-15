@@ -1,0 +1,1493 @@
+{
+ "version": "1",
+ "turn_id": "mock-verdict",
+ "kind": "answer",
+ "mode": "mock",
+ "request": {
+  "version": "1",
+  "intent": "question_evidence",
+  "asks_verdict": true,
+  "asks_prediction": false,
+  "environment": {
+   "preset": "lunar_habitat",
+   "label": "Lunar base or pressurized rover",
+   "o2_pct": 30.0,
+   "pressure_kpa": 70.3,
+   "gravity": "lunar",
+   "flow": "ventilated",
+   "scenario_id": "lunar_habitat",
+   "cell": null
+  },
+  "compare_with": [],
+  "item": {
+   "material": null,
+   "words": null,
+   "fuel_phase": null,
+   "query_word": null,
+   "label": null
+  },
+  "equipment": null,
+  "questions": [
+   "S1"
+  ],
+  "investigations": [],
+  "unresolved_names": [],
+  "tests": [],
+  "term": null,
+  "keywords": [],
+  "english": "Is the atmosphere of a lunar habitat safe for putting out a fire?",
+  "sources": {
+   "intent": "message",
+   "asks_verdict": "message",
+   "environment.preset": "message",
+   "questions": "message",
+   "environment.o2_pct": "preset",
+   "environment.pressure_kpa": "preset"
+  },
+  "agreement": {
+   "intent": "agree",
+   "asks_verdict": "agree",
+   "asks_prediction": "agree",
+   "environment.preset": "agree",
+   "questions": "majority"
+  },
+  "removed_ungrounded": [],
+  "unknown": [],
+  "assumptions": [
+   {
+    "field": "environment.o2_pct",
+    "text": "Oxygen: 30%, from the Lunar base or pressurized rover preset."
+   }
+  ],
+  "clarify": null,
+  "dashboard_q": "lunar habitat suppress"
+ },
+ "state": {
+  "version": "1",
+  "turn": 1,
+  "request": {
+   "version": "1",
+   "intent": "question_evidence",
+   "asks_verdict": true,
+   "asks_prediction": false,
+   "environment": {
+    "preset": "lunar_habitat",
+    "label": "Lunar base or pressurized rover",
+    "o2_pct": 30.0,
+    "pressure_kpa": 70.3,
+    "gravity": "lunar",
+    "flow": "ventilated",
+    "scenario_id": "lunar_habitat",
+    "cell": null
+   },
+   "compare_with": [],
+   "item": {
+    "material": null,
+    "words": null,
+    "fuel_phase": null,
+    "query_word": null,
+    "label": null
+   },
+   "equipment": null,
+   "questions": [
+    "S1"
+   ],
+   "investigations": [],
+   "unresolved_names": [],
+   "tests": [],
+   "term": null,
+   "keywords": [],
+   "english": "Is the atmosphere of a lunar habitat safe for putting out a fire?",
+   "sources": {
+    "intent": "message",
+    "asks_verdict": "message",
+    "environment.preset": "message",
+    "questions": "message",
+    "environment.o2_pct": "preset",
+    "environment.pressure_kpa": "preset"
+   },
+   "agreement": {
+    "intent": "agree",
+    "asks_verdict": "agree",
+    "asks_prediction": "agree",
+    "environment.preset": "agree",
+    "questions": "majority"
+   },
+   "removed_ungrounded": [],
+   "unknown": [],
+   "assumptions": [
+    {
+     "field": "environment.o2_pct",
+     "text": "Oxygen: 30%, from the Lunar base or pressurized rover preset."
+    }
+   ],
+   "clarify": null,
+   "dashboard_q": "lunar habitat suppress"
+  },
+  "pending_clarify": null,
+  "last_list": [],
+  "last_tests": [
+   "FLEX-19",
+   "FLEX-20",
+   "FLEX-21",
+   "FLEX-22",
+   "FLEX-23",
+   "FLEX-24",
+   "FLEX-25",
+   "FLEX-26",
+   "FLEX-27",
+   "FLEX-28"
+  ]
+ },
+ "notices": [
+  {
+   "id": "refuse_verdict",
+   "text": "This tool gives no safety verdict: it does not judge whether a material, an atmosphere or a design is fit for use. Below is what NASA's recorded tests and documents hold for the question, each with its source."
+  }
+ ],
+ "answer": {
+  "origin": "model",
+  "sentences": [
+   {
+    "n": 1,
+    "text": "For extinction conditions, 17 of the 298 tests counted in the team's tables were recorded with oxygen and pressure both inside the lunar habitat ranges.",
+    "facts": [
+     "F1"
+    ],
+    "origin": "model",
+    "status": "kept"
+   },
+   {
+    "n": 2,
+    "text": "The other 281 counted tests have none of these matches, and 0 tests have oxygen inside the range with no pressure in the table.",
+    "facts": [
+     "F2"
+    ],
+    "origin": "model",
+    "status": "kept"
+   },
+   {
+    "n": 3,
+    "text": "The FLEX-EIRD document, section 2.2 Agent Efficacy, states that \"the goal of the agent in a total flooding application is to reduce the oxygen concentration below the LOI\".",
+    "facts": [
+     "F6"
+    ],
+    "origin": "model",
+    "status": "kept"
+   }
+  ],
+  "removed": []
+ },
+ "facts": [
+  {
+   "id": "F1",
+   "ref": "evidence/scenario_lunar_habitat.json#S1/status.in_atmosphere",
+   "tool": "counts_per_question",
+   "kind": "statement",
+   "context": "Lunar base or pressurized rover; Extinction conditions (S1)",
+   "text": "17 of the 298 tests counted for this need were recorded with oxygen and pressure both inside the ranges of this environment.",
+   "numbers": [
+    {
+     "value": 17,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 298,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "needs.S1.statements[status.in_atmosphere]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F2",
+   "ref": "evidence/scenario_lunar_habitat.json#S1/tiers.counts",
+   "tool": "counts_per_question",
+   "kind": "statement",
+   "context": "Lunar base or pressurized rover; Extinction conditions (S1)",
+   "text": "The 298 counted tests by match with this environment: 17 with oxygen and pressure both inside the ranges; 0 with oxygen inside the range and no pressure in the table; 0 with pressure inside the range and no oxygen in the table; 281 with none of these matches.",
+   "numbers": [
+    {
+     "value": 298,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 17,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 281,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "needs.S1.statements[tiers.counts]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F3",
+   "ref": "evidence/scenario_lunar_habitat.json#S1/matched.investigations",
+   "tool": "counts_per_question",
+   "kind": "statement",
+   "context": "Lunar base or pressurized rover; Extinction conditions (S1)",
+   "text": "The 17 matched tests come from PSI-69.",
+   "numbers": [
+    {
+     "value": 17,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 69,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "needs.S1.statements[matched.investigations]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F4",
+   "ref": "evidence/scenario_lunar_habitat.json#S1/gap.gravity.no_usable_test_at_level",
+   "tool": "counts_per_question",
+   "kind": "statement",
+   "context": "Lunar base or pressurized rover; Extinction conditions (S1)",
+   "text": "Gravity gap: none of the 298 tests counted for this need is recorded at the gravity level of this environment (lunar).",
+   "numbers": [
+    {
+     "value": 298,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "needs.S1.statements[gap.gravity.no_usable_test_at_level]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F5",
+   "ref": "data/pipeline/evidence/scenario_lunar_habitat.json#limit",
+   "tool": "counts_per_question",
+   "kind": "limit",
+   "context": null,
+   "text": "A count says how many recorded tests hold the variables of a question; it is not a result for this environment and not a judgement of it.",
+   "numbers": [],
+   "source": {
+    "file": "data/pipeline/evidence/scenario_lunar_habitat.json",
+    "line": null,
+    "key": "limit"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/evidence/scenario_lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F6",
+   "ref": "data/pipeline/findings.csv#FLEX.loi",
+   "tool": "criteria",
+   "kind": "criterion",
+   "context": null,
+   "text": "FLEX-EIRD, 2.2 Agent Efficacy: \"For fire safety, the goal of the agent in a total flooding application is to reduce the oxygen concentration below the LOI\"",
+   "numbers": [
+    {
+     "value": 2.2,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/findings.csv",
+    "line": 98,
+    "key": "FLEX.loi"
+   },
+   "source_keys": [],
+   "link": "https://www1.grc.nasa.gov/wp-content/uploads/FLEX_EIRD_v4.pdf",
+   "quote": true,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F7",
+   "ref": "data/pipeline/findings.csv#RG.ignition",
+   "tool": "criteria",
+   "kind": "criterion",
+   "context": null,
+   "text": "NP-2015-10-034-JSC, External Heat Flux Effects on the Ignitability and Suppression of Materials in Microgravity, p. 24: \"Time to ignition and the time between introduction of suppression agent and extinction are measured as a function of environmental conditions.\"",
+   "numbers": [
+    {
+     "value": 2015,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 10,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 34,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 24,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/findings.csv",
+    "line": 104,
+    "key": "RG.ignition"
+   },
+   "source_keys": [],
+   "link": "https://www.nasa.gov/wp-content/uploads/2016/05/np-2015-10-034-jsc_combustion_in_reduced_gravity-iss-mini-book-011116-508.pdf",
+   "quote": true,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F8",
+   "ref": "data/pipeline/need_references.csv#3001.V2-9059",
+   "tool": "criteria",
+   "kind": "criterion",
+   "context": null,
+   "text": "NASA-STD-3001-V2, 9.8.2.1 [V2 9059], as the team's reference list states it: The vehicle shall have a fire protection system composed of detecting, warning, and extinguishing devices that do not create a hazardous environment.",
+   "numbers": [
+    {
+     "value": 3001,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 9059,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/need_references.csv",
+    "line": 72,
+    "key": "3001.V2-9059"
+   },
+   "source_keys": [],
+   "link": "https://standards.nasa.gov/standard/NASA/NASA-STD-3001_VOL_2",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F9",
+   "ref": "data/pipeline/findings.csv#limit",
+   "tool": "criteria",
+   "kind": "limit",
+   "context": null,
+   "text": "Criteria are quoted from the documents listed; this tool does not apply them to your design.",
+   "numbers": [],
+   "source": {
+    "file": "data/pipeline/findings.csv",
+    "line": null,
+    "key": "limit"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/findings.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F10",
+   "ref": "data/pipeline/scenario_tests.csv#scenario_id=lunar_habitat",
+   "tool": "tests_table",
+   "kind": "test_row",
+   "context": null,
+   "text": "24 recorded tests lie in this environment's ranges or in one of them and are counted for Extinction conditions (S1): 24 with oxygen and pressure both inside, 0 with oxygen inside and no pressure in the table, 0 with pressure inside and no oxygen in the table.",
+   "numbers": [
+    {
+     "value": 24,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 24,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/scenario_tests.csv",
+    "line": null,
+    "key": "scenario_id=lunar_habitat"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/scenario_tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F11",
+   "ref": "data/pipeline/scenario_tests.csv#investigation_id=PSI-159",
+   "tool": "tests_table",
+   "kind": "test_row",
+   "context": null,
+   "text": "7 of them are gas-flame tests of ACME CFI-G (PSI-159).",
+   "numbers": [
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 159,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/scenario_tests.csv",
+    "line": null,
+    "key": "investigation_id=PSI-159"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/scenario_tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-159"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F12",
+   "ref": "data/pipeline/scenario_tests.csv#investigation_id=PSI-69",
+   "tool": "tests_table",
+   "kind": "test_row",
+   "context": null,
+   "text": "17 of them are fuel-droplet tests of FLEX (PSI-69).",
+   "numbers": [
+    {
+     "value": 17,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 69,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/scenario_tests.csv",
+    "line": null,
+    "key": "investigation_id=PSI-69"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/scenario_tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-69"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F13",
+   "ref": "data/pipeline/tests.csv#limit",
+   "tool": "tests_table",
+   "kind": "limit",
+   "context": null,
+   "text": "Values are copied as NASA's tables give them, through the team's tests.csv; an empty cell is not a zero and not a 'no'.",
+   "numbers": [],
+   "source": {
+    "file": "data/pipeline/tests.csv",
+    "line": null,
+    "key": "limit"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  }
+ ],
+ "panels": [
+  {
+   "id": "p1",
+   "type": "counts",
+   "title": "Recorded tests per fire-safety question: Lunar base or pressurized rover",
+   "note": "A count says how many recorded tests hold the variables of a question; it is not a result for this environment and not a judgement of it.",
+   "columns": [
+    {
+     "key": "question",
+     "label": "question",
+     "kind": "text"
+    },
+    {
+     "key": "name",
+     "label": "name",
+     "kind": "text"
+    },
+    {
+     "key": "counted",
+     "label": "counted",
+     "kind": "number"
+    },
+    {
+     "key": "both_inside",
+     "label": "both inside",
+     "kind": "number"
+    },
+    {
+     "key": "oxygen_only",
+     "label": "oxygen only",
+     "kind": "number"
+    },
+    {
+     "key": "pressure_only",
+     "label": "pressure only",
+     "kind": "number"
+    },
+    {
+     "key": "elsewhere",
+     "label": "elsewhere",
+     "kind": "number"
+    },
+    {
+     "key": "status",
+     "label": "status",
+     "kind": "text"
+    }
+   ],
+   "rows": [
+    {
+     "question": "S1",
+     "name": "Extinction conditions",
+     "counted": 298,
+     "both_inside": 17,
+     "oxygen_only": 0,
+     "pressure_only": 0,
+     "elsewhere": 281,
+     "status": "in_atmosphere"
+    }
+   ],
+   "download": null,
+   "dashboard_section": "#needs",
+   "fact_ids": [
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5"
+   ]
+  },
+  {
+   "id": "p2",
+   "type": "criteria",
+   "title": "Criteria in NASA documents: Extinction conditions (S1)",
+   "note": "Criteria are quoted from the documents listed; this tool does not apply them to your design.",
+   "columns": [
+    {
+     "key": "document",
+     "label": "document",
+     "kind": "text"
+    },
+    {
+     "key": "version",
+     "label": "version",
+     "kind": "text"
+    },
+    {
+     "key": "section",
+     "label": "section",
+     "kind": "text"
+    },
+    {
+     "key": "text",
+     "label": "text",
+     "kind": "text"
+    },
+    {
+     "key": "link",
+     "label": "link",
+     "kind": "link"
+    }
+   ],
+   "rows": [
+    {
+     "document": "FLEX-EIRD",
+     "version": "November 4, 2005 (file name FLEX_EIRD_v4.pdf)",
+     "section": "2.2 Agent Efficacy",
+     "text": "For fire safety, the goal of the agent in a total flooding application is to reduce the oxygen concentration below the LOI",
+     "link": {
+      "text": "document",
+      "href": "https://www1.grc.nasa.gov/wp-content/uploads/FLEX_EIRD_v4.pdf"
+     }
+    },
+    {
+     "document": "NP-2015-10-034-JSC",
+     "version": "NP-2015-10-034-JSC",
+     "section": "External Heat Flux Effects on the Ignitability and Suppression of Materials in Microgravity, p. 24",
+     "text": "Time to ignition and the time between introduction of suppression agent and extinction are measured as a function of environmental conditions.",
+     "link": {
+      "text": "document",
+      "href": "https://www.nasa.gov/wp-content/uploads/2016/05/np-2015-10-034-jsc_combustion_in_reduced_gravity-iss-mini-book-011116-508.pdf"
+     }
+    },
+    {
+     "document": "NASA-STD-3001-V2",
+     "version": "Revision F, approved 2026-07-14 (Table 6.2-3 also read in Revision E, 2025-05-01)",
+     "section": "9.8.2.1 [V2 9059]",
+     "text": "The vehicle shall have a fire protection system composed of detecting, warning, and extinguishing devices that do not create a hazardous environment.",
+     "link": {
+      "text": "document",
+      "href": "https://standards.nasa.gov/standard/NASA/NASA-STD-3001_VOL_2"
+     }
+    }
+   ],
+   "download": null,
+   "dashboard_section": "#criteria",
+   "fact_ids": [
+    "F6",
+    "F7",
+    "F8",
+    "F9"
+   ]
+  },
+  {
+   "id": "p3",
+   "type": "table",
+   "title": "Recorded tests: Lunar base or pressurized rover, Extinction conditions (S1)",
+   "note": "Values are copied as NASA's tables give them, through the team's tests.csv; an empty cell is not a zero and not a 'no'.",
+   "columns": [
+    {
+     "key": "test_id",
+     "label": "test id",
+     "kind": "link"
+    },
+    {
+     "key": "investigation",
+     "label": "investigation",
+     "kind": "text"
+    },
+    {
+     "key": "tier",
+     "label": "tier",
+     "kind": "text"
+    },
+    {
+     "key": "fuel_phase",
+     "label": "fuel phase",
+     "kind": "text"
+    },
+    {
+     "key": "fuel",
+     "label": "fuel",
+     "kind": "text"
+    },
+    {
+     "key": "o2_pct",
+     "label": "oxygen (%)",
+     "kind": "number"
+    },
+    {
+     "key": "o2_basis",
+     "label": "oxygen basis",
+     "kind": "text"
+    },
+    {
+     "key": "pressure_kpa",
+     "label": "pressure (kPa)",
+     "kind": "number"
+    },
+    {
+     "key": "flow_cms",
+     "label": "flow (cm/s)",
+     "kind": "number"
+    },
+    {
+     "key": "gravity",
+     "label": "gravity",
+     "kind": "text"
+    },
+    {
+     "key": "test_end",
+     "label": "test end",
+     "kind": "text"
+    },
+    {
+     "key": "extinction_diameter_mm",
+     "label": "extinction diameter mm",
+     "kind": "text"
+    },
+    {
+     "key": "flow_event",
+     "label": "flow event",
+     "kind": "text"
+    },
+    {
+     "key": "objective_link",
+     "label": "objective link",
+     "kind": "text"
+    },
+    {
+     "key": "source_file",
+     "label": "source file",
+     "kind": "text"
+    },
+    {
+     "key": "source_row",
+     "label": "source row",
+     "kind": "text"
+    }
+   ],
+   "rows": [
+    {
+     "test_id": {
+      "text": "FLEX-19",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L20"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.8741,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "20"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-20",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L21"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.9274,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "completion",
+     "extinction_diameter_mm": "1.56",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "21"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-21",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L22"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 72.0741,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": "0.95",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "22"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-22",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L23"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 72.0607,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "23"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-23",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L24"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 72.2341,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "24"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-24",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L25"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 72.3674,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "25"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-25",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L26"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.6341,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "completion",
+     "extinction_diameter_mm": "0.59",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "26"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-26",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L27"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.7808,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": "0.4",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "27"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-27",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L28"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 72.0874,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "28"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-28",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L29"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.9541,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "29"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-37",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L38"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.2341,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "38"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-38",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L39"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.2475,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "39"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-39",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L40"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.3141,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": "0.0",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "40"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-40",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L41"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.3408,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "41"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-41",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L42"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.2341,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "42"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-42",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L43"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.3275,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "43"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-43",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L44"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.3141,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": "0.0",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "44"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21106F1",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L652"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "50% butane",
+     "o2_pct": 35.8532,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "flow termination",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "36"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21106F3",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L654"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "50% butane",
+     "o2_pct": 35.4241,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "flow termination",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "38"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21106F4",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L655"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "50% butane",
+     "o2_pct": 35.3757,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "flow termination",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "39"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21153F1",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L745"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "30% ethane",
+     "o2_pct": 34.0808,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "self-extinction",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "129"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21153A4",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L746"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "30% ethane",
+     "o2_pct": 33.4934,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "flow termination",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "130"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21153A5",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L747"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "30% ethane",
+     "o2_pct": 33.2446,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "flow termination",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "131"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21174B1",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L773"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "30% butane",
+     "o2_pct": 35.544,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "self-extinction",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "157"
+    }
+   ],
+   "download": {
+    "filename": "tests_lunar_habitat_S1.csv",
+    "total_rows": 24
+   },
+   "dashboard_section": "#tests",
+   "fact_ids": [
+    "F10",
+    "F11",
+    "F12",
+    "F13"
+   ]
+  }
+ ],
+ "followups": [
+  {
+   "text": "Where are the raw files of these extinction tests?",
+   "request": null
+  },
+  {
+   "text": "How is a counted test defined?",
+   "request": null
+  }
+ ],
+ "clarify": null,
+ "dashboard": {
+  "q": "lunar habitat suppress",
+  "section": "#needs"
+ },
+ "trace": {
+  "steps": [
+   {
+    "step": "understand",
+    "label": "Reading your request",
+    "summary": "Read 3 times (2 by the model, once by the rule parser); 5 of 6 fields agree.",
+    "ms": 8420,
+    "model_calls": 2,
+    "detail": {
+     "readings": [
+      {
+       "reader": "M1",
+       "valid": true,
+       "ms": 4100
+      },
+      {
+       "reader": "M2",
+       "valid": true,
+       "ms": 4300
+      },
+      {
+       "reader": "R",
+       "valid": true,
+       "ms": 10
+      }
+     ],
+     "agreement": {
+      "intent": "agree",
+      "asks_verdict": "agree",
+      "asks_prediction": "agree",
+      "environment.preset": "agree",
+      "questions": "majority"
+     },
+     "removed_ungrounded": [],
+     "asked": false
+    }
+   },
+   {
+    "step": "plan",
+    "label": "Choosing what to look up",
+    "summary": "Looking up counts of recorded tests per fire-safety question, criteria in NASA documents, the recorded tests in range.",
+    "ms": 2,
+    "model_calls": 0,
+    "detail": {
+     "tools": [
+      {
+       "tool": "counts_per_question",
+       "args": {
+        "env": "lunar_habitat",
+        "questions": [
+         "S1"
+        ]
+       },
+       "why": "intent question_evidence"
+      },
+      {
+       "tool": "criteria",
+       "args": {
+        "questions": [
+         "S1"
+        ]
+       },
+       "why": "intent question_evidence"
+      },
+      {
+       "tool": "tests_table",
+       "args": {
+        "env": "lunar_habitat",
+        "question": "S1"
+       },
+       "why": "intent question_evidence"
+      }
+     ],
+     "dashboard_mismatch": []
+    }
+   },
+   {
+    "step": "lookup",
+    "label": "Looking up the team's files",
+    "summary": "13 facts from 5 files.",
+    "ms": 96,
+    "model_calls": 0
+   },
+   {
+    "step": "write",
+    "label": "Writing from the facts",
+    "summary": "3 sentences written by the local model.",
+    "ms": 7900,
+    "model_calls": 1,
+    "detail": {
+     "sentences": 3,
+     "valid": true
+    }
+   },
+   {
+    "step": "check",
+    "label": "Checking every sentence",
+    "summary": "3 sentences written, 0 removed by the checks, 0 repaired. Model check: 3 of 3 supported.",
+    "ms": 6100,
+    "model_calls": 1,
+    "detail": {
+     "gate_failures": [],
+     "repair": false,
+     "checker": {
+      "yes": 3,
+      "no": 0
+     }
+    }
+   },
+   {
+    "step": "deliver",
+    "label": "Done",
+    "summary": "Done in 22.5 s with 4 model calls.",
+    "ms": 1,
+    "model_calls": 0
+   }
+  ],
+  "model_calls": 4,
+  "total_ms": 22519,
+  "cache": "miss",
+  "gate_report": {
+   "written": 3,
+   "repaired": 0,
+   "removed": 0,
+   "removed_by_gate": {},
+   "checker_no": 0,
+   "kept": 3,
+   "fallback": false,
+   "fallback_reason": null
+  },
+  "data_version": "mock",
+  "commit": "main"
+ },
+ "label": "Written by a local language model (gpt-oss:20b) from the facts shown, and checked by code. A research exploration tool, not safety guidance."
+}

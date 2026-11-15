@@ -45,6 +45,14 @@ DEFAULTS = {
     "timeout_s": 600,
 }
 
+# The conversational assistant (ai/assistant/): run-time model calls log here (git-ignored), never in
+# ai/runs/; evaluation and recording runs log to RUNS_DIR as the other model calls do.
+ASSISTANT_RUNTIME_DIR = AI_DIR / "assistant" / "_runtime"
+ASSISTANT = {"max_model_calls": 4, "port": 8765, "message_max_chars": 1000, "state_max_bytes": 8000,
+             "call_timeout_s": 180}
+# call_timeout_s was 90; at integration (15 Nov) the GPU slowed to about 18 tokens per second while other work
+# ran on the machine, and write calls of 1,600+ tokens timed out (q10, q11). 180 s covers 3,200 tokens at 18/s.
+
 CODE_WRITTEN_WITH = "AI assistant (Claude Code)"
 HEADER_COMMENT = (
     "# AI-generated code: written with an AI assistant (Claude) during the "

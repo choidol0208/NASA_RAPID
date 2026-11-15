@@ -71,6 +71,92 @@ The team worked in four Claude Code sessions, one per role: pm, data, ui and cat
 
 **Video side pilot** (`video/`; pm role). For 19 BASS-II clips (PSI-25), a reader copies the numbers NASA's video shows on screen (FUEL, AIR, FAN, RAD and a clock) into one row per second. It is a transcription of NASA's display, not a NASA data file and not a measurement. Output: `video/data/team_transcription_bass2_onscreen_readings/`. Details: `video/README.md`.
 
+## Assistant
+
+*AI-generated section (Claude Code, pm role, 15 November 2026). The assistant's code in `ai/assistant/` was written with an AI assistant (Claude); every file says so in its first line.*
+
+The assistant is a chat box above the dashboard. You type what you are building and where, in your own words and in any language (it answers in English). It covers the four points of the challenge's Objectives:
+
+- the **investigations most relevant** to a crewed environment: spacecraft, station, lunar or Martian base, pressurized rover or spacesuit;
+- the **data that support predictive modelling**, and where they are: in NASA's tables, in the archive but unprocessed, or with no record in PSI;
+- the **research behind fire-safety equipment and controls**: detection, suppression, material selection and ventilation;
+- what the records say about **applications on Earth**.
+
+Each answer has numbered citations that open their source. Beside it are the panels that fit the question: ranking, counts per fire-safety question, the three piles, a test table to download, criteria, the files of a test and quoted NASA sentences. The dashboard below is driven to the same request.
+
+### How one turn works
+
+The model is used in several small steps, each with its own narrow prompt and JSON schema, and code sits between them. The page shows each step as it runs.
+
+1. **Understand** (model and code). The message becomes a structured request: what is wanted (a closed list of ten intents), the environment, the material, the fire-safety questions and any investigations named. The model reads it twice, with two seeds, and the existing rule parser (`scoring.scorer.interpret`) reads it a third time. A field is taken where the readings agree. Where they conflict, or a needed value is missing, the assistant asks one clarifying question or states the assumption it makes.
+2. **Plan** (code). A fixed table picks the lookup tools from the request; the model does not choose them.
+3. **Look up** (code). Deterministic tools read the team's files and return numbered facts. Each fact has a sentence built from a template, its numbers, its source file and a link.
+4. **Write** (model). A short answer built only from the facts given. Every sentence names the facts it rests on.
+5. **Check** (code, then model). Code gates test every sentence: it must cite a fact, every number must appear in the cited facts, quotations must be verbatim, and it must hold no safety verdict, advice, prediction or "validated". Then a second model pass, with a fresh prompt that sees only the sentence and its cited facts, answers "does this follow from these facts alone?". A failing sentence is removed, or the answer is repaired once. If nothing trustworthy remains, the answer is put together by team code from the facts.
+6. **Deliver.** The answer, its citations, the panels, the reading of the request as editable chips, and two or three follow-up questions.
+
+A turn makes **at most four model calls**. A preset button or a repeated request is answered from cache or by template, with no model call. The conversation is carried as the structured request, not as raw chat history.
+
+| Technique | What it guards against |
+|---|---|
+| Structured reading into a closed vocabulary (JSON schema) | free-text misreading; values the tools do not know |
+| Repeated reading (two model readings and the rule parser, field by field) | one unstable reading |
+| Numbers kept only if they are in the message; code converts units | invented or miscomputed numbers |
+| One clarifying question, or a stated assumption | answering a different question |
+| Tools chosen by a fixed table | the model picking what to look up |
+| Facts only from the tools; fact ids as a schema enum | facts from model memory; invented citations |
+| Small contexts: only this turn's facts, structured state | distraction, long prompts |
+| Code gates on every sentence | unsupported numbers, verdicts, advice, invented names |
+| One repair with the gate failures as feedback | fixable slips |
+| A model checker with a fresh prompt | paraphrase that goes beyond the facts |
+| A template answer from the facts as the fallback | a turn with nothing trustworthy to show |
+
+The contract is `ai/assistant/DESIGN.md`. A reader's version is `docs/assistant/README.md`, and the published methods it draws on are in `docs/assistant/techniques.md`.
+
+### Install and run
+
+```
+./install.sh --check      # report what is present and what would be done; downloads nothing
+./install.sh              # check Python 3.10+, install Ollama if missing, download the model, build, self-test
+./run.sh                  # open http://127.0.0.1:8765/ with the assistant
+./run.sh --no-model       # the same with rule-based answers only, no language model
+```
+
+The install needs Python 3.10 or newer, with the standard library only (no pip packages), and [Ollama](https://ollama.com/download). The model is **OpenAI gpt-oss:20b** (Apache-2.0), run locally through Ollama. It is about 13 GB to download, the size `ollama list` shows on the build machine. `install.sh` downloads it as part of the install: it says the size, asks once (Enter means yes; `--yes` skips the question) and then checks the installed digest against `ai/config.py`. If Ollama is missing, it offers to install it by Ollama's official method (Homebrew on macOS, the install script on Linux); `--install-ollama` skips that question. Without the model, `./install.sh --no-model` and `./run.sh --no-model` give the rule-based assistant.
+
+Measured on the build machine (Apple M4 Pro, 48 GB): the model ran at 50.1 to 51.0 tokens per second (`ai/runs/smoke.jsonl`, 14 November). After one assistant turn, Ollama reported the loaded model at 12.7 GB, all of it on the GPU, with a context of 16,384 tokens (`GET /api/ps`, 15 November). The evaluation records the same reading as `loaded_model` in `data/insights/assistant_eval.json`. With 16 GB of memory or less the model may not fit beside the system; that is a rule of thumb, not a test. The server listens on 127.0.0.1 only and sends nothing off the machine. Conversations are not stored in the repository; run-time logs go to the git-ignored `ai/assistant/_runtime/`.
+
+**The public page** runs no language model. Once the page build includes the assistant's files (a request to the ui role, `ai/assistant/DESIGN.md` section 17), it will replay conversations recorded with the local model, marked as recorded (`data/insights/assistant_recorded.json`, written by `python3 -m ai.assistant.record`). Until then the assistant appears only in the local install.
+
+### What is measured
+
+`python3 -m ai.assistant.evaluate` runs a fixed set of 74 questions (`ai/assistant/eval/questions.json`) through the pipeline's own entry point. An AI session wrote the questions and their expected readings before any model run; no person has read them yet. The set covers each Objective point, comparisons, follow-ups, vague requests that need a clarifying question, requests for a safety verdict or a prediction that must be declined, questions the files cannot answer, 17 questions in Korean, Japanese or Spanish, and 4 that hide instructions in quoted text. Five arms are compared:
+
+- `single_call`: one model call that gets the facts and answers, with no repeated reading and no checks;
+- `full`: the whole pipeline;
+- `no_repeat`, `no_gates`, `no_checker`: the full pipeline with one technique switched off.
+
+Results go to `data/insights/assistant_eval.json` and `docs/assistant/evaluation.md`.
+
+<!-- assistant-eval-table:start -->
+**Results: not yet measured.** This table is filled by `python3 -m ai.assistant.evaluate --write-readme` after the evaluation run. No number is written here by hand.
+
+| Measure | `single_call` | `full` | `no_repeat` | `no_gates` | `no_checker` |
+|---|---|---|---|---|---|
+| (to be filled by the evaluation) | | | | | |
+<!-- assistant-eval-table:end -->
+
+How to read the results: the question set is small and was written by an AI session of the team, so it is not a benchmark. The code gates that measure the answers are also part of the full pipeline. The checker is the same model as the writer, so its verdicts are not independent.
+
+### Limits
+
+- It gives **no safety verdict** and **no estimate at conditions the recorded tests did not reach**. When asked for either, it says so and shows what the files hold instead.
+- It answers only from the team's files. When they do not hold an answer, it says so and names what would be needed.
+- Text from NASA records and from the user is treated as data, never as instructions.
+- Answers are in English. Requests in other languages are read by the model; the rule parser knows only English and some Korean.
+- The only model is OpenAI gpt-oss:20b (Apache-2.0) through Ollama, called only through `ai/llm.py` with its allowlist and digest check.
+- It is a research exploration tool, not safety guidance. Every model-written answer is labelled as written by a local language model from the facts shown and checked by code.
+
 ## How to run it
 
 Needs Python 3 (tried with 3.13.5). The page build, the scorer and the pipeline check use only the Python standard library. Other needs are named at each step. The results below were measured on 14 November 2026, after the 19:00 freeze.

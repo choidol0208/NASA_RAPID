@@ -1,0 +1,2030 @@
+{
+ "version": "1",
+ "turn_id": "mock-no-model",
+ "kind": "answer",
+ "mode": "mock",
+ "request": {
+  "version": "1",
+  "intent": "where_data",
+  "asks_verdict": false,
+  "asks_prediction": false,
+  "environment": {
+   "preset": "lunar_habitat",
+   "label": "Lunar base or pressurized rover",
+   "o2_pct": 30.0,
+   "pressure_kpa": 70.3,
+   "gravity": "lunar",
+   "flow": "ventilated",
+   "scenario_id": "lunar_habitat",
+   "cell": null
+  },
+  "compare_with": [],
+  "item": {
+   "material": null,
+   "words": null,
+   "fuel_phase": null,
+   "query_word": null,
+   "label": null
+  },
+  "equipment": null,
+  "questions": [
+   "P1",
+   "P2",
+   "P3",
+   "S1",
+   "D1",
+   "D2"
+  ],
+  "investigations": [],
+  "unresolved_names": [],
+  "tests": [],
+  "term": null,
+  "keywords": [],
+  "english": "Where are the raw files for lunar habitat tests?",
+  "sources": {
+   "intent": "rules",
+   "environment.preset": "rules",
+   "questions": "default"
+  },
+  "agreement": {
+   "intent": "rules_only",
+   "environment.preset": "rules_only"
+  },
+  "removed_ungrounded": [],
+  "unknown": [],
+  "assumptions": [
+   {
+    "field": "questions",
+    "text": "Questions: all fire-safety questions of the team's list, because the message names none."
+   }
+  ],
+  "clarify": null,
+  "dashboard_q": "lunar habitat"
+ },
+ "state": {
+  "version": "1",
+  "turn": 2,
+  "request": {
+   "version": "1",
+   "intent": "where_data",
+   "asks_verdict": false,
+   "asks_prediction": false,
+   "environment": {
+    "preset": "lunar_habitat",
+    "label": "Lunar base or pressurized rover",
+    "o2_pct": 30.0,
+    "pressure_kpa": 70.3,
+    "gravity": "lunar",
+    "flow": "ventilated",
+    "scenario_id": "lunar_habitat",
+    "cell": null
+   },
+   "compare_with": [],
+   "item": {
+    "material": null,
+    "words": null,
+    "fuel_phase": null,
+    "query_word": null,
+    "label": null
+   },
+   "equipment": null,
+   "questions": [
+    "P1",
+    "P2",
+    "P3",
+    "S1",
+    "D1",
+    "D2"
+   ],
+   "investigations": [],
+   "unresolved_names": [],
+   "tests": [],
+   "term": null,
+   "keywords": [],
+   "english": "Where are the raw files for lunar habitat tests?",
+   "sources": {
+    "intent": "rules",
+    "environment.preset": "rules",
+    "questions": "default"
+   },
+   "agreement": {
+    "intent": "rules_only",
+    "environment.preset": "rules_only"
+   },
+   "removed_ungrounded": [],
+   "unknown": [],
+   "assumptions": [
+    {
+     "field": "questions",
+     "text": "Questions: all fire-safety questions of the team's list, because the message names none."
+    }
+   ],
+   "clarify": null,
+   "dashboard_q": "lunar habitat"
+  },
+  "pending_clarify": null,
+  "last_list": [],
+  "last_tests": [
+   "FLEX-19",
+   "FLEX-20",
+   "FLEX-21",
+   "FLEX-22",
+   "FLEX-23",
+   "FLEX-24",
+   "FLEX-25",
+   "FLEX-26",
+   "FLEX-27",
+   "FLEX-28"
+  ]
+ },
+ "notices": [
+  {
+   "id": "no_model",
+   "text": "No language model ran for this answer: it is put together by team code from the facts."
+  }
+ ],
+ "answer": {
+  "origin": "template",
+  "sentences": [
+   {
+    "n": 1,
+    "text": "Lunar base or pressurized rover: oxygen 30 to 36%, pressure below 85.8 kPa, lunar gravity.",
+    "facts": [
+     "F1"
+    ],
+    "origin": "template",
+    "status": "kept"
+   },
+   {
+    "n": 2,
+    "text": "24 recorded tests lie in this environment's ranges or in one of them and are counted for Extinction conditions (S1): 24 with oxygen and pressure both inside, 0 with oxygen inside and no pressure in the table, 0 with pressure inside and no oxygen in the table.",
+    "facts": [
+     "F21"
+    ],
+    "origin": "template",
+    "status": "kept"
+   }
+  ],
+  "removed": []
+ },
+ "facts": [
+  {
+   "id": "F1",
+   "ref": "web/dist/data/piles/lunar_habitat.json#header[0]",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": null,
+   "text": "Lunar base or pressurized rover: oxygen 30 to 36%, pressure below 85.8 kPa, lunar gravity.",
+   "numbers": [
+    {
+     "value": 30,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 36,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 85.8,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "header[0]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F2",
+   "ref": "web/dist/data/piles/lunar_habitat.json#header[1]",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": null,
+   "text": "NASA's PSI archive lists 60,866 files (13.47 TB) for 24 combustion investigations (listing of 14 November 2026).",
+   "numbers": [
+    {
+     "value": 60866,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 13.47,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 24,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 14,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 2026,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "header[1]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F3",
+   "ref": "web/dist/data/piles/lunar_habitat.json#header[2]",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": null,
+   "text": "398 of them (104.4 GB, 0.77% of the bytes) carry in their name the NASA identifier or the test number of one of the 26 tests recorded inside these oxygen and pressure ranges: 316 files that are not an archive or a video recording (86.85 MB) and 82 archives and video recordings (104.3 GB).",
+   "numbers": [
+    {
+     "value": 398,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 104.4,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0.77,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 26,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 316,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 86.85,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 82,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 104.3,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "header[2]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F4",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.P1.bar",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Flammability limit (P1)",
+   "text": "Flammability limit (P1), 376 tests of solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.",
+   "numbers": [
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 237,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 139,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.P1.bar"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F5",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.P1.pile3[0]",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Flammability limit (P1)",
+   "text": "Lunar gravity: 0 of 376 tests. Ground: the team's mapping sets microgravity for each of the 7 per-test tables (376 of 376 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 6 of the 7 mapped investigations and the Cygnus spacecraft for PSI-99.",
+   "numbers": [
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 6,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 99,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.P1.pile3[0]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F6",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.P2.bar",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Ignition (P2)",
+   "text": "Ignition (P2), 376 tests of solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.",
+   "numbers": [
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 237,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 139,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.P2.bar"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F7",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.P2.pile3[0]",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Ignition (P2)",
+   "text": "Lunar gravity: 0 of 376 tests. Ground: the team's mapping sets microgravity for each of the 7 per-test tables (376 of 376 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 6 of the 7 mapped investigations and the Cygnus spacecraft for PSI-99.",
+   "numbers": [
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 6,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 99,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.P2.pile3[0]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F8",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.P3.bar",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Flame spread and growth (P3)",
+   "text": "Flame spread and growth (P3), 376 tests of solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.",
+   "numbers": [
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 237,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 139,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.P3.bar"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F9",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.P3.pile3[0]",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Flame spread and growth (P3)",
+   "text": "Lunar gravity: 0 of 376 tests. Ground: the team's mapping sets microgravity for each of the 7 per-test tables (376 of 376 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 6 of the 7 mapped investigations and the Cygnus spacecraft for PSI-99.",
+   "numbers": [
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 6,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 99,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.P3.pile3[0]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F10",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.S1.bar",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Extinction conditions (S1)",
+   "text": "Extinction conditions (S1), 1,824 tests of all fuel phases: inside 26 | cannot be placed from the tables 676 | oxygen recorded for an oxidizer stream 63 | outside by a recorded value 1,059.",
+   "numbers": [
+    {
+     "value": 1824,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 26,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 676,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 63,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 1059,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.S1.bar"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F11",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.S1.pile3[0]",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Extinction conditions (S1)",
+   "text": "Lunar gravity: 0 of 1,824 tests. Ground: the team's mapping sets microgravity for each of the 14 per-test tables (1,824 of 1,824 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 11 of the 12 mapped investigations and the Cygnus spacecraft for PSI-99.",
+   "numbers": [
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 1824,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 14,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 1824,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 1824,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 11,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 12,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 99,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.S1.pile3[0]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F12",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.D1.bar",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Combustion products (D1)",
+   "text": "Combustion products (D1), 376 tests of solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.",
+   "numbers": [
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 237,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 139,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.D1.bar"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F13",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.D1.pile3[0]",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Combustion products (D1)",
+   "text": "Lunar gravity: 0 of 376 tests. Ground: the team's mapping sets microgravity for each of the 7 per-test tables (376 of 376 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 6 of the 7 mapped investigations and the Cygnus spacecraft for PSI-99.",
+   "numbers": [
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 6,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 99,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.D1.pile3[0]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F14",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.D2.bar",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Smoke generation conditions (D2)",
+   "text": "Smoke generation conditions (D2), 376 tests of solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.",
+   "numbers": [
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 237,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 139,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.D2.bar"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F15",
+   "ref": "web/dist/data/piles/lunar_habitat.json#needs.D2.pile3[0]",
+   "tool": "where_the_data_are",
+   "kind": "pile",
+   "context": "Lunar base or pressurized rover; Smoke generation conditions (D2)",
+   "text": "Lunar gravity: 0 of 376 tests. Ground: the team's mapping sets microgravity for each of the 7 per-test tables (376 of 376 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 6 of the 7 mapped investigations and the Cygnus spacecraft for PSI-99.",
+   "numbers": [
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 376,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 6,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 99,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "needs.D2.pile3[0]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F16",
+   "ref": "web/dist/data/piles/lunar_habitat.json#small_print[0]",
+   "tool": "where_the_data_are",
+   "kind": "limit",
+   "context": null,
+   "text": "Built by code from PSI's file listing of 14 November 2026 and NASA's per-test tables as the team mapped them. No language model writes or changes a line of this block.",
+   "numbers": [
+    {
+     "value": 14,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 2026,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "small_print[0]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F17",
+   "ref": "web/dist/data/piles/lunar_habitat.json#small_print[1]",
+   "tool": "where_the_data_are",
+   "kind": "limit",
+   "context": null,
+   "text": "\"Column seen\" means a header that an AI agent read in one opened file of a file group and that the data role's AI session opened again. It is not a measurement of the test, and the other files of the group were not opened.",
+   "numbers": [],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "small_print[1]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F18",
+   "ref": "web/dist/data/piles/lunar_habitat.json#small_print[2]",
+   "tool": "where_the_data_are",
+   "kind": "limit",
+   "context": null,
+   "text": "No value read from a raw file has entered a count. Counted tests: P1 133, P2 0, P3 2, S1 298, D1 122, D2 0.",
+   "numbers": [
+    {
+     "value": 133,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 2,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 298,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 122,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "small_print[2]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F19",
+   "ref": "web/dist/data/piles/lunar_habitat.json#small_print[3]",
+   "tool": "where_the_data_are",
+   "kind": "limit",
+   "context": null,
+   "text": "Recount by a second AI session: not yet. Read by a person: none yet.",
+   "numbers": [],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "small_print[3]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F20",
+   "ref": "web/dist/data/piles/lunar_habitat.json#small_print[4]",
+   "tool": "where_the_data_are",
+   "kind": "limit",
+   "context": null,
+   "text": "A research exploration tool, not safety guidance. Counts and the reading order are the team's computation, not NASA's conclusions. Nothing here says what happens at a condition that was not tested.",
+   "numbers": [],
+   "source": {
+    "file": "web/dist/data/piles/lunar_habitat.json",
+    "line": null,
+    "key": "small_print[4]"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/web/dist/data/piles/lunar_habitat.json",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  },
+  {
+   "id": "F21",
+   "ref": "data/pipeline/scenario_tests.csv#scenario_id=lunar_habitat",
+   "tool": "tests_table",
+   "kind": "test_row",
+   "context": null,
+   "text": "24 recorded tests lie in this environment's ranges or in one of them and are counted for Extinction conditions (S1): 24 with oxygen and pressure both inside, 0 with oxygen inside and no pressure in the table, 0 with pressure inside and no oxygen in the table.",
+   "numbers": [
+    {
+     "value": 24,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 24,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 0,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/scenario_tests.csv",
+    "line": null,
+    "key": "scenario_id=lunar_habitat"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/scenario_tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": true,
+   "limit": false
+  },
+  {
+   "id": "F22",
+   "ref": "data/pipeline/scenario_tests.csv#investigation_id=PSI-159",
+   "tool": "tests_table",
+   "kind": "test_row",
+   "context": null,
+   "text": "7 of them are gas-flame tests of ACME CFI-G (PSI-159).",
+   "numbers": [
+    {
+     "value": 7,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 159,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/scenario_tests.csv",
+    "line": null,
+    "key": "investigation_id=PSI-159"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/scenario_tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-159"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F23",
+   "ref": "data/pipeline/scenario_tests.csv#investigation_id=PSI-69",
+   "tool": "tests_table",
+   "kind": "test_row",
+   "context": null,
+   "text": "17 of them are fuel-droplet tests of FLEX (PSI-69).",
+   "numbers": [
+    {
+     "value": 17,
+     "unit": null,
+     "what": "number in the text"
+    },
+    {
+     "value": 69,
+     "unit": null,
+     "what": "number in the text"
+    }
+   ],
+   "source": {
+    "file": "data/pipeline/scenario_tests.csv",
+    "line": null,
+    "key": "investigation_id=PSI-69"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/scenario_tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [
+    "PSI-69"
+   ],
+   "lead": false,
+   "limit": false
+  },
+  {
+   "id": "F24",
+   "ref": "data/pipeline/tests.csv#limit",
+   "tool": "tests_table",
+   "kind": "limit",
+   "context": null,
+   "text": "Values are copied as NASA's tables give them, through the team's tests.csv; an empty cell is not a zero and not a 'no'.",
+   "numbers": [],
+   "source": {
+    "file": "data/pipeline/tests.csv",
+    "line": null,
+    "key": "limit"
+   },
+   "source_keys": [],
+   "link": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv",
+   "quote": false,
+   "field": null,
+   "investigation_ids": [],
+   "lead": false,
+   "limit": true
+  }
+ ],
+ "panels": [
+  {
+   "id": "p1",
+   "type": "piles",
+   "title": "Where the data are: Lunar base or pressurized rover",
+   "note": "Built by code from PSI's file listing of 14 November 2026 and NASA's per-test tables as the team mapped them. No language model writes or changes a line of this block. \"Column seen\" means a header that an AI agent read in one opened file of a file group and that the data role's AI session opened again. It is not a measurement of the test, and the other files of the group were not opened. No value read from a raw file has entered a count. Counted tests: P1 133, P2 0, P3 2, S1 298, D1 122, D2 0. Recount by a second AI session: not yet. Read by a person: none yet. A research exploration tool, not safety guidance. Counts and the reading order are the team's computation, not NASA's conclusions. Nothing here says what happens at a condition that was not tested.",
+   "columns": [
+    {
+     "key": "question",
+     "label": "question",
+     "kind": "text"
+    },
+    {
+     "key": "bar",
+     "label": "bar",
+     "kind": "text"
+    },
+    {
+     "key": "pile1",
+     "label": "in NASA's tables",
+     "kind": "list"
+    },
+    {
+     "key": "pile2",
+     "label": "in the archive",
+     "kind": "list"
+    },
+    {
+     "key": "pile3",
+     "label": "No record in PSI (listing of 14 November 2026)",
+     "kind": "list"
+    }
+   ],
+   "rows": [
+    {
+     "question": "P1 Flammability limit",
+     "bar": "Flammability limit (P1), 376 tests of solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.",
+     "pile1": [
+      "0 of the 376 tests of solid fuels are recorded inside these ranges."
+     ],
+     "pile2": [
+      "237 tests cannot be placed: 121 BASS (PSI-26), 109 SAME-R (PSI-101), 4 SAME (PSI-102) and 3 others. The tables hold neither their oxygen nor their pressure, or only one of the two."
+     ],
+     "pile3": [
+      "Lunar gravity: 0 of 376 tests. Ground: the team's mapping sets microgravity for each of the 7 per-test tables (376 of 376 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 6 of the 7 mapped investigations and the Cygnus spacecraft for PSI-99.",
+      "This gap is not unprocessed data: PSI's tables hold no counted test of this question inside these ranges (listing of 14 November 2026). All 133 counted tests (125 BASS-II and 8 SAFFIRE-II) have their oxygen in NASA's table, between 13.6 and 22.2%, below this environment's 30%. Placement uses the table value, so reading raw files does not move one of them in. Source: column Calibrated  initial O2 % by vol of PSI-25_Experimental table_BASS-II.csv (125 tests); column Percent O2 (Note 1) of PSI-99_Experimental table_SAFFIRE-2.csv (8 tests)."
+     ]
+    },
+    {
+     "question": "P2 Ignition",
+     "bar": "Ignition (P2), 376 tests of solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.",
+     "pile1": [
+      "0 of the 376 tests of solid fuels are recorded inside these ranges."
+     ],
+     "pile2": [
+      "237 tests cannot be placed: 121 BASS (PSI-26), 109 SAME-R (PSI-101), 4 SAME (PSI-102) and 3 others. The tables hold neither their oxygen nor their pressure, or only one of the two."
+     ],
+     "pile3": [
+      "Lunar gravity: 0 of 376 tests. Ground: the team's mapping sets microgravity for each of the 7 per-test tables (376 of 376 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 6 of the 7 mapped investigations and the Cygnus spacecraft for PSI-99."
+     ]
+    },
+    {
+     "question": "P3 Flame spread and growth",
+     "bar": "Flame spread and growth (P3), 376 tests of solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.",
+     "pile1": [
+      "0 of the 376 tests of solid fuels are recorded inside these ranges."
+     ],
+     "pile2": [
+      "237 tests cannot be placed: 121 BASS (PSI-26), 109 SAME-R (PSI-101), 4 SAME (PSI-102) and 3 others. The tables hold neither their oxygen nor their pressure, or only one of the two."
+     ],
+     "pile3": [
+      "Lunar gravity: 0 of 376 tests. Ground: the team's mapping sets microgravity for each of the 7 per-test tables (376 of 376 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 6 of the 7 mapped investigations and the Cygnus spacecraft for PSI-99.",
+      "This gap is not unprocessed data: PSI's tables hold no counted test of this question inside these ranges (listing of 14 November 2026). All 2 counted tests (2 SAFFIRE-I) have their oxygen in NASA's table, between 21.5 and 21.7%, below this environment's 30%. Placement uses the table value, so reading raw files does not move one of them in. Source: column Percent O2 of PSI-98_Experimental table_SAFFIRE-1.csv (2 tests)."
+     ]
+    },
+    {
+     "question": "S1 Extinction conditions",
+     "bar": "Extinction conditions (S1), 1,824 tests of all fuel phases: inside 26 | cannot be placed from the tables 676 | oxygen recorded for an oxidizer stream 63 | outside by a recorded value 1,059.",
+     "pile1": [
+      "17 tests counted for this question: FLEX (PSI-69) fuel-droplet tests, liquid heptane or methanol, microgravity, oxygen 30% or 34%, 71.2 to 72.4 kPa.",
+      "Recorded for them in NASA's table: how the burn ended 17 of 17 (15 disruption, 2 completion); extinction diameter 6 of 17; flow event 0 of 17.",
+      "Extinction diameter as the table writes it: a number above zero for 4, a zero for 2, blank for 8, a dash for 3.",
+      "9 more tests inside the ranges: gas flames of ACME-CFI-G (PSI-159), recorded at 50.7 kPa and oxygen 33.2 to 35.9%. Not counted: for 7 of them the PSI record of that investigation does not state this purpose, as the team read it; 2 hold no outcome of this question in NASA's table."
+     ],
+     "pile2": [
+      "Extinction diameter: not in NASA's table for 11 of the 17 tests. A header Dext  (mm) or Dext = was seen in 5 opened files of the file groups these belong to (650 files, 102.5 MB). Not read.",
+      "Flow speed: not in NASA's table for 17 of the 17 tests; no header in the files opened so far was accepted for it (4 headers seen in 1 opened file and not mapped: FLOW_NOZZLE_1_SPEED(N/A), FLOW_NOZZLE_2_SPEED(N/A), TP_PARAMETER_FLOW_NOZZLE_1_SPEED(N/A), TP_PARAMETER_FLOW_NOZZLE_2_SPEED(N/A); unit written as N/A). Not opened: 32 files (14.42 MB) in 4 document groups of FLEX (PSI-69).",
+      "Lowest flow speed: not in NASA's table for 17 of the 17 tests; no header in the files opened so far was accepted for it. Not opened: 32 files (14.42 MB) in 4 document groups of FLEX (PSI-69).",
+      "Flow event: not in NASA's table for 17 of the 17 tests; no header in the files opened so far was accepted for it. Not opened: 32 files (14.42 MB) in 4 document groups of FLEX (PSI-69).",
+      "676 tests cannot be placed: 435 SPICE (PSI-107), 121 BASS (PSI-26), 109 SAME-R (PSI-101) and 11 others. The tables hold neither their oxygen nor their pressure, or only one of the two."
+     ],
+     "pile3": [
+      "Lunar gravity: 0 of 1,824 tests. Ground: the team's mapping sets microgravity for each of the 14 per-test tables (1,824 of 1,824 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 11 of the 12 mapped investigations and the Cygnus spacecraft for PSI-99."
+     ]
+    },
+    {
+     "question": "D1 Combustion products",
+     "bar": "Combustion products (D1), 376 tests of solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.",
+     "pile1": [
+      "0 of the 376 tests of solid fuels are recorded inside these ranges."
+     ],
+     "pile2": [
+      "237 tests cannot be placed: 121 BASS (PSI-26), 109 SAME-R (PSI-101), 4 SAME (PSI-102) and 3 others. The tables hold neither their oxygen nor their pressure, or only one of the two."
+     ],
+     "pile3": [
+      "Lunar gravity: 0 of 376 tests. Ground: the team's mapping sets microgravity for each of the 7 per-test tables (376 of 376 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 6 of the 7 mapped investigations and the Cygnus spacecraft for PSI-99.",
+      "This gap is not unprocessed data: PSI's tables hold no counted test of this question inside these ranges (listing of 14 November 2026). All 122 counted tests (122 BASS-II) have their oxygen in NASA's table, between 13.6 and 22.2%, below this environment's 30%. Placement uses the table value, so reading raw files does not move one of them in. Source: column Calibrated  initial O2 % by vol of PSI-25_Experimental table_BASS-II.csv (122 tests)."
+     ]
+    },
+    {
+     "question": "D2 Smoke generation conditions",
+     "bar": "Smoke generation conditions (D2), 376 tests of solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.",
+     "pile1": [
+      "0 of the 376 tests of solid fuels are recorded inside these ranges."
+     ],
+     "pile2": [
+      "237 tests cannot be placed: 121 BASS (PSI-26), 109 SAME-R (PSI-101), 4 SAME (PSI-102) and 3 others. The tables hold neither their oxygen nor their pressure, or only one of the two."
+     ],
+     "pile3": [
+      "Lunar gravity: 0 of 376 tests. Ground: the team's mapping sets microgravity for each of the 7 per-test tables (376 of 376 tests); no table has a column for it; the PSI record's Flight Platform field names the ISS for 6 of the 7 mapped investigations and the Cygnus spacecraft for PSI-99."
+     ]
+    }
+   ],
+   "download": null,
+   "dashboard_section": "#piles",
+   "fact_ids": [
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9",
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+    "F16",
+    "F17",
+    "F18",
+    "F19",
+    "F20"
+   ]
+  },
+  {
+   "id": "p2",
+   "type": "table",
+   "title": "Recorded tests: Lunar base or pressurized rover, Extinction conditions (S1)",
+   "note": "Values are copied as NASA's tables give them, through the team's tests.csv; an empty cell is not a zero and not a 'no'.",
+   "columns": [
+    {
+     "key": "test_id",
+     "label": "test id",
+     "kind": "link"
+    },
+    {
+     "key": "investigation",
+     "label": "investigation",
+     "kind": "text"
+    },
+    {
+     "key": "tier",
+     "label": "tier",
+     "kind": "text"
+    },
+    {
+     "key": "fuel_phase",
+     "label": "fuel phase",
+     "kind": "text"
+    },
+    {
+     "key": "fuel",
+     "label": "fuel",
+     "kind": "text"
+    },
+    {
+     "key": "o2_pct",
+     "label": "oxygen (%)",
+     "kind": "number"
+    },
+    {
+     "key": "o2_basis",
+     "label": "oxygen basis",
+     "kind": "text"
+    },
+    {
+     "key": "pressure_kpa",
+     "label": "pressure (kPa)",
+     "kind": "number"
+    },
+    {
+     "key": "flow_cms",
+     "label": "flow (cm/s)",
+     "kind": "number"
+    },
+    {
+     "key": "gravity",
+     "label": "gravity",
+     "kind": "text"
+    },
+    {
+     "key": "test_end",
+     "label": "test end",
+     "kind": "text"
+    },
+    {
+     "key": "extinction_diameter_mm",
+     "label": "extinction diameter mm",
+     "kind": "text"
+    },
+    {
+     "key": "flow_event",
+     "label": "flow event",
+     "kind": "text"
+    },
+    {
+     "key": "objective_link",
+     "label": "objective link",
+     "kind": "text"
+    },
+    {
+     "key": "source_file",
+     "label": "source file",
+     "kind": "text"
+    },
+    {
+     "key": "source_row",
+     "label": "source row",
+     "kind": "text"
+    }
+   ],
+   "rows": [
+    {
+     "test_id": {
+      "text": "FLEX-19",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L20"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.8741,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "20"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-20",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L21"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.9274,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "completion",
+     "extinction_diameter_mm": "1.56",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "21"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-21",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L22"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 72.0741,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": "0.95",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "22"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-22",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L23"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 72.0607,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "23"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-23",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L24"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 72.2341,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "24"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-24",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L25"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 72.3674,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "25"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-25",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L26"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.6341,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "completion",
+     "extinction_diameter_mm": "0.59",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "26"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-26",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L27"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.7808,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": "0.4",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "27"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-27",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L28"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 72.0874,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "28"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-28",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L29"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.9541,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "29"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-37",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L38"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.2341,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "38"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-38",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L39"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.2475,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "39"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-39",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L40"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 34.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.3141,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": "0.0",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "40"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-40",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L41"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.3408,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "41"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-41",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L42"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "methanol",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.2341,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "42"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-42",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L43"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.3275,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "43"
+    },
+    {
+     "test_id": {
+      "text": "FLEX-43",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L44"
+     },
+     "investigation": "PSI-69",
+     "tier": "atmosphere",
+     "fuel_phase": "liquid",
+     "fuel": "heptane",
+     "o2_pct": 30.0,
+     "o2_basis": "ambient",
+     "pressure_kpa": 71.3141,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "disruption",
+     "extinction_diameter_mm": "0.0",
+     "flow_event": null,
+     "objective_link": "stated",
+     "source_file": "PSI-69_Experimental table_FLEX.csv",
+     "source_row": "44"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21106F1",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L652"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "50% butane",
+     "o2_pct": 35.8532,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "flow termination",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "36"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21106F3",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L654"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "50% butane",
+     "o2_pct": 35.4241,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "flow termination",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "38"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21106F4",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L655"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "50% butane",
+     "o2_pct": 35.3757,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "flow termination",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "39"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21153F1",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L745"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "30% ethane",
+     "o2_pct": 34.0808,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "self-extinction",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "129"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21153A4",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L746"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "30% ethane",
+     "o2_pct": 33.4934,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "flow termination",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "130"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21153A5",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L747"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "30% ethane",
+     "o2_pct": 33.2446,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "flow termination",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "131"
+    },
+    {
+     "test_id": {
+      "text": "CFIG-N-21174B1",
+      "href": "https://github.com/choidol0208/NASA_RAPID/blob/main/data/pipeline/tests.csv?plain=1#L773"
+     },
+     "investigation": "PSI-159",
+     "tier": "atmosphere",
+     "fuel_phase": "gas",
+     "fuel": "30% butane",
+     "o2_pct": 35.544,
+     "o2_basis": "ambient",
+     "pressure_kpa": 50.665,
+     "flow_cms": null,
+     "gravity": "microgravity",
+     "test_end": "self-extinction",
+     "extinction_diameter_mm": null,
+     "flow_event": null,
+     "objective_link": "not_stated",
+     "source_file": "PSI-159_Experimental table_CFI-G_Normal Flames.csv",
+     "source_row": "157"
+    }
+   ],
+   "download": {
+    "filename": "tests_lunar_habitat_S1.csv",
+    "total_rows": 24
+   },
+   "dashboard_section": "#tests",
+   "fact_ids": [
+    "F21",
+    "F22",
+    "F23",
+    "F24"
+   ]
+  }
+ ],
+ "followups": [
+  {
+   "text": "Which raw files belong to the test FLEX-1?",
+   "request": null
+  },
+  {
+   "text": "What data could support a model of extinction?",
+   "request": null
+  }
+ ],
+ "clarify": null,
+ "dashboard": {
+  "q": "lunar habitat",
+  "section": "#piles"
+ },
+ "trace": {
+  "steps": [
+   {
+    "step": "understand",
+    "label": "Reading your request",
+    "summary": "Read by the rule parser (no language model).",
+    "ms": 14,
+    "model_calls": 0,
+    "detail": {
+     "readings": [
+      {
+       "reader": "R",
+       "valid": true,
+       "ms": 14
+      }
+     ],
+     "agreement": {
+      "intent": "rules_only",
+      "environment.preset": "rules_only"
+     },
+     "removed_ungrounded": [],
+     "asked": false
+    }
+   },
+   {
+    "step": "plan",
+    "label": "Choosing what to look up",
+    "summary": "Looking up where the data are: NASA's tables, the archive, or no record, the recorded tests in range.",
+    "ms": 1,
+    "model_calls": 0
+   },
+   {
+    "step": "lookup",
+    "label": "Looking up the team's files",
+    "summary": "24 facts from 3 files.",
+    "ms": 88,
+    "model_calls": 0
+   },
+   {
+    "step": "write",
+    "label": "Writing from the facts",
+    "summary": "Answer put together by team code from the facts.",
+    "ms": 1,
+    "model_calls": 0
+   },
+   {
+    "step": "deliver",
+    "label": "Done",
+    "summary": "Done in 0.1 s with 0 model calls.",
+    "ms": 1,
+    "model_calls": 0
+   }
+  ],
+  "model_calls": 0,
+  "total_ms": 105,
+  "cache": "miss",
+  "gate_report": null,
+  "data_version": "mock",
+  "commit": "main"
+ },
+ "label": "Put together by team code from the facts shown; no language model wrote it. A research exploration tool, not safety guidance."
+}

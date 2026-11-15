@@ -213,15 +213,18 @@ RUN_LOG_META = {
 }
 
 
-def run_log_path(run):
+def run_log_path(run, log_dir=None):
+    """ai/runs/<run>.jsonl, or <log_dir>/<run>.jsonl when log_dir is given (the assistant's git-ignored
+    run-time folder, config.ASSISTANT_RUNTIME_DIR)."""
     if not re.fullmatch(r"[A-Za-z0-9_.-]+", run or ""):
         raise ValueError(f"bad run name {run!r}")
-    return config.RUNS_DIR / f"{run}.jsonl"
+    return (config.RUNS_DIR if log_dir is None else __import__("pathlib").Path(log_dir)) / f"{run}.jsonl"
 
 
-def log_line(run, record, fresh=False):
-    """Append one JSON line to ai/runs/<run>.jsonl, writing the _meta line first if needed."""
-    path = run_log_path(run)
+def log_line(run, record, fresh=False, log_dir=None):
+    """Append one JSON line to ai/runs/<run>.jsonl (or <log_dir>/<run>.jsonl), writing the _meta line first
+    if needed."""
+    path = run_log_path(run, log_dir)
     path.parent.mkdir(parents=True, exist_ok=True)
     if fresh or not path.exists() or path.stat().st_size == 0:
         meta = dict(RUN_LOG_META["_meta"], created=_now())
@@ -250,7 +253,7 @@ def schema_instruction(schema):
 
 def chat(messages, schema, think=None, temperature=None, seed=None, num_ctx=None,
          num_predict=None, *, model=config.MODEL, format_mode=None, retries=None,
-         run="calls", log_extra=None, timeout=None):
+         run="calls", log_extra=None, timeout=None, log_dir=None):
     """Call the local model once (plus up to `retries` format retries) and return a result dict.
 
     messages     list of {"role": "system"|"user"|"assistant", "content": str}
@@ -260,6 +263,8 @@ def chat(messages, schema, think=None, temperature=None, seed=None, num_ctx=None
                  'prompt': no `format`, the schema is stated in the prompt only
     run          log file name under ai/runs/ (without .jsonl)
     log_extra    dict merged into the log line (for example {"record": "PSI-25", "step": "select"})
+    log_dir      folder of the run log; None means ai/runs/ (the assistant's server passes its git-ignored
+                 run-time folder, config.ASSISTANT_RUNTIME_DIR)
 
     Returns {"data", "valid", "errors", "raw", "model", "digest", "prompt_sha256", "options",
     "think", "format_mode", "eval_count", "eval_duration_ns", "tokens_per_s", "wall_s",
@@ -334,7 +339,7 @@ def chat(messages, schema, think=None, temperature=None, seed=None, num_ctx=None
         line["parsed"] = data
         if log_extra:
             line.update(log_extra)
-        log_line(run, line)
+        log_line(run, line, log_dir=log_dir)
         if result["valid"] or attempt >= retries:
             return result
         attempt += 1
@@ -343,6 +348,44 @@ def chat(messages, schema, think=None, temperature=None, seed=None, num_ctx=None
             {"role": "user", "content": "That reply was not valid (" + "; ".join(errors[:5])
              + "). Reply again with only the JSON object that matches the schema."},
         ]
+
+
+# ---------------------------------------------------------------------- run-time status
+
+def server_status(model=config.MODEL):
+    """Whether the assistant can call the model now. Never raises and never pulls a model.
+
+    Returns {"reachable", "version", "installed", "digest_ok", "allowed", "digest_prefix", "reason"};
+    reason is None when the model can be called, else one fixed sentence. Under AI_NO_MODEL_CALLS=1 no
+    connection is opened."""
+    out = {"reachable": False, "version": None, "installed": False, "digest_ok": False,
+           "allowed": isinstance(model, str) and model in config.ALLOWED, "digest_prefix": None, "reason": None}
+    if not out["allowed"]:
+        out["reason"] = f"{model} is not an allowed model"
+        return out
+    if os.environ.get(NO_CALLS_ENV) == "1":
+        out["reason"] = f"{NO_CALLS_ENV}=1"
+        return out
+    try:
+        out["version"] = _http("GET", "/api/version", timeout=3).get("version")
+        out["reachable"] = True
+        tags = _http("GET", "/api/tags", timeout=5)
+    except Exception:  # noqa: BLE001 - a status probe never raises
+        out["reachable"] = False
+        out["reason"] = f"Ollama is not reachable at {config.OLLAMA_URL}"
+        return out
+    found = [m for m in tags.get("models", []) if m.get("name") == model or m.get("model") == model]
+    if not found:
+        out["reason"] = f"{model} is not installed"
+        return out
+    out["installed"] = True
+    digest = found[0].get("digest", "") or ""
+    out["digest_prefix"] = digest[:12]
+    if not digest.startswith(config.EXPECT_DIGEST_PREFIX):
+        out["reason"] = f"the installed {model} has another digest than the one the team checked"
+        return out
+    out["digest_ok"] = True
+    return out
 
 
 # ---------------------------------------------------------------------- smoke test

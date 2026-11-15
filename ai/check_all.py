@@ -50,6 +50,12 @@ Hard checks (files pm owns):
                wording and source checks (ai/model_readiness.py check)
   robustness   robustness.json: live top 3, config version and assumed_dims equal rank() now; the shares
                rebuild by the NumPy path (ai/robustness.py check_file)
+  assistant    every ai/assistant/ code file (.py, .js, .css, .sh) and install.sh, run.sh carry the
+               AI-generated-code sentence; eval/questions.json has the required coverage and equals its frozen
+               sha256; assistant_eval.json (when built) is a model run on that set with every question in each
+               arm it has; assistant_recorded.json (when built): every response is a RESPONSE marked recorded,
+               every model sentence passes the code gates against its recorded facts, and the tools re-run
+               with each recorded request give the same text for every cited fact
 
 Reported as info (never fails): a need statement whose pipeline reading says no test is counted while its
 count is above zero (the data role's text; the fix is in pipeline/spec/needs.json).
@@ -68,6 +74,7 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -77,7 +84,7 @@ from pathlib import Path
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ai import checks as C, config, evidence as evmod, meta as metamod, resolve  # noqa: E402
+from ai import checks as C, config, evidence as evmod, llm, meta as metamod, resolve  # noqa: E402
 from ai import templates as T  # noqa: E402
 from ai.lint_patterns import NUMBER_WORDS as LP_NUMBER_WORDS  # noqa: E402
 
@@ -1154,6 +1161,156 @@ def check_readiness_and_robustness(rep):
         rep.fail("robustness", f"cannot import ai/robustness.py: {exc}")
 
 
+# ====================================================================== assistant (ai/assistant/)
+
+ASSISTANT_DIR = config.AI_DIR / "assistant"
+ASSISTANT_ARMS = ("single_call", "full", "no_repeat", "no_gates", "no_checker")
+HEADER_SENTENCE = config.HEADER_COMMENT.lstrip("# ").strip()
+
+
+def _assistant_headers(rep):
+    files = [p for p in sorted(ASSISTANT_DIR.rglob("*")) if p.is_file() and p.suffix in (".py", ".js", ".css", ".sh")
+             and not any(part in ("_runtime", "__pycache__") or part.startswith(".")
+                         for part in p.relative_to(ASSISTANT_DIR).parts)]
+    files += [p for p in (ROOT / "install.sh", ROOT / "run.sh") if p.exists()]
+    bad = []
+    for p in files:
+        head = p.read_text(encoding="utf-8").split("\n")[:3]
+        if not any(HEADER_SENTENCE in line for line in head):
+            bad.append(_rel(p))
+    for b in bad:
+        rep.fail("assistant", f"{b}: the AI-generated-code sentence is not in its first lines")
+    if not bad:
+        rep.ok("assistant", f"{len(files)} assistant code files (.py, .js, .css, .sh, with install.sh and run.sh) "
+                            "carry the AI-generated-code sentence")
+
+
+def _assistant_eval(rep, EV):
+    data, errors = EV.load_questions()
+    counts, problems = EV.coverage(data)
+    for e in errors[:5]:
+        rep.fail("assistant", f"eval/questions.json: {e}")
+    for pr in problems:
+        rep.fail("assistant", f"eval/questions.json coverage: {pr}")
+    now, frozen = EV.freeze_state()
+    if frozen is None:
+        rep.info("assistant", "eval/questions.sha256 is not written yet (python3 -m ai.assistant.evaluate --freeze)")
+    elif frozen != now:
+        rep.fail("assistant", "eval/questions.json changed after it was frozen in eval/questions.sha256")
+    elif not errors and not problems:
+        rep.ok("assistant", f"eval/questions.json: {counts['questions']} questions, coverage as required, "
+                            f"frozen at {now[:12]}")
+    p = INSIGHTS / "assistant_eval.json"
+    if not p.exists():
+        rep.not_built("assistant", "data/insights/assistant_eval.json (python3 -m ai.assistant.evaluate)")
+        return
+    d = json.loads(p.read_text(encoding="utf-8"))
+    before = len(rep.failures())
+    if d.get("fake_model") or d.get("model") != config.MODEL_LABEL:
+        rep.fail("assistant", "assistant_eval.json is not a run with the model (fake or no-model run)")
+    if d.get("n_questions") != len(data["questions"]):
+        rep.fail("assistant", f"assistant_eval.json n_questions {d.get('n_questions')} != {len(data['questions'])}")
+    if d.get("questions_sha256") != now:
+        rep.fail("assistant", "assistant_eval.json was measured on another questions.json (sha256 differs)")
+    arms = d.get("arms") or {}
+    extra = [a for a in arms if a not in ASSISTANT_ARMS]
+    if extra:
+        rep.fail("assistant", f"assistant_eval.json has unknown arms {extra}")
+    subsets = d.get("subsets") or {}
+    for a, v in arms.items():
+        want = data["questions"]
+        if a in subsets:  # an ablation arm run on a fixed random part of the set (evaluate.py --subset-arms)
+            ids = set(subsets[a].get("ids") or [])
+            want = [q for q in data["questions"] if q["id"] in ids]
+            if len(want) != len(ids):
+                rep.fail("assistant", f"assistant_eval.json arm {a}: its subset names questions not in the set")
+        got = {r.get("id") for r in v.get("per_question") or []}
+        if len(v.get("per_question") or []) != len(want) or got != {q["id"] for q in want}:
+            rep.fail("assistant", f"assistant_eval.json arm {a}: {len(v.get('per_question') or [])} of "
+                                  f"{len(want)} questions")
+    missing = [a for a in ASSISTANT_ARMS if a not in arms]
+    if missing and d.get("complete"):
+        rep.fail("assistant", f"assistant_eval.json says complete but lacks arms {missing}")
+    if len(rep.failures()) == before:
+        if missing:
+            rep.info("assistant", f"assistant_eval.json is partial (complete: false): arms {missing} not run")
+        rep.ok("assistant", f"assistant_eval.json: arms {sorted(arms)} on {d.get('n_questions')} questions, "
+                            "measured on the frozen question set")
+
+
+def _assistant_recorded(rep, EV):
+    p = INSIGHTS / "assistant_recorded.json"
+    if not p.exists():
+        rep.not_built("assistant", "data/insights/assistant_recorded.json (python3 -m ai.assistant.record)")
+        return
+    from ai.assistant import check as CK, plan as PL, tools as TL
+    from ai import llm
+    d = json.loads(p.read_text(encoding="utf-8"))
+    schema = EV.design_block("RESPONSE")
+    data = TL.Data()
+    before = len(rep.failures())
+    if d.get("fake_model") or d.get("model") != config.MODEL_LABEL:
+        rep.fail("assistant", "assistant_recorded.json is not a recording with the model (fake run)")
+    stale, n_turns, n_model = [], 0, 0
+    for c in d.get("conversations") or []:
+        for i, t in enumerate(c.get("turns") or [], 1):
+            n_turns += 1
+            where = f"assistant_recorded.json {c.get('id')} turn {i}"
+            resp = t.get("response") or {}
+            if resp.get("mode") != "recorded":
+                rep.fail("assistant", f"{where}: mode is {resp.get('mode')!r}, not 'recorded'")
+            errs = llm.validate(resp, schema)
+            if errs:
+                rep.fail("assistant", f"{where}: not a RESPONSE: {'; '.join(errs[:2])}")
+            facts = {f.get("id"): f for f in resp.get("facts") or [] if isinstance(f, dict)}
+            answer = resp.get("answer") or {}
+            cited_refs = set()
+            for s in answer.get("sentences") or []:
+                ids = s.get("facts") or []
+                if any(x not in facts for x in ids):
+                    rep.fail("assistant", f"{where}: sentence {s.get('n')} cites an id that is not a fact of the turn")
+                cited_refs |= {facts[x].get("ref") for x in ids if x in facts}
+                if (s.get("origin") or answer.get("origin")) == "model":
+                    n_model += 1
+                    fails = EV.gates(CK.gate_sentence, s.get("text", ""), [facts[x] for x in ids if x in facts],
+                                     resp.get("request"), turn_ids=set(facts), cited_ids=ids)
+                    for g, r in fails:
+                        rep.fail("assistant", f"{where}: sentence {s.get('n')} fails gate {g}: {r}")
+            req = resp.get("request")
+            if resp.get("kind") == "answer" and isinstance(req, dict) and cited_refs:
+                fresh = TL.run(PL.plan(req), data)
+                now = {f.get("ref"): f.get("text") for f in fresh.get("facts") or []}
+                for f in facts.values():
+                    if f.get("ref") in cited_refs and now.get(f.get("ref")) != f.get("text"):
+                        stale.append(f"{where} {f.get('ref')}")
+    for s_ in stale[:6]:
+        rep.fail("assistant", f"recorded answer is stale: run python3 -m ai.assistant.record ({s_})")
+    if len(rep.failures()) == before:
+        rep.ok("assistant", f"assistant_recorded.json: {n_turns} turns, {n_model} model sentences pass the gates "
+                            "against their recorded facts, every cited fact re-runs to the same text")
+
+
+def check_assistant(rep):
+    """The assistant's question set, evaluation and recordings (ai/assistant/DESIGN.md section 15.2)."""
+    if not ASSISTANT_DIR.exists():
+        rep.not_built("assistant", "ai/assistant/ does not exist")
+        return
+    _assistant_headers(rep)
+    if not (ASSISTANT_DIR / "eval" / "questions.json").exists():
+        rep.not_built("assistant", "ai/assistant/eval/questions.json")
+        return
+    try:
+        from ai.assistant import evaluate as EV
+    except Exception as exc:  # noqa: BLE001 - reported as a failure
+        rep.fail("assistant", f"cannot import ai/assistant/evaluate.py: {type(exc).__name__}: {exc}")
+        return
+    _assistant_eval(rep, EV)
+    try:
+        _assistant_recorded(rep, EV)
+    except ImportError as exc:
+        rep.fail("assistant", f"assistant_recorded.json exists but the assistant cannot be imported: {exc}")
+
+
 # ====================================================================== report-only lint
 
 def lint_report(rep, live_rank=True):
@@ -1195,8 +1352,23 @@ def lint_report(rep, live_rank=True):
 
 # ====================================================================== main
 
-def run(final=False, live_rank=True):
+def assistant_tests(rep):
+    """The assistant's unit tests (fake model, no network), run by build_all through --assistant-tests."""
+    env = dict(os.environ, **{llm.NO_CALLS_ENV: "1"})
+    r = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "ai/assistant", "-p", "test_*.py"],
+                       cwd=ROOT, env=env, capture_output=True, text=True)
+    tail = (r.stderr or "").strip().splitlines()
+    ran = next((x for x in tail if x.startswith("Ran ")), "no test ran")
+    if r.returncode != 0:
+        rep.fail("assistant", f"assistant unit tests failed ({ran}): " + " | ".join(tail[-6:]))
+    else:
+        rep.ok("assistant", f"assistant unit tests (fake model, no network): {ran}, OK")
+
+
+def run(final=False, live_rank=True, with_assistant_tests=False):
     rep = Report()
+    if with_assistant_tests:
+        assistant_tests(rep)
     check_headers(rep)
     check_disclosure(rep)
     check_compliance_diff(rep)
@@ -1209,6 +1381,7 @@ def run(final=False, live_rank=True):
         check_scenarios(rep, INSIGHTS / "scenarios.json", ev, recount=rc, live_rank=live_rank)
         check_sheet(rep, INSIGHTS / "cards.json", INSIGHTS / "scenarios.json", ev)
     check_readiness_and_robustness(rep)
+    check_assistant(rep)
     lint_report(rep, live_rank=live_rank)
     return rep
 
@@ -1217,8 +1390,10 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--final", action="store_true", help="fail on any unreviewed model sentence")
     ap.add_argument("--json", action="store_true", help="print the report as JSON")
+    ap.add_argument("--assistant-tests", action="store_true",
+                    help="also run the assistant's unit tests (fake model, no network)")
     args = ap.parse_args(argv)
-    rep = run(final=args.final)
+    rep = run(final=args.final, with_assistant_tests=args.assistant_tests)
     fails = rep.failures()
     if args.json:
         print(json.dumps({"ok": not fails, "items": rep.items, "lint_hits": rep.lint_hits}, indent=1,
