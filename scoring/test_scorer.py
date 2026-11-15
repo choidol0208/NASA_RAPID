@@ -613,6 +613,29 @@ class Review1115Decisions(unittest.TestCase):
         self.assertEqual(CFG["gate"]["min_similarity"], 0.2)  # B1: gate kept
 
 
+class ChallengeFit1648(unittest.TestCase):
+    """pm's challenge-fit check (request 1648, config 1.5.3): the statement's own examples read as the statement means them."""
+
+    def test_artemis_is_not_a_lunar_base(self):
+        sc = scorer.interpret("Artemis II smoke alarm", CFG)[0]
+        self.assertNotEqual(sc.get("preset"), "lunar_habitat")
+        self.assertEqual(sc["concern"], "detection")
+
+    def test_combustion_chamber_is_in_scope_rockets_are_not(self):
+        self.assertEqual(scorer.rank("ACME combustion chamber 40% oxygen")["status"], "ok")
+        self.assertEqual(scorer.rank("hybrid rocket combustion chamber fire")["status"], "out_of_scope")
+
+    def test_partial_gravity_notice_has_its_sources(self):
+        w = next(x for x in scorer.rank("lunar habitat")["warnings"] if x["code"] == "partial_gravity")
+        for part in ("Olson and Ferkul 2012", "OCHMO-TB-008", "LUCI", "FM2", "PSI-22"):
+            self.assertIn(part, w["message"])
+
+    def test_o2_above_all_names_the_oxidizer_streams(self):
+        w = next(x for x in scorer.rank("50% O2")["warnings"] if x["code"] == "o2_above_all")
+        self.assertIn("85%", w["message"])
+        self.assertIn("40%", w["message"])
+
+
 class AhpWeights(unittest.TestCase):
     """Config 1.2.0: the profile weights are the AHP derivation of scoring/ahp_judgements.json."""
 

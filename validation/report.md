@@ -1,6 +1,6 @@
 # Catalog filter validation report
 
-- Run: 2026-11-15 15:20 · target `scoring.scorer:rank`
+- Run: 2026-11-15 16:56 · target `scoring.scorer:rank`
 - Result: **45/45 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
@@ -61,7 +61,7 @@
 | S01 | FLEX | stable |
 | L01 | FLEX | stable |
 
-## Weight sensitivity (each prevention weight x0.5 and x1.5, rescaled to sum 1; config 1.5.2)
+## Weight sensitivity (each prevention weight x0.5 and x1.5, rescaled to sum 1; config 1.5.3)
 
 - 44 of 48 variants keep the same top 3 in the same order; 1 keep the same three in another order; rank 1 changes in 3.
 
@@ -72,7 +72,7 @@
 | lunar habitat cotton fabric | o2 | x1.5 | ACME-BRE, SAFFIRE-II, SAFFIRE-I (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | same set; rank 1 changed |
 | lunar habitat cotton fabric | fuel | x0.5 | BASS-II, SAFFIRE-II, ACME-BRE (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | changed; rank 1 changed |
 
-## Sensitivity to the other values (each x0.5 and x1.5 on the four demo queries; config 1.5.2)
+## Sensitivity to the other values (each x0.5 and x1.5 on the four demo queries; config 1.5.3)
 
 - 124 of 136 runs keep the same top 3 in the same order; 3 keep the same three in another order; rank 1 changes in 5.
 
@@ -96,7 +96,7 @@
 | research-purpose table (`similarity.role`) | 8 | — |
 | data-availability table (`evidence.data_availability`) | 7 | x1.5 lunar habitat: ACME-BRE, FLEX, ACME-CFI-G (rank 1) |
 
-## Weighting by purpose (config 1.5.2)
+## Weighting by purpose (config 1.5.3)
 
 | Profile | Queries read as this purpose | One-at-a-time x0.5/x1.5: same top 3 | rank 1 changes | Scheme | Same top 3 | Same rank 1 |
 |---|---|---|---|---|---|---|
@@ -131,7 +131,7 @@ Rows where another scheme changes the top 3:
 - suppression, prevention weights, "inert gas suppression ISS": BASS, BASS-II, SAFFIRE-I (configured: BASS, FLEX, BASS-II)
 - suppression, detection weights, "nitrogen extinguish fabric fire ISS": BASS, BASS-II, SAFFIRE-I (configured: BASS, BASS-II, ACME-BRE)
 
-## Weight uncertainty: SMAA with the order of importance only (config 1.5.2, 300 draws per profile, seed 20261114)
+## Weight uncertainty: SMAA with the order of importance only (config 1.5.3, 300 draws per profile, seed 20261114)
 
 | Profile | Query | Top 3 with the profile's weights | Same rank 1 | Same top 3 (as a set) | Top-3 acceptability of each investigation (10% or more) |
 |---|---|---|---|---|---|

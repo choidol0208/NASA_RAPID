@@ -1,12 +1,12 @@
 {
   "_about": {
     "what": "Scoring rules for ranking PSI test configurations against a user scenario. Read by scoring/scorer.py; the dashboard can read the same file (e.g., to draw weight sliders).",
-    "status": "Team proposal (2026-11-14), not NASA guidance. Config 1.5.0 (weights unchanged from 1.4.0): the profile weights come from scoring/derive_weights.py, which combines the streams named in scoring/weight_streams.json. Judgement stream: AHP over literature-based pairwise judgements, filled in by an AI session from evidence classes with cited textbooks, papers and NASA records (scoring/literature_evidence.json; CR 0, 0.009 and 0.008). Suppression is further pooled, over o2, pressure, diluent and fuel, with the relative importance of those conditions in the NASA FLEX measurements (scoring/data_weights.json). The human lead approved the AHP (19:26), the FLEX pooling (20:06) and the literature stream (20:19). All other values are unchanged from 1.1.0 and were approved after the AI review in scoring/PARAMETER_REVIEW.md. The model's build-up and its sources are in scoring/BUILDUP.md. Change values here only, never in code; change the weights only through the stream files and derive_weights.py --write. Config 1.5.0 changes no weight. (1) Detection questions are matched by fire signature, gas or particulate (similarity.role.signatures). (2) Each compliance line states the basis of the value it checked, and 'met' is kept for per-test table values and catalog classifications ('documented' otherwise). (3) The BASS-II pressure is a published value, no longer an assumption (atmosphere_fallback.pressure_published). The reasoning is in scoring/METHOD.md, section 'Combined model 1.5.0'. Config 1.5.1 (2026-11-15, review of 09:40, items A1-A3; weights unchanged): the five day tables (ACME PSI-20 to 23, SLICE PSI-106) are summary_table; near-ties are ordered by recorded share, then evidence (order-independent); 'solid' and Korean 고체 (solid) are read as the fuel phase; DAFT's dust particles are not a fire signature (similarity.role.signatures.not_from_a_fire). Config 1.5.2 (2026-11-15, the human lead's decisions on review items B1-B5, recommendations taken; weights unchanged): B1, gate kept, 'decisive is not a veto' recorded (gate.decisive_is_not_a_veto); B2, documented values keep their similarity (no 0.8 cap); B3, a 'no_material' warning when no fuel is named; B4, scores are compared within a question only (formula_scope); B5, detection pressure stays class 3 with the scope stated (profiles.detection.scope).",
-    "generated_by": "AI-assisted (Claude), reviewed: profile weights of 1.0.0-1.1.0 (direct point allocation) approved as-is by the human lead (team member), 2026-11-14 16:51 KST; all other values approved as-is by the same reviewer, 2026-11-14 17:03 KST, after the AI review in scoring/PARAMETER_REVIEW.md; config 1.2.0 (2026-11-14 19:26 KST): profile weights replaced by the AHP derivation, pairwise judgements approved as-is and applied by decision of the same reviewer; config 1.3.0 (2026-11-14 20:06 KST): suppression weights pooled with the NASA FLEX data stream, by decision of the same reviewer; config 1.4.0 (2026-11-14 20:19 KST): judgement stream replaced by the literature-based judgements, by decision of the same reviewer; config 1.5.0 (2026-11-15 KST): signature-aware detection purpose, compliance basis and the published BASS-II pressure, built by the catalog AI session after the human lead asked it to judge, on theory, the three differences between the catalog and the data role's raw-file method and to combine the two where both hold. Weights unchanged.; config 1.5.1 (2026-11-15 10:10 KST): review items A1-A3 fixed by the catalog AI session at the human lead's request. Weights unchanged.; config 1.5.2 (2026-11-15 15:20 KST): the human lead's decisions on review items B1-B5 (recommendations as proposed), applied by the catalog AI session. Weights unchanged.",
+    "status": "Team proposal (2026-11-14), not NASA guidance. Config 1.5.0 (weights unchanged from 1.4.0): the profile weights come from scoring/derive_weights.py, which combines the streams named in scoring/weight_streams.json. Judgement stream: AHP over literature-based pairwise judgements, filled in by an AI session from evidence classes with cited textbooks, papers and NASA records (scoring/literature_evidence.json; CR 0, 0.009 and 0.008). Suppression is further pooled, over o2, pressure, diluent and fuel, with the relative importance of those conditions in the NASA FLEX measurements (scoring/data_weights.json). The human lead approved the AHP (19:26), the FLEX pooling (20:06) and the literature stream (20:19). All other values are unchanged from 1.1.0 and were approved after the AI review in scoring/PARAMETER_REVIEW.md. The model's build-up and its sources are in scoring/BUILDUP.md. Change values here only, never in code; change the weights only through the stream files and derive_weights.py --write. Config 1.5.0 changes no weight. (1) Detection questions are matched by fire signature, gas or particulate (similarity.role.signatures). (2) Each compliance line states the basis of the value it checked, and 'met' is kept for per-test table values and catalog classifications ('documented' otherwise). (3) The BASS-II pressure is a published value, no longer an assumption (atmosphere_fallback.pressure_published). The reasoning is in scoring/METHOD.md, section 'Combined model 1.5.0'. Config 1.5.1 (2026-11-15, review of 09:40, items A1-A3; weights unchanged): the five day tables (ACME PSI-20 to 23, SLICE PSI-106) are summary_table; near-ties are ordered by recorded share, then evidence (order-independent); 'solid' and Korean 고체 (solid) are read as the fuel phase; DAFT's dust particles are not a fire signature (similarity.role.signatures.not_from_a_fire). Config 1.5.2 (2026-11-15, the human lead's decisions on review items B1-B5, recommendations taken; weights unchanged): B1, gate kept, 'decisive is not a veto' recorded (gate.decisive_is_not_a_veto); B2, documented values keep their similarity (no 0.8 cap); B3, a 'no_material' warning when no fuel is named; B4, scores are compared within a question only (formula_scope); B5, detection pressure stays class 3 with the scope stated (profiles.detection.scope). Config 1.5.3 (2026-11-15, pm's challenge-fit check, request 1648; weights unchanged): partial-gravity notice with its NASA source (Olson and Ferkul 2012, Table I; OCHMO-TB-008) and the challenge's future sources; not_understood names what the ranking reads; 'artemis' no longer reads as a lunar base; Mars hint with a sourced example atmosphere; 'combustion chamber' no longer out of scope; o2_above_all names the 85% oxidizer streams.",
+    "generated_by": "AI-assisted (Claude), reviewed: profile weights of 1.0.0-1.1.0 (direct point allocation) approved as-is by the human lead (team member), 2026-11-14 16:51 KST; all other values approved as-is by the same reviewer, 2026-11-14 17:03 KST, after the AI review in scoring/PARAMETER_REVIEW.md; config 1.2.0 (2026-11-14 19:26 KST): profile weights replaced by the AHP derivation, pairwise judgements approved as-is and applied by decision of the same reviewer; config 1.3.0 (2026-11-14 20:06 KST): suppression weights pooled with the NASA FLEX data stream, by decision of the same reviewer; config 1.4.0 (2026-11-14 20:19 KST): judgement stream replaced by the literature-based judgements, by decision of the same reviewer; config 1.5.0 (2026-11-15 KST): signature-aware detection purpose, compliance basis and the published BASS-II pressure, built by the catalog AI session after the human lead asked it to judge, on theory, the three differences between the catalog and the data role's raw-file method and to combine the two where both hold. Weights unchanged.; config 1.5.1 (2026-11-15 10:10 KST): review items A1-A3 fixed by the catalog AI session at the human lead's request. Weights unchanged.; config 1.5.2 (2026-11-15 15:20 KST): the human lead's decisions on review items B1-B5 (recommendations as proposed), applied by the catalog AI session. Weights unchanged.; config 1.5.3 (2026-11-15 17:00 KST): text and keyword fixes from pm's challenge-fit check (request 1648), applied by the catalog AI session. Weights unchanged.",
     "formula": "score = 100 * M * G * sum_i(w_i * S_i) over active dimensions; weights renormalized to sum 1 over active dimensions",
     "formula_scope": "A score orders the investigations for one question only. Scores of different questions are not comparable: the weights are rescaled over the dimensions each question sets (4 for 'ISS', 6 for 'lunar habitat cotton fabric'). Compare questions by their test counts (review of 2026-11-15, B4)."
   },
-  "version": "1.5.2",
+  "version": "1.5.3",
   "default_profile": "prevention",
   "profiles": {
     "prevention": {
@@ -376,7 +376,6 @@
         "lunar base",
         "lunar habitat",
         "rover",
-        "artemis",
         "달",
         "달 기지",
         "월면",
@@ -401,7 +400,7 @@
         "flow_state": "ventilated",
         "gravity": "martian"
       },
-      "source": "The challenge text gives no Mars atmosphere; ask the user for O2 and pressure."
+      "source": "The challenge text gives no Mars atmosphere; type an oxygen and a pressure to place tests (for example 32% O2 at 8.0 psi, a lander and surface-habitat atmosphere recommended in NASA/TP-2010-216134)."
     },
     "spacesuit": {
       "label_en": "Spacesuit",
@@ -443,13 +442,11 @@
       "propellant",
       "thruster",
       "rocket engine",
-      "combustion chamber",
       "solid rocket",
       "hybrid rocket",
       "로켓",
       "추진제",
       "추력기",
-      "연소실",
       "엔진"
     ],
     "gravity": {
@@ -1353,9 +1350,9 @@
   },
   "warnings": {
     "out_of_scope": "Rocket and propellant fire safety is outside the scope of PSI combustion research.",
-    "partial_gravity": "PSI has no partial-gravity (lunar or Martian) combustion data. All results here are microgravity tests; they are not bounds for lunar or Martian gravity. NASA names partial-gravity material flammability a major gap (OCHMO-TB-008).",
+    "partial_gravity": "PSI has no partial-gravity (lunar or Martian) combustion data; every result here is a microgravity test. The challenge statement suggests that results at the two ends of the gravity scale could bound intermediate levels. This page does not treat them as bounds: in NASA drop-tower tests of three materials (Olson and Ferkul 2012, Table I), the oxygen limits at lunar gravity were lower than at both 0 g and 1 g, and at Martian gravity lower for two of the three. Those drops lasted 5.18 s and used extinction criteria that differ from the 1 g test. NASA names partial-gravity material flammability a major gap (OCHMO-TB-008). The challenge statement names the Lunar-g Combustion Investigation (LUCI) and the Flammability of Materials on the Moon (FM2) experiment as expected future sources, and ACME's E-FIELD Flames (PSI-22) as an experiment in which an electric field mimicked partial gravity.",
     "earth_gravity": "PSI results are microgravity tests. Only some investigations report 1g comparisons.",
-    "o2_above_all": "O2 is above the highest surrounding-atmosphere O2 tested in microgravity in PSI ({max_o2}% in {max_cfg}). Any conclusion is an extrapolation.",
+    "o2_above_all": "O2 is above the highest surrounding-atmosphere O2 tested in microgravity in PSI ({max_o2}% in {max_cfg}). Any conclusion is an extrapolation. The highest O2 in PSI, 85% in ACME Flame Design and ACME CFI-G, was the oxidizer stream of an inverse flame, not the surrounding atmosphere.",
     "o2_above_result": "User O2 {user}% is above this configuration's tested maximum ({max}%): the real fire may be more severe than tested.",
     "outside_range": "Outside the tested range for: {dims}.",
     "gas_for_solid": "Evidence comes from gaseous-fuel tests; apply to solid materials with caution.",
@@ -1366,7 +1363,7 @@
     "fallback": "{dims} not reported in the catalog; scored as ordinary cabin air (team assumption: 21% O2, 101.3 kPa).",
     "complementary": "Included because it was tested at your O2; the closer matches above were tested at a different O2.",
     "ranges_separate": "The O2 range and the pressure range are each taken over all tests of this configuration; they do not say that a test was run at both of your values.",
-    "not_understood": "No PSI investigation or keyword matches {words}; the ranking uses the rest of the query and these words change nothing.",
+    "not_understood": "The ranking does not read these words: {words}. It reads an environment, a material, a purpose and conditions; investigation names are not ranking terms, and every investigation is listed under All investigations.",
     "no_material": "No material is named, so the fuel is not compared: this ranking rests on the atmosphere, the flow and the purpose only. Name a material (for example cotton fabric, PMMA or wire insulation) for a closer match."
   },
   "atmosphere_fallback": {
