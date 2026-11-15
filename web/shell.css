@@ -1026,3 +1026,41 @@ details.pile-need { scroll-margin-top: calc(var(--appbar-h) + var(--tabs-h) + 12
   .pile-flow { flex-direction: column; } .flow-arrow { transform: rotate(90deg); }
   .pile-tiles, .emap-cards { grid-template-columns: 1fr; }
 }
+
+/* ---- The other tabs, in the same manner (15 November, 22:00): question tiles over the quoted results, the points to
+   consider as cards, a link to the NASA record on each result card, the score as a bar in the full list. */
+.card-psi { margin-left: 6px; font-size: 13px; }
+.rf-overview { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin: 0 0 var(--s2); }
+.rf-tile { display: flex; flex-direction: column; gap: 4px; text-align: left; padding: var(--s3) var(--s4); background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--t-found); border-radius: 10px; box-shadow: var(--shadow); cursor: pointer; font: inherit; color: var(--ink); }
+.rf-tile:hover { border-color: var(--t-found); background: var(--t-found-soft); }
+.rf-tile-name { font: 700 14.5px/1.3 var(--display); }
+.rf-tile-fig { font-size: 13px; color: var(--ink-2); }
+.rf-tile-fig b { font: 700 30px/1.1 var(--display); font-variant-numeric: tabular-nums; color: var(--ink); margin-right: 4px; }
+.rf-tile-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: #e8ebee; margin: 2px 0; }
+.rfg { display: block; min-width: 3px; }
+.rfg-at_environment, .swatch.rfg-at_environment { background: var(--t-found); }
+.rfg-about_a_stated_condition, .swatch.rfg-about_a_stated_condition { background: #7bbf9c; }
+.rfg-stated_without_these_conditions, .swatch.rfg-stated_without_these_conditions { background: #b9c1cb; }
+.rfg-other_conditions, .swatch.rfg-other_conditions { background: #dfe3e8; }
+.rf-tile-here { font-size: 12.5px; color: var(--ink-3); }
+.rf-tile.has-here .rf-tile-here b { color: var(--t-found); }
+.rf-legend .swatch { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+.points-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s3); margin: var(--s2) 0 var(--s4); }
+.point-card { padding: var(--s3) var(--s4); background: var(--white); border: 1px solid var(--line); border-top: 3px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); }
+.point-card.has-tests { border-top-color: var(--blue); }
+.point-card.no-tests { border-top-color: var(--t-stops); }
+.point-card p { margin: 0; }
+.point-name { font: 700 14.5px/1.3 var(--display); color: var(--ink); }
+.point-fig { font-size: 13px; color: var(--ink-2); }
+.point-fig b { font: 700 32px/1.1 var(--display); font-variant-numeric: tabular-nums; margin-right: 2px; }
+.point-card.has-tests .point-fig b { color: var(--blue-dark); }
+.point-card.no-tests .point-fig b { color: var(--t-stops); }
+.point-sub { font-size: 12.5px; color: var(--ink-2); }
+.point-said { margin-top: 4px !important; font-size: 12.5px; line-height: 1.45; color: var(--ink-3); }
+.point-card .pile-fold { margin: 6px 0 0; font-size: 13px; }
+#ranking td.score-cell { position: relative; min-width: 110px; text-align: right; }
+#ranking .score-bar { position: absolute; left: 8px; top: 50%; height: 8px; max-width: calc(100% - 56px); margin-top: -4px; border-radius: 4px; background: #c9d4f7; }
+#ranking tr.is-top .score-bar { background: var(--blue); }
+#ranking .score-num { position: relative; font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (max-width: 900px) { .rf-overview, .points-cards { grid-template-columns: 1fr; } }
+#ranking td.score-cell { vertical-align: middle; }

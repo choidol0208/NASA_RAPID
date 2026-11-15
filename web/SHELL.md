@@ -138,3 +138,11 @@ The human lead: the service is meant to spare the reader effort, and a list of i
 
 No sentence of the data is changed or dropped; each is on the page or one click away.
 
+## The other tabs in the same manner (15 November, 22:00)
+
+- **What was found.** Above the quoted results, one tile per question: the number of quoted results, a bar of the four groups they are sorted into, and how many are at this environment's oxygen and pressure; a click opens the question's block. "Points to consider" is one card per question with the counted tests in the scenario range as its figure; the sentence on what a count means is behind a fold.
+- **Closest investigations.** Each result card's head has a link to the investigation's record in NASA's archive.
+- **All investigations.** The match score is also drawn as a bar.
+
+Computed in the page from the same data; no sentence of the data is changed.
+

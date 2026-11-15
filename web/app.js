@@ -260,7 +260,8 @@ function renderResults(out, cat, insights, sc) {
       h("span", { class: "rank", "aria-label": `Rank ${r.rank}` }, String(r.rank)),
       h("h3", {}, `${r.investigation_id}`),
       h("div", { class: "score", title: SCORE_TIP }, String(r.score), h("small", {}, "match score")),
-      h("p", { class: "subtitle" }, inv ? inv.investigation_name : r.psi_accession));
+      h("p", { class: "subtitle" }, inv ? inv.investigation_name : r.psi_accession, " ",
+        r.psi_accession ? h("a", { href: (inv && inv.psi_url) || PSI_RECORD + r.psi_accession, target: "_blank", rel: "noopener", class: "psi-link card-psi", title: "Open this investigation's record in NASA's PSI archive" }, r.psi_accession + " in NASA's archive ↗") : null));
     const body = [
       h("p", { class: "config", title: r.config_label }, h("b", {}, "Closest test configuration: "), r.config_label),
       strip(r),
@@ -330,7 +331,7 @@ function renderRanking(out) {
       h("td", { class: "num" }, String(i + 1)),
       h("td", {}, h("b", {}, r.investigation_id)),
       h("td", {}, r.config_label),
-      h("td", { class: "num" }, String(r.score)),
+      h("td", { class: "num score-cell" }, h("span", { class: "score-bar", style: `width:${Math.max(0, Math.min(100, +r.score || 0))}%`, "aria-hidden": "true" }), h("span", { class: "score-num" }, String(r.score))),
       h("td", {}, mini),
       h("td", { class: "psi" }, link(r.psi_url, r.psi_accession)),
       h("td", { class: "psi" }, r.dataset_doi ? link("https://doi.org/" + r.dataset_doi, "DOI") : "not stated")));
@@ -723,20 +724,26 @@ function renderPoints(out, pipe) {
   const sid = scenarioId(out, pipe);
   const rows = sid && pipe.scenarioNeeds ? pipe.scenarioNeeds.filter((r) => r.scenario_id === sid) : [];
   const spec = sid && pipe.scenarioSpec ? pipe.scenarioSpec.scenarios.find((x) => x.id === sid) : null;
-  const ul = h("ul", { class: "points-list" });
+  const ul = h("div", { class: "points-cards" });
   for (const n of order) {
     const r = rows.find((x) => x.need_id === n.id);
-    let said = null;
+    let said = null, fig = null, sub = [];
     if (r) {
+      fig = +r.tests_atmosphere || 0;
+      if (+r.tests_oxygen_only) sub.push(`${+r.tests_oxygen_only} more with oxygen in range, pressure not in the table`);
+      if (+r.tests_pressure_only) sub.push(`${+r.tests_pressure_only} more with pressure in range, oxygen not in the table`);
       const atm = +r.tests_atmosphere || 0, o2o = +r.tests_oxygen_only || 0, po = +r.tests_pressure_only || 0;
       const codes = r.gaps ? r.gaps.split(";").filter(Boolean) : [];
       const parts = [atm ? `${atm} counted tests in the scenario range` : "", o2o ? `${o2o} with oxygen in range and no pressure in the table` : "",
         po ? `${po} with pressure in range and no oxygen in the table` : ""].filter(Boolean);
       said = parts.length ? parts.join("; ") : `no counted test in the scenario range (${(r.status === "other_atmosphere" && otherAtmosphereLabel(codes)) || SN_SHORT[r.status] || r.status})`;
     }
-    ul.append(h("li", {}, h("b", {}, n.name), " ",
-      said ? [h("span", {}, `— ${spec ? spec.label : "this environment"}: ${said}. `), rowLink("data/pipeline/scenario_needs.csv", r, "row")] : null,
-      typeof n.reading === "string" && n.reading ? h("span", { class: "gap reading" }, " What a count means: ", n.reading) : null));
+    // a card per question: the counted tests in the scenario range as the figure, the sentence as before under it
+    ul.append(h("article", { class: "point-card " + (fig === null ? "" : fig ? "has-tests" : "no-tests") }, h("p", { class: "point-name" }, `${n.name} (${n.id})`),
+      fig === null ? null : h("p", { class: "point-fig" }, h("b", {}, String(fig)), h("span", {}, fig === 1 ? " counted test in range" : " counted tests in range")),
+      sub.length ? h("p", { class: "point-sub" }, sub.join("; ")) : null,
+      said ? h("p", { class: "point-said", title: `${spec ? spec.label : "this environment"}: ${said}` }, fig ? null : said[0].toUpperCase() + said.slice(1) + ". ", rowLink("data/pipeline/scenario_needs.csv", r, "Open its row in the team's table")) : null,
+      typeof n.reading === "string" && n.reading ? h("details", { class: "pile-fold" }, h("summary", {}, "What a count means"), h("p", { class: "gap reading" }, n.reading)) : null));
   }
   put(box, h("h3", {}, sid ? `Points to consider for ${spec ? spec.label : sid}` : "Points to consider"),
     sid ? null : h("p", { class: "gap" }, "Counts per environment are computed for the two demo scenarios (ISS, lunar habitat). For other inputs, the table below shows each ranked investigation."),
@@ -1392,7 +1399,23 @@ async function renderResultsFirst(out) {
   const flat = OPTIONAL_HAS("data/results/results_flat.csv")
     ? h("p", {}, h("a", { href: vurl("data/results/results_flat.csv"), download: "results_flat.csv" }, "Download every quoted result (CSV)"),
       " · built by the data role's code from the reference list (", link(REPO + doc.source, doc.source), ")") : null;
+  const RF_GROUPS = [["at_environment", "at this environment's oxygen and pressure"], ["about_a_stated_condition", "about one of its stated conditions"],
+    ["stated_without_these_conditions", "stated without these conditions"], ["other_conditions", "at other stated conditions"]];
+  blocks.forEach((d, i) => { d.id = "rf-" + doc.needs[i].id; });
+  const overview = h("div", { class: "rf-overview", role: "group", "aria-label": "Quoted results per fire-safety question" }, doc.needs.map((n, i) => {
+    const by = Object.fromEntries(RF_GROUPS.map(([g]) => [g, n.entries.filter((e) => e.group === g).length]));
+    const b = h("button", { type: "button", class: "rf-tile" + (by.at_environment ? " has-here" : "") },
+      h("span", { class: "rf-tile-name" }, `${n.name} (${n.id})`),
+      h("span", { class: "rf-tile-fig" }, h("b", {}, String(n.entries.length)), n.entries.length === 1 ? " quoted result" : " quoted results"),
+      h("span", { class: "rf-tile-bar", role: "img", "aria-label": RF_GROUPS.map(([g, w]) => `${by[g]} ${w}`).join(", ") },
+        RF_GROUPS.filter(([g]) => by[g]).map(([g, w]) => h("span", { class: "rfg rfg-" + g, style: `flex-grow:${by[g]}`, title: `${by[g]} ${w}` }))),
+      h("span", { class: "rf-tile-here" }, h("b", {}, String(by.at_environment)), " at this environment's oxygen and pressure"));
+    b.addEventListener("click", () => { blocks[i].open = true; blocks[i].scrollIntoView({ block: "start", behavior: "smooth" }); });
+    return b;
+  }));
+  const rfLegend = h("p", { class: "pile-legend rf-legend" }, RF_GROUPS.map(([g, w]) => h("span", {}, h("span", { class: "swatch rfg-" + g }), " ", w)));
   body.replaceChildren(
+    overview, rfLegend,
     h("details", { class: "more" }, h("summary", {}, "How the results are grouped and ordered"), h("p", { class: "gap" }, doc.order_rule)),
     ...blocks, flat,
     h("div", { class: "small-print" }, h("p", {}, doc.team_output), h("p", {}, doc.ai_note)));
