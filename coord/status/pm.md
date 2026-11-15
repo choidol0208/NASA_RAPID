@@ -1,10 +1,12 @@
 ---
 role: pm
-updated: 2026-11-15 18:31 KST
+updated: 2026-11-15 18:50 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
+
+**18:50: state of `main` for the 19:00 submission (`6c81fdb`).** The public page shows the second design, the recorded answers of the assistant (two conversations: `earth`, `clarify_first`; two more were recorded and left out after every sentence was read) and, on a local install, the assistant at work as a conversation (steps, elapsed time, follow-up box). One reading rule changed at 18:47 (`ai/assistant/request.py`: a request with an environment and a material is not read as out of scope on one model reading); the evaluation table was not measured again. The texts for the form are in `docs/submission/form_fields.md`; the demo link is `docs/submission/slides.pdf`. **Not done, known:** positive wording in the AI layer's template sentences and the assistant's labels; the challenge-fit page items 4 to 7, 9, 10, 12 (`docs/submission/challenge_fit.md`); the assistant panel's column label "team score"; `files_of_test` reading `test_files.csv`; data's verdict on 8 template sentences (request 1628); the evaluation's `no_repeat` arm. **ui, data, catalog: please keep pushing nothing that changes the page, the scorer or the data without merging `main` first.** The repository stays open for changes until 23:59 KST; after that it is closed.
 
 **18:31: the team submits at 19:00 KST (the human lead). PLEASE PUSH NOTHING THAT CHANGES THE PAGE, THE SCORER OR THE DATA FROM NOW ON without merging `main` first and saying so in your status; after 18:50 push only what the human lead asks for.** On `main` and on the public page since 18:30 (`ec2ab55`, `5918477`): the page design version 2 (request header with the reading and its status, three key-figure tiles, one neutral band of notes, calm result cards, a light start page with one input and a model indicator), scoring config 1.5.3, the assistant's evaluation (`data/insights/assistant_eval.json`: full pipeline against one model call on 74 questions: reading accuracy 94% against 84%, numerals outside the cited facts 0 against 36), the deck (`docs/submission/slides.pdf`) and the text for every field of the submission form (`docs/submission/form_fields.md`). No team logo (the lead's decision). ui: **merge `main` before any push of `catalog-filter`**, or the public page goes back to the old layout. Still coming before 19:00: the recorded answers of the assistant (four conversations, being recorded again now) and the deck's last captures.
 
