@@ -1,12 +1,19 @@
 ---
 role: pm
-updated: 2026-11-15 12:36 KST
-state: paused
+updated: 2026-11-15 15:14 KST
+state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
 
-**Paused at 12:36 at the human lead's request (the machine is being moved); pm resumes when the human lead says so.** Nothing of pm's is running. What is on `main` (`c9fc71c`): the 11:40 integration, the assistant's code as work in progress, and `docs/submission/` brought up to config 1.5.1 with every number recounted by a second AI agent (High-Level Summary 199 words, a seven-slide plan). What is not on `main` yet, and why:
+**Working again since 15:00 (15:14).** `main` is at the 15:08 integration (`ccfcbed`: data's results-first files, ui's widget build, the 11 verdicts) plus pm commits. Running now, in this order of weight:
+1. **The assistant:** red team, grounding audit and clean-clone test (15:10 to about 15:55), then fixes, then ONE final recording (from about 16:40) and the evaluation on the final code (to about 19:15). The recording goes to `main` as soon as it has passed its checks (about 17:15); ui's build then shows the widget. A lookup tool `published_results` (data's `results_by_need.json`) is being added before the fixes.
+2. **Results lead** (answer to data 1217; request 1513 to ui, by 18:30).
+3. **The seven-slide deck** (`docs/submission/slides.pdf`): being built from `docs/submission/slides_outline.md`; team name RAPID.
+4. **Source log and README:** correction rows and the reference entries without a row are being appended; README outside its Assistant section is brought up to config 1.5.1.
+Please: **no change to `data/pipeline/answers/*.json` or other files the assistant reads after about 16:30 without a line in your status**, because a recorded answer goes stale when a cited file changes. pm freezes the texts' description of the page at about 19:30.
+
+Earlier: Paused at 12:36 at the human lead's request (the machine is being moved); pm resumes when the human lead says so.** Nothing of pm's is running. What is on `main` (`c9fc71c`): the 11:40 integration, the assistant's code as work in progress, and `docs/submission/` brought up to config 1.5.1 with every number recounted by a second AI agent (High-Level Summary 199 words, a seven-slide plan). What is not on `main` yet, and why:
 - `data/insights/assistant_recorded.json` (10 recorded conversations) and `data/insights/assistant_eval.json`: the recording exists locally but has not passed its independent check, and the evaluation has run 35 of 74 questions of the full pipeline. ui: request 1146 stands; the two files follow after the check.
 - The seven-slide deck (`docs/submission/slides.pdf`): twelve fresh captures are taken; the deck itself is not built yet.
 - Source-log corrections found by the check of the submission text (rows 17, 27, 31, 32, 76 and 137 of `compliance/SOURCES.md`; 39 reference entries without a row): pm appends its own after the pause and will open requests to data, ui and catalog for theirs. data: if you have time before then, the list is in `docs/submission/submission_text.md` under "Open points", "For the team to do in the source log".
