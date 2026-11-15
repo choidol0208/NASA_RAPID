@@ -22,11 +22,15 @@
    "knowledge_gap",
    "limitation",
    "published_result",
-   "stated_objective"
+   "stated_objective",
+   "measure",
+   "process"
   ],
   "quote_note": "'quote' is the sentence as it appears in the document (18 items carry one). The 12 quotes that existed on 2026-11-14 at noon were checked a second time against the documents by a separate AI pass and found verbatim; the quotes added later the same day (ICES-2019 sensors, pressure and CO/CO2 ratio; the two table captions) were read in the documents by the session that added them. For NASA-STD-6001B, TASKBOOK-14639, ICES-2019-BASS2, SAFFIRE-2017, FSJ-2018-SAME and FLEX-EIRD the check used a text extraction of the PDF, not the PDF pages. Not checked by a human. Quotes from documents that are not NASA works are limited to short phrases (25 words or fewer) for copyright reasons and were shortened on 2026-11-14 (each remains an exact contiguous part of the original sentence); the document itself must be consulted for context.",
   "unverified": "ISO 14624-1, ISO/TS 16697, ASTM D2863 and SAE 2008-01-2055 were not read in full (see 'access'). CHALLENGE-2026 was checked on the official page by another session of the team (access 'read_by_teammate').",
-  "item_types_note": "'stated_objective' is a sentence in which the investigators or a NASA project document state the purpose of an experiment; needs.json links a need to an investigation through such items."
+  "item_types_note": "'stated_objective' is a sentence in which the investigators or a NASA project document state the purpose of an experiment; needs.json links a need to an investigation through such items.",
+  "item_types_added_2026_11_15": "'measure' is a sentence of a NASA document that names a mitigation (a way to reduce or control a fire hazard) for the case the sentence describes; 'process' is a sentence that states how the fire-safety work is organised (order, basis, submission). Both carry the quote as 'text'. The team recommends nothing by listing them.",
+  "quote_note_2026_11_15": "The 25 items added on 2026-11-15 (documents NASA-STD-I-6001B, NASA-STD-6016C, JSC-29353B and new items of OCHMO-TB-008, NASA-STD-3001-V2, NASA-TP-2010-216134) were searched in a text extraction of the downloaded document and found verbatim; each is at most 40 words. Not checked by a person."
  },
  "references": [
   {
@@ -438,6 +442,14 @@
      "text": "Rationale of the fire protection system requirement.",
      "where": "9.8.2.1 [V2 9059], Rationale (Revision F)",
      "quote": "Fire protection is to be based on the anticipated nature of the fire and the likely location of the crew in the event of a fire."
+    },
+    {
+     "id": "3001.V2-9063.quote",
+     "type": "requirement",
+     "text": "A fire protection system shall include manually operated portable fire extinguishers usable while wearing the most encumbering equipment and clothing anticipated.",
+     "where": "9.8.2.5 [V2 9063] (Revision F); PDF page 198",
+     "quote": "A fire protection system shall include manually operated portable fire extinguishers usable while wearing the most encumbering equipment and clothing anticipated.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
     }
    ],
    "pdf_url": "https://www.nasa.gov/wp-content/uploads/2025/05/nasa-std-3001-vol-2.pdf"
@@ -584,6 +596,62 @@
      "text": "Lesson from the Mir fires: monitoring must include volatile gases as well as smoke.",
      "where": "Lessons Learned, Mir (1997), p. 12",
      "quote": "This requires a carefully planned monitoring strategy, which includes volatile gases as well as smoke."
+    },
+    {
+     "id": "TB008.prevention",
+     "type": "process",
+     "text": "The major approach to fire protection in current human-crew spacecraft is through prevention.",
+     "where": "Overview; PDF page 1",
+     "quote": "The major approach to fire protection in current human-crew spacecraft is through prevention.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "TB008.tradestudies",
+     "type": "process",
+     "text": "During the design of new spacecrafts, trade studies for fire detection, fire suppression, crew response, crew protection, and post-fire clean-up and monitoring systems must be conducted.",
+     "where": "Overview; PDF page 1",
+     "quote": "During the design of new spacecrafts, trade studies for fire detection, fire suppression, crew response, crew protection, and post-fire clean-up and monitoring systems must be conducted.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "TB008.neverabsolute",
+     "type": "process",
+     "text": "Prevention is never absolute; thus, the overall strategy of fire safety must include fire detection, response, and suppression.",
+     "where": "Overview; PDF page 2",
+     "quote": "Prevention is never absolute; thus, the overall strategy of fire safety must include fire detection, response, and suppression.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "TB008.detectorlocation",
+     "type": "measure",
+     "text": "Smoke detectors should be located in equipment bays, the cabin, and nearby ventilation return ducts.",
+     "where": "Application, Fire Detection; PDF page 8",
+     "quote": "Smoke detectors should be located in equipment bays, the cabin, and nearby ventilation return ducts.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "TB008.portable",
+     "type": "measure",
+     "text": "Portable fire extinguishers must be provided for extinguishing fires in open areas, as well as areas behind panels",
+     "where": "Application, Fire Suppression; PDF page 9",
+     "quote": "Portable fire extinguishers must be provided for extinguishing fires in open areas, as well as areas behind panels",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "TB008.ventilationoff",
+     "type": "measure",
+     "text": "Terminate ventilation in the affected module to slow the spread of fire.",
+     "where": "Background, ISS Fire Safety Strategy, step 2; PDF page 3",
+     "quote": "Terminate ventilation in the affected module to slow the spread of fire.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "TB008.powerremoval",
+     "type": "measure",
+     "text": "Removing electrical power from hardware within the affected module should cease any continuous ignition sources",
+     "where": "Background, ISS Fire Safety Strategy, step 4; PDF page 3",
+     "quote": "Removing electrical power from hardware within the affected module should cease any continuous ignition sources",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
     }
    ],
    "note": "The technical brief states on every page that it is for reference only; its items are not requirements."
@@ -754,6 +822,22 @@
      ],
      "quote": "Effects of pressure, gravity, oxygen mole fraction, and diluent gas on material flammability.",
      "note": "The report states no relation between a flammability limit and total pressure. Its appendix on the analytic hierarchy process says only 'Flammability of materials increases as the volume percent of oxygen increases.' (p. 72)."
+    },
+    {
+     "id": "EAWG.mitigate",
+     "type": "process",
+     "text": "These atmospheres must mitigate the risks of fire, decompression sickness (DCS), and hypoxia and enable crew excursions on planetary surfaces.",
+     "where": "Executive Summary; PDF page 11",
+     "quote": "These atmospheres must mitigate the risks of fire, decompression sickness (DCS), and hypoxia and enable crew excursions on planetary surfaces.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "EAWG.outsidedb",
+     "type": "process",
+     "text": "This will require spacecraft interior materials flammability testing at a maximum oxygen concentration outside the existing shuttle/ISS database",
+     "where": "Executive Summary; PDF page 11",
+     "quote": "This will require spacecraft interior materials flammability testing at a maximum oxygen concentration outside the existing shuttle/ISS database",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
     }
    ]
   },
@@ -4570,6 +4654,165 @@
     }
    ],
    "note": "Files downloaded on 2026-11-14 through the PSI download service; licence CC0-1.0 per the PSI record of PSI-25. AI-read, not checked by a human."
+  },
+  {
+   "id": "NASA-STD-I-6001B",
+   "kind": "standard",
+   "title": "Flammability, Offgassing, and Compatibility Requirements and Test Procedures",
+   "issuer": "NASA",
+   "version": "NASA-STD-(I)-6001B, interim; its pages state: 'This document represents the technical consensus of the developing group but does not yet have final NASA approval.'",
+   "url": "https://ntrs.nasa.gov/citations/20110012152",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20110012152/downloads/20110012152.pdf",
+   "access": "full_text_read",
+   "note": "Added 2026-11-15: the PDF (or Word file) was downloaded and its text extracted (pdftotext; LibreOffice for the Word file); an AI agent (Claude Code) searched each quote in the extracted text and found it verbatim after whitespace was collapsed. Not checked by a person. A separate document from NASA-STD-6001B w/Change 3 (entry NASA-STD-6001B), which was not re-opened on 2026-11-15.",
+   "items": [
+    {
+     "id": "I6001B.4.1f",
+     "type": "requirement",
+     "text": "The worst-case anticipated use environment (most hazardous pressure, temperature, material thickness, and fluid exposure conditions) shall be used in the evaluation of material suitability.",
+     "where": "4.1 Material Evaluation Requirements, f; PDF page 16",
+     "quote": "The worst-case anticipated use environment (most hazardous pressure, temperature, material thickness, and fluid exposure conditions) shall be used in the evaluation of material suitability.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "I6001B.6.1.1",
+     "type": "requirement",
+     "text": "A system flammability evaluation shall be conducted if materials that fail to meet the criteria of Test 1 are proposed for use in human-occupied spacecraft, specified test facilities, or specified GSE.",
+     "where": "6.1.1; PDF page 19",
+     "quote": "A system flammability evaluation shall be conducted if materials that fail to meet the criteria of Test 1 are proposed for use in human-occupied spacecraft, specified test facilities, or specified GSE.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "I6001B.6.1.note",
+     "type": "process",
+     "text": "This evaluation can be conducted by analysis or by testing.",
+     "where": "6.1, note after 6.1.2 a; PDF page 19",
+     "quote": "This evaluation can be conducted by analysis or by testing.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "I6001B.6.1.2a",
+     "type": "measure",
+     "text": "The amount and arrangement of flammable materials are controlled to prevent the spread of fire in the vehicle; any potential fire is isolated in well-defined areas, by firebreaks or other techniques, without propagation paths to other areas.",
+     "where": "6.1.2 a; PDF page 19",
+     "quote": "The amount and arrangement of flammable materials are controlled to prevent the spread of fire in the vehicle; any potential fire is isolated in well-defined areas, by firebreaks or other techniques, without propagation paths to other areas.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "I6001B.6.1.2b",
+     "type": "measure",
+     "text": "The design ensures that ignition sources are eliminated or controlled.",
+     "where": "6.1.2 b; PDF page 20",
+     "quote": "The design ensures that ignition sources are eliminated or controlled.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "I6001B.6.1.3",
+     "type": "requirement",
+     "text": "If the test approach is used, materials that do not meet the criteria of Test 1 shall be evaluated by a configuration test, such as Test 10, which evaluates the worst possible failure modes in the worst-case operating conditions.",
+     "where": "6.1.3; PDF page 20",
+     "quote": "If the test approach is used, materials that do not meet the criteria of Test 1 shall be evaluated by a configuration test, such as Test 10, which evaluates the worst possible failure modes in the worst-case operating conditions.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    }
+   ]
+  },
+  {
+   "id": "NASA-STD-6016C",
+   "kind": "standard",
+   "title": "Standard Materials and Processes Requirements for Spacecraft",
+   "issuer": "NASA Office of the NASA Chief Engineer",
+   "version": "NASA-STD-6016C, the Word file on NTRS ('2021-09-13 2021-08-31 2021-08-05 NASA-STD-6016C - OFT-2 Changes fmOPRD Final.doc'); its title page reads 'Approved: YYYY-MM-DD'",
+   "url": "https://ntrs.nasa.gov/citations/20210021618",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20210021618/downloads/2021-09-13%202021-08-31%202021-08-05%20NASA-STD-6016C%20-%20OFT-2%20Changes%20fmOPRD%20Final.doc",
+   "access": "full_text_read",
+   "note": "Added 2026-11-15: the PDF (or Word file) was downloaded and its text extracted (pdftotext; LibreOffice for the Word file); an AI agent (Claude Code) searched each quote in the extracted text and found it verbatim after whitespace was collapsed. Not checked by a person.",
+   "items": [
+    {
+     "id": "6016C.4.1.6a",
+     "type": "requirement",
+     "text": "MUAs containing sufficient information to demonstrate that the application is acceptable shall be submitted by the responsible M&P organization for all M&P that are technically acceptable but do not meet the requirements of this NASA Technical Standard",
+     "where": "4.1.6 Material Usage Agreements (MUAs), a [MPR 28]; Word file, no page numbers in the text",
+     "quote": "MUAs containing sufficient information to demonstrate that the application is acceptable shall be submitted by the responsible M&P organization for all M&P that are technically acceptable but do not meet the requirements of this NASA Technical Standard",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "6016C.4.2.1.1i",
+     "type": "requirement",
+     "text": "Flammability configuration analysis in accordance with JSC 29353 shows hardware configuration to be self-extinguishing.",
+     "where": "4.2.1.1 Flammability Control [MPR 44], exception i; Word file, no page numbers in the text",
+     "quote": "Flammability configuration analysis in accordance with JSC 29353 shows hardware configuration to be self-extinguishing.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "6016C.MUA.initial",
+     "type": "process",
+     "text": "INITIAL SUBMISSION: PDR.",
+     "where": "Appendix D, Data Requirements Description 'Materials Usage Agreements (MUAs)', item 9; Word file, no page numbers in the text",
+     "quote": "INITIAL SUBMISSION: PDR.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "6016C.MUA.resubmit",
+     "type": "requirement",
+     "text": "MUAs shall be revised and resubmitted whenever design modifications affect the part numbers or the environment or loads change to more severe than identified on the MUA or the MUA rationale.",
+     "where": "Appendix D, Data Requirements Description 'Materials Usage Agreements (MUAs)', item 10; Word file, no page numbers in the text",
+     "quote": "MUAs shall be revised and resubmitted whenever design modifications affect the part numbers or the environment or loads change to more severe than identified on the MUA or the MUA rationale.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    }
+   ]
+  },
+  {
+   "id": "JSC-29353B",
+   "kind": "guideline",
+   "title": "Flammability Configuration Analysis for Spacecraft Applications",
+   "issuer": "NASA JSC",
+   "version": "JSC 29353B, July 2014",
+   "url": "https://ntrs.nasa.gov/citations/20150020937",
+   "pdf_url": "https://ntrs.nasa.gov/api/citations/20150020937/downloads/20150020937.pdf",
+   "access": "full_text_read",
+   "note": "Added 2026-11-15: the PDF (or Word file) was downloaded and its text extracted (pdftotext; LibreOffice for the Word file); an AI agent (Claude Code) searched each quote in the extracted text and found it verbatim after whitespace was collapsed. Not checked by a person.",
+   "items": [
+    {
+     "id": "JSC29353B.1.0.control",
+     "type": "process",
+     "text": "For this reason, spacecraft fire control is based on minimizing potential ignition sources and eliminating materials that can propagate fire.",
+     "where": "1.0 Introduction; PDF page 9",
+     "quote": "For this reason, spacecraft fire control is based on minimizing potential ignition sources and eliminating materials that can propagate fire.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "JSC29353B.1.0.extinguishers",
+     "type": "process",
+     "text": "Fire extinguishers are always provided on crewed spacecraft, but are not considered as part of the fire control process.",
+     "where": "1.0 Introduction; PDF page 9",
+     "quote": "Fire extinguishers are always provided on crewed spacecraft, but are not considered as part of the fire control process.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "JSC29353B.4.0.methods",
+     "type": "measure",
+     "text": "The primary methods used by NASA to reduce flammability hazards are the limitation of flammable materials by replacement with nonflammable materials and the restriction of propagation paths",
+     "where": "4.0 Flammability Assessment Guidelines, page 4; PDF page 13",
+     "quote": "The primary methods used by NASA to reduce flammability hazards are the limitation of flammable materials by replacement with nonflammable materials and the restriction of propagation paths",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "JSC29353B.4.0.methods.how",
+     "type": "measure",
+     "text": "either by covering flammable materials with a nonflammable material or by separation of flammable materials.",
+     "where": "4.0 Flammability Assessment Guidelines, page 4 (continuation of the sentence of JSC29353B.4.0.methods); PDF page 13",
+     "quote": "either by covering flammable materials with a nonflammable material or by separation of flammable materials.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    },
+    {
+     "id": "JSC29353B.4.0.test",
+     "type": "process",
+     "text": "When the results of the flammability configuration analysis are inconclusive, the hardware configuration (or a simulated configuration with acceptable fidelity) may be tested for flammability to determine acceptability.",
+     "where": "4.0 Flammability Assessment Guidelines, page 4; PDF page 13",
+     "quote": "When the results of the flammability configuration analysis are inconclusive, the hardware configuration (or a simulated configuration with acceptable fidelity) may be tested for flammability to determine acceptability.",
+     "note": "Added 2026-11-15 (process steps, pipeline/spec/process.json); 'text' is the quote unchanged."
+    }
+   ]
   }
  ]
 }

@@ -19,6 +19,9 @@ import os
 import re
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import process_steps  # noqa: E402
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SPEC = os.path.join(HERE, "spec")
@@ -563,6 +566,7 @@ def build_answer(sid, nid, ctx):
         "sentences": sentences,
     }
     verify_numbers(answer, "%s__%s" % (sid, nid))
+    answer["process"] = process_steps.process_view(nid)   # added 2026-11-15 (pipeline/spec/process.json)
     return answer
 
 

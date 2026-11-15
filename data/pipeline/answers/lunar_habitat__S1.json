@@ -2508,5 +2508,67 @@
     "data/pipeline/findings_by_environment.json#environments.lunar_habitat.needs.general"
    ]
   }
- ]
+ ],
+ "process": {
+  "steps_informed": [
+   {
+    "id": "step_4_detection_and_response",
+    "order": 4,
+    "label_by_team": "Detection and response: detector locations, portable extinguishers, ventilation shutdown and power removal"
+   }
+  ],
+  "team_reading": "Team's reading (AI, not checked by a person): tests that record the conditions at which a flame goes out relate to the response step, which names ventilation shutdown and extinguishers.",
+  "measures": [
+   {
+    "item_id": "TB008.detectorlocation",
+    "type": "measure",
+    "quote": "Smoke detectors should be located in equipment bays, the cabin, and nearby ventilation return ducts.",
+    "where": "Application, Fire Detection; PDF page 8",
+    "document_id": "OCHMO-TB-008",
+    "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+    "version": "OCHMO-TB-008 Rev A",
+    "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+    "access": "full_text_read",
+    "step_id": "step_4_detection_and_response"
+   },
+   {
+    "item_id": "TB008.portable",
+    "type": "measure",
+    "quote": "Portable fire extinguishers must be provided for extinguishing fires in open areas, as well as areas behind panels",
+    "where": "Application, Fire Suppression; PDF page 9",
+    "document_id": "OCHMO-TB-008",
+    "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+    "version": "OCHMO-TB-008 Rev A",
+    "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+    "access": "full_text_read",
+    "step_id": "step_4_detection_and_response"
+   },
+   {
+    "item_id": "TB008.ventilationoff",
+    "type": "measure",
+    "quote": "Terminate ventilation in the affected module to slow the spread of fire.",
+    "where": "Background, ISS Fire Safety Strategy, step 2; PDF page 3",
+    "document_id": "OCHMO-TB-008",
+    "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+    "version": "OCHMO-TB-008 Rev A",
+    "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+    "access": "full_text_read",
+    "step_id": "step_4_detection_and_response"
+   },
+   {
+    "item_id": "TB008.powerremoval",
+    "type": "measure",
+    "quote": "Removing electrical power from hardware within the affected module should cease any continuous ignition sources",
+    "where": "Background, ISS Fire Safety Strategy, step 4; PDF page 3",
+    "document_id": "OCHMO-TB-008",
+    "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+    "version": "OCHMO-TB-008 Rev A",
+    "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+    "access": "full_text_read",
+    "step_id": "step_4_detection_and_response"
+   }
+  ],
+  "sentence": "Measures are quoted from NASA documents for the case they describe. The team recommends nothing.",
+  "source": "data/pipeline/process_steps.json"
+ }
 }

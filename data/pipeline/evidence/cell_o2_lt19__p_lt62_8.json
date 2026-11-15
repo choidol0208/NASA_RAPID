@@ -6549,7 +6549,25 @@
      "access": "full_text_read",
      "quote": "The total pressure is also monitored, which varied from 99.2 to 99.5 kPa in the tests reported."
     }
-   ]
+   ],
+   "process": {
+    "steps_informed": [
+     {
+      "id": "step_1_material_evaluation",
+      "order": 1,
+      "label_by_team": "Evaluate the material at the worst-case anticipated use environment"
+     },
+     {
+      "id": "step_2_configuration_evaluation",
+      "order": 2,
+      "label_by_team": "System or configuration evaluation when a material that fails Test 1 is proposed"
+     }
+    ],
+    "team_reading": "Team's reading (AI, not checked by a person): tests that record whether a solid material keeps burning at a recorded oxygen, pressure and flow relate to the evaluation of a material at its use environment and to the configuration evaluation.",
+    "measures": [],
+    "sentence": "Measures are quoted from NASA documents for the case they describe. The team recommends nothing.",
+    "source": "data/pipeline/process_steps.json"
+   }
   },
   {
    "need_id": "P2",
@@ -7408,7 +7426,86 @@
      "access": "full_text_read",
      "quote": "The ignition delay (tign) in each test was defined as the time from when the igniter was first turned on to the last time the igniter was turned off and a stable flame persisted."
     }
-   ]
+   ],
+   "process": {
+    "steps_informed": [
+     {
+      "id": "step_1_material_evaluation",
+      "order": 1,
+      "label_by_team": "Evaluate the material at the worst-case anticipated use environment"
+     },
+     {
+      "id": "step_3_measures",
+      "order": 3,
+      "label_by_team": "Measures named for that case: replace with nonflammable material, restrict propagation paths, eliminate or control ignition sources, materials usage agreement"
+     }
+    ],
+    "team_reading": "Team's reading (AI, not checked by a person): tests that record the ignition of a solid material relate to the material evaluation and to the measure that names ignition sources.",
+    "measures": [
+     {
+      "item_id": "JSC29353B.4.0.methods",
+      "type": "measure",
+      "quote": "The primary methods used by NASA to reduce flammability hazards are the limitation of flammable materials by replacement with nonflammable materials and the restriction of propagation paths",
+      "where": "4.0 Flammability Assessment Guidelines, page 4; PDF page 13",
+      "document_id": "JSC-29353B",
+      "title": "Flammability Configuration Analysis for Spacecraft Applications",
+      "version": "JSC 29353B, July 2014",
+      "url": "https://ntrs.nasa.gov/citations/20150020937",
+      "access": "full_text_read",
+      "step_id": "step_3_measures"
+     },
+     {
+      "item_id": "JSC29353B.4.0.methods.how",
+      "type": "measure",
+      "quote": "either by covering flammable materials with a nonflammable material or by separation of flammable materials.",
+      "where": "4.0 Flammability Assessment Guidelines, page 4 (continuation of the sentence of JSC29353B.4.0.methods); PDF page 13",
+      "document_id": "JSC-29353B",
+      "title": "Flammability Configuration Analysis for Spacecraft Applications",
+      "version": "JSC 29353B, July 2014",
+      "url": "https://ntrs.nasa.gov/citations/20150020937",
+      "access": "full_text_read",
+      "step_id": "step_3_measures"
+     },
+     {
+      "item_id": "I6001B.6.1.2a",
+      "type": "measure",
+      "quote": "The amount and arrangement of flammable materials are controlled to prevent the spread of fire in the vehicle; any potential fire is isolated in well-defined areas, by firebreaks or other techniques, without propagation paths to other areas.",
+      "where": "6.1.2 a; PDF page 19",
+      "document_id": "NASA-STD-I-6001B",
+      "title": "Flammability, Offgassing, and Compatibility Requirements and Test Procedures",
+      "version": "NASA-STD-(I)-6001B, interim; its pages state: 'This document represents the technical consensus of the developing group but does not yet have final NASA approval.'",
+      "url": "https://ntrs.nasa.gov/citations/20110012152",
+      "access": "full_text_read",
+      "step_id": "step_3_measures"
+     },
+     {
+      "item_id": "I6001B.6.1.2b",
+      "type": "measure",
+      "quote": "The design ensures that ignition sources are eliminated or controlled.",
+      "where": "6.1.2 b; PDF page 20",
+      "document_id": "NASA-STD-I-6001B",
+      "title": "Flammability, Offgassing, and Compatibility Requirements and Test Procedures",
+      "version": "NASA-STD-(I)-6001B, interim; its pages state: 'This document represents the technical consensus of the developing group but does not yet have final NASA approval.'",
+      "url": "https://ntrs.nasa.gov/citations/20110012152",
+      "access": "full_text_read",
+      "step_id": "step_3_measures"
+     },
+     {
+      "item_id": "6016C.4.1.6a",
+      "type": "requirement",
+      "quote": "MUAs containing sufficient information to demonstrate that the application is acceptable shall be submitted by the responsible M&P organization for all M&P that are technically acceptable but do not meet the requirements of this NASA Technical Standard",
+      "where": "4.1.6 Material Usage Agreements (MUAs), a [MPR 28]; Word file, no page numbers in the text",
+      "document_id": "NASA-STD-6016C",
+      "title": "Standard Materials and Processes Requirements for Spacecraft",
+      "version": "NASA-STD-6016C, the Word file on NTRS ('2021-09-13 2021-08-31 2021-08-05 NASA-STD-6016C - OFT-2 Changes fmOPRD Final.doc'); its title page reads 'Approved: YYYY-MM-DD'",
+      "url": "https://ntrs.nasa.gov/citations/20210021618",
+      "access": "full_text_read",
+      "step_id": "step_3_measures"
+     }
+    ],
+    "sentence": "Measures are quoted from NASA documents for the case they describe. The team recommends nothing.",
+    "source": "data/pipeline/process_steps.json"
+   }
   },
   {
    "need_id": "P3",
@@ -8224,7 +8321,86 @@
      "access": "full_text_read",
      "quote": "Flame growth rates are also of interest, to determine how quickly a fire in space can grow and if the flames reach a finite size or continue to grow. This has implications for firefighting strategies in spacecraft."
     }
-   ]
+   ],
+   "process": {
+    "steps_informed": [
+     {
+      "id": "step_2_configuration_evaluation",
+      "order": 2,
+      "label_by_team": "System or configuration evaluation when a material that fails Test 1 is proposed"
+     },
+     {
+      "id": "step_3_measures",
+      "order": 3,
+      "label_by_team": "Measures named for that case: replace with nonflammable material, restrict propagation paths, eliminate or control ignition sources, materials usage agreement"
+     }
+    ],
+    "team_reading": "Team's reading (AI, not checked by a person): tests that record flame spread over a solid material relate to the configuration evaluation and to the measures that name propagation paths.",
+    "measures": [
+     {
+      "item_id": "JSC29353B.4.0.methods",
+      "type": "measure",
+      "quote": "The primary methods used by NASA to reduce flammability hazards are the limitation of flammable materials by replacement with nonflammable materials and the restriction of propagation paths",
+      "where": "4.0 Flammability Assessment Guidelines, page 4; PDF page 13",
+      "document_id": "JSC-29353B",
+      "title": "Flammability Configuration Analysis for Spacecraft Applications",
+      "version": "JSC 29353B, July 2014",
+      "url": "https://ntrs.nasa.gov/citations/20150020937",
+      "access": "full_text_read",
+      "step_id": "step_3_measures"
+     },
+     {
+      "item_id": "JSC29353B.4.0.methods.how",
+      "type": "measure",
+      "quote": "either by covering flammable materials with a nonflammable material or by separation of flammable materials.",
+      "where": "4.0 Flammability Assessment Guidelines, page 4 (continuation of the sentence of JSC29353B.4.0.methods); PDF page 13",
+      "document_id": "JSC-29353B",
+      "title": "Flammability Configuration Analysis for Spacecraft Applications",
+      "version": "JSC 29353B, July 2014",
+      "url": "https://ntrs.nasa.gov/citations/20150020937",
+      "access": "full_text_read",
+      "step_id": "step_3_measures"
+     },
+     {
+      "item_id": "I6001B.6.1.2a",
+      "type": "measure",
+      "quote": "The amount and arrangement of flammable materials are controlled to prevent the spread of fire in the vehicle; any potential fire is isolated in well-defined areas, by firebreaks or other techniques, without propagation paths to other areas.",
+      "where": "6.1.2 a; PDF page 19",
+      "document_id": "NASA-STD-I-6001B",
+      "title": "Flammability, Offgassing, and Compatibility Requirements and Test Procedures",
+      "version": "NASA-STD-(I)-6001B, interim; its pages state: 'This document represents the technical consensus of the developing group but does not yet have final NASA approval.'",
+      "url": "https://ntrs.nasa.gov/citations/20110012152",
+      "access": "full_text_read",
+      "step_id": "step_3_measures"
+     },
+     {
+      "item_id": "I6001B.6.1.2b",
+      "type": "measure",
+      "quote": "The design ensures that ignition sources are eliminated or controlled.",
+      "where": "6.1.2 b; PDF page 20",
+      "document_id": "NASA-STD-I-6001B",
+      "title": "Flammability, Offgassing, and Compatibility Requirements and Test Procedures",
+      "version": "NASA-STD-(I)-6001B, interim; its pages state: 'This document represents the technical consensus of the developing group but does not yet have final NASA approval.'",
+      "url": "https://ntrs.nasa.gov/citations/20110012152",
+      "access": "full_text_read",
+      "step_id": "step_3_measures"
+     },
+     {
+      "item_id": "6016C.4.1.6a",
+      "type": "requirement",
+      "quote": "MUAs containing sufficient information to demonstrate that the application is acceptable shall be submitted by the responsible M&P organization for all M&P that are technically acceptable but do not meet the requirements of this NASA Technical Standard",
+      "where": "4.1.6 Material Usage Agreements (MUAs), a [MPR 28]; Word file, no page numbers in the text",
+      "document_id": "NASA-STD-6016C",
+      "title": "Standard Materials and Processes Requirements for Spacecraft",
+      "version": "NASA-STD-6016C, the Word file on NTRS ('2021-09-13 2021-08-31 2021-08-05 NASA-STD-6016C - OFT-2 Changes fmOPRD Final.doc'); its title page reads 'Approved: YYYY-MM-DD'",
+      "url": "https://ntrs.nasa.gov/citations/20210021618",
+      "access": "full_text_read",
+      "step_id": "step_3_measures"
+     }
+    ],
+    "sentence": "Measures are quoted from NASA documents for the case they describe. The team recommends nothing.",
+    "source": "data/pipeline/process_steps.json"
+   }
   },
   {
    "need_id": "S1",
@@ -10436,7 +10612,69 @@
      "access": "full_text_read",
      "quote": "Understanding the combustion characteristics of liquid hydrocarbon fuels is of practical and fundamental importance."
     }
-   ]
+   ],
+   "process": {
+    "steps_informed": [
+     {
+      "id": "step_4_detection_and_response",
+      "order": 4,
+      "label_by_team": "Detection and response: detector locations, portable extinguishers, ventilation shutdown and power removal"
+     }
+    ],
+    "team_reading": "Team's reading (AI, not checked by a person): tests that record the conditions at which a flame goes out relate to the response step, which names ventilation shutdown and extinguishers.",
+    "measures": [
+     {
+      "item_id": "TB008.detectorlocation",
+      "type": "measure",
+      "quote": "Smoke detectors should be located in equipment bays, the cabin, and nearby ventilation return ducts.",
+      "where": "Application, Fire Detection; PDF page 8",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     },
+     {
+      "item_id": "TB008.portable",
+      "type": "measure",
+      "quote": "Portable fire extinguishers must be provided for extinguishing fires in open areas, as well as areas behind panels",
+      "where": "Application, Fire Suppression; PDF page 9",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     },
+     {
+      "item_id": "TB008.ventilationoff",
+      "type": "measure",
+      "quote": "Terminate ventilation in the affected module to slow the spread of fire.",
+      "where": "Background, ISS Fire Safety Strategy, step 2; PDF page 3",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     },
+     {
+      "item_id": "TB008.powerremoval",
+      "type": "measure",
+      "quote": "Removing electrical power from hardware within the affected module should cease any continuous ignition sources",
+      "where": "Background, ISS Fire Safety Strategy, step 4; PDF page 3",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     }
+    ],
+    "sentence": "Measures are quoted from NASA documents for the case they describe. The team recommends nothing.",
+    "source": "data/pipeline/process_steps.json"
+   }
   },
   {
    "need_id": "D1",
@@ -15647,7 +15885,69 @@
      "access": "full_text_read",
      "quote": "Of interest to the combustion community is the ratio of CO to CO2, a measure of completeness of combustion"
     }
-   ]
+   ],
+   "process": {
+    "steps_informed": [
+     {
+      "id": "step_4_detection_and_response",
+      "order": 4,
+      "label_by_team": "Detection and response: detector locations, portable extinguishers, ventilation shutdown and power removal"
+     }
+    ],
+    "team_reading": "Team's reading (AI, not checked by a person): tests that record the gases a burning material gives off relate to the detection step.",
+    "measures": [
+     {
+      "item_id": "TB008.detectorlocation",
+      "type": "measure",
+      "quote": "Smoke detectors should be located in equipment bays, the cabin, and nearby ventilation return ducts.",
+      "where": "Application, Fire Detection; PDF page 8",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     },
+     {
+      "item_id": "TB008.portable",
+      "type": "measure",
+      "quote": "Portable fire extinguishers must be provided for extinguishing fires in open areas, as well as areas behind panels",
+      "where": "Application, Fire Suppression; PDF page 9",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     },
+     {
+      "item_id": "TB008.ventilationoff",
+      "type": "measure",
+      "quote": "Terminate ventilation in the affected module to slow the spread of fire.",
+      "where": "Background, ISS Fire Safety Strategy, step 2; PDF page 3",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     },
+     {
+      "item_id": "TB008.powerremoval",
+      "type": "measure",
+      "quote": "Removing electrical power from hardware within the affected module should cease any continuous ignition sources",
+      "where": "Background, ISS Fire Safety Strategy, step 4; PDF page 3",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     }
+    ],
+    "sentence": "Measures are quoted from NASA documents for the case they describe. The team recommends nothing.",
+    "source": "data/pipeline/process_steps.json"
+   }
   },
   {
    "need_id": "D2",
@@ -16723,7 +17023,69 @@
      "access": "full_text_read",
      "quote": "it is surprising that for the same Rt/R0, the actual heating temperature difference can be as large as 30 degrees Celsius."
     }
-   ]
+   ],
+   "process": {
+    "steps_informed": [
+     {
+      "id": "step_4_detection_and_response",
+      "order": 4,
+      "label_by_team": "Detection and response: detector locations, portable extinguishers, ventilation shutdown and power removal"
+     }
+    ],
+    "team_reading": "Team's reading (AI, not checked by a person): tests that record smoke from a heated material relate to the detection step, which names detector locations.",
+    "measures": [
+     {
+      "item_id": "TB008.detectorlocation",
+      "type": "measure",
+      "quote": "Smoke detectors should be located in equipment bays, the cabin, and nearby ventilation return ducts.",
+      "where": "Application, Fire Detection; PDF page 8",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     },
+     {
+      "item_id": "TB008.portable",
+      "type": "measure",
+      "quote": "Portable fire extinguishers must be provided for extinguishing fires in open areas, as well as areas behind panels",
+      "where": "Application, Fire Suppression; PDF page 9",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     },
+     {
+      "item_id": "TB008.ventilationoff",
+      "type": "measure",
+      "quote": "Terminate ventilation in the affected module to slow the spread of fire.",
+      "where": "Background, ISS Fire Safety Strategy, step 2; PDF page 3",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     },
+     {
+      "item_id": "TB008.powerremoval",
+      "type": "measure",
+      "quote": "Removing electrical power from hardware within the affected module should cease any continuous ignition sources",
+      "where": "Background, ISS Fire Safety Strategy, step 4; PDF page 3",
+      "document_id": "OCHMO-TB-008",
+      "title": "NASA-STD-3001 Technical Brief: Fire Protection",
+      "version": "OCHMO-TB-008 Rev A",
+      "url": "https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf",
+      "access": "full_text_read",
+      "step_id": "step_4_detection_and_response"
+     }
+    ],
+    "sentence": "Measures are quoted from NASA documents for the case they describe. The team recommends nothing.",
+    "source": "data/pipeline/process_steps.json"
+   }
   }
  ]
 }

@@ -3433,5 +3433,23 @@
     "pipeline/spec/answers.json#searches"
    ]
   }
- ]
+ ],
+ "process": {
+  "steps_informed": [
+   {
+    "id": "step_1_material_evaluation",
+    "order": 1,
+    "label_by_team": "Evaluate the material at the worst-case anticipated use environment"
+   },
+   {
+    "id": "step_2_configuration_evaluation",
+    "order": 2,
+    "label_by_team": "System or configuration evaluation when a material that fails Test 1 is proposed"
+   }
+  ],
+  "team_reading": "Team's reading (AI, not checked by a person): tests that record whether a solid material keeps burning at a recorded oxygen, pressure and flow relate to the evaluation of a material at its use environment and to the configuration evaluation.",
+  "measures": [],
+  "sentence": "Measures are quoted from NASA documents for the case they describe. The team recommends nothing.",
+  "source": "data/pipeline/process_steps.json"
+ }
 }

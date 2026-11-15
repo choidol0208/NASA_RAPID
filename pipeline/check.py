@@ -6514,6 +6514,502 @@ def check_s4(ctx):
 
 
 # ----------------------------------------------------------------------------
+# T. comparison with the catalog (another role's file; differences are NOTES)
+# ----------------------------------------------------------------------------
+
+T_CATALOG = os.path.join(ROOT, "data", "catalog", "configurations.csv")
+T_STATES = ("equal", "catalog_wider", "catalog_narrower", "overlap_neither_contains", "pipeline_has_no_value",
+            "catalog_has_no_value", "both_have_no_value", "not_comparable")
+T_DIFF = ("catalog_wider", "catalog_narrower", "overlap_neither_contains", "pipeline_has_no_value",
+          "catalog_has_no_value")
+
+
+def t_num(x):
+    try:
+        return float(x)
+    except (TypeError, ValueError):
+        return None
+
+
+def t_family(cid, m):
+    m = m.lower()
+    if cid.startswith("BASS-II"):
+        for key, fam in (("sibal", "sibal"), ("nomex", "nomex"), ("rod", "rod")):
+            if key in m:
+                return fam
+        if "spher" in m or "wax" in m or "candle" in m:
+            return "other"
+        return "film" if ("film" in m or "micron" in m or re.search(r"0\.[1-4] mm", m)) else "slab"
+    if "sibal" in m:
+        return "sibal"
+    if "nomex" in m or "ultem" in m:
+        return "sheet"
+    for key in ("wax", "candle"):
+        if key in m:
+            return "wax"
+    return "sphere" if "sphere" in m else ("skip" if "soot" in m else "slab")
+
+
+T_FAMILY = {"BASS-II-C01": "film", "BASS-II-C02": "slab", "BASS-II-C03": "rod", "BASS-II-C04": "sibal",
+            "BASS-II-C05": "nomex", "BASS-II-C06": "other", "BASS-C01": "sibal", "BASS-C02": "slab",
+            "BASS-C03": "sphere", "BASS-C04": "wax", "BASS-C05": "sheet"}
+
+
+def t_round(text, places):
+    from decimal import Decimal, ROUND_HALF_UP
+    return float(Decimal(text).quantize(Decimal(1).scaleb(-places), rounding=ROUND_HALF_UP))
+
+
+def t_state(c, p):
+    if c == p:
+        return "equal"
+    if c[0] <= p[0] and p[1] <= c[1]:
+        return "catalog_wider"
+    if p[0] <= c[0] and c[1] <= p[1]:
+        return "catalog_narrower"
+    return "overlap_neither_contains"
+
+
+@check("T1_catalog_comparison",
+       "catalog_comparison.csv and its summary reproduce from data/catalog/configurations.csv and tests.csv: the "
+       "mapped tests, n, min, max and the states with and without the tolerance per configuration and variable. "
+       "Differences between the catalog and the pipeline are reported as a NOTE and never fail the check.")
+def check_t1(ctx):
+    res = Result()
+    if not os.path.exists(T_CATALOG):
+        raise Skip("data/catalog/ is absent (another role's folder): nothing to compare")
+    if not ctx.has("catalog_comparison.csv"):
+        raise Skip("catalog_comparison.csv not written (run pipeline/catalog_compare.py)")
+    configs = read_csv(T_CATALOG)
+    unit = {s["file"]: s.get("row_unit", "") for s in ctx.sources}
+    rows = {(r["config_id"], r["variable"]): r for r in ctx.table("catalog_comparison.csv")}
+    seen = 0
+    for c in configs:
+        ref = c["tests_table_ref"].strip()
+        file = ref.split(" (")[0].strip()
+        note = ref[len(file):].strip(" ()")
+        sub = [t for t in ctx.tests if ref and t["source_file"] == file]
+        cid = c["config_id"]
+        if cid in T_FAMILY:
+            sub = [t for t in sub if t_family(cid, t_raw_cell(file, t["source_row"], 5)) == T_FAMILY[cid]]
+        elif note.startswith("Fuel ="):
+            sub = [t for t in sub if note.split("=", 1)[1].strip().lower() in t["fuel_material"].lower()]
+        elif re.fullmatch(r"S\d", note):
+            sub = [t for t in sub if t["test_id"].endswith("-" + note)]
+        elif re.match(r"2-\d", note):
+            ns = [int(n) for n in re.findall(r"2-(\d)", note)]
+            want = set(range(ns[0], ns[-1] + 1)) if " to " in note else set(ns)
+            sub = [t for t in sub if int(t["test_id"].rsplit("-", 1)[1]) in want]
+        gate = (not ref) or (not sub)
+        for var, lo, hi, cols in (("o2_pct", "o2_min_pct", "o2_max_pct", ("o2_pct",)),
+                                  ("pressure_kpa", "pressure_min_kpa", "pressure_max_kpa", ("pressure_kpa",)),
+                                  ("flow_cms", "flow_min_cms", "flow_max_cms", ("flow_cms", "flow_min_cms")),
+                                  ("test_count", None, None, ())):
+            r = rows.get((cid, var))
+            res.checked += 1
+            seen += 1
+            if r is None:
+                res.fail(problem="row missing", config_id=cid, variable=var)
+                continue
+            if int(r["mapped_tests"]) != len(sub) or r["table_row_unit"] != (unit.get(file, "") if ref else ""):
+                res.fail(problem="mapped tests or row unit differ", config_id=cid, variable=var)
+            if var == "test_count":
+                cnt = c["test_count_config"].strip()
+                if gate and (ref or cnt):
+                    want = "not_comparable"
+                elif not cnt:
+                    want = "both_have_no_value" if not sub else "catalog_has_no_value"
+                else:
+                    want = ("equal" if float(cnt) == len(sub) else
+                            "catalog_wider" if float(cnt) > len(sub) else "catalog_narrower")
+                if r["state_exact"] != want or r["state_with_tolerance"] != want:
+                    res.fail(problem="test_count state", config_id=cid, want=want, got=r["state_exact"])
+                continue
+            vals = [(t_num(t[k]), t[k]) for t in sub for k in cols if t_num(t[k]) is not None]
+            n = sum(1 for t in sub if any(t_num(t[k]) is not None for k in cols))
+            pmin, pmax = (min(vals)[1], max(vals)[1]) if vals else ("", "")
+            if (int(r["pipeline_n_recorded"]), r["pipeline_min"], r["pipeline_max"]) != (n, pmin, pmax):
+                res.fail(problem="n, min or max differ", config_id=cid, variable=var)
+            ls, hs = c[lo].strip(), c[hi].strip()
+            basis = sorted({t.get("o2_basis", "") or "(empty)" for t in sub if t_num(t["o2_pct"]) is not None})
+            if gate:
+                want = ("not_comparable",) * 2
+            elif not (ls or hs):
+                want = ("both_have_no_value",) * 2 if not vals else ("catalog_has_no_value",) * 2
+            elif not vals:
+                want = ("pipeline_has_no_value",) * 2
+            elif not (ls and hs) or t_num(ls) is None or t_num(hs) is None:
+                want = ("not_comparable",) * 2
+            elif var == "o2_pct" and basis != [c.get("o2_reference", "").strip() or "(empty)"]:
+                want = ("not_comparable",) * 2
+            else:
+                cat = (float(ls), float(hs))
+                want = (t_state(cat, (min(vals)[0], max(vals)[0])),
+                        t_state(cat, (t_round(pmin, len(ls.split(".")[1]) if "." in ls else 0),
+                                      t_round(pmax, len(hs.split(".")[1]) if "." in hs else 0))))
+            if (r["state_exact"], r["state_with_tolerance"]) != want:
+                res.fail(problem="state differs", config_id=cid, variable=var, want=list(want),
+                         got=[r["state_exact"], r["state_with_tolerance"]])
+    if seen != len(rows):
+        res.fail(problem="rows in the file that no configuration produces", rows=len(rows), expected=seen)
+    summ = ctx.json("catalog_comparison_summary.json")
+    for key in ("state_exact", "state_with_tolerance"):
+        for var, cnts in summ["counts_by_state"][key].items():
+            for st in T_STATES:
+                if cnts.get(st, 0) != sum(1 for r in rows.values() if r["variable"] == var and r[key] == st):
+                    res.fail(problem="summary count differs", key=key, variable=var, state=st)
+        nd = sum(1 for r in rows.values() if r[key] in T_DIFF)
+        if summ["differences"][key] != nd or len(summ["difference_list"][key]) != nd:
+            res.fail(problem="difference count differs", key=key)
+    ex, tol = summ["differences"]["state_exact"], summ["differences"]["state_with_tolerance"]
+    res.numbers = {"configurations": len(configs), "rows": len(rows), "differences_exact": ex,
+                   "differences_with_tolerance": tol}
+    res.note = ("%d configuration-variable rows differ between the catalog and the pipeline (%d with the "
+                "tolerance of rounding to the catalog's printed digits); information for the catalog role, "
+                "not a failure (catalog_comparison_summary.json)" % (ex, tol))
+    return res
+
+
+@check("T2_process_steps",
+       "process_steps.json and the 'process' field of every evidence-package need block and answer file: every item id "
+       "of spec/process.json exists in references.json with a quote; every measure's text equals its item's quote and "
+       "its item text (no team-written measure text); item types are in references.json _meta.item_types; quotes of "
+       "items added for the process are at most 40 words; each need's steps exist; the field of each need equals the "
+       "steps and measures of spec/process.json.")
+def check_t2(ctx):
+    res = Result()
+    if not ctx.has("process_steps.json"):
+        raise Skip("process_steps.json not written (run pipeline/process_steps.py)")
+    refs = ctx.spec("references")
+    accepted = set(refs["_meta"]["item_types"])
+    items = {}
+    for doc in refs["references"]:
+        for it in doc["items"]:
+            items[it["id"]] = (doc, it)
+            if it["type"] not in accepted:
+                res.fail(problem="item type not in _meta.item_types", item_id=it["id"], type=it["type"])
+    spec = ctx.spec("process")
+    out = ctx.json("process_steps.json")
+    needs = {n["id"]: n for n in ctx.needs}
+    step_ids = [s["id"] for s in spec["steps"]]
+
+    def view_ok(v, iid, where):
+        res.checked += 1
+        if iid not in items:
+            res.fail(problem="item id not in references.json", item_id=iid, where=where)
+            return
+        doc, it = items[iid]
+        q = it.get("quote", "")
+        if not q or v.get("quote") != q or v.get("item_id") != iid or v.get("document_id") != doc["id"] \
+                or v.get("where") != it["where"] or v.get("url") != doc.get("url", "") or v.get("access") != doc.get("access", ""):
+            res.fail(problem="item view differs from references.json", item_id=iid, where=where)
+        if len(q.split()) > 40:
+            res.fail(problem="quote longer than 40 words", item_id=iid)
+
+    if [s["id"] for s in out["steps"]] != step_ids:
+        res.fail(problem="steps differ from spec/process.json")
+    for s_spec, s_out in zip(spec["steps"], out["steps"]):
+        if [v["item_id"] for v in s_out["items"]] != s_spec["items"] or \
+                [v["item_id"] for v in s_out["measures"]] != s_spec["measures"]:
+            res.fail(problem="items or measures of a step differ", step=s_spec["id"])
+        for v in s_out["items"] + s_out["measures"]:
+            view_ok(v, v.get("item_id"), s_spec["id"])
+        for v in s_out["measures"]:
+            it = items.get(v["item_id"], (None, {}))[1]
+            if it.get("text") != it.get("quote"):
+                res.fail(problem="measure text is not the NASA quote", item_id=v["item_id"])
+        want = [n for n in needs if s_spec["id"] in needs[n].get("informs_process_steps", {}).get("steps", [])]
+        if s_out["needs_informing"] != want:
+            res.fail(problem="needs informing a step differ", step=s_spec["id"])
+    for blk in ("capability_areas", "where_the_weight_lies"):
+        if [v["item_id"] for v in out[blk]["items"]] != spec[blk]["items"]:
+            res.fail(problem="block items differ", block=blk)
+        for v in out[blk]["items"]:
+            view_ok(v, v["item_id"], blk)
+    if out["sentence"] != spec["_meta"]["fixed_sentence"]:
+        res.fail(problem="fixed sentence differs")
+    for nid, n in needs.items():
+        f = n.get("informs_process_steps")
+        if not f or not f.get("steps") or set(f["steps"]) - set(step_ids) \
+                or not f.get("team_reading", "").startswith("Team's reading"):
+            res.fail(problem="informs_process_steps missing, unknown step or not marked as the team's reading", need_id=nid)
+    by_step = {s["id"]: s for s in out["steps"]}
+
+    def field_ok(fld, nid, where):
+        res.checked += 1
+        steps = needs[nid]["informs_process_steps"]["steps"]
+        want_m = [(m["item_id"], sid) for sid in step_ids if sid in steps for m in by_step[sid]["measures"]]
+        if fld is None or [x["id"] for x in fld["steps_informed"]] != [s for s in step_ids if s in steps] \
+                or [(m["item_id"], m["step_id"]) for m in fld["measures"]] != want_m \
+                or fld["sentence"] != spec["_meta"]["fixed_sentence"] \
+                or fld["team_reading"] != needs[nid]["informs_process_steps"]["team_reading"]:
+            res.fail(problem="process field differs", need_id=nid, where=where)
+            return
+        for m in fld["measures"]:
+            view_ok(m, m["item_id"], where)
+    packs = answers = 0
+    for e in ctx.json("evidence/index.json")["packages"]:
+        pack = ctx.json("evidence/" + e["file"])
+        packs += 1
+        for b in pack["needs"]:
+            field_ok(b.get("process"), b["need_id"], e["file"])
+    for name in sorted(os.listdir(ctx.out_path("answers"))):
+        if name == "index.json" or not name.endswith(".json"):
+            continue
+        a = ctx.json("answers/" + name)
+        answers += 1
+        field_ok(a.get("process"), name.rsplit("__", 1)[1][:-5], name)
+    res.numbers = {"steps": len(out["steps"]), "measures": sum(len(s["measures"]) for s in out["steps"]),
+                   "packages": packs, "answer_files": answers, "item_views": res.checked}
+    return res
+
+
+@check("T3_need_recorded_summary",
+       "need_recorded_summary.csv recounted from tests.csv, need_tests.csv, file_links.csv and needs.json: tests in "
+       "scope, of investigations with a 'supported' stated_by link, with an outcome in a table cell (per variable), "
+       "counted (objective_link stated) and with a video tied by two labels.")
+def check_t3(ctx):
+    res = Result()
+    if not ctx.has("need_recorded_summary.csv"):
+        raise Skip("need_recorded_summary.csv not written")
+    rows = {r["need_id"]: r for r in ctx.table("need_recorded_summary.csv")}
+    counted = collections.defaultdict(set)
+    for r in ctx.table("need_tests.csv"):
+        if r["objective_link"] == "stated":
+            counted[r["need_id"]].add(r["test_id"])
+    video = {r["test_id"] for r in ctx.table("file_links.csv")
+             if r["kind"] == "video" and r["link_state"] == "two_labels_agree" and r["test_id"]}
+    for n in ctx.needs:
+        res.checked += 1
+        r = rows.get(n["id"])
+        scope = [t for t in ctx.tests if all(t.get(k) in v for k, v in n.get("scope", {}).items())]
+        sup = {s["investigation_id"] for s in n.get("stated_by", []) if s.get("verdict") == "supported"}
+        linked = [t for t in scope if t["investigation_id"] in sup]
+        wo = sum(1 for t in linked if any(t[o] != "" for o in n["outcomes_any"]))
+        per = "; ".join("%s %d" % (o, sum(1 for t in linked if t[o] != "")) for o in n["outcomes_any"])
+        ids = {t["test_id"] for t in linked}
+        want = (len(scope), len(linked), wo, per, len(counted[n["id"]]), len(ids & video), len(counted[n["id"]] & video))
+        got = None if r is None else (int(r["tests_in_scope"]), int(r["tests_in_scope_of_supported_investigations"]),
+                                      int(r["with_outcome_in_table_cell"]), r["outcome_cells_by_variable"],
+                                      int(r["counted_tests"]), int(r["in_scope_supported_with_video_two_labels"]),
+                                      int(r["counted_with_video_two_labels"]))
+        if got != want:
+            res.fail(problem="recount differs", need_id=n["id"], want=list(want), got=list(got) if got else None)
+        elif not r["sentence"].startswith("%d tests in the scope" % len(linked)):
+            res.fail(problem="sentence does not carry the count", need_id=n["id"])
+    res.numbers = {n: "%s/%s/%s" % (r["tests_in_scope_of_supported_investigations"], r["with_outcome_in_table_cell"],
+                                    r["counted_tests"]) for n, r in rows.items()}
+    return res
+
+
+@check("T4_material_tests",
+       "material_tests.csv recounted from tests.csv, need_tests.csv, scenario_tests.csv and file_links.csv: one row "
+       "per material_id x investigation x sample form; tests, names as written, how the name is known, n/min/max of "
+       "oxygen, pressure and flow, counted tests per need, scenario counts and videos tied by two labels.")
+def check_t4(ctx):
+    res = Result()
+    if not ctx.has("material_tests.csv"):
+        raise Skip("material_tests.csv not written")
+    form = ("sample_geometry", "sample_thickness_mm", "sample_width_cm", "rod_diameter_mm")
+    groups = collections.defaultdict(list)
+    for t in ctx.tests:
+        groups[(t["material_id"], t["investigation_id"]) + tuple(t[f] for f in form)].append(t)
+    counted = collections.defaultdict(set)
+    for r in ctx.table("need_tests.csv"):
+        if r["objective_link"] == "stated":
+            counted[r["test_id"]].add(r["need_id"])
+    scen = collections.defaultdict(dict)
+    for r in ctx.table("scenario_tests.csv"):
+        scen[r["test_id"]][r["scenario_id"]] = (r["o2_match"] == "in", r["o2_match"] == "in" and r["pressure_match"] == "in")
+    vid = collections.defaultdict(set)
+    for r in ctx.table("file_links.csv"):
+        if r["kind"] == "video" and r["link_state"] == "two_labels_agree" and r["test_id"]:
+            vid[r["test_id"]].add(r["psi_file_id"])
+    rows = ctx.table("material_tests.csv")
+    seen = set()
+    for r in rows:
+        res.checked += 1
+        k = (r["material_id"], r["investigation_id"]) + tuple(r[f] for f in form)
+        g = groups.get(k)
+        if g is None or k in seen:
+            res.fail(problem="row not a group of tests.csv or repeated", key=list(k))
+            continue
+        seen.add(k)
+        if r["test_ids"].split() != [t["test_id"] for t in g] or int(r["tests"]) != len(g):
+            res.fail(problem="tests differ", key=list(k))
+        if r["materials_as_written"].split("; ") != sorted({t["fuel_material"] for t in g}):
+            res.fail(problem="names as written differ", key=list(k))
+        rd = sum("fuel_material:not_written_in_cell_named_in_readme" in t["flags"] for t in g)
+        ab = sum("fuel_material:blank_in_source_value_of_row_above_used" in t["flags"] for t in g)
+        if (int(r["name_from_readme_flag"]), int(r["name_from_row_above_flag"]), int(r["name_in_table_cell"])) != (rd, ab, len(g) - rd - ab):
+            res.fail(problem="name source counts differ", key=list(k))
+        for v in ("o2_pct", "pressure_kpa", "flow_cms"):
+            vals = [t_num(t[v]) for t in g if t_num(t[v]) is not None]
+            got = (int(r[v + "_n"]), t_num(r[v + "_min"]), t_num(r[v + "_max"]))
+            if got != ((len(vals), min(vals), max(vals)) if vals else (0, None, None)):
+                res.fail(problem="range differs", key=list(k), variable=v)
+        for n in ctx.needs:
+            if int(r["counted_" + n["id"]]) != sum(n["id"] in counted[t["test_id"]] for t in g):
+                res.fail(problem="counted differs", key=list(k), need_id=n["id"])
+        for sc in ctx.spec("scenarios")["scenarios"]:
+            a = sum(scen[t["test_id"]].get(sc["id"], (0, 0))[0] for t in g)
+            b = sum(scen[t["test_id"]].get(sc["id"], (0, 0))[1] for t in g)
+            if (int(r["scenario_%s_o2_in" % sc["id"]]), int(r["scenario_%s_o2_and_pressure_in" % sc["id"]])) != (a, b):
+                res.fail(problem="scenario counts differ", key=list(k), scenario=sc["id"])
+        if int(r["tests_with_video_two_labels"]) != sum(t["test_id"] in vid for t in g) or \
+                int(r["videos_two_labels"]) != len(set().union(*[vid[t["test_id"]] for t in g])):
+            res.fail(problem="video counts differ", key=list(k))
+    if seen != set(groups) or sum(int(r["tests"]) for r in rows) != len(ctx.tests):
+        res.fail(problem="groups missing", missing=len(set(groups) - seen))
+    res.numbers = {"rows": len(rows), "materials": len({r["material_id"] for r in rows}), "tests": len(ctx.tests)}
+    return res
+
+
+@check("T5_material_published",
+       "material_published.csv: every value equals the value at the same place of the item's 'values' in "
+       "references.json, every table of a per-material shape is listed, and a literal match is given only where the "
+       "material names are equal after removing case, spaces and hyphens.")
+def check_t5(ctx):
+    res = Result()
+    if not ctx.has("material_published.csv"):
+        raise Skip("material_published.csv not written")
+    items = {it["id"]: it for d in ctx.spec("references")["references"] for it in d["items"]}
+    norm = lambda x: re.sub(r"[\s\-]+", "", x).lower()
+    names = collections.defaultdict(set)
+    mats = {m["id"]: m for m in ctx.spec("materials")["materials"]}
+    for r in ctx.table("material_tests.csv"):
+        m = mats.get(r["material_id"], {})
+        for c in [r["material_id"], m.get("label", "")] + m.get("aliases", []) + r["materials_as_written"].split("; "):
+            if c:
+                names[norm(c)].add(r["material_id"])
+    js = lambda v: json.dumps(v, ensure_ascii=False) if isinstance(v, (list, dict)) else str(v)
+    listed = set()
+    for r in ctx.table("material_published.csv"):
+        res.checked += 1
+        listed.add(r["item_id"])
+        it = items.get(r["item_id"])
+        if it is None:
+            res.fail(problem="item not in references.json", item_id=r["item_id"])
+            continue
+        v, i = it["values"], int(r["table_row"]) - 1
+        if r["table_shape"] == "rows":
+            row = v["rows"][i]
+            ok = row.get("material") == r["material_as_printed"] and (
+                (r["quantity"] == "" and r["value_as_printed"] == "") or js(row.get(r["quantity"])) == r["value_as_printed"])
+            for part in [p for p in r["condition"].split("; ") if p]:
+                k, val = part.split("=", 1)
+                ok = ok and js(row.get(k)) == val
+        else:
+            tab = v[r["quantity"]]
+            col = [k for k in tab if k.startswith("columns_")][0]
+            ck, cv = r["condition"].split("=", 1)
+            ok = ck == col[len("columns_"):] and r["material_as_printed"] in tab and \
+                cv in [js(x) for x in tab[col]] and js(tab[r["material_as_printed"]][[js(x) for x in tab[col]].index(cv)]) == r["value_as_printed"]
+        if not ok:
+            res.fail(problem="value differs from the item", item_id=r["item_id"], row=r["table_row"], quantity=r["quantity"])
+        want = "; ".join(sorted(names.get(norm(r["material_as_printed"]), ()))) or "no literal match"
+        if r["normalised_material_match"] != want:
+            res.fail(problem="literal match differs", material=r["material_as_printed"], want=want)
+    shaped = {it["id"] for it in items.values() if isinstance(it.get("values"), dict) and (
+        (isinstance(it["values"].get("rows"), list) and it["values"]["rows"] and
+         all(isinstance(x, dict) and "material" in x for x in it["values"]["rows"])) or
+        any(isinstance(t, dict) and sum(k.startswith("columns_") for k in t) == 1 for t in it["values"].values()))}
+    if shaped != listed:
+        res.fail(problem="per-material tables not listed or listed wrongly", missing=sorted(shaped - listed), extra=sorted(listed - shaped))
+    res.numbers = {"rows": res.checked, "items": len(listed)}
+    return res
+
+
+@check("T6_archive_summary",
+       "archive_summary.csv and archive_summary_totals.json: the totals overall and per investigation equal the sums of "
+       "the CSV; every psi_file_id of the CSV and of the not-listed list is an archive of the saved PSI listing of its "
+       "investigation with equal bytes; archives listed plus not listed equal the archives of the listings; member "
+       "classes add up to the members; raw_layers_summary.json carries the same totals (SKIP without the listings).")
+def check_t6(ctx):
+    res = Result()
+    if not ctx.has("archive_summary.csv"):
+        raise Skip("archive_summary.csv not written (python3 pipeline/archive_summary.py <folder>)")
+    rows = ctx.table("archive_summary.csv")
+    tot = ctx.json("archive_summary_totals.json")
+    classes = ("still_image", "camera_frame_hobj", "text", "other")
+    ival = lambda r, k: int(r[k])
+
+    def sums(rs):
+        return {"archives_listed": len(rs), "bytes_of_listed_archives": sum(ival(r, "listing_bytes") for r in rs),
+                "bytes_fetched": sum(ival(r, "bytes_fetched") for r in rs), "members": sum(ival(r, "members") for r in rs),
+                "directories": sum(ival(r, "directories") for r in rs),
+                "members_by_class": {c: sum(ival(r, "members_" + c) for r in rs) for c in classes},
+                "uncompressed_bytes": sum(ival(r, "uncompressed_bytes") for r in rs)}
+    for scope, block, rs in [("overall", tot["overall"], rows)] + [
+            (inv, b, [r for r in rows if r["investigation_id"] == inv]) for inv, b in tot["investigations"].items()]:
+        res.checked += 1
+        want = sums(rs)
+        if any(block[k] != v for k, v in want.items()):
+            res.fail(problem="totals differ from the CSV sums", scope=scope)
+        rel = collections.Counter(r["identifier_relation"] for r in rs)
+        if any(block["identifier_relation"].get(k, 0) != n for k, n in rel.items()) or \
+                sum(block["identifier_relation"].values()) != len(rs):
+            res.fail(problem="identifier relations differ", scope=scope)
+    for r in rows:
+        if sum(ival(r, "members_" + c) for c in classes) + ival(r, "directories") != ival(r, "members"):
+            res.fail(problem="member classes do not add up", file_id=r["psi_file_id"])
+    dis = {x["psi_file_id"] for x in tot["archives_whose_member_identifiers_disagree_with_the_archive_name"]}
+    if dis != {r["psi_file_id"] for r in rows if r["identifier_relation"] == "disagree"}:
+        res.fail(problem="list of disagreeing archives differs")
+    nl = tot["archives_not_listed"]
+    o = tot["overall"]
+    if o["archives_not_listed"] != len(nl) or o["archives_listed"] + len(nl) != o["archives_in_listing"]:
+        res.fail(problem="listed plus not listed differ from the archives of the listings")
+    rl = ctx.json("raw_layers_summary.json").get("overall", {}).get("archive_directories_all")
+    if rl is None or any(rl.get(k) != o[k] for k in ("archives_in_listing", "archives_listed", "bytes_fetched", "members")):
+        res.fail(problem="raw_layers_summary.json lacks or differs in archive_directories_all")
+    numbers = {"archives_listed": o["archives_listed"], "archives_in_listing": o["archives_in_listing"],
+               "members": o["members"], "not_listed": len(nl), "disagree": len(dis)}
+    try:
+        listing = {}
+        for inv in tot["investigations"]:
+            for f in p_listing_files(ctx, inv):
+                if f["kind"] == "archive":
+                    listing[f["id"]] = (inv, f["bytes"])
+    except Skip as exc:
+        res.numbers = numbers
+        res.details = {"listing_part": "SKIP: " + str(exc)}
+        return res
+    for r in rows + nl:
+        if listing.get(r["psi_file_id"]) != (r["investigation_id"], int(r["listing_bytes"])):
+            res.fail(problem="file id not an archive of the listing with equal bytes", file_id=r["psi_file_id"])
+    if len(listing) != o["archives_in_listing"]:
+        res.fail(problem="archives in the listings differ", listing=len(listing), totals=o["archives_in_listing"])
+    res.numbers = numbers
+    return res
+
+
+def t_raw_cell(file, source_row, col):
+    """Cell <col> of the raw table row that starts on line <source_row> (header = line 1)."""
+    cache = T_RAW_LINES.setdefault(file, None)
+    if cache is None:
+        data = read_bytes(os.path.join(RAW, file))
+        for enc in ("utf-8-sig", "cp1252", "latin-1"):
+            try:
+                text = data.decode(enc)
+                break
+            except UnicodeDecodeError:
+                continue
+        rd = csv.reader(io.StringIO(text))
+        next(rd)
+        cache, start = {}, rd.line_num + 1
+        for row in rd:
+            cache[start] = row
+            start = rd.line_num + 1
+        T_RAW_LINES[file] = cache
+    row = cache.get(int(source_row)) if str(source_row).isdigit() else None
+    return row[col] if row and len(row) > col else ""
+
+
+T_RAW_LINES = {}
+
+
+# ----------------------------------------------------------------------------
 # running
 # ----------------------------------------------------------------------------
 
@@ -6539,6 +7035,8 @@ def run_checks(ctx):
             entry["failing_examples"] = res.failures[:MAX_EXAMPLES]
             if res.details:
                 entry["details"] = res.details
+            if getattr(res, "note", None):
+                entry["note"] = res.note
         except Skip as exc:
             entry.update(status="SKIP", numbers={}, failures=0, failing_examples=[], reason=str(exc))
         except Exception as exc:        # a check that cannot run is a failed check
@@ -6550,6 +7048,8 @@ def run_checks(ctx):
             line += " " + entry["reason"]
         else:
             line += " failures=%d %s" % (entry["failures"], compact(entry["numbers"]))
+            if entry.get("note"):
+                line += "\n     NOTE " + entry["note"]
         print(line)
     return report
 
@@ -6574,6 +7074,7 @@ def main():
             "tolerances": {"converted_values": ROUND_TOL, "derived_formulas": DERIVED_TOL, "indicator_statistics": STAT_TOL},
         },
         "summary": dict(counts, checks=len(report)),
+        "notes": [{"id": e["id"], "note": e["note"]} for e in report if e.get("note")],
         "checks": report,
     }
     out = os.path.join(ctx.data_dir, "validation_report.json")

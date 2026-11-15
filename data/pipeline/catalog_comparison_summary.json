@@ -1,0 +1,406 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-15. Not human-reviewed.",
+  "written_by": "pipeline/catalog_compare.py",
+  "inputs": [
+   "data/catalog/configurations.csv",
+   "data/pipeline/tests.csv",
+   "data/psi/experimental_tables/ (PSI-25, PSI-26 material cells)",
+   "pipeline/spec/sources.json (row_unit)"
+  ],
+  "mapping_rule": "tests of tests.csv whose source_file is the file named in tests_table_ref, filtered by the note in parentheses as in web/check_integration.py config_subset (BASS families by the raw material cell; 'Fuel = X' by fuel_material; 'S<n>' by test id suffix; '2-<n>' by test number)",
+  "tolerance": "pipeline min and max rounded half-up to the number of decimals the catalog prints for that bound",
+  "states": [
+   "equal",
+   "catalog_wider",
+   "catalog_narrower",
+   "overlap_neither_contains",
+   "pipeline_has_no_value",
+   "catalog_has_no_value",
+   "both_have_no_value",
+   "not_comparable"
+  ],
+  "difference_states": [
+   "catalog_wider",
+   "catalog_narrower",
+   "overlap_neither_contains",
+   "pipeline_has_no_value",
+   "catalog_has_no_value"
+  ]
+ },
+ "configurations": 41,
+ "rows": 164,
+ "counts_by_state": {
+  "state_exact": {
+   "o2_pct": {
+    "equal": 13,
+    "catalog_wider": 4,
+    "catalog_narrower": 0,
+    "overlap_neither_contains": 1,
+    "pipeline_has_no_value": 0,
+    "catalog_has_no_value": 0,
+    "both_have_no_value": 10,
+    "not_comparable": 13
+   },
+   "pressure_kpa": {
+    "equal": 0,
+    "catalog_wider": 1,
+    "catalog_narrower": 1,
+    "overlap_neither_contains": 5,
+    "pipeline_has_no_value": 0,
+    "catalog_has_no_value": 0,
+    "both_have_no_value": 21,
+    "not_comparable": 13
+   },
+   "flow_cms": {
+    "equal": 14,
+    "catalog_wider": 2,
+    "catalog_narrower": 0,
+    "overlap_neither_contains": 0,
+    "pipeline_has_no_value": 8,
+    "catalog_has_no_value": 0,
+    "both_have_no_value": 4,
+    "not_comparable": 13
+   },
+   "test_count": {
+    "equal": 28,
+    "catalog_wider": 0,
+    "catalog_narrower": 0,
+    "overlap_neither_contains": 0,
+    "pipeline_has_no_value": 0,
+    "catalog_has_no_value": 0,
+    "both_have_no_value": 4,
+    "not_comparable": 9
+   }
+  },
+  "state_with_tolerance": {
+   "o2_pct": {
+    "equal": 16,
+    "catalog_wider": 2,
+    "catalog_narrower": 0,
+    "overlap_neither_contains": 0,
+    "pipeline_has_no_value": 0,
+    "catalog_has_no_value": 0,
+    "both_have_no_value": 10,
+    "not_comparable": 13
+   },
+   "pressure_kpa": {
+    "equal": 7,
+    "catalog_wider": 0,
+    "catalog_narrower": 0,
+    "overlap_neither_contains": 0,
+    "pipeline_has_no_value": 0,
+    "catalog_has_no_value": 0,
+    "both_have_no_value": 21,
+    "not_comparable": 13
+   },
+   "flow_cms": {
+    "equal": 14,
+    "catalog_wider": 2,
+    "catalog_narrower": 0,
+    "overlap_neither_contains": 0,
+    "pipeline_has_no_value": 8,
+    "catalog_has_no_value": 0,
+    "both_have_no_value": 4,
+    "not_comparable": 13
+   },
+   "test_count": {
+    "equal": 28,
+    "catalog_wider": 0,
+    "catalog_narrower": 0,
+    "overlap_neither_contains": 0,
+    "pipeline_has_no_value": 0,
+    "catalog_has_no_value": 0,
+    "both_have_no_value": 4,
+    "not_comparable": 9
+   }
+  }
+ },
+ "differences": {
+  "state_exact": 22,
+  "state_with_tolerance": 12
+ },
+ "difference_list": {
+  "state_exact": [
+   {
+    "config_id": "ACME-FLAME-DESIGN-C01",
+    "variable": "o2_pct",
+    "state": "catalog_wider",
+    "catalog": "19.8 to 40.0",
+    "pipeline": "19.8048 to 40.0 (n=207)",
+    "reason": ""
+   },
+   {
+    "config_id": "ACME-FLAME-DESIGN-C01",
+    "variable": "pressure_kpa",
+    "state": "overlap_neither_contains",
+    "catalog": "94.4 to 131.4",
+    "pipeline": "94.4321 to 131.4141 (n=207)",
+    "reason": ""
+   },
+   {
+    "config_id": "ACME-FLAME-DESIGN-C02",
+    "variable": "o2_pct",
+    "state": "catalog_wider",
+    "catalog": "21.2 to 85.0",
+    "pipeline": "21.2017 to 84.9978 (n=109)",
+    "reason": ""
+   },
+   {
+    "config_id": "ACME-FLAME-DESIGN-C02",
+    "variable": "pressure_kpa",
+    "state": "overlap_neither_contains",
+    "catalog": "43.0 to 304.7",
+    "pipeline": "43.0233 to 304.7484 (n=120)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-II-C03",
+    "variable": "flow_cms",
+    "state": "catalog_wider",
+    "catalog": "0.0 to 38.5",
+    "pipeline": "0.0 to 20.0 (n=45)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-II-C04",
+    "variable": "flow_cms",
+    "state": "catalog_wider",
+    "catalog": "1.0 to 29.0",
+    "pipeline": "1.0 to 11.0 (n=27)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-C01",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": " to 40",
+    "pipeline": " to  (n=0)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-C02",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": " to 40",
+    "pipeline": " to  (n=0)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-C03",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": " to 40",
+    "pipeline": " to  (n=0)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-C04",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": " to 40",
+    "pipeline": " to  (n=0)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-C05",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": " to 40",
+    "pipeline": " to  (n=0)",
+    "reason": ""
+   },
+   {
+    "config_id": "CFI-C01",
+    "variable": "pressure_kpa",
+    "state": "catalog_narrower",
+    "catalog": "50.7 to 506.6",
+    "pipeline": "50.6625 to 506.625 (n=79)",
+    "reason": ""
+   },
+   {
+    "config_id": "CFI-C01",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": "0 to 0",
+    "pipeline": " to  (n=0)",
+    "reason": "the catalog's source label is 'team'"
+   },
+   {
+    "config_id": "FLEX-C01",
+    "variable": "pressure_kpa",
+    "state": "overlap_neither_contains",
+    "catalog": "70.2 to 309.3",
+    "pipeline": "70.1676 to 309.2679 (n=156)",
+    "reason": ""
+   },
+   {
+    "config_id": "FLEX-C01",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": "0 to 0",
+    "pipeline": " to  (n=0)",
+    "reason": "the catalog's source label is 'team'"
+   },
+   {
+    "config_id": "FLEX-C02",
+    "variable": "pressure_kpa",
+    "state": "overlap_neither_contains",
+    "catalog": "70.4 to 309.3",
+    "pipeline": "70.3942 to 309.2946 (n=117)",
+    "reason": ""
+   },
+   {
+    "config_id": "FLEX-C02",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": "0 to 0",
+    "pipeline": " to  (n=0)",
+    "reason": "the catalog's source label is 'team'"
+   },
+   {
+    "config_id": "SAFFIRE-I-C01",
+    "variable": "o2_pct",
+    "state": "catalog_wider",
+    "catalog": "21.5 to 21.7",
+    "pipeline": "21.7 to 21.7 (n=1)",
+    "reason": "the table cell of SAFFIRE-1-S1 is a range (tests.csv flag o2_pct:range_in_source_*); the pipeline keeps one value"
+   },
+   {
+    "config_id": "SAFFIRE-II-C03",
+    "variable": "o2_pct",
+    "state": "catalog_wider",
+    "catalog": "21.9 to 22.1",
+    "pipeline": "22.1 to 22.1 (n=2)",
+    "reason": "the table cell of SAFFIRE-2-2-8, SAFFIRE-2-2-9 is a range (tests.csv flag o2_pct:range_in_source_*); the pipeline keeps one value"
+   },
+   {
+    "config_id": "ACME-CFI-G-C01",
+    "variable": "o2_pct",
+    "state": "overlap_neither_contains",
+    "catalog": "18.0 to 40.0",
+    "pipeline": "17.9686 to 39.97 (n=179)",
+    "reason": ""
+   },
+   {
+    "config_id": "ACME-CFI-G-C01",
+    "variable": "pressure_kpa",
+    "state": "overlap_neither_contains",
+    "catalog": "50.7 to 304.0",
+    "pipeline": "50.665 to 303.99 (n=179)",
+    "reason": ""
+   },
+   {
+    "config_id": "ACME-CFI-G-C02",
+    "variable": "pressure_kpa",
+    "state": "catalog_wider",
+    "catalog": "49.5 to 331.0",
+    "pipeline": "49.5382 to 330.99 (n=154)",
+    "reason": ""
+   }
+  ],
+  "state_with_tolerance": [
+   {
+    "config_id": "BASS-II-C03",
+    "variable": "flow_cms",
+    "state": "catalog_wider",
+    "catalog": "0.0 to 38.5",
+    "pipeline": "0.0 to 20.0 (n=45)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-II-C04",
+    "variable": "flow_cms",
+    "state": "catalog_wider",
+    "catalog": "1.0 to 29.0",
+    "pipeline": "1.0 to 11.0 (n=27)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-C01",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": " to 40",
+    "pipeline": " to  (n=0)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-C02",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": " to 40",
+    "pipeline": " to  (n=0)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-C03",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": " to 40",
+    "pipeline": " to  (n=0)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-C04",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": " to 40",
+    "pipeline": " to  (n=0)",
+    "reason": ""
+   },
+   {
+    "config_id": "BASS-C05",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": " to 40",
+    "pipeline": " to  (n=0)",
+    "reason": ""
+   },
+   {
+    "config_id": "CFI-C01",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": "0 to 0",
+    "pipeline": " to  (n=0)",
+    "reason": "the catalog's source label is 'team'"
+   },
+   {
+    "config_id": "FLEX-C01",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": "0 to 0",
+    "pipeline": " to  (n=0)",
+    "reason": "the catalog's source label is 'team'"
+   },
+   {
+    "config_id": "FLEX-C02",
+    "variable": "flow_cms",
+    "state": "pipeline_has_no_value",
+    "catalog": "0 to 0",
+    "pipeline": " to  (n=0)",
+    "reason": "the catalog's source label is 'team'"
+   },
+   {
+    "config_id": "SAFFIRE-I-C01",
+    "variable": "o2_pct",
+    "state": "catalog_wider",
+    "catalog": "21.5 to 21.7",
+    "pipeline": "21.7 to 21.7 (n=1)",
+    "reason": "the table cell of SAFFIRE-1-S1 is a range (tests.csv flag o2_pct:range_in_source_*); the pipeline keeps one value"
+   },
+   {
+    "config_id": "SAFFIRE-II-C03",
+    "variable": "o2_pct",
+    "state": "catalog_wider",
+    "catalog": "21.9 to 22.1",
+    "pipeline": "22.1 to 22.1 (n=2)",
+    "reason": "the table cell of SAFFIRE-2-2-8, SAFFIRE-2-2-9 is a range (tests.csv flag o2_pct:range_in_source_*); the pipeline keeps one value"
+   }
+  ]
+ },
+ "sentences": [
+  "The catalog and the pipeline are built separately from the same PSI tables; this file compares them.",
+  "A difference is information for the catalog role, not an error of either file.",
+  "States are computed by the rules written in pipeline/catalog_compare.py; the team checked no state by hand."
+ ]
+}
