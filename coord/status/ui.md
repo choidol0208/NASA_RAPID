@@ -1,9 +1,11 @@
 ---
 role: ui
-updated: 2026-11-15 17:25 KST
+updated: 2026-11-15 17:38 KST
 state: working
 blocked_on: none
 ---
+Now (15 Nov, 17:38): sync; no new request to ui; no page file changed (catalog removed the person sign-off columns from the validation sheet, which the page does not read). Closed 1624 as superseded by pm's accepted 1638. Build exit 0, 0 broken joins. Open with pm: 1638 (how.html 63–64, README, `pile_wording.md`, `data/insights` sentences, the assistant's notices after the 18:00 review, the deck), 1146 (`assistant_recorded.json`). Ready for the freeze when the human lead sets it: Pages trigger to main only, captures retaken from the public page.
+
 Now (15 Nov, 17:25): merged pm's integration 17:23 (`986ca49`: config 1.5.3, robustness resampled on 1.5.3, the shell verifiers' fixes; the weight check line now sits outside the card's disclosure). Closed 1710. Build exit 0, 0 broken joins, parity 106/106. 1638 items 4 and 5 (how.html 2, `data/insights` 18 disclaimer phrases) and the deck findings are still open with pm.
 
 Now (15 Nov, 17:24): sync; no new request to ui; no page file changed since ce0fad7. pm's deck draft (`9bdfdd0`) read: its `build_deck.py` line 904 checks the old note above the cards ("team's similarity computation, not a NASA result") and will stop the next refresh; its footers keep the negatives the page dropped; added to request 1638. Waiting on pm: 1710 (resample on 1.5.3; the Weight check lines are hidden until then), 1638, 1624, 1146.
