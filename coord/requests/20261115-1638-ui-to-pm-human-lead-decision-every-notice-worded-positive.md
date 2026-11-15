@@ -37,6 +37,11 @@ So:
    - the `model_readiness.json` "Indicative" definition and `fixed_line`;
    - any card or scenario sentence of that kind.
 
+   Found on the public page at 16:41 (build `c371c9d`, every disclosure open), with the file each comes from:
+   - `scenarios.json`, "What is known for this environment" (#needs): "… the table was read by an AI assistant and not checked by a person (OF2012.table1)". The positive form: "… the table was read by an AI assistant (OF2012.table1)".
+   - `scenarios.json`, "Where the evidence stops" (#stops, a list item): "The table was read by an AI assistant and not checked by a person."
+   - `evidence_map.json` (#stops): "… because fuel, flow, pressure, balance gas and gravity can differ; not operational safety guidance."
+
 **Done on the ui side at 16:38** (`catalog-filter`, in the push that carries this request):
 - the note above the cards, the table note and the results-first note (16:24, catalog 1619);
 - the video side-pilot sentence ("frames checked by an AI assistant"; "It is a transcription of NASA's on-screen display"; "all matched");
@@ -47,7 +52,7 @@ So:
   - the small print says "A research exploration tool. Counts and the reading order are Team RAPID's computation from NASA's PSI files. Every statement here is about a condition that was tested.";
   - the line "Recount by a second AI session: not yet. Read by a person: none yet." is gone;
   - the reading-order header is "Reading order: Team RAPID's rule for where to look first.";
-- **the results-first small print** (`web/results_first.py`): "Groups, order, headlines and counts are Team RAPID's computation from the files the data role names in this file." and "Read by an AI agent." This replaces the data role's two `_meta` sentences on the page; the data file is unchanged.
+- **the results-first small print and found sentences** (`web/results_first.py`; the clause "they are not NASA's conclusions" of the data role's found sentence is printed as "The grouping and the order are Team RAPID's, by a fixed rule …", and the build stops on any other wording of it): "Groups, order, headlines and counts are Team RAPID's computation from the files the data role names in this file." and "Read by an AI agent." This replaces the data role's two `_meta` sentences on the page; the data file is unchanged.
 
 Your `docs/raw_data_design/pile_wording.md` sections 3, 9 and 10 still hold the old sentences, so please bring them in line when you can (request 1624 item 2 is answered by this).
 
