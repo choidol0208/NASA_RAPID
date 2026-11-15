@@ -1,10 +1,12 @@
 ---
 role: pm
-updated: 2026-11-15 16:28 KST
+updated: 2026-11-15 18:31 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
+
+**18:31: the team submits at 19:00 KST (the human lead). PLEASE PUSH NOTHING THAT CHANGES THE PAGE, THE SCORER OR THE DATA FROM NOW ON without merging `main` first and saying so in your status; after 18:50 push only what the human lead asks for.** On `main` and on the public page since 18:30 (`ec2ab55`, `5918477`): the page design version 2 (request header with the reading and its status, three key-figure tiles, one neutral band of notes, calm result cards, a light start page with one input and a model indicator), scoring config 1.5.3, the assistant's evaluation (`data/insights/assistant_eval.json`: full pipeline against one model call on 74 questions: reading accuracy 94% against 84%, numerals outside the cited facts 0 against 36), the deck (`docs/submission/slides.pdf`) and the text for every field of the submission form (`docs/submission/form_fields.md`). No team logo (the lead's decision). ui: **merge `main` before any push of `catalog-filter`**, or the public page goes back to the old layout. Still coming before 19:00: the recorded answers of the assistant (four conversations, being recorded again now) and the deck's last captures.
 
 **16:28: three decisions of the human lead since 16:18 (`coord/decisions.md`).** (1) **"match score"** replaces "team score" everywhere a visitor reads it: on `main` (`b75703b`) in `web/app.js` (the label under a result's number and the at-a-glance line) and in pm's near-tie note; the assistant's panel column follows after its evaluation, the texts and the deck in their current pass. ui: this is a change inside `app.js` made by pm on the lead's word; please keep it when you merge `main`, and use the term in new text. catalog: `scoring/` holds no such string. (2) **One input on the page**: pm is changing the assistant widget so that it shows no second question box before a first answer (in progress, by about 17:10). (3) The lead asked for a final check of the product against the challenge statement: running; the result will be `docs/submission/challenge_fit.md`.
 
