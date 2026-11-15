@@ -28,6 +28,10 @@ It is a research exploration tool. It is not operational fire-safety guidance, a
 
 Captures of the team's own page as it is now (not AI-generated images). The four of the public page were taken with headless Chrome at 1,440 px on 15 November 2026 at 22:09 KST, for the example "lunar habitat cotton fabric"; the one of the conversation was taken from the local install at 20:11 KST by `docs/submission/deck/capture.mjs`.
 
+**The SI assistant answering (animation, local install with the language model).** A request is typed; the dashboard appears at once; the assistant shows its steps while the model works, then the answer with a citation on every sentence; a follow-up is asked. A recording of the team's own page on 15 November 2026 at about 23:15 KST (`docs/readme/record_demo.mjs`, `docs/readme/make_gif.py`); frames are skipped while a step runs, so it plays faster than the one to two minutes an answer takes.
+
+![Animation: a request is typed on the start page, the SI assistant works through its steps and shows a cited answer, then answers a follow-up](docs/readme/assistant_demo.gif)
+
 **The dashboard.** What you typed and how it was read, three key figures, a note on gravity, five tabs that each say what they hold, and the closest investigations with their match scores.
 
 ![The dashboard for lunar habitat cotton fabric: the request as read, three key figures, five tabs, and the first result card with its match score and its match per dimension](docs/readme/01_dashboard_closest.png)
