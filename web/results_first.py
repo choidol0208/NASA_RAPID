@@ -26,6 +26,23 @@ class ResultsError(RuntimeError):
     pass
 
 
+# The human lead's decision of 16:35 on 15 Nov (every notice worded positively): the one disclaimer clause of
+# the data role's "found" sentence is printed in its positive form. The file itself is unchanged; any other
+# wording of the clause stops the build, so a new form is never shown unnoticed.
+POSITIVE = {
+    "The grouping and the order are the team's, by a fixed rule on the conditions each statement states; they are not NASA's conclusions.":
+    "The grouping and the order are Team RAPID's, by a fixed rule on the conditions each statement states.",
+}
+
+
+def positive(sentence):
+    for old, new in POSITIVE.items():
+        sentence = sentence.replace(old, new)
+    if re.search(r"not NASA's conclusions|not (operational )?safety guidance", sentence):
+        raise ResultsError(f"a disclaimer clause in a found sentence has a new wording: {sentence[:160]}")
+    return sentence
+
+
 def _value_label(v):
     lab = v.get("material_as_printed") or v.get("row_label") or v.get("column") or v.get("quantity") or ""
     val = f"{v.get('value_as_printed', '')}" + (f" {v['unit']}" if v.get("unit") else "")
@@ -73,7 +90,7 @@ def build(root):
             needs.append({
                 "id": n["need_id"], "name": n.get("need", n["need_id"]), "question": n.get("question", ""),
                 "headline": (n.get("headline") or {}).get("text", ""),
-                "found_sentence": found.get("sentence", ""), "printed_sentence": found.get("printed_values_sentence", ""),
+                "found_sentence": positive(found.get("sentence", "")), "printed_sentence": found.get("printed_values_sentence", ""),
                 "all_q_sentence": found.get("all_questions_sentence", "") if nq else "", "n_all_q": nq,
                 "criteria_sentence": crit.get("sentence", ""), "n_criteria": (crit.get("counts") or {}).get("n_criterion_findings", 0),
                 "entries": entries,
@@ -81,7 +98,10 @@ def build(root):
             texts += [needs[-1]["headline"]]
         out[s["id"]] = {"scenario": s["id"], "label": s.get("label", s["id"]), "needs": needs,
                         "order_rule": meta.get("order_rule", {}).get("text", ""),
-                        "team_output": meta.get("team_output", ""), "not_guidance": meta.get("not_research_guidance", ""),
+                        # the human lead's decision of 16:35 (all notices worded positively): the page prints these two
+                        # lines instead of the file's _meta.team_output and _meta.not_research_guidance
+                        "team_output": "Groups, order, headlines and counts are Team RAPID's computation from the files the data role names in this file.",
+                        "ai_note": "Read by an AI agent.",
                         "source": "data/pipeline/results_by_need.json"}
     # the page adds no sentence of its own to these texts; scan the data role's headlines anyway
     for t in texts:

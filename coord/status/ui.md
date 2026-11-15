@@ -1,9 +1,17 @@
 ---
 role: ui
-updated: 2026-11-15 16:28 KST
+updated: 2026-11-15 16:49 KST
 state: working
 blocked_on: none
 ---
+Now (15 Nov, 16:49): human lead: "not operational fire-safety guidance" removed too. Masthead and footer notices on both pages are positive ("Research exploration tool built on NASA Physical Sciences Informatics (PSI) data."; "Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data."), meta descriptions likewise; request 1638 items 1 to 3 done by ui, 4 and 5 remain with pm.
+
+Now (15 Nov, 16:46): the human lead asked the ui session to remove "and it is not endorsed by NASA". Done in the masthead and footer notices of `index.html` and `how.html` and in the method page's meta description (the footer stays identical on both pages, build check passes); pm told in request 1638 (merge `catalog-filter` before editing those lines; `README.md` line 17 is pm's).
+
+Now (15 Nov, 16:43): sync; no new request to ui. Closed 1549 (pm's third pass of the texts: config 1.5.2, parity 106/106, "below 85.8 kPa"; the two "1.5.1" left are version history). Waiting on pm: 1638 and 1624 (positive notices in the shell, how.html, `data/insights`; `pile_wording.md`), 1146 (`assistant_recorded.json`).
+
+Now (15 Nov, 16:38): **human lead's decision in the ui session (about 16:35): every notice worded positively, the footer included**; one positive statement that scores, order and counts are Team RAPID's computation stays (§5), AI labels stay (§4). ui rewrote its remaining disclaimer sentences (video side pilot, need-reference note, tests status note, three piles header, small print and reading-order header, results-first small print). Request 1638 to pm: the masthead and footer notices, how.html and `data/insights` text, and recording the decision in `coord/decisions.md`.
+
 Now (15 Nov, 16:28): sync. main `b75703b` (pm: "match score" in app.js and `data/insights`) merged; its two lines in `web/app.js` conflicted with ui's 1619 change of the same lines, resolved by keeping ui's version (pm's renames plus the tooltip and the shorter tags). pm's 16:26 decision says the "not a NASA result" notes stay, while catalog 1619 relays the human lead's 16:18 instruction to drop such negatives; ui followed 1619 and noted the difference in request 1624; pm's footer keeps the §5 "not a NASA result" clause. Build exit 0, 0 broken joins, parity 106/106.
 
 Now (15 Nov, 16:24): **catalog 1619 done** (human lead 16:18): "team score" is "match score" on the cards, in At a glance and in the table header (with the tooltip), the AI tags are "catalog values AI-extracted" and "AI-generated", and the notes above the cards, under the table and in results-first are worded positively (the §5 statement stays next to the scores). Request 1624 to pm: the same rule for sentences the page prints from pm's `pile_wording.md`, pm's `scenarios.json` ("team score" 8 times) and data's `results_by_need.json` `_meta`.
