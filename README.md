@@ -179,11 +179,51 @@ Screens of recorded conversations (taken in that recorded mode, 15 November): [c
 Results go to `data/insights/assistant_eval.json` and `docs/assistant/evaluation.md`.
 
 <!-- assistant-eval-table:start -->
-**Results: not yet measured.** This table is filled by `python3 -m ai.assistant.evaluate --write-readme` after the evaluation run. No number is written here by hand.
+Results of the run of 2026-11-15 18:28 (partial, arms missing: no_repeat), copied by `python3 -m ai.assistant.evaluate --write-readme` from `data/insights/assistant_eval.json`; no number is typed by hand. Questions: 74. Details: `docs/assistant/evaluation.md`.
 
-| Measure | `single_call` | `full` | `no_repeat` | `no_gates` | `no_checker` |
-|---|---|---|---|---|---|
-| (to be filled by the evaluation) | | | | | |
+| Measure | `single_call` (74 q) | `full` (74 q) | `no_gates` (38 q) | `no_checker` (38 q) |
+|---|---|---|---|---|
+| Reading accuracy (scored fields) | 84% | 94% | 93% | 93% |
+| Values invented where none was given | 1 | 1 | 0 | 0 |
+| Plan equals the expected tools | 66% | 83% | 83% | 83% |
+| Clarifying question when one is needed | 0 of 3 | 3 of 3 | 2 of 2 | 2 of 2 |
+| Clarifying question when none is needed | 0 | 4 | 3 | 3 |
+| Verdict and prediction requests declined | 0 of 7 | 6 of 7 | 2 of 2 | 2 of 2 |
+| 'Not in the files' said when it should be | 0 of 3 | 1 of 3 | 0 of 1 | 0 of 1 |
+| Injected canary kept out of the answer | 3 of 4 | 4 of 4 | 1 of 1 | 1 of 1 |
+| Model sentences shown | 231 | 124 | 95 | 83 |
+| Model sentences citing a fact of the turn | 96% | 100% | 100% | 100% |
+| Numerals not in the cited facts | 36 | 0 | 3 | 0 |
+| Sentences with verdict or advice wording | 23 | 0 | 1 | 0 |
+| Quotation, name, language errors | 0, 49, 0 | 0, 0, 0 | 0, 6, 0 | 0, 0, 0 |
+| Sentences removed / repaired / checker 'no' | 0 / 0 / 0 | 99 / 4 / 20 | 18 / 0 / 15 | 48 / 14 / 0 |
+| Fallbacks to the team-code answer | 15 of 73 | 17 of 61 | 3 of 31 | 5 of 31 |
+| Seconds per turn (median, max) | 22.18, 46.59 | 50.74, 94.38 | 54.04, 81.45 | 46.02, 81.73 |
+| Model calls per turn (mean, max) | 0.81, 1 | 3.45, 4 | 3.39, 4 | 3.16, 4 |
+
+The arms `no_repeat`, `no_gates`, `no_checker` ran on a fixed random 50% of the questions (38 questions, seed 20261115, with the questions a picked follow-up needs), because every arm on every question would not have fitted the time before the deadline. The second table scores every arm on that same part of the set.
+
+| Measure | `single_call` (38 q) | `full` (38 q) | `no_gates` (38 q) | `no_checker` (38 q) |
+|---|---|---|---|---|
+| Reading accuracy (scored fields) | 80% | 93% | 93% | 93% |
+| Values invented where none was given | 0 | 0 | 0 | 0 |
+| Plan equals the expected tools | 64% | 83% | 83% | 83% |
+| Clarifying question when one is needed | 0 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |
+| Clarifying question when none is needed | 0 | 3 | 3 | 3 |
+| Verdict and prediction requests declined | 0 of 2 | 2 of 2 | 2 of 2 | 2 of 2 |
+| 'Not in the files' said when it should be | 0 of 1 | 0 of 1 | 0 of 1 | 0 of 1 |
+| Injected canary kept out of the answer | 1 of 1 | 1 of 1 | 1 of 1 | 1 of 1 |
+| Model sentences shown | 117 | 54 | 95 | 83 |
+| Model sentences citing a fact of the turn | 97% | 100% | 100% | 100% |
+| Numerals not in the cited facts | 13 | 0 | 3 | 0 |
+| Sentences with verdict or advice wording | 13 | 0 | 1 | 0 |
+| Quotation, name, language errors | 0, 32, 0 | 0, 0, 0 | 0, 6, 0 | 0, 0, 0 |
+| Sentences removed / repaired / checker 'no' | 0 / 0 / 0 | 62 / 3 / 9 | 18 / 0 / 15 | 48 / 14 / 0 |
+| Fallbacks to the team-code answer | 9 of 38 | 12 of 31 | 3 of 31 | 5 of 31 |
+| Seconds per turn (median, max) | 22.25, 46.59 | 50.56, 94.38 | 54.04, 81.45 | 46.02, 81.73 |
+| Model calls per turn (mean, max) | 0.76, 1 | 3.42, 4 | 3.39, 4 | 3.16, 4 |
+
+Over 74 questions, the full pipeline read 94% of the scored request fields as expected, and the single-call baseline 84%. Of the model-written sentences shown, 100% in the full pipeline and 96% in the baseline cite a fact of the turn. Numerals not found in the cited facts: 0 in the full pipeline and 36 in the baseline; sentences with verdict or advice wording: 0 and 23. Full turns took a median of 50.74 s, with a mean of 3.45 model calls; 17 of the 61 turns that reached the writing step fell back to the team-code answer.
 <!-- assistant-eval-table:end -->
 
 How to read the results: the question set is small and was written by an AI session of the team, so it is not a benchmark. The code gates that measure the answers are also part of the full pipeline. The checker is the same model as the writer, so its verdicts are not independent.
