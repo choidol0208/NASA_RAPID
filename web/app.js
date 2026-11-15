@@ -1227,15 +1227,15 @@ async function renderPiles(out, pipe) {
     const barEl = barOf(n);
     const pile2 = [...n.pile2];
     const inside = (n.segments.find((s) => s.placement === "inside") || { n: 0 }).n;
-    const p1 = h("div", { class: "pile" }, h("h4", {}, "In NASA's tables"), list(n.pile1));
-    const p2 = h("div", { class: "pile" }, h("h4", {}, "In the archive, not in a table"),
+    const p1 = h("div", { class: "pile pile-tables" }, h("h4", {}, "In NASA's tables"), list(n.pile1));
+    const p2 = h("div", { class: "pile pile-archive" }, h("h4", {}, "In the archive, not in a table"),
       pile2.length ? list(pile2) : (n.order && n.order.length) ? null : h("p", { class: "gap" }, !inside ? "No test of this question is inside these ranges, so no file group is listed for one."
         : n.pile2_from_chain ? "No file group of the tests counted here has a column seen for a value this question lacks."
         : "The file groups of these tests are listed once the data role's question chain covers this environment."),
       n.order && n.order.length ? h("div", { class: "reading-order" }, h("h5", {}, "Where to read first"),
         ...(doc.order_header || []).map((s) => h("p", { class: "gap" }, s)), list(n.order)) : null,
       n.shelf.length ? h("div", { class: "shelf" }, h("h5", {}, "Not found in the files opened"), list(n.shelf)) : null);
-    const p3 = n.pile3.length ? h("div", { class: "pile" }, h("h4", {}, doc.pile3_label), list(n.pile3)) : null;
+    const p3 = n.pile3.length ? h("div", { class: "pile pile-none" }, h("h4", {}, doc.pile3_label), list(n.pile3)) : null;
     // open the first question of the user's kind, and any question with tests inside the ranges
     const open = n.id === focus[0] || inside > 0 || (!focus.length && i === 0);
     const d = h("details", { class: "pile-need" + (focus.includes(n.id) ? " is-focus" : "") },

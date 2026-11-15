@@ -897,3 +897,35 @@ th { background: var(--paper); font: 600 13px/1.4 var(--display); color: var(--i
 .how-strip .btn { background: var(--blue); border-color: var(--blue); color: var(--white) !important; }
 .how-strip .btn:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
 @media print { .masthead-how { display: none !important; } }
+
+/* ---- "Where the data are": how to read it (15 November, 19:55; the human lead: "it is not clear at once how to read
+   this part"). A three-step guide above the blocks; inside a block each of the three parts has a number and a colour. */
+.read-guide { margin: 0 0 var(--s4); padding: var(--s4) var(--s5); background: var(--t-data-soft); border: 1px solid #dccff5; border-radius: var(--r); }
+.read-guide-title { margin: 0 0 var(--s2); font: 700 13px/1.4 var(--display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--t-data); }
+.read-guide ol { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s4) var(--s5); counter-reset: rg; }
+.read-guide li { position: relative; padding-left: 34px; font-size: 14px; line-height: 1.5; color: var(--ink-2); counter-increment: rg; }
+.read-guide li::before { content: counter(rg); position: absolute; left: 0; top: 0; width: 24px; height: 24px; border-radius: 50%; background: var(--t-data); color: var(--white); font: 700 13px/24px var(--display); text-align: center; }
+.read-guide li > b { display: block; margin-bottom: 2px; color: var(--ink); font: 700 15px/1.3 var(--display); }
+.rg-key { white-space: normal; }
+.rg-key::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: 5px; border-radius: 50%; vertical-align: 0; }
+.rg-in::before { background: var(--blue); }
+.rg-out::before { background: #c9cfd6; }
+.rg-un::before { background: #d08a16; }
+.rg-part { display: flex; align-items: baseline; gap: 7px; margin-top: 4px; color: var(--ink); }
+.rg-part i, .pile > h4::before { flex: none; display: inline-block; width: 20px; height: 20px; border-radius: 6px; font: 700 12px/20px var(--display); font-style: normal; text-align: center; color: var(--white); }
+.rg-p1 i, .pile-tables > h4::before { background: var(--t-found); }
+.rg-p2 i, .pile-archive > h4::before { background: var(--t-data); }
+.rg-p3 i, .pile-none > h4::before { background: var(--t-stops); }
+.pile-need .pile { margin: var(--s4) 0 var(--s2); padding: 2px 0 2px var(--s4); border-left: 3px solid var(--line); }
+.pile-need .pile-tables { border-left-color: var(--t-found); }
+.pile-need .pile-archive { border-left-color: var(--t-data); }
+.pile-need .pile-none { border-left-color: var(--t-stops); }
+.pile-need .pile > h4 { display: flex; align-items: center; gap: 8px; margin: 0 0 var(--s1); font: 700 16px/1.3 var(--display); }
+.pile-tables > h4::before { content: "1"; }
+.pile-archive > h4::before { content: "2"; }
+.pile-none > h4::before { content: "3"; }
+/* the lines about the archive: the first one (the environment's ranges) leads, the others are the fine print */
+.piles .pile-header p:first-child { font-weight: 700; color: var(--ink); }
+.piles .pile-header p:not(:first-child) { font-size: 13px; line-height: 1.5; color: var(--ink-3); max-width: 110ch; }
+@media (max-width: 900px) { .read-guide ol { grid-template-columns: 1fr; } .read-guide { padding: var(--s3) var(--s4); } }
+@media print { .read-guide { display: none; } }

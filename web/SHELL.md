@@ -119,3 +119,8 @@ The human lead: the page is clean, but everything looks alike and it is not clea
 - **"How it works"** is the one filled, light control in the dark app bar, with an icon. The start page has a second, labelled button under "About this page", and the button of the strip at the foot of the dashboard is filled.
 
 Checked in a browser at 1280 px and 375 px: no sideways scroll; the section under the bar does not move when the bar sticks; the descriptions come back at the resting place.
+
+## "Where the data are": a reading guide (15 November, 19:50)
+
+The human lead: it is not clear at once how to read this part. `index.html` now holds a static three-step guide above `#piles-body` (one block per question and what the bar's colours mean; the three parts of a block; what the lines under the guide are). In `app.js` the three parts of a block carry a class each (`pile-tables`, `pile-archive`, `pile-none`; the class `pile` stays), so that `shell.css` gives each its number and colour. No sentence that `web/raw_piles.py` writes was changed. The lines about the archive stay; the first one leads and the others are set smaller.
+

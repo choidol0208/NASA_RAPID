@@ -156,6 +156,18 @@
       <h2 id="piles-title">Where the data are: in NASA's tables, in the archive, or no record</h2>
       <p class="team-note">Built by the team's code from PSI's file listing and NASA's tables; every sentence is a fixed template filled with counts. No language model.</p>
     </div>
+    <!-- Wayfinding (15 November): how to read this tab, in three steps. The parts it names are the labels app.js prints. -->
+    <div class="read-guide" role="note" aria-label="How to read this tab">
+      <p class="read-guide-title">How to read this tab</p>
+      <ol>
+        <li><b>One block per fire-safety question.</b> The bar on a block shows every recorded test of that question: <span class="rg-key rg-in">inside your oxygen and pressure ranges</span>, <span class="rg-key rg-out">outside by a recorded value</span>, or <span class="rg-key rg-un">not placed, because NASA's table lacks its oxygen or its pressure</span>.</li>
+        <li><b>Open a block.</b> It answers in up to three parts:
+          <span class="rg-part rg-p1"><i>1</i> In NASA's tables: data ready to use</span>
+          <span class="rg-part rg-p2"><i>2</i> In the archive, not in a table: raw files to read next</span>
+          <span class="rg-part rg-p3"><i>3</i> No record in PSI: what PSI does not hold</span></li>
+        <li><b>The lines under this box</b> give this environment's ranges, the size of NASA's archive and how the files were matched to tests.</li>
+      </ol>
+    </div>
     <div id="piles-body"></div>
   </section>
 
