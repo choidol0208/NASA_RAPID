@@ -588,6 +588,31 @@ class Review1115(unittest.TestCase):
         self.assertIn(out["results"][0]["investigation_id"], ("SAME", "SAME-R"))
 
 
+class Review1115Decisions(unittest.TestCase):
+    """The human lead's decisions on review items B1-B5 (2026-11-15): only B3 changes the output."""
+
+    def test_no_material_warning(self):
+        codes = lambda q: [w["code"] for w in scorer.rank(q)["warnings"]]
+        self.assertIn("no_material", codes("lunar habitat"))
+        self.assertIn("no_material", codes("smoke detector on ISS"))
+        for q in ("lunar habitat cotton fabric", "lunar habitat solid", "CO2 suppression of heptane fire"):
+            self.assertNotIn("no_material", codes(q), q)
+
+    def test_warning_changes_no_score(self):
+        cfg = copy.deepcopy(CFG)
+        cfg["warnings"].pop("no_material")
+        for q in ("ISS", "lunar habitat"):
+            a, b = scorer.rank(q), scorer.rank(q, config=cfg)
+            self.assertEqual([(r["config_id"], r["score"]) for r in a["ranking"]], [(r["config_id"], r["score"]) for r in b["ranking"]])
+            self.assertNotIn("no_material", [w["code"] for w in b["warnings"]])
+
+    def test_decisions_are_recorded(self):
+        self.assertIn("not a veto", CFG["gate"]["decisive_is_not_a_veto"])
+        self.assertIn("pyrolysis", CFG["profiles"]["detection"]["scope"])
+        self.assertIn("one question only", CFG["_about"]["formula_scope"])
+        self.assertEqual(CFG["gate"]["min_similarity"], 0.2)  # B1: gate kept
+
+
 class AhpWeights(unittest.TestCase):
     """Config 1.2.0: the profile weights are the AHP derivation of scoring/ahp_judgements.json."""
 

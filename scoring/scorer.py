@@ -738,6 +738,8 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
         warnings.append({"code": "partial_gravity", "message": W["partial_gravity"]})
     elif g == "earth":
         warnings.append({"code": "earth_gravity", "message": W["earth_gravity"]})
+    if W.get("no_material") and not any(sc.get(f) for f in ("fuel_phase", "fuel_class", "fuel_material")):
+        warnings.append({"code": "no_material", "message": W["no_material"]})  # review B3: the fuel is not compared
     # Highest O2 of any surrounding atmosphere tested (oxidizer streams of inverse flames excluded).
     o2s = [(_f(c.get("o2_max_pct")), c) for c in cfgs
            if _f(c.get("o2_max_pct")) is not None and (c.get("o2_reference") or "") != "oxidizer_stream"]

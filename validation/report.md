@@ -1,27 +1,27 @@
 # Catalog filter validation report
 
-- Run: 2026-11-15 10:07 · target `scoring.scorer:rank`
-- Result: **43/43 scenarios passed**
+- Run: 2026-11-15 15:20 · target `scoring.scorer:rank`
+- Result: **45/45 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
 |---|---|---|---|---|---|
-| R01 | rough_input | ISS | BASS-II, SAFFIRE-I, SAFFIRE-II |  | PASS |
-| R02 | rough_input | 우주정거장 (Korean: space station) | BASS-II, SAFFIRE-I, SAFFIRE-II |  | PASS |
-| R03 | rough_input | moon | FLEX, ACME-CFI-G, ACME-BRE | partial_gravity | PASS |
+| R01 | rough_input | ISS | BASS-II, SAFFIRE-I, SAFFIRE-II | no_material | PASS |
+| R02 | rough_input | 우주정거장 (Korean: space station) | BASS-II, SAFFIRE-I, SAFFIRE-II | no_material | PASS |
+| R03 | rough_input | moon | FLEX, ACME-CFI-G, ACME-BRE | partial_gravity, no_material | PASS |
 | R04 | rough_input | fabric | BASS, BASS-II, SAFFIRE-I |  | PASS |
-| R05 | rough_input | smoke | SAME, SAME-R, SAME-SIM |  | PASS |
+| R05 | rough_input | smoke | SAME, SAME-R, SAME-SIM | no_material | PASS |
 | R06 | rough_input | (empty) |  | need_input | PASS |
-| R07 | rough_input | ISS at 30% O2 and 10.2 psi | FLEX, ACME-CFI-G, ACME-BRE |  | PASS |
+| R07 | rough_input | ISS at 30% O2 and 10.2 psi | FLEX, ACME-CFI-G, ACME-BRE | no_material | PASS |
 | P01 | prevention | ISS cotton fabric | BASS-II, SAFFIRE-I, SAFFIRE-II |  | PASS |
 | P02 | prevention | lunar habitat cotton fabric | SAFFIRE-II, SAFFIRE-I, ACME-BRE | partial_gravity | PASS |
 | P03 | prevention | 달 기지 면직물 (Korean: lunar base cotton fabric) | SAFFIRE-II, SAFFIRE-I, ACME-BRE | partial_gravity | PASS |
 | P04 | prevention | stagnant PMMA | BASS-II, ACME-BRE, BASS-FGM-MODEL |  | PASS |
 | P05 | prevention | 달 기지 아크릴 정체 구역 (Korean: lunar base acrylic stagnant zone) | ACME-BRE, BASS-II, FLEX | partial_gravity | PASS |
 | P06 | prevention | propane 40% oxygen | ACME-CFI-G, ACME-FLAME-DESIGN, ACME-BRE |  | PASS |
-| D01 | detection | smoke detector on ISS | SAME, SAME-R, SAME-SIM |  | PASS |
+| D01 | detection | smoke detector on ISS | SAME, SAME-R, SAME-SIM | no_material | PASS |
 | D02 | detection | wire insulation overheating smoke | SAME, SAME-R, SAME-SIM |  | PASS |
-| D03 | detection | CO detection on ISS | BASS-II, SAFFIRE-I, SAFFIRE-II |  | PASS |
-| D04 | detection | toxic gas and smoke detection in a spacecraft | BASS-II, SAME, SAME-R |  | PASS |
+| D03 | detection | CO detection on ISS | BASS-II, SAFFIRE-I, SAFFIRE-II | no_material | PASS |
+| D04 | detection | toxic gas and smoke detection in a spacecraft | BASS-II, SAME, SAME-R | no_material | PASS |
 | S01 | suppression | CO2 suppression of heptane fire | FLEX, FLEX-2, CFI |  | PASS |
 | S02 | suppression | nitrogen extinguish fabric fire ISS | BASS, BASS-II, ACME-BRE |  | PASS |
 | L01 | liquid | liquid fuel leak heptane ISS | FLEX, FLEX-2, CFI |  | PASS |
@@ -29,23 +29,25 @@
 | F02 | fuel_phase | gaseous fuel | ACME-CFI-G, ACME-BRE, ACME-FLAME-DESIGN |  | PASS |
 | F03 | fuel_phase | droplet | FLEX, CFI, FLEX-2 |  | PASS |
 | F04 | fuel_phase | liquid fuel lunar habitat | FLEX, FLEX-2, ACME-CFI-G | partial_gravity | PASS |
-| F05 | fuel_phase | inert gas suppression ISS | BASS, FLEX, BASS-II |  | PASS |
-| F06 | fuel_phase | combustion gas detection | BASS-II, DAFT, SAFFIRE-I |  | PASS |
+| F05 | fuel_phase | inert gas suppression ISS | BASS, FLEX, BASS-II | no_material | PASS |
+| F06 | fuel_phase | combustion gas detection | BASS-II, DAFT, SAFFIRE-I | no_material | PASS |
 | F09 | fuel_phase | lunar habitat solid | ACME-BRE, BASS-II, SAFFIRE-II | partial_gravity | PASS |
 | F10 | fuel_phase | 고체 연료 화재 | BASS, BASS-II, SAFFIRE-I |  | PASS |
-| F08 | fuel_phase | CO2 detection | BASS-II, DAFT, SAFFIRE-I |  | PASS |
-| F07 | rough_input | CO2 30% suppression ISS | FLEX, BASS, BASS-II | not_understood | PASS |
-| E01 | equipment | smoke detector for a lunar rover | SAME, SAME-R, FLEX-2 | partial_gravity | PASS |
-| E02 | equipment | fire extinguisher for a Mars habitat | BASS, FLEX, BASS-II | partial_gravity, mars_atmosphere | PASS |
+| F11 | fuel_phase | lunar habitat | FLEX, ACME-CFI-G, ACME-BRE | partial_gravity, no_material | PASS |
+| F12 | fuel_phase | lunar habitat cotton fabric | SAFFIRE-II, SAFFIRE-I, ACME-BRE | partial_gravity | PASS |
+| F08 | fuel_phase | CO2 detection | BASS-II, DAFT, SAFFIRE-I | no_material | PASS |
+| F07 | rough_input | CO2 30% suppression ISS | FLEX, BASS, BASS-II | not_understood, no_material | PASS |
+| E01 | equipment | smoke detector for a lunar rover | SAME, SAME-R, FLEX-2 | partial_gravity, no_material | PASS |
+| E02 | equipment | fire extinguisher for a Mars habitat | BASS, FLEX, BASS-II | partial_gravity, no_material, mars_atmosphere | PASS |
 | E03 | equipment | crew garment for a Moon base | BASS-II, SAFFIRE-II, ACME-BRE | partial_gravity | PASS |
-| E04 | equipment | battery enclosure for the ISS | BASS-II, SAFFIRE-I, SAFFIRE-II | not_understood | PASS |
-| E05 | equipment | water mist suppression system for a lunar habitat | FLEX, ACME-CFI-G, ACME-FLAME-DESIGN | not_understood, partial_gravity | PASS |
+| E04 | equipment | battery enclosure for the ISS | BASS-II, SAFFIRE-I, SAFFIRE-II | not_understood, no_material | PASS |
+| E05 | equipment | water mist suppression system for a lunar habitat | FLEX, ACME-CFI-G, ACME-FLAME-DESIGN | not_understood, partial_gravity, no_material | PASS |
 | E06 | equipment | glove box |  | need_input, not_understood | PASS |
-| Q01 | sentence | 산소 30% 기압 70 kPa의 달 기지 (Korean: lunar base at 30% oxygen and air pressure 70 kPa) | FLEX, ACME-CFI-G, ACME-BRE | partial_gravity | PASS |
-| Q02 | sentence | spacecraft cabin | BASS-II, SAFFIRE-I, SAFFIRE-II |  | PASS |
-| Q03 | sentence | a base on a planet whose atmosphere has 30% oxygen | ACME-CFI-G, FLEX, ACME-BRE | partial_gravity | PASS |
-| T01 | trap | spacesuit | ACME-BRE, ACME-CFI-G, FLEX | o2_above_all | PASS |
-| T02 | trap | Mars base | BASS, BASS-II, SAFFIRE-I | partial_gravity, mars_atmosphere | PASS |
+| Q01 | sentence | 산소 30% 기압 70 kPa의 달 기지 (Korean: lunar base at 30% oxygen and air pressure 70 kPa) | FLEX, ACME-CFI-G, ACME-BRE | partial_gravity, no_material | PASS |
+| Q02 | sentence | spacecraft cabin | BASS-II, SAFFIRE-I, SAFFIRE-II | no_material | PASS |
+| Q03 | sentence | a base on a planet whose atmosphere has 30% oxygen | ACME-CFI-G, FLEX, ACME-BRE | partial_gravity, no_material | PASS |
+| T01 | trap | spacesuit | ACME-BRE, ACME-CFI-G, FLEX | no_material, o2_above_all | PASS |
+| T02 | trap | Mars base | BASS, BASS-II, SAFFIRE-I | partial_gravity, no_material, mars_atmosphere | PASS |
 | T03 | trap | hybrid rocket combustion chamber fire |  | out_of_scope | PASS |
 | T04 | trap | 로켓 추진제 화재 위험 (Korean: rocket propellant fire hazard) |  | out_of_scope | PASS |
 
@@ -59,7 +61,7 @@
 | S01 | FLEX | stable |
 | L01 | FLEX | stable |
 
-## Weight sensitivity (each prevention weight x0.5 and x1.5, rescaled to sum 1; config 1.5.1)
+## Weight sensitivity (each prevention weight x0.5 and x1.5, rescaled to sum 1; config 1.5.2)
 
 - 44 of 48 variants keep the same top 3 in the same order; 1 keep the same three in another order; rank 1 changes in 3.
 
@@ -70,7 +72,7 @@
 | lunar habitat cotton fabric | o2 | x1.5 | ACME-BRE, SAFFIRE-II, SAFFIRE-I (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | same set; rank 1 changed |
 | lunar habitat cotton fabric | fuel | x0.5 | BASS-II, SAFFIRE-II, ACME-BRE (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | changed; rank 1 changed |
 
-## Sensitivity to the other values (each x0.5 and x1.5 on the four demo queries; config 1.5.1)
+## Sensitivity to the other values (each x0.5 and x1.5 on the four demo queries; config 1.5.2)
 
 - 124 of 136 runs keep the same top 3 in the same order; 3 keep the same three in another order; rank 1 changes in 5.
 
@@ -94,7 +96,7 @@
 | research-purpose table (`similarity.role`) | 8 | — |
 | data-availability table (`evidence.data_availability`) | 7 | x1.5 lunar habitat: ACME-BRE, FLEX, ACME-CFI-G (rank 1) |
 
-## Weighting by purpose (config 1.5.1)
+## Weighting by purpose (config 1.5.2)
 
 | Profile | Queries read as this purpose | One-at-a-time x0.5/x1.5: same top 3 | rank 1 changes | Scheme | Same top 3 | Same rank 1 |
 |---|---|---|---|---|---|---|
@@ -129,7 +131,7 @@ Rows where another scheme changes the top 3:
 - suppression, prevention weights, "inert gas suppression ISS": BASS, BASS-II, SAFFIRE-I (configured: BASS, FLEX, BASS-II)
 - suppression, detection weights, "nitrogen extinguish fabric fire ISS": BASS, BASS-II, SAFFIRE-I (configured: BASS, BASS-II, ACME-BRE)
 
-## Weight uncertainty: SMAA with the order of importance only (config 1.5.1, 300 draws per profile, seed 20261114)
+## Weight uncertainty: SMAA with the order of importance only (config 1.5.2, 300 draws per profile, seed 20261114)
 
 | Profile | Query | Top 3 with the profile's weights | Same rank 1 | Same top 3 (as a set) | Top-3 acceptability of each investigation (10% or more) |
 |---|---|---|---|---|---|

@@ -351,6 +351,18 @@ All are in `python3 validation/sensitivity.py` and `validation/report.md`.
 - **Missing not at random** [D8]: when the value decides whether it is recorded, a complete-case analysis is biased. Ranking therefore uses the documented value (informed imputation), and the compliance line says that it is one.
 - **Verification method per requirement** [SE1]: test, analysis, inspection and demonstration are different methods. The `basis` field records which one stands behind each line.
 
+**Decisions on the review of 2026-11-15 (config 1.5.1 and 1.5.2, the human lead):**
+- Fixed:
+  - A1: the day tables are summary tables;
+  - A2: near-ties go to the larger recorded share first;
+  - A3: "solid" is read;
+  - B3: a `no_material` warning.
+- Kept, with the reason recorded in `METHOD.md` 1.2, 1.5, 1.7 and 1.8:
+  - B1: the gate;
+  - B2: no cap on documented values;
+  - B4: no score comparison across questions;
+  - B5: detection pressure stays in class 3.
+
 **Checks:**
 - 71 unit tests (`FireSignatures`, `ComplianceBasis`).
 - 41 validation scenarios (D03, D04, F08 new; F06's expectation changed from SAME to BASS-II, with the reason in `scenarios.json`).
