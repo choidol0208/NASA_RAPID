@@ -1,12 +1,12 @@
 ---
 role: catalog
-updated: 2026-11-15 10:19 KST
+updated: 2026-11-15 10:20 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-**Sync 10:19:**
+**Sync 10:20:**
 - Merged `main` (no change) and `catalog-filter` (fast-forward to `086a0f8`: ui merged `catalog-scoring`, so `catalog-filter` now runs 1.5.1).
 - Inbox empty. Requests 1012 to ui and pm are not answered yet.
 - Checks: 76 unit tests, 43 of 43 scenarios, parity 104 of 104, source check clean, reading order up to date. No demo top-3 change since 10:13.
