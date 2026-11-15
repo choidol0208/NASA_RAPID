@@ -22,12 +22,11 @@ How the catalog is built from the PSI tables (grouping, ranges, unit conversion,
 - **Disagreements:** where the catalog differs from an original, or two records disagree, `source_notes` says so (for example the Saffire-I record's dates, or the thickness units in the Saffire tables).
 - **Independent check:** `python3 validation/check_catalog_sources.py` compares the catalog with the NASA records and tables directly and writes `validation/catalog_source_check.md`.
 
-## Human verification
+## Source sheet for the demo values
 
-`validation/verification_sheet.csv` lists the catalog values behind the demo rankings (`ISS`, `lunar habitat`, `ISS cotton fabric`, `lunar habitat cotton fabric`): fuel, oxygen, pressure and flow ranges, and test counts. Each value comes with the NASA table rows and raw cells, or the PSI record text, where a person can check it.
+`validation/verification_sheet.csv` lists the catalog values behind the demo rankings (`ISS`, `lunar habitat`, `ISS cotton fabric`, `lunar habitat cotton fabric`): fuel, oxygen, pressure and flow ranges, and test counts. Each value comes with the NASA table rows and raw cells, or the PSI record text, where it is found.
 - Rebuild it with `python3 validation/build_verification_sheet.py` after any catalog or scorer change.
-- A person fills in `checked_by`, `matches_source` and `comment`.
-- A row becomes `human_verified` only through `scripts/build_catalog.py`.
+- `validation/check_catalog_sources.py` checks every ranking value against its NASA source by code.
 - Row numbers are CSV row numbers (header = row 1), the same numbers that `source_notes` and `data/pipeline/*.csv` use.
 
 ## Rebuilding

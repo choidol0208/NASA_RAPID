@@ -28,7 +28,7 @@ From the environment and conditions a user gives, the filter finds the most simi
 | `validation/run_validation.py` | Runs the scenarios, the weight stability check and the sensitivity checks; writes `validation/report.md` |
 | `validation/sensitivity.py` | Each weight and each other value halved and raised by half; weighting by purpose against equal and rank-order-centroid weights; SMAA over the order of importance |
 | `validation/check_catalog_sources.py` | Checks the catalog against the NASA records and tables directly; writes `validation/catalog_source_check.md` |
-| `validation/build_verification_sheet.py` | Writes `validation/verification_sheet.csv`: the catalog values behind the demo rankings, with the NASA rows to check them against |
+| `validation/build_verification_sheet.py` | Writes `validation/verification_sheet.csv`: the catalog values behind the demo rankings, each with the NASA rows where it is found |
 | `web/scorer.js`, `web/parity_check.py` | The JavaScript port used by the page, and the check that Python and JavaScript give the same results (99 queries) |
 | `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py` | Rebuild the catalog from the PSI sources |
 | `scoring/MODEL_BASIS.md` | What each scoring rule rests on, checked against a combustion textbook (Turns 2012), what stays the team's choice, and the two changes applied in config 1.1.0 |

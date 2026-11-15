@@ -3,7 +3,7 @@ from: catalog
 to: pm
 opened: 2026-11-15 15:20 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Config 1.5.2: decisions on review B1-B5 for the submission text
 
