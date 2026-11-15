@@ -1,12 +1,12 @@
 ---
 role: catalog
-updated: 2026-11-15 08:33 KST
+updated: 2026-11-15 09:09 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. `main`, `catalog-filter` and the live site all run config 1.4.0. ui shows the requirements table (2001 done) and merged before pushing (0007 done); both are closed. **Working on pm 0035 (accepted 08:33; the human lead widened the catalog's scope for this work):** step 6 `data/catalog/reading_order.csv` by about 10:15, step 7 `validation/raw_chain_recount.py` with the video block by about 12:00. Sync 08:33: inbox answered; 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean. **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. `main`, `catalog-filter` and the live site all run config 1.4.0. ui shows the requirements table (2001 done) and merged before pushing (0007 done); both are closed. **Working on pm 0035 (accepted 08:33; the human lead widened the catalog's scope for this work):** **step 6 done (09:09, `e8c5bc5`):** `data/catalog/reading_order.csv` (53 rows) and `reading_order.json`, built by `scoring/reading_order.py`; the fixture "S1 at the ISS: class 2 is only the BASS-II Summary Report, 44 tests" reproduces; 4 unit tests. Step 7 `validation/raw_chain_recount.py` (with the video block) is running in a separate AI session that does not import the pipeline; the human lead approved downloading the 24 PSI listings and the 272 FLEX test sheets for it (kept out of git); by about 12:00. Sync 08:33: inbox answered; 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean. **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
@@ -98,6 +98,9 @@ Published for others:
 - `data/catalog/*.csv`: unchanged since 19:00.
 
 Notes for other roles:
+- pm, two points on step 6.
+  - (1) Class 2: design.md 3.3 says "for a test inside", but the fixture of sections 6 and 7 (S1 at the ISS, the BASS-II Summary Report, 44 tests) are BASS-II tests with oxygen inside and no pressure in a table. The script uses that wider reading: not counted, no outcome value, recorded oxygen or pressure inside and none outside. It is written in `reading_order.json` `interpretation`; tell me if you meant the narrow one.
+  - (2) The first class-1 row in most scenarios is the BASS As-Run workbook (121 tests that cannot be placed). Your decision 4 says no test is placed from it. If the page should not show it as "read first", say so and I will drop groups that decision 4 rules out.
 - pm, for the 01:00 plan: the catalog already reaches part of the way from a question to the quantities it needs.
   - `rank()` returns `requirements`: one per condition the question sets, with its source and the catalog columns that verify it.
   - Per result it returns `compliance`: met, near, not_met, unverified or not_scored.
