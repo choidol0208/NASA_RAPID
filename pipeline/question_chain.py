@@ -73,8 +73,7 @@ RAW_VALUE_VARIABLE = {
     "saffire_ambient_pressure": {"*": "pressure_kpa"},
     "same_particle_size_statistics": {"*": "smoke_particle_size_um"},
     "flex_test_sheet": {"Dext (mm)": "extinction_diameter_mm", "Pressure (atm)": "pressure_kpa",
-                        "O2 Mole Fraction": "o2_pct", "D0 (mm)": "initial_diameter_mm",
-                        "kavg (mm2/s)": "burning_rate_constant_mm2_s"},
+                        "O2 Mole Fraction": "o2_pct"},
 }
 # the BASS as-run workbook (bass_as_run_cabin_block) is read but gives no location: the file does
 # not state where its oxygen and pressure were measured (code location_not_stated)
@@ -159,7 +158,7 @@ def build(tests, need_tests, scen_tests, values_long, raw_values, videos, spec_d
         m = RAW_VALUE_VARIABLE.get(r["extraction"])
         if not m or not r["test_id"]:
             continue
-        var = m.get(r["header_as_written"].strip(), m.get("*"))
+        var = m.get(" ".join(r["header_as_written"].split()), m.get("*"))
         if var:
             read[(r["test_id"], var)].append(r)
     best = video_best(videos)

@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 77,
+  "PASS": 79,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 77
+  "checks": 79
  },
  "checks": [
   {
@@ -1606,14 +1606,16 @@
    "verifies": "raw_values.csv: every row names a PSI file id of the listing of its investigation with the listed name and bytes; a test_id is given only with literal link evidence and exists in tests.csv for the same investigation; a series row has n_readings >= 1, min <= first, last <= max as stored numbers, and the rows of the lowest and the highest reading inside its first and last row.",
    "status": "PASS",
    "numbers": {
-    "rows": 9764,
+    "rows": 14085,
     "by_extraction": {
      "saffire_ambient_pressure": 13,
-     "same_particle_size_statistics": 9751
+     "same_particle_size_statistics": 9751,
+     "flex_test_sheet": 4079,
+     "bass_as_run_cabin_block": 242
     },
-    "files": 15,
-    "rows_with_test_id": 6549,
-    "tests_named": 121
+    "files": 288,
+    "rows_with_test_id": 10795,
+    "tests_named": 508
    },
    "failures": 0,
    "failing_examples": []
@@ -1718,7 +1720,7 @@
     "investigations": 24,
     "names_test_files": 12934,
     "opened_files": 219,
-    "values_files": 15,
+    "values_files": 288,
     "archives_listed": 23
    },
    "failures": 0,
@@ -1753,7 +1755,7 @@
    "status": "PASS",
    "numbers": {
     "blocks": 318,
-    "rows": 3734,
+    "rows": 3745,
     "lunar_S1": {
      "cannot_be_placed_from_table": 676,
      "inside": 26,
@@ -1769,7 +1771,7 @@
    "verifies": "question_chain.csv: the location of every quantity of every test recomputed from tests.csv, raw_values.csv, spec/raw_columns.json and spec/sources.json (table cell, value read, column seen, document sentence, not found), aggregated by scenario, need, role, variable, investigation, placement and location; summed over placement the rows equal need_gap_states.csv (required and outcome roles); lunar habitat P1 pressure: raw column 134, document only 129, not found 113.",
    "status": "PASS",
    "numbers": {
-    "keys": 3247,
+    "keys": 3254,
     "need_gap_state_rows": 426,
     "lunar_P1_pressure": {
      "documented_only": 129,
@@ -1811,6 +1813,38 @@
      "one_label": 344,
      "labels_disagree": 6
     }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "R1_flex_test_sheets",
+   "verifies": "FLEX test sheets in raw_values.csv (extraction flex_test_sheet): each sheet tied again by the CIR test number printed inside plus its FLEX number or test date against NASA's FLEX table; identifier, pressure (sheet atm against table mmHg / 760, half a unit of the sheet's last decimal) and oxygen compared again; values kept as written; flex_sheet_vs_table.csv and the block flex_test_sheets of raw_values_effect.json agree; fixture of design.md section 7 for the 17 FLEX tests inside the lunar ranges (identifier 17 of 17, pressure 16 of 17 with FLEX-23 off, oxygen 16 of 17 with FLEX-28 off, the extinction-diameter cross-table).",
+   "status": "PASS",
+   "numbers": {
+    "sheets": 272,
+    "bytes": 250375,
+    "tied": 267,
+    "tests_with_two_tied_sheets": [
+     "FLEX-127"
+    ],
+    "lunar": {
+     "identifier": 17,
+     "pressure": 16,
+     "oxygen": 16
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "R2_bass_as_run",
+   "verifies": "BASS as-run workbook in raw_values.csv (extraction bass_as_run_cabin_block): two rows per run for 121 runs, the columns 'O2 % by volume' and 'pressure, atm'; each run tied to a distinct test of PSI-26 in tests.csv ('As Run Test #' and 'Test #' recomputed from NASA's table); every row carries location_not_stated and every oxygen value below 1 magnitude_not_as_unit_written; no row gives a location in question_chain.csv; the block of raw_values_effect.json recounts.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 242,
+    "runs": 121,
+    "tests": 121
    },
    "failures": 0,
    "failing_examples": []

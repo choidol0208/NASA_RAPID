@@ -5810,7 +5810,7 @@ def q_location(ctx, test, var):
         for r in ctx.table("raw_values.csv"):
             m = Q_RAW_VARIABLE.get(r["extraction"])
             if m and r["test_id"]:
-                v = m.get(r["header_as_written"].strip(), m.get("*"))
+                v = m.get(" ".join(r["header_as_written"].split()), m.get("*"))
                 if v:
                     idx.add((r["test_id"], v))
         return idx
@@ -6078,6 +6078,213 @@ def check_q4(ctx):
                 res.fail(problem="lunar video fixture not reproduced", recount=str(fx))
     res.numbers = {"rows": res.checked, "video_group": g, "tests_with_a_video_by_best_state":
                    {s: sum(1 for v in best.values() if v == s) for s in Q_VIDEO_ORDER}}
+    return res
+
+
+
+# ----------------------------------------------------------------------------
+# R. values read from raw files that design steps 4 and 5 added to raw_values.csv
+#    (FLEX test sheets, BASS as-run cabin block); recomputed with separate code
+# ----------------------------------------------------------------------------
+
+R_FLEX_TABLE = "PSI-69_Experimental table_FLEX.csv"
+R_LUNAR_DEXT = {  # design.md section 7: (table form, sheet form) -> tests
+    ("number", "number"): {"FLEX-21", "FLEX-25", "FLEX-26"}, ("number", "nan"): {"FLEX-20"},
+    ("zero", "zero"): {"FLEX-39", "FLEX-43"}, ("blank", "number"): {"FLEX-23", "FLEX-38"},
+    ("blank", "nan"): {"FLEX-19", "FLEX-22", "FLEX-24", "FLEX-27", "FLEX-28", "FLEX-37"},
+    ("dash", "number"): {"FLEX-40"}, ("dash", "zero"): {"FLEX-41"}, ("dash", "nan"): {"FLEX-42"}}
+
+
+def r_form(v):
+    v = (v or "").strip()
+    if not v:
+        return "blank"
+    if v in ("-", "–", "—"):
+        return "dash"
+    if v.lower() == "nan":
+        return "nan"
+    try:
+        return "zero" if float(v) == 0 else "number"
+    except ValueError:
+        return "text"
+
+
+def r_table(name):
+    """(source row, {column: cell as written}) of a raw table; cp1252 where the file is not UTF-8 (en dashes)."""
+    raw = read_bytes(os.path.join(RAW, name))
+    try:
+        text = raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        text = raw.decode("cp1252")
+    rows = list(csv.reader(io.StringIO(text, newline="")))
+    head = [h.strip() for h in rows[0]]
+    return [(i, dict(zip(head, r + [""] * (len(head) - len(r))))) for i, r in enumerate(rows[1:], start=2)]
+
+
+def r_flex_table():
+    return r_table(R_FLEX_TABLE)
+
+
+def r_sheets(ctx):
+    sheets = {}
+    for r in ctx.table("raw_values.csv"):
+        if r["extraction"] == "flex_test_sheet":
+            k = " ".join(r["header_as_written"].split())
+            sheets.setdefault(r["psi_file_name"], {"rows": [], "fields": {}, "id": r["psi_file_id"], "bytes": int(r["bytes"])})
+            sheets[r["psi_file_name"]]["rows"].append(r)
+            sheets[r["psi_file_name"]]["fields"][k] = r["value"]
+    return sheets
+
+
+@check("R1_flex_test_sheets",
+       "FLEX test sheets in raw_values.csv (extraction flex_test_sheet): each sheet tied again by the CIR test number "
+       "printed inside plus its FLEX number or test date against NASA's FLEX table; identifier, pressure (sheet atm "
+       "against table mmHg / 760, half a unit of the sheet's last decimal) and oxygen compared again; values kept as "
+       "written; flex_sheet_vs_table.csv and the block flex_test_sheets of raw_values_effect.json agree; fixture of "
+       "design.md section 7 for the 17 FLEX tests inside the lunar ranges (identifier 17 of 17, pressure 16 of 17 "
+       "with FLEX-23 off, oxygen 16 of 17 with FLEX-28 off, the extinction-diameter cross-table).")
+def check_r1(ctx):
+    res = Result()
+    sheets = r_sheets(ctx)
+    if not sheets:
+        raise Skip("no FLEX test sheet in raw_values.csv")
+    table = r_flex_table()
+    test_of = {int(t["source_row"]): t["test_id"] for t in ctx.tests if t["source_file"] == R_FLEX_TABLE}
+    rec = {}
+    for name, sh in sheets.items():
+        res.checked += 1
+        f = sh["fields"]
+        ident = f.get("CIR Test Number", "")
+        num = re.match(r"^FLEX-(\d+)$", f.get("(first line)", ""))
+        cands = [(n, c) for n, c in table if c["FLEX Identifier"].strip() == ident]
+        pick = [(n, c) for n, c in cands if num and c["FLEX Test #"].strip() == str(int(num.group(1)))]
+        if len(pick) != 1:
+            m = re.match(r"^\s*\w+,\s*(\w+)\s+(\d+),\s*(\d{4})", f.get("Test Date", ""))
+            months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+                      "October", "November", "December"]
+            want = (int(m.group(3)), months.index(m.group(1)) + 1, int(m.group(2))) if m and m.group(1) in months else None
+            def tdate(x):
+                mm = re.match(r"^\s*(\d+)/(\d+)/(\d{2,4})\s*$", x)
+                return (int(mm.group(3)) + (2000 if len(mm.group(3)) == 2 else 0), int(mm.group(1)), int(mm.group(2))) if mm else None
+            pick = [(n, c) for n, c in cands if want and tdate(c["Test Date"]) == want]
+        row = pick[0] if len(pick) == 1 else None
+        tid = test_of.get(row[0], "") if row else ""
+        if any(r["test_id"] != tid for r in sh["rows"]):
+            res.fail(problem="tie of the sheet differs from the recount", sheet=name, recount=tid)
+        if any(r["test_id"] and "tests.csv" not in r["link_evidence"] for r in sh["rows"]):
+            res.fail(problem="tied row without tests.csv evidence", sheet=name)
+        if row:
+            c = row[1]
+            p_sheet = fnum(f.get("Pressure (atm)", ""))
+            p_tab = fnum(c["Ambient pressure; mmHg"])
+            dec = len(f.get("Pressure (atm)", "").split(".", 1)[1]) if "." in f.get("Pressure (atm)", "") else 0
+            p_ok = p_sheet is not None and p_tab is not None and abs(p_sheet - p_tab / 760.0) <= 0.5 * 10 ** -dec + 1e-9
+            o_sheet, o_tab = fnum(f.get("O2 Mole Fraction", "")), fnum(c["O initial ambient composition; mole fraction"])
+            dec = len(f.get("O2 Mole Fraction", "").split(".", 1)[1]) if "." in f.get("O2 Mole Fraction", "") else 0
+            o_ok = o_sheet is not None and o_tab is not None and abs(o_sheet - o_tab) <= 0.5 * 10 ** -dec + 1e-9
+            rec[name] = {"test_id": tid, "id": ident == c["FLEX Identifier"].strip(), "p": p_ok, "o": o_ok,
+                        "dext": (r_form(c["Visible flame extinction diameter; mm"]), r_form(f.get("Dext (mm)", "")))}
+        for r in sh["rows"]:
+            if r["value"] != r["value"].strip(" \t"):
+                res.fail(problem="value not stripped as the rule says", sheet=name)
+    lunar = {m["test_id"] for m in ctx.table("scenario_tests.csv") if m["scenario_id"] == "lunar_habitat"
+             and m["investigation_id"] == "PSI-69" and m["o2_match"] == "in" and m["pressure_match"] == "in"}
+    by_t = {}
+    for v in rec.values():
+        by_t.setdefault(v["test_id"], []).append(v)
+    lun = {t: (by_t.get(t) or [None])[0] for t in lunar}
+    if any(len(by_t.get(t, [])) > 1 for t in lunar):
+        res.fail(problem="a lunar FLEX test has more than one tied sheet")
+    nums = {}
+    if all(lun.values()) and len(lunar) == 17:
+        nums = {"identifier": sum(1 for v in lun.values() if v["id"]), "pressure": sum(1 for v in lun.values() if v["p"]),
+                "oxygen": sum(1 for v in lun.values() if v["o"])}
+        off = ({t for t, v in lun.items() if not v["p"]}, {t for t, v in lun.items() if not v["o"]})
+        cross = {}
+        for t, v in lun.items():
+            cross.setdefault(v["dext"], set()).add(t)
+        if nums != {"identifier": 17, "pressure": 16, "oxygen": 16} or off != ({"FLEX-23"}, {"FLEX-28"}) or cross != R_LUNAR_DEXT:
+            res.fail(problem="lunar fixture of design.md section 7 not reproduced", recount=nums,
+                     off=[sorted(off[0]), sorted(off[1])], cross={"%s/%s" % k: sorted(v) for k, v in cross.items()})
+    else:
+        res.fail(problem="not all 17 lunar FLEX tests have a tied sheet", tied=sorted(t for t, v in lun.items() if v))
+    # flex_sheet_vs_table.csv and the effect block
+    if ctx.has("flex_sheet_vs_table.csv"):
+        ft = ctx.table("flex_sheet_vs_table.csv")
+        if len({r["psi_file_name"] for r in ft}) != len(sheets):
+            res.fail(problem="flex_sheet_vs_table.csv sheets differ from raw_values.csv")
+        for r in ft:
+            t = r["psi_file_name"]
+            if r["key"] == "Pressure (atm)" and t in rec and (r["agreement"] in ("agrees_within_rounding", "agrees_as_written")) != rec[t]["p"]:
+                res.fail(problem="pressure agreement differs", test_id=t)
+            if r["key"] == "O2 Mole Fraction" and t in rec and (r["agreement"] in ("agrees_within_rounding", "agrees_as_written")) != rec[t]["o"]:
+                res.fail(problem="oxygen agreement differs", test_id=t)
+    else:
+        res.fail(problem="flex_sheet_vs_table.csv absent")
+    eff = ctx.json("raw_values_effect.json").get("flex_test_sheets")
+    if not eff:
+        res.fail(problem="raw_values_effect.json has no block flex_test_sheets")
+    else:
+        a = eff["all_sheets"]
+        want = (len(sheets), sum(s["bytes"] for s in sheets.values()), sum(1 for v in rec.values() if v["p"]),
+                sum(1 for v in rec.values() if v["o"]))
+        if (a["sheets_read"], a["bytes_read"], a["pressure_agrees_within_rounding"], a["oxygen_agrees"]) != want:
+            res.fail(problem="effect block counts differ", block=(a["sheets_read"], a["bytes_read"], a["pressure_agrees_within_rounding"], a["oxygen_agrees"]), recount=want)
+        l = eff["lunar_habitat_inside"]
+        if nums and (l["identifier_equals_table"], l["pressure_agrees_within_rounding"], l["oxygen_agrees"]) != (17, 16, 16):
+            res.fail(problem="effect block lunar counts differ")
+        if "not adopted" not in eff["state"]:
+            res.fail(problem="state is not 'not adopted'")
+    res.numbers = {"sheets": len(sheets), "bytes": sum(s["bytes"] for s in sheets.values()), "tied": len(rec),
+                   "tests_with_two_tied_sheets": sorted(t for t, v in by_t.items() if len(v) > 1),
+                   "lunar": nums}
+    return res
+
+
+@check("R2_bass_as_run",
+       "BASS as-run workbook in raw_values.csv (extraction bass_as_run_cabin_block): two rows per run for 121 runs, "
+       "the columns 'O2 % by volume' and 'pressure, atm'; each run tied to a distinct test of PSI-26 in tests.csv "
+       "('As Run Test #' and 'Test #' recomputed from NASA's table); every row carries location_not_stated and every "
+       "oxygen value below 1 magnitude_not_as_unit_written; no row gives a location in question_chain.csv; the block "
+       "of raw_values_effect.json recounts.")
+def check_r2(ctx):
+    res = Result()
+    rows = [r for r in ctx.table("raw_values.csv") if r["extraction"] == "bass_as_run_cabin_block"]
+    if not rows:
+        raise Skip("no BASS as-run row in raw_values.csv")
+    table = r_table("PSI-26_Experimental table_BASS.csv")
+    test_of = {int(t["source_row"]): t["test_id"] for t in ctx.tests if t["source_file"] == "PSI-26_Experimental table_BASS.csv"}
+    runs = {}
+    for r in rows:
+        res.checked += 1
+        runs.setdefault((r["sheet"], r["row"]), []).append(r)
+        if "location_not_stated" not in r["link_evidence"]:
+            res.fail(problem="row without location_not_stated", cell=r["cell_or_range"])
+        v = fnum(r["value"])
+        if r["header_as_written"].startswith("O2") and v is not None and 0 < v < 1 and "magnitude_not_as_unit_written" not in r["link_evidence"]:
+            res.fail(problem="oxygen below 1 without magnitude_not_as_unit_written", cell=r["cell_or_range"])
+        m = re.search(r"'As run test no\.' (\S+) and 'Test no\.' (\S+) equal", r["link_evidence"])
+        if r["test_id"]:
+            if not m:
+                res.fail(problem="tie evidence not parseable", cell=r["cell_or_range"])
+                continue
+            c = [n for n, c in table if c.get("As Run Test #", "").strip() == m.group(1) and c.get("Test #", "").strip() == m.group(2)]
+            if len(c) != 1 or test_of.get(c[0]) != r["test_id"]:
+                res.fail(problem="tie differs from the recount", cell=r["cell_or_range"], test_id=r["test_id"])
+    tids = {r["test_id"] for r in rows if r["test_id"]}
+    heads = sorted({r["header_as_written"] for r in rows})
+    if len(runs) != 121 or len(tids) != 121 or any(len(v) != 2 for v in runs.values()) or heads != ["O2 % by volume", "pressure, atm"]:
+        res.fail(problem="not 121 runs with two columns tied to 121 tests", runs=len(runs), tests=len(tids), headers=heads)
+    if any(not t.startswith("BASS-") for t in tids) or len(tids & {t["test_id"] for t in ctx.tests if t["investigation_id"] == "PSI-26"}) != len(tids):
+        res.fail(problem="a tied test is not a PSI-26 test")
+    if ctx.has("question_chain.csv"):
+        for r in ctx.table("question_chain.csv"):
+            if r["investigation_id"] == "PSI-26" and r["location"] == "raw_file_value_read":
+                res.fail(problem="a PSI-26 test has a value-read location")
+    eff = ctx.json("raw_values_effect.json").get("bass_as_run_cabin_block")
+    if not eff or eff["runs"] != len(runs) or any(eff["columns"][h]["rows"] != sum(1 for r in rows if r["header_as_written"] == h) for h in heads):
+        res.fail(problem="effect block bass_as_run_cabin_block differs")
+    res.numbers = {"rows": len(rows), "runs": len(runs), "tests": len(tids)}
     return res
 
 
