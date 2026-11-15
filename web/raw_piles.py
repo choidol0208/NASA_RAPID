@@ -226,6 +226,9 @@ def build(root):
         i = got[0].index(column)
         return row[i] if i < len(row) else ""
 
+    ro_path = P("data", "catalog", "reading_order.csv")
+    reading_order = _csv(ro_path) if os.path.exists(ro_path) else []
+
     chain_path = P("data", "pipeline", "question_chain.csv")
     chain_src = "data/pipeline/question_chain.csv"
     if not os.path.exists(chain_path):
@@ -490,6 +493,18 @@ def build(root):
                             ub = sum(int(g.get("bytes_in_listing") or 0) for g in un)
                             tail = f" Not opened: {n_(uf)} {plural(uf, 'file', 'files')} ({size(ub)}) in {len(un)} document {plural(len(un), 'group', 'groups')} of {inv_label(acc)}."
                         shelf.append(f"{cap(VAR_WORDS.get(v, v))}: not in NASA's table for {r['in_scope_tests']} of the {n_in} tests; no header in the files opened so far was accepted for it{clause}.{tail}")
+            # ---- pile 2, the reading order (pile_wording.md section 9; catalog's data/catalog/reading_order.csv)
+            order = []
+            for r in sorted((r for r in reading_order if r["scenario_id"] == sid and r["need_id"] == nid), key=lambda r: int(r["order"])):
+                files = int(r["files"] or 0)
+                if r["state"] == "not_in_sampled_files":
+                    ev = "not opened"
+                elif r["state"] == "column_in_sampled_raw_file":
+                    seen = files if "all files of the group" in (r.get("evidence") or "") else 1
+                    ev = f"header seen in {seen} of {n_(files)} {plural(files, 'file', 'files')}"
+                else:
+                    raise PileError(f"reading_order.csv: state {r['state']!r} has no wording in pile_wording.md section 9")
+                order.append(f"{r['order']}. {r['name_pattern']} ({short.get(r['investigation_id'], r['investigation_id'])}, {r['investigation_id']}):{n_(files)} {plural(files, 'file', 'files')}, {size(r['bytes'])}; target tests {n_(r['target_tests'])}; {ev}.")
             cannot = [t for t in pool if place[t] == "cannot_be_placed_from_table"]
             if cannot:
                 byc = collections.Counter(tests[t]["investigation_id"] for t in cannot).most_common()
@@ -498,7 +513,7 @@ def build(root):
                 shelf.append(f"{n_(len(cannot))} tests cannot be placed: {joined(lst)}. The tables hold neither their oxygen nor their pressure, or only one of the two.")
             need_out.append({"id": nid, "name": nd["name"], "bar": bar,
                              "segments": [{"placement": k, "label": PLACEMENT_LABEL[k], "n": v} for k, v in segs],
-                             "in_scope": len(pool), "pile1": p1, "pile2": p2, "shelf": shelf, "pile3": p3,
+                             "in_scope": len(pool), "pile1": p1, "pile2": p2, "shelf": shelf, "pile3": p3, "order": order,
                              "pile2_from_chain": bool(ch)})
         small = [f"Built by code from PSI's file listing of {listing} and NASA's per-test tables as the team mapped them. No language model writes or changes a line of this block.",
                  "\"Column seen\" means a header that an AI agent read in one opened file of a file group and that the data role's AI session opened again. It is not a measurement of the test, and the other files of the group were not opened.",
@@ -512,9 +527,13 @@ def build(root):
                          f"The statement describes PSI's record on that date. The {n_inv - im} investigations that have no row per test are outside it.")
         out[sid] = {"scenario": sid, "label": sc["label"], "header": header, "needs": need_out, "small_print": small,
                     "pile3_label": pile3_label, "pile3_meaning": pile3_meaning,
+                    "order_header": ["Reading order: the team's rule, not a NASA priority. It says where to read first, not that the value is there.",
+                                     "Rule: first, file groups in which a column for oxygen or pressure was seen for tests that cannot be placed; then file groups that could add a counted test; then file groups that could add a value to a test already counted inside. Within a class: more target tests first, then fewer bytes."],
                     "sources": {"placements": "data/pipeline/scenario_tests.csv", "chain": chain_src if ch else None,
+                                "reading order": "data/catalog/reading_order.csv" if reading_order else None,
                                 "links": links["source"] if links else None}}
-        all_text += header + small + [pile3_label, pile3_meaning] + [x for n in need_out for x in [n["bar"]] + n["pile1"] + n["pile2"] + n["shelf"] + n["pile3"]]
+        all_text += header + small + [pile3_label, pile3_meaning] + out[sid]["order_header"] + \
+            [x for n in need_out for x in [n["bar"]] + n["pile1"] + n["pile2"] + n["shelf"] + n["pile3"] + n["order"]]
 
     # word scan (whole words; "safety" is not "safe")
     for s in all_text:
