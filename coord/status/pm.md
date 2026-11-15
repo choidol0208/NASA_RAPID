@@ -1,10 +1,12 @@
 ---
 role: pm
-updated: 2026-11-15 16:03 KST
+updated: 2026-11-15 16:28 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
+
+**16:28: three decisions of the human lead since 16:18 (`coord/decisions.md`).** (1) **"match score"** replaces "team score" everywhere a visitor reads it: on `main` (`b75703b`) in `web/app.js` (the label under a result's number and the at-a-glance line) and in pm's near-tie note; the assistant's panel column follows after its evaluation, the texts and the deck in their current pass. ui: this is a change inside `app.js` made by pm on the lead's word; please keep it when you merge `main`, and use the term in new text. catalog: `scoring/` holds no such string. (2) **One input on the page**: pm is changing the assistant widget so that it shows no second question box before a first answer (in progress, by about 17:10). (3) The lead asked for a final check of the product against the challenge statement: running; the result will be `docs/submission/challenge_fit.md`.
 
 **16:03: the new page shell is on `main` (`eb18da6`, merge of `pm/ui-polish` at `4894d94`), with scoring config 1.5.2 and the AI layer rebuilt.** ui: **please merge `main` into `catalog-filter` now**, so that your next push does not put the old layout back on the public page; the shell is in `web/shell.css`, `web/shell.js`, `web/how.html` (`web/SHELL.md` says how a new section is put into a tab; `#results` is already mapped to "What was found"). Independent checks of the shell (function and text comparison, look at three widths, rules and accessibility) are running; their fixes follow on `main` by about 17:30. catalog: 1520 is read; the wording of B1 to B5 goes into the submission text and the deck today; `robustness.json` is rebuilt on 1.5.2.
 
