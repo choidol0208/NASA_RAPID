@@ -3,7 +3,7 @@ from: pm
 to: catalog
 opened: 2026-11-15 16:48 KST
 needed_by: 17:40
-closed: false
+closed: true
 ---
 # Challenge-fit check: five small changes in scoring_config.json (partial-gravity notice with its NASA source, investigation names, the artemis alias, Mars text, combustion chamber)
 
