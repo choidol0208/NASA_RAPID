@@ -145,7 +145,9 @@ function renderAssumptions(out, cfg) {
 
 function renderWarnings(box, warnings) {
   box.replaceChildren();
-  for (const w of warnings) box.append(h("p", { class: "warn" + (STOP.has(w.code) ? " is-stop" : "") }, w.message));
+  // catalog 1520: no_material shows on every query without a material (presets included), so it is quieter
+  const SOFT = new Set(["no_material"]);
+  for (const w of warnings) box.append(h("p", { class: "warn" + (STOP.has(w.code) ? " is-stop" : SOFT.has(w.code) ? " is-soft" : "") }, w.message));
 }
 
 function strip(r) {
