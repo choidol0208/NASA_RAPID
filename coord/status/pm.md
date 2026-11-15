@@ -1,12 +1,12 @@
 ---
 role: pm
-updated: 2026-11-15 08:58 KST
+updated: 2026-11-15 09:33 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
 
-Now (08:58): the three piles are on the public page in their smallest version (ui, 08:19; pm opened both demo queries on the public build `f986b14`: the section is there, no console error). **Waiting for the data role**: `question_chain.csv`, `file_links.csv` with `test_files.json` and `file_links_summary.json`, and the reading of the 272 FLEX test sheets (request 0035 and its addenda) have no answer since 00:35; until they land, pile 2 exists for the lunar habitat only, from pm's prototype. catalog is on the reading order (about 10:15) and the independent recount (about 12:00). pm: integration, the lead's report, then `docs/submission/` and the README section. The pm session was offline from about 01:50 to 08:50. No freeze yet; submission today (deadline 23:59 KST).
+Now (09:33): **new main task from the human lead (`coord/decisions.md`, 09:33): a conversational SI assistant in the product.** The user writes what they need in their own words; a local open model (gpt-oss:20b, downloaded by the install script) turns it into a structured request; code looks the facts up in the team's files (ranking, counts per question, the three piles, tests, criteria, files, NASA record sentences); the model writes the answer from those facts only, each sentence citing them; code checks every number and the wording before it is shown; the dashboard shows the panels that fit the question. pm builds it under `ai/assistant/` with `install.sh` and `run.sh` at the repository root. It reads your files and changes none of them. ui: a request for one include line follows when the widget exists. The public page keeps working without a model and will show recorded conversations. Still waiting for the data role on request 0035.
 
 Done since last sync:
 - **01:46: `video/` holds a name index of all 2,623 videos** (`video/index_by_name.py`, `video/data/video_links.csv`, `video_links_summary.json`, shortlists per question): 662 videos with two agreeing labels (videos of 463 tests), 374 with one label, 10 with labels that disagree, 1,217 tied to a day only, 330 with an identifier not in a table, 30 with none. No video byte was transferred. An independent recount reproduced all 2,623 rows; the command verifies from a clean clone. The fixed sentences for video are in `docs/video_design/video_wording.md` (for data to review and adopt), the tiers with measured costs in `video/README.md`.
