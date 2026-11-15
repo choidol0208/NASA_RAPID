@@ -8,7 +8,7 @@ Fire Evidence Explorer is a web page: you describe a crewed environment, and it 
 
 **Slides:** [docs/submission/slides.pdf](docs/submission/slides.pdf) (seven slides, the demo link of the submission; built by the pm AI session, source and build script in `docs/submission/deck/`)
 
-**Download:** two archives in the [latest release](https://github.com/choidol0208/NASA_RAPID/releases/latest), one per way of running it on your own computer (see "Download" below). The live page needs no download.
+**Download:** two archives in the [latest release](https://github.com/choidol0208/NASA_RAPID/releases/latest), one per way of running it on your own computer; the one with the local model is recommended (see "Download" below). The live page needs no download.
 
 **Start here:** open the "Lunar habitat, cotton fabric" demo, then the tab "What was found" (what NASA's documents report per question, then "ISS and lunar habitat, side by side") and the tab "Where the evidence stops". For the lunar habitat (30% oxygen or more and at or below 70.3 kPa), PSI has no counted test.
 
@@ -52,8 +52,8 @@ The page is live and needs no download. To run it on your own computer (macOS or
 
 | Archive | What you get | Start it with |
 |---|---|---|
-| `fire-evidence-explorer-rule-based.zip` | The dashboard and an assistant that answers at once from the team's files with fixed sentences. No language model is downloaded or run. | `./start-rule-based.sh` |
-| `fire-evidence-explorer-with-local-model.zip` | The same, with the assistant answered by the language model OpenAI gpt-oss:20b (Apache-2.0) on your computer. **The model is not inside the archive**: on the first start the install asks once, then fetches it through Ollama (about 13 GB; about 16 GB of memory is advised). | `./start-with-model.sh` |
+| `fire-evidence-explorer-with-local-model.zip` **(recommended)** | The product as it is meant to be used: the dashboard, and the SI assistant answered by the language model OpenAI gpt-oss:20b (Apache-2.0) on your computer. **The model is not inside the archive**: on the first start the install asks once, then fetches it through Ollama (about 13 GB; about 16 GB of memory is advised). | `./start-with-model.sh` |
+| `fire-evidence-explorer-rule-based.zip` | The dashboard and an assistant that answers at once from the team's files with fixed sentences. No language model is downloaded or run. For a computer without the disk or the memory for the model. | `./start-rule-based.sh` |
 
 Both archives hold the same source at the same commit, about 28 MB; they differ in the `START_HERE.md` at their top. The model cannot be put into an archive: a file of a GitHub release may not exceed 2 GB. The two scripts run the commands of "Install and run" below (`./install.sh --no-model` and `./run.sh --no-model`, or `./install.sh` and `./run.sh`), and both open http://127.0.0.1:8765/.
 
