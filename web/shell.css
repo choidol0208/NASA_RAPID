@@ -98,8 +98,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
 .shell-on main > .verbs { order: -2; }
 .shell-on main > #assistant { order: -1; }
 .shell-on main > #status, .shell-on main > .skeleton { order: -3; }
-/* "#results" (the ui role's results block) comes first under "What was found" */
-.shell-on main > section#results { order: 1; }
+/* "#results-first" (the ui role's results block) comes first under "What was found" */
+.shell-on main > :is(section#results-first, section#results) { order: 1; }
 .shell-on main > :is(#needs, #tests, #answers, #piles, #shown, #criteria, #stops, #all, #how) { order: 2; }
 
 .ask { margin: var(--s5) 0 0; }

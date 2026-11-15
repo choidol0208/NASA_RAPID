@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 95,
+  "PASS": 96,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 95
+  "checks": 96
  },
  "notes": [
   {
@@ -2088,6 +2088,19 @@
     "with_relation": 19,
     "attributed_to_psi": 45,
     "labelled_not_measured": 13
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "U6_results_top_five",
+   "verifies": "results_top.json (pipeline/results_top.py, added 2026-11-15): per scenario x need the entries equal the rule of spec/results.json top_five applied again to results_by_need.json (stable sorts, kinds and relation read from references.json), at most two per document, positions and skipped results as the walk gives them; every line equals the item text of references.json, every values line and conditions line equals a rebuild from the item's printed values and the finding's conditions, every source line equals the document; header counts equal the block counts; no team sentence holds a forbidden word; results_top.csv equals the JSON row by row.",
+   "status": "PASS",
+   "numbers": {
+    "blocks": 36,
+    "entries": 180,
+    "blocks_under_five": 0,
+    "forbidden_word_hits_in_lines": 3
    },
    "failures": 0,
    "failing_examples": []

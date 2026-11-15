@@ -1239,9 +1239,60 @@ async function renderPiles(out, pipe) {
   renderJump();
 }
 
+// ------------------------------------------------------------------ results first (pm request 20261115-1513)
+// What NASA's documents and the investigators' papers report, per question, as quotations in the data
+// role's own order (data/results/<scenario>.json, built from data/pipeline/results_by_need.json).
+const resultsCache = new Map();
+function resultsFor(sid) {
+  if (!sid || !OPTIONAL_HAS(`data/results/${sid}.json`)) return Promise.resolve(null);
+  if (!resultsCache.has(sid)) resultsCache.set(sid, loadJSON(`data/results/${sid}.json`, null));
+  return resultsCache.get(sid);
+}
+function resultItem(e) {
+  const quote = e.quote ? h("blockquote", { class: "rf-quote" }, e.quote)
+    : h("p", { class: "rf-text" }, e.text, " ", h("span", { class: "tag" }, "the team's summary of the item; no quotation held"));
+  const vals = e.values && e.values.length
+    ? h("p", { class: "rf-values" }, h("b", {}, "Printed values: "), e.values.slice(0, 8).join("; "), e.values.length > 8 ? ` (and ${e.values.length - 8} more in results_flat.csv)` : "")
+    : null;
+  return h("li", { class: "rf-item" },
+    h("p", { class: "rf-group" }, e.group_label, e.kind ? [" · ", h("b", {}, e.kind)] : null),
+    quote,
+    h("p", { class: "rf-src" }, e.url ? link(e.url, e.doc) : e.doc, e.where ? `, ${e.where}` : "", e.access ? ` (${e.access})` : ""),
+    e.relation ? h("p", { class: "rf-rel" }, e.relation) : null,
+    vals);
+}
+async function renderResultsFirst(out) {
+  const sec = $("#results-first"), body = $("#results-first-body");
+  const sid = out.status === "ok" ? out.scenario.preset || null : null;
+  const doc = await resultsFor(sid);
+  if (!doc || (out.scenario.preset || null) !== doc.scenario) { sec.hidden = true; body.replaceChildren(); return; }
+  const focus = { prevention: ["P1", "P2", "P3"], detection: ["D1", "D2"], suppression: ["S1"] }[out.scenario.concern] || [];
+  const blocks = doc.needs.map((n, i) => {
+    const first = n.entries.slice(0, 3), rest = n.entries.slice(3);
+    const d = h("details", { class: "rf-need" + (focus.includes(n.id) ? " is-focus" : "") },
+      h("summary", {}, h("b", {}, `${n.name} (${n.id})`), " ", h("span", { class: "rf-count" }, `${n.entries.length} quoted ${n.entries.length === 1 ? "result" : "results"}`)),
+      h("p", { class: "rf-headline" }, n.headline),
+      n.entries.length ? h("ul", { class: "rf-list" }, first.map(resultItem)) : h("p", { class: "gap" }, "No quoted result is tagged for this question."),
+      rest.length ? h("details", { class: "more" }, h("summary", {}, `Show all ${n.entries.length}`), h("ul", { class: "rf-list" }, rest.map(resultItem))) : null,
+      h("p", { class: "gap" }, n.found_sentence, " ", n.printed_sentence),
+      n.n_all_q ? h("p", { class: "gap" }, `${n.n_all_q} more results are tagged for all questions. ${n.all_q_sentence} They are in the download.`) : null,
+      h("p", { class: "gap" }, n.criteria_sentence, n.n_criteria ? ` (${n.n_criteria} criteria quoted for this question, in the download.)` : ""));
+    if (n.id === focus[0] || (!focus.length && i === 0)) d.open = true;
+    return d;
+  });
+  const flat = OPTIONAL_HAS("data/results/results_flat.csv")
+    ? h("p", {}, h("a", { href: vurl("data/results/results_flat.csv"), download: "results_flat.csv" }, "Download every quoted result (CSV)"),
+      " · built by the data role's code from the reference list (", link(REPO + doc.source, doc.source), ")") : null;
+  body.replaceChildren(
+    h("details", { class: "more" }, h("summary", {}, "How the results are grouped and ordered"), h("p", { class: "gap" }, doc.order_rule)),
+    ...blocks, flat,
+    h("div", { class: "small-print" }, h("p", {}, doc.team_output), h("p", {}, doc.not_guidance)));
+  sec.hidden = false;
+}
+
 // ------------------------------------------------------------------ jump menu (the page is long: about 22,000 px on a desktop)
 // One link per section that is shown, in page order; it follows the sections as they are shown or hidden.
-const JUMP = [["#top", "Find"], ["#needs", "Compare"], ["#tests", "Recorded tests"], ["#answers", "Constraints"], ["#shown", "Constraints"],
+const JUMP = [["#top", "Find"], ["#needs", "Compare"], ["#tests", "Recorded tests"], ["#results-first", "What NASA reports"], ["#answers", "Constraints"], ["#shown", "Constraints"],
   ["#piles", "Where the data are"], ["#stops", "Where the evidence stops"], ["#ai-use", "How AI is used"], ["#method", "How the score works"]];
 function renderJump() {
   const nav = $("#jump");
@@ -1547,7 +1598,7 @@ async function main() {
     renderWarnings($("#scenario-warnings"), out.warnings);
     renderRequirements(out, config);
     if (out.status !== "ok") {
-      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false); show("#criteria", false); show("#shown", false); show("#answers", false); show("#piles", false);
+      show("#top", false); show("#all", false); show("#needs", false); show("#stops", false); show("#gaps-section", false); show("#tests", false); show("#glance", false); show("#criteria", false); show("#shown", false); show("#answers", false); show("#piles", false); show("#results-first", false);
       $("#assumptions").replaceChildren();
       setStatus(out.status === "out_of_scope" ? "Out of scope for this tool." : "Add an environment or a material to start.", "info");
       return;
@@ -1563,6 +1614,7 @@ async function main() {
     renderCriteria(pipe);
     renderShown(out, pipe);
     renderExport(out, pipe, cat);
+    renderResultsFirst(out);
     renderAnswers(out, pipe);
     renderPiles(out, pipe);
     renderCompare(out, pipe, (q2) => { run(q2); $("#needs").scrollIntoView({ behavior: "smooth", block: "start" }); });

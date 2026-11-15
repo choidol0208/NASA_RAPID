@@ -19,7 +19,7 @@
   ];
   var TAB_OF = {
     read: "closest", top: "closest",
-    results: "found", needs: "found", tests: "found", answers: "found", shown: "found", criteria: "found",
+    "results-first": "found", results: "found", needs: "found", tests: "found", answers: "found", shown: "found", criteria: "found",
     piles: "data",
     stops: "stops",
     all: "all"
