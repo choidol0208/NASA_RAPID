@@ -1,31 +1,37 @@
 ---
 role: catalog
-updated: 2026-11-15 09:52 KST
+updated: 2026-11-15 10:13 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-**09:52: config 1.5.0 on `catalog-scoring` (weights unchanged).** The human lead asked catalog to judge, on theory, three differences between the catalog and the data role's raw-file method, and to combine the two where both hold. Reasoning: `scoring/METHOD.md` 1.7 and `scoring/BUILDUP.md` B7.
-1. **Detection per fire signature.**
-   - NASA defines fire signatures as gaseous species and particulate properties (Ruff, NASA/TM-2011-217036).
-   - Role similarity for detection is now purpose × outcome. Purpose is the detection label OR a NASA-stated measurement purpose. Outcome is a measured signature.
-   - Effect: gas questions ("CO detection on ISS", "combustion gas detection") rank BASS-II first, with SAME 2nd or 3rd. Smoke questions are unchanged.
-2. **Compliance basis.**
-   - Every line has `basis`. `met` only for per-test table values or catalog classifications; `documented` for record text, test matrix and published values.
-   - Team readings are `unverified` and leave the confidence. FLEX and CFI go from medium to low on quiescent questions.
-   - Request 0945 to ui: show `documented` and the basis.
-3. **BASS-II pressure is `published`**, from ICES 2019, "Pressure was not varied from 1 atmosphere". It is no longer assumed, and the score is unchanged.
+**10:13: config 1.5.1 on `catalog-scoring` (weights unchanged since 1.4.0).**
+- **1.5.0 (09:52):** the combined model of the catalog and the data role's raw-file method, at the human lead's request. Reasoning: `scoring/METHOD.md` 1.7, `scoring/BUILDUP.md` B7.
+  - Detection is matched per fire signature (gas or particulate). Gas questions rank BASS-II first.
+  - Compliance lines carry a basis and the status `documented`. ui shows both (0945, done and closed).
+  - The BASS-II pressure is `published` (ICES 2019). Team readings leave the confidence.
+- **1.5.1 (10:10):** an AI review of the scorer (09:40) checked against the tables and the code; items A1–A3 fixed at the human lead's request.
+  - A1: the five day tables (ACME PSI-20 to 23, SLICE PSI-106) are `summary_table`. The review named two.
+  - A2: near-ties are ordered by recorded share, then evidence, then score (order-independent; `has_1g_comparison` dropped).
+  - A3: "solid" and 고체 (solid) are read as the fuel phase.
+  - DAFT measured a dust aerosol, not a fire, so it is no longer fire-signature evidence.
+  - Part C is in METHOD 1.5 and 1.8, WEIGHTING 6 and BUILDUP B2 and B3a.
+  - **Demo top 3s change:** ISS: BASS-II, SAFFIRE-I, SAFFIRE-II. lunar habitat: FLEX, ACME-CFI-G, ACME-BRE. ISS cotton fabric: BASS-II, SAFFIRE-I, SAFFIRE-II. Requests 1012 to ui and pm.
+  - B1–B5 (gate, non-table values, solid default, cross-question scores, detection pressure) wait for the human lead's decision. The catalog changes nothing there before it.
+- **pm 0035 done:** step 6 at 09:09; step 7 `validation/raw_chain_recount.py` at 10:12. 62 of 71 fixtures reproduce; the 9 misses are video link states, with four causes in the answer.
+- **Inbox:** data 0927 answered: yes, the configuration-to-tests key of `web/check_integration.py`. data 0953 read.
+- **Checks:**
+  - 76 unit tests; 43 of 43 scenarios (D03 and F01 expectations changed, with reasons in `scenarios.json`; F09, F10 new);
+  - parity 104 of 104; source check clean;
+  - `web/check_integration.py` 0 broken joins;
+  - weights match the derivation; reading order up to date.
+- **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Checks: 71 unit tests, 41 of 41 scenarios (D03, D04, F08 new; F06's expectation changed from SAME to BASS-II, with the reason recorded), parity 102 of 102, weights match the derivation, reading order up to date.
-
-For pm:
-- Rebuild the AI layer at integration: detection rankings changed.
-- `ai/test_robustness.py` was not run here (no numpy in this checkout). The functions it calls kept their signatures.
-- Two quotes (the BASS-II report 1.2 and ICES 2019 Section II) are used as the data role recorded them; catalog could not open either full text (over 10 MB; HTTP 403).
-
-
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. `main` and `catalog-filter` run config 1.4.0 (read 09:50); `catalog-scoring` runs 1.5.0. ui shows the requirements table (2001 done) and merged before pushing (0007 done); both are closed. **Working on pm 0035 (accepted 08:33; the human lead widened the catalog's scope for this work):** **step 6 done (09:09, `e8c5bc5`):** `data/catalog/reading_order.csv` (53 rows) and `reading_order.json`, built by `scoring/reading_order.py`; the fixture "S1 at the ISS: class 2 is only the BASS-II Summary Report, 44 tests" reproduces; 4 unit tests. Step 7 `validation/raw_chain_recount.py` (with the video block) is running in a separate AI session that does not import the pipeline; the human lead approved downloading the 24 PSI listings and the 272 FLEX test sheets for it (kept out of git); by about 12:00. Sync 09:12: merged main 09:00 and catalog-filter (ui shows the reading order as "Where to read first"); inbox: 0035 in progress; 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean. **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 10:13:
+- `main` runs config 1.4.0;
+- `catalog-filter` runs 1.5.0 (ui merged it at 09:47);
+- `catalog-scoring` runs 1.5.1.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
@@ -112,9 +118,22 @@ Next:
 - Weights change only through the stream files and `scoring/derive_weights.py --write`, with the human lead's decision. After any change, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the numbers.
 
 Published for others:
-- `scoring/scoring_config.json` 1.4.0: profile weights from `derive_weights.py` (AHP over literature-based judgements; suppression pooled with FLEX), plus `_about` and `rationale` text; new section `requirements` (labels and verifying columns of the requirements layer). Other keys unchanged. `config_version` in `rank()` output is `1.4.0`.
-- `scoring.scorer.rank` and `web/scorer.js`: same code path; scores follow the 1.4.0 weights. Two additive output fields, `requirements` (top level) and `compliance` (per result), as described in request 2001.
-- `data/catalog/*.csv`: unchanged since 19:00.
+- `scoring/scoring_config.json` 1.5.1. Weights are unchanged from 1.4.0: AHP over literature-based judgements; suppression pooled with FLEX. New since 1.4.0:
+  - `similarity.role.signatures` (keywords, outputs, stated purpose, `not_from_a_fire`);
+  - `keywords.signature`;
+  - a generic `solid` material entry;
+  - `atmosphere_fallback.pressure_published`;
+  - `selection.tie_rule`;
+  - `confidence.why`;
+  - the role requirement fields `concern, signature`.
+- `scoring.scorer.rank` and `web/scorer.js`: the same code path (parity 104 of 104). Output fields:
+  - `requirements`;
+  - `compliance` per result, now `{id, status, basis}`, with the statuses met, documented, near, not_met, unverified and not_scored;
+  - `value_basis` per result;
+  - `scenario.signature` for detection questions;
+  - `tie_note` with the new wording.
+- `data/catalog/investigations.csv`: `data_availability` of PSI-20 to 23 and PSI-106 is `summary_table` (10:05). `data/catalog/reading_order.csv` and `.json` (pm 0035 step 6).
+- `validation/raw_chain_recount.py`, `_report.md`, `.json` and `_netlog.jsonl` (pm 0035 step 7).
 
 Notes for other roles:
 - pm, two points on step 6.
@@ -125,6 +144,8 @@ Notes for other roles:
   - Per result it returns `compliance`: met, near, not_met, unverified or not_scored.
   - Each configuration says where its numbers come from (`o2_source`, `pressure_source`, `flow_source`: table, record, test_matrix or team).
   - An `unverified` requirement is the natural pointer to "tested, but the value is not in the tables". If your plan needs a field per requirement, such as where to look in the raw files, tell me its name and I will add it to `requirements` in Python and JS together, with parity.
-- pm: the submission text can say "the weights of each question type are derived by the analytic hierarchy process from 51 pairwise judgements (consistency ratio 0.006 to 0.014, limit 0.10), each citing a NASA PSI record sentence, a textbook point or the team's reasoning; an AI session wrote the judgements and the human lead approved them".
+- pm, for the submission text:
+  - Since 1.4.0 the 51 pairwise judgements follow by a fixed rule (1, 3, 5) from evidence classes compiled by an AI session from cited sources (CR 0, 0.009, 0.008).
+  - CR near 0 follows from that rule. Do not present it as a measure of judgement quality (`scoring/WEIGHTING.md` 6).
 - pm: earlier numbers that changed: unit tests 39 → 45; weight sensitivity "45 of 48, rank 1 never changes" → "146 of 152 over all three profiles, rank 1 changes once"; other values 129/136 → 127/136. In that last check `ISS` now changes at rank 3 in 2 runs.
 - Earlier history of this status is in git (`git log -p coord/status/catalog.md`).

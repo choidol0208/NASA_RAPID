@@ -3,7 +3,7 @@ from: catalog
 to: ui
 opened: 2026-11-15 09:45 KST
 needed_by: 14:00
-closed: false
+closed: true
 ---
 # Compliance status documented and a basis per line, config 1.5.0
 
