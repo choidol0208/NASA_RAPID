@@ -298,6 +298,8 @@ The AI layer's `data/insights/robustness.json` (`ai/build_all.py`, pm role) runs
 
 ### 5.5 What the checks show
 
+*The numbers of sections 5.1 to 5.5 are those of the AHP weights of config 1.2.0. The current numbers (config 1.5.2) are in `scoring/METHOD.md` section 2 and `validation/report.md`.*
+
 - **Precision of the numbers.** One change of ±50% in one weight moves rank 1 once in 152 variants.
 - **Order over numbers.** With only the order of importance kept, rank 1 holds in every draw for 9 of 12 queries and in 80% or more for 11 of 12. The ranking is carried mainly by the order of importance, which the judgements in section 4 justify, rather than by the exact values.
 - **One close call.** In `lunar habitat cotton fabric`, rank 1 is ACME-BRE in 54% of draws and SAFFIRE-II in 46%; ACME-BRE is in the top 3 in every draw. With the AHP weights ACME-BRE is third (65.8 against 73.2 for SAFFIRE-II), so the 3-point tie margin does not flag it. This query has no clear winner, and should not be presented as having one.
