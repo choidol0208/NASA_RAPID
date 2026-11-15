@@ -167,6 +167,7 @@ Shares of the explained variance; 95% bootstrap intervals in brackets.
 - FLEX is droplets in quiescent gas. It says nothing about flow, solid shape or the purpose of a study.
 - Solid flame spread and smoke have no measured response in the PSI tables (BASS-II records O2 and flow but no spread rate; SAME records no particle size). Prevention and detection therefore get no data stream.
 - The table writes the burning-rate unit as "mm"; it is read as K, conventionally mm²/s. Shares and elasticities do not depend on the unit.
+- The LMG shares depend on the ranges FLEX chose to test (its design) and on droplet burning. Using them for the suppression of solid fires is an assumption; present them as such (review of 2026-11-15, C4).
 
 ---
 
@@ -217,6 +218,7 @@ Shares of the explained variance; 95% bootstrap intervals in brackets.
 - Three classes are coarse.
 - The classes were assigned by an AI session from the cited findings. Several findings were checked only in abstracts (marked † in section 7).
 - A class says whether a condition can decide the outcome, not by how much one condition outweighs another.
+- With the fixed rule (1, 3, 5), the prevention weights reduce to "decisive : supporting = 3 : 1", and CR ≈ 0 follows from the construction. CR shows a consistent rule, not good judgement; do not present it as a quality measure (review of 2026-11-15, C4).
 - Review by combustion researchers, and the team members' form (B3b), are the next steps. A filled form takes precedence over this stream automatically, with the human lead's decision to apply it.
 
 ### B3b. Form for people: AHP form for the team's combustion-trained members

@@ -506,7 +506,7 @@ class ComplianceBasis(unittest.TestCase):
     value or a catalog classification, 'documented' is a value a NASA document states."""
 
     def lines(self, q, inv):
-        out = scorer.rank(q)
+        out = scorer.rank(q, top_k=10)
         rid = {x["id"]: x["dimension"] for x in out["requirements"]}
         r = next(x for x in out["results"] if x["investigation_id"] == inv)
         return r, {rid[c["id"]]: (c["status"], c["basis"]) for c in r["compliance"]}
@@ -542,6 +542,50 @@ class ComplianceBasis(unittest.TestCase):
             a, b = scorer.rank(q), scorer.rank(q, config=cfg)
             self.assertEqual([(r["config_id"], r["score"]) for r in a["ranking"]],
                              [(r["config_id"], r["score"]) for r in b["ranking"]], q)
+
+
+class Review1115(unittest.TestCase):
+    """Fixes from the review of 2026-11-15 (A1 day tables, A2 tie rule, A3 solid words) and the DAFT outcome."""
+
+    def test_day_tables_are_summary_tables(self):
+        for i in ("ACME-BRE", "ACME-CLD", "ACME-E-FIELD", "ACME-S-FLAME", "SLICE", "FLEX-2"):
+            self.assertEqual(INV[i]["data_availability"], "summary_table", i)
+        self.assertEqual(INV["FLEX"]["data_availability"], "raw_table")
+
+    def test_tie_rule_is_order_independent(self):
+        out = scorer.rank("ISS cotton fabric")
+        rows = [dict(r) for r in out["ranking"]]
+        for r in rows:
+            r.pop("tie_note", None)
+        base = sorted(rows, key=lambda r: (-r["score"], -r["coverage"], -r["evidence"], r["config_id"]))
+        a = [r["config_id"] for r in scorer.order_ties(base, CFG["selection"]["tie_points"])]
+        # Same scores, but the arrival order within equal scores reversed: the result must not change.
+        shuffled = sorted(base[::-1], key=lambda r: -r["score"])
+        b = [r["config_id"] for r in scorer.order_ties(shuffled, CFG["selection"]["tie_points"])]
+        self.assertEqual(a, b)
+
+    def test_recorded_share_first_within_the_margin(self):
+        out = scorer.rank("ISS cotton fabric")
+        top = out["ranking"][0]
+        tie = CFG["selection"]["tie_points"]
+        best = max(r["score"] for r in out["ranking"])
+        group = [r for r in out["ranking"] if best - r["score"] <= tie]
+        self.assertEqual(top["coverage"], max(r["coverage"] for r in group))
+        self.assertNotIn("1g", scorer.TIE_NOTE)  # has_1g_comparison is no longer a tie-break
+
+    def test_solid_words(self):
+        for q in ("lunar habitat solid", "solid fuel fire", "solid materials", "고체 연료"):
+            sc = scorer.interpret(q, CFG)[0]
+            self.assertEqual(sc.get("fuel_phase"), "solid", q)
+            self.assertEqual(scorer.not_understood(q, CFG), [], q)
+        self.assertEqual(scorer.interpret("solid PMMA", CFG)[0]["fuel_material"], "pmma")  # a named material still wins
+
+    def test_dust_is_not_a_fire_signature(self):
+        out = scorer.rank("smoke")
+        p = CFG["similarity"]["role"]
+        daft = next(r for r in out["ranking"] if r["investigation_id"] == "DAFT")
+        self.assertEqual(daft["similarity"]["role"], p["related_focus"])  # detection purpose, no fire outcome
+        self.assertIn(out["results"][0]["investigation_id"], ("SAME", "SAME-R"))
 
 
 class AhpWeights(unittest.TestCase):

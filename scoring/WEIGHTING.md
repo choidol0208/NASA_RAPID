@@ -319,6 +319,14 @@ Earlier checks that also bear on the weights:
 - Each profile was checked on four queries. The validation set has 6 prevention, 2 detection and 2 suppression scenarios. The detection and suppression profiles rest on fewer examples.
 - The research-purpose similarity uses the team's classification of each investigation. A different classification would change `S_role` and, through the large role weights, the detection and suppression rankings.
 - `lunar habitat cotton fabric` has an unstable rank 1 (section 5.5).
+- **What the consistency ratio does not show (config 1.4.0 and later).**
+  - The judgements follow from evidence classes by a fixed rule: 1 for the same class, 3 for one class apart, 5 for two apart.
+  - The prevention weights therefore reduce to "decisive : supporting = 3 : 1", and a CR near 0 follows from the construction.
+  - CR shows that the rule was applied consistently. It is not a measure of the quality of the judgements, so do not present it as one.
+- **The FLEX data stream** (`scoring/data_weights.json`; for the method see `scoring/BUILDUP.md` B2).
+  - Its shares of explained variance (LMG) depend on the ranges that FLEX chose to test and on droplet burning.
+  - The burning-rate unit in the table is "not confirmed".
+  - Carrying the shares over to the suppression of solid fires is an assumption.
 
 **Next steps (plan)**
 1. **Researchers' judgements.**

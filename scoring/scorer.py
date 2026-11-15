@@ -398,12 +398,16 @@ def role_match(concern, c, p, signature=None):
         by_statement = bool(stated) and stated.get("signature") in sigs
         outs = {re.sub(r"\s*\(.*\)$", "", x) for x in _split(c.get("measured_outputs"))}
         measured = [g for g in sigs if outs & set(sg["outputs"].get(g, [])) or set(focus) & set(sg["focus"].get(g, []))]
+        if c["investigation_id"] in (sg.get("not_from_a_fire") or {}):
+            measured = []  # particles of a dust standard, not of a fire
         purpose = "detection label" if by_label else f"NASA-stated {stated['signature']} measurement purpose" if by_statement else ""
         outcome = f"measured {' and '.join(measured)} signature" if measured else ""
+        if c["investigation_id"] in (sg.get("not_from_a_fire") or {}):
+            outcome = "measured particles not produced by a fire"
         note = "; ".join(x for x in (purpose, outcome) if x) or "no detection purpose or signature measurement"
-        if purpose and outcome:
+        if purpose and measured:
             return p["same_axis"], note
-        if purpose or outcome:
+        if purpose or measured:
             return p["related_focus"], note
         return (p["fundamental"] if "fundamental" in roles else p["other"]), note
     if concern in roles:
@@ -692,6 +696,24 @@ def compliance(reqs, r, sc, cfg):
     return out
 
 
+TIE_NOTE = "within the tie margin of the best remaining score; ordered by recorded share, then evidence"
+
+
+def order_ties(rows, tie):
+    """Near-ties (selection.tie_points). rows: one per investigation, sorted by score. At each place, the
+    results within `tie` points of the best remaining score form a group, and the one with the largest
+    recorded share (coverage) comes first, then the stronger evidence, then the higher score. Unlike
+    swapping neighbours once, this does not depend on the order the results arrive in."""
+    rest, out = list(rows), []
+    while rest:
+        top = rest[0]["score"]
+        group = [r for r in rest if round(top - r["score"], 6) <= tie]
+        pick = min(group, key=lambda r: (-r["coverage"], -r["evidence"], -r["score"], r["config_id"]))
+        rest.remove(pick)
+        out.append(dict(pick, tie_note=TIE_NOTE) if pick["score"] < top else pick)
+    return out
+
+
 def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None, catalog=None):
     cfg = config if isinstance(config, dict) else load_config(config)
     inv, cfgs = catalog or load_catalog(catalog_dir)
@@ -752,19 +774,14 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
             key_findings=c.get("key_findings") or c["_inv"].get("key_findings"),
             has_1g_comparison=c["_inv"].get("has_1g_comparison") == "Y",
             verification_status=c["_inv"].get("verification_status")))
-    scored.sort(key=lambda r: (-r["score"], -r["evidence"], -int(r["has_1g_comparison"]), r["config_id"]))
+    scored.sort(key=lambda r: (-r["score"], -r["coverage"], -r["evidence"], r["config_id"]))
     best, others = {}, {}
     for r in scored:  # one configuration per investigation
         if r["investigation_id"] not in best:
             best[r["investigation_id"]] = r
         else:
             others.setdefault(r["investigation_id"], []).append(r["config_id"])
-    inv_rank = list(best.values())  # already sorted by score
-    tie = cfg["selection"]["tie_points"]
-    for i in range(len(inv_rank) - 1):  # near-ties: stronger evidence first
-        a, b = inv_rank[i], inv_rank[i + 1]
-        if a["score"] - b["score"] <= tie and (b["evidence"], b["has_1g_comparison"]) > (a["evidence"], a["has_1g_comparison"]):
-            inv_rank[i], inv_rank[i + 1] = dict(b, tie_note="within tie margin; ordered by evidence quality"), a
+    inv_rank = order_ties(list(best.values()), cfg["selection"]["tie_points"])
     k = top_k or cfg["selection"]["top_k"]
     conf = cfg["confidence"]
     picked = inv_rank[:k]

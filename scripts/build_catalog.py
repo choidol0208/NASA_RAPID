@@ -775,6 +775,13 @@ def value_sources(r):
     return out
 
 
+# Tables whose rows are not individual tests: a planned test matrix (FLEX-2) and the tables with one row per
+# test day (the four ACME day tables, "Flames Ignited" per day; SLICE, fuel per test date). Their evidence
+# class is summary_table, not raw_table (review of 2026-11-15, item A1; METHOD.md 3.1 counts them as days).
+SUMMARY_TABLES = {"PSI-68": "planned test matrix", "PSI-20": "test days", "PSI-21": "test days",
+                  "PSI-22": "test days", "PSI-23": "test days", "PSI-106": "test days"}
+
+
 def platform_of(d):
     hw = (d.get("experimentHardware") or "").lower()
     if d.get("projectType", "").lower().startswith("ground"):
@@ -808,7 +815,7 @@ def main():
         has_table = bool(man[acc]["experimental_tables"])
         if ground:
             avail = "derived_analysis"
-        elif acc == "PSI-68":
+        elif acc in SUMMARY_TABLES:
             avail = "summary_table"
         else:
             avail = "raw_table" if has_table else "papers_only"
