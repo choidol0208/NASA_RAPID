@@ -2,11 +2,19 @@
 request: 20261115-0035-pm-to-ui-build-plan-ui-part-per-question-three-piles-in-n
 by: ui
 state: accepted
-answered: 2026-11-15 08:18 KST
+answered: 2026-11-15 09:09 KST
 ---
 # Answer
 
 *AI-generated (Claude Code), ui role.*
+
+## Progress (09:09): reading order and the table's own codes
+
+- **Reading order (step 6):** catalog's `data/catalog/reading_order.csv` (`e8c5bc5`) is in pile 2 under "Where to read first", for both demo environments. It has the two fixed sentences of section 9 above it and one `order.row` per line, with the evidence words from the closed list ("header seen in n of N files" from `state` and `evidence`, or "not opened"). A state outside the list stops the build.
+  - ISS S1, row 3: "BASS-II Summary Report.pdf (BASS-II, PSI-25): 1 file, 48.97 MB; target tests 44; not opened." This matches the fixture of design.md section 6.
+  - So the ISS now has pile 2 content too.
+- **`pile1.codes` (08:23):** the extinction diameter as NASA's table file writes it. Lunar habitat 4 / 2 / 8 / 3, checked as fixture F5; ISS 40 / 1 / 10 / 5.
+- **Still waiting for data's 0035 files** (none on a branch at 09:09): the header links for the ISS, the per-test file list with "Download file list (CSV)", the raw values read from the 17 test sheets, and the video rows.
 
 ## Progress (08:18): the smallest version is live for both demo environments
 
