@@ -1,12 +1,12 @@
 ---
 role: catalog
-updated: 2026-11-15 11:13 KST
+updated: 2026-11-15 11:15 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-**Sync 11:13:**
+**Sync 11:15:**
 - Merged `catalog-filter` (fast-forward to `3d5776e`). It now holds the data role's `needs.json`, `process.json` and the catalog comparison, plus ui's three-piles fixes.
 - Reading order regenerated: the 53 rows are identical; only the `needs.json` hash in `reading_order.json` changed, so the fixture test runs again.
 - Inbox empty. pm 1012 (by 14:00) has no answer yet.
