@@ -1,10 +1,24 @@
 ---
 role: catalog
-updated: 2026-11-15 16:56 KST
+updated: 2026-11-15 17:19 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
+
+**17:19: check of open points (the human lead asked).**
+- The live page runs config 1.5.3 (read from the public `data/scoring_config.json`).
+- Added the source-log row for the documents that 1.5.3 reuses, and the 1.5.3 changes to `scoring/METHOD.md` 1.6 and 1.8.
+- Still open with pm (1619, by 17:30):
+  - "team's score" in `README.md` lines 43 and 54, and "team score" in `web/SHELL.md` line 14;
+  - two negatives in `how.html` lines 63–64 ("not NASA guidance", "marked when not yet checked").
+- Needs a human (optional): `validation/verification_sheet.csv` has 104 checks for 13 demo configurations and none is checked by a person yet.
+
+**Sync 17:15:**
+- Merged `main` (pm's assistant red-team tests) and `catalog-filter` (ui merged config 1.5.3; `catalog-filter` and the page now run 1.5.3, `main` 1.5.2).
+- ui asked pm (1710) to resample the weight check on 1.5.3. That is pm's file; nothing for catalog.
+- Inbox empty. pm 1619 and 1520 are open (by 17:30).
+- Checks: 83 unit tests, 45 of 45 scenarios, parity 106 of 106, source check clean, reading order up to date.
 
 **16:56: config 1.5.3 (pm 1648, challenge-fit check; weights unchanged; no demo top-3 change).**
 - `partial_gravity` notice with its NASA source (Olson and Ferkul 2012, Table I, checked; OCHMO-TB-008) and the challenge's future sources (LUCI, FM2, E-FIELD).
@@ -71,7 +85,7 @@ blocked_on: none
   - weights match the derivation; reading order up to date.
 - **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 16:56: `main` and `catalog-filter` run config 1.5.2; `catalog-scoring` runs 1.5.3.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 17:19: `main` runs config 1.5.2; `catalog-filter` and `catalog-scoring` run 1.5.3.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.

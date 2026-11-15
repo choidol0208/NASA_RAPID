@@ -115,6 +115,10 @@ The question type comes from words in the query: "smoke" and "detector" give det
   - "30% O2" and "O2 30%" are read, but not "CO2 30%".
   - Pressure is read in kPa, psi, psia, atm, bar or mmHg; flow speed in cm/s, mm/s or m/s.
 - **Words not read:** they are listed in `not_understood`, and the page says they change nothing.
+- **Words the challenge statement uses (1.5.3, pm's challenge-fit check):**
+  - "artemis" is not a lunar alias. The statement's Artemis II example is a spacecraft in flight, so "Artemis II smoke alarm" reads as a detection question with no environment assumed.
+  - "combustion chamber" is in scope; the statement speaks of the combustion chamber of CFI-G. Rocket and propellant words stay out of scope.
+  - Investigation names (BASS, FLEX, SAME) are not ranking terms. The `not_understood` notice says what the ranking reads.
 - **Fire signature (detection questions only, 1.5.0):** `keywords.signature`.
   - Gas words: CO, CO2, HCN, HCl, combustion gases or products, toxic gas, gas sensor.
   - Particulate words: smoke, aerosol, particle, soot.
@@ -152,6 +156,11 @@ Effects on the demo queries:
 ---
 
 ### 1.8 Limits of the similarity rules
+
+- **Partial gravity (1.5.3).**
+  - Every PSI test is a microgravity test. The challenge statement suggests that results at the two ends of the gravity scale could bound intermediate levels. The page does not treat them as bounds.
+  - In NASA drop-tower tests of three materials (Olson and Ferkul 2012, Table I, 5.18 s drops), the oxygen limits at lunar gravity were lower than at both 0 g and 1 g. At Martian gravity they were lower for two of the three; Mylar G lies between.
+  - NASA names partial-gravity material flammability a major gap (OCHMO-TB-008). The `partial_gravity` notice says this, and names LUCI, FM2 and ACME E-FIELD Flames (PSI-22) as the statement's future sources.
 
 - **Detection covers the smoke of overheated materials** (`profiles.detection.scope`, review B5).
   - SAME and SAME-R heated samples without a flame (pyrolysis), so oxygen and pressure stay in evidence class 3 for detection.
