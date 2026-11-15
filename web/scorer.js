@@ -297,12 +297,14 @@ function roleMatch(concern, c, p, signature = null) { // mirrors role_match: [si
     const byLabel = roles.includes("detection");
     const byStatement = !!stated && sigs.includes(stated.signature);
     const outs = new Set(split(c.measured_outputs).map((x) => x.replace(/\s*\(.*\)$/, "")));
-    const measured = sigs.filter((g) => (sg.outputs[g] || []).some((x) => outs.has(x)) || focus.some((x) => (sg.focus[g] || []).includes(x)));
+    const notFire = Object.prototype.hasOwnProperty.call(sg.not_from_a_fire || {}, c.investigation_id);
+    const measured = notFire ? [] // particles of a dust standard, not of a fire
+      : sigs.filter((g) => (sg.outputs[g] || []).some((x) => outs.has(x)) || focus.some((x) => (sg.focus[g] || []).includes(x)));
     const purpose = byLabel ? "detection label" : byStatement ? `NASA-stated ${stated.signature} measurement purpose` : "";
-    const outcome = measured.length ? `measured ${measured.join(" and ")} signature` : "";
+    const outcome = notFire ? "measured particles not produced by a fire" : measured.length ? `measured ${measured.join(" and ")} signature` : "";
     const note = [purpose, outcome].filter((x) => x).join("; ") || "no detection purpose or signature measurement";
-    if (purpose && outcome) return [p.same_axis, note];
-    if (purpose || outcome) return [p.related_focus, note];
+    if (purpose && measured.length) return [p.same_axis, note];
+    if (purpose || measured.length) return [p.related_focus, note];
     return [roles.includes("fundamental") ? p.fundamental : p.other, note];
   }
   if (roles.includes(concern)) return [p.same_axis, ""];
@@ -535,6 +537,20 @@ function compliance(reqs, r, sc, cfg) { // mirrors compliance: status and the ba
   });
 }
 
+const TIE_NOTE = "within the tie margin of the best remaining score; ordered by recorded share, then evidence";
+function orderTies(rows, tie) { // mirrors order_ties: at each place, the near-tie group by coverage, evidence, score
+  const rest = [...rows], out = [];
+  while (rest.length) {
+    const top = rest[0].score;
+    const group = rest.filter((r) => pyRound(top - r.score, 6) <= tie);
+    group.sort((a, b) => (b.coverage - a.coverage) || (b.evidence - a.evidence) || (b.score - a.score) || cmp(a.config_id, b.config_id));
+    const pick = group[0];
+    rest.splice(rest.indexOf(pick), 1);
+    out.push(pick.score < top ? { ...pick, tie_note: TIE_NOTE } : pick);
+  }
+  return out;
+}
+
 export function createScorer({ config, investigationsCsv, configurationsCsv }) {
   const invRows = parseCSV(investigationsCsv);
   const inv = {};
@@ -592,23 +608,13 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
         has_1g_comparison: c._inv.has_1g_comparison === "Y", verification_status: c._inv.verification_status,
       };
     });
-    scored.sort((a, b) => (b.score - a.score) || (b.evidence - a.evidence) ||
-      ((b.has_1g_comparison ? 1 : 0) - (a.has_1g_comparison ? 1 : 0)) || cmp(a.config_id, b.config_id));
+    scored.sort((a, b) => (b.score - a.score) || (b.coverage - a.coverage) || (b.evidence - a.evidence) || cmp(a.config_id, b.config_id));
     const best = new Map(), others = {};
     for (const r of scored) {
       if (!best.has(r.investigation_id)) best.set(r.investigation_id, r);
       else (others[r.investigation_id] = others[r.investigation_id] || []).push(r.config_id);
     }
-    const invRank = [...best.values()];
-    const tie = cfg.selection.tie_points;
-    for (let i = 0; i < invRank.length - 1; i++) {
-      const a = invRank[i], b = invRank[i + 1];
-      const better = b.evidence > a.evidence || (b.evidence === a.evidence && b.has_1g_comparison && !a.has_1g_comparison);
-      if (a.score - b.score <= tie && better) {
-        invRank[i] = { ...b, tie_note: "within tie margin; ordered by evidence quality" };
-        invRank[i + 1] = a;
-      }
-    }
+    const invRank = orderTies([...best.values()], cfg.selection.tie_points);
     const k = topK || cfg.selection.top_k;
     const conf = cfg.confidence;
     let picked = invRank.slice(0, k);

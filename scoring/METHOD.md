@@ -25,7 +25,7 @@ score = 100 × M × G × Σ_d ( w_d × S_d )
 | `S_d` | Similarity of dimension d between the user's conditions and the configuration, from 0 to 1 |
 | `w_d` | Weight of dimension d for the question type (profile). The weights of the dimensions the user gave are rescaled to sum to 1 |
 | `G` | Gate, 0.5 to 1: cuts the score when fuel or oxygen is far off, because other dimensions must not make up for it |
-| `M` | Evidence factor, 0.7 to 1: data availability and microgravity duration of the investigation |
+| `M` | Evidence factor: data availability and microgravity duration of the investigation. The formula allows 0.7 to 1, but because the verification term is fixed at 0.7 (1.5), the reachable range is 0.85 to 0.97. The catalog's investigations take 0.88, 0.95 or 0.97 |
 
 **Seven dimensions:** oxygen (`o2`), pressure, flow, fuel, sample shape (`geometry`), research purpose (`role`), diluent gas.
 - A dimension counts only if the user's query gives it; the research purpose always counts.
@@ -71,11 +71,18 @@ The question type comes from words in the query: "smoke" and "detector" give det
 - **Gate (non-compensatory):** if the fuel or the O2 similarity is below 0.2, the score is multiplied by 0.5 to 1.0. The factor rises linearly from 0.5 at a similarity of 0 to 1.0 at a similarity of 0.2.
 - **Evidence factor:** `M = 0.7 + 0.3 × mean(data availability, microgravity duration, verification)`.
   - Data availability: raw table 1.0, summary table 0.8, derived analysis 0.6, images 0.5, papers only 0.3.
+  - A table whose rows are not individual tests is a summary table. This covers the FLEX-2 planned matrix and, since the review of 2026-11-15 (A1), the day tables: the four ACME tables (PSI-20 to 23, "Flames Ignited" per day) and SLICE (PSI-106, fuel per test date). They were `raw_table` before, so their M is now 0.95 instead of 0.97.
   - Microgravity duration: long 1.0, short 0.6, ground 0.5.
   - Verification: 0.7 whether or not a person has checked the row, so checking rows never reorders the ranking.
 - **Selection:**
   - One configuration per investigation.
-  - The top 3 are the result; scores within 3 points count as a tie and are ordered by evidence.
+  - The top 3 are the result.
+  - Near-ties (`selection.tie_points`, 3 points), rule of 2026-11-15 (review A2). Each place is filled in the same way. The results within 3 points of the best remaining score form a group, and they are ordered by:
+    1. the larger recorded share (`coverage`: the share of the weight compared with a value that a NASA source states);
+    2. the stronger evidence factor;
+    3. the higher score.
+
+    The rule does not depend on the order the results arrive in. Before, neighbours were swapped once, by evidence and then by `has_1g_comparison`. That field is empty when the record does not mention a 1 g comparison, so the old rule penalised silence and was not in this document.
   - If the user's O2 is not air (outside 21 ± 2%) and none of the top 3 was tested at that O2, the third place goes to the best result that was.
 - **Unreported atmosphere:**
   - When a record gives no O2, it is scored as 21%.
@@ -132,6 +139,24 @@ Effects on the demo queries:
 - The full list is in `validation/report.md`.
 
 ---
+
+### 1.8 Limits of the similarity rules
+
+These are known limits, not yet changed (review of 2026-11-15, part C):
+- **Thermal thickness labels on ranges.**
+  - SAFFIRE-II-C03 (PMMA, 0.85 to 10 mm) is labelled thick, and SAFFIRE-II-C01 (silicone, 0.27 to 1.03 mm) thin. Each range crosses the thin–thick boundary.
+  - BASS-II-C06 holds a PMMA spherical section and a wax candle in one configuration, so a PMMA query finds it as "same material".
+  - Of the SIBAL configurations, only SAFFIRE-II-C02 records a thickness (0.37 mm).
+  - Next: a `mixed` label or split configurations.
+- **Inside a range scores 1.** A query value inside a tested range scores 1.0 even if the tests sit only at the two ends. The `ranges_separate` warning covers only O2 and pressure ranges compared together.
+- **The diluent rule is a first-order approximation.**
+  - It compares molar heat capacities at 298 K, squared.
+  - At flame temperatures the heat capacity of CO2 is much larger than at 298 K, and helium's high thermal diffusivity is not captured (MODEL_BASIS.md B).
+  - The direction agrees with the FLEX regression (`scoring/data_weights.json`): helium raises the burning-rate constant, CO2 lowers it.
+- **Scale numbers are not comparable between dimensions.** The shapes were chosen per dimension (MODEL_BASIS.md, rows on oxygen and pressure).
+  - Oxygen is asymmetric: a fire above the tested O2 may be worse. So it decays exponentially in the log ratio, with its own scale on each side.
+  - Pressure and flow speed act through power laws with no safe side. So they use a symmetric Gaussian in the log ratio.
+  - "σ = ln 2" and "scale ln(26/21)" are therefore not on one scale.
 
 ## 2. How it was validated
 
