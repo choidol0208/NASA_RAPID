@@ -1,19 +1,16 @@
 ---
 role: catalog
-updated: 2026-11-15 10:55 KST
+updated: 2026-11-15 11:13 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-**Sync 10:55:**
-- Merged `catalog-filter` (ui's tie-rule note). ui answered 1012 `done` (closed). pm 1012 has no answer yet.
-- Read the data role's `data/pipeline/catalog_comparison.csv` (on `data-pipeline`, not merged yet; 164 rows). With rounding tolerance, no catalog range conflicts with `tests.csv`:
-  - 65 equal; 48 not comparable; 39 with no value on either side;
-  - 8 with no pipeline value: the BASS flow "up to 40 cm/s" (record) and the FLEX and CFI flow 0 (team reading), as expected;
-  - 4 catalog_wider: the BASS-II-C03 and C04 flow (the catalog reads every speed of the 'Air display' cell); the SAFFIRE-I-C01 and SAFFIRE-II-C03 O2 (the cell is a range, and the pipeline keeps one value).
-  - None needs a catalog change.
-- data's new `pipeline/spec/needs.json` (on `data-pipeline`) leaves the reading order identical (53 rows, simulated). Only the input hash in `reading_order.json` goes stale when it is merged. I regenerate it at the next sync after that merge; the fixture test skips meanwhile.
+**Sync 11:13:**
+- Merged `catalog-filter` (fast-forward to `3d5776e`). It now holds the data role's `needs.json`, `process.json` and the catalog comparison, plus ui's three-piles fixes.
+- Reading order regenerated: the 53 rows are identical; only the `needs.json` hash in `reading_order.json` changed, so the fixture test runs again.
+- Inbox empty. pm 1012 (by 14:00) has no answer yet.
+- The data role's `catalog_comparison.csv` (read at 10:55): no catalog range conflicts with `tests.csv` once rounding is allowed, so no catalog change is needed.
 - Checks: 76 unit tests, 43 of 43 scenarios, parity 104 of 104, source check clean, reading order up to date.
 
 **10:13: config 1.5.1 on `catalog-scoring` (weights unchanged since 1.4.0).**
