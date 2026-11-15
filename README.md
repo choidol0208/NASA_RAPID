@@ -2,7 +2,7 @@
 
 Fire Evidence Explorer is a web page: you describe a crewed environment, and it shows which of NASA's microgravity fire investigations come closest, what their recorded tests can say about six fire-safety information needs, and where the evidence stops.
 
-**Live page:** https://choidol0208.github.io/NASA_RAPID/
+**Live page (demo version):** https://choidol0208.github.io/NASA_RAPID/ . The live page is a demo: the dashboard works in full, but no language model runs on it, so the SI assistant only replays recorded answers. For the full version, with the assistant answered by the language model on your computer, download it below.
 
 **Download (release):** [**with the local language model, recommended**](https://github.com/choidol0208/NASA_RAPID/releases/latest/download/fire-evidence-explorer-with-local-model.zip) · [rule-based, no model](https://github.com/choidol0208/NASA_RAPID/releases/latest/download/fire-evidence-explorer-rule-based.zip) · [release page](https://github.com/choidol0208/NASA_RAPID/releases/latest). Unzip, then run the script named in `START_HERE.md`; the model itself (about 13 GB) is fetched on the first start after asking. The live page needs no download.
 
