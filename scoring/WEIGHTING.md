@@ -211,6 +211,8 @@ The pair-by-pair values and reasons are in `scoring/ahp_judgements.json`.
 | o2 | 0.085 | The SAME tests heat materials until they smoke rather than burning them in a flame, so the oxygen level matters less than for flame spread | team |
 | pressure, geometry | 0.049, 0.051 | Refine only: no detection record names them as a main variable | team |
 
+Scope (config 1.5.2, review B5): the detection profile covers the smoke of overheated materials (heated without a flame), as in SAME and SAME-R. Pressure stays in class 3 in the literature stream until a source on the smoke of overheated materials is found and checked (`profiles.detection.scope`).
+
 ### 4.3 Suppression: role 0.286, fuel 0.162, o2 0.162, diluent 0.162, flow 0.089, pressure 0.080, geometry 0.059
 
 | Dimension | Weight | Basis | Type |
@@ -314,6 +316,7 @@ Earlier checks that also bear on the weights:
 
 **Limits**
 - The 51 pairwise judgements are an AI session's judgements from the evidence in section 4, approved as they are by the human lead. AHP checks their consistency, not their truth. There is no ground-truth ranking to test them against.
+- Decisive (class 1) is a large weight, not a veto (review B1, the human lead's decision, 2026-11-15; `scoring/METHOD.md` 1.5).
 - The weighted sum treats the criteria as independent. Only fuel and oxygen are handled non-additively (the gate). Other interactions, such as flow and oxygen together setting a flammability boundary, are not modelled as interactions.
 - Purpose is read from keywords. A query that mixes purposes gets the first one in the order detection, suppression, prevention. A query with no purpose word gets prevention, and the assumption is shown.
 - Each profile was checked on four queries. The validation set has 6 prevention, 2 detection and 2 suppression scenarios. The detection and suppression profiles rest on fewer examples.

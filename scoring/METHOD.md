@@ -29,6 +29,12 @@ score = 100 × M × G × Σ_d ( w_d × S_d )
 
 **Seven dimensions:** oxygen (`o2`), pressure, flow, fuel, sample shape (`geometry`), research purpose (`role`), diluent gas.
 - A dimension counts only if the user's query gives it; the research purpose always counts.
+- **A score orders the investigations for one question only.**
+  - Scores of different questions are not comparable, because the weights are rescaled over the dimensions each question sets. "ISS" sets 4 dimensions and "lunar habitat cotton fabric" 6.
+  - Compare questions by their test counts, not by their scores (review of 2026-11-15, B4; the human lead's decision).
+- **No material named** (since 1.5.2, review B3).
+  - Without a material the fuel is not compared, so the ranking rests on the atmosphere, the flow and the purpose; for "lunar habitat" the top 3 are fuel droplets (FLEX) and gas burners (ACME-CFI-G, ACME-BRE).
+  - The result carries the `no_material` warning and asks for a material. The ranking itself is unchanged.
 - The diluent counts only in suppression questions.
 
 ### 1.3 Weights by question type (profiles)
@@ -69,6 +75,8 @@ The question type comes from words in the query: "smoke" and "detector" give det
 ### 1.5 Gate, evidence factor and selection
 
 - **Gate (non-compensatory):** if the fuel or the O2 similarity is below 0.2, the score is multiplied by 0.5 to 1.0. The factor rises linearly from 0.5 at a similarity of 0 to 1.0 at a similarity of 0.2.
+  - Evidence class 1 ("decisive", WEIGHTING.md) means a large weight. It is not a veto. A weighted sum lets the other conditions make up for part of a mismatch; the gate stops that only when fuel or oxygen is far off.
+  - The review of 2026-11-15 (B1) proposed an oxygen gate at 0.37 and a flow gate (0.5). The human lead kept the current gate. With the stricter oxygen gate, "lunar habitat cotton fabric" ranks a gas burner first (ACME-BRE 62.6), because no solid test reached 30% O2. That absence is shown by the test counts, not by the ranking (`gate.decisive_is_not_a_veto`).
 - **Evidence factor:** `M = 0.7 + 0.3 × mean(data availability, microgravity duration, verification)`.
   - Data availability: raw table 1.0, summary table 0.8, derived analysis 0.6, images 0.5, papers only 0.3.
   - A table whose rows are not individual tests is a summary table. This covers the FLEX-2 planned matrix and, since the review of 2026-11-15 (A1), the day tables: the four ACME tables (PSI-20 to 23, "Flames Ignited" per day) and SLICE (PSI-106, fuel per test date). They were `raw_table` before, so their M is now 0.95 instead of 0.97.
@@ -127,6 +135,7 @@ The data role's raw-file layer ranks and counts NASA tests from table values onl
    - For ranking, the catalog is more valid. Constant conditions are often not tabulated *because* they were constant. That missingness depends on the value itself (not missing at random, Rubin 1976). A complete-case rule would drop exactly the constant-pressure ISS experiments.
    - For the word "met", the data role is more valid. NASA/SP-2016-6105 Rev2 (5.3) names the verification method of each requirement. A test value per test is not the same evidence as a document read by inspection.
    - Combined rule: scores keep the documented values. The compliance line says `documented` instead of `met` when the value is not a per-test table value, and it names the basis. A team reading is not a NASA statement, so it is `unverified` and leaves the confidence.
+   - The review of 2026-11-15 (B2) proposed capping the similarity of non-table values at 0.8. The human lead kept this rule. The value 0.8 has no source, and a cap would lower exactly the constant-condition experiments described above. On "ISS" it would also move BASS-II, whose pressure a paper states, from first to third.
 3. **BASS-II pressure: assumption against "cannot be placed".**
    - A published paper states the value, so the catalog's "assumed" was too weak.
    - The data role's "cannot be placed from the table" stays right for table placement.
@@ -141,6 +150,10 @@ Effects on the demo queries:
 ---
 
 ### 1.8 Limits of the similarity rules
+
+- **Detection covers the smoke of overheated materials** (`profiles.detection.scope`, review B5).
+  - SAME and SAME-R heated samples without a flame (pyrolysis), so oxygen and pressure stay in evidence class 3 for detection.
+  - The review noted that soot production in flames rises with pressure. That concerns flaming combustion. Pressure would move to class 2 only with a checked source on the smoke or detector response of overheated materials. A simulated class 2 moves no detection rank 1 and changes one rank 3 ("smoke detector for a lunar rover").
 
 These are known limits, not yet changed (review of 2026-11-15, part C):
 - **Thermal thickness labels on ranges.**
