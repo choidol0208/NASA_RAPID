@@ -6,7 +6,7 @@ Fire Evidence Explorer is a web page: you describe a crewed environment, and it 
 
 **Demo links:** [Lunar habitat, cotton fabric](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat%20cotton%20fabric) · [Lunar habitat](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat) · [ISS cabin](https://choidol0208.github.io/NASA_RAPID/?q=ISS) · [How it works](https://choidol0208.github.io/NASA_RAPID/how.html)
 
-**Slides:** [docs/submission/slides.pdf](docs/submission/slides.pdf) (seven slides, a draft built by the pm AI session for the team to revise; source and build script in `docs/submission/deck/`)
+**Slides:** [docs/submission/slides.pdf](docs/submission/slides.pdf) (seven slides, the demo link of the submission; built by the pm AI session, source and build script in `docs/submission/deck/`)
 
 **Start here:** open the "Lunar habitat, cotton fabric" demo, then the tab "What was found" (what NASA's documents report per question, then "ISS and lunar habitat, side by side") and the tab "Where the evidence stops". For the lunar habitat (30% oxygen or more and at or below 70.3 kPa), PSI has no counted test.
 
@@ -20,21 +20,45 @@ It is a research exploration tool. It is not operational fire-safety guidance, a
 
 ## Screenshots
 
-The images are screenshots of the page, taken with `web/capture_media.mjs` from the page built at the 19:00 freeze on 14 November. They were taken before scoring config 1.5.1 and before the page shell of 15 November (top bar, tabs, the method on `how.html`), so the layout, the order and the scores of the result cards in them can differ from the page now; the top three under config 1.5.2 are under "Ranking tests" below.
+Captures of the team's own page as it is now (not AI-generated images). The four of the public page were taken with headless Chrome at 1,440 px on 15 November 2026 at 22:09 KST, for the example "lunar habitat cotton fabric"; the one of the conversation was taken from the local install at 20:11 KST by `docs/submission/deck/capture.mjs`.
 
-The lunar habitat query: how the input was read, and the closest investigations.
+**The dashboard.** What you typed and how it was read, three key figures, a note on gravity, five tabs that each say what they hold, and the closest investigations with their match scores.
 
-![Lunar habitat query: the input as read, with oxygen 30% and 70.3 kPa from the preset, and the three closest investigations](web/media/02_lunar_first_screen.png)
+![The dashboard for lunar habitat cotton fabric: the request as read, three key figures, five tabs, and the first result card with its match score and its match per dimension](docs/readme/01_dashboard_closest.png)
 
-The ISS cabin and the lunar habitat side by side: counted recorded tests per need.
+**A conversation with the SI assistant (local install, with the language model).** The request, the six steps the assistant went through, how the request was read (each value is a button that changes it), the answer with a citation number on every sentence, its label, and the box for a follow-up.
 
-![ISS cabin and lunar habitat side by side: counted tests for each of six needs](web/media/03_compare_iss_lunar.png)
+![One conversation with the assistant on the local install: the request, six steps, the values read from the request as buttons, the cited answer, suggested next questions and the follow-up box](docs/submission/deck/img/assistant_live.png)
 
-Where the evidence stops: every recorded test on the oxygen axis, by kind of fuel, with the input at 30% oxygen.
+**What was found.** One tile per fire-safety question: how many results NASA's documents report, and how many of them at this environment's oxygen and pressure.
 
-![Recorded tests on the oxygen axis for gas flames, fuel droplets and solid fuels; solid-fuel tests end at 22.2% oxygen](web/media/04_lunar_evidence_map.png)
+![The tab What was found: six tiles, one per fire-safety question, with the number of quoted results](docs/readme/02_what_was_found.png)
 
-A short animation, from the ISS query to the lunar habitat query: [`web/media/demo_iss_to_lunar.gif`](web/media/demo_iss_to_lunar.gif) (2.4 MB). It was recorded on 14 November, before scoring config 1.5.1 and before the page shell, so it shows the old layout, and its result cards can show an earlier order and earlier scores.
+**Where the data are.** From the 60,866 files of NASA's archive to the 26 tests recorded inside this environment's ranges, then question by question: in NASA's tables, in the archive's files, or no record.
+
+![The tab Where the data are: a flow of four figures, a table of the six questions, and question blocks with three figure tiles](docs/readme/03_where_the_data_are.png)
+
+**Where the evidence stops.** Every recorded test on the oxygen axis by kind of fuel, with the input marked, and one card per kind of fuel.
+
+![The tab Where the evidence stops: recorded tests on the oxygen axis for gas flames, fuel droplets and solid fuels, and three cards with the tests at or above 30% oxygen](docs/readme/04_where_the_evidence_stops.png)
+
+Older screenshots and a short animation of 14 November, from before the page's redesign, are in `web/media/`.
+
+## With and without the language model
+
+The dashboard is the same everywhere: code computes every count, rank and figure, and no language model touches a number. What changes is the SI assistant.
+
+| | Public page | Local install, no model | Local install with the model |
+|---|---|---|---|
+| How to open it | [the live page](https://choidol0208.github.io/NASA_RAPID/), nothing to install | `./install.sh --no-model`, then `./run.sh --no-model` | `./install.sh`, then `./run.sh` |
+| What it needs | a browser | Python 3.10 or newer | also Ollama and the model OpenAI gpt-oss:20b (Apache-2.0): about 13 GB to download, 12.7 GB loaded on the build machine |
+| Is the model in this repository? | no | no | no: `install.sh` asks once before it downloads the model through Ollama |
+| Reading of your request | rule parser | rule parser | the rule parser at once; the model then reads it twice, and the page says whether the reading was checked or corrected |
+| The assistant | replays two recorded conversations, marked as recorded | answers at once, put together by team code from the facts; the label says that no model wrote it | answers each request in about a minute (median 51 s over 74 evaluation questions on the build machine): the steps are shown while it works, every sentence cites a fact, and code and a second model pass check each sentence |
+| Change a value, ask a follow-up | no | yes | yes |
+| Indicator on the page | "Rule-based mode · Recorded answers of gpt-oss:20b" | "Rule-based mode" | "gpt-oss:20b · local model" |
+
+The picture of the conversation above is the third column. How one turn works, what was measured and the limits are under "Assistant" below.
 
 ## What you can do on the page
 
