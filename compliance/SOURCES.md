@@ -248,3 +248,4 @@ Before the deadline, move this table into Space Agency Data and References in th
 The DOI of each experiment is in `data/psi/manifest.json`. PSI requires you to cite the experiment by its DOI when you use the data.
 
 Type: data / document / code / library / model / image / font / other
+| 11/15 19:28 | correction | Adds to the row of 11/14 21:33 on the NIST-JANAF Thermochemical Tables (N-023, O-029, C-095, H-064, He-001): on 15 November 2026 the five files were also removed from the git history of every branch (history rewrite and forced push, `docs/history_rewrite_20261115.md`). GitHub may still return the old commits to a request by their full id until it removes unreferenced objects | https://janaf.nist.gov/ | NIST Standard Reference Data, copyright U.S. Secretary of Commerce: not public domain; not redistributed | NIST | `scoring/flame_temperature.py` reads a local download (a check; no score uses it) |

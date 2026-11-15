@@ -46,7 +46,7 @@ A short animation, from the ISS query to the lunar habitat query: [`web/media/de
 
 ## What is implemented today
 
-Checked on 15 November 2026 at about 16:15 KST against the page built from commit `362f010` in a scratch folder (`python3 web/build.py`: `built 62 files`): the section headings of the built `index.html` and `how.html`, `web/SHELL.md` and the data files the page loads. The live site was not opened for this check.
+Checked on 15 November 2026 at about 16:15 KST against the page built from commit `371150e` (`371150e` before the history rewrite of 15 November 2026, `docs/history_rewrite_20261115.md`) in a scratch folder (`python3 web/build.py`: `built 62 files`): the section headings of the built `index.html` and `how.html`, `web/SHELL.md` and the data files the page loads. The live site was not opened for this check.
 
 - The shell (`web/SHELL.md`): a sticky top bar with the search, "Copy link", "How it works" and "Source code"; after a query, a row of summary tiles ("At a glance") and five tabs; a footer with the notices and the build stamp.
 - A query box with six presets: ISS cabin, Lunar habitat, Lunar habitat cotton fabric, Smoke detection on the ISS, Spacesuit, Mars base. `?q=` opens the page with a query.
@@ -237,7 +237,7 @@ How to read the results: the question set is small and was written by an AI sess
 
 ## How to run it
 
-Needs Python 3 (tried with 3.13.5). The page build, the scorer and the pipeline check use only the Python standard library. Other needs are named at each step. The results below were measured on 15 November 2026 at about 16:15 KST, at commit `362f010` (the build, the pipeline check, the AI tests and checks and the validation run on copies in a scratch folder, so that nothing in the repository was written).
+Needs Python 3 (tried with 3.13.5). The page build, the scorer and the pipeline check use only the Python standard library. Other needs are named at each step. The results below were measured on 15 November 2026 at about 16:15 KST, at commit `371150e` (the build, the pipeline check, the AI tests and checks and the validation run on copies in a scratch folder, so that nothing in the repository was written).
 
 ### Build and open the page
 
@@ -304,7 +304,7 @@ python3 ai/check_all.py
 
 Result of the tests, run with `AI_NO_MODEL_CALLS=1`: `Ran 363 tests ... OK` (the AI layer's tests in `ai/` and the assistant's in `ai/assistant/`). No test calls a model. `ai/check_all.py` only reads; it checks everything in `data/insights/`.
 
-Result of `ai/check_all.py` at commit `362f010`: `PASS: 0 hard failure(s); 2 file(s) not built yet; 0 report-only lint hit(s)`. The two files not built yet are the assistant's `data/insights/assistant_eval.json` and `assistant_recorded.json`.
+Result of `ai/check_all.py` at commit `371150e`: `PASS: 0 hard failure(s); 2 file(s) not built yet; 0 report-only lint hit(s)`. The two files not built yet are the assistant's `data/insights/assistant_eval.json` and `assistant_recorded.json`.
 
 The build rewrites every file in `data/insights/`, with no model call (needs NumPy, pandas and scikit-learn; not run for this README):
 
@@ -343,6 +343,8 @@ The repository holds what the page needs: the 24 PSI records, the 22 experimenta
 - The full record is `compliance/AI_USAGE_LOG.md`. On the method page `how.html`, the block "How AI is used here, and how it was checked" shows the counts (`data/insights/quality.json`).
 
 ## Known limits
+
+- **History rewrite of 15 November 2026.** Five NIST-JANAF table files that the team may not redistribute were in the repository for 84 minutes on 14 November. They were removed from the files then and, on 15 November, from the git history of every branch; 261 of 584 commits have a new id. What was done, how it was checked and the table of old and new ids: `docs/history_rewrite_20261115.md`. GitHub may still show an old commit to someone who opens it by its full id until it removes unreferenced objects.
 
 Data and pipeline (from `pipeline/README.md`):
 

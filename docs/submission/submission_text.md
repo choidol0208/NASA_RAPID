@@ -1,4 +1,4 @@
-DRAFT written by an AI assistant (Claude Code, pm role) for the team to rewrite in its own words before submitting. Every number is listed at the end with its source and the way to recount it.
+DRAFT written by an AI assistant (Claude Code, pm role) for the team to rewrite in its own words before submitting. Every number is listed at the end with its source and the way to recount it. Commit ids in this file are the ids from before the history rewrite of 15 November 2026 (`docs/history_rewrite_20261115.md`); `docs/history_rewrite_20261115_ids.tsv` gives the new id of each.
 
 > **For the team lead.** Delete this box before submitting.
 >
@@ -13,7 +13,7 @@ DRAFT written by an AI assistant (Claude Code, pm role) for the team to rewrite 
 >
 > **2. The assistant's measured values are filled in** (15 November, 18:30 KST) from `data/insights/assistant_eval.json`: the full pipeline and the one-call baseline on all 74 questions, two ablation arms on a fixed half of 38, the third not run for time. The text for the submission form itself is in `docs/submission/form_fields.md`.
 >
-> **3. Decisions that wait for you.** Slide 6 of `slides_outline.md` (version A or B), the five NIST-JANAF files that remain in the git history of the public repository, the short quotes, and the branch `data-lab`. See "Open points". The catalog role's review items B1 to B5 are decided (your decisions of 15:16, config 1.5.2); the text states them under "How it works".
+> **3. Decisions that wait for you.** Slide 6 of `slides_outline.md` (version A or B), the five NIST-JANAF files (decided and done on 15 November: removed from the git history of every branch, `docs/history_rewrite_20261115.md`), the short quotes, and the branch `data-lab`. See "Open points". The catalog role's review items B1 to B5 are decided (your decisions of 15:16, config 1.5.2); the text states them under "How it works".
 >
 > **4. The three sentences most worth rewriting in your own words.**
 > - The first sentence of the High-Level Summary: what the thing is.
@@ -978,7 +978,7 @@ Numbers this draft could not recount, marked `[NOT RECOUNTED: ...]` where they s
 
 Decisions that wait for the human lead:
 
-- The five NIST-JANAF files (NIST SRD 13: C-095, H-064, He-001, N-023, O-029; copyright U.S. Secretary of Commerce, not public domain) were removed from the repository, but they remain in its git history: commit `6202f9a` of 14 November added them under `scoring/reference/janaf/`, and that commit is on `main` and on the remote branches. The repository is the Final Project link, and the final submission asks you to confirm that no copyrighted material was used without permission. Decide whether this is acceptable under NIST's terms or whether the history needs action. This job changed nothing in git.
+- The five NIST-JANAF files (NIST SRD 13: C-095, H-064, He-001, N-023, O-029; copyright U.S. Secretary of Commerce, not public domain) were in the repository on 14 November from 20:08 to 21:32 KST. On 15 November 2026, on the human lead's decision, they were also removed from the git history of every branch (`docs/history_rewrite_20261115.md`): no commit on any branch holds them. GitHub may still show the old commits to someone who opens them by their full id until it removes unreferenced objects; removing them at once is a request to GitHub Support by the repository's owner.
 - F6: the challenge's Resources tab lists the PSI combustion repository (read by the pm AI session on 15 November 2026 at 12:31 KST; logged in `compliance/SOURCES.md`). A person should look at the tab once before submitting.
 
 - The catalog role's review items B1 to B5: decided by the human lead at 15:16 (catalog's recommendations taken; config 1.5.2, on `main` since 16:03). No weight, score or top 3 changed. "How it works", "Ranking", states the five decisions; B3 and B4 are rules of this text (`coord/requests/20261115-1520-catalog-to-pm-...md`). This point is closed.

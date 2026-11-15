@@ -266,8 +266,24 @@ def require_clean():
         sys.exit("Commit your own changes first (tracked files are modified):\n" + dirty)
 
 
+# The commit that added scoring/reference/janaf/. It was removed from every branch on 15 November 2026
+# (docs/history_rewrite_20261115.md). A branch that still descends from it holds the old history.
+REMOVED_COMMIT = "6202f9a0f05c9a5fd9fb00f9d95bf8488bffa26e"
+
+
+def holds_removed_history(rev):
+    p = subprocess.run(["git", "merge-base", "--is-ancestor", REMOVED_COMMIT, rev], capture_output=True, cwd=ROOT)
+    return p.returncode == 0  # 1: not an ancestor; 128: the old commit is not in this clone at all
+
+
 def merge(ref):
     """Merge ref into the current branch. On conflict, abort and report. Returns True when merged."""
+    for side in ("HEAD", ref):
+        if holds_removed_history(side):
+            print(f"STOP: {side} still holds the history that was removed from GitHub on 15 November 2026. "
+                  "Nothing was merged. Reset this clone first: docs/history_rewrite_20261115.md, "
+                  "section 'For team members'. Do not push this branch.")
+            return False
     p = subprocess.run(["git", "merge", "--no-edit", ref], capture_output=True, text=True, cwd=ROOT)
     if p.returncode == 0:
         last = (p.stdout.strip().splitlines() or ["merged"])[-1]

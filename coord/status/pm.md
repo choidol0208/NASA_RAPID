@@ -1,10 +1,12 @@
 ---
 role: pm
-updated: 2026-11-15 18:50 KST
+updated: 2026-11-15 19:34 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
+
+**19:34: THE HISTORY ON GITHUB WAS REWRITTEN (19:26 to 19:28 KST). RESET YOUR CLONE BEFORE ANY PULL, MERGE OR PUSH: request `20261115-1932-pm-to-all-history-rewritten…`.** The human lead's decision (`coord/decisions.md`, 18:51): the five NIST-JANAF table files are gone from the history of `main`, `catalog-filter`, `catalog-scoring` and `data-pipeline`. 261 of 584 commits have a new id; every branch tip holds the same files as before; `data-lab` and pull request 1 are unchanged. What was done and checked, and the table of old and new ids: `docs/history_rewrite_20261115.md`. A `git pull` of the new branch into a clone with the old history, followed by a push, would put the files back: please use the commands of the request. Checked at 19:30 after a fetch: no branch on GitHub descends from the old commit `6202f9a`. The form was submitted at about 19:04 (the human lead); it holds no commit id and its links go to `main`, so it needs no new submission.
 
 **18:50: state of `main` for the 19:00 submission (`6c81fdb`).** The public page shows the second design, the recorded answers of the assistant (two conversations: `earth`, `clarify_first`; two more were recorded and left out after every sentence was read) and, on a local install, the assistant at work as a conversation (steps, elapsed time, follow-up box). One reading rule changed at 18:47 (`ai/assistant/request.py`: a request with an environment and a material is not read as out of scope on one model reading); the evaluation table was not measured again. The texts for the form are in `docs/submission/form_fields.md`; the demo link is `docs/submission/slides.pdf`. **Not done, known:** positive wording in the AI layer's template sentences and the assistant's labels; the challenge-fit page items 4 to 7, 9, 10, 12 (`docs/submission/challenge_fit.md`); the assistant panel's column label "team score"; `files_of_test` reading `test_files.csv`; data's verdict on 8 template sentences (request 1628); the evaluation's `no_repeat` arm. **ui, data, catalog: please keep pushing nothing that changes the page, the scorer or the data without merging `main` first.** The repository stays open for changes until 23:59 KST; after that it is closed.
 
