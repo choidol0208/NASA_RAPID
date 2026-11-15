@@ -19,6 +19,10 @@ Usage:
   python3 pipeline/zip_directory.py fetch OUT_DIR FILE_ID [FILE_ID ...]
       writes OUT_DIR/<file_id>.json (member list, bytes fetched, status codes)
       and prints one line per archive; put OUT_DIR outside the repository
+  python3 pipeline/zip_directory.py members OUT_DIR
+      (added 2026-11-15) writes data/pipeline/archive_members.csv: one row per
+      .zip archive tied by name to a FLEX test inside the lunar-habitat ranges
+      (test_files.json), from the member lists in OUT_DIR
   python3 pipeline/zip_directory.py sample OUT_DIR
       writes data/pipeline/archive_members_sample.csv from the member lists
       in OUT_DIR: one row per archive, member name pattern (digits masked as
@@ -244,11 +248,62 @@ def sample(out_dir):
                                                           os.path.relpath(OUT_CSV, ROOT)))
 
 
+# ------------------------------------------------- added 2026-11-15 (design step 12)
+MEMBERS_CSV = os.path.join(ROOT, "data", "pipeline", "archive_members.csv")
+MEMBER_COLS = ["scenario_id", "test_id", "psi_file_id", "archive_name", "archive_bytes", "zip64", "members_declared",
+               "members_parsed", "directories", "members_by_extension", "first_member", "last_member",
+               "uncompressed_bytes", "compressed_bytes", "central_directory_bytes", "bytes_fetched", "requests"]
+
+
+def members(out_dir, scenario="lunar_habitat", investigation="PSI-69"):
+    """archive_members.csv: one row per .zip archive tied by name to a test inside the scenario's ranges
+    (data/pipeline/test_files.json), from the member lists in OUT_DIR/<file_id>.json written by 'fetch'
+    (this script, by range requests). The members were not opened."""
+    with open(os.path.join(ROOT, "data", "pipeline", "test_files.json"), encoding="utf-8") as f:
+        tf = json.load(f)["scenarios"][scenario]
+    rows, missing = [], []
+    for t in sorted(tf, key=lambda x: (len(x), x)):
+        v = tf[t]
+        if v["investigation_id"] != investigation:
+            continue
+        for a in sorted((x for x in v["file_list"] if x["file_name"].lower().endswith(".zip")), key=lambda x: x["file_name"]):
+            path = os.path.join(out_dir, a["psi_file_id"] + ".json")
+            if not os.path.exists(path):
+                missing.append(a["psi_file_id"])
+                continue
+            with open(path, encoding="utf-8") as f:
+                d = json.load(f)
+            ml = d.get("member_list") or []
+            files = [m for m in ml if not m.get("is_dir")]
+            ext = {}
+            for m in files:
+                e = m["name"].rsplit(".", 1)[1].lower() if "." in m["name"].rsplit("/", 1)[-1] else "(none)"
+                ext[e] = ext.get(e, 0) + 1
+            rows.append({"scenario_id": scenario, "test_id": t, "psi_file_id": a["psi_file_id"],
+                         "archive_name": a["file_name"], "archive_bytes": a["bytes"], "zip64": d.get("zip64"),
+                         "members_declared": d.get("members_declared"), "members_parsed": len(ml),
+                         "directories": len(ml) - len(files),
+                         "members_by_extension": "; ".join("%s %d" % (k, ext[k]) for k in sorted(ext)),
+                         "first_member": ml[0]["name"] if ml else "", "last_member": ml[-1]["name"] if ml else "",
+                         "uncompressed_bytes": sum(m["uncompressed_bytes"] for m in files),
+                         "compressed_bytes": sum(m["compressed_bytes"] for m in files),
+                         "central_directory_bytes": d.get("central_directory_bytes"),
+                         "bytes_fetched": d.get("bytes_fetched"), "requests": len(d.get("requests") or [])})
+    with open(MEMBERS_CSV, "w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, MEMBER_COLS, lineterminator="\n")
+        w.writeheader()
+        w.writerows(rows)
+    print("members: %d archives written, %d member lists missing (fetch them first): %s"
+          % (len(rows), len(missing), " ".join(missing)))
+
+
 def main(argv):
     if len(argv) >= 3 and argv[1] == "fetch":
         fetch(argv[2], argv[3:])
     elif len(argv) == 3 and argv[1] == "sample":
         sample(argv[2])
+    elif len(argv) == 3 and argv[1] == "members":
+        members(argv[2])
     else:
         sys.exit(__doc__)
 

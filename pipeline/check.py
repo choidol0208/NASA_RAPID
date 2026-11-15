@@ -15,6 +15,7 @@ and pipeline/README.md, then compares with the files in data/pipeline/.
 Exit code 1 when a check fails. The report carries no timestamp.
 """
 import argparse
+import collections
 import csv
 import hashlib
 import io
@@ -5740,6 +5741,776 @@ def check_p6(ctx):
                    "rules": sum(len(si["rules"]) for si in spec["investigations"].values())}
     return res
 
+
+
+
+# ----------------------------------------------------------------------------
+# Q. the question chain (question_chain.csv, question_chain_counts.csv), written by
+#    pipeline/question_chain.py; recomputed here from the inputs with separate code
+# ----------------------------------------------------------------------------
+
+# Fixtures of docs/raw_data_design/design.md section 10 (placement of all tests, and of the solid-fuel
+# scope), of the video design (docs/video_design/design.md section 12) and of claims.md (the nine CFI-G
+# tests inside the lunar ranges: 7 not stated, 2 without an outcome).
+Q_PLACEMENT_FIXTURES = {
+    ("lunar_habitat", "S1"): {"inside": 26, "cannot_be_placed_from_table": 676, "oxygen_of_oxidizer_stream": 63,
+                              "outside_by_recorded_value": 1059},
+    ("lunar_habitat", "P1"): {"inside": 0, "cannot_be_placed_from_table": 237, "outside_by_recorded_value": 139},
+    ("iss", "S1"): {"inside": 179, "cannot_be_placed_from_table": 739, "oxygen_of_oxidizer_stream": 106,
+                    "outside_by_recorded_value": 800},
+    ("mars_habitat", "S1"): {"no_range_set": 1824},
+}
+Q_P1_PRESSURE_STATES = {"column_in_sampled_raw_file": 134, "documented_only": 129, "not_in_sampled_files": 113}
+Q_LOC_STATE = {"table_cell": "in_table", "raw_file_value_read": "column_in_sampled_raw_file",
+               "raw_file_column_seen": "column_in_sampled_raw_file", "document_sentence": "documented_only",
+               "not_found_in_files_opened": "not_in_sampled_files"}
+# a row of raw_values.csv gives a value for this variable (extraction -> key as written -> variable; '*' any key)
+Q_RAW_VARIABLE = {"saffire_ambient_pressure": {"*": "pressure_kpa"},
+                  "same_particle_size_statistics": {"*": "smoke_particle_size_um"},
+                  "flex_test_sheet": {"Dext (mm)": "extinction_diameter_mm", "Pressure (atm)": "pressure_kpa",
+                                      "O2 Mole Fraction": "o2_pct"}}
+Q_VIDEO_ORDER = ("two_labels_agree", "one_label", "labels_disagree")
+Q_NO_VIDEO_VARIABLES = ("o2_pct", "pressure_kpa", "co_produced_ppm", "co2_produced_pct_points",
+                        "co_to_co2_molar_ratio", "smoke_particle_size_um", "aging_time_s")
+
+
+def q_place(o2, p):
+    if (o2, p) == ("not_specified", "not_specified"):
+        return "no_range_set"
+    if "out" in (o2, p):
+        return "outside_by_recorded_value"
+    if (o2, p) == ("in", "in"):
+        return "inside"
+    return "oxygen_of_oxidizer_stream" if o2 == "not_ambient" else "cannot_be_placed_from_table"
+
+
+def q_inputs(ctx):
+    if not ctx.has("question_chain.csv"):
+        raise Skip("question_chain.csv not written")
+
+    def load():
+        tests = ctx.tests
+        marks = {(r["scenario_id"], r["test_id"]): r for r in ctx.table("scenario_tests.csv")}
+        link = {}
+        for r in ctx.table("need_tests.csv"):
+            link[(r["need_id"], r["test_id"])] = r["objective_link"]
+        scope = {}
+        for n in ctx.needs:
+            ph = (n.get("scope") or {}).get("fuel_phase")
+            scope[n["id"]] = [t for t in tests if not ph or t["fuel_phase"] in ph]
+        return {"tests": tests, "marks": marks, "link": link, "scope": scope,
+                "scenarios": [s["id"] for s in ctx.spec("scenarios")["scenarios"]],
+                "rows": ctx.table("question_chain.csv")}
+    return ctx._get("q_inputs", load)
+
+
+def q_location(ctx, test, var):
+    """Location of one quantity of one test, from the inputs (not from raw_gaps.py)."""
+    def raw_index():
+        idx = set()
+        for r in ctx.table("raw_values.csv"):
+            m = Q_RAW_VARIABLE.get(r["extraction"])
+            if m and r["test_id"]:
+                v = m.get(" ".join(r["header_as_written"].split()), m.get("*"))
+                if v:
+                    idx.add((r["test_id"], v))
+        return idx
+
+    def entries():
+        e = set()
+        for inv in ctx.spec("raw_columns")["investigations"]:
+            for x in inv["entries"]:
+                e.add((inv["investigation_id"], x["standard_variable"]))
+        return e
+
+    def docs():
+        d = set()
+        for s in ctx.sources:
+            for x in s.get("documented_elsewhere", []) or []:
+                d.add((s["investigation_id"], x["variable"]))
+        return d
+    if not o_blank(test.get(var)):
+        return "table_cell"
+    if (test["test_id"], var) in ctx._get("q_raw", raw_index):
+        return "raw_file_value_read"
+    inv = test["investigation_id"]
+    if (inv, var) in ctx._get("q_entries", entries):
+        return "raw_file_column_seen"
+    if (inv, var) in ctx._get("q_docs", docs):
+        return "document_sentence"
+    return "not_found_in_files_opened"
+
+
+@check("Q1_chain_placements",
+       "question_chain.csv: the placement of every test (scenario_tests.csv oxygen and pressure match, recomputed); "
+       "the quantity rows of each scenario, need, role and variable sum to the tests in the need's scope and to its "
+       "counted tests, per placement; fixtures of design.md section 10 (lunar habitat 26 / 676 / 63 / 1,059; solid "
+       "0 / 237 / 139; ISS 179 / 739 / 106 / 800; Mars habitat no range set for 1,824).")
+def check_q1(ctx):
+    res = Result()
+    Q = q_inputs(ctx)
+    got = {}
+    for r in Q["rows"]:
+        if r["row_kind"] != "quantity":
+            continue
+        k = (r["scenario_id"], r["need_id"], r["role"], r["variable"])
+        a = got.setdefault(k, {})
+        b = a.setdefault(r["placement"], [0, 0])
+        b[0] += int(r["in_scope_tests"])
+        b[1] += int(r["counted_tests"])
+        if q_place(r["o2_match"], r["pressure_match"]) != r["placement"]:
+            res.fail(problem="placement does not follow from the pair", row=k, pair=(r["o2_match"], r["pressure_match"]))
+    for sid in Q["scenarios"]:
+        for n in ctx.needs:
+            want = {}
+            for t in Q["scope"][n["id"]]:
+                m = Q["marks"][(sid, t["test_id"])]
+                w = want.setdefault(q_place(m["o2_match"], m["pressure_match"]), [0, 0])
+                w[0] += 1
+                w[1] += Q["link"].get((n["id"], t["test_id"])) == "stated"
+            roles = [("required", v) for v in n["conditions_required"]] + \
+                    [("useful", v) for v in n.get("conditions_useful", [])] + [("outcome", v) for v in n["outcomes_any"]]
+            for role, var in roles:
+                res.checked += 1
+                g = got.get((sid, n["id"], role, var), {})
+                if g != want:
+                    res.fail(problem="placement sums differ", scenario=sid, need=n["id"], variable=var, file=g, recount=want)
+            fx = Q_PLACEMENT_FIXTURES.get((sid, n["id"]))
+            if fx:
+                have = {k: v[0] for k, v in want.items()}
+                if {k: v for k, v in have.items() if v} != {k: v for k, v in fx.items() if v}:
+                    res.fail(problem="fixture of design.md section 10 not reproduced", scenario=sid, need=n["id"],
+                             recount=have, fixture=fx)
+    res.numbers = {"blocks": res.checked, "rows": len(Q["rows"]),
+                   "lunar_S1": {k: v[0] for k, v in sorted(got.get(("lunar_habitat", "S1", "required", "o2_pct"), {}).items())}}
+    return res
+
+
+@check("Q2_chain_locations",
+       "question_chain.csv: the location of every quantity of every test recomputed from tests.csv, raw_values.csv, "
+       "spec/raw_columns.json and spec/sources.json (table cell, value read, column seen, document sentence, not "
+       "found), aggregated by scenario, need, role, variable, investigation, placement and location; summed over "
+       "placement the rows equal need_gap_states.csv (required and outcome roles); lunar habitat P1 pressure: raw "
+       "column 134, document only 129, not found 113.")
+def check_q2(ctx):
+    res = Result()
+    Q = q_inputs(ctx)
+    file_agg, state_agg = {}, {}
+    for r in Q["rows"]:
+        if r["row_kind"] != "quantity":
+            continue
+        if Q_LOC_STATE.get(r["location"]) != r["state"]:
+            res.fail(problem="location and state do not agree", location=r["location"], state=r["state"])
+        k = (r["scenario_id"], r["need_id"], r["role"], r["variable"], r["investigation_id"], r["placement"], r["location"])
+        a = file_agg.setdefault(k, [0, 0])
+        a[0] += int(r["in_scope_tests"])
+        a[1] += int(r["counted_tests"])
+        k2 = (r["scenario_id"], r["need_id"], r["role"], r["variable"], r["state"],
+              r["column_is_or_doc"] if r["state"] == "column_in_sampled_raw_file" else "")
+        b = state_agg.setdefault(k2, [0, 0])
+        b[0] += int(r["in_scope_tests"])
+        b[1] += int(r["counted_tests"])
+    want = {}
+    for sid in Q["scenarios"]:
+        for n in ctx.needs:
+            roles = [("required", v) for v in n["conditions_required"]] + \
+                    [("useful", v) for v in n.get("conditions_useful", [])] + [("outcome", v) for v in n["outcomes_any"]]
+            for t in Q["scope"][n["id"]]:
+                m = Q["marks"][(sid, t["test_id"])]
+                p = q_place(m["o2_match"], m["pressure_match"])
+                c = Q["link"].get((n["id"], t["test_id"])) == "stated"
+                for role, var in roles:
+                    k = (sid, n["id"], role, var, t["investigation_id"], p, q_location(ctx, t, var))
+                    w = want.setdefault(k, [0, 0])
+                    w[0] += 1
+                    w[1] += c
+    for k in sorted(set(want) | set(file_agg)):
+        res.checked += 1
+        if want.get(k) != file_agg.get(k):
+            res.fail(problem="location count differs", key=k, file=file_agg.get(k), recount=want.get(k))
+    n_rows = 0
+    for r in ctx.table("need_gap_states.csv"):
+        n_rows += 1
+        k = (r["scenario_id"], r["need_id"], r["role"], r["variable"], r["state"], r["column_is"])
+        if state_agg.get(k) != [int(r["in_scope_tests_in_state"]), int(r["counted_tests_in_state"])]:
+            res.fail(problem="chain summed over placement differs from need_gap_states.csv", key=k,
+                     chain=state_agg.get(k), need_gap_states=[r["in_scope_tests_in_state"], r["counted_tests_in_state"]])
+    covered = {k for k in state_agg if k[2] in ("required", "outcome")}
+    if len(covered) != n_rows:
+        res.fail(problem="chain has state rows that need_gap_states.csv lacks, or the reverse", chain=len(covered), ngs=n_rows)
+    p1 = {}
+    for k, v in state_agg.items():
+        if k[:4] == ("lunar_habitat", "P1", "required", "pressure_kpa") and k[4] != "in_table":
+            p1[k[4]] = p1.get(k[4], 0) + v[0]
+    if p1 != Q_P1_PRESSURE_STATES:
+        res.fail(problem="P1 pressure fixture not reproduced", recount=p1, fixture=Q_P1_PRESSURE_STATES)
+    res.numbers = {"keys": res.checked, "need_gap_state_rows": n_rows, "lunar_P1_pressure": p1}
+    return res
+
+
+@check("Q3_chain_inside_and_counts",
+       "Counted tests placed inside equal tests_atmosphere of scenario_needs.csv; question_chain_counts.csv per "
+       "scenario, need, placement and pair: tests in scope, counted, not counted split into objective not stated, "
+       "no outcome in the table, a required condition missing (recomputed); claims.md: of the 9 CFI-G tests inside "
+       "the lunar ranges 7 are not stated and 2 hold no outcome for S1; the 17 counted lunar S1 tests are FLEX.")
+def check_q3(ctx):
+    res = Result()
+    Q = q_inputs(ctx)
+    inside = {}
+    for r in Q["rows"]:
+        if r["row_kind"] == "quantity" and r["placement"] == "inside" and r["variable"] == "o2_pct" and r["role"] in ("required", "useful"):
+            inside[(r["scenario_id"], r["need_id"])] = inside.get((r["scenario_id"], r["need_id"]), 0) + int(r["counted_tests"])
+    for r in ctx.table("scenario_needs.csv"):
+        res.checked += 1
+        if inside.get((r["scenario_id"], r["need_id"]), 0) != int(r["tests_atmosphere"]):
+            res.fail(problem="inside counted differs from scenario_needs.csv", scenario=r["scenario_id"], need=r["need_id"],
+                     chain=inside.get((r["scenario_id"], r["need_id"]), 0), scenario_needs=r["tests_atmosphere"])
+    if not ctx.has("question_chain_counts.csv"):
+        res.fail(problem="question_chain_counts.csv absent")
+        return res
+    file_rows = {(r["scenario_id"], r["need_id"], r["level"], r["placement"], r["o2_match"], r["pressure_match"]): r
+                 for r in ctx.table("question_chain_counts.csv")}
+    seen = set()
+    cfig = None
+    for sid in Q["scenarios"]:
+        for n in ctx.needs:
+            b = {}
+            for t in Q["scope"][n["id"]]:
+                m = Q["marks"][(sid, t["test_id"])]
+                p = q_place(m["o2_match"], m["pressure_match"])
+                for k in ((sid, n["id"], "placement", p, "", ""), (sid, n["id"], "placement_pair", p, m["o2_match"], m["pressure_match"])):
+                    b.setdefault(k, []).append(t)
+            for k, ts in b.items():
+                res.checked += 1
+                seen.add(k)
+                lk = [Q["link"].get((n["id"], t["test_id"])) for t in ts]
+                counted = sum(1 for x in lk if x == "stated")
+                not_stated = sum(1 for x in lk if x == "not_stated")
+                no_row = [t for t, x in zip(ts, lk) if x is None]
+                no_out = sum(1 for t in no_row if all(not o_blank(t.get(v)) for v in n["conditions_required"])
+                             and all(o_blank(t.get(v)) for v in n["outcomes_any"]))
+                want = (len(ts), counted, len(ts) - counted, not_stated, no_out, len(ts) - counted - not_stated - no_out)
+                r = file_rows.get(k)
+                got = None if r is None else tuple(int(r[c]) for c in ("in_scope_tests", "counted_tests", "not_counted_tests",
+                                                                          "n_not_stated", "n_no_outcome", "n_required_condition_missing"))
+                if got != want:
+                    res.fail(problem="counts view differs", key=k, file=got, recount=want)
+                if k == ("lunar_habitat", "S1", "placement", "inside", "", ""):
+                    cf = [t for t in ts if t["investigation_id"] == "PSI-159"]
+                    cfig = (len(cf), sum(1 for t in cf if Q["link"].get(("S1", t["test_id"])) == "not_stated"),
+                            sum(1 for t in cf if ("S1", t["test_id"]) not in Q["link"]))
+                    fl = {t["investigation_id"] for t in ts if Q["link"].get(("S1", t["test_id"])) == "stated"}
+                    if cfig != (9, 7, 2) or fl != {"PSI-69"} or counted != 17:
+                        res.fail(problem="claims.md fixture (9 CFI-G = 7 + 2; 17 counted FLEX) not reproduced",
+                                 cfig=cfig, counted_investigations=sorted(fl), counted=counted)
+    if set(file_rows) != seen:
+        res.fail(problem="counts view rows differ from the recount", extra=sorted(set(file_rows) - seen)[:5],
+                 missing=sorted(seen - set(file_rows))[:5])
+    res.numbers = {"rows": res.checked, "lunar_S1_inside_cfig_total_not_stated_no_outcome": cfig}
+    return res
+
+
+@check("Q4_chain_video",
+       "Video in the chain: the best link state of a video tied to each test, recomputed from pm's video index "
+       "(video/data/video_links.csv), in the counts view; the video rows are the BASS-II main-view recordings "
+       "(investigation PSI-25, view 'main'; files, bytes, transcribed) for flow_cms only, never for oxygen, "
+       "pressure, CO, CO2, the CO to CO2 ratio, particle size or aging time; fixtures: ISS P1, oxygen inside and "
+       "pressure not in the table, 55 counted: 42 / 4 / 0 / 9, main view 49 files, 3,515,643,202 bytes, 7 transcribed; "
+       "lunar habitat inside 26, 8 with two agreeing labels (all CFI-G), 0 of 17 counted.")
+def check_q4(ctx):
+    res = Result()
+    Q = q_inputs(ctx)
+    path = os.path.join(ROOT, "video", "data", "video_links.csv")
+    if not os.path.exists(path):
+        raise Skip("video/data/video_links.csv absent")
+    with open(path, encoding="utf-8", newline="") as f:
+        vids = list(csv.DictReader(l for l in f if not l.startswith("#")))
+    best, main = {}, {}
+    for v in vids:
+        if v["test_id"] and v["link_state"] in Q_VIDEO_ORDER:
+            b = best.get(v["test_id"])
+            if b is None or Q_VIDEO_ORDER.index(v["link_state"]) < Q_VIDEO_ORDER.index(b):
+                best[v["test_id"]] = v["link_state"]
+            if v["investigation"] == "PSI-25" and v["view_from_name"] == "main":
+                main.setdefault(v["test_id"], []).append(v)
+    grp = [v for v in vids if v["investigation"] == "PSI-25" and v["view_from_name"] == "main"]
+    g = (len(grp), sum(int(v["bytes"]) for v in grp), sum(1 for v in grp if v["transcribed"] == "yes"))
+    for r in Q["rows"]:
+        if r["row_kind"] != "video":
+            continue
+        res.checked += 1
+        if r["variable"] in Q_NO_VIDEO_VARIABLES or r["variable"] != "flow_cms" or r["location"] != "video_on_screen_text":
+            res.fail(problem="video row for a variable the screen does not show", variable=r["variable"])
+        if (int(r["files"]), int(r["bytes"]), int(r["files_opened"])) != g:
+            res.fail(problem="video group files, bytes or transcribed differ", file=(r["files"], r["bytes"], r["files_opened"]), recount=g)
+    for r in Q["rows"]:
+        if r["location"] == "video_on_screen_text" and r["row_kind"] != "video":
+            res.fail(problem="video location on a quantity row")
+    tid = {t["test_id"]: t for t in Q["tests"]}
+    for r in ctx.table("question_chain_counts.csv"):
+        res.checked += 1
+        ts = []
+        for t in Q["scope"][r["need_id"]]:
+            m = Q["marks"][(r["scenario_id"], t["test_id"])]
+            if q_place(m["o2_match"], m["pressure_match"]) == r["placement"] and \
+                    (r["level"] == "placement" or (m["o2_match"], m["pressure_match"]) == (r["o2_match"], r["pressure_match"])):
+                ts.append(t["test_id"])
+        c = [t for t in ts if Q["link"].get((r["need_id"], t)) == "stated"]
+        want = tuple(sum(1 for t in c if best.get(t) == s) for s in Q_VIDEO_ORDER) + (sum(1 for t in c if t not in best),)
+        want += tuple(sum(1 for t in ts if best.get(t) == s) for s in Q_VIDEO_ORDER)
+        mv = [v for t in c for v in main.get(t, [])]
+        want += (len(mv), sum(int(v["bytes"]) for v in mv), sum(1 for v in mv if v["transcribed"] == "yes"))
+        got = tuple(int(r[k]) for k in ("counted_with_video_two_labels_agree", "counted_with_video_one_label",
+                                        "counted_with_video_labels_disagree_only", "counted_without_video",
+                                        "in_scope_with_video_two_labels_agree", "in_scope_with_video_one_label",
+                                        "in_scope_with_video_labels_disagree_only", "counted_main_view_files",
+                                        "counted_main_view_bytes", "counted_main_view_files_transcribed"))
+        if got != want:
+            res.fail(problem="video counts differ", key=(r["scenario_id"], r["need_id"], r["level"], r["placement"], r["o2_match"], r["pressure_match"]),
+                     file=got, recount=want)
+        if (r["scenario_id"], r["need_id"], r["level"], r["o2_match"], r["pressure_match"]) == ("iss", "P1", "placement_pair", "in", "not_recorded"):
+            fx = (int(r["counted_tests"]),) + want[:4] + want[7:]
+            if fx != (55, 42, 4, 0, 9, 49, 3515643202, 7):
+                res.fail(problem="ISS P1 video fixture not reproduced", recount=fx)
+        if (r["scenario_id"], r["need_id"], r["level"], r["placement"]) == ("lunar_habitat", "S1", "placement", "inside"):
+            two = [t for t in ts if best.get(t) == "two_labels_agree"]
+            fx = (len(ts), len(two), {tid[t]["investigation_id"] for t in two}, want[0])
+            if fx != (26, 8, {"PSI-159"}, 0):
+                res.fail(problem="lunar video fixture not reproduced", recount=str(fx))
+    res.numbers = {"rows": res.checked, "video_group": g, "tests_with_a_video_by_best_state":
+                   {s: sum(1 for v in best.values() if v == s) for s in Q_VIDEO_ORDER}}
+    return res
+
+
+
+# ----------------------------------------------------------------------------
+# R. values read from raw files that design steps 4 and 5 added to raw_values.csv
+#    (FLEX test sheets, BASS as-run cabin block); recomputed with separate code
+# ----------------------------------------------------------------------------
+
+R_FLEX_TABLE = "PSI-69_Experimental table_FLEX.csv"
+R_LUNAR_DEXT = {  # design.md section 7: (table form, sheet form) -> tests
+    ("number", "number"): {"FLEX-21", "FLEX-25", "FLEX-26"}, ("number", "nan"): {"FLEX-20"},
+    ("zero", "zero"): {"FLEX-39", "FLEX-43"}, ("blank", "number"): {"FLEX-23", "FLEX-38"},
+    ("blank", "nan"): {"FLEX-19", "FLEX-22", "FLEX-24", "FLEX-27", "FLEX-28", "FLEX-37"},
+    ("dash", "number"): {"FLEX-40"}, ("dash", "zero"): {"FLEX-41"}, ("dash", "nan"): {"FLEX-42"}}
+
+
+def r_form(v):
+    v = (v or "").strip()
+    if not v:
+        return "blank"
+    if v in ("-", "–", "—"):
+        return "dash"
+    if v.lower() == "nan":
+        return "nan"
+    try:
+        return "zero" if float(v) == 0 else "number"
+    except ValueError:
+        return "text"
+
+
+def r_table(name):
+    """(source row, {column: cell as written}) of a raw table; cp1252 where the file is not UTF-8 (en dashes)."""
+    raw = read_bytes(os.path.join(RAW, name))
+    try:
+        text = raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        text = raw.decode("cp1252")
+    rows = list(csv.reader(io.StringIO(text, newline="")))
+    head = [h.strip() for h in rows[0]]
+    return [(i, dict(zip(head, r + [""] * (len(head) - len(r))))) for i, r in enumerate(rows[1:], start=2)]
+
+
+def r_flex_table():
+    return r_table(R_FLEX_TABLE)
+
+
+def r_sheets(ctx):
+    sheets = {}
+    for r in ctx.table("raw_values.csv"):
+        if r["extraction"] == "flex_test_sheet":
+            k = " ".join(r["header_as_written"].split())
+            sheets.setdefault(r["psi_file_name"], {"rows": [], "fields": {}, "id": r["psi_file_id"], "bytes": int(r["bytes"])})
+            sheets[r["psi_file_name"]]["rows"].append(r)
+            sheets[r["psi_file_name"]]["fields"][k] = r["value"]
+    return sheets
+
+
+@check("R1_flex_test_sheets",
+       "FLEX test sheets in raw_values.csv (extraction flex_test_sheet): each sheet tied again by the CIR test number "
+       "printed inside plus its FLEX number or test date against NASA's FLEX table; identifier, pressure (sheet atm "
+       "against table mmHg / 760, half a unit of the sheet's last decimal) and oxygen compared again; values kept as "
+       "written; flex_sheet_vs_table.csv and the block flex_test_sheets of raw_values_effect.json agree; fixture of "
+       "design.md section 7 for the 17 FLEX tests inside the lunar ranges (identifier 17 of 17, pressure 16 of 17 "
+       "with FLEX-23 off, oxygen 16 of 17 with FLEX-28 off, the extinction-diameter cross-table).")
+def check_r1(ctx):
+    res = Result()
+    sheets = r_sheets(ctx)
+    if not sheets:
+        raise Skip("no FLEX test sheet in raw_values.csv")
+    table = r_flex_table()
+    test_of = {int(t["source_row"]): t["test_id"] for t in ctx.tests if t["source_file"] == R_FLEX_TABLE}
+    rec = {}
+    for name, sh in sheets.items():
+        res.checked += 1
+        f = sh["fields"]
+        ident = f.get("CIR Test Number", "")
+        num = re.match(r"^FLEX-(\d+)$", f.get("(first line)", ""))
+        cands = [(n, c) for n, c in table if c["FLEX Identifier"].strip() == ident]
+        pick = [(n, c) for n, c in cands if num and c["FLEX Test #"].strip() == str(int(num.group(1)))]
+        if len(pick) != 1:
+            m = re.match(r"^\s*\w+,\s*(\w+)\s+(\d+),\s*(\d{4})", f.get("Test Date", ""))
+            months = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+                      "October", "November", "December"]
+            want = (int(m.group(3)), months.index(m.group(1)) + 1, int(m.group(2))) if m and m.group(1) in months else None
+            def tdate(x):
+                mm = re.match(r"^\s*(\d+)/(\d+)/(\d{2,4})\s*$", x)
+                return (int(mm.group(3)) + (2000 if len(mm.group(3)) == 2 else 0), int(mm.group(1)), int(mm.group(2))) if mm else None
+            pick = [(n, c) for n, c in cands if want and tdate(c["Test Date"]) == want]
+        row = pick[0] if len(pick) == 1 else None
+        tid = test_of.get(row[0], "") if row else ""
+        if any(r["test_id"] != tid for r in sh["rows"]):
+            res.fail(problem="tie of the sheet differs from the recount", sheet=name, recount=tid)
+        if any(r["test_id"] and "tests.csv" not in r["link_evidence"] for r in sh["rows"]):
+            res.fail(problem="tied row without tests.csv evidence", sheet=name)
+        if row:
+            c = row[1]
+            p_sheet = fnum(f.get("Pressure (atm)", ""))
+            p_tab = fnum(c["Ambient pressure; mmHg"])
+            dec = len(f.get("Pressure (atm)", "").split(".", 1)[1]) if "." in f.get("Pressure (atm)", "") else 0
+            p_ok = p_sheet is not None and p_tab is not None and abs(p_sheet - p_tab / 760.0) <= 0.5 * 10 ** -dec + 1e-9
+            o_sheet, o_tab = fnum(f.get("O2 Mole Fraction", "")), fnum(c["O initial ambient composition; mole fraction"])
+            dec = len(f.get("O2 Mole Fraction", "").split(".", 1)[1]) if "." in f.get("O2 Mole Fraction", "") else 0
+            o_ok = o_sheet is not None and o_tab is not None and abs(o_sheet - o_tab) <= 0.5 * 10 ** -dec + 1e-9
+            rec[name] = {"test_id": tid, "id": ident == c["FLEX Identifier"].strip(), "p": p_ok, "o": o_ok,
+                        "dext": (r_form(c["Visible flame extinction diameter; mm"]), r_form(f.get("Dext (mm)", "")))}
+        for r in sh["rows"]:
+            if r["value"] != r["value"].strip(" \t"):
+                res.fail(problem="value not stripped as the rule says", sheet=name)
+    lunar = {m["test_id"] for m in ctx.table("scenario_tests.csv") if m["scenario_id"] == "lunar_habitat"
+             and m["investigation_id"] == "PSI-69" and m["o2_match"] == "in" and m["pressure_match"] == "in"}
+    by_t = {}
+    for v in rec.values():
+        by_t.setdefault(v["test_id"], []).append(v)
+    lun = {t: (by_t.get(t) or [None])[0] for t in lunar}
+    if any(len(by_t.get(t, [])) > 1 for t in lunar):
+        res.fail(problem="a lunar FLEX test has more than one tied sheet")
+    nums = {}
+    if all(lun.values()) and len(lunar) == 17:
+        nums = {"identifier": sum(1 for v in lun.values() if v["id"]), "pressure": sum(1 for v in lun.values() if v["p"]),
+                "oxygen": sum(1 for v in lun.values() if v["o"])}
+        off = ({t for t, v in lun.items() if not v["p"]}, {t for t, v in lun.items() if not v["o"]})
+        cross = {}
+        for t, v in lun.items():
+            cross.setdefault(v["dext"], set()).add(t)
+        if nums != {"identifier": 17, "pressure": 16, "oxygen": 16} or off != ({"FLEX-23"}, {"FLEX-28"}) or cross != R_LUNAR_DEXT:
+            res.fail(problem="lunar fixture of design.md section 7 not reproduced", recount=nums,
+                     off=[sorted(off[0]), sorted(off[1])], cross={"%s/%s" % k: sorted(v) for k, v in cross.items()})
+    else:
+        res.fail(problem="not all 17 lunar FLEX tests have a tied sheet", tied=sorted(t for t, v in lun.items() if v))
+    # flex_sheet_vs_table.csv and the effect block
+    if ctx.has("flex_sheet_vs_table.csv"):
+        ft = ctx.table("flex_sheet_vs_table.csv")
+        if len({r["psi_file_name"] for r in ft}) != len(sheets):
+            res.fail(problem="flex_sheet_vs_table.csv sheets differ from raw_values.csv")
+        for r in ft:
+            t = r["psi_file_name"]
+            if r["key"] == "Pressure (atm)" and t in rec and (r["agreement"] in ("agrees_within_rounding", "agrees_as_written")) != rec[t]["p"]:
+                res.fail(problem="pressure agreement differs", test_id=t)
+            if r["key"] == "O2 Mole Fraction" and t in rec and (r["agreement"] in ("agrees_within_rounding", "agrees_as_written")) != rec[t]["o"]:
+                res.fail(problem="oxygen agreement differs", test_id=t)
+    else:
+        res.fail(problem="flex_sheet_vs_table.csv absent")
+    eff = ctx.json("raw_values_effect.json").get("flex_test_sheets")
+    if not eff:
+        res.fail(problem="raw_values_effect.json has no block flex_test_sheets")
+    else:
+        a = eff["all_sheets"]
+        want = (len(sheets), sum(s["bytes"] for s in sheets.values()), sum(1 for v in rec.values() if v["p"]),
+                sum(1 for v in rec.values() if v["o"]))
+        if (a["sheets_read"], a["bytes_read"], a["pressure_agrees_within_rounding"], a["oxygen_agrees"]) != want:
+            res.fail(problem="effect block counts differ", block=(a["sheets_read"], a["bytes_read"], a["pressure_agrees_within_rounding"], a["oxygen_agrees"]), recount=want)
+        l = eff["lunar_habitat_inside"]
+        if nums and (l["identifier_equals_table"], l["pressure_agrees_within_rounding"], l["oxygen_agrees"]) != (17, 16, 16):
+            res.fail(problem="effect block lunar counts differ")
+        if "not adopted" not in eff["state"]:
+            res.fail(problem="state is not 'not adopted'")
+    res.numbers = {"sheets": len(sheets), "bytes": sum(s["bytes"] for s in sheets.values()), "tied": len(rec),
+                   "tests_with_two_tied_sheets": sorted(t for t, v in by_t.items() if len(v) > 1),
+                   "lunar": nums}
+    return res
+
+
+@check("R2_bass_as_run",
+       "BASS as-run workbook in raw_values.csv (extraction bass_as_run_cabin_block): two rows per run for 121 runs, "
+       "the columns 'O2 % by volume' and 'pressure, atm'; each run tied to a distinct test of PSI-26 in tests.csv "
+       "('As Run Test #' and 'Test #' recomputed from NASA's table); every row carries location_not_stated and every "
+       "oxygen value below 1 magnitude_not_as_unit_written; no row gives a location in question_chain.csv; the block "
+       "of raw_values_effect.json recounts.")
+def check_r2(ctx):
+    res = Result()
+    rows = [r for r in ctx.table("raw_values.csv") if r["extraction"] == "bass_as_run_cabin_block"]
+    if not rows:
+        raise Skip("no BASS as-run row in raw_values.csv")
+    table = r_table("PSI-26_Experimental table_BASS.csv")
+    test_of = {int(t["source_row"]): t["test_id"] for t in ctx.tests if t["source_file"] == "PSI-26_Experimental table_BASS.csv"}
+    runs = {}
+    for r in rows:
+        res.checked += 1
+        runs.setdefault((r["sheet"], r["row"]), []).append(r)
+        if "location_not_stated" not in r["link_evidence"]:
+            res.fail(problem="row without location_not_stated", cell=r["cell_or_range"])
+        v = fnum(r["value"])
+        if r["header_as_written"].startswith("O2") and v is not None and 0 < v < 1 and "magnitude_not_as_unit_written" not in r["link_evidence"]:
+            res.fail(problem="oxygen below 1 without magnitude_not_as_unit_written", cell=r["cell_or_range"])
+        m = re.search(r"'As run test no\.' (\S+) and 'Test no\.' (\S+) equal", r["link_evidence"])
+        if r["test_id"]:
+            if not m:
+                res.fail(problem="tie evidence not parseable", cell=r["cell_or_range"])
+                continue
+            c = [n for n, c in table if c.get("As Run Test #", "").strip() == m.group(1) and c.get("Test #", "").strip() == m.group(2)]
+            if len(c) != 1 or test_of.get(c[0]) != r["test_id"]:
+                res.fail(problem="tie differs from the recount", cell=r["cell_or_range"], test_id=r["test_id"])
+    tids = {r["test_id"] for r in rows if r["test_id"]}
+    heads = sorted({r["header_as_written"] for r in rows})
+    if len(runs) != 121 or len(tids) != 121 or any(len(v) != 2 for v in runs.values()) or heads != ["O2 % by volume", "pressure, atm"]:
+        res.fail(problem="not 121 runs with two columns tied to 121 tests", runs=len(runs), tests=len(tids), headers=heads)
+    if any(not t.startswith("BASS-") for t in tids) or len(tids & {t["test_id"] for t in ctx.tests if t["investigation_id"] == "PSI-26"}) != len(tids):
+        res.fail(problem="a tied test is not a PSI-26 test")
+    if ctx.has("question_chain.csv"):
+        for r in ctx.table("question_chain.csv"):
+            if r["investigation_id"] == "PSI-26" and r["location"] == "raw_file_value_read":
+                res.fail(problem="a PSI-26 test has a value-read location")
+    eff = ctx.json("raw_values_effect.json").get("bass_as_run_cabin_block")
+    if not eff or eff["runs"] != len(runs) or any(eff["columns"][h]["rows"] != sum(1 for r in rows if r["header_as_written"] == h) for h in heads):
+        res.fail(problem="effect block bass_as_run_cabin_block differs")
+    res.numbers = {"rows": len(rows), "runs": len(runs), "tests": len(tids)}
+    return res
+
+
+
+# ----------------------------------------------------------------------------
+# S. file-to-test links (file_links.csv, file_links_summary.json, test_files.json,
+#    listing_snapshot.json, video_tie_differences.csv), written by pipeline/file_links.py
+# ----------------------------------------------------------------------------
+
+S_INVS = ("PSI-10", "PSI-25", "PSI-39", "PSI-69", "PSI-99", "PSI-159")
+S_VIDEO_FIXTURE = {"PSI-25": (244, 47, 5), "PSI-159": (314, 11, 2), "PSI-39": (101, 5, 2), "PSI-69": (3, 5, 1),
+                   "PSI-10": (0, 306, 0)}
+S_VIDEO_TOTALS = {"two_labels_agree": 662, "one_label": 374, "labels_disagree": 10, "day_only": 1217,
+                  "id_not_in_table": 330, "none": 30}
+S_STATES = ("two_labels_agree", "one_label", "labels_disagree", "id_not_in_table", "day_only", "none")
+
+
+@check("S1_file_links",
+       "file_links.csv: one row per file of the six linked investigations; files and bytes per investigation equal "
+       "raw_inventory.json and listing_snapshot.json (and the snapshot's sha256 equals the saved listing where it is "
+       "present); every link state is one of six; video rows equal pm's video index (state and test), with its "
+       "fixtures (PSI-25 244 / 47 / 5, PSI-159 314 / 11 / 2, PSI-39 101 / 5 / 2, PSI-69 3 / 5 / 1, PSI-10 306 with one "
+       "label; all videos 662 / 374 / 10 / 1,217 / 330 / 30); a two_labels_agree row of PSI-69 has a NASA identifier "
+       "among its labels or a folder validated by its test sheet.")
+def check_s1(ctx):
+    res = Result()
+    if not ctx.has("file_links.csv"):
+        raise Skip("file_links.csv not written")
+    rows = ctx.table("file_links.csv")
+    snap = ctx.json("listing_snapshot.json")["investigations"]
+    inv = {x["investigation_id"]: x for x in ctx.json("raw_inventory.json")["investigations"]}
+    for i in S_INVS:
+        rs = [r for r in rows if r["investigation_id"] == i]
+        res.checked += len(rs)
+        tot = (len(rs), sum(int(r["bytes"] or 0) for r in rs))
+        sn = snap.get(i, {})
+        srows = {x[0]: x for x in sn.get("rows", [])}
+        if tot != (inv[i]["files"], inv[i]["bytes"]) or tot != (sn.get("files"), sn.get("bytes")) or len(srows) != len(rs):
+            res.fail(problem="files or bytes differ from raw_inventory.json or the snapshot", investigation=i, file_links=tot,
+                     inventory=(inv[i]["files"], inv[i]["bytes"]))
+        for r in rs:
+            x = srows.get(r["psi_file_id"])
+            if x is None or (x[1], x[2], str(x[3] if x[3] is not None else "")) != (r["file_name"], int(r["bytes"] or 0), r["version"]):
+                res.fail(problem="row not as in the snapshot", file_id=r["psi_file_id"])
+            if r["link_state"] not in S_STATES:
+                res.fail(problem="unknown link state", state=r["link_state"])
+            if i == "PSI-69" and r["link_state"] == "two_labels_agree" and not r["source"].startswith("pm video"):
+                if not re.search(r"(name_identifier|folder_identifier|identifier_inside_file)=", r["labels_found"]) \
+                        and "test sheet" not in r["second_label_scope"]:
+                    res.fail(problem="FLEX file linked by FLEX numbers alone", file=r["file_name"])
+        lp = os.path.join(LISTINGS, i + ".json")
+        if os.path.exists(lp):
+            with open(lp, "rb") as f:
+                if hashlib.sha256(f.read()).hexdigest() != sn.get("listing_sha256"):
+                    res.fail(problem="snapshot sha256 differs from the saved listing", investigation=i)
+    path = os.path.join(ROOT, "video", "data", "video_links.csv")
+    with open(path, encoding="utf-8", newline="") as f:
+        vids = list(csv.DictReader(l for l in f if not l.startswith("#")))
+    vby = {v["psi_file_id"]: v for v in vids}
+    vrows = [r for r in rows if r["source"].startswith("pm video")]
+    for r in vrows:
+        v = vby.get(r["psi_file_id"])
+        if v is None or (v["link_state"], v["test_id"]) != (r["link_state"], r["test_id"]):
+            res.fail(problem="video row differs from pm's index", file_id=r["psi_file_id"])
+    if len(vrows) != sum(1 for v in vids if v["investigation"] in S_INVS):
+        res.fail(problem="video rows are not all videos of pm's index for the six investigations")
+    per = {}
+    for v in vids:
+        per.setdefault(v["investigation"], collections.Counter())[v["link_state"]] += 1
+    for i, (a, b, c) in S_VIDEO_FIXTURE.items():
+        got = (per[i]["two_labels_agree"], per[i]["one_label"], per[i]["labels_disagree"])
+        if got != (a, b, c):
+            res.fail(problem="video fixture not reproduced", investigation=i, recount=got)
+    tot = collections.Counter(v["link_state"] for v in vids)
+    if dict(tot) != S_VIDEO_TOTALS:
+        res.fail(problem="video totals not reproduced", recount=dict(tot))
+    res.numbers = {"rows": len(rows), "video_rows": len(vrows),
+                   "by_state": dict(collections.Counter(r["link_state"] for r in rows))}
+    return res
+
+
+@check("S2_file_links_lunar",
+       "Files whose name carries a label of the 26 tests inside the lunar ranges, recounted from file_links.csv with "
+       "own regexes for PSI-69 (identifier or FLEX number in the name) and PSI-159 (identifier in the name): 398 "
+       "files, 104,358,456,350 bytes, 316 small files of 86,853,632 bytes; PSI-69 299 files of 24,954,842,492 bytes; "
+       "PSI-159 99 files of 79,403,613,858 bytes; by second label 336 / 47 / 15; FLEX-19 17 files, 1,112,400,426 bytes; "
+       "identifier 193F001 on the rows of FLEX-70 and FLEX-73; file_links_summary.json and test_files.json agree.")
+def check_s2(ctx):
+    res = Result()
+    if not ctx.has("file_links.csv"):
+        raise Skip("file_links.csv not written")
+    rows = ctx.table("file_links.csv")
+    inside = sorted({m["test_id"] for m in ctx.table("scenario_tests.csv") if m["scenario_id"] == "lunar_habitat"
+                     and m["o2_match"] == "in" and m["pressure_match"] == "in"})
+    flex = r_flex_table()
+    num2id = {c["FLEX Test #"].strip(): c["FLEX Identifier"].strip() for _, c in flex}
+    id_rows = {}
+    for _, c in flex:
+        id_rows.setdefault(c["FLEX Identifier"].strip(), []).append(c["FLEX Test #"].strip())
+    lun_num = {t.split("-")[1] for t in inside if t.startswith("FLEX-")}
+    lun_id = {num2id[n]: n for n in lun_num}
+    cfig = {re.search(r"(\d{5}[A-Z]\d{1,2})$", t).group(1): t for t in inside if t.startswith("CFIG")}
+    hit = []
+    for r in rows:
+        name = re.sub(r"^PSI-\d+_[^_]+_", "", r["file_name"], count=1)
+        if r["investigation_id"] == "PSI-69":
+            m = re.search(r"FLEX[-_ ]?(\d{3})(?![0-9])", name, re.I)
+            n = str(int(m.group(1))) if m else None
+            ids = [k for k in lun_id if re.search(r"(?<![A-Za-z0-9])" + re.escape(k) + r"(?![0-9])", name)]
+            if (n in lun_num) or ids:
+                hit.append(r)
+        elif r["investigation_id"] == "PSI-159":
+            m = re.search(r"(?<!\d)(\d{5}[A-Z]\d{1,2})(?!\d)", name)
+            if m and m.group(1) in cfig:
+                hit.append(r)
+    big = ("archive", "video")
+    got = {"files": len(hit), "bytes": sum(int(r["bytes"]) for r in hit),
+           "small_files": sum(1 for r in hit if r["kind"] not in big),
+           "small_bytes": sum(int(r["bytes"]) for r in hit if r["kind"] not in big),
+           "flex": (sum(1 for r in hit if r["investigation_id"] == "PSI-69"), sum(int(r["bytes"]) for r in hit if r["investigation_id"] == "PSI-69")),
+           "cfig": (sum(1 for r in hit if r["investigation_id"] == "PSI-159"), sum(int(r["bytes"]) for r in hit if r["investigation_id"] == "PSI-159")),
+           "second_label": tuple(sum(1 for r in hit if r["link_state"] == s) for s in ("two_labels_agree", "one_label", "labels_disagree"))}
+    want = {"files": 398, "bytes": 104358456350, "small_files": 316, "small_bytes": 86853632,
+            "flex": (299, 24954842492), "cfig": (99, 79403613858), "second_label": (336, 47, 15)}
+    if got != want:
+        res.fail(problem="lunar link fixture not reproduced", recount=str(got))
+    f19 = [r for r in hit if r["investigation_id"] == "PSI-69" and ("FLEX-19" in r["name_names_test"].split("+"))]
+    if (len(f19), sum(int(r["bytes"]) for r in f19)) != (17, 1112400426):
+        res.fail(problem="FLEX-19 fixture not reproduced", recount=(len(f19), sum(int(r["bytes"]) for r in f19)))
+    if sorted(id_rows.get("193F001", []), key=int) != ["70", "73"]:
+        res.fail(problem="193F001 not on the rows of FLEX-70 and FLEX-73", rows=id_rows.get("193F001"))
+    s = ctx.json("file_links_summary.json")["scenarios"]["lunar_habitat"]
+    if (s["files_naming_inside_tests"], s["bytes"], s["small_files"], s["small_bytes"]) != (got["files"], got["bytes"], got["small_files"], got["small_bytes"]):
+        res.fail(problem="summary differs from the recount")
+    tf = ctx.json("test_files.json")["scenarios"]["lunar_habitat"]
+    ids = {x["psi_file_id"] for t in tf.values() for x in t["file_list"]}
+    if set(tf) != set(inside) or ids != {r["psi_file_id"] for r in hit}:
+        res.fail(problem="test_files.json differs from the recount", tests=len(tf), files=len(ids))
+    res.checked = len(rows)
+    res.numbers = {"lunar": got}
+    return res
+
+
+@check("S3_video_tie_differences",
+       "video_tie_differences.csv: every video of pm's index is compared with the data role's own first name tie "
+       "(raw_names.py, the level and tests behind test_files.csv); every row has a known class that follows from its "
+       "two sides, its pm side equals pm's index, and the counts equal file_links_summary.json.")
+def check_s3(ctx):
+    res = Result()
+    if not ctx.has("video_tie_differences.csv"):
+        raise Skip("video_tie_differences.csv not written")
+    rows = ctx.table("video_tie_differences.csv")
+    known = {"different_tests", "data_role_day_only", "data_role_not_tied", "data_role_ties_a_test_pm_does_not",
+             "pm_day_only_data_role_not_tied", "data_role_day_only_pm_not"}
+    path = os.path.join(ROOT, "video", "data", "video_links.csv")
+    with open(path, encoding="utf-8", newline="") as f:
+        vby = {v["psi_file_id"]: v for v in csv.DictReader(l for l in f if not l.startswith("#"))}
+    for r in rows:
+        res.checked += 1
+        v = vby.get(r["psi_file_id"])
+        if r["difference"] not in known or v is None or (v["link_state"], v["test_id"]) != (r["pm_link_state"], r["pm_test_id"]):
+            res.fail(problem="difference row not consistent", file_id=r["psi_file_id"])
+        pm_test = r["pm_link_state"] in ("two_labels_agree", "one_label", "labels_disagree")
+        if ((r["data_role_level"] == "test") and pm_test) != (r["difference"] == "different_tests"):
+            res.fail(problem="class does not follow from the two sides", file_id=r["psi_file_id"])
+    summ = ctx.json("file_links_summary.json")["video_tie_differences"]
+    if summ["rows"] != len(rows) or summ["by_difference"] != dict(sorted(collections.Counter(r["difference"] for r in rows).items())):
+        res.fail(problem="summary counts differ")
+    res.numbers = {"rows": len(rows), "by_difference": dict(collections.Counter(r["difference"] for r in rows))}
+    return res
+
+
+
+@check("Q5_gravity_basis",
+       "gravity_level: microgravity for 1,824 of 1,824 tests of tests.csv over the 14 tables whose constants set it "
+       "(sources.json); each of these tables names its basis, the PSI record field Comment[Flight Platform], with the "
+       "value as written: 'International Space Station (ISS)' for 11 of the 12 investigations and 'Cygnus Spacecraft' "
+       "for PSI-99 (addendum 01:40 e of pm request 20261115-0035).")
+def check_q5(ctx):
+    res = Result()
+    g = collections.Counter(t["gravity_level"] for t in ctx.tests)
+    files = {t["source_file"] for t in ctx.tests}
+    srcs = [s for s in ctx.sources if (s.get("constants") or {}).get("gravity_level")]
+    vals = {}
+    for s in srcs:
+        res.checked += 1
+        b = s.get("gravity_level_basis") or {}
+        if b.get("record_field") != "Comment[Flight Platform]" or not b.get("value_as_written") or not b.get("archive"):
+            res.fail(problem="table without a gravity basis", source=s["id"])
+        vals[s["investigation_id"]] = b.get("value_as_written")
+    want = {i: ("Cygnus Spacecraft" if i == "PSI-99" else "International Space Station (ISS)") for i in vals}
+    if dict(g) != {"microgravity": 1824} or len(files) != 14 or len(srcs) != 14 or len(vals) != 12 or vals != want:
+        res.fail(problem="gravity fixture not reproduced", gravity=dict(g), tables=len(files), sources=len(srcs), values=vals)
+    res.numbers = {"tests": sum(g.values()), "tables": len(files),
+                   "flight_platform": dict(collections.Counter(vals.values()))}
+    return res
+
+
+
+@check("S4_archive_members",
+       "archive_members.csv (design step 12): one row per .zip archive whose name carries a label of a FLEX test inside "
+       "the lunar ranges (test_files.json): 47 archives, 24,923,186,032 bytes; members parsed equal the count of the "
+       "end record in every row; archive bytes equal file_links.csv; FLEX-19: 886 tif, 852 tif and 122 bmp frames.")
+def check_s4(ctx):
+    res = Result()
+    if not ctx.has("archive_members.csv"):
+        raise Skip("archive_members.csv not written")
+    rows = ctx.table("archive_members.csv")
+    tf = ctx.json("test_files.json")["scenarios"]["lunar_habitat"]
+    want = {x["psi_file_id"]: (t, x["bytes"]) for t, v in tf.items() if v["investigation_id"] == "PSI-69"
+            for x in v["file_list"] if x["file_name"].lower().endswith(".zip")}
+    fl = {r["psi_file_id"]: int(r["bytes"]) for r in ctx.table("file_links.csv") if r["investigation_id"] == "PSI-69"}
+    for r in rows:
+        res.checked += 1
+        if r["members_declared"] != r["members_parsed"]:
+            res.fail(problem="members parsed differ from the end record", file_id=r["psi_file_id"])
+        if want.get(r["psi_file_id"]) != (r["test_id"], int(r["archive_bytes"])) or fl.get(r["psi_file_id"]) != int(r["archive_bytes"]):
+            res.fail(problem="archive not as in test_files.json or file_links.csv", file_id=r["psi_file_id"])
+    f19 = sorted(re.sub(r"; txt \d+", "", r["members_by_extension"]) for r in rows if r["test_id"] == "FLEX-19")
+    if len(rows) != 47 or set(want) != {r["psi_file_id"] for r in rows} or sum(int(r["archive_bytes"]) for r in rows) != 24923186032 \
+            or f19 != ["bmp 122", "tif 852", "tif 886"]:
+        res.fail(problem="fixture not reproduced", archives=len(rows), flex19=f19)
+    res.numbers = {"archives": len(rows), "bytes_fetched": sum(int(r["bytes_fetched"]) for r in rows),
+                   "members": sum(int(r["members_parsed"]) for r in rows)}
+    return res
 
 
 # ----------------------------------------------------------------------------

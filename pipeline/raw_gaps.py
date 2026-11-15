@@ -41,6 +41,8 @@ import os
 import re
 import sys
 
+import flex_sheets
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SPEC = os.path.join(HERE, "spec")
@@ -586,6 +588,126 @@ def effect(S, raw_values, tests_by_id, scenarios, coverage, factor, need_tests):
             "not_adopted": E["not_adopted"]}
 
 
+# ---------------------------------------------------------------- FLEX test sheets (added 2026-11-15)
+FLEX_COLS = ["psi_file_name", "psi_file_id", "bytes", "number_in_name", "first_line", "identifier_in_sheet", "tie_state",
+             "table_row", "table_flex_test_number", "test_id", "key", "sheet_value_as_written", "table_column",
+             "table_cell_as_written", "sheet_form", "table_form", "agreement", "state"]
+AGREE = ("agrees_as_written", "agrees_within_rounding", "agrees")
+
+
+def flex_rows(sheets):
+    out = []
+    for s in sheets:
+        for f in s["fields"]:
+            out.append({"psi_file_name": s["psi_file_name"], "psi_file_id": s["psi_file_id"], "bytes": s["bytes"],
+                        "number_in_name": s["number_in_name"], "first_line": s["first_line"],
+                        "identifier_in_sheet": s["identifier_in_sheet"], "tie_state": s["tie_state"],
+                        "table_row": s["table_row"] or "", "table_flex_test_number": s["table_flex_test_number"] or "",
+                        "test_id": s["test_id"], "key": f["key"],
+                        "sheet_value_as_written": "" if f["sheet_value"] is None else f["sheet_value"],
+                        "table_column": f["table_column"] or "",
+                        "table_cell_as_written": "" if f["table_cell"] is None else f["table_cell"],
+                        "sheet_form": f.get("sheet_form", ""), "table_form": f.get("table_form", ""),
+                        "agreement": f["agreement"], "state": flex_sheets.STATE})
+    return out
+
+
+def flex_summary(sheets):
+    by_key = {}
+    for s in sheets:
+        for f in s["fields"]:
+            by_key.setdefault(f["key"], {}).setdefault(f["agreement"], 0)
+            by_key[f["key"]][f["agreement"]] += 1
+    cross = {}
+    for s in sheets:
+        f = next((x for x in s["fields"] if x["key"] == "Dext (mm)"), None)
+        if f is None or f["agreement"] in ("not_tied", "key_not_in_sheet"):
+            continue
+        k = (f["table_form"], f["sheet_form"], f["agreement"])
+        cross.setdefault(k, []).append({"test_id": s["test_id"], "table_cell_as_written": f["table_cell"],
+                                        "sheet_value_as_written": f["sheet_value"]})
+    def differs(key):
+        out = []
+        for s in sheets:
+            f = next((x for x in s["fields"] if x["key"] == key), None)
+            if f and f["agreement"] not in AGREE and f["agreement"] not in ("no_table_column",):
+                out.append({"test_id": s["test_id"], "psi_file_name": s["psi_file_name"], "sheet_value_as_written": f["sheet_value"],
+                            "table_cell_as_written": f["table_cell"], "agreement": f["agreement"]})
+        return out
+    ties = {}
+    for s in sheets:
+        ties[s["tie_state"]] = ties.get(s["tie_state"], 0) + 1
+    return {"sheets_read": len(sheets), "bytes_read": sum(s["bytes"] for s in sheets),
+            "tie_states": dict(sorted(ties.items())),
+            "identifier_equals_table": sum(1 for s in sheets for f in s["fields"]
+                                           if f["key"] == "CIR Test Number" and f["agreement"] == "agrees_as_written"),
+            "pressure_agrees_within_rounding": sum(1 for s in sheets for f in s["fields"]
+                                                   if f["key"] == "Pressure (atm)" and f["agreement"] in AGREE),
+            "oxygen_agrees": sum(1 for s in sheets for f in s["fields"] if f["key"] == "O2 Mole Fraction" and f["agreement"] in AGREE),
+            "agreement_by_key": {k: dict(sorted(v.items())) for k, v in by_key.items()},
+            "pressure_differs": differs("Pressure (atm)"), "oxygen_differs": differs("O2 Mole Fraction"),
+            "extinction_diameter_cross_table": [{"table_form": k[0], "sheet_form": k[1], "agreement": k[2], "tests": len(v),
+                                                 "cases": v} for k, v in sorted(cross.items())]}
+
+
+def flex_block(sheets, inputs, scen_tests, not_adopted):
+    raw = {x["investigation_id"]: x for x in inputs["raw"]["investigations"]}["PSI-69"]
+    grp = next(g for g in raw["groups"] if g["group"] == "test_sheet")
+    lunar = {r["test_id"] for r in scen_tests if r["scenario_id"] == "lunar_habitat" and r["investigation_id"] == "PSI-69"
+             and r["o2_match"] == "in" and r["pressure_match"] == "in"}
+    cross = [{"psi_file_name": s["psi_file_name"], "number_in_name": s["number_in_name"], "first_line": s["first_line"],
+              "identifier_in_sheet": s["identifier_in_sheet"], "table_flex_test_number": s["table_flex_test_number"],
+              "test_id": s["test_id"], "tie_state": s["tie_state"]}
+             for s in sheets if s["table_flex_test_number"] != str(s["number_in_name"])]
+    return {"state": flex_sheets.STATE, "not_adopted": not_adopted,
+            "written_from": "data/pipeline/raw_values.csv (extraction flex_test_sheet), compared with "
+                            "data/psi/experimental_tables/" + flex_sheets.TABLE + " as the file writes it; per field: "
+                            "data/pipeline/flex_sheet_vs_table.csv",
+            "tie_rule": flex_sheets.__doc__.split("Tie rule: ", 1)[1].split("\n\n", 1)[0].replace("\n", " "),
+            "comparison_rule": "text: equal as written; date and time: the same day or clock time; numbers: equal, or "
+                               "within half a unit of the last decimal the sheet writes (pressure: sheet atm against "
+                               "table mmHg / 760); a nan, blank, dash or text on either side is compared by form only",
+            "group_in_listing": {"files": grp["files_in_listing"], "bytes": grp["bytes_in_listing"]},
+            "all_sheets": flex_summary(sheets),
+            "lunar_habitat_inside": dict(flex_summary([s for s in sheets if s["test_id"] in lunar]),
+                                         tests_inside=len(lunar), test_ids=sorted(lunar, key=lambda t: int(t.split("-")[1]))),
+            "numbering_crosswalk": {"rule": "sheets whose number in the file name is not the 'FLEX Test #' of the "
+                                            "table row the sheet is tied to (or that are not tied)",
+                                    "sheets": cross},
+            "what_the_codes_mean": "No file opened says what nan, 0.00, a blank or a dash mean, or whether the sheet's "
+                                   "line 'Dext (mm)' is the visible-flame extinction diameter of the table."}
+
+
+def bass_block(rows, not_adopted):
+    """The two cabin-block columns of the BASS as-run workbook, as written; no test is placed from them."""
+    cols = {}
+    for r in rows:
+        c = cols.setdefault(r["header_as_written"], {"rows": 0, "tests": set(), "numbers": [], "not_numbers": 0, "codes": {}})
+        c["rows"] += 1
+        if r["test_id"]:
+            c["tests"].add(r["test_id"])
+        try:
+            c["numbers"].append((float(r["value"]), r["value"]))
+        except ValueError:
+            c["not_numbers"] += 1
+        codes = r["link_evidence"].split("codes: ", 1)[1].split("; tie", 1)[0].split("; ")
+        for k in codes:
+            c["codes"][k] = c["codes"].get(k, 0) + 1
+    out = {}
+    for h, c in sorted(cols.items()):
+        nums = sorted(c["numbers"])
+        out[h] = {"rows": c["rows"], "tests_tied": len(c["tests"]), "values_not_numbers": c["not_numbers"],
+                  "lowest_as_written": nums[0][1] if nums else None, "highest_as_written": nums[-1][1] if nums else None,
+                  "codes": dict(sorted(c["codes"].items()))}
+    return {"state": "read from NASA's file, not adopted", "not_adopted": not_adopted,
+            "file": rows[0]["psi_file_name"], "psi_file_id": rows[0]["psi_file_id"], "bytes": int(rows[0]["bytes"]),
+            "runs": len({(r["sheet"], r["row"]) for r in rows}), "columns": out,
+            "codes_meaning": {"location_not_stated": "the columns stand under the group label 'ISS environment'; the "
+                                                     "workbook does not say where or when in the run the value was taken",
+                              "magnitude_not_as_unit_written": "the header says '%' and the stored number is below 1"},
+            "placement": "No test is placed from these values; question_chain.csv gives them no location."}
+
+
 def main():
     inputs = load()
     tests = read_csv(os.path.join(OUT, "tests.csv"))
@@ -612,8 +734,15 @@ def main():
     factor = read_json(os.path.join(SPEC, "findings.json"))["_meta"]["units"]["psi_to_kpa"]
     eff = effect(S, raw_values, {t["test_id"]: t for t in tests}, scenarios,
                  read_json(os.path.join(SPEC, "coverage.json")), factor, need_tests)
+    sheets = flex_sheets.compare(raw_values)
+    write_csv(os.path.join(OUT, "flex_sheet_vs_table.csv"), FLEX_COLS, flex_rows(sheets))
+    if sheets:
+        eff["flex_test_sheets"] = flex_block(sheets, inputs, scen_tests, eff["not_adopted"])
+    bass = [r for r in raw_values if r["extraction"] == "bass_as_run_cabin_block"]
+    if bass:
+        eff["bass_as_run_cabin_block"] = bass_block(bass, eff["not_adopted"])
     text = json.dumps(eff, indent=1, ensure_ascii=False) + "\n"
-    for name in ("gap_states.csv", "need_gap_states.csv", "retrieval_queue.csv"):
+    for name in ("gap_states.csv", "flex_sheet_vs_table.csv", "need_gap_states.csv", "retrieval_queue.csv"):
         with open(os.path.join(OUT, name), encoding="utf-8") as f:
             bad = FORBIDDEN.findall(f.read())
         if bad:

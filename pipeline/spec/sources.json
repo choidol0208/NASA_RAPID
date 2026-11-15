@@ -6,7 +6,8 @@
   "row_rules": "'require': a row is read only if these columns are filled. 'exclude': rows named here are not tests and are left out, with the reason. 'fill_down': a blank cell in these columns continues the cell of the row above; every value read that way is flagged blank_in_source_value_of_row_above_used. A row that repeats an earlier row cell for cell is read once. A column with 'if_empty' gives a value only where an earlier column gave none; a different value is flagged, never substituted. run_report.json lists every row left out and why. 'row_note' says what a row of the table is where it is not simply one test.",
   "documented_elsewhere": "'documented_elsewhere' lists what a NASA record or a paper of the investigators says about a variable the experimental table does not hold. It is shown as a sentence next to the gap. It never becomes a value of a test: the table stays the only source of values. The engine checks record sentences against the record and paper sentences against references.json. A need can list a required condition under 'conditions_documented_ok' (needs.json): such a condition counts as known for the tests of a table when this list holds a sentence about it. The sentence says what is known for the investigation as a whole (for BASS-II a nominal 1 atmosphere, not a reading per test); for Saffire-I and -II a reading per sample exists in the NASA PSI raw-data workbooks (PSISAF.pressure_column), which this pipeline does not map.",
   "sample_keywords": "Rule 'sample_keywords' (BASS, BASS-II): 'entries' are tried in order and the first whose 'words' are all in the cell gives the material and the shape; entries with 'after_thickness' are tried only if the cell gives no thickness. 'shape_words' give the shape where the entry has none. 'rod_inches' maps the rod size written in the cell (inches) to a diameter. A cell with a thickness and no earlier entry follows 'thickness': the material named there, 'film' below limit_mm and 'slab' from it. 'not_in_cell' marks entries whose material is not written in the cell (BASS-II ReadMe: rods, spheres and unlabelled films are PMMA); the test is flagged. The shape words 'fabric sheet', 'film', 'slab', 'sphere' and the materials named here are the team's vocabulary, chosen by these keywords. A thickness is a number followed by 'micron' or 'mm'. Where 'thickness' gives the material and the cell does not name it, the test is flagged in the same way as for 'not_in_cell'. 'width_from_cell' takes the sample width from the number followed by 'cm' in the cell. If no entry applies and the cell gives no thickness, the cell is not read and the test is flagged fuel_material:not_parsed.",
-  "documented_start": "Rule 'o2_text': a cell with two oxygen numbers gives a value only if 'documented_start' names, for that exact cell text, which of the two written numbers a publication gives as the initial oxygen ('reference_item' in references.json). The test is flagged o2_pct:range_in_source_start_value_named_in_publication. A two-number cell that is not listed gives no value (flag o2_pct:range_in_source_start_value_not_documented). No midpoint or average is computed. The cell text is kept in o2_range_as_written."
+  "documented_start": "Rule 'o2_text': a cell with two oxygen numbers gives a value only if 'documented_start' names, for that exact cell text, which of the two written numbers a publication gives as the initial oxygen ('reference_item' in references.json). The test is flagged o2_pct:range_in_source_start_value_named_in_publication. A two-number cell that is not listed gives no value (flag o2_pct:range_in_source_start_value_not_documented). No midpoint or average is computed. The cell text is kept in o2_range_as_written.",
+  "gravity_level_basis": "Added 2026-11-15 (pm request 20261115-0035, addendum 01:40 a): for every table whose constants set gravity_level, 'gravity_level_basis' names the PSI record field the constant rests on (Comment[Flight Platform] of i_Investigation.txt in the PSI metadata archive of the investigation), with its value as written. No gravity value was changed."
  },
  "sources": [
   {
@@ -85,7 +86,17 @@
      "rule": "lower"
     }
    ],
-   "basis": "NASA/TP-2015-216046, Appendix A.1 and Table IX: the 'O', 'N', 'CO' columns are O2, N2, CO2 mole fractions; 'Burning rate; mm' is in mm2/s"
+   "basis": "NASA/TP-2015-216046, Appendix A.1 and Table IX: the 'O', 'N', 'CO' columns are O2, N2, CO2 mole fractions; 'Burning rate; mm' is in mm2/s",
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-69_metadata_PSI-133_FLEX.zip",
+    "archive_bytes": 24780,
+    "archive_sha256": "3ff0e8a61bc58e79756b4a860cdf0616889f95f03fe48536b62e600ced2c0337",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "bass2",
@@ -311,7 +322,17 @@
      "reference_item": "ICES19.pressure",
      "quote": "Pressure was not varied from 1 atmosphere."
     }
-   ]
+   ],
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-25_metadata_PSI_metadata_PSI-101_BASS-II.zip",
+    "archive_bytes": 13439,
+    "archive_sha256": "629faf104a8ff0e8d335f2527c019e740380163ea7f74b8ad754ae71f7da2559",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "bass",
@@ -488,7 +509,17 @@
      "equals": "SOOT Cleaning",
      "reason": "maintenance entry in the sample column, not a test"
     }
-   ]
+   ],
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-26_metadata_PSI-102_BASS.zip",
+    "archive_bytes": 11647,
+    "archive_sha256": "1167ee239db24e7d73508b2d472e9bab9382211b596312167a2a6d24b4bcfc59",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "cfi",
@@ -533,7 +564,17 @@
      }
     }
    ],
-   "basis": "Column names; pressure cells carry the unit 'atm'"
+   "basis": "Column names; pressure cells carry the unit 'atm'",
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-39_metadata_PSI-118_CFI.zip",
+    "archive_bytes": 10237,
+    "archive_sha256": "9fbb9b18160e36dcdd930eb0f19db1f764e7c9d44d804da4fe5c8a8fd936650f",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "saffire1",
@@ -631,7 +672,17 @@
      "reference_item": "SAF17.pressure",
      "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant."
     }
-   ]
+   ],
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-98_metadata_PSI-166_SAFFIRE-I.zip",
+    "archive_bytes": 10031,
+    "archive_sha256": "ac398e9688f2b003fdbcdcc754d0d7703a006b6fb8b7a6afa598447bb5d72d0e",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "saffire2",
@@ -743,7 +794,17 @@
      "reference_item": "SAF17.pressure",
      "quote": "All tests were performed at normal pressure (1 atm) and the pressure increase due to combustion was insignificant."
     }
-   ]
+   ],
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-99_metadata_PSI-167_SAFFIRE-II.zip",
+    "archive_bytes": 10539,
+    "archive_sha256": "eb9f705d758daa14658fdf8e289031e08badd62f8c4bedf7bb5bfe3ac7688cd2",
+    "value_as_written": "Cygnus Spacecraft",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "saffire3",
@@ -810,7 +871,17 @@
      "record_field": "approach",
      "quote": "solid state sensors were used to measure pressure"
     }
-   ]
+   ],
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-100_metadata_PSI-168_SAFFIRE-III.zip",
+    "archive_bytes": 8384,
+    "archive_sha256": "663cfdec4feffed118edd8f4435ed189f1f76464c7bc289cee33c37039fc94c3",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "cfig_normal",
@@ -876,7 +947,17 @@
      }
     }
    ],
-   "basis": "Column names and the PSI investigation description"
+   "basis": "Column names and the PSI investigation description",
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-159_metadata_PSI-159-ISA.zip",
+    "archive_bytes": 8404,
+    "archive_sha256": "0ef60d1ee8d4d53bbe58139d56fa99e9500ca48dd7913b25ac85dc853d6710ab",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "cfig_inverse",
@@ -934,7 +1015,17 @@
      }
     }
    ],
-   "basis": "Column names and the PSI investigation description"
+   "basis": "Column names and the PSI investigation description",
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-159_metadata_PSI-159-ISA.zip",
+    "archive_bytes": 8404,
+    "archive_sha256": "0ef60d1ee8d4d53bbe58139d56fa99e9500ca48dd7913b25ac85dc853d6710ab",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "flame_design_normal",
@@ -979,7 +1070,17 @@
      }
     }
    ],
-   "basis": "Column names and the PSI investigation description"
+   "basis": "Column names and the PSI investigation description",
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-10_metadata_PSI-10-ISA.zip",
+    "archive_bytes": 17047,
+    "archive_sha256": "611b404c92125223ae099f086727ba1f5f031abf22d31eaa58d066a825f87b56",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "flame_design_inverse",
@@ -1012,7 +1113,17 @@
      }
     }
    ],
-   "basis": "Column names and the PSI investigation description"
+   "basis": "Column names and the PSI investigation description",
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-10_metadata_PSI-10-ISA.zip",
+    "archive_bytes": 17047,
+    "archive_sha256": "611b404c92125223ae099f086727ba1f5f031abf22d31eaa58d066a825f87b56",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "same",
@@ -1053,7 +1164,17 @@
     }
    ],
    "basis": "Column names",
-   "row_note": "The four value rows carry the same values as Table 3-6 of the SAME requirements document of 2005, the planned test matrix (SAMEEIRD.matrix); the weight loss rate is a target value (SAMEEIRD.target). Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read."
+   "row_note": "The four value rows carry the same values as Table 3-6 of the SAME requirements document of 2005, the planned test matrix (SAMEEIRD.matrix); the weight loss rate is a target value (SAMEEIRD.target). Rows 6 to 9 say 'same conditions as 1-4' for four more materials and have no values of their own; they are not read.",
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-102_metadata_PSI-170_SAME.zip",
+    "archive_bytes": 13127,
+    "archive_sha256": "809127b7c6578263dc829d8ef8b15fa98fd1626dcf9c9d44d832a48974e146c6",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "same_r",
@@ -1088,7 +1209,17 @@
     }
    ],
    "basis": "Column names. Rt/R0 is the ratio of the resistance of the heated wire to its resistance at room temperature (SAMER.rtr0)",
-   "row_note": "The PSI record reports 66 test points; the table has 109 rows, of which 42 carry a test number ending in 'a' and are a second reading of the same smoke after aging. Each row is counted as one test row."
+   "row_note": "The PSI record reports 66 test points; the table has 109 rows, of which 42 carry a test number ending in 'a' and are a second reading of the same smoke after aging. Each row is counted as one test row.",
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-101_metadata_PSI-169_SAME-R.zip",
+    "archive_bytes": 11037,
+    "archive_sha256": "b827c77500fc949152394a319776697a355cd80540d9721fa5440ea46687d3b7",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "spice",
@@ -1114,7 +1245,17 @@
     }
    ],
    "basis": "Column names. The table has no test number, so the source row number is used",
-   "row_note": "A row is one flow setting of a flame, not one flame; the PSI record reports 526 flames studied."
+   "row_note": "A row is one flow setting of a flame, not one flame; the PSI record reports 526 flames studied.",
+   "gravity_level_basis": {
+    "record_field": "Comment[Flight Platform]",
+    "file": "i_Investigation.txt",
+    "archive": "PSI-107_metadata_PSI-176_SPICE.zip",
+    "archive_bytes": 9313,
+    "archive_sha256": "2ebc6e168e4f2614e205addfb9d0643b18d0c3f019109e8a75cda73dac935995",
+    "value_as_written": "International Space Station (ISS)",
+    "read_by": "pm role (AI sessions), 2026-11-15; values as listed in docs/raw_data_design/psi_metadata_summary.md",
+    "note": "The field names a flight platform, not a gravity level; it is the document found behind the team's constant 'microgravity' for this table. The constant is not changed."
+   }
   },
   {
    "id": "slice",
