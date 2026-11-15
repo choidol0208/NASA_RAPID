@@ -32,6 +32,10 @@ Captures of the team's own page as it is now (not AI-generated images). The four
 
 ![Animation: a request is typed on the start page, the SI assistant works through its steps and shows a cited answer, then answers a follow-up](docs/readme/assistant_demo.gif)
 
+**The five tabs (animation).** The worked example, then each tab clicked once: closest investigations, what was found, where the data are, where the evidence stops, all investigations. A recording of the team's own page (`docs/readme/record_tour.mjs`); the pointer and the captions are added by the scripts.
+
+![Animation: the dashboard for the worked example, then each of the five tabs is clicked and scrolled once, with a caption that says what the tab holds](docs/readme/tour_demo.gif)
+
 **The dashboard.** What you typed and how it was read, three key figures, a note on gravity, five tabs that each say what they hold, and the closest investigations with their match scores.
 
 ![The dashboard for lunar habitat cotton fabric: the request as read, three key figures, five tabs, and the first result card with its match score and its match per dimension](docs/readme/01_dashboard_closest.png)

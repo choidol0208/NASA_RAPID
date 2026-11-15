@@ -32,12 +32,21 @@ CAPTIONS = {
     "click Send": "Send it.",
     "follow-up answer": "The assistant keeps the material and answers for the ISS.",
     "follow-up answer (done)": "A cited answer for the ISS cabin; the dashboard follows.",
+    "dashboard": "One request: how it was read, three key figures, five tabs.",
+    "tab closest": "Closest investigations: match score, reason and largest gap.",
+    "tab found": "What was found: NASA's reported results, question by question.",
+    "tab data": "Where the data are: NASA's tables, the archive, or no record.",
+    "tab stops": "Where the evidence stops: every recorded test on the oxygen axis.",
+    "tab all": "All 24 investigations, ranked for this request.",
 }
+for _t in ("closest", "found", "data", "stops", "all"):
+    CAPTIONS[f"tab {_t} move"] = CAPTIONS[f"tab {_t} click"] = "Five tabs, each with its own colour and one line on what it holds."
 NOTE = "Recording of the local install · the language model gpt-oss:20b answers · pointer, typing and captions added by script · waiting shortened"
 
 src, out = os.path.abspath(sys.argv[1]), sys.argv[2]
 meta = json.load(open(os.path.join(src, "frames.json")))
 frames = meta["frames"]
+NOTE = meta.get("note_line") or NOTE
 big = ImageFont.load_default(size=27)      # Pillow's built-in face (Aileron), so no font file is needed
 small = ImageFont.load_default(size=13)
 cap_dir = os.path.join(src, "captioned")
