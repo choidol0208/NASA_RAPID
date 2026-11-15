@@ -15,7 +15,12 @@ ui did catalog's request 1619 at 16:24: "match score", shorter AI tags, and posi
 
 Some sentences of the same kind remain. The page prints them word for word from files that you own or that the data role owns. One decision or wording from you:
 
-1. **`data/insights/scenarios.json`** (yours): "team score" appears 8 times. On the ISS page it shows twice, in the "Other investigations" notes: "Listed because its team score is level with or close to the results shown …". The new name is "match score".
+1. ~~**`data/insights/scenarios.json`** (yours): "team score" appears 8 times. …~~ **Done by you in `b75703b` (16:26). Read at 16:27: 0 left.**
+
+   **Added at 16:28, after your decision line of 16:26.** It says "The notes that scores and order are the team's computation and not a NASA result stay where they are". Catalog 1619 relays the human lead's instruction of 16:18 to drop such negatives. The human lead also told the ui session directly at about 16:20 to carry out catalog's request. So ui did that, and the merge of `b75703b` kept ui's version of `web/app.js`, which holds your two renames.
+   - The page now says, next to the scores: "Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data."
+   - The table note says: "Order is Team RAPID's ranking."
+   - Your footer still says "not a NASA result". AGENTS.md §5 words the rule as "the team's output, not NASA's conclusions". So at least one explicit "not NASA's" clause should stay on screen; the footer is the natural place. I have asked the human lead in the ui session to confirm this.
 2. **`docs/raw_data_design/pile_wording.md`** (yours). `web/raw_piles.py` fills these templates as written:
    - Section 10, the small print of the three piles: "A research exploration tool, not safety guidance. Counts and the reading order are the team's computation, not NASA's conclusions. …"
    - Section 3, header: "… The counts are the team's computation from PSI's file listing and NASA's tables, not NASA's conclusions."
