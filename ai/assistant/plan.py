@@ -1,9 +1,12 @@
 # AI-generated code: written with an AI assistant (Claude) during the NASA Space Apps Challenge 2026 hackathon.
 """Plan by table (ai/assistant/DESIGN.md section 5): code chooses the lookup tools; no model does.
 
-plan(request) -> (steps, dropped), each step {"tool", "args", "why"}; at most MAX_TOOLS steps.
+plan(request) -> (steps, dropped), each step {"tool", "args", "why"}; at most MAX_TOOLS steps, plus the step
+published_results (added 15 November, after the question set was frozen), which is not counted against MAX_TOOLS so
+that it pushes out no step the plan gave before it was added.
 """
 MAX_TOOLS = 6
+EXTRA_TOOLS = ("published_results",)   # added 15 November; not counted against MAX_TOOLS
 
 # needed fields per intent (DESIGN.md 4.6)
 NEEDED_FIELDS = {
@@ -38,7 +41,14 @@ def plan(req, vocab=None):
     has_o2p = env.get("o2_pct") is not None or env.get("pressure_kpa") is not None
     steps = []
 
+    src = req.get("sources") or {}
+    from_preset = [k for k, f in (("o2", "environment.o2_pct"), ("p", "environment.pressure_kpa"))
+                   if src.get(f) == "preset"]
+
     def add(tool, args, why):
+        if tool == "tested_range" and args.get("env") is env and from_preset:
+            # a value the preset set is 'the preset's', not 'your' (added after the grounding audit of 15 Nov)
+            args = dict(args, preset_values=from_preset)
         steps.append({"tool": tool, "args": args, "why": why})
 
     if intent in ("help", "out_of_scope"):
@@ -67,6 +77,8 @@ def plan(req, vocab=None):
             # the team after the first live run: without it no fact named the material)
             add("rank_investigations", {"q": req["dashboard_q"]}, "question_evidence: the material named")
         add("counts_per_question", {"env": env, "questions": qs}, "question_evidence: counts")
+        if env.get("scenario_id"):
+            add("published_results", {"env": env, "questions": qs}, "question_evidence: quoted results")
         if item and has_o2p:
             add("tested_range", {"env": env, "phase": phase}, "question_evidence: the material's fuel phase")
         add("criteria", {"questions": qs}, "question_evidence: criteria")
@@ -81,6 +93,8 @@ def plan(req, vocab=None):
     elif intent == "modelling_data":
         add("modelling_data", {"questions": qs, "investigations": req.get("investigations") or []},
             "modelling_data: readiness and variables")
+        if env.get("scenario_id"):
+            add("published_results", {"env": env, "questions": qs}, "modelling_data: quoted results")
         if has_o2p:
             add("tested_range", {"env": env, "phase": phase}, "the environment has oxygen or pressure")
     elif intent == "equipment_research":
@@ -89,6 +103,9 @@ def plan(req, vocab=None):
             from ai.assistant import texts
             add("criteria", {"questions": texts.EQUIPMENT[req["equipment"]]["questions"]},
                 "equipment_research: criteria of its questions")
+            if env.get("scenario_id"):
+                add("published_results", {"env": env, "questions": texts.EQUIPMENT[req["equipment"]]["questions"]},
+                    "equipment_research: quoted results of its questions")
     elif intent == "earth_applications":
         add("earth_applications", {"investigations": req.get("investigations") or []}, "earth_applications")
     elif intent == "explain":
@@ -103,8 +120,9 @@ def plan(req, vocab=None):
     if req.get("asks_prediction") and not any(s["tool"] == "tested_range" for s in steps):
         if has_o2p or _has_env(env):
             add("tested_range", {"env": env, "phase": phase}, "asks_prediction: where the values lie")
-    dropped = steps[MAX_TOOLS:]
-    return steps[:MAX_TOOLS], dropped
+    others = [s for s in steps if s["tool"] not in EXTRA_TOOLS]
+    keep = {id(s) for s in others[:MAX_TOOLS]}
+    return [s for s in steps if s["tool"] in EXTRA_TOOLS or id(s) in keep], others[MAX_TOOLS:]
 
 
 def _compare_env(c, vocab):

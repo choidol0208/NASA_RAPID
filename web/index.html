@@ -59,13 +59,19 @@
         <button type="submit">Find evidence</button>
       </div>
       <p id="ask-help" class="ask-help">Rough input is fine. Anything you leave out is filled from a preset or a default, and listed below so you can see it.</p>
-      <div class="presets" role="group" aria-label="Example environments">
-        <button type="button" data-q="ISS">ISS cabin</button>
-        <button type="button" data-q="lunar habitat">Lunar habitat</button>
-        <button type="button" data-q="lunar habitat cotton fabric">Lunar habitat, cotton fabric</button>
-        <button type="button" data-q="smoke detector on ISS">Smoke detection on the ISS</button>
-        <button type="button" data-q="spacesuit">Spacesuit</button>
-        <button type="button" data-q="Mars base">Mars base</button>
+      <!-- One set of examples. The assistant's example questions join it as a second group ("Questions") where a local server answers. -->
+      <div class="ask-examples">
+        <div class="ex-group">
+          <span class="ex-label" aria-hidden="true">Environments</span>
+          <div class="presets" role="group" aria-label="Example environments">
+            <button type="button" data-q="ISS">ISS cabin</button>
+            <button type="button" data-q="lunar habitat">Lunar habitat</button>
+            <button type="button" data-q="lunar habitat cotton fabric">Lunar habitat, cotton fabric</button>
+            <button type="button" data-q="smoke detector on ISS">Smoke detection on the ISS</button>
+            <button type="button" data-q="spacesuit">Spacesuit</button>
+            <button type="button" data-q="Mars base">Mars base</button>
+          </div>
+        </div>
       </div>
     </form>
   </section>

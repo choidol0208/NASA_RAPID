@@ -2,25 +2,42 @@
 /* The chat assistant on top of the Fire Evidence Explorer dashboard (contract: ai/assistant/DESIGN.md, section 12).
    Plain JavaScript, one IIFE, no framework, no request to another site. Every number, sentence and source shown
    here comes from the response of the local assistant server, from a recorded response file, or from a mock file;
-   this script computes no fact. */
+   this script computes no fact.
+   One input (15 November, 16:26 decision): the page's own input (#q in #ask-form) is the only question box a visitor
+   meets first. A real submit of it also starts a turn here where a server answers (live, no-model, mock); this
+   section shows no text box of its own until an answer is on screen, and then only a follow-up box. */
 (function () {
   "use strict";
 
   // ------------------------------------------------------------------ fixed texts (section 12.5, word for word)
+  // Step labels for events that carry none (a turn answered from cache; added after the clean-clone check).
+  var STEP_LABELS = { understand: "Reading your request", plan: "Choosing what to look up", lookup: "Looking up the team's files",
+    write: "Writing from the facts", check: "Checking every sentence", deliver: "Done" };
   var L = {
-    title: "Ask the assistant",
+    // Titles of the section (one input: the section no longer says "Ask the assistant" above a second box).
+    titleIdle: "The SI assistant",
+    titleAnswer: "The assistant's answer",
+    titleRecorded: "Recorded answers of the SI assistant",
     sub: "Ask in your own words, in any language. Answers are in English, built only from the team's files, with a source for every sentence.",
-    placeholder: "e.g. Which NASA tests are closest to a cotton fabric fire in a lunar habitat?",
-    inputLabel: "Your question",
+    followUp: "Ask a follow-up",
     send: "Ask",
-    examples: "Try one of these",
-    labelModel: "Written by a local language model (gpt-oss:20b) from the facts shown, and checked by code. A research exploration tool, not safety guidance.",
+    questions: "Questions",
+    idleHow: "Type what you are building, or a question, in the box at the top of the page. The written answer appears here.",
+    waitLive: "The written answer takes about 1 to 2 minutes on this computer. The dashboard below already shows this request.",
+    offer: "Ask the assistant about this",
+    offerBusy: "This can be asked when the current answer is done.",
+    // The page's input invites a question only where a local server answers it (setInputWords).
+    inputLabel: "What are you building, and where? Or ask a question.",
+    inputHint: "e.g. moon cotton fabric, 30% O2 at 10.2 psi, or: where are the raw data for the ISS?",
+    recordedMark: "Recorded on {date} with the local language model (gpt-oss:20b) and replayed here; no model runs on this page.",
+    labelModel: "Written by a local language model (gpt-oss:20b) from the facts shown; every sentence shown passed the code checks and a second model check. No person reviewed this answer. A research exploration tool, not safety guidance.",
     labelTemplate: "Put together by team code from the facts shown; no language model wrote it. A research exploration tool, not safety guidance.",
     sentByCode: "This sentence was put in by team code from its fact, not written by the model.",
-    labelRecorded: "Recorded on {date} with the local language model (gpt-oss:20b) and replayed here; no model runs on this page. A research exploration tool, not safety guidance.",
-    modeLive: "Running on this computer with the local model gpt-oss:20b.",
+    sentByCodeTag: "team code",
+    labelRecorded: "Recorded on {date} with the local language model (gpt-oss:20b) and replayed here; no model runs on this page. Every model sentence shown passed the code checks and a second model check when it was recorded. No person reviewed these answers. A research exploration tool, not safety guidance.",
+    modeLive: "Running on this computer with the local model gpt-oss:20b. Each answer: the model reads your request twice and a rule parser once; code looks up the facts; the model writes; code checks and a second model pass check every sentence, and what fails is removed and shown. About 1 to 2 minutes per question on this computer.",
     modeNoModel: "The local model is not available ({reason}), so answers are put together by team code from the facts.",
-    modeRecorded: "This public page runs no language model. It replays conversations recorded with the local model. To ask your own questions, install the project and run ./run.sh (see the README).",
+    modeRecorded: "This public page runs no language model. It replays conversations recorded with the local model, where code checks and a second model pass checked every sentence. To ask your own questions, install the project and run ./run.sh (see the README).",
     modeNothing: "The assistant needs its local server (./run.sh). The dashboard below works without it.",
     recordedList: "Recorded conversations",
     clarify: "One question before I look this up:",
@@ -49,14 +66,13 @@
     showOnDashboard: "Show on the dashboard",
     showTable: "Show the table ({n})",
     showPanels: "Show the panels of this answer",
-    emptyChat: "Ask a question below, or try one of the examples.",
+    checkerSkipped: "Model checker: not run ({reason}), so no model sentence is shown.",
     emptyPanels: "Panels appear here with each answer: rankings, counts, tables with a download, quoted NASA sentences and file lists, each with its source.",
     apply: "Apply",
     cancel: "Cancel",
     changed: "Changed: ",
     notGiven: "not given",
     noDashboardPanel: "This part of the dashboard is not shown for this input.",
-    typedToDashboard: "No language model runs on this page, so your words went to the dashboard's own rule-based search below. To ask the assistant, install the project and run ./run.sh (see the README).",
     recordedPlay: "Play",
     evalNone: "No measurement file was found.",
     mockEval: "Mock file: the values are placeholders for testing the page, not measurements."
@@ -82,7 +98,10 @@
 
   var S = {
     mode: null, reason: null, state: null, busy: false, recorded: null, recordedDate: null, vocab: null,
-    turns: [], els: {}, mockPrefix: "assistant/mock/", seq: 0
+    turns: [], els: {}, mockPrefix: "assistant/mock/", seq: 0,
+    handled: [],      // the dashboard queries this conversation already covers (no "Ask the assistant about this" for them)
+    pending: null,    // an example that was put into the page's input and is being submitted
+    hasList: false    // examples (or the recorded list) are loaded
   };
 
   // ------------------------------------------------------------------ small helpers
@@ -117,12 +136,15 @@
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   function isNum(v) { return typeof v === "number" && isFinite(v); }
+  function norm(t) { return String(t || "").trim().toLowerCase(); }
+  function answers() { return S.mode === "live" || S.mode === "no_model" || S.mode === "mock"; } // a server (or the mock) answers
+  // The query the dashboard shows now: app.js writes it to the address on every run of a visitor's request.
+  function currentQ() { return (new URLSearchParams(location.search).get("q") || "").trim(); }
   function fmtNum(v) { return isNum(v) ? String(Number(v.toFixed(3))) : String(v); }
   function link(href, text, cls) {
     if (!href) return h("span", { class: cls }, text);
     return h("a", { href: href, target: "_blank", rel: "noopener", class: cls }, text);
   }
-  function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } return null; }
 
   function fetchJSON(url, opts, timeout) {
     var ctl = typeof AbortController === "function" ? new AbortController() : null;
@@ -148,31 +170,33 @@
     if (!main) return false;
     var root = h("section", { id: "assistant", class: "as", "aria-labelledby": "as-title" });
     var els = S.els;
+    els.title = h("h2", { id: "as-title" }, L.titleIdle);
+    els.sub = h("p", { class: "as-sub" }, h("span", { class: "as-how" }, L.idleHow), " ", L.sub);
     els.mode = h("div", { class: "as-mode", role: "status" });
-    els.chat = h("div", { class: "as-chat", role: "log", "aria-live": "polite", "aria-label": "Conversation" },
-      h("p", { class: "as-empty" }, L.emptyChat));
+    els.offer = h("p", { class: "as-offer", hidden: true });
+    els.chat = h("div", { class: "as-chat", role: "log", "aria-live": "polite", "aria-label": "Conversation" });
     els.panelList = h("div", { class: "as-panel-list" }, h("p", { class: "as-empty" }, L.emptyPanels));
     els.panels = h("aside", { class: "as-panels", "aria-label": L.panels }, h("h3", { class: "as-h" }, L.panels), els.panelList);
-    els.input = h("textarea", { id: "as-input", rows: 2, maxlength: 1000, placeholder: L.placeholder, autocomplete: "off" });
+    // The follow-up box: part of the conversation, shown only once an answer is on screen.
+    els.input = h("textarea", { id: "as-input", rows: 1, maxlength: 1000, placeholder: L.followUp, autocomplete: "off" });
     els.send = h("button", { type: "submit", class: "as-send" }, L.send);
-    els.form = h("form", { class: "as-form", autocomplete: "off" },
-      h("label", { for: "as-input", class: "as-vh" }, L.inputLabel), els.input, els.send);
+    els.form = h("form", { class: "as-form", autocomplete: "off", hidden: true },
+      h("label", { for: "as-input", class: "as-vh" }, L.followUp), els.input, els.send);
+    els.grid = h("div", { class: "as-grid", hidden: true }, h("div", { class: "as-conv" }, els.chat, els.form), els.panels);
     els.examples = h("div", { class: "as-examples", hidden: true });
     els.evalBody = h("div", { class: "as-eval-body" });
     els.evalFold = h("details", { class: "as-eval", hidden: true }, h("summary", {}, L.evalFold), els.evalBody);
-    add(root, [h("h2", { id: "as-title" }, L.title), h("p", { class: "as-sub" }, L.sub), els.mode,
-      h("div", { class: "as-grid" }, els.chat, els.panels), els.form, els.examples, els.evalFold]);
+    add(root, [els.title, els.sub, els.mode, els.offer, els.grid, els.examples, els.evalFold]);
     var ask = main.querySelector(":scope > section.ask");
     if (ask) ask.insertAdjacentElement("afterend", root); else main.appendChild(root);
     S.root = root;
+    root.setAttribute("data-state", "idle");
 
-    var draft = store("as-draft");
-    if (draft) els.input.value = draft;
-    els.input.addEventListener("input", function () { store("as-draft", els.input.value || null); });
     els.input.addEventListener("keydown", function (e) {
       if (e.key === "Enter" && !e.shiftKey && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); submitForm(); }
     });
     els.form.addEventListener("submit", function (e) { e.preventDefault(); submitForm(); });
+    wireInput();
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePopovers(); });
     return true;
   }
@@ -184,13 +208,119 @@
     S.els.mode.textContent = t || "";
     S.els.mode.className = "as-mode as-mode-" + mode;
     S.root.setAttribute("data-mode", mode);
+    if (answers()) setInputWords();
+    refresh();
+  }
+
+  // Where a server answers (live, no-model, mock), the page's one input also invites a question. On the public
+  // page and without a server it keeps the dashboard's own words (index.html): only the dashboard reads it there.
+  function setInputWords() {
+    var lab = document.querySelector('#ask-form label[for="q"]'), q = document.getElementById("q");
+    var bar = document.getElementById("shell-q"), barLab = document.querySelector('label[for="shell-q"]');
+    if (lab) lab.textContent = L.inputLabel;
+    if (q) q.setAttribute("placeholder", L.inputHint);
+    if (barLab) barLab.textContent = L.inputLabel;
+    if (bar) bar.setAttribute("placeholder", L.inputLabel);
   }
 
   function setBusy(b) {
     S.busy = b;
     S.els.send.disabled = b;
     S.els.send.textContent = b ? L.waiting : L.send;
-    S.root.querySelectorAll(".as-act").forEach(function (x) { x.disabled = b; });
+    // the example questions next to the page's input are outside this section
+    document.querySelectorAll("#assistant .as-act, .as-qgroup .as-act").forEach(function (x) { x.disabled = b; });
+    syncOffer();
+  }
+
+  // The section in step with the conversation: short before a first question, the answer and its follow-up box after.
+  function refresh() {
+    if (!S.root) return;
+    var els = S.els, talk = S.turns.length > 0, rec = S.mode === "recorded", can = answers();
+    S.root.setAttribute("data-state", talk ? "talk" : "idle");
+    els.title.textContent = rec ? L.titleRecorded : (talk && can ? L.titleAnswer : L.titleIdle);
+    els.sub.hidden = !can || talk;
+    els.grid.hidden = !talk;
+    // the follow-up box: only once an answer of this conversation is on screen
+    els.form.hidden = !can || !S.turns.some(function (t) { return t.resp && t.resp.kind !== "error"; });
+    els.examples.hidden = !S.hasList || (talk && !rec);
+    syncOffer();
+  }
+
+  // A request shown on the dashboard that this conversation does not cover (a shared link, an example
+  // environment, a comparison button): one button, never a model turn nobody asked for.
+  function syncOffer() {
+    var box = S.els.offer;
+    if (!box) return;
+    var q = currentQ();
+    if (!answers() || !q || S.handled.indexOf(norm(q)) >= 0) { box.hidden = true; return; }
+    // While a turn runs, a new request on the dashboard is shown with the button off and one line saying why.
+    if (box.hidden || box.getAttribute("data-q") !== q || box.getAttribute("data-busy") !== String(S.busy)) {
+      box.setAttribute("data-q", q);
+      box.setAttribute("data-busy", String(S.busy));
+      box.replaceChildren(h("span", { class: "as-offer-q" }, q), h("button", { type: "button", class: "as-btn as-act",
+        disabled: S.busy, onclick: function () { if (!S.busy) { newConversation(); ask({ message: q }, q, { dashQ: q }); } } }, L.offer));
+      if (S.busy) box.appendChild(h("span", { class: "as-small as-offer-wait" }, L.offerBusy));
+    }
+    box.hidden = false;
+  }
+
+  function newConversation() {
+    S.state = null; S.turns = []; S.handled = [];
+    S.els.chat.replaceChildren();
+    S.els.panelList.replaceChildren(h("p", { class: "as-empty" }, L.emptyPanels));
+    S.els.input.value = "";
+  }
+
+  // ------------------------------------------------------------------ the page's one input
+  // A turn starts on a real submit of #ask-form (the large input, or the app bar's, which submits the same form).
+  // The example environments, a tab, the back button and a page opened with ?q= do not submit the form, so they
+  // start no turn; the dashboard's query they show is offered as a button (syncOffer).
+  function wireInput() {
+    var form = document.getElementById("ask-form"), q = document.getElementById("q");
+    if (form && q) {
+      form.addEventListener("submit", function () {
+        if (S.driving) return; // this section's own drive of the dashboard (driveDashboard)
+        var text = (q.value || "").trim();
+        if (text) fromInput(text);
+      });
+    }
+    var cond = document.getElementById("conditions"); // app.js fills it again on every run
+    var soon = function () { setTimeout(syncOffer, 0); };
+    if (cond && typeof MutationObserver === "function") new MutationObserver(soon).observe(cond, { childList: true });
+    window.addEventListener("popstate", soon);
+  }
+
+  function fromInput(text) {
+    var ex = S.pending && S.pending.text === text ? S.pending : null;
+    S.pending = null;
+    if (S.busy) return; // the turn in progress finishes first; the new request is then offered as a button
+    if (S.mode === "recorded") { // no model on this page: a recorded question shows its recording, anything else the dashboard only
+      var rec = findRecorded(text);
+      if (!rec) return;
+      newConversation(); S.handled.push(norm(text));
+      setBusy(true);
+      playRecordedTurn(rec, text).then(function () { setBusy(false); }, function () { setBusy(false); });
+      return;
+    }
+    if (!answers()) return;
+    newConversation();
+    if (ex && ex.request) ask({ request: ex.request, answer_mode: ex.answer_mode }, text, { dashQ: text });
+    else ask({ message: text, answer_mode: ex ? ex.answer_mode : null }, text, { dashQ: text });
+  }
+
+  // An example question: its text goes into the page's input, which is submitted (the dashboard and this section).
+  function askExample(x) {
+    if (S.busy) return;
+    var text = x.message || x.label;
+    S.pending = { text: text, request: x.request || null, answer_mode: x.answer_mode || null };
+    var go = function () {
+      var input = document.getElementById("q"), form = document.getElementById("ask-form");
+      if (!input || !form || !dashboardReady()) { fromInput(text); return; }
+      input.value = text;
+      if (typeof form.requestSubmit === "function") form.requestSubmit();
+      else form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+    };
+    whenReady(go, 0, go);
   }
 
   // ------------------------------------------------------------------ modes (section 12.7)
@@ -230,41 +360,62 @@
     fetchJSON(url, { cache: "no-store" }).then(function (d) {
       var ex = (d && d.examples) || [];
       if (!ex.length) return;
+      var buttons = function (cls) {
+        return ex.map(function (x) {
+          return h("button", { type: "button", class: cls + " as-act", onclick: function () { askExample(x); } }, x.message || x.label);
+        });
+      };
       var box = S.els.examples;
-      box.replaceChildren(h("h3", { class: "as-h" }, L.examples), h("div", { class: "as-btns" }, ex.map(function (x) {
-        return h("button", { type: "button", class: "as-btn as-act", title: x.message || null, onclick: function () {
-          if (S.busy) return;
-          if (x.request) ask({ request: x.request, answer_mode: x.answer_mode || null }, x.label || x.message);
-          else ask({ message: x.message, answer_mode: x.answer_mode || null }, x.message);
-        } }, x.label || x.message);
-      })));
-      box.hidden = false;
+      box.replaceChildren(h("h3", { class: "as-h" }, L.questions), h("div", { class: "as-btns" }, buttons("as-btn")));
+      // With the page shell, the same questions also sit next to the page's own examples, as one set
+      // ("Environments", "Questions"); the shell shows that group on the start page and this one after it.
+      var host = document.querySelector("#ask-form .ask-examples");
+      if (host && document.documentElement.classList.contains("shell-on") && !host.querySelector(".as-qgroup")) {
+        host.appendChild(h("div", { class: "ex-group as-qgroup" }, h("span", { class: "ex-label", id: "as-qlabel" }, L.questions),
+          h("div", { class: "ex-list", role: "group", "aria-labelledby": "as-qlabel" }, buttons("ex-q"))));
+        box.classList.add("as-twin");
+      }
+      S.hasList = true;
+      refresh();
     }).catch(function () { /* no examples: the input still works */ });
   }
 
   function renderRecordedList() {
     var box = S.els.examples;
-    box.replaceChildren(h("h3", { class: "as-h" }, L.recordedList), h("div", { class: "as-btns" },
-      S.recorded.conversations.map(function (c) {
+    box.replaceChildren(h("h3", { class: "as-h" }, L.recordedList),
+      h("p", { class: "as-small as-recmark" }, fill(L.recordedMark, { date: S.recordedDate || "" })),
+      h("div", { class: "as-btns" }, S.recorded.conversations.map(function (c) {
         return h("button", { type: "button", class: "as-btn as-act", onclick: function () { playConversation(c); } },
           c.title || c.id);
       })));
-    box.hidden = false;
+    S.hasList = true;
+    refresh();
   }
 
   // ------------------------------------------------------------------ sending a turn
+  // The follow-up box: the same conversation goes on (the carried state).
   function submitForm() {
     var msg = (S.els.input.value || "").trim();
     if (!msg || S.busy) return;
     S.els.input.value = "";
-    store("as-draft", null);
-    if (S.mode === "recorded" || S.mode === "nothing") { typedWithoutServer(msg); return; }
+    if (S.mode === "recorded") { // not shown in this mode; a recorded question still plays its recording
+      var rec = findRecorded(msg);
+      if (rec) { setBusy(true); playRecordedTurn(rec).then(function () { setBusy(false); }, function () { setBusy(false); }); }
+      return;
+    }
+    if (!answers()) return;
     ask({ message: msg }, msg);
   }
 
-  function ask(body, shownText) {
+  // opts.dashQ: the request the dashboard shows when the turn starts. The answer drives the dashboard to its own
+  // request only while the dashboard still shows that one (a visitor who moved on is not pulled back).
+  function ask(body, shownText, opts) {
     if (S.busy) return;
     var turn = newTurn(shownText);
+    turn.dashQ = opts && opts.dashQ !== undefined ? opts.dashQ : currentQ();
+    turn.fromInput = !!(opts && opts.dashQ !== undefined); // the dashboard already shows the visitor's own text
+    S.handled.push(norm(turn.dashQ));
+    if (!opts || opts.dashQ === undefined) showTurn(turn); // asked from inside the conversation
     setBusy(true);
     var payload = {
       message: body.message || null, request: body.request || null, state: S.state,
@@ -369,8 +520,8 @@
   // ------------------------------------------------------------------ recorded mode
   function playConversation(c) {
     if (S.busy) return;
+    newConversation();
     setBusy(true);
-    S.state = null;
     var chain = Promise.resolve();
     (c.turns || []).forEach(function (t, i) {
       chain = chain.then(function () { return i ? sleep(500) : null; }).then(function () { return playRecordedTurn(t); });
@@ -378,9 +529,12 @@
     chain.then(function () { setBusy(false); }, function () { setBusy(false); });
   }
 
-  function playRecordedTurn(t) {
+  function playRecordedTurn(t, dashQ) {
     var resp = t.response;
     var turn = newTurn(t.message || (resp && resp.request && resp.request.english) || "");
+    turn.dashQ = dashQ !== undefined ? dashQ : currentQ();
+    turn.fromInput = dashQ !== undefined;
+    if (dashQ === undefined && S.turns.length === 1) showTurn(turn); // opened from the list
     var chain = Promise.resolve();
     ((resp.trace && resp.trace.steps) || []).forEach(function (st) {
       var wait = Math.min(600, Math.max(60, Math.round((st.ms || 0) / 10)));
@@ -399,32 +553,42 @@
     return hit;
   }
 
-  function typedWithoutServer(msg) {
-    var rec = S.mode === "recorded" ? findRecorded(msg) : null;
-    if (rec) { setBusy(true); playRecordedTurn(rec).then(function () { setBusy(false); }); return; }
-    var turn = newTurn(msg);
-    add(turn.body, h("p", { class: "as-notice as-notice-info" }, L.typedToDashboard));
-    add(turn.body, h("p", { class: "as-row" }, h("button", { type: "button", class: "as-btn", onclick: function () {
-      driveDashboard(msg, "#top", true);
-    } }, L.dashboard)));
-    driveDashboard(msg, null, false);
-  }
-
   // ------------------------------------------------------------------ one turn in the chat (section 12.3)
   function newTurn(text) {
     var chat = S.els.chat;
-    var empty = chat.querySelector(".as-empty");
-    if (empty) empty.remove();
     var idx = S.turns.length;
     var steps = h("ol", { class: "as-steps", "aria-label": "Steps" });
     var body = h("div", { class: "as-body" });
-    var el = h("article", { class: "as-turn", "data-turn": idx },
-      h("div", { class: "as-user" }, h("span", { class: "as-vh" }, "You: "), text), steps, body);
+    // live mode only: the model needs a minute or two, and the dashboard is already usable
+    var wait = S.mode === "live" ? h("p", { class: "as-wait" }, L.waitLive) : null;
+    var user = h("div", { class: "as-user" }, h("span", { class: "as-vh" }, "You: "), text);
+    var el = h("article", { class: "as-turn", "data-turn": idx }, user, steps, wait, body);
+    // The latest answer is shown in full; the earlier turns fold to their question (a click opens one again).
+    S.turns.forEach(function (t) { foldTurn(t, true); });
     chat.appendChild(el);
-    var turn = { el: el, steps: steps, body: body, idx: idx, streamed: false, stepEls: {}, resp: null };
+    var turn = { el: el, user: user, steps: steps, body: body, idx: idx, streamed: false, stepEls: {}, resp: null, wait: wait, dashQ: "" };
+    var toggle = function () { if (el.classList.contains("as-old")) foldTurn(turn, !el.classList.contains("as-folded")); };
+    user.addEventListener("click", toggle);
+    user.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
     S.turns.push(turn);
+    refresh();
     scrollChatTo(el);
     return turn;
+  }
+
+  function foldTurn(turn, fold) {
+    turn.el.classList.add("as-old");
+    turn.el.classList.toggle("as-folded", fold);
+    turn.user.setAttribute("role", "button");
+    turn.user.setAttribute("tabindex", "0");
+    turn.user.setAttribute("aria-expanded", String(!fold));
+  }
+
+  // A turn that starts outside the window (after a follow-up, or a recording opened from the list) is brought into view.
+  function showTurn(turn) {
+    var bar = document.getElementById("appbar");
+    var top = (bar ? bar.offsetHeight : 0) + 16, r = turn.el.getBoundingClientRect();
+    if (r.top < top || r.top > window.innerHeight * 0.6) window.scrollBy(0, r.top - top);
   }
 
   function scrollChatTo(el) {
@@ -437,7 +601,7 @@
     if (!li) {
       li = h("li", { class: "as-step as-run", "data-step": ev.step },
         h("span", { class: "as-dot", "aria-hidden": "true" }),
-        h("span", { class: "as-step-label" }, ev.label || ev.step),
+        h("span", { class: "as-step-label" }, ev.label || STEP_LABELS[ev.step] || ev.step),
         h("span", { class: "as-step-sum" }, ""));
       turn.stepEls[ev.step] = li;
       turn.steps.appendChild(li);
@@ -457,6 +621,7 @@
   }
 
   function renderError(turn, j) {
+    if (turn.wait) { turn.wait.remove(); turn.wait = null; }
     Object.keys(turn.stepEls).forEach(function (k) { turn.stepEls[k].classList.remove("as-run"); });
     add(turn.body, h("p", { class: "as-notice as-notice-error", role: "alert" }, L.error));
     if (j && j.trace) add(turn.body, traceFold(j.trace));
@@ -464,6 +629,7 @@
 
   function renderResponse(turn, resp, opt) {
     turn.resp = resp;
+    if (turn.wait) { turn.wait.remove(); turn.wait = null; }
     if (!resp || typeof resp !== "object") { renderError(turn, null); return; }
     if (!opt.streamed) {
       ((resp.trace && resp.trace.steps) || []).forEach(function (st) {
@@ -501,6 +667,7 @@
         var span = h("span", { class: "as-sent" + (st.status === "repaired" ? " as-repaired" : "") + (byCode ? " as-sent-code" : ""),
           title: byCode ? L.sentByCode : null }, st.text);
         para.appendChild(span);
+        if (byCode) para.appendChild(h("span", { class: "as-code-tag", title: L.sentByCode }, L.sentByCodeTag));
         (st.facts || []).forEach(function (id) {
           var f = byId[id]; if (!f) return;
           para.appendChild(citeButton(f, nums[id], pop));
@@ -525,13 +692,6 @@
     if (facts.length) add(b, factsFold(facts, order, nums));
     if (resp.trace) add(b, traceFold(resp.trace));
 
-    var fu = resp.followups || [];
-    if (fu.length) {
-      add(b, h("div", { class: "as-follow" }, h("h4", { class: "as-h4" }, L.follow), h("div", { class: "as-btns" },
-        fu.map(function (f) {
-          return h("button", { type: "button", class: "as-btn as-act", onclick: function () { followUp(f, turn); } }, f.text);
-        }))));
-    }
     var dq = resp.dashboard && resp.dashboard.q;
     var row = h("p", { class: "as-row" });
     if (dq) {
@@ -545,8 +705,23 @@
       } }, L.showPanels));
     }
     if (row.childNodes.length) add(b, row);
+    // The follow-up suggestions come last in the turn, right above the follow-up box.
+    var fu = resp.followups || [];
+    if (fu.length) {
+      add(b, h("div", { class: "as-follow" }, h("h4", { class: "as-h4" }, L.follow), h("div", { class: "as-btns" },
+        fu.map(function (f) {
+          return h("button", { type: "button", class: "as-btn as-act", onclick: function () { followUp(f, turn); } }, f.text);
+        }))));
+    }
     renderPanels(turn);
-    if (dq) driveDashboard(dq, null, false);
+    if (dq) {
+      // A turn asked from the page's input leaves the dashboard (and the input) on the visitor's own words; the
+      // button above offers the answer's request. A follow-up or a recording opened from the list drives the
+      // dashboard as before, unless the visitor has moved the dashboard on since.
+      if (!turn.fromInput && norm(currentQ()) === norm(turn.dashQ)) { S.handled.push(norm(dq)); driveDashboard(dq, null, false); }
+      else if (turn.fromInput) S.handled.push(norm(dq));
+    }
+    refresh();
     scrollChatTo(turn.el);
   }
 
@@ -612,7 +787,7 @@
     var d = h("details", { class: "as-fold as-trace" }, h("summary", {}, L.traceFold));
     var ol = h("ol", { class: "as-trace-steps" });
     (tr.steps || []).forEach(function (st) {
-      var li = h("li", {}, h("b", {}, st.label), " ", st.summary,
+      var li = h("li", {}, h("b", {}, st.label || STEP_LABELS[st.step] || st.step), " ", st.summary,
         h("span", { class: "as-ms" }, " (" + st.ms + " ms, " + st.model_calls + " model call" + (st.model_calls === 1 ? "" : "s") + ")"));
       var det = st.detail;
       if (det && typeof det === "object") add(li, traceDetail(st.step, det));
@@ -655,7 +830,8 @@
         return "sentence " + g.n + ", " + g.gate + ": " + g.reason;
       }).join("; ") + "." : "No gate failure."));
       if ("repair" in det) add(out, h("p", {}, det.repair ? "One repair call was made with the failures as feedback." : "No repair call."));
-      if (det.checker) add(out, h("p", {}, "Model checker: " + det.checker.yes + " supported, " + det.checker.no + " not supported."));
+      if (det.checker && det.checker.skipped) add(out, h("p", {}, fill(L.checkerSkipped, { reason: det.checker.skipped })));
+      else if (det.checker) add(out, h("p", {}, "Model checker: " + det.checker.yes + " supported, " + det.checker.no + " not supported."));
     }
     return out.childNodes.length ? out : null;
   }
@@ -850,10 +1026,10 @@
 
   // ------------------------------------------------------------------ driving the dashboard (section 12.6)
   function dashboardReady() { var r = document.getElementById("read"); return !!(r && !r.hidden); }
-  function whenReady(fn, tries) {
+  function whenReady(fn, tries, giveUp) {
     if (dashboardReady()) { fn(); return; }
-    if ((tries || 0) > 100) return;
-    setTimeout(function () { whenReady(fn, (tries || 0) + 1); }, 150);
+    if ((tries || 0) > 100) { if (giveUp) giveUp(); return; }
+    setTimeout(function () { whenReady(fn, (tries || 0) + 1, giveUp); }, 150);
   }
   function driveDashboard(q, section, scroll) {
     whenReady(function () {
@@ -861,15 +1037,25 @@
       if (!input || !form) return;
       if (q && input.value !== q) {
         input.value = q;
-        if (typeof form.requestSubmit === "function") form.requestSubmit();
-        else form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+        // S.driving: this submit starts no turn here. data-quiet: the page shell keeps the visitor's tab and
+        // scroll position when the dashboard follows an answer (web/shell.js, newQuery).
+        S.driving = true;
+        if (!scroll) form.setAttribute("data-quiet", "");
+        try {
+          if (typeof form.requestSubmit === "function") form.requestSubmit();
+          else form.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+        } finally { S.driving = false; form.removeAttribute("data-quiet"); }
       }
       if (scroll) scrollToSection(section || "#top");
     });
   }
   function scrollToSection(sel, tries) {
     var el = document.querySelector(sel);
-    if (el && !el.hidden) { el.scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    if (el && !el.hidden) {
+      // with the page shell the section can be under another tab: the shell opens that tab and scrolls there
+      if (window.feeShell && typeof window.feeShell.reveal === "function" && window.feeShell.reveal(el)) return;
+      el.scrollIntoView({ behavior: "smooth", block: "start" }); return;
+    }
     if ((tries || 0) < 15) { setTimeout(function () { scrollToSection(sel, (tries || 0) + 1); }, 120); return; }
     var top = document.querySelector("#top");
     if (top && !top.hidden) top.scrollIntoView({ behavior: "smooth", block: "start" });

@@ -7,6 +7,8 @@ Each reply is a dict (returned as `data`, checked against the schema like ai.llm
 (messages, schema) -> dict, "invalid" (valid False) or "timeout" (raises ai.llm.LLMError). A step with no
 reply left gives "invalid". `calls` records every call (step, messages, schema, options).
 """
+import json
+
 from ai import llm
 
 
@@ -34,7 +36,8 @@ class FakeChat:
         if reply == "invalid" or not isinstance(reply, dict):
             return dict(base, data=None, valid=False, errors=["fake invalid reply"], raw="{}")
         errors = llm.validate(reply, schema)
-        return dict(base, data=reply if not errors else None, valid=not errors, errors=errors, raw=str(reply))
+        return dict(base, data=reply if not errors else None, valid=not errors, errors=errors,
+                    raw=json.dumps(reply, ensure_ascii=False))
 
     def steps(self):
         return [c["step"] for c in self.calls]

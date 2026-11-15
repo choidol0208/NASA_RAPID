@@ -116,7 +116,10 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Cache-Control", "no-store")
         self.end_headers()
         if self.command != "HEAD":
-            self.wfile.write(body)
+            try:
+                self.wfile.write(body)
+            except (BrokenPipeError, ConnectionResetError):
+                pass  # the client left before the reply (added after the red-team run of 15 Nov)
         self._log(status)
 
     def do_HEAD(self):

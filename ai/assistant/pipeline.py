@@ -231,7 +231,21 @@ def _understand(tr, message, state, vocab):
         extra["flow"] = R.get("flow")
     pending = (state or {}).get("pending_clarify")
     prev = (state or {}).get("request")
-    if pending and prev and len((message or "").split()) <= 8 and values.get("intent") not in ("out_of_scope",):
+    if prev and not pending and SAME_AS_BEFORE.search(message or "") and len((message or "").split()) <= 10 \
+            and values.get("intent") not in ("out_of_scope", "help") and prev.get("intent") not in ("help", "out_of_scope"):
+        # "And the same for smoke generation?" keeps the previous intent; only the named field changes (changed at
+        # integration, 15 Nov: the readings took it as question_evidence and the turn asked for an environment)
+        values["intent"] = prev["intent"]
+        agreement["intent"] = "carried"
+        extra["new_topic"] = False
+    # a short reply that gives the value the pending question asked for continues the pending request even when a
+    # reading called it out of scope ("A Mars base" after "Which environment is this for?"; changed at integration,
+    # 15 Nov, after the recording run)
+    answers_pending = bool(pending and prev and (
+        (str(pending.get("field", "")).startswith("environment") and (values.get("preset") or values.get("o2_pct")))
+        or (pending.get("field") == "equipment" and values.get("equipment"))))
+    if pending and prev and len((message or "").split()) <= 8 and (
+            values.get("intent") not in ("out_of_scope",) or answers_pending):
         # an answer to the clarifying question continues the pending request
         values["intent"] = prev["intent"]
         values["asks_verdict"] = values.get("asks_verdict") or prev.get("asks_verdict")
@@ -298,6 +312,7 @@ _TYPO = {"\u2010": "-", "\u2011": "-", "\u2012": "-", "\u2013": "-", "\u2212": "
          "\u2009": " "}
 
 
+SAME_AS_BEFORE = re.compile(r"\b(?:the same|same for|same thing|likewise)\b|똑같이|마찬가지|同じ|lo mismo", re.I)
 BACKREF = re.compile(r"^(?:of (?:those|these|them)|these|those|they|both|neither|the (?:remaining|other|rest))\b",
                      re.I)
 
@@ -313,7 +328,7 @@ def clean_text(t):
 
 
 def _is_aim(f):
-    return bool(f) and f.get("kind") == "nasa_sentence" and f.get("field") in ck.LP.NON_RESULT_FIELDS
+    return bool(f) and (f.get("kind") == "nasa_sentence" or f.get("quote")) and f.get("field") in ck.LP.NON_RESULT_FIELDS
 
 
 def _gate_all(sentences, by_id, req, turn_ids):
@@ -338,6 +353,39 @@ def _gate_all(sentences, by_id, req, turn_ids):
     return fails
 
 
+_SALVAGE_ERR = re.compile(r"^\$\.sentences(?:\[\d+\]\.facts)?: more than \d+ items$")
+
+
+def _salvage(r, sch):
+    """A write or repair reply whose only schema errors are too many sentences or too many fact ids in a sentence
+    is kept instead of discarded (added after the red-team and clean-clone runs of 15 Nov: 3 of 24 writes were lost
+    for this alone). The sentences past the limit are dropped; a sentence citing more than 4 facts stays and fails
+    the citation gate on its own. Returns the data, or None when the reply cannot be kept."""
+    if not r or not r.get("invalid") or not r.get("errors") or not all(_SALVAGE_ERR.match(e) for e in r["errors"]):
+        return None
+    try:
+        data = llm.parse_json(r.get("raw") or "")
+    except (ValueError, TypeError):
+        return None
+    if not isinstance(data, dict) or not isinstance(data.get("sentences"), list):
+        return None
+    data["sentences"] = data["sentences"][:sch["properties"]["sentences"]["maxItems"]]
+    loose = copy.deepcopy(sch)
+    loose["properties"]["sentences"]["items"]["properties"]["facts"].pop("maxItems", None)
+    if llm.validate(data, loose):
+        return None
+    return data
+
+
+def _call_write(tr, step, msgs, sch):
+    r = tr.call(step, msgs, sch)
+    if r and r.get("invalid"):
+        data = _salvage(r, sch)
+        if data is not None:
+            return dict(r, invalid=False, valid=True, data=data, salvaged=list(r["errors"]))
+    return r
+
+
 def _write_and_check(tr, req, vocab, notices, facts, panels, message):
     """-> (answer, chosen panel ids, followup texts, gate_report, write detail, check detail)."""
     by_id = {f["id"]: f for f in facts}
@@ -353,15 +401,15 @@ def _write_and_check(tr, req, vocab, notices, facts, panels, message):
     def fallback(reason):
         report["fallback"] = True
         report["fallback_reason"] = reason
-        return write.template_answer(facts)
+        return write.template_answer(facts, req)
 
     if tr.mode != "live" or tr.budget.remaining() < need_calls or not wf:
         reason = "no model" if tr.mode != "live" else ("no facts" if not wf else "budget")
-        return {"origin": "template", "sentences": write.template_answer(facts), "removed": []}, [], [], \
+        return {"origin": "template", "sentences": write.template_answer(facts, req), "removed": []}, [], [], \
             dict(report, fallback=tr.mode == "live", fallback_reason=reason), wdetail, cdetail
     msgs = write.messages(req, vocab, notices, wf, panels)
     sch = write.schema(req, wf, panels)
-    w = tr.call("write", msgs, sch)
+    w = _call_write(tr, "write", msgs, sch)
     ok = bool(w and not w.get("invalid"))
     tr.done("write", texts.SUMMARY["write_model"].format(written=len(w["data"]["sentences"])) if ok
             else texts.SUMMARY["write_template"], {"sentences": len(w["data"]["sentences"]) if ok else 0, "valid": ok,
@@ -374,6 +422,9 @@ def _write_and_check(tr, req, vocab, notices, facts, panels, message):
         return {"origin": "template", "sentences": sents, "removed": []}, [], [], report, wdetail, cdetail
     data = w["data"]
     wdetail.update({"sentences": len(data["sentences"]), "valid": True})
+    if w.get("salvaged"):
+        wdetail["salvaged"] = w["salvaged"][:3]
+        report["salvaged"] = w["salvaged"][:3]
     written = [{"text": clean_text(s["text"]), "facts": list(s["facts"])} for s in data["sentences"]]
     report["written"] = len(written)
     fails = _gate_all(written, by_id, req, turn_ids)
@@ -386,19 +437,15 @@ def _write_and_check(tr, req, vocab, notices, facts, panels, message):
             cdetail["gate_failures"].append({"n": i, "gate": gate, "reason": reason})
     status = ["kept"] * len(written)
     current = written
-    # Repair needs one call, the checker another. When only one call is left (two readings were made) and the code
-    # gates would leave too little to show (nothing, or under half of what was written), the last call goes to the
-    # repair and the checker is skipped for this turn (said in the trace): the repaired sentences still pass every
-    # code gate. Otherwise the last call stays with the checker. (Changed after the first evaluation questions of
-    # 15 Nov: with two readings, a turn could never repair, and q01 fell back to the template answer.)
-    n_fail = sum(1 for g in fails if g)
-    weak = (len(written) - n_fail) == 0 or (len(written) - n_fail) < len(written) / 2
-    repair_last = tr.arm == "full" and tr.budget.remaining() == 1 and weak
+    # Repair needs one call, the checker another: a repair is made only when a call is left for the checker after
+    # it. No model sentence is ever shown without having passed both the code gates and the model checker. (Changed
+    # after the red-team and grounding audits of 15 Nov: an earlier rule let the last call go to the repair and
+    # skipped the checker, and a wrong definition and a sentence against the catalog were shown unchecked.)
     if tr.arm != "no_gates" and any(fails):
-        if tr.budget.remaining() >= need_calls or repair_last:
+        if tr.budget.remaining() >= need_calls:
             failures = [(i, g[0][0], g[0][1]) for i, g in enumerate(fails, 1) if g]
             rmsgs = write.repair_messages(msgs, json.dumps(data, ensure_ascii=False), failures)
-            r = tr.call("repair", rmsgs, sch)
+            r = _call_write(tr, "repair", rmsgs, sch)
             cdetail["repair"] = True
             if r and not r.get("invalid"):
                 rep = [{"text": clean_text(s["text"]), "facts": list(s["facts"])} for s in r["data"]["sentences"]]
@@ -432,11 +479,13 @@ def _write_and_check(tr, req, vocab, notices, facts, panels, message):
                     st2.append("kept")
             current, status = keep, st2
     # the model checker
-    first_removed = bool(written) and (not current or current[0]["text"] != written[0]["text"]) and \
-        not any(x["text"] == written[0]["text"] for x in current)
     if tr.arm != "no_checker" and current and tr.budget.remaining() < 1:
-        cdetail["checker"]["skipped"] = "the last model call of the turn went to the repair"
+        # cannot happen with the rule above (kept as a guard): no checker call is left, so no model sentence is shown
+        cdetail["checker"]["skipped"] = "no model call was left for the checker"
         report["checker_skipped"] = True
+        report["removed"] = len(removed)
+        sents = fallback("no checker call left")
+        return {"origin": "template", "sentences": sents, "removed": removed}, [], [], report, wdetail, cdetail
     elif tr.arm != "no_checker" and current:
         cm = ck.checker_messages(current, by_id, req)
         c = tr.call("check", cm, ck.check_schema(len(current)))
@@ -489,7 +538,7 @@ def _write_and_check(tr, req, vocab, notices, facts, panels, message):
             data.get("followups") or [], report, wdetail, cdetail
     lead = []
     if lead_ids and not any(set(s["facts"]) & lead_ids for s in current):
-        lead = [s for s in write.template_answer([f for f in facts if f["lead"]])[:1]]
+        lead = [s for s in write.template_answer([f for f in facts if f["lead"]], req)[:1]]
         report["lead_from_template"] = bool(lead)
     sents = [{"text": s["text"], "facts": s["facts"], "origin": "template", "status": "kept"} for s in lead]
     sents += [{"text": s["text"], "facts": s["facts"], "origin": "model", "status": stt}
@@ -500,11 +549,16 @@ def _write_and_check(tr, req, vocab, notices, facts, panels, message):
         data.get("followups") or [], report, wdetail, cdetail
 
 
+FALLBACK_NOTICE = {"write failed": "fallback_write", "write call not made": "fallback_write",
+                   "budget": "fallback_write", "check failed": "fallback_check", "check call not made": "fallback_check",
+                   "no checker call left": "fallback_check", "no facts": None}
+
+
 def _followups(texts_in, req, facts):
     out = []
     for t in texts_in or []:
         t = (t or "").strip()
-        if t and not ck.gate_question(t, facts) and t not in [o["text"] for o in out]:
+        if t and not ck.gate_question(t, facts, req) and t not in [o["text"] for o in out]:
             out.append({"text": t, "request": None})
         if len(out) == 3:
             break
@@ -576,7 +630,8 @@ def turn(message=None, state=None, request=None, *, chat=None, mode=None, arm="f
                                              last_tests=hit["state"].get("last_tests"),
                                              pending=hit["state"].get("pending_clarify"))
                 for s in hit["trace"]["steps"]:
-                    tr.emit({"event": "step", "step": s["step"], "status": "done", "summary": s["summary"],
+                    tr.emit({"event": "step", "step": s["step"], "status": "done", "label": texts.STEPS[s["step"]],
+                             "summary": s["summary"],
                              "ms": 0, "model_calls": 0})
                 return hit
         tr.start("understand")
@@ -587,6 +642,21 @@ def turn(message=None, state=None, request=None, *, chat=None, mode=None, arm="f
         else:
             req, detail, summary = _understand(tr, message, state, vocab)
             tr.done("understand", summary, detail)
+        others = [c["label"] for c in req.get("compare_with") or []]
+        if message is not None:
+            # environments the rule parser found in the message beyond the one looked up (the live spot check of
+            # 15 Nov: the model readings left compare_with empty and the spacesuit was again dropped without a word)
+            for pid in rq.rule_reading(message, state, vocab).get("presets_named") or []:
+                lab = (vocab["presets"].get(pid) or {}).get("label")
+                if pid != (req["environment"] or {}).get("preset") and lab and lab not in others:
+                    others.append(lab)
+        if others and req["intent"] != "compare_environments" and not req["clarify"]:
+            # two environments in a message that is not a comparison: only the first is looked up, and the
+            # request says so (added after the red-team run of 15 Nov: the spacesuit was dropped without a word)
+            first = (req["environment"] or {}).get("label") or "the first environment"
+            txt = texts.ASSUME_COMPARE_ONLY.format(label=first, others=", ".join(others))
+            if not any(a.get("text") == txt for a in req["assumptions"]):
+                req["assumptions"].append({"field": "compare_with", "text": txt})
         if arm == "single_call" and message is not None:
             return _single_call(tr, message, req, state, data, key)
         if req["clarify"]:
@@ -628,7 +698,7 @@ def turn(message=None, state=None, request=None, *, chat=None, mode=None, arm="f
         # write and check
         tr.start("write")
         if answer_mode == "template":
-            answer = {"origin": "template", "sentences": write.template_answer(facts), "removed": []}
+            answer = {"origin": "template", "sentences": write.template_answer(facts, req), "removed": []}
             chosen, fups, report = [], [], None
             wdetail, cdetail = {"sentences": 0, "valid": False}, None
             tr.done("write", texts.SUMMARY["write_template"], wdetail)
@@ -653,7 +723,11 @@ def turn(message=None, state=None, request=None, *, chat=None, mode=None, arm="f
             summ = texts.SUMMARY["check_none"]
         tr.done("check", summ, cdetail or {"gate_failures": [], "repair": False, "checker": {"yes": 0, "no": 0}})
         if answer["origin"] == "template" and report and report.get("fallback") and mode == "live":
-            notices.append({"id": "fallback", "text": texts.NOTICES["fallback"]})
+            # the notice says what happened (separate texts added after the red-team run of 15 Nov); a turn with
+            # no facts to write from gets no fallback notice (the not-in-files notice says what is missing)
+            nid = FALLBACK_NOTICE.get(report.get("fallback_reason"), "fallback")
+            if nid:
+                notices.append({"id": "fallback", "text": texts.NOTICES[nid]})
         if not answer["sentences"] and not any(n["id"] == "not_in_files" for n in notices):
             notices.append({"id": "not_in_files", "text": texts.NOTICES["not_in_files"].format(
                 needed=texts.NEEDED["search"].format(keywords=", ".join(req.get("keywords") or ["these"])))})

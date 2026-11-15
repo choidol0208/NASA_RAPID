@@ -13,7 +13,7 @@ FACT = {
         "tool": {"type": "string"},
         "kind": {"type": "string", "enum": ["ranking", "count", "statement", "range", "pile", "test_row", "readiness",
                                             "nasa_sentence", "criterion", "file_group", "video", "card", "definition",
-                                            "limit"]},
+                                            "limit", "published_result"]},  # published_result: added 15 November
         "context": {"type": ["string", "null"], "maxLength": 160},
         "text": {"type": "string", "minLength": 1, "maxLength": 900},
         "numbers": {"type": "array", "items": {"type": "object", "additionalProperties": False,

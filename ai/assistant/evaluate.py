@@ -70,7 +70,10 @@ ARMS = ("single_call", "full", "no_repeat", "no_gates", "no_checker")
 # (--subset-arms); full and single_call are then also scored on that same half (metrics_on_subset).
 SUBSET_SHARE = 0.5
 SUBSET_SEED = 20261115
-OPTIONAL_TOOLS = {"videos_of_test"}
+# Tools left out of the plan score. published_results was added on 15 November after the question set was frozen
+# (f628f1732af1): its expected_tools do not name it, so counting it would lower the plan score of every
+# question_evidence, modelling_data and equipment_research question for a step the frozen set could not know.
+OPTIONAL_TOOLS = {"videos_of_test", "published_results"}
 WORDING_GATES = ("policy", "wording", "banned", "lint", "extra")   # G5 to G9
 SET_KEYS = {"questions", "investigations", "tests", "environments", "compare_with"}
 PRESET_FILLED = {"environment.o2_pct", "environment.pressure_kpa", "environment.gravity", "environment.flow"}

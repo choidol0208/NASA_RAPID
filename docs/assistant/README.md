@@ -8,6 +8,7 @@
 |---|---|
 | `README.md` | this file |
 | `techniques.md` | the research note: multi-step use of a language model, the published sources, what each step means for a small local model |
+| `screens/` | four JPEG screens of recorded conversations in recorded mode (15 November): closest investigations after a clarifying question, the raw files of one test, research behind equipment, a declined prediction |
 | `evaluation.md` | written by `python3 -m ai.assistant.evaluate --report` from `data/insights/assistant_eval.json`; it does not exist until the evaluation has run |
 
 ## 1. One turn
@@ -29,14 +30,16 @@
         v
  WRITE        model: at most 5 sentences, each citing fact ids (the ids are a schema enum); panels; follow-ups
         v
- CHECK        14 code gates per sentence -> one repair with the failures -> model checker with a fresh prompt
+ CHECK        15 code gates per sentence -> one repair with the failures -> model checker with a fresh prompt
               (sees each sentence with its cited facts only) -> template answer if nothing trustworthy remains
         v
  DELIVER      answer with numbered citations, panels, editable reading chips, follow-ups; the dashboard below
               is driven to the same request
 ```
 
-At most four model calls per turn, counted by code: reading 1, reading 2, write and check; or reading 1, write, repair and check when reading 2 was skipped. The two readings use low reasoning effort; write, repair and check use medium. A preset button or a request seen before uses no model call.
+At most four model calls per turn, counted by code: reading 1, reading 2, write and check; or reading 1, write, repair and check when reading 2 was skipped. A repair is made only when a call is left for the checker after it, so no model sentence is shown without having passed both the code gates and the model checker; when the checker cannot run or its reply is invalid, the answer is the team-code template answer with a notice that says why. The two readings use low reasoning effort; write, repair and check use medium. A preset button or a request seen before uses no model call.
+
+Added on 15 November: for a question about an environment (and for modelling data and equipment research) the plan also runs `published_results`, which quotes what NASA's experiments found for that question from `data/pipeline/results_by_need.json`, in the data role's fixed order by the conditions each statement gives, with printed values in a quotes panel; all rows can be filtered in `data/pipeline/results_flat.csv`. The order and counts are the team's; the quotes are the documents' words. It is left out of the plan score, because the question set was frozen before it was added.
 
 Without a model (Ollama not running, `./run.sh --no-model`, or `AI_NO_MODEL_CALLS=1`) the same turn runs with the rule parser alone and a template answer. The page says so. Every fixed sentence the assistant can show is in `ai/assistant/texts.py`. The refusals of a safety verdict and of a prediction, the "not in the team's files" notice, the out-of-scope text and the answer labels are among them.
 
@@ -176,7 +179,11 @@ An interrupted run continues where it stopped. The progress is kept in `ai/assis
 
 `python3 -m ai.assistant.record` runs the conversations of `ai/assistant/eval/record_script.json` with the local model (full arm). There are ten: the closest investigations for a lunar habitat and then the raw files of those tests, a comparison of environments, a smoke detector for a rover (asked in Korean), data for predictive models of extinction and smoke generation, research behind a suppression system, where the flame-spread data for the ISS are, applications on Earth, a vague request that gets one clarifying question, a declined safety verdict and a declined prediction. `--resume` keeps the conversations already recorded (git-ignored progress file) and `--skip-failed` leaves out a conversation that has a problem, naming it under `left_out`, instead of writing nothing. The output is `data/insights/assistant_recorded.json`. Each response is marked `recorded` and carries the recorded label with its date. The file is not written when a turn ends in an error, when a response does not match the RESPONSE schema, or when a model sentence fails a gate against its facts. `python3 ai/check_all.py` re-checks the file: every model sentence against its recorded facts, and the tools re-run with each recorded request so that every cited fact still has the same text. If not, it reports "recorded answer is stale".
 
-The public page runs no model. Once `web/build.py` copies the assistant's files and these two JSON files (a request to the ui role, DESIGN.md section 17), the page replays the recordings. Until then the assistant appears only in the local install.
+**The recording of 15 November (16:03 to 16:36 KST).** Six of the ten conversations are in the file: 11 turns, 18 model sentences. An AI session (Claude Code, pm role) read every model sentence after the first recording. Eight conversations had a sentence that was wrong or broader than its facts and were re-recorded once. Four are left out, each named with its reason under `left_out` in the file (through the script's own `left_out` list): `lunar_cotton` (a sentence said that "the archive" was built by code, where the fact says that of the team's file block), `modelling_extinction` (a count of tests whose pressure is stated in a document, not in a table, was presented as the tests that have pressure data, in both recordings), `verdict_declined` (sentences said that no test is counted for flame spread or for extinction, which the cited facts contradict), and `iss_vs_lunar` (the follow-up "add a spacesuit" answered for the ISS cabin and the spacesuit only, without the lunar habitat, and showed the assumption "Read as earth (the readings differed ...)", in both recordings). These are model and pipeline faults that the code gates and the model checker did not catch; they are reported here, not edited away. Of the 11 recorded turns, 8 are model answers, 2 are template (team-code) answers because the checks removed the model's sentences, and 1 is a clarifying question.
+
+The public page runs no model. `web/build.py` copies the assistant's files and these two JSON files, and the page replays the recordings in recorded mode. `check_all.py` re-runs every fact of each recorded turn (not only the cited ones, since the page shows all of them) and fails a recorded model answer whose model checker did not run. The recorded label says in how many of the model answers the checker ran, and that no person reviewed them.
+
+Red-team cases: `ai/assistant/eval/redteam_cases.json` (16 cases, not part of the frozen question set; see `ai/assistant/eval/README.md`). The attacks code alone can reproduce are unit tests in `ai/assistant/test_redteam.py`.
 
 ## 5. Checks and tests
 
