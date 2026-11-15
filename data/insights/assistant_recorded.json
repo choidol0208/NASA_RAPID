@@ -1,0 +1,4350 @@
+{
+ "_meta": {
+  "built_by": "ai/assistant/record.py",
+  "code_written_with": "AI assistant (Claude Code)",
+  "language_model_used_at_build": "gpt-oss:20b (f38aa0c53da5)",
+  "generated_at": "2026-11-15T18:38:50+09:00",
+  "inputs_sha256": {
+   "ai/assistant/eval/record_script.json": "bad178ca4b9169e929a21c150709bf91819e3b6e976bfab1522e547432218ad0"
+  },
+  "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). Conversations recorded with the local language model gpt-oss:20b (f38aa0c53da5): the answers were written by the model only from facts that code looked up in the team's files; every model sentence kept passed the code gates and, in 3 of 3 answers written by the model, a model checker; and they are replayed on the public page marked as recorded. Checked by code and AI sessions; reviewed by a person: none. Team output, not a NASA conclusion, and not safety guidance.",
+  "content_sha256": "0d1b4ad3791593573d05c7cdda56bcc3c87a80a999334c6ed4c6087ab53b4b6f"
+ },
+ "recorded_at": "2026-11-15T18:38:50+09:00",
+ "model": "gpt-oss:20b (f38aa0c53da5)",
+ "fake_model": false,
+ "data_version": "d5a6ff674ab0",
+ "commit": "ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e",
+ "run_log": "ai/runs/assistant_record_20261115-1838.jsonl",
+ "conversations": [
+  {
+   "id": "earth",
+   "title": "Applications on Earth",
+   "turns": [
+    {
+     "message": "What do the PSI records say about applications on Earth?",
+     "response": {
+      "version": "1",
+      "turn_id": "084ba942d1a1",
+      "kind": "answer",
+      "mode": "recorded",
+      "request": {
+       "version": "1",
+       "intent": "earth_applications",
+       "asks_verdict": false,
+       "asks_prediction": false,
+       "environment": {
+        "preset": "earth",
+        "label": "Earth sea level",
+        "o2_pct": 21.0,
+        "pressure_kpa": 101.3,
+        "gravity": "earth",
+        "flow": null,
+        "scenario_id": null,
+        "cell": {
+         "id": "cell_o2_19_23__p_85_8_116_8",
+         "o2_bin": "o2_19_23",
+         "pressure_bin": "p_85_8_116_8",
+         "label": "Oxygen 19 to 23% (air, 21 +/- 2); pressure 85.8 to below 116.8 kPa (around 101.3 kPa = 14.7 psia)"
+        }
+       },
+       "compare_with": [],
+       "item": {
+        "material": null,
+        "words": null,
+        "fuel_phase": null,
+        "query_word": null,
+        "label": null
+       },
+       "equipment": null,
+       "questions": [],
+       "investigations": [],
+       "unresolved_names": [],
+       "tests": [],
+       "term": null,
+       "keywords": [
+        "PSI",
+        "Earth"
+       ],
+       "english": "What do the PSI records say about applications on Earth?",
+       "sources": {
+        "intent": "message",
+        "environment.preset": "message",
+        "environment.gravity": "message",
+        "environment.o2_pct": "preset",
+        "environment.pressure_kpa": "preset"
+       },
+       "agreement": {
+        "intent": "agree",
+        "asks_verdict": "agree",
+        "asks_prediction": "agree",
+        "environment.preset": "majority",
+        "environment.gravity": "majority"
+       },
+       "removed_ungrounded": [],
+       "unknown": [],
+       "assumptions": [
+        {
+         "field": "environment.o2_pct",
+         "text": "Oxygen: 21%, from the Earth sea level preset."
+        },
+        {
+         "field": "environment.pressure_kpa",
+         "text": "Pressure: 101.3 kPa, from the Earth sea level preset."
+        }
+       ],
+       "clarify": null,
+       "dashboard_q": ""
+      },
+      "state": {
+       "version": "1",
+       "turn": 1,
+       "request": {
+        "version": "1",
+        "intent": "earth_applications",
+        "asks_verdict": false,
+        "asks_prediction": false,
+        "environment": {
+         "preset": "earth",
+         "label": "Earth sea level",
+         "o2_pct": 21.0,
+         "pressure_kpa": 101.3,
+         "gravity": "earth",
+         "flow": null,
+         "scenario_id": null,
+         "cell": {
+          "id": "cell_o2_19_23__p_85_8_116_8",
+          "o2_bin": "o2_19_23",
+          "pressure_bin": "p_85_8_116_8",
+          "label": "Oxygen 19 to 23% (air, 21 +/- 2); pressure 85.8 to below 116.8 kPa (around 101.3 kPa = 14.7 psia)"
+         }
+        },
+        "compare_with": [],
+        "item": {
+         "material": null,
+         "words": null,
+         "fuel_phase": null,
+         "query_word": null,
+         "label": null
+        },
+        "equipment": null,
+        "questions": [],
+        "investigations": [],
+        "unresolved_names": [],
+        "tests": [],
+        "term": null,
+        "keywords": [
+         "PSI",
+         "Earth"
+        ],
+        "english": "What do the PSI records say about applications on Earth?",
+        "sources": {
+         "intent": "message",
+         "environment.preset": "message",
+         "environment.gravity": "message",
+         "environment.o2_pct": "preset",
+         "environment.pressure_kpa": "preset"
+        },
+        "agreement": {
+         "intent": "agree",
+         "asks_verdict": "agree",
+         "asks_prediction": "agree",
+         "environment.preset": "majority",
+         "environment.gravity": "majority"
+        },
+        "removed_ungrounded": [],
+        "unknown": [],
+        "assumptions": [
+         {
+          "field": "environment.o2_pct",
+          "text": "Oxygen: 21%, from the Earth sea level preset."
+         },
+         {
+          "field": "environment.pressure_kpa",
+          "text": "Pressure: 101.3 kPa, from the Earth sea level preset."
+         }
+        ],
+        "clarify": null,
+        "dashboard_q": ""
+       },
+       "pending_clarify": null,
+       "last_list": [],
+       "last_tests": []
+      },
+      "notices": [],
+      "answer": {
+       "origin": "model",
+       "sentences": [
+        {
+         "text": "The record's impact statement says that ACME/Flame Design (PSI-10) has potential for improving efficiency and reducing pollutant emissions in terrestrial combustors.",
+         "facts": [
+          "F1"
+         ],
+         "origin": "model",
+         "status": "kept",
+         "n": 1
+        },
+        {
+         "text": "The record's impact statement says that ACME/Flame Design (PSI-10) contributes to novel designs of future coal power plants.",
+         "facts": [
+          "F2"
+         ],
+         "origin": "model",
+         "status": "kept",
+         "n": 2
+        }
+       ],
+       "removed": [
+        {
+         "text": "The record's impact statement says that ACME CLD Flame (PSI-21) and ACME E-FIELD Flames (PSI-22) focus on flame extinction, fire suppression, pollutant reduction, and combustion efficiency using electric fields.",
+         "by": "hedge",
+         "reason": "the quote says may; the sentence drops it"
+        },
+        {
+         "text": "The record's impact statement says that ACME s-Flame (PSI-23) improves power, efficiency, emissions, and reliability for diffusion flame engines, while BASS-II (PSI-25) and BASS (PSI-26) model Earth flames and heat.",
+         "by": "checker",
+         "reason": "Facts do not state BASS-II and BASS model Earth flames and heat."
+        }
+       ]
+      },
+      "facts": [
+       {
+        "ref": "evidence.json#PSI-10/IMP-1",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "ACME/Flame Design (PSI-10) record, impact statement: \"This project has the potential for improving efficiency and reducing pollutant emissions in terrestrial combustors.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-10.units[IMP-1]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-10",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-10"
+        ],
+        "lead": true,
+        "limit": false,
+        "id": "F1"
+       },
+       {
+        "ref": "evidence.json#PSI-10/IMP-2",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "ACME/Flame Design (PSI-10) record, impact statement: \"For example, it is contributing to novel designs of future coal power plants.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-10.units[IMP-2]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-10",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-10"
+        ],
+        "lead": true,
+        "limit": false,
+        "id": "F2"
+       },
+       {
+        "ref": "evidence.json#PSI-21/IMP-3",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "ACME CLD Flame (PSI-21) record, impact statement: \"In addition, an understanding of those factors that affect flame extinction in diffusion flames is critical in the suppression of fires and in improving engine efficiency.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-21.units[IMP-3]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-21",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-21"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F3"
+       },
+       {
+        "ref": "evidence.json#PSI-22/IMP-2",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "ACME E-FIELD Flames (PSI-22) record, impact statement: \"The use of electric fields to control flames can reduce the production of harmful pollutants in practical terrestrial combustion.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-22.units[IMP-2]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-22",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-22"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F4"
+       },
+       {
+        "ref": "evidence.json#PSI-22/IMP-4",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "ACME E-FIELD Flames (PSI-22) record, impact statement: \"Combustion using electrical fields may also allow for more efficient combustion, reducing fuel consumption in addition to unwanted emissions.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-22.units[IMP-4]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-22",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-22"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F5"
+       },
+       {
+        "ref": "evidence.json#PSI-23/IMP-2",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "ACME s-Flame (PSI-23) record, impact statement: \"Practically, with diffusion flame burning as the basis in many combustion engines and devices, understanding the underlying dynamics and chemistry of diffusion flames is important in improving performance in terms of power, efficiency, pollutant emissions, and reliability.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-23.units[IMP-2]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-23",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-23"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F6"
+       },
+       {
+        "ref": "evidence.json#PSI-25/IMP-6",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "BASS-II (PSI-25) record, impact statement: \"These models can then be used to more accurately study flames on Earth, such as in wildfires, building fires, energy recapture from waste recycling, and other combustion problems.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-25.units[IMP-6]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-25"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F7"
+       },
+       {
+        "ref": "evidence.json#PSI-26/IMP-2",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "BASS (PSI-26) record, impact statement: \"A critical element of this understanding is the radiative heat emission from the flame.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-26.units[IMP-2]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-26",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-26"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F8"
+       },
+       {
+        "ref": "texts#earth_limit",
+        "tool": "earth_applications",
+        "kind": "limit",
+        "context": null,
+        "text": "These are the records' own statements of possible applications on Earth; the team has not assessed them.",
+        "numbers": [],
+        "source": {
+         "file": "ai/assistant/texts.py",
+         "line": null,
+         "key": "LIMITS.earth_applications"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/ai/assistant/texts.py",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F9"
+       }
+      ],
+      "panels": [
+       {
+        "type": "quotes",
+        "title": "What the PSI records say about applications on Earth",
+        "note": "These are the records' own statements of possible applications on Earth; the team has not assessed them.",
+        "columns": [
+         {
+          "key": "investigation",
+          "label": "investigation",
+          "kind": "text"
+         },
+         {
+          "key": "field",
+          "label": "field",
+          "kind": "text"
+         },
+         {
+          "key": "sentence",
+          "label": "sentence",
+          "kind": "text"
+         },
+         {
+          "key": "record",
+          "label": "record",
+          "kind": "link"
+         },
+         {
+          "key": "doi",
+          "label": "dataset DOI",
+          "kind": "link"
+         }
+        ],
+        "rows": [
+         {
+          "investigation": "ACME/Flame Design (PSI-10)",
+          "field": "impact statement",
+          "sentence": "This project has the potential for improving efficiency and reducing pollutant emissions in terrestrial combustors.",
+          "record": {
+           "text": "PSI-10",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-10"
+          },
+          "doi": {
+           "text": "10.60555/w4zy-bt45",
+           "href": "https://doi.org/10.60555/w4zy-bt45"
+          }
+         },
+         {
+          "investigation": "ACME/Flame Design (PSI-10)",
+          "field": "impact statement",
+          "sentence": "For example, it is contributing to novel designs of future coal power plants.",
+          "record": {
+           "text": "PSI-10",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-10"
+          },
+          "doi": {
+           "text": "10.60555/w4zy-bt45",
+           "href": "https://doi.org/10.60555/w4zy-bt45"
+          }
+         },
+         {
+          "investigation": "ACME CLD Flame (PSI-21)",
+          "field": "impact statement",
+          "sentence": "In addition, an understanding of those factors that affect flame extinction in diffusion flames is critical in the suppression of fires and in improving engine efficiency.",
+          "record": {
+           "text": "PSI-21",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-21"
+          },
+          "doi": {
+           "text": "10.60555/23e1-9950",
+           "href": "https://doi.org/10.60555/23e1-9950"
+          }
+         },
+         {
+          "investigation": "ACME E-FIELD Flames (PSI-22)",
+          "field": "impact statement",
+          "sentence": "The use of electric fields to control flames can reduce the production of harmful pollutants in practical terrestrial combustion.",
+          "record": {
+           "text": "PSI-22",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-22"
+          },
+          "doi": {
+           "text": "10.60555/se5a-8c73",
+           "href": "https://doi.org/10.60555/se5a-8c73"
+          }
+         },
+         {
+          "investigation": "ACME E-FIELD Flames (PSI-22)",
+          "field": "impact statement",
+          "sentence": "Combustion using electrical fields may also allow for more efficient combustion, reducing fuel consumption in addition to unwanted emissions.",
+          "record": {
+           "text": "PSI-22",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-22"
+          },
+          "doi": {
+           "text": "10.60555/se5a-8c73",
+           "href": "https://doi.org/10.60555/se5a-8c73"
+          }
+         },
+         {
+          "investigation": "ACME s-Flame (PSI-23)",
+          "field": "impact statement",
+          "sentence": "Practically, with diffusion flame burning as the basis in many combustion engines and devices, understanding the underlying dynamics and chemistry of diffusion flames is important in improving performance in terms of power, efficiency, pollutant emissions, and reliability.",
+          "record": {
+           "text": "PSI-23",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-23"
+          },
+          "doi": {
+           "text": "10.60555/k57n-p030",
+           "href": "https://doi.org/10.60555/k57n-p030"
+          }
+         },
+         {
+          "investigation": "BASS-II (PSI-25)",
+          "field": "impact statement",
+          "sentence": "These models can then be used to more accurately study flames on Earth, such as in wildfires, building fires, energy recapture from waste recycling, and other combustion problems.",
+          "record": {
+           "text": "PSI-25",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25"
+          },
+          "doi": {
+           "text": "10.60555/4qc4-de67",
+           "href": "https://doi.org/10.60555/4qc4-de67"
+          }
+         },
+         {
+          "investigation": "BASS (PSI-26)",
+          "field": "impact statement",
+          "sentence": "A critical element of this understanding is the radiative heat emission from the flame.",
+          "record": {
+           "text": "PSI-26",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-26"
+          },
+          "doi": {
+           "text": "10.60555/58h4-dy80",
+           "href": "https://doi.org/10.60555/58h4-dy80"
+          }
+         },
+         {
+          "investigation": "BASS (PSI-26)",
+          "field": "impact statement",
+          "sentence": "These models have wide applicability to the general understanding of many terrestrial combustion problems and will guide novel spacecraft design and ensure the safety of future crewed missions.",
+          "record": {
+           "text": "PSI-26",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-26"
+          },
+          "doi": {
+           "text": "10.60555/58h4-dy80",
+           "href": "https://doi.org/10.60555/58h4-dy80"
+          }
+         },
+         {
+          "investigation": "CFI (PSI-39)",
+          "field": "impact statement",
+          "sentence": "Cool flames play a key role in the development and selection of new fuels and the design of advanced engines such as clean, high-efficiency Homogeneous Charge Compression Ignition (HCCI) engines.",
+          "record": {
+           "text": "PSI-39",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-39"
+          },
+          "doi": {
+           "text": "10.60555/m6pj-a914",
+           "href": "https://doi.org/10.60555/m6pj-a914"
+          }
+         },
+         {
+          "investigation": "CFI (PSI-39)",
+          "field": "impact statement",
+          "sentence": "The research will also help combustion chemists to develop new computational models to compute combustion performance in for many practical applications on earth, including an understanding of how cool flame reactivity determines octane and cetane number for fuels in spark ignition and diesel engines.",
+          "record": {
+           "text": "PSI-39",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-39"
+          },
+          "doi": {
+           "text": "10.60555/m6pj-a914",
+           "href": "https://doi.org/10.60555/m6pj-a914"
+          }
+         },
+         {
+          "investigation": "DAFT / DAFT-2 (PSI-47)",
+          "field": "impact statement",
+          "sentence": "Additionally, the successful adaptation of the TSI P-Trak for microgravity can inform the design of instruments for use in other challenging Earth environments, such as submarines or underwater laboratories where accurate detection of smoke can save lives.",
+          "record": {
+           "text": "PSI-47",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-47"
+          },
+          "doi": {
+           "text": "10.60555/ztgj-d202",
+           "href": "https://doi.org/10.60555/ztgj-d202"
+          }
+         },
+         {
+          "investigation": "SPICE-ANALYSIS (PSI-60)",
+          "field": "impact statement",
+          "sentence": "This study sought to enhance understanding of soot formation, flame structure, and radiative transport under microgravity and normal gravity, improving predictive models for combustion in both spacecraft and terrestrial systems.",
+          "record": {
+           "text": "PSI-60",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-60"
+          },
+          "doi": {
+           "text": "10.60555/mzjm-yv57",
+           "href": "https://doi.org/10.60555/mzjm-yv57"
+          }
+         },
+         {
+          "investigation": "SPICE-ANALYSIS (PSI-60)",
+          "field": "impact statement",
+          "sentence": "On Earth, the insights help reduce pollutant emissions, optimize combustion efficiency, and inform the design of cleaner energy and industrial systems.",
+          "record": {
+           "text": "PSI-60",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-60"
+          },
+          "doi": {
+           "text": "10.60555/mzjm-yv57",
+           "href": "https://doi.org/10.60555/mzjm-yv57"
+          }
+         },
+         {
+          "investigation": "BASS-FGM-MODEL (PSI-62)",
+          "field": "impact statement",
+          "sentence": "On Earth, these advancements could improve combustion modeling by deepening our understanding of coupled thermal, chemical, and flow processes, which betters fire safety standards.",
+          "record": {
+           "text": "PSI-62",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-62"
+          },
+          "doi": {
+           "text": "10.60555/e9xp-ex83",
+           "href": "https://doi.org/10.60555/e9xp-ex83"
+          }
+         },
+         {
+          "investigation": "BASS-FGM-MODEL (PSI-62)",
+          "field": "impact statement",
+          "sentence": "Overall, this research can contribute significantly to safer human exploration in space and improvements to fire safety protocols on Earth.",
+          "record": {
+           "text": "PSI-62",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-62"
+          },
+          "doi": {
+           "text": "10.60555/e9xp-ex83",
+           "href": "https://doi.org/10.60555/e9xp-ex83"
+          }
+         },
+         {
+          "investigation": "FLEX-2 (PSI-68)",
+          "field": "impact statement",
+          "sentence": "Insights gained from these studies can lead to more efficient and cleaner combustion technologies which are crucial for reducing pollution and greenhouse gas emissions.",
+          "record": {
+           "text": "PSI-68",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-68"
+          },
+          "doi": {
+           "text": "10.60555/byp8-h018",
+           "href": "https://doi.org/10.60555/byp8-h018"
+          }
+         },
+         {
+          "investigation": "FLEX-2 (PSI-68)",
+          "field": "impact statement",
+          "sentence": "Future combustor designs with minimal carbon footprint, maximum fuel efficiency and less pollutant emissions.",
+          "record": {
+           "text": "PSI-68",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-68"
+          },
+          "doi": {
+           "text": "10.60555/byp8-h018",
+           "href": "https://doi.org/10.60555/byp8-h018"
+          }
+         },
+         {
+          "investigation": "FLEX-2 (PSI-68)",
+          "field": "impact statement",
+          "sentence": "Allow quantitative evaluation of the performance of future fuels in combustors through the development of surrogates (mixtures of pure fuels that simulate the behavior of real fuels).",
+          "record": {
+           "text": "PSI-68",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-68"
+          },
+          "doi": {
+           "text": "10.60555/byp8-h018",
+           "href": "https://doi.org/10.60555/byp8-h018"
+          }
+         },
+         {
+          "investigation": "FLEX-2 (PSI-68)",
+          "field": "impact statement",
+          "sentence": "Validation of jet engine models by engine manufacturers with support from prior droplet results.",
+          "record": {
+           "text": "PSI-68",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-68"
+          },
+          "doi": {
+           "text": "10.60555/byp8-h018",
+           "href": "https://doi.org/10.60555/byp8-h018"
+          }
+         },
+         {
+          "investigation": "FLEX (PSI-69)",
+          "field": "impact statement",
+          "sentence": "The research impacts and Earth benefits of the FLEX mission are significant and multifaceted.",
+          "record": {
+           "text": "PSI-69",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69"
+          },
+          "doi": {
+           "text": "10.60555/mbq8-0451",
+           "href": "https://doi.org/10.60555/mbq8-0451"
+          }
+         },
+         {
+          "investigation": "FLEX (PSI-69)",
+          "field": "impact statement",
+          "sentence": "On Earth, the insights gained from these experiments have the potential to advance fire safety in confined and reduced-gravity environments, such as submarines or high-altitude aircraft.",
+          "record": {
+           "text": "PSI-69",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69"
+          },
+          "doi": {
+           "text": "10.60555/mbq8-0451",
+           "href": "https://doi.org/10.60555/mbq8-0451"
+          }
+         },
+         {
+          "investigation": "FLEX (PSI-69)",
+          "field": "impact statement",
+          "sentence": "Additionally, the study of ''cool flames'' and low-temperature combustion processes observed in microgravity can inform the design of advanced combustion engines, leading to improved fuel efficiency and reduced emissions in automotive and industrial applications.",
+          "record": {
+           "text": "PSI-69",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69"
+          },
+          "doi": {
+           "text": "10.60555/mbq8-0451",
+           "href": "https://doi.org/10.60555/mbq8-0451"
+          }
+         },
+         {
+          "investigation": "FLEX (PSI-69)",
+          "field": "impact statement",
+          "sentence": "Overall, the FLEX mission's contributions to combustion science have the potential to enhance both space exploration safety and terrestrial fire safety technologies.",
+          "record": {
+           "text": "PSI-69",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69"
+          },
+          "doi": {
+           "text": "10.60555/mbq8-0451",
+           "href": "https://doi.org/10.60555/mbq8-0451"
+          }
+         },
+         {
+          "investigation": "SAFFIRE-I (PSI-98)",
+          "field": "impact statement",
+          "sentence": "Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines.",
+          "record": {
+           "text": "PSI-98",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98"
+          },
+          "doi": {
+           "text": "10.60555/0t15-1z43",
+           "href": "https://doi.org/10.60555/0t15-1z43"
+          }
+         },
+         {
+          "investigation": "SAFFIRE-II (PSI-99)",
+          "field": "impact statement",
+          "sentence": "Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines.",
+          "record": {
+           "text": "PSI-99",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99"
+          },
+          "doi": {
+           "text": "10.60555/2chp-m469",
+           "href": "https://doi.org/10.60555/2chp-m469"
+          }
+         },
+         {
+          "investigation": "SAFFIRE-III (PSI-100)",
+          "field": "impact statement",
+          "sentence": "Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines.",
+          "record": {
+           "text": "PSI-100",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-100"
+          },
+          "doi": {
+           "text": "10.60555/040q-4h36",
+           "href": "https://doi.org/10.60555/040q-4h36"
+          }
+         },
+         {
+          "investigation": "SAME-R (PSI-101)",
+          "field": "impact statement",
+          "sentence": "The smoke detectors developed from the results of SAME can also be useful in other extreme environments on Earth, such as submarines or underwater laboratories.",
+          "record": {
+           "text": "PSI-101",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-101"
+          },
+          "doi": {
+           "text": "10.60555/2np7-jv14",
+           "href": "https://doi.org/10.60555/2np7-jv14"
+          }
+         },
+         {
+          "investigation": "SAME (PSI-102)",
+          "field": "impact statement",
+          "sentence": "The results from SAME are needed to provide the reduced gravity baseline data against which future detection technology developments can be evaluated.The smoke detectors developed from the results of SAME can also be useful in other extreme environments on Earth, such as submarines or underwater laboratories.",
+          "record": {
+           "text": "PSI-102",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-102"
+          },
+          "doi": {
+           "text": "10.60555/gd4k-8h62",
+           "href": "https://doi.org/10.60555/gd4k-8h62"
+          }
+         },
+         {
+          "investigation": "SLICE (PSI-106)",
+          "field": "impact statement",
+          "sentence": "Improved numerical models for flame behavior lead to more efficient combustion technologies on Earth.",
+          "record": {
+           "text": "PSI-106",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-106"
+          },
+          "doi": {
+           "text": "10.60555/pm12-rg61",
+           "href": "https://doi.org/10.60555/pm12-rg61"
+          }
+         },
+         {
+          "investigation": "SLICE (PSI-106)",
+          "field": "impact statement",
+          "sentence": "Understanding soot formation aids in designing combustion systems with minimum emissions.",
+          "record": {
+           "text": "PSI-106",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-106"
+          },
+          "doi": {
+           "text": "10.60555/pm12-rg61",
+           "href": "https://doi.org/10.60555/pm12-rg61"
+          }
+         },
+         {
+          "investigation": "SLICE (PSI-106)",
+          "field": "impact statement",
+          "sentence": "Findings will inform the development of cleaner, more efficient engines and industrial burners.",
+          "record": {
+           "text": "PSI-106",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-106"
+          },
+          "doi": {
+           "text": "10.60555/pm12-rg61",
+           "href": "https://doi.org/10.60555/pm12-rg61"
+          }
+         },
+         {
+          "investigation": "COOLFLAME-CFD (PSI-117)",
+          "field": "impact statement",
+          "sentence": "Earth Benefits: Advances low-temperature combustion understanding relevant to engine knock, efficiency, and emissions; delivers validated CFD tools transferrable to practical combustors.",
+          "record": {
+           "text": "PSI-117",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-117"
+          },
+          "doi": {
+           "text": "10.60555/gz0q-b577",
+           "href": "https://doi.org/10.60555/gz0q-b577"
+          }
+         },
+         {
+          "investigation": "COOLFLAME-COUNTERFLOW (PSI-142)",
+          "field": "impact statement",
+          "sentence": "Since many real engines operate in the 20-40 atm pressure range, therefore, cool flames and warm flames are relevant and important flame regimes for high-pressure near-limit combustion applications.",
+          "record": {
+           "text": "PSI-142",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-142"
+          },
+          "doi": {
+           "text": "10.60555/80qf-vj95",
+           "href": "https://doi.org/10.60555/80qf-vj95"
+          }
+         },
+         {
+          "investigation": "ACME CFI-G (PSI-159)",
+          "field": "impact statement",
+          "sentence": "The internal combustion engines used for transportation generally have thermal efficiencies of 38% or lower because of thermal losses.",
+          "record": {
+           "text": "PSI-159",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-159"
+          },
+          "doi": {
+           "text": "10.60555/cyt1-kh64",
+           "href": "https://doi.org/10.60555/cyt1-kh64"
+          }
+         },
+         {
+          "investigation": "ACME CFI-G (PSI-159)",
+          "field": "impact statement",
+          "sentence": "These efficiencies may increase to 60% if future engines can take advantage of ultra-lean combustion.",
+          "record": {
+           "text": "PSI-159",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-159"
+          },
+          "doi": {
+           "text": "10.60555/cyt1-kh64",
+           "href": "https://doi.org/10.60555/cyt1-kh64"
+          }
+         },
+         {
+          "investigation": "ACME CFI-G (PSI-159)",
+          "field": "impact statement",
+          "sentence": "This should facilitate the development of more efficient internal combustion engines.",
+          "record": {
+           "text": "PSI-159",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-159"
+          },
+          "doi": {
+           "text": "10.60555/cyt1-kh64",
+           "href": "https://doi.org/10.60555/cyt1-kh64"
+          }
+         }
+        ],
+        "download": null,
+        "dashboard_section": null,
+        "id": "p1",
+        "fact_ids": [
+         "F1",
+         "F2",
+         "F3",
+         "F4",
+         "F5",
+         "F6",
+         "F7",
+         "F8",
+         "F9"
+        ]
+       }
+      ],
+      "followups": [
+       {
+        "text": "What specific pollutant reductions are quantified?",
+        "request": null
+       },
+       {
+        "text": "Which NASA investigations study smoke detection?",
+        "request": null
+       }
+      ],
+      "clarify": null,
+      "dashboard": {
+       "q": "",
+       "section": null
+      },
+      "trace": {
+       "steps": [
+        {
+         "step": "understand",
+         "label": "Reading your request",
+         "summary": "Read 3 times (2 by the model, once by the rule parser); 5 of 5 fields agree.",
+         "ms": 9854,
+         "model_calls": 2,
+         "detail": {
+          "readings": [
+           {
+            "reader": "R",
+            "valid": true,
+            "ms": 0
+           },
+           {
+            "reader": "M1",
+            "valid": true,
+            "ms": 4088
+           },
+           {
+            "reader": "M2",
+            "valid": true,
+            "ms": 5761
+           }
+          ],
+          "agreement": {
+           "intent": "agree",
+           "asks_verdict": "agree",
+           "asks_prediction": "agree",
+           "environment.preset": "majority",
+           "environment.gravity": "majority"
+          },
+          "removed_ungrounded": [],
+          "asked": false,
+          "conflicts": {}
+         }
+        },
+        {
+         "step": "plan",
+         "label": "Choosing what to look up",
+         "summary": "Looking up what the records say about Earth.",
+         "ms": 0,
+         "model_calls": 0,
+         "detail": {
+          "tools": [
+           {
+            "tool": "earth_applications",
+            "args": {
+             "investigations": []
+            },
+            "why": "earth_applications"
+           }
+          ],
+          "dropped": [],
+          "dashboard_mismatch": []
+         }
+        },
+        {
+         "step": "lookup",
+         "label": "Looking up the team's files",
+         "summary": "9 facts from 0 files.",
+         "ms": 0,
+         "model_calls": 0,
+         "detail": {
+          "tools": [
+           {
+            "tool": "earth_applications",
+            "ms": 0,
+            "facts": 9,
+            "panels": 1
+           }
+          ],
+          "notes": [],
+          "files": []
+         }
+        },
+        {
+         "step": "write",
+         "label": "Writing from the facts",
+         "summary": "4 sentences written by the local model.",
+         "ms": 52599,
+         "model_calls": 1,
+         "detail": {
+          "sentences": 4,
+          "valid": true,
+          "facts_given": 9
+         }
+        },
+        {
+         "step": "check",
+         "label": "Checking every sentence",
+         "summary": "4 sentences written, 2 removed by the checks, 0 repaired. Model check: 2 of 3 supported.",
+         "ms": 13758,
+         "model_calls": 1,
+         "detail": {
+          "gate_failures": [
+           {
+            "n": 3,
+            "gate": "hedge",
+            "reason": "the quote says may; the sentence drops it"
+           }
+          ],
+          "repair": false,
+          "checker": {
+           "yes": 2,
+           "no": 1
+          }
+         }
+        },
+        {
+         "step": "deliver",
+         "label": "Done",
+         "summary": "Done in 76.2 s with 4 model calls.",
+         "ms": 0,
+         "model_calls": 0
+        }
+       ],
+       "model_calls": 4,
+       "total_ms": 76215,
+       "cache": "none",
+       "gate_report": {
+        "written": 4,
+        "repaired": 0,
+        "removed": 2,
+        "removed_by_gate": {
+         "hedge": 1
+        },
+        "checker_no": 1,
+        "kept": 2,
+        "fallback": false,
+        "fallback_reason": null,
+        "sentences": [
+         {
+          "n": 1,
+          "text": "The record's impact statement says that ACME/Flame Design (PSI-10) has potential for improving efficiency and reducing pollutant emissions in terrestrial combustors.",
+          "facts": [
+           "F1"
+          ],
+          "failures": []
+         },
+         {
+          "n": 2,
+          "text": "The record's impact statement says that ACME/Flame Design (PSI-10) contributes to novel designs of future coal power plants.",
+          "facts": [
+           "F2"
+          ],
+          "failures": []
+         },
+         {
+          "n": 3,
+          "text": "The record's impact statement says that ACME CLD Flame (PSI-21) and ACME E-FIELD Flames (PSI-22) focus on flame extinction, fire suppression, pollutant reduction, and combustion efficiency using electric fields.",
+          "facts": [
+           "F3",
+           "F4",
+           "F5"
+          ],
+          "failures": [
+           [
+            "hedge",
+            "the quote says may; the sentence drops it"
+           ]
+          ]
+         },
+         {
+          "n": 4,
+          "text": "The record's impact statement says that ACME s-Flame (PSI-23) improves power, efficiency, emissions, and reliability for diffusion flame engines, while BASS-II (PSI-25) and BASS (PSI-26) model Earth flames and heat.",
+          "facts": [
+           "F6",
+           "F7",
+           "F8"
+          ],
+          "failures": []
+         }
+        ]
+       },
+       "data_version": "d5a6ff674ab0",
+       "commit": "ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e"
+      },
+      "label": "Recorded on 15 November 2026 with the local language model (gpt-oss:20b) and replayed here; no model runs on this page. Every model sentence shown passed the code checks and a second model check when it was recorded. No person reviewed these answers. A research exploration tool, not safety guidance."
+     }
+    },
+    {
+     "message": "Could the SAFFIRE results matter for building fires on Earth?",
+     "response": {
+      "version": "1",
+      "turn_id": "5097c994f418",
+      "kind": "answer",
+      "mode": "recorded",
+      "request": {
+       "version": "1",
+       "intent": "earth_applications",
+       "asks_verdict": false,
+       "asks_prediction": false,
+       "environment": {
+        "preset": "earth",
+        "label": "Earth sea level",
+        "o2_pct": 21.0,
+        "pressure_kpa": 101.3,
+        "gravity": "earth",
+        "flow": null,
+        "scenario_id": null,
+        "cell": {
+         "id": "cell_o2_19_23__p_85_8_116_8",
+         "o2_bin": "o2_19_23",
+         "pressure_bin": "p_85_8_116_8",
+         "label": "Oxygen 19 to 23% (air, 21 +/- 2); pressure 85.8 to below 116.8 kPa (around 101.3 kPa = 14.7 psia)"
+        }
+       },
+       "compare_with": [],
+       "item": {
+        "material": null,
+        "words": null,
+        "fuel_phase": null,
+        "query_word": null,
+        "label": null
+       },
+       "equipment": null,
+       "questions": [],
+       "investigations": [
+        "PSI-98",
+        "PSI-99",
+        "PSI-100"
+       ],
+       "unresolved_names": [],
+       "tests": [],
+       "term": null,
+       "keywords": [
+        "SAFFIRE",
+        "building fires",
+        "Earth"
+       ],
+       "english": "Could the SAFFIRE results matter for building fires on Earth?",
+       "sources": {
+        "intent": "message",
+        "environment.preset": "message",
+        "environment.o2_pct": "message",
+        "environment.pressure_kpa": "message",
+        "environment.gravity": "message",
+        "investigations": "message"
+       },
+       "agreement": {
+        "intent": "agree",
+        "asks_verdict": "agree",
+        "asks_prediction": "agree",
+        "environment.preset": "agree",
+        "environment.o2_pct": "agree",
+        "environment.pressure_kpa": "agree",
+        "environment.gravity": "agree",
+        "investigations": "rules_only"
+       },
+       "removed_ungrounded": [],
+       "unknown": [],
+       "assumptions": [],
+       "clarify": null,
+       "dashboard_q": ""
+      },
+      "state": {
+       "version": "1",
+       "turn": 2,
+       "request": {
+        "version": "1",
+        "intent": "earth_applications",
+        "asks_verdict": false,
+        "asks_prediction": false,
+        "environment": {
+         "preset": "earth",
+         "label": "Earth sea level",
+         "o2_pct": 21.0,
+         "pressure_kpa": 101.3,
+         "gravity": "earth",
+         "flow": null,
+         "scenario_id": null,
+         "cell": {
+          "id": "cell_o2_19_23__p_85_8_116_8",
+          "o2_bin": "o2_19_23",
+          "pressure_bin": "p_85_8_116_8",
+          "label": "Oxygen 19 to 23% (air, 21 +/- 2); pressure 85.8 to below 116.8 kPa (around 101.3 kPa = 14.7 psia)"
+         }
+        },
+        "compare_with": [],
+        "item": {
+         "material": null,
+         "words": null,
+         "fuel_phase": null,
+         "query_word": null,
+         "label": null
+        },
+        "equipment": null,
+        "questions": [],
+        "investigations": [
+         "PSI-98",
+         "PSI-99",
+         "PSI-100"
+        ],
+        "unresolved_names": [],
+        "tests": [],
+        "term": null,
+        "keywords": [
+         "SAFFIRE",
+         "building fires",
+         "Earth"
+        ],
+        "english": "Could the SAFFIRE results matter for building fires on Earth?",
+        "sources": {
+         "intent": "message",
+         "environment.preset": "message",
+         "environment.o2_pct": "message",
+         "environment.pressure_kpa": "message",
+         "environment.gravity": "message",
+         "investigations": "message"
+        },
+        "agreement": {
+         "intent": "agree",
+         "asks_verdict": "agree",
+         "asks_prediction": "agree",
+         "environment.preset": "agree",
+         "environment.o2_pct": "agree",
+         "environment.pressure_kpa": "agree",
+         "environment.gravity": "agree",
+         "investigations": "rules_only"
+        },
+        "removed_ungrounded": [],
+        "unknown": [],
+        "assumptions": [],
+        "clarify": null,
+        "dashboard_q": ""
+       },
+       "pending_clarify": null,
+       "last_list": [
+        "PSI-98",
+        "PSI-99",
+        "PSI-100"
+       ],
+       "last_tests": []
+      },
+      "notices": [],
+      "answer": {
+       "origin": "model",
+       "sentences": [
+        {
+         "text": "The record's impact statements say studying fire in small sealed environments like the Cygnus vehicle benefits fire safety on Earth, including mines, airplanes, or submarines.",
+         "facts": [
+          "F1",
+          "F2",
+          "F3"
+         ],
+         "origin": "model",
+         "status": "kept",
+         "n": 1
+        },
+        {
+         "text": "The team has not assessed these statements.",
+         "facts": [
+          "F4"
+         ],
+         "origin": "model",
+         "status": "kept",
+         "n": 2
+        }
+       ],
+       "removed": []
+      },
+      "facts": [
+       {
+        "ref": "evidence.json#PSI-98/IMP-5",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "SAFFIRE-I (PSI-98) record, impact statement: \"Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-98.units[IMP-5]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-98"
+        ],
+        "lead": true,
+        "limit": false,
+        "id": "F1"
+       },
+       {
+        "ref": "evidence.json#PSI-99/IMP-5",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "SAFFIRE-II (PSI-99) record, impact statement: \"Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-99.units[IMP-5]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-99"
+        ],
+        "lead": true,
+        "limit": false,
+        "id": "F2"
+       },
+       {
+        "ref": "evidence.json#PSI-100/IMP-5",
+        "tool": "earth_applications",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "SAFFIRE-III (PSI-100) record, impact statement: \"Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-100.units[IMP-5]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-100",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-100"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F3"
+       },
+       {
+        "ref": "texts#earth_limit",
+        "tool": "earth_applications",
+        "kind": "limit",
+        "context": null,
+        "text": "These are the records' own statements of possible applications on Earth; the team has not assessed them.",
+        "numbers": [],
+        "source": {
+         "file": "ai/assistant/texts.py",
+         "line": null,
+         "key": "LIMITS.earth_applications"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/ai/assistant/texts.py",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F4"
+       },
+       {
+        "ref": "investigations.csv#PSI-98",
+        "tool": "investigation_card",
+        "kind": "card",
+        "context": null,
+        "text": "SAFFIRE-I (PSI-98): Spacecraft Fire Safety Experiment-I; platform free_flyer (Cygnus); operations 03-02-2001 to 02-28-2008; 4 tests listed in the catalog (catalog values extracted by an AI session from the PSI record, not checked by a person).",
+        "numbers": [
+         {
+          "value": 3.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 2.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 2001.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 28.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 2008.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 4.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/catalog/investigations.csv",
+         "line": 15,
+         "key": null
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/catalog/investigations.csv?plain=1#L15",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [
+         "PSI-98"
+        ],
+        "lead": true,
+        "limit": false,
+        "id": "F5"
+       },
+       {
+        "ref": "cards.json#PSI-98/key_points/0",
+        "tool": "investigation_card",
+        "kind": "card",
+        "context": null,
+        "text": "Impact statement in the record: \"Results determine microgravity flammability limits for several spacecraft materials, help to validate NASA’s material selection criteria, and how microgravity and limited oxygen affect flame size.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/cards.json",
+         "line": null,
+         "key": "[PSI-98].key_points[0]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-98"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F6"
+       },
+       {
+        "ref": "cards.json#PSI-98/key_points/1",
+        "tool": "investigation_card",
+        "kind": "card",
+        "context": null,
+        "text": "Planned approach: \"The Saffire-1 experiments was performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/cards.json",
+         "line": null,
+         "key": "[PSI-98].key_points[1]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98",
+        "quote": true,
+        "field": "approach",
+        "investigation_ids": [
+         "PSI-98"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F7"
+       },
+       {
+        "ref": "cards.json#PSI-98/key_points/2",
+        "tool": "investigation_card",
+        "kind": "card",
+        "context": null,
+        "text": "Stated hypothesis: \"This investigation hypothesizes that due to large differences between fire behavior in normal and reduced gravity, the use of terrestrial fires and fire standards to design spacecraft fire safety systems presents an inherent risk to the vehicle because of the significant level of uncertainty.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/cards.json",
+         "line": null,
+         "key": "[PSI-98].key_points[2]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98",
+        "quote": true,
+        "field": "hypothesis",
+        "investigation_ids": [
+         "PSI-98"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F8"
+       },
+       {
+        "ref": "cards.json#PSI-98/key_points/3",
+        "tool": "investigation_card",
+        "kind": "card",
+        "context": null,
+        "text": "Stated objective: \"The objectives of this investigation were to: (1) determine how rapidly a large scale fire grows in low-gravity and (2) investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test.\"",
+        "numbers": [
+         {
+          "value": 1.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 2.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/insights/cards.json",
+         "line": null,
+         "key": "[PSI-98].key_points[3]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98",
+        "quote": true,
+        "field": "objective",
+        "investigation_ids": [
+         "PSI-98"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F9"
+       },
+       {
+        "ref": "investigations.csv#PSI-99",
+        "tool": "investigation_card",
+        "kind": "card",
+        "context": null,
+        "text": "SAFFIRE-II (PSI-99): Spacecraft Fire Experiment-II; platform free_flyer (Cygnus); operations 09-30-2016 to 04-01-2017; 15 tests listed in the catalog (catalog values extracted by an AI session from the PSI record, not checked by a person).",
+        "numbers": [
+         {
+          "value": 9.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 30.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 2016.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 4.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 1.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 2017.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 15.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/catalog/investigations.csv",
+         "line": 16,
+         "key": null
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/catalog/investigations.csv?plain=1#L16",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [
+         "PSI-99"
+        ],
+        "lead": true,
+        "limit": false,
+        "id": "F10"
+       },
+       {
+        "ref": "cards.json#PSI-99/key_points/0",
+        "tool": "investigation_card",
+        "kind": "card",
+        "context": null,
+        "text": "Stated objective: \"The objectives of SAFFIRE-II are to determine how rapidly a large scale fire grows in low-gravity and to investigate the low-g flammability limits compared to those obtained in NASA’s normal gravity material flammability screening test.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/cards.json",
+         "line": null,
+         "key": "[PSI-99].key_points[0]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99",
+        "quote": true,
+        "field": "objective",
+        "investigation_ids": [
+         "PSI-99"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F11"
+       },
+       {
+        "ref": "cards.json#PSI-99/key_points/1",
+        "tool": "investigation_card",
+        "kind": "card",
+        "context": null,
+        "text": "Impact statement in the record: \"The investigation is crucial for the safety of current and future space missions.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/cards.json",
+         "line": null,
+         "key": "[PSI-99].key_points[1]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99",
+        "quote": true,
+        "field": "researchImpacts",
+        "investigation_ids": [
+         "PSI-99"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F12"
+       },
+       {
+        "ref": "cards.json#PSI-99/key_points/2",
+        "tool": "investigation_card",
+        "kind": "card",
+        "context": null,
+        "text": "Planned approach: \"The Saffire-II experiment was performed on the Orbital Science’s Cygnus resupply vehicle after it deberthed from the ISS.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/cards.json",
+         "line": null,
+         "key": "[PSI-99].key_points[2]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99",
+        "quote": true,
+        "field": "approach",
+        "investigation_ids": [
+         "PSI-99"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F13"
+       }
+      ],
+      "panels": [
+       {
+        "type": "quotes",
+        "title": "What the PSI records say about applications on Earth",
+        "note": "These are the records' own statements of possible applications on Earth; the team has not assessed them.",
+        "columns": [
+         {
+          "key": "investigation",
+          "label": "investigation",
+          "kind": "text"
+         },
+         {
+          "key": "field",
+          "label": "field",
+          "kind": "text"
+         },
+         {
+          "key": "sentence",
+          "label": "sentence",
+          "kind": "text"
+         },
+         {
+          "key": "record",
+          "label": "record",
+          "kind": "link"
+         },
+         {
+          "key": "doi",
+          "label": "dataset DOI",
+          "kind": "link"
+         }
+        ],
+        "rows": [
+         {
+          "investigation": "SAFFIRE-I (PSI-98)",
+          "field": "impact statement",
+          "sentence": "Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines.",
+          "record": {
+           "text": "PSI-98",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98"
+          },
+          "doi": {
+           "text": "10.60555/0t15-1z43",
+           "href": "https://doi.org/10.60555/0t15-1z43"
+          }
+         },
+         {
+          "investigation": "SAFFIRE-II (PSI-99)",
+          "field": "impact statement",
+          "sentence": "Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines.",
+          "record": {
+           "text": "PSI-99",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99"
+          },
+          "doi": {
+           "text": "10.60555/2chp-m469",
+           "href": "https://doi.org/10.60555/2chp-m469"
+          }
+         },
+         {
+          "investigation": "SAFFIRE-III (PSI-100)",
+          "field": "impact statement",
+          "sentence": "Studying fire in small, sealed environments such as the Cygnus cargo supply vehicle benefits fire safety and prevention efforts on Earth, including inside mines, airplanes, or submarines.",
+          "record": {
+           "text": "PSI-100",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-100"
+          },
+          "doi": {
+           "text": "10.60555/040q-4h36",
+           "href": "https://doi.org/10.60555/040q-4h36"
+          }
+         }
+        ],
+        "download": null,
+        "dashboard_section": null,
+        "id": "p1",
+        "fact_ids": [
+         "F1",
+         "F2",
+         "F3",
+         "F4"
+        ]
+       },
+       {
+        "type": "card",
+        "title": "SAFFIRE-I (PSI-98)",
+        "note": "catalog values extracted by an AI session from the PSI record, not checked by a person",
+        "columns": [
+         {
+          "key": "name",
+          "label": "field",
+          "kind": "text"
+         },
+         {
+          "key": "value",
+          "label": "value",
+          "kind": "text"
+         }
+        ],
+        "rows": [
+         {
+          "name": "investigation",
+          "value": "Spacecraft Fire Safety Experiment-I"
+         },
+         {
+          "name": "accession",
+          "value": "PSI-98"
+         },
+         {
+          "name": "platform",
+          "value": "free_flyer (Cygnus)"
+         },
+         {
+          "name": "operations",
+          "value": "03-02-2001 to 02-28-2008"
+         },
+         {
+          "name": "tests in catalog",
+          "value": "4"
+         },
+         {
+          "name": "fire-safety role",
+          "value": "prevention"
+         },
+         {
+          "name": "research focus",
+          "value": "flame_spread; flammability_boundary"
+         },
+         {
+          "name": "dataset DOI",
+          "value": "10.60555/0t15-1z43"
+         },
+         {
+          "name": "record",
+          "value": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98"
+         },
+         {
+          "name": "catalog values",
+          "value": "ai_extracted"
+         }
+        ],
+        "download": null,
+        "dashboard_section": "#all",
+        "id": "p2",
+        "fact_ids": [
+         "F5",
+         "F6",
+         "F7",
+         "F8",
+         "F9"
+        ]
+       },
+       {
+        "type": "card",
+        "title": "SAFFIRE-II (PSI-99)",
+        "note": "catalog values extracted by an AI session from the PSI record, not checked by a person",
+        "columns": [
+         {
+          "key": "name",
+          "label": "field",
+          "kind": "text"
+         },
+         {
+          "key": "value",
+          "label": "value",
+          "kind": "text"
+         }
+        ],
+        "rows": [
+         {
+          "name": "investigation",
+          "value": "Spacecraft Fire Experiment-II"
+         },
+         {
+          "name": "accession",
+          "value": "PSI-99"
+         },
+         {
+          "name": "platform",
+          "value": "free_flyer (Cygnus)"
+         },
+         {
+          "name": "operations",
+          "value": "09-30-2016 to 04-01-2017"
+         },
+         {
+          "name": "tests in catalog",
+          "value": "15"
+         },
+         {
+          "name": "fire-safety role",
+          "value": "prevention"
+         },
+         {
+          "name": "research focus",
+          "value": "ignition; flame_spread; flammability_boundary"
+         },
+         {
+          "name": "dataset DOI",
+          "value": "10.60555/2chp-m469"
+         },
+         {
+          "name": "record",
+          "value": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99"
+         },
+         {
+          "name": "catalog values",
+          "value": "ai_extracted"
+         }
+        ],
+        "download": null,
+        "dashboard_section": "#all",
+        "id": "p3",
+        "fact_ids": [
+         "F10",
+         "F11",
+         "F12",
+         "F13"
+        ]
+       }
+      ],
+      "followups": [
+       {
+        "text": "What specific fire safety insights were gained from SAFFIRE experiments?",
+        "request": null
+       },
+       {
+        "text": "Can SAFFIRE data inform mine fire suppression protocols?",
+        "request": null
+       }
+      ],
+      "clarify": null,
+      "dashboard": {
+       "q": "",
+       "section": "#all"
+      },
+      "trace": {
+       "steps": [
+        {
+         "step": "understand",
+         "label": "Reading your request",
+         "summary": "Read 3 times (2 by the model, once by the rule parser); 7 of 8 fields agree.",
+         "ms": 10661,
+         "model_calls": 2,
+         "detail": {
+          "readings": [
+           {
+            "reader": "R",
+            "valid": true,
+            "ms": 0
+           },
+           {
+            "reader": "M1",
+            "valid": true,
+            "ms": 5505
+           },
+           {
+            "reader": "M2",
+            "valid": true,
+            "ms": 5151
+           }
+          ],
+          "agreement": {
+           "intent": "agree",
+           "asks_verdict": "agree",
+           "asks_prediction": "agree",
+           "environment.preset": "agree",
+           "environment.o2_pct": "agree",
+           "environment.pressure_kpa": "agree",
+           "environment.gravity": "agree",
+           "investigations": "rules_only"
+          },
+          "removed_ungrounded": [],
+          "asked": false,
+          "conflicts": {}
+         }
+        },
+        {
+         "step": "plan",
+         "label": "Choosing what to look up",
+         "summary": "Looking up what the records say about Earth, the investigation's record.",
+         "ms": 0,
+         "model_calls": 0,
+         "detail": {
+          "tools": [
+           {
+            "tool": "earth_applications",
+            "args": {
+             "investigations": [
+              "PSI-98",
+              "PSI-99",
+              "PSI-100"
+             ]
+            },
+            "why": "earth_applications"
+           },
+           {
+            "tool": "investigation_card",
+            "args": {
+             "accession": "PSI-98"
+            },
+            "why": "an investigation named or picked"
+           },
+           {
+            "tool": "investigation_card",
+            "args": {
+             "accession": "PSI-99"
+            },
+            "why": "an investigation named or picked"
+           }
+          ],
+          "dropped": [],
+          "dashboard_mismatch": []
+         }
+        },
+        {
+         "step": "lookup",
+         "label": "Looking up the team's files",
+         "summary": "13 facts from 1 files.",
+         "ms": 1,
+         "model_calls": 0,
+         "detail": {
+          "tools": [
+           {
+            "tool": "earth_applications",
+            "ms": 0,
+            "facts": 4,
+            "panels": 1
+           },
+           {
+            "tool": "investigation_card",
+            "ms": 1,
+            "facts": 5,
+            "panels": 1
+           },
+           {
+            "tool": "investigation_card",
+            "ms": 0,
+            "facts": 4,
+            "panels": 1
+           }
+          ],
+          "notes": [],
+          "files": [
+           "data/insights/cards.json"
+          ]
+         }
+        },
+        {
+         "step": "write",
+         "label": "Writing from the facts",
+         "summary": "2 sentences written by the local model.",
+         "ms": 25407,
+         "model_calls": 1,
+         "detail": {
+          "sentences": 2,
+          "valid": true,
+          "facts_given": 13
+         }
+        },
+        {
+         "step": "check",
+         "label": "Checking every sentence",
+         "summary": "2 sentences written, 0 removed by the checks, 0 repaired. Model check: 2 of 2 supported.",
+         "ms": 5324,
+         "model_calls": 1,
+         "detail": {
+          "gate_failures": [],
+          "repair": false,
+          "checker": {
+           "yes": 2,
+           "no": 0
+          }
+         }
+        },
+        {
+         "step": "deliver",
+         "label": "Done",
+         "summary": "Done in 41.4 s with 4 model calls.",
+         "ms": 0,
+         "model_calls": 0
+        }
+       ],
+       "model_calls": 4,
+       "total_ms": 41397,
+       "cache": "none",
+       "gate_report": {
+        "written": 2,
+        "repaired": 0,
+        "removed": 0,
+        "removed_by_gate": {},
+        "checker_no": 0,
+        "kept": 2,
+        "fallback": false,
+        "fallback_reason": null,
+        "sentences": [
+         {
+          "n": 1,
+          "text": "The record's impact statements say studying fire in small sealed environments like the Cygnus vehicle benefits fire safety on Earth, including mines, airplanes, or submarines.",
+          "facts": [
+           "F1",
+           "F2",
+           "F3"
+          ],
+          "failures": []
+         },
+         {
+          "n": 2,
+          "text": "The team has not assessed these statements.",
+          "facts": [
+           "F4"
+          ],
+          "failures": []
+         }
+        ]
+       },
+       "data_version": "d5a6ff674ab0",
+       "commit": "ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e"
+      },
+      "label": "Recorded on 15 November 2026 with the local language model (gpt-oss:20b) and replayed here; no model runs on this page. Every model sentence shown passed the code checks and a second model check when it was recorded. No person reviewed these answers. A research exploration tool, not safety guidance."
+     }
+    }
+   ]
+  },
+  {
+   "id": "clarify_first",
+   "title": "A vague request gets one clarifying question, then an answer",
+   "turns": [
+    {
+     "message": "Which experiments are relevant?",
+     "response": {
+      "version": "1",
+      "turn_id": "ea1810297288",
+      "kind": "clarify",
+      "mode": "recorded",
+      "request": {
+       "version": "1",
+       "intent": "find_investigations",
+       "asks_verdict": false,
+       "asks_prediction": false,
+       "environment": {
+        "preset": null,
+        "label": null,
+        "o2_pct": null,
+        "pressure_kpa": null,
+        "gravity": null,
+        "flow": null,
+        "scenario_id": null,
+        "cell": null
+       },
+       "compare_with": [],
+       "item": {
+        "material": null,
+        "words": null,
+        "fuel_phase": null,
+        "query_word": null,
+        "label": null
+       },
+       "equipment": null,
+       "questions": [],
+       "investigations": [],
+       "unresolved_names": [],
+       "tests": [],
+       "term": null,
+       "keywords": [
+        "experiments",
+        "relevant"
+       ],
+       "english": "Which experiments are relevant?",
+       "sources": {
+        "intent": "message"
+       },
+       "agreement": {
+        "intent": "agree",
+        "asks_verdict": "agree",
+        "asks_prediction": "agree"
+       },
+       "removed_ungrounded": [],
+       "unknown": [
+        "environment"
+       ],
+       "assumptions": [],
+       "clarify": {
+        "field": "environment",
+        "question": "Which environment is this for?",
+        "options": [
+         {
+          "label": "ISS cabin",
+          "patch": {
+           "environment": {
+            "preset": "iss"
+           }
+          }
+         },
+         {
+          "label": "Lunar base or pressurized rover",
+          "patch": {
+           "environment": {
+            "preset": "lunar_habitat"
+           }
+          }
+         },
+         {
+          "label": "Mars habitat",
+          "patch": {
+           "environment": {
+            "preset": "mars_habitat"
+           }
+          }
+         },
+         {
+          "label": "Spacesuit",
+          "patch": {
+           "environment": {
+            "preset": "spacesuit"
+           }
+          }
+         },
+         {
+          "label": "Exploration atmosphere 8.2 psia / 34% O2",
+          "patch": {
+           "environment": {
+            "preset": "exploration_8_2_34"
+           }
+          }
+         },
+         {
+          "label": "Exploration atmosphere 10.2 psia / 26.5% O2",
+          "patch": {
+           "environment": {
+            "preset": "exploration_10_2_26_5"
+           }
+          }
+         },
+         {
+          "label": "Earth, sea-level air",
+          "patch": {
+           "environment": {
+            "preset": "earth"
+           }
+          }
+         },
+         {
+          "label": "Another atmosphere (type oxygen and pressure)",
+          "patch": null
+         }
+        ]
+       },
+       "dashboard_q": ""
+      },
+      "state": {
+       "version": "1",
+       "turn": 1,
+       "request": {
+        "version": "1",
+        "intent": "find_investigations",
+        "asks_verdict": false,
+        "asks_prediction": false,
+        "environment": {
+         "preset": null,
+         "label": null,
+         "o2_pct": null,
+         "pressure_kpa": null,
+         "gravity": null,
+         "flow": null,
+         "scenario_id": null,
+         "cell": null
+        },
+        "compare_with": [],
+        "item": {
+         "material": null,
+         "words": null,
+         "fuel_phase": null,
+         "query_word": null,
+         "label": null
+        },
+        "equipment": null,
+        "questions": [],
+        "investigations": [],
+        "unresolved_names": [],
+        "tests": [],
+        "term": null,
+        "keywords": [
+         "experiments",
+         "relevant"
+        ],
+        "english": "Which experiments are relevant?",
+        "sources": {
+         "intent": "message"
+        },
+        "agreement": {
+         "intent": "agree",
+         "asks_verdict": "agree",
+         "asks_prediction": "agree"
+        },
+        "removed_ungrounded": [],
+        "unknown": [
+         "environment"
+        ],
+        "assumptions": [],
+        "clarify": {
+         "field": "environment",
+         "question": "Which environment is this for?",
+         "options": [
+          {
+           "label": "ISS cabin",
+           "patch": {
+            "environment": {
+             "preset": "iss"
+            }
+           }
+          },
+          {
+           "label": "Lunar base or pressurized rover",
+           "patch": {
+            "environment": {
+             "preset": "lunar_habitat"
+            }
+           }
+          },
+          {
+           "label": "Mars habitat",
+           "patch": {
+            "environment": {
+             "preset": "mars_habitat"
+            }
+           }
+          },
+          {
+           "label": "Spacesuit",
+           "patch": {
+            "environment": {
+             "preset": "spacesuit"
+            }
+           }
+          },
+          {
+           "label": "Exploration atmosphere 8.2 psia / 34% O2",
+           "patch": {
+            "environment": {
+             "preset": "exploration_8_2_34"
+            }
+           }
+          },
+          {
+           "label": "Exploration atmosphere 10.2 psia / 26.5% O2",
+           "patch": {
+            "environment": {
+             "preset": "exploration_10_2_26_5"
+            }
+           }
+          },
+          {
+           "label": "Earth, sea-level air",
+           "patch": {
+            "environment": {
+             "preset": "earth"
+            }
+           }
+          },
+          {
+           "label": "Another atmosphere (type oxygen and pressure)",
+           "patch": null
+          }
+         ]
+        },
+        "dashboard_q": ""
+       },
+       "pending_clarify": {
+        "field": "environment",
+        "question": "Which environment is this for?"
+       },
+       "last_list": [],
+       "last_tests": []
+      },
+      "notices": [],
+      "answer": null,
+      "facts": [],
+      "panels": [],
+      "followups": [],
+      "clarify": {
+       "field": "environment",
+       "question": "Which environment is this for?",
+       "options": [
+        {
+         "label": "ISS cabin",
+         "patch": {
+          "environment": {
+           "preset": "iss"
+          }
+         }
+        },
+        {
+         "label": "Lunar base or pressurized rover",
+         "patch": {
+          "environment": {
+           "preset": "lunar_habitat"
+          }
+         }
+        },
+        {
+         "label": "Mars habitat",
+         "patch": {
+          "environment": {
+           "preset": "mars_habitat"
+          }
+         }
+        },
+        {
+         "label": "Spacesuit",
+         "patch": {
+          "environment": {
+           "preset": "spacesuit"
+          }
+         }
+        },
+        {
+         "label": "Exploration atmosphere 8.2 psia / 34% O2",
+         "patch": {
+          "environment": {
+           "preset": "exploration_8_2_34"
+          }
+         }
+        },
+        {
+         "label": "Exploration atmosphere 10.2 psia / 26.5% O2",
+         "patch": {
+          "environment": {
+           "preset": "exploration_10_2_26_5"
+          }
+         }
+        },
+        {
+         "label": "Earth, sea-level air",
+         "patch": {
+          "environment": {
+           "preset": "earth"
+          }
+         }
+        },
+        {
+         "label": "Another atmosphere (type oxygen and pressure)",
+         "patch": null
+        }
+       ]
+      },
+      "dashboard": {
+       "q": "",
+       "section": null
+      },
+      "trace": {
+       "steps": [
+        {
+         "step": "understand",
+         "label": "Reading your request",
+         "summary": "Read 3 times (2 by the model, once by the rule parser); 3 of 3 fields agree.",
+         "ms": 8664,
+         "model_calls": 2,
+         "detail": {
+          "readings": [
+           {
+            "reader": "R",
+            "valid": true,
+            "ms": 0
+           },
+           {
+            "reader": "M1",
+            "valid": true,
+            "ms": 4402
+           },
+           {
+            "reader": "M2",
+            "valid": true,
+            "ms": 4260
+           }
+          ],
+          "agreement": {
+           "intent": "agree",
+           "asks_verdict": "agree",
+           "asks_prediction": "agree"
+          },
+          "removed_ungrounded": [],
+          "asked": true,
+          "conflicts": {}
+         }
+        },
+        {
+         "step": "deliver",
+         "label": "Done",
+         "summary": "Done in 8.7 s with 2 model calls.",
+         "ms": 0,
+         "model_calls": 0
+        }
+       ],
+       "model_calls": 2,
+       "total_ms": 8666,
+       "cache": "none",
+       "gate_report": null,
+       "data_version": "d5a6ff674ab0",
+       "commit": "ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e"
+      },
+      "label": "Put together by team code from the facts shown; no language model wrote it. A research exploration tool, not safety guidance."
+     }
+    },
+    {
+     "message": "A Mars base",
+     "response": {
+      "version": "1",
+      "turn_id": "676e9fd625e4",
+      "kind": "answer",
+      "mode": "recorded",
+      "request": {
+       "version": "1",
+       "intent": "find_investigations",
+       "asks_verdict": false,
+       "asks_prediction": false,
+       "environment": {
+        "preset": "mars_habitat",
+        "label": "Mars habitat",
+        "o2_pct": null,
+        "pressure_kpa": null,
+        "gravity": "martian",
+        "flow": "ventilated",
+        "scenario_id": "mars_habitat",
+        "cell": null
+       },
+       "compare_with": [],
+       "item": {
+        "material": null,
+        "words": null,
+        "fuel_phase": null,
+        "query_word": null,
+        "label": null
+       },
+       "equipment": null,
+       "questions": [],
+       "investigations": [],
+       "unresolved_names": [],
+       "tests": [],
+       "term": null,
+       "keywords": [
+        "mars",
+        "base"
+       ],
+       "english": "Which experiments are relevant? A Mars base",
+       "sources": {
+        "intent": "message",
+        "environment.preset": "message",
+        "environment.gravity": "message",
+        "environment.flow": "preset"
+       },
+       "agreement": {
+        "intent": "single",
+        "asks_verdict": "single",
+        "asks_prediction": "single",
+        "environment.preset": "agree",
+        "environment.gravity": "agree"
+       },
+       "removed_ungrounded": [],
+       "unknown": [],
+       "assumptions": [],
+       "clarify": null,
+       "dashboard_q": "Mars base"
+      },
+      "state": {
+       "version": "1",
+       "turn": 2,
+       "request": {
+        "version": "1",
+        "intent": "find_investigations",
+        "asks_verdict": false,
+        "asks_prediction": false,
+        "environment": {
+         "preset": "mars_habitat",
+         "label": "Mars habitat",
+         "o2_pct": null,
+         "pressure_kpa": null,
+         "gravity": "martian",
+         "flow": "ventilated",
+         "scenario_id": "mars_habitat",
+         "cell": null
+        },
+        "compare_with": [],
+        "item": {
+         "material": null,
+         "words": null,
+         "fuel_phase": null,
+         "query_word": null,
+         "label": null
+        },
+        "equipment": null,
+        "questions": [],
+        "investigations": [],
+        "unresolved_names": [],
+        "tests": [],
+        "term": null,
+        "keywords": [
+         "mars",
+         "base"
+        ],
+        "english": "Which experiments are relevant? A Mars base",
+        "sources": {
+         "intent": "message",
+         "environment.preset": "message",
+         "environment.gravity": "message",
+         "environment.flow": "preset"
+        },
+        "agreement": {
+         "intent": "single",
+         "asks_verdict": "single",
+         "asks_prediction": "single",
+         "environment.preset": "agree",
+         "environment.gravity": "agree"
+        },
+        "removed_ungrounded": [],
+        "unknown": [],
+        "assumptions": [],
+        "clarify": null,
+        "dashboard_q": "Mars base"
+       },
+       "pending_clarify": null,
+       "last_list": [
+        "PSI-26",
+        "PSI-25",
+        "PSI-98"
+       ],
+       "last_tests": []
+      },
+      "notices": [],
+      "answer": {
+       "origin": "model",
+       "sentences": [
+        {
+         "text": "The team's ranking puts BASS (PSI-26), BASS-II (PSI-25), and SAFFIRE-I (PSI-98) as the closest investigations for a Mars habitat.",
+         "facts": [
+          "F1"
+         ],
+         "origin": "model",
+         "status": "kept",
+         "n": 1
+        },
+        {
+         "text": "The record's stated hypothesis for SAFFIRE-I (PSI-98) is that there is a significant lack of microgravity data for spacecraft designers.",
+         "facts": [
+          "F35"
+         ],
+         "origin": "model",
+         "status": "kept",
+         "n": 2
+        },
+        {
+         "text": "The team's tables count 133 tests for the flammability limit (P1) in a Mars habitat, but none are recorded at the gravity level of this environment.",
+         "facts": [
+          "F12"
+         ],
+         "origin": "model",
+         "status": "repaired",
+         "n": 3
+        },
+        {
+         "text": "The team's tables count 2 tests for flame spread and growth (P3) in a Mars habitat, but none are recorded at the gravity level of this environment.",
+         "facts": [
+          "F20"
+         ],
+         "origin": "model",
+         "status": "repaired",
+         "n": 4
+        }
+       ],
+       "removed": [
+        {
+         "text": "The team's tables count 298 tests for extinction conditions (S1) in a Mars habitat, but none are recorded at Martian gravity.",
+         "by": "names",
+         "reason": "the name 'Martian' is not in the cited facts"
+        }
+       ]
+      },
+      "facts": [
+       {
+        "ref": "scorer.rank#Mars base",
+        "tool": "rank_investigations",
+        "kind": "ranking",
+        "context": null,
+        "text": "Closest to this input by the team's ranking, in order: BASS (PSI-26), BASS-II (PSI-25), SAFFIRE-I (PSI-98).",
+        "numbers": [],
+        "source": {
+         "file": "data/catalog/configurations.csv",
+         "line": null,
+         "key": "rank('Mars base')"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/scoring/scorer.py",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [
+         "PSI-26",
+         "PSI-25",
+         "PSI-98"
+        ],
+        "lead": true,
+        "limit": false,
+        "id": "F1"
+       },
+       {
+        "ref": "configurations.csv#BASS-C01",
+        "tool": "rank_investigations",
+        "kind": "ranking",
+        "context": null,
+        "text": "BASS (PSI-26): closest configuration SIBAL fabric (1–2 cm), concurrent and opposed flow; flow match 0.90 (flow concurrent; opposed, up to 40 cm/s, named in the PSI record, not a test value); research purpose match 1.00 (role prevention; suppression).",
+        "numbers": [
+         {
+          "value": 1.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 2.0,
+          "unit": "cm",
+          "what": "a value in the text"
+         },
+         {
+          "value": 0.9,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 40.0,
+          "unit": "cm/s",
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/catalog/configurations.csv",
+         "line": 14,
+         "key": "BASS-C01"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/catalog/configurations.csv?plain=1#L14",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [
+         "PSI-26"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F2"
+       },
+       {
+        "ref": "configurations.csv#BASS-II-C01",
+        "tool": "rank_investigations",
+        "kind": "ranking",
+        "context": null,
+        "text": "BASS-II (PSI-25): closest configuration Thin PMMA films (0.1–0.4 mm), opposed-flow flame spread; flow match 0.90 (flow opposed at 0–10 cm/s); research purpose match 1.00 (role prevention).",
+        "numbers": [
+         {
+          "value": 0.1,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 0.4,
+          "unit": "mm",
+          "what": "a value in the text"
+         },
+         {
+          "value": 0.9,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 0.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 10.0,
+          "unit": "cm/s",
+          "what": "a value in the text"
+         },
+         {
+          "value": 1.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/catalog/configurations.csv",
+         "line": 8,
+         "key": "BASS-II-C01"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/catalog/configurations.csv?plain=1#L8",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [
+         "PSI-25"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F3"
+       },
+       {
+        "ref": "configurations.csv#SAFFIRE-I-C01",
+        "tool": "rank_investigations",
+        "kind": "ranking",
+        "context": null,
+        "text": "SAFFIRE-I (PSI-98): closest configuration Large SIBAL fabric (0.94 x 0.4 m), concurrent flow 20 cm/s; flow match 0.90 (flow concurrent at 20 cm/s); research purpose match 1.00 (role prevention).",
+        "numbers": [
+         {
+          "value": 0.94,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 0.4,
+          "unit": "m",
+          "what": "a value in the text"
+         },
+         {
+          "value": 20.0,
+          "unit": "cm/s",
+          "what": "a value in the text"
+         },
+         {
+          "value": 0.9,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 1.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/catalog/configurations.csv",
+         "line": 27,
+         "key": "SAFFIRE-I-C01"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/catalog/configurations.csv?plain=1#L27",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [
+         "PSI-98"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F4"
+       },
+       {
+        "ref": "scorer#partial_gravity",
+        "tool": "rank_investigations",
+        "kind": "limit",
+        "context": null,
+        "text": "PSI has no partial-gravity (lunar or Martian) combustion data; every result here is a microgravity test. The challenge statement suggests that results at the two ends of the gravity scale could bound intermediate levels. This page does not treat them as bounds: in NASA drop-tower tests of three materials (Olson and Ferkul 2012, Table I), the oxygen limits at lunar gravity were lower than at both 0 g and 1 g, and at Martian gravity lower for two of the three. Those drops lasted 5.18 s and used extinction criteria that differ from the 1 g test. NASA names partial-gravity material flammability a major gap (OCHMO-TB-008). The challenge statement names the Lunar-g Combustion Investigation (LUCI) and the Flammability of Materials on the Moon (FM2) experiment as expected future sources, and ACME's E-FIELD Flames (PSI-22) as an experiment in which an electric field mimicked partial gravity.",
+        "numbers": [
+         {
+          "value": 2012.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 0.0,
+          "unit": "g",
+          "what": "a value in the text"
+         },
+         {
+          "value": 1.0,
+          "unit": "g",
+          "what": "a value in the text"
+         },
+         {
+          "value": 5.18,
+          "unit": "s",
+          "what": "a value in the text"
+         },
+         {
+          "value": 2.0,
+          "unit": null,
+          "what": "a number word in the text"
+         },
+         {
+          "value": 3.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "scoring/scoring_config.json",
+         "line": null,
+         "key": "warnings.partial_gravity"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/scoring/scoring_config.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F5"
+       },
+       {
+        "ref": "scorer#no_material",
+        "tool": "rank_investigations",
+        "kind": "limit",
+        "context": null,
+        "text": "No material is named, so the fuel is not compared: this ranking rests on the atmosphere, the flow and the purpose only. Name a material (for example cotton fabric, PMMA or wire insulation) for a closer match.",
+        "numbers": [],
+        "source": {
+         "file": "scoring/scoring_config.json",
+         "line": null,
+         "key": "warnings.no_material"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/scoring/scoring_config.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F6"
+       },
+       {
+        "ref": "scorer#mars_atmosphere",
+        "tool": "rank_investigations",
+        "kind": "limit",
+        "context": null,
+        "text": "The challenge text gives no Mars atmosphere; type an oxygen and a pressure to place tests (for example 32% O2 at 8.0 psi, a lander and surface-habitat atmosphere recommended in NASA/TP-2010-216134).",
+        "numbers": [
+         {
+          "value": 32.0,
+          "unit": "%",
+          "what": "a value in the text"
+         },
+         {
+          "value": 8.0,
+          "unit": "psi",
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "scoring/scoring_config.json",
+         "line": null,
+         "key": "warnings.mars_atmosphere"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/scoring/scoring_config.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F7"
+       },
+       {
+        "ref": "texts#rank_limit",
+        "tool": "rank_investigations",
+        "kind": "limit",
+        "context": null,
+        "text": "The ranking is the team's similarity score over the catalog, not NASA's conclusion and not a fire-safety judgement.",
+        "numbers": [],
+        "source": {
+         "file": "ai/assistant/texts.py",
+         "line": null,
+         "key": "LIMITS.rank_investigations"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/ai/assistant/texts.py",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F8"
+       },
+       {
+        "ref": "scenarios.json#mars_habitat/note",
+        "tool": "counts_per_question",
+        "kind": "limit",
+        "context": null,
+        "text": "The challenge text gives no Mars atmosphere, and the team did not use the working-group recommendation for surface habitats (8.0 psia or 7.6 psia with 32% oxygen, EAWG.atmospheres), so no oxygen or pressure range is set. Only the gravity gap can be reported.",
+        "numbers": [
+         {
+          "value": 8.0,
+          "unit": "psia",
+          "what": "a value in the text"
+         },
+         {
+          "value": 7.6,
+          "unit": "psia",
+          "what": "a value in the text"
+         },
+         {
+          "value": 32.0,
+          "unit": "%",
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "pipeline/spec/scenarios.json",
+         "line": null,
+         "key": "scenarios[mars_habitat].note"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/pipeline/spec/scenarios.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F9"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#P1/status.atmosphere_not_specified",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Flammability limit (P1)",
+        "text": "This environment sets no oxygen range and no pressure range. The 133 tests counted for this need were not compared with an atmosphere.",
+        "numbers": [
+         {
+          "value": 133.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.P1.statements[status.atmosphere_not_specified]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": true,
+        "limit": false,
+        "id": "F10"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#P1/need.reading",
+        "tool": "counts_per_question",
+        "kind": "limit",
+        "context": "Mars habitat; Flammability limit (P1)",
+        "text": "A counted test records the material, the oxygen at the start and at least one outcome: an event word, the difference between the initial and the final oxygen reading, a burn time or a burn length. Its pressure is not in the table: it is documented for the investigation as a whole (ICES19.pressure, SAF17.pressure), not read per test. Its gravity level is a constant of the table in the team's source mapping. The count is not a count of tests that burned, and the lowest oxygen tested is not a flammability limit.",
+        "numbers": [
+         {
+          "value": 1.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.P1.statements[need.reading]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F11"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#P1/gap.gravity.no_usable_test_at_level",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Flammability limit (P1)",
+        "text": "Gravity gap: none of the 133 tests counted for this need is recorded at the gravity level of this environment (martian).",
+        "numbers": [
+         {
+          "value": 133.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.P1.statements[gap.gravity.no_usable_test_at_level]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F12"
+       },
+       {
+        "ref": "answers/mars_habitat__P1.json#top_line",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Flammability limit (P1)",
+        "text": "Not judged here. This environment sets no oxygen range and no pressure range, so the 133 tests counted for this need were not compared with an atmosphere. Published results and caveats quoted for this need or for fire safety in general: 0 at the oxygen and pressure of this environment and 4 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+        "numbers": [
+         {
+          "value": 133.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 0.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 4.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 1.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/answers/mars_habitat__P1.json",
+         "line": null,
+         "key": "top_line.text"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/answers/mars_habitat__P1.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F13"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#P2/status.not_measured",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Ignition (P2)",
+        "text": "No test in the mapped PSI tables is counted for this need: no test meets every required condition, holds a value for at least one outcome variable of the need and comes from an investigation linked to the need by a supported purpose sentence of the investigators or of a NASA project document.",
+        "numbers": [
+         {
+          "value": 1.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.P2.statements[status.not_measured]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": true,
+        "limit": false,
+        "id": "F14"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#P2/need.reading",
+        "tool": "counts_per_question",
+        "kind": "limit",
+        "context": "Mars habitat; Ignition (P2)",
+        "text": "A counted test would record the material, the oxygen and an ignition result. No mapped table records one for a solid fuel.",
+        "numbers": [
+         {
+          "value": 1.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.P2.statements[need.reading]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F15"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#P2/gap.need.no_usable_test",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Ignition (P2)",
+        "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need.",
+        "numbers": [],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.P2.statements[gap.need.no_usable_test]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F16"
+       },
+       {
+        "ref": "answers/mars_habitat__P2.json#top_line",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Ignition (P2)",
+        "text": "Not judged here. The PSI experimental tables hold no test counted for this need. No counted test is recorded at this condition or in a neighbouring cell, and no published result or caveat of the reference list, tagged for this need or for fire safety in general, states a condition of this environment: the first three rungs hold only statements made without these conditions. What has not been found in these sources is listed.",
+        "numbers": [
+         {
+          "value": 3.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/answers/mars_habitat__P2.json",
+         "line": null,
+         "key": "top_line.text"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/answers/mars_habitat__P2.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F17"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#P3/status.atmosphere_not_specified",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Flame spread and growth (P3)",
+        "text": "This environment sets no oxygen range and no pressure range. The 2 tests counted for this need were not compared with an atmosphere.",
+        "numbers": [
+         {
+          "value": 2.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.P3.statements[status.atmosphere_not_specified]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F18"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#P3/need.reading",
+        "tool": "counts_per_question",
+        "kind": "limit",
+        "context": "Mars habitat; Flame spread and growth (P3)",
+        "text": "A counted test records the material, the flow speed and direction and a spread rate, burn length or burn time. In the current tables the counted tests record a burn time and no spread rate or burn length; a burn time is not a spread rate.",
+        "numbers": [],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.P3.statements[need.reading]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F19"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#P3/gap.gravity.no_usable_test_at_level",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Flame spread and growth (P3)",
+        "text": "Gravity gap: none of the 2 tests counted for this need is recorded at the gravity level of this environment (martian).",
+        "numbers": [
+         {
+          "value": 2.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.P3.statements[gap.gravity.no_usable_test_at_level]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F20"
+       },
+       {
+        "ref": "answers/mars_habitat__P3.json#top_line",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Flame spread and growth (P3)",
+        "text": "Not judged here. This environment sets no oxygen range and no pressure range, so the 2 tests counted for this need were not compared with an atmosphere. No counted test is recorded at this condition or in a neighbouring cell, and no published result or caveat of the reference list, tagged for this need or for fire safety in general, states a condition of this environment: the first three rungs hold only statements made without these conditions. What has not been found in these sources is listed.",
+        "numbers": [
+         {
+          "value": 2.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 3.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/answers/mars_habitat__P3.json",
+         "line": null,
+         "key": "top_line.text"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/answers/mars_habitat__P3.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F21"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#S1/status.atmosphere_not_specified",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Extinction conditions (S1)",
+        "text": "This environment sets no oxygen range and no pressure range. The 298 tests counted for this need were not compared with an atmosphere.",
+        "numbers": [
+         {
+          "value": 298.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.S1.statements[status.atmosphere_not_specified]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F22"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#S1/need.reading",
+        "tool": "counts_per_question",
+        "kind": "limit",
+        "context": "Mars habitat; Extinction conditions (S1)",
+        "text": "A counted test records the fuel, the oxygen and how the burn ended or an event word. Its pressure is a value of the table (FLEX) or, for BASS-II, a statement of the investigators about the investigation as a whole (ICES19.pressure), not a reading per test. In the FLEX table the ending is extinction, disruption or completion: the count is not a count of extinctions, and 'extinction' is also the recorded end of FLEX tests with no carbon dioxide and no helium added. The indicator 'S1.test_end' gives the count per ending.",
+        "numbers": [],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.S1.statements[need.reading]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F23"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#S1/gap.gravity.no_usable_test_at_level",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Extinction conditions (S1)",
+        "text": "Gravity gap: none of the 298 tests counted for this need is recorded at the gravity level of this environment (martian).",
+        "numbers": [
+         {
+          "value": 298.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.S1.statements[gap.gravity.no_usable_test_at_level]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F24"
+       },
+       {
+        "ref": "answers/mars_habitat__S1.json#top_line",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Extinction conditions (S1)",
+        "text": "Not judged here. This environment sets no oxygen range and no pressure range, so the 298 tests counted for this need were not compared with an atmosphere. No counted test is recorded at this condition or in a neighbouring cell, and no published result or caveat of the reference list, tagged for this need or for fire safety in general, states a condition of this environment: the first three rungs hold only statements made without these conditions. What has not been found in these sources is listed.",
+        "numbers": [
+         {
+          "value": 298.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 3.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/answers/mars_habitat__S1.json",
+         "line": null,
+         "key": "top_line.text"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/answers/mars_habitat__S1.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F25"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#D1/status.atmosphere_not_specified",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Combustion products (D1)",
+        "text": "This environment sets no oxygen range and no pressure range. The 122 tests counted for this need were not compared with an atmosphere.",
+        "numbers": [
+         {
+          "value": 122.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.D1.statements[status.atmosphere_not_specified]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F26"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#D1/need.reading",
+        "tool": "counts_per_question",
+        "kind": "limit",
+        "context": "Mars habitat; Combustion products (D1)",
+        "text": "A counted test records the material and the difference between the final and the initial CO or CO2 reading of the on-board sensors of the experiment (ICES19.sensors). The readings are not cabin concentrations and are not compared with crew exposure limits (SMAC.scope). The investigators state the purpose of the readings as evaluating the levels of combustion products and the completeness of combustion (BASS2TM.products, ICES15.purpose); in the passages read they do not present them as a detection measurement. The count is a count of tests that hold such a difference; it says nothing about what a detector would register.",
+        "numbers": [],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.D1.statements[need.reading]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F27"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#D1/gap.gravity.no_usable_test_at_level",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Combustion products (D1)",
+        "text": "Gravity gap: none of the 122 tests counted for this need is recorded at the gravity level of this environment (martian).",
+        "numbers": [
+         {
+          "value": 122.0,
+          "unit": null,
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.D1.statements[gap.gravity.no_usable_test_at_level]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F28"
+       },
+       {
+        "ref": "answers/mars_habitat__D1.json#top_line",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Combustion products (D1)",
+        "text": "Not judged here. This environment sets no oxygen range and no pressure range, so the 122 tests counted for this need were not compared with an atmosphere. No counted test is recorded at this condition or in a neighbouring cell, and no published result or caveat of the reference list, tagged for this need or for fire safety in general, states a condition of this environment: the first three rungs hold only statements made without these conditions. What has not been found in these sources is listed.",
+        "numbers": [
+         {
+          "value": 122.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 3.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/answers/mars_habitat__D1.json",
+         "line": null,
+         "key": "top_line.text"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/answers/mars_habitat__D1.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F29"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#D2/status.not_measured",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Smoke generation conditions (D2)",
+        "text": "No test in the mapped PSI tables is counted for this need: no test meets every required condition, holds a value for at least one outcome variable of the need and comes from an investigation linked to the need by a supported purpose sentence of the investigators or of a NASA project document.",
+        "numbers": [
+         {
+          "value": 1.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.D2.statements[status.not_measured]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F30"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#D2/need.reading",
+        "tool": "counts_per_question",
+        "kind": "limit",
+        "context": "Mars habitat; Smoke generation conditions (D2)",
+        "text": "A row of this need holds the conditions of a smoke test: material, air flow, aging time and the heating level (a target weight loss rate in the planned SAME matrix, SAMEEIRD.target; the heater resistance ratio Rt/R0 in SAME-R, SAMER.rtr0). No row holds a measured smoke property, so no test is counted for this need.",
+        "numbers": [],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.D2.statements[need.reading]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F31"
+       },
+       {
+        "ref": "evidence/scenario_mars_habitat.json#D2/gap.need.no_usable_test",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Smoke generation conditions (D2)",
+        "text": "Need gap: no test is counted for this need, so the status and the counts of this block compare nothing with this environment. Indicators of this block, if any, are computed over tests that are not counted for the need.",
+        "numbers": [],
+        "source": {
+         "file": "data/pipeline/evidence/scenario_mars_habitat.json",
+         "line": null,
+         "key": "needs.D2.statements[gap.need.no_usable_test]"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/evidence/scenario_mars_habitat.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F32"
+       },
+       {
+        "ref": "answers/mars_habitat__D2.json#top_line",
+        "tool": "counts_per_question",
+        "kind": "statement",
+        "context": "Mars habitat; Smoke generation conditions (D2)",
+        "text": "Not judged here. The PSI experimental tables hold no test counted for this need. No counted test is recorded at this condition or in a neighbouring cell, and no published result or caveat of the reference list, tagged for this need or for fire safety in general, states a condition of this environment: the first three rungs hold only statements made without these conditions. What has not been found in these sources is listed.",
+        "numbers": [
+         {
+          "value": 3.0,
+          "unit": null,
+          "what": "a number word in the text"
+         }
+        ],
+        "source": {
+         "file": "data/pipeline/answers/mars_habitat__D2.json",
+         "line": null,
+         "key": "top_line.text"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/pipeline/answers/mars_habitat__D2.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": false,
+        "id": "F33"
+       },
+       {
+        "ref": "texts#counts_limit",
+        "tool": "counts_per_question",
+        "kind": "limit",
+        "context": null,
+        "text": "A count says how many recorded tests hold the variables of a question; it is not a result for this environment and not a judgement of it.",
+        "numbers": [],
+        "source": {
+         "file": "ai/assistant/texts.py",
+         "line": null,
+         "key": "LIMITS.counts_per_question"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/ai/assistant/texts.py",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F34"
+       },
+       {
+        "ref": "evidence.json#PSI-98/HYP-3",
+        "tool": "search_records",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "SAFFIRE-I (PSI-98) record, stated hypothesis: \"There is a significant lack of microgravity data available for spacecraft designers on which to base their fire safety designs and procedures.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-98.units[HYP-3]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98",
+        "quote": true,
+        "field": "hypothesis",
+        "investigation_ids": [
+         "PSI-98"
+        ],
+        "lead": true,
+        "limit": false,
+        "id": "F35"
+       },
+       {
+        "ref": "evidence.json#PSI-99/HYP-3",
+        "tool": "search_records",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "SAFFIRE-II (PSI-99) record, stated hypothesis: \"There is a significant lack of microgravity data available for spacecraft designers on which to base their fire safety designs and procedures.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-99.units[HYP-3]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99",
+        "quote": true,
+        "field": "hypothesis",
+        "investigation_ids": [
+         "PSI-99"
+        ],
+        "lead": true,
+        "limit": false,
+        "id": "F36"
+       },
+       {
+        "ref": "evidence.json#PSI-100/HYP-3",
+        "tool": "search_records",
+        "kind": "nasa_sentence",
+        "context": null,
+        "text": "SAFFIRE-III (PSI-100) record, stated hypothesis: \"There is a significant lack of microgravity data available for spacecraft designers on which to base their fire safety designs and procedures.\"",
+        "numbers": [],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records.PSI-100.units[HYP-3]"
+        },
+        "source_keys": [],
+        "link": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-100",
+        "quote": true,
+        "field": "hypothesis",
+        "investigation_ids": [
+         "PSI-100"
+        ],
+        "lead": false,
+        "limit": false,
+        "id": "F37"
+       },
+       {
+        "ref": "texts#search_limit",
+        "tool": "search_records",
+        "kind": "limit",
+        "context": null,
+        "text": "A keyword search over the 493 numbered sentences of the 24 PSI records; a sentence that does not use these words is not found.",
+        "numbers": [
+         {
+          "value": 493.0,
+          "unit": null,
+          "what": "a value in the text"
+         },
+         {
+          "value": 24.0,
+          "unit": "psi",
+          "what": "a value in the text"
+         }
+        ],
+        "source": {
+         "file": "data/insights/evidence.json",
+         "line": null,
+         "key": "records"
+        },
+        "source_keys": [],
+        "link": "https://github.com/choidol0208/NASA_RAPID/blob/ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e/data/insights/evidence.json",
+        "quote": false,
+        "field": null,
+        "investigation_ids": [],
+        "lead": false,
+        "limit": true,
+        "id": "F38"
+       }
+      ],
+      "panels": [
+       {
+        "type": "ranking",
+        "title": "Closest NASA investigations (team's ranking)",
+        "note": "The ranking is the team's similarity score over the catalog, not NASA's conclusion and not a fire-safety judgement.",
+        "columns": [
+         {
+          "key": "investigation",
+          "label": "investigation",
+          "kind": "text"
+         },
+         {
+          "key": "accession",
+          "label": "accession",
+          "kind": "text"
+         },
+         {
+          "key": "configuration",
+          "label": "configuration",
+          "kind": "text"
+         },
+         {
+          "key": "score",
+          "label": "team score (0 to 100)",
+          "kind": "number"
+         },
+         {
+          "key": "why",
+          "label": "why",
+          "kind": "text"
+         },
+         {
+          "key": "main_gap",
+          "label": "main gap",
+          "kind": "text"
+         },
+         {
+          "key": "record",
+          "label": "record",
+          "kind": "link"
+         }
+        ],
+        "rows": [
+         {
+          "investigation": "BASS",
+          "accession": "PSI-26",
+          "configuration": "SIBAL fabric (1–2 cm), concurrent and opposed flow",
+          "score": 89.7,
+          "why": "flow match 0.90 (flow concurrent; opposed, up to 40 cm/s, named in the PSI record, not a test value); research purpose match 1.00 (role prevention; suppression)",
+          "main_gap": "",
+          "record": {
+           "text": "PSI-26",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-26"
+          }
+         },
+         {
+          "investigation": "BASS-II",
+          "accession": "PSI-25",
+          "configuration": "Thin PMMA films (0.1–0.4 mm), opposed-flow flame spread",
+          "score": 89.7,
+          "why": "flow match 0.90 (flow opposed at 0–10 cm/s); research purpose match 1.00 (role prevention)",
+          "main_gap": "",
+          "record": {
+           "text": "PSI-25",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25"
+          }
+         },
+         {
+          "investigation": "SAFFIRE-I",
+          "accession": "PSI-98",
+          "configuration": "Large SIBAL fabric (0.94 x 0.4 m), concurrent flow 20 cm/s",
+          "score": 89.7,
+          "why": "flow match 0.90 (flow concurrent at 20 cm/s); research purpose match 1.00 (role prevention)",
+          "main_gap": "",
+          "record": {
+           "text": "PSI-98",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98"
+          }
+         }
+        ],
+        "download": null,
+        "dashboard_section": "#top",
+        "id": "p1",
+        "fact_ids": [
+         "F1",
+         "F2",
+         "F3",
+         "F4",
+         "F5",
+         "F6",
+         "F7",
+         "F8"
+        ]
+       },
+       {
+        "type": "counts",
+        "title": "Recorded tests per fire-safety question: Mars habitat",
+        "note": "A count says how many recorded tests hold the variables of a question; it is not a result for this environment and not a judgement of it.",
+        "columns": [
+         {
+          "key": "question",
+          "label": "question",
+          "kind": "text"
+         },
+         {
+          "key": "name",
+          "label": "name",
+          "kind": "text"
+         },
+         {
+          "key": "counted",
+          "label": "counted",
+          "kind": "number"
+         },
+         {
+          "key": "both_inside",
+          "label": "both inside",
+          "kind": "number"
+         },
+         {
+          "key": "oxygen_only",
+          "label": "oxygen only",
+          "kind": "number"
+         },
+         {
+          "key": "pressure_only",
+          "label": "pressure only",
+          "kind": "number"
+         },
+         {
+          "key": "elsewhere",
+          "label": "elsewhere",
+          "kind": "number"
+         },
+         {
+          "key": "status",
+          "label": "status",
+          "kind": "text"
+         }
+        ],
+        "rows": [
+         {
+          "question": "P1",
+          "name": "Flammability limit",
+          "counted": 133,
+          "both_inside": 0,
+          "oxygen_only": 0,
+          "pressure_only": 0,
+          "elsewhere": 133,
+          "status": "atmosphere_not_specified"
+         },
+         {
+          "question": "P2",
+          "name": "Ignition",
+          "counted": 0,
+          "both_inside": 0,
+          "oxygen_only": 0,
+          "pressure_only": 0,
+          "elsewhere": 0,
+          "status": "not_measured"
+         },
+         {
+          "question": "P3",
+          "name": "Flame spread and growth",
+          "counted": 2,
+          "both_inside": 0,
+          "oxygen_only": 0,
+          "pressure_only": 0,
+          "elsewhere": 2,
+          "status": "atmosphere_not_specified"
+         },
+         {
+          "question": "S1",
+          "name": "Extinction conditions",
+          "counted": 298,
+          "both_inside": 0,
+          "oxygen_only": 0,
+          "pressure_only": 0,
+          "elsewhere": 298,
+          "status": "atmosphere_not_specified"
+         },
+         {
+          "question": "D1",
+          "name": "Combustion products",
+          "counted": 122,
+          "both_inside": 0,
+          "oxygen_only": 0,
+          "pressure_only": 0,
+          "elsewhere": 122,
+          "status": "atmosphere_not_specified"
+         },
+         {
+          "question": "D2",
+          "name": "Smoke generation conditions",
+          "counted": 0,
+          "both_inside": 0,
+          "oxygen_only": 0,
+          "pressure_only": 0,
+          "elsewhere": 0,
+          "status": "not_measured"
+         }
+        ],
+        "download": null,
+        "dashboard_section": "#needs",
+        "id": "p2",
+        "fact_ids": [
+         "F9",
+         "F10",
+         "F11",
+         "F12",
+         "F13",
+         "F14",
+         "F15",
+         "F16",
+         "F17",
+         "F18",
+         "F19",
+         "F20",
+         "F21",
+         "F22",
+         "F23",
+         "F24",
+         "F25",
+         "F26",
+         "F27",
+         "F28",
+         "F29",
+         "F30",
+         "F31",
+         "F32",
+         "F33",
+         "F34"
+        ]
+       },
+       {
+        "type": "quotes",
+        "title": "NASA record sentences that use these words",
+        "note": "A keyword search over the 493 numbered sentences of the 24 PSI records; a sentence that does not use these words is not found.",
+        "columns": [
+         {
+          "key": "investigation",
+          "label": "investigation",
+          "kind": "text"
+         },
+         {
+          "key": "field",
+          "label": "field",
+          "kind": "text"
+         },
+         {
+          "key": "sentence",
+          "label": "sentence",
+          "kind": "text"
+         },
+         {
+          "key": "record",
+          "label": "record",
+          "kind": "link"
+         },
+         {
+          "key": "doi",
+          "label": "dataset DOI",
+          "kind": "link"
+         }
+        ],
+        "rows": [
+         {
+          "investigation": "SAFFIRE-I (PSI-98)",
+          "field": "stated hypothesis",
+          "sentence": "There is a significant lack of microgravity data available for spacecraft designers on which to base their fire safety designs and procedures.",
+          "record": {
+           "text": "PSI-98",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-98"
+          },
+          "doi": {
+           "text": "10.60555/0t15-1z43",
+           "href": "https://doi.org/10.60555/0t15-1z43"
+          }
+         },
+         {
+          "investigation": "SAFFIRE-II (PSI-99)",
+          "field": "stated hypothesis",
+          "sentence": "There is a significant lack of microgravity data available for spacecraft designers on which to base their fire safety designs and procedures.",
+          "record": {
+           "text": "PSI-99",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-99"
+          },
+          "doi": {
+           "text": "10.60555/2chp-m469",
+           "href": "https://doi.org/10.60555/2chp-m469"
+          }
+         },
+         {
+          "investigation": "SAFFIRE-III (PSI-100)",
+          "field": "stated hypothesis",
+          "sentence": "There is a significant lack of microgravity data available for spacecraft designers on which to base their fire safety designs and procedures.",
+          "record": {
+           "text": "PSI-100",
+           "href": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-100"
+          },
+          "doi": {
+           "text": "10.60555/040q-4h36",
+           "href": "https://doi.org/10.60555/040q-4h36"
+          }
+         }
+        ],
+        "download": null,
+        "dashboard_section": null,
+        "id": "p3",
+        "fact_ids": [
+         "F35",
+         "F36",
+         "F37",
+         "F38"
+        ]
+       }
+      ],
+      "followups": [
+       {
+        "text": "What partial-gravity experiments are planned for Mars?",
+        "request": null
+       },
+       {
+        "text": "Which materials were tested in BASS?",
+        "request": null
+       }
+      ],
+      "clarify": null,
+      "dashboard": {
+       "q": "Mars base",
+       "section": "#top"
+      },
+      "trace": {
+       "steps": [
+        {
+         "step": "understand",
+         "label": "Reading your request",
+         "summary": "Read 2 times (1 by the model, once by the rule parser); 2 of 5 fields agree.",
+         "ms": 5441,
+         "model_calls": 1,
+         "detail": {
+          "readings": [
+           {
+            "reader": "R",
+            "valid": true,
+            "ms": 0
+           },
+           {
+            "reader": "M1",
+            "valid": true,
+            "ms": 5439
+           }
+          ],
+          "agreement": {
+           "intent": "single",
+           "asks_verdict": "single",
+           "asks_prediction": "single",
+           "environment.preset": "agree",
+           "environment.gravity": "agree"
+          },
+          "removed_ungrounded": [],
+          "asked": false,
+          "conflicts": {}
+         }
+        },
+        {
+         "step": "plan",
+         "label": "Choosing what to look up",
+         "summary": "Looking up the team's ranking of the investigations, counts of recorded tests per fire-safety question, a keyword search of the NASA record sentences.",
+         "ms": 0,
+         "model_calls": 0,
+         "detail": {
+          "tools": [
+           {
+            "tool": "rank_investigations",
+            "args": {
+             "q": "Mars base"
+            },
+            "why": "find_investigations: the team's ranking"
+           },
+           {
+            "tool": "counts_per_question",
+            "args": {
+             "env": {
+              "preset": "mars_habitat",
+              "label": "Mars habitat",
+              "o2_pct": null,
+              "pressure_kpa": null,
+              "gravity": "martian",
+              "flow": "ventilated",
+              "scenario_id": "mars_habitat",
+              "cell": null
+             },
+             "questions": []
+            },
+            "why": "find_investigations: counts per question"
+           },
+           {
+            "tool": "search_records",
+            "args": {
+             "keywords": [
+              "mars",
+              "base"
+             ],
+             "limit": 3
+            },
+            "why": "the message has keywords"
+           }
+          ],
+          "dropped": [],
+          "dashboard_mismatch": []
+         }
+        },
+        {
+         "step": "lookup",
+         "label": "Looking up the team's files",
+         "summary": "38 facts from 11 files.",
+         "ms": 11,
+         "model_calls": 0,
+         "detail": {
+          "tools": [
+           {
+            "tool": "rank_investigations",
+            "ms": 6,
+            "facts": 8,
+            "panels": 1
+           },
+           {
+            "tool": "counts_per_question",
+            "ms": 5,
+            "facts": 26,
+            "panels": 1
+           },
+           {
+            "tool": "search_records",
+            "ms": 0,
+            "facts": 4,
+            "panels": 1
+           }
+          ],
+          "notes": [],
+          "files": [
+           "data/catalog/configurations.csv",
+           "data/catalog/investigations.csv",
+           "data/pipeline/answers/mars_habitat__D1.json",
+           "data/pipeline/answers/mars_habitat__D2.json",
+           "data/pipeline/answers/mars_habitat__P1.json",
+           "data/pipeline/answers/mars_habitat__P2.json",
+           "data/pipeline/answers/mars_habitat__P3.json",
+           "data/pipeline/answers/mars_habitat__S1.json",
+           "data/pipeline/evidence/scenario_mars_habitat.json",
+           "data/pipeline/scenario_needs.csv",
+           "scoring/scoring_config.json"
+          ]
+         }
+        },
+        {
+         "step": "write",
+         "label": "Writing from the facts",
+         "summary": "5 sentences written by the local model.",
+         "ms": 32820,
+         "model_calls": 1,
+         "detail": {
+          "sentences": 5,
+          "valid": true,
+          "facts_given": 24
+         }
+        },
+        {
+         "step": "check",
+         "label": "Checking every sentence",
+         "summary": "5 sentences written, 1 removed by the checks, 2 repaired. Model check: 4 of 4 supported.",
+         "ms": 21683,
+         "model_calls": 2,
+         "detail": {
+          "gate_failures": [
+           {
+            "n": 5,
+            "gate": "names",
+            "reason": "the name 'Martian' is not in the cited facts"
+           }
+          ],
+          "repair": true,
+          "checker": {
+           "yes": 4,
+           "no": 0
+          }
+         }
+        },
+        {
+         "step": "deliver",
+         "label": "Done",
+         "summary": "Done in 60.0 s with 4 model calls.",
+         "ms": 0,
+         "model_calls": 0
+        }
+       ],
+       "model_calls": 4,
+       "total_ms": 59962,
+       "cache": "none",
+       "gate_report": {
+        "written": 5,
+        "repaired": 2,
+        "removed": 1,
+        "removed_by_gate": {
+         "names": 1
+        },
+        "checker_no": 0,
+        "kept": 4,
+        "fallback": false,
+        "fallback_reason": null,
+        "sentences": [
+         {
+          "n": 1,
+          "text": "The team's ranking puts BASS (PSI-26), BASS-II (PSI-25), and SAFFIRE-I (PSI-98) as the closest investigations for a Mars habitat.",
+          "facts": [
+           "F1"
+          ],
+          "failures": []
+         },
+         {
+          "n": 2,
+          "text": "The record's stated hypothesis for SAFFIRE-I (PSI-98) is that there is a significant lack of microgravity data for spacecraft designers.",
+          "facts": [
+           "F35"
+          ],
+          "failures": []
+         },
+         {
+          "n": 3,
+          "text": "The team's tables count 133 tests for the flammability limit (P1) in a Mars habitat, but none are recorded at Martian gravity.",
+          "facts": [
+           "F12"
+          ],
+          "failures": []
+         },
+         {
+          "n": 4,
+          "text": "The team's tables count 2 tests for flame spread and growth (P3) in a Mars habitat, but none are recorded at Martian gravity.",
+          "facts": [
+           "F20"
+          ],
+          "failures": []
+         },
+         {
+          "n": 5,
+          "text": "The team's tables count 298 tests for extinction conditions (S1) in a Mars habitat, but none are recorded at Martian gravity.",
+          "facts": [
+           "F22"
+          ],
+          "failures": [
+           [
+            "names",
+            "the name 'Martian' is not in the cited facts"
+           ]
+          ]
+         }
+        ]
+       },
+       "data_version": "d5a6ff674ab0",
+       "commit": "ec2ab5524864bbeb4ddcab9dfa69b2bee4528c9e"
+      },
+      "label": "Recorded on 15 November 2026 with the local language model (gpt-oss:20b) and replayed here; no model runs on this page. Every model sentence shown passed the code checks and a second model check when it was recorded. No person reviewed these answers. A research exploration tool, not safety guidance."
+     }
+    }
+   ]
+  }
+ ],
+ "left_out": []
+}
