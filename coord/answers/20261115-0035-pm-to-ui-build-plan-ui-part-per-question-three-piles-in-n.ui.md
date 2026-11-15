@@ -2,11 +2,18 @@
 request: 20261115-0035-pm-to-ui-build-plan-ui-part-per-question-three-piles-in-n
 by: ui
 state: accepted
-answered: 2026-11-15 09:09 KST
+answered: 2026-11-15 09:47 KST
 ---
 # Answer
 
 *AI-generated (Claude Code), ui role.*
+
+## Progress (09:47): the other four environments, and a pointer from the first screen
+
+- The other four environments now show the header line and the bars only, as you planned (Mars habitat, spacesuit and the two exploration atmospheres). Mars habitat reads 1.7 ('this environment sets no oxygen range and no pressure range…') with a bar of 'no range set 1,824', which is fixture F1 and is checked at build time. The two exploration atmospheres are built but not reached from the page today, because no preset or input word selects them.
+- 'At a glance' has one line that points to the block, with the block's own numbers. Lunar habitat: 'Raw data: 26 tests are recorded inside these ranges; 398 of the 60,866 files in PSI (0.77% of the bytes) carry their names.' ISS: '179 tests are recorded inside these oxygen and pressure ranges.'
+- A sticky 'On this page' menu links the sections; 'Where the data are' is one of them.
+- Ground 3 (5.3) is not printed. Its ground needs the stated value and its comparison with the range as fields of the data file, and `sources.json` `documented_elsewhere` of PSI-25 holds only the quote.
 
 ## Progress (09:09): reading order and the table's own codes
 

@@ -1116,24 +1116,50 @@ function renderCoverage(out, pipe) {
 // Per environment and question: in NASA's tables / in the archive, not in a table / no record in PSI.
 // Every sentence comes from data/piles/<scenario>.json, written by web/raw_piles.py from the team's
 // files with the fixed templates of docs/raw_data_design/pile_wording.md; the page adds only labels.
-const PILE_COLORS = { inside: "seg-in", cannot_be_placed_from_table: "seg-cannot", oxygen_of_oxidizer_stream: "seg-stream", outside_by_recorded_value: "seg-out" };
+const PILE_COLORS = { inside: "seg-in", cannot_be_placed_from_table: "seg-cannot", oxygen_of_oxidizer_stream: "seg-stream", outside_by_recorded_value: "seg-out", no_range_set: "seg-none" };
+const PILE_WORDS = { inside: "inside the ranges", cannot_be_placed_from_table: "cannot be placed from the tables", oxygen_of_oxidizer_stream: "oxygen recorded for an oxidizer stream", outside_by_recorded_value: "outside by a recorded value", no_range_set: "no range set" };
 const pilesCache = new Map();
 function pilesFor(sid) {
   if (!sid || !OPTIONAL_HAS(`data/piles/${sid}.json`)) return Promise.resolve(null);
   if (!pilesCache.has(sid)) pilesCache.set(sid, loadJSON(`data/piles/${sid}.json`, null));
   return pilesCache.get(sid);
 }
+// one line in "At a glance" that points to the block (the numbers are the block's own)
+function pilesGlance(doc) {
+  $("#glance .glance-piles")?.remove();
+  const g = doc && doc.glance;
+  if (!g || $("#glance").hidden) return;
+  const words = g.no_range ? "this environment sets no oxygen or pressure range, so no test is placed."
+    : g.linked_files ? `${g.inside.toLocaleString("en-US")} tests are recorded inside these ranges; ${g.linked_files.toLocaleString("en-US")} of the ${g.archive_files.toLocaleString("en-US")} files in PSI (${g.linked_share_pct}% of the bytes) carry their names.`
+      : `${g.inside.toLocaleString("en-US")} ${g.inside === 1 ? "test is" : "tests are"} recorded inside these oxygen and pressure ranges.`;
+  $("#glance").append(h("p", { class: "glance-piles" }, h("b", {}, "Raw data: "), words, " ", h("a", { href: "#piles" }, "Where the data are")));
+}
 async function renderPiles(out, pipe) {
   const sec = $("#piles"), body = $("#piles-body");
-  const sid = out.status === "ok" ? scenarioId(out, pipe) : null;
+  const sid = out.status === "ok" ? out.scenario.preset || null : null;
   const doc = await pilesFor(sid);
-  if (!doc || scenarioId(out, pipe) !== doc.scenario) { sec.hidden = true; body.replaceChildren(); return; }
+  if (!doc || (out.scenario.preset || null) !== doc.scenario) { sec.hidden = true; body.replaceChildren(); pilesGlance(null); renderJump(); return; }
+  pilesGlance(doc);
   const focus = { prevention: ["P1", "P2", "P3"], detection: ["D1", "D2"], suppression: ["S1"] }[out.scenario.concern] || [];
   const list = (items) => (items && items.length ? h("ul", { class: "pile-list" }, items.map((s) => h("li", {}, s))) : null);
+  const barOf = (n) => h("div", { class: "pile-bar", role: "img", "aria-label": n.bar },
+    ...n.segments.map((s) => h("span", { class: "seg " + (PILE_COLORS[s.placement] || ""), style: `flex-grow:${s.n}`, title: `${s.label}: ${s.n}` })));
+  const legendOf = (segs) => h("p", { class: "pile-legend" }, ...[...new Set(segs)].map((k) =>
+    h("span", {}, h("span", { class: "swatch " + PILE_COLORS[k] }), " ", PILE_WORDS[k])));
+  if (doc.bars_only) {
+    // the other environments: header line and one bar per question (pm 0035)
+    body.replaceChildren(
+      h("div", { class: "pile-header" }, ...doc.header.map((s) => h("p", {}, s))),
+      legendOf(doc.needs.flatMap((n) => n.segments.map((s) => s.placement))),
+      ...doc.needs.map((n) => h("div", { class: "pile-need is-bars" }, h("div", { class: "bars-row" }, h("b", {}, `${n.name} (${n.id})`), " ", barOf(n)), h("p", { class: "bar-line" }, n.bar))),
+      h("p", { class: "gap" }, "The three piles per question are built for the ISS cabin and the lunar habitat; for this environment the page shows the placement of the tests only."),
+      h("div", { class: "small-print" }, ...doc.small_print.map((s) => h("p", {}, s))));
+    sec.hidden = false;
+    renderJump();
+    return;
+  }
   const blocks = doc.needs.map((n, i) => {
-    const total = n.segments.reduce((a, s) => a + s.n, 0) || 1;
-    const barEl = h("div", { class: "pile-bar", role: "img", "aria-label": n.bar },
-      ...n.segments.map((s) => h("span", { class: "seg " + (PILE_COLORS[s.placement] || ""), style: `flex-grow:${s.n}`, title: `${s.label}: ${s.n}` })));
+    const barEl = barOf(n);
     const pile2 = [...n.pile2];
     const inside = (n.segments.find((s) => s.placement === "inside") || { n: 0 }).n;
     const p1 = h("div", { class: "pile" }, h("h4", {}, "In NASA's tables"), list(n.pile1));
@@ -1153,8 +1179,7 @@ async function renderPiles(out, pipe) {
     if (open) d.open = true;
     return d;
   });
-  const legend = h("p", { class: "pile-legend" }, ...Object.entries(PILE_COLORS).map(([k, c]) =>
-    h("span", {}, h("span", { class: "swatch " + c }), " ", { inside: "inside the ranges", cannot_be_placed_from_table: "cannot be placed from the tables", oxygen_of_oxidizer_stream: "oxygen recorded for an oxidizer stream", outside_by_recorded_value: "outside by a recorded value" }[k])));
+  const legend = legendOf(doc.needs.flatMap((n) => n.segments.map((s) => s.placement)));
   const srcs = Object.entries(doc.sources || {}).filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join("; ");
   // the one-line meaning of each pile (pile_wording.md section 3), printed once above the questions
   const meanings = h("dl", { class: "pile-meanings" },
@@ -1168,6 +1193,21 @@ async function renderPiles(out, pipe) {
     h("div", { class: "small-print" }, ...doc.small_print.map((s) => h("p", {}, s)),
       h("p", {}, "Files read for this block: ", srcs, ". ", h("span", { class: "tag" }, "Computed by team code from NASA PSI tables and file listing"))));
   sec.hidden = false;
+  renderJump();
+}
+
+// ------------------------------------------------------------------ jump menu (the page is long: about 22,000 px on a desktop)
+// One link per section that is shown, in page order; it follows the sections as they are shown or hidden.
+const JUMP = [["#top", "Find"], ["#needs", "Compare"], ["#tests", "Recorded tests"], ["#answers", "Constraints"], ["#shown", "Constraints"],
+  ["#piles", "Where the data are"], ["#stops", "Where the evidence stops"], ["#ai-use", "How AI is used"], ["#method", "How the score works"]];
+function renderJump() {
+  const nav = $("#jump");
+  if (!nav) return;
+  const seen = new Set();
+  const links = JUMP.filter(([id, label]) => { const s = $(id); if (!s || s.hidden || seen.has(label)) return false; seen.add(label); return true; })
+    .map(([id, label]) => h("a", { href: id }, label));
+  nav.replaceChildren(h("span", { class: "jump-label" }, "On this page:"), ...links);
+  nav.hidden = !$("#glance") || $("#glance").hidden || links.length < 3;
 }
 
 // ------------------------------------------------------------------ how AI is used here (pm request 1705)
@@ -1485,8 +1525,13 @@ async function main() {
     renderTests(out, pipe, cat);
     renderEvidenceMap(out, pipe);
     show("#top", true); show("#all", true); show("#needs", true); show("#stops", true); // #answers, #shown and #criteria are set by renderAnswers()
+    renderJump();
   }
 
+  // Sections are shown or hidden by several renderers, some after a file loads: keep the jump menu in step.
+  let jumpT = null;
+  new MutationObserver(() => { clearTimeout(jumpT); jumpT = setTimeout(renderJump, 50); })
+    .observe(document.querySelector("main"), { attributes: true, attributeFilter: ["hidden"], subtree: true });
   // The weights in the method text are read from the scoring config, so the text never goes stale.
   const wl = $("#weights-now");
   if (wl && config.profiles) {
