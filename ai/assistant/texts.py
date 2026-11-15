@@ -152,13 +152,13 @@ SUMMARY = {
 
 ANSWER_LABELS = {
     "model": ("Written by a local language model (gpt-oss:20b) from the facts shown; every sentence shown passed the "
-              "code checks and a second model check. No person reviewed this answer. A research exploration tool "
+              "code checks and a second model check. A research exploration tool "
               "built on NASA PSI data."),
     "template": ("Put together by team code from the facts shown; no language model wrote it. A research "
                  "exploration tool built on NASA PSI data."),
     "recorded": ("Recorded on {date} with the local language model (gpt-oss:20b) and replayed here; no model runs "
                  "on this page. Every model sentence shown passed the code checks and a second model check when it "
-                 "was recorded. No person reviewed these answers. A research exploration tool built on NASA PSI data."),
+                 "was recorded. A research exploration tool built on NASA PSI data."),
 }
 
 # ---------------------------------------------------------------- tools (7)
