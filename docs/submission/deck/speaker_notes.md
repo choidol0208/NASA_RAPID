@@ -35,9 +35,9 @@ Note (59 words): The page sorts each question's data into three piles. Code foll
 
 ## Slide 6
 
-Title on the slide: Four uses of SI and how each is checked
+Title on the slide: Four kinds of SI, each with its measured check.
 
-Note (60 words): We use SI in four places, each with a check. Rules rank; no model touches a number. One local open-weight model wrote card sentences; gates and AI reviews removed 37 of 70. The assistant chains small model steps with code checks; its measurement is in progress. The video reader copies NASA's on-screen numbers; its flame timing failed and was dropped.
+Note (59 words): We use SI only where a check can measure it. Rules rank; no model touches a number. One local open-weight model wrote card sentences; code gates and AI reviews removed 37 of 70. The assistant chains small model steps with code checks between them. The video reader copies NASA's on-screen numbers; its flame timing failed, so we dropped it.
 
 ## Slide 7
 

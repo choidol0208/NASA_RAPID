@@ -241,7 +241,7 @@ const specs = [
     selectors: ["#appbar", "header.masthead", "main > section.ask", "main > section.verbs"], pad: 0, padY: 0,
     prepare: `const c = document.querySelector("header.masthead p.challenge"); if (c) c.style.display = "none"; window.scrollTo(0, 0);`,
     preparedNote: "The masthead line that quotes the challenge statement (p.challenge) is hidden for this capture only; nothing else is changed.",
-    boxes: { appbar: "#appbar", masthead: "header.masthead", ask: "main > section.ask", verbs: "main > section.verbs" },
+    boxes: { appbar: "#appbar", masthead: "header.masthead", eyebrow: "header.masthead .eyebrow", ask: "main > section.ask", verbs: "main > section.verbs" },
     check: `({ challengeLineShown: getComputedStyle(document.querySelector("header.masthead p.challenge")).display !== "none", examples: [...document.querySelectorAll(".presets button")].map((b) => b.textContent.trim()), input: document.querySelector("#q").value, appbar: document.querySelector("#appbar").innerText.replace(/\\s+/g, " ").trim(), verbs: document.querySelector("main > section.verbs").innerText.replace(/\\s+/g, " ").trim() })`,
   },
   {

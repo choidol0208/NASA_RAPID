@@ -66,11 +66,27 @@ TEAM_NAME = "RAPID"
 # While any value is None, the deck shows a visible chip "to be measured" in its place,
 # slide 6 takes the title WORDING["s6"]["title_unmeasured"], and box 3 says
 # "measurement in progress".
-ASSISTANT_MEASURED = {
-    "correct_full_pipeline": None,      # e.g. "61": questions answered correctly by the full pipeline
-    "questions_in_set": None,           # e.g. "74": questions in the evaluated set
-    "correct_single_call": None,        # e.g. "40 of 74": the one-call baseline (arm single_call)
-}
+def _assistant_measured():
+    """The assistant's measured values, read from data/insights/assistant_eval.json when it exists
+    (written by python3 -m ai.assistant.evaluate); None values while it does not."""
+    import json as _json, os as _os
+    f = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "..", "..", "data", "insights", "assistant_eval.json")
+    if not _os.path.exists(f):
+        return {"correct_full_pipeline": None, "questions_in_set": None, "correct_single_call": None}
+    with open(f, encoding="utf-8") as fh:
+        d = _json.load(fh)
+    full, one = d["arms"]["full"]["metrics"], d["arms"]["single_call"]["metrics"]
+    pct = lambda m: f"{round(100 * m['reading_accuracy']['overall'])}%"
+    return {
+        "correct_full_pipeline": pct(full),                 # share of the scored fields of the request read correctly
+        "questions_in_set": str(d["n_questions"]),
+        "correct_single_call": pct(one),
+        "numbers_full": str(full["numbers_unsupported"]["count"]), "numbers_single": str(one["numbers_unsupported"]["count"]),
+        "wording_full": str(full["forbidden_wording"]), "wording_single": str(one["forbidden_wording"]),
+    }
+
+
+ASSISTANT_MEASURED = _assistant_measured()
 
 # The check of the video reader (frames compared by an AI session) is stated in
 # video/README.md; its per-frame sheet is not in the repository, so the figure cannot be
@@ -259,10 +275,10 @@ WORDING = {
             },
             {
                 "name": "Conversational assistant",
-                "tag": "being built",
+                "tag": "prototype, measured",
                 "does": "understand → plan → look up → write → check → deliver",
                 "does_note": "Small model steps with code checks between them; it looks up counts, tests and quoted results.",
-                "check_measured": "Correct on **{a_full}** of **{a_set}** questions; one-call baseline **{a_single}**.",
+                "check_measured": "**{a_set}** questions: request read correctly **{a_full}** (one model call **{a_single}**); numbers outside the cited facts **{a_num_full}** (one call **{a_num_single}**).",
                 "check_unmeasured": "{a_chip}",
             },
             {
@@ -1115,8 +1131,10 @@ def slide1():
     link = PUBLIC_URL.replace("https://", "")
     ax0, _, ax1, _ = cap_box("top.png", "ask")
     _, _, _, vy1 = cap_box("top.png", "verbs")
+    _, ey0, _, _ = cap_box("top.png", "eyebrow")   # page design v2: the start page is centred; the crop starts at its title
     cw, ch = cap_size("top.png")
     x0, x1 = max(0, ax0 - 24), min(cw, ax1 + 24)
+    y0 = max(0, ey0 - 20)
     body = f'''<div class="cols">
 <div class="col" style="width:800px">
   <div class="pair"><div class="lbl">{esc(w["product_label"])}</div><div class="big">{esc(w["product"])}</div></div>
@@ -1125,7 +1143,7 @@ def slide1():
   <div class="linkband"><div class="lbl">{esc(w["link_label"])}</div><a href="{esc(PUBLIC_URL)}">{esc(link)}</a><p>{fmt(w["link_hint"])}</p></div>
 </div>
 <div class="col" style="width:840px">
-  {shot("top.png", x0, 0, x1, min(ch, vy1 + 2), 800, "The start page of Fire Evidence Explorer: the app bar with the product name, the line on what to type, the notice line, the question What are you building, and where, six example buttons, and the three cards Find, Compare, Interpret")}
+  {shot("top.png", x0, y0, x1, min(ch, vy1 + 2), 680, "The start page of Fire Evidence Explorer: the product name, the line on what to type, the notice line, the question What are you building, and where, six example buttons, and the three cards Find, Compare, Interpret")}
   <p class="cap">{fmt(w["caption"])}</p>
 </div></div>'''
     return slide(1, w["kicker"], fmt(w["title"]), body, fmt(w["footer"]))
@@ -1328,6 +1346,7 @@ def slide6():
     measured = all(v is not None for v in ASSISTANT_MEASURED.values())
     a = {k: (esc(v) if v is not None else chip(w["placeholder"])) for k, v in ASSISTANT_MEASURED.items()}
     araw = {"a_full": a["correct_full_pipeline"], "a_set": a["questions_in_set"], "a_single": a["correct_single_call"],
+            "a_num_full": a.get("numbers_full", ""), "a_num_single": a.get("numbers_single", ""), "a_word_full": a.get("wording_full", ""), "a_word_single": a.get("wording_single", ""),
             "a_chip": chip(w["placeholder_all"])}   # while any value is None: one chip, so that nothing can look like a value
     picture = "assistant_recorded.png" in CAP   # taken by capture.mjs only once the new recording is marked ready
     rows = []
