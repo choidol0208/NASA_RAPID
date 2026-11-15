@@ -6670,6 +6670,138 @@ def check_t1(ctx):
     return res
 
 
+@check("T2_process_steps",
+       "process_steps.json and the 'process' field of every evidence-package need block and answer file: every item id "
+       "of spec/process.json exists in references.json with a quote; every measure's text equals its item's quote and "
+       "its item text (no team-written measure text); item types are in references.json _meta.item_types; quotes of "
+       "items added for the process are at most 40 words; each need's steps exist; the field of each need equals the "
+       "steps and measures of spec/process.json.")
+def check_t2(ctx):
+    res = Result()
+    if not ctx.has("process_steps.json"):
+        raise Skip("process_steps.json not written (run pipeline/process_steps.py)")
+    refs = ctx.spec("references")
+    accepted = set(refs["_meta"]["item_types"])
+    items = {}
+    for doc in refs["references"]:
+        for it in doc["items"]:
+            items[it["id"]] = (doc, it)
+            if it["type"] not in accepted:
+                res.fail(problem="item type not in _meta.item_types", item_id=it["id"], type=it["type"])
+    spec = ctx.spec("process")
+    out = ctx.json("process_steps.json")
+    needs = {n["id"]: n for n in ctx.needs}
+    step_ids = [s["id"] for s in spec["steps"]]
+
+    def view_ok(v, iid, where):
+        res.checked += 1
+        if iid not in items:
+            res.fail(problem="item id not in references.json", item_id=iid, where=where)
+            return
+        doc, it = items[iid]
+        q = it.get("quote", "")
+        if not q or v.get("quote") != q or v.get("item_id") != iid or v.get("document_id") != doc["id"] \
+                or v.get("where") != it["where"] or v.get("url") != doc.get("url", "") or v.get("access") != doc.get("access", ""):
+            res.fail(problem="item view differs from references.json", item_id=iid, where=where)
+        if len(q.split()) > 40:
+            res.fail(problem="quote longer than 40 words", item_id=iid)
+
+    if [s["id"] for s in out["steps"]] != step_ids:
+        res.fail(problem="steps differ from spec/process.json")
+    for s_spec, s_out in zip(spec["steps"], out["steps"]):
+        if [v["item_id"] for v in s_out["items"]] != s_spec["items"] or \
+                [v["item_id"] for v in s_out["measures"]] != s_spec["measures"]:
+            res.fail(problem="items or measures of a step differ", step=s_spec["id"])
+        for v in s_out["items"] + s_out["measures"]:
+            view_ok(v, v.get("item_id"), s_spec["id"])
+        for v in s_out["measures"]:
+            it = items.get(v["item_id"], (None, {}))[1]
+            if it.get("text") != it.get("quote"):
+                res.fail(problem="measure text is not the NASA quote", item_id=v["item_id"])
+        want = [n for n in needs if s_spec["id"] in needs[n].get("informs_process_steps", {}).get("steps", [])]
+        if s_out["needs_informing"] != want:
+            res.fail(problem="needs informing a step differ", step=s_spec["id"])
+    for blk in ("capability_areas", "where_the_weight_lies"):
+        if [v["item_id"] for v in out[blk]["items"]] != spec[blk]["items"]:
+            res.fail(problem="block items differ", block=blk)
+        for v in out[blk]["items"]:
+            view_ok(v, v["item_id"], blk)
+    if out["sentence"] != spec["_meta"]["fixed_sentence"]:
+        res.fail(problem="fixed sentence differs")
+    for nid, n in needs.items():
+        f = n.get("informs_process_steps")
+        if not f or not f.get("steps") or set(f["steps"]) - set(step_ids) \
+                or not f.get("team_reading", "").startswith("Team's reading"):
+            res.fail(problem="informs_process_steps missing, unknown step or not marked as the team's reading", need_id=nid)
+    by_step = {s["id"]: s for s in out["steps"]}
+
+    def field_ok(fld, nid, where):
+        res.checked += 1
+        steps = needs[nid]["informs_process_steps"]["steps"]
+        want_m = [(m["item_id"], sid) for sid in step_ids if sid in steps for m in by_step[sid]["measures"]]
+        if fld is None or [x["id"] for x in fld["steps_informed"]] != [s for s in step_ids if s in steps] \
+                or [(m["item_id"], m["step_id"]) for m in fld["measures"]] != want_m \
+                or fld["sentence"] != spec["_meta"]["fixed_sentence"] \
+                or fld["team_reading"] != needs[nid]["informs_process_steps"]["team_reading"]:
+            res.fail(problem="process field differs", need_id=nid, where=where)
+            return
+        for m in fld["measures"]:
+            view_ok(m, m["item_id"], where)
+    packs = answers = 0
+    for e in ctx.json("evidence/index.json")["packages"]:
+        pack = ctx.json("evidence/" + e["file"])
+        packs += 1
+        for b in pack["needs"]:
+            field_ok(b.get("process"), b["need_id"], e["file"])
+    for name in sorted(os.listdir(ctx.out_path("answers"))):
+        if name == "index.json" or not name.endswith(".json"):
+            continue
+        a = ctx.json("answers/" + name)
+        answers += 1
+        field_ok(a.get("process"), name.rsplit("__", 1)[1][:-5], name)
+    res.numbers = {"steps": len(out["steps"]), "measures": sum(len(s["measures"]) for s in out["steps"]),
+                   "packages": packs, "answer_files": answers, "item_views": res.checked}
+    return res
+
+
+@check("T3_need_recorded_summary",
+       "need_recorded_summary.csv recounted from tests.csv, need_tests.csv, file_links.csv and needs.json: tests in "
+       "scope, of investigations with a 'supported' stated_by link, with an outcome in a table cell (per variable), "
+       "counted (objective_link stated) and with a video tied by two labels.")
+def check_t3(ctx):
+    res = Result()
+    if not ctx.has("need_recorded_summary.csv"):
+        raise Skip("need_recorded_summary.csv not written")
+    rows = {r["need_id"]: r for r in ctx.table("need_recorded_summary.csv")}
+    counted = collections.defaultdict(set)
+    for r in ctx.table("need_tests.csv"):
+        if r["objective_link"] == "stated":
+            counted[r["need_id"]].add(r["test_id"])
+    video = {r["test_id"] for r in ctx.table("file_links.csv")
+             if r["kind"] == "video" and r["link_state"] == "two_labels_agree" and r["test_id"]}
+    for n in ctx.needs:
+        res.checked += 1
+        r = rows.get(n["id"])
+        scope = [t for t in ctx.tests if all(t.get(k) in v for k, v in n.get("scope", {}).items())]
+        sup = {s["investigation_id"] for s in n.get("stated_by", []) if s.get("verdict") == "supported"}
+        linked = [t for t in scope if t["investigation_id"] in sup]
+        wo = sum(1 for t in linked if any(t[o] != "" for o in n["outcomes_any"]))
+        per = "; ".join("%s %d" % (o, sum(1 for t in linked if t[o] != "")) for o in n["outcomes_any"])
+        ids = {t["test_id"] for t in linked}
+        want = (len(scope), len(linked), wo, per, len(counted[n["id"]]), len(ids & video), len(counted[n["id"]] & video))
+        got = None if r is None else (int(r["tests_in_scope"]), int(r["tests_in_scope_of_supported_investigations"]),
+                                      int(r["with_outcome_in_table_cell"]), r["outcome_cells_by_variable"],
+                                      int(r["counted_tests"]), int(r["in_scope_supported_with_video_two_labels"]),
+                                      int(r["counted_with_video_two_labels"]))
+        if got != want:
+            res.fail(problem="recount differs", need_id=n["id"], want=list(want), got=list(got) if got else None)
+        elif not r["sentence"].startswith("%d tests in the scope" % len(linked)):
+            res.fail(problem="sentence does not carry the count", need_id=n["id"])
+    res.numbers = {n: "%s/%s/%s" % (r["tests_in_scope_of_supported_investigations"], r["with_outcome_in_table_cell"],
+                                    r["counted_tests"]) for n, r in rows.items()}
+    return res
+
+
 def t_raw_cell(file, source_row, col):
     """Cell <col> of the raw table row that starts on line <source_row> (header = line 1)."""
     cache = T_RAW_LINES.setdefault(file, None)

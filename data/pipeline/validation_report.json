@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 85,
+  "PASS": 87,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 85
+  "checks": 87
  },
  "notes": [
   {
@@ -1156,7 +1156,7 @@
    "numbers": {
     "uses": 193,
     "distinct_items_used": 128,
-    "items_defined": 309
+    "items_defined": 334
    },
    "failures": 0,
    "failing_examples": []
@@ -1180,7 +1180,7 @@
     "packages": 26,
     "listed_in_index": 26,
     "extra_files": 0,
-    "need_block_fields_not_in_contract": 7
+    "need_block_fields_not_in_contract": 8
    },
    "failures": 0,
    "failing_examples": [],
@@ -1191,6 +1191,7 @@
      "matched_by_fuel_phase",
      "matched_ranges",
      "note",
+     "process",
      "raw_state",
      "reading"
     ]
@@ -1957,6 +1958,35 @@
    "failures": 0,
    "failing_examples": [],
    "note": "22 configuration-variable rows differ between the catalog and the pipeline (12 with the tolerance of rounding to the catalog's printed digits); information for the catalog role, not a failure (catalog_comparison_summary.json)"
+  },
+  {
+   "id": "T2_process_steps",
+   "verifies": "process_steps.json and the 'process' field of every evidence-package need block and answer file: every item id of spec/process.json exists in references.json with a quote; every measure's text equals its item's quote and its item text (no team-written measure text); item types are in references.json _meta.item_types; quotes of items added for the process are at most 40 words; each need's steps exist; the field of each need equals the steps and measures of spec/process.json.",
+   "status": "PASS",
+   "numbers": {
+    "steps": 4,
+    "measures": 9,
+    "packages": 26,
+    "answer_files": 36,
+    "item_views": 923
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "T3_need_recorded_summary",
+   "verifies": "need_recorded_summary.csv recounted from tests.csv, need_tests.csv, file_links.csv and needs.json: tests in scope, of investigations with a 'supported' stated_by link, with an outcome in a table cell (per variable), counted (objective_link stated) and with a video tied by two labels.",
+   "status": "PASS",
+   "numbers": {
+    "P1": "259/134/133",
+    "P2": "129/0/0",
+    "P3": "133/2/2",
+    "S1": "524/299/298",
+    "D1": "129/122/122",
+    "D2": "113/0/0"
+   },
+   "failures": 0,
+   "failing_examples": []
   }
  ]
 }

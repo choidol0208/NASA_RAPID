@@ -1,0 +1,48 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-15. Not human-reviewed.",
+  "purpose": "The steps of spacecraft fire-safety work as the NASA documents of references.json state them, each with the ids of the items that state it. pipeline/process_steps.py copies the quotes from references.json into data/pipeline/process_steps.json; nothing in this file is a quote.",
+  "authorship": "The order of the steps, their labels ('label_by_team') and the grouping of items under a step are the team's reading of the quoted sentences (AI, not checked by a person). Every sentence shown as NASA's is the 'quote' of a references.json item. The team recommends nothing.",
+  "fixed_sentence": "Measures are quoted from NASA documents for the case they describe. The team recommends nothing.",
+  "measure_rule": "A measure is an item of type 'measure' (or the requirement that names the materials usage agreement) listed under 'measures' of a step; its text is the item's quote, unchanged.",
+  "needs_field": "Each need of needs.json carries 'informs_process_steps': the steps it informs and a one-line statement marked as the team's reading."
+ },
+ "steps": [
+  {
+   "id": "step_1_material_evaluation",
+   "order": 1,
+   "label_by_team": "Evaluate the material at the worst-case anticipated use environment",
+   "items": ["I6001B.4.1f", "EAWG.mitigate", "EAWG.outsidedb"],
+   "measures": []
+  },
+  {
+   "id": "step_2_configuration_evaluation",
+   "order": 2,
+   "label_by_team": "System or configuration evaluation when a material that fails Test 1 is proposed",
+   "items": ["I6001B.6.1.1", "I6001B.6.1.note", "I6001B.6.1.3", "6016C.4.2.1.1i", "JSC29353B.4.0.test"],
+   "measures": []
+  },
+  {
+   "id": "step_3_measures",
+   "order": 3,
+   "label_by_team": "Measures named for that case: replace with nonflammable material, restrict propagation paths, eliminate or control ignition sources, materials usage agreement",
+   "items": ["6016C.MUA.initial", "6016C.MUA.resubmit"],
+   "measures": ["JSC29353B.4.0.methods", "JSC29353B.4.0.methods.how", "I6001B.6.1.2a", "I6001B.6.1.2b", "6016C.4.1.6a"]
+  },
+  {
+   "id": "step_4_detection_and_response",
+   "order": 4,
+   "label_by_team": "Detection and response: detector locations, portable extinguishers, ventilation shutdown and power removal",
+   "items": ["3001.V2-9059", "3001.V2-9063.quote"],
+   "measures": ["TB008.detectorlocation", "TB008.portable", "TB008.ventilationoff", "TB008.powerremoval"]
+  }
+ ],
+ "capability_areas": {
+  "label_by_team": "The four capability areas",
+  "items": ["TB008.areas"]
+ },
+ "where_the_weight_lies": {
+  "label_by_team": "What fire control is based on, as the documents state it",
+  "items": ["JSC29353B.1.0.control", "JSC29353B.1.0.extinguishers", "TB008.prevention", "TB008.neverabsolute", "TB008.tradestudies"]
+ }
+}

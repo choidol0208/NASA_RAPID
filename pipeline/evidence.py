@@ -36,6 +36,7 @@ import re
 import pandas as pd
 
 import raw_gaps
+import process_steps
 
 MATCHED = ("atmosphere", "oxygen_only", "pressure_only")
 TIERS = MATCHED + ("other",)
@@ -511,6 +512,7 @@ class Builder:
         block["gaps"] = gaps
         block["statements"] = sentences
         block["references"] = self.references(need.get("references", []), f"need {need['id']}")
+        block["process"] = process_steps.process_view(need["id"])   # added 2026-11-15 (pipeline/spec/process.json)
 
         # the lists of the block and the row of the csv must tell the same numbers
         best = [t for t in matched if t["tier"] in ("atmosphere", "oxygen_only")]
