@@ -1,15 +1,56 @@
 ---
 role: catalog
-updated: 2026-11-15 15:55 KST
+updated: 2026-11-15 17:19 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-**Sync 15:55:**
-- Merged `main`: pm's source log (+49 rows), README and submission text updated to the results-first page. No catalog row in `compliance/` was changed. Nothing new on `catalog-filter`.
-- No change to the catalog or the scorer.
-- pm 1520 (by 17:30) has no answer yet. Inbox empty.
+**17:19: check of open points (the human lead asked).**
+- The live page runs config 1.5.3 (read from the public `data/scoring_config.json`).
+- Added the source-log row for the documents that 1.5.3 reuses, and the 1.5.3 changes to `scoring/METHOD.md` 1.6 and 1.8.
+- Still open with pm (1619, by 17:30):
+  - "team's score" in `README.md` lines 43 and 54, and "team score" in `web/SHELL.md` line 14;
+  - two negatives in `how.html` lines 63–64 ("not NASA guidance", "marked when not yet checked").
+- Needs a human (optional): `validation/verification_sheet.csv` has 104 checks for 13 demo configurations and none is checked by a person yet.
+
+**Sync 17:15:**
+- Merged `main` (pm's assistant red-team tests) and `catalog-filter` (ui merged config 1.5.3; `catalog-filter` and the page now run 1.5.3, `main` 1.5.2).
+- ui asked pm (1710) to resample the weight check on 1.5.3. That is pm's file; nothing for catalog.
+- Inbox empty. pm 1619 and 1520 are open (by 17:30).
+- Checks: 83 unit tests, 45 of 45 scenarios, parity 106 of 106, source check clean, reading order up to date.
+
+**16:56: config 1.5.3 (pm 1648, challenge-fit check; weights unchanged; no demo top-3 change).**
+- `partial_gravity` notice with its NASA source (Olson and Ferkul 2012, Table I, checked; OCHMO-TB-008) and the challenge's future sources (LUCI, FM2, E-FIELD).
+- `not_understood` names what the ranking reads. "artemis" is no longer a lunar alias. "combustion chamber" is in scope.
+- Mars hint with the sourced 8.0 psia / 32% O2 example. pm's "34% at 8.2 psi" is not the atmosphere that TP-2010-216134 recommends.
+- `o2_above_all` names both 85% oxidizer streams. SLICE hardware comes from the PSI-106 record text.
+- Answered 1648 `done`. Merged `main` and `catalog-filter`.
+- pm 1619 and 1520 are open (by 17:30).
+- Checks: 83 unit tests, 45 of 45 scenarios, parity 106 of 106, source check clean, integration 0 broken joins.
+
+**Sync 16:33:**
+- Merged `main` (pm: "match score" in the texts) and `catalog-filter` (ui's 1619 work).
+- ui answered 1619 `done` (closed): "match score" with its tooltip on the cards and the table header; the AI tags shortened; the negatives dropped from ui's notes. The §5 line now also sits next to the scores.
+- ui forwarded the remaining negatives to pm (1624): the footer notice, "team score" in `data/insights/scenarios.json`, the small print of the three piles, and the data role's `results_by_need.json`.
+- pm 1619 (by 17:30) and pm 1520 (texts by 17:30) are open. Inbox empty.
+- Checks: 79 unit tests, 45 of 45 scenarios, parity 106 of 106, source check clean, reading order up to date.
+
+**16:20: the human lead asked (16:18) for fewer disclaimers on `how.html` and the shell, and for a clearer name than "team score".**
+- Requests 1619 to pm (shell notices, `how.html`, `data/insights/` labels, submission texts, README) and to ui (`web/app.js` labels, the table header), with exact replacement text.
+- The negatives go. Kept once each, worded positively:
+  - the line that match scores and order are Team RAPID's computation from NASA PSI data (AGENTS.md §5);
+  - the AI labels on AI-written text (§4).
+- Name: **match score** (0–100, weighted similarity to the question), in `scoring/METHOD.md` 1.2. The scorer's output field stays `score`. No code or score change.
+
+**Sync 16:16:**
+- Merged `main`: pm's integrations of 16:03 and 16:06 (the new page shell, ui's results-first section, data's `results_top`). Config 1.5.2 is now on `main`, and the AI layer was rebuilt on it. Nothing new on `catalog-filter`.
+- pm accepted 1520: the texts follow by 17:30, and B3 is taken as a rule for the deck. The request stays open until `done`.
+- Fixed the two points pm found:
+  - The validation numbers in `scoring/METHOD.md` 2 and `scoring/README.md` were from 1.2.0 and 1.4.0. They now come from the current `validation/report.md`: 124 of 136, rank 1 changes in 3 and 5, SMAA 7 of 12, 79 unit tests, 45 scenarios, parity 106.
+  - `scoring/__init__.py` has an AI-generated header.
+  - `scoring/WEIGHTING.md` 5.x is now marked as the numbers of config 1.2.0.
+- Inbox empty.
 - Checks: 79 unit tests, 45 of 45 scenarios, parity 106 of 106, source check clean, reading order up to date.
 
 **15:22: config 1.5.2 on `catalog-scoring`: the human lead's decisions on review items B1–B5 (recommendations taken at 15:16; weights unchanged).**
@@ -44,7 +85,7 @@ blocked_on: none
   - weights match the derivation; reading order up to date.
 - **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 15:55: `main` runs config 1.5.1; `catalog-filter` and `catalog-scoring` run 1.5.2.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 17:19: `main` runs config 1.5.2; `catalog-filter` and `catalog-scoring` run 1.5.3.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
@@ -131,7 +172,7 @@ Next:
 - Weights change only through the stream files and `scoring/derive_weights.py --write`, with the human lead's decision. After any change, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the numbers.
 
 Published for others:
-- `scoring/scoring_config.json` 1.5.2. Weights are unchanged from 1.4.0: AHP over literature-based judgements; suppression pooled with FLEX. New since 1.4.0:
+- `scoring/scoring_config.json` 1.5.3. Weights are unchanged from 1.4.0: AHP over literature-based judgements; suppression pooled with FLEX. New since 1.4.0:
   - `similarity.role.signatures` (keywords, outputs, stated purpose, `not_from_a_fire`);
   - `keywords.signature`;
   - a generic `solid` material entry;

@@ -27,7 +27,13 @@ const browser = await chromium.launch();
 
 // The page shell (web/SHELL.md) shows one tab at a time: reveal() opens the tab that holds an element.
 const reveal = (page, sel) => page.evaluate((s) => { if (window.feeShell) window.feeShell.reveal(s, { scroll: false }); }, sel);
-async function open(page, q) { // q === null: the start page, before a query
+async function open(page, q) { // q === null: the start page, before a query; "how.html": the method page
+  if (q === "how.html") { // the shell moved #ai-use and #method there; app.js fills them without a query
+    await page.goto(BASE + "how.html");
+    await page.waitForFunction(() => { const s = document.querySelector("#ai-use"); return s && !s.hidden && document.querySelector("#ai-use-body").children.length > 0; }, null, { timeout: 30000 });
+    await page.waitForTimeout(1000);
+    return;
+  }
   await page.goto(q === null ? BASE : BASE + "?q=" + encodeURIComponent(q));
   await page.waitForFunction(() => document.querySelector("#glance") && !document.querySelector("#glance").hidden, null, { timeout: 30000 });
   await page.waitForTimeout(1500);
@@ -132,7 +138,7 @@ await unionShot("slide5_lunar_piles.png", "lunar habitat", ["#piles .section-hea
     if (s.endsWith("(S1)")) d.id = "capture-pile-s1";
   }
 });
-await unionShot("slide6_ai_use.png", "lunar habitat", ["#ai-use-title", "#ai-use > p", "#ai-use-body"]);
+await unionShot("slide6_ai_use.png", "how.html", ["#ai-use-title", "#ai-use > p", "#ai-use-body"]);
 
 // GIF of the demo story: ISS, then lunar habitat, the comparison, the evidence map.
 if (want("demo_iss_to_lunar.gif")) {

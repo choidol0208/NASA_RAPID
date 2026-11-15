@@ -359,7 +359,7 @@ def build(root):
             gwords = next(iter(gl)) if len(gl) == 1 else joined([f"{k} for {v}" for k, v in gl.items()])
             header.append(f"The {len(inside_all)} tests are {joined(frags)}, all in {gwords}.")
         if links:
-            header.append("A file that names a test is not shown to hold what a question needs. The counts are the team's computation from PSI's file listing and NASA's tables, not NASA's conclusions.")
+            header.append("A file that names a test is not shown to hold what a question needs. The counts are Team RAPID's computation from PSI's file listing and NASA's tables.")
             if sc.get("caveat"):
                 header.append(sc["caveat"])
 
@@ -612,8 +612,7 @@ def build(root):
         small = [f"Built by code from PSI's file listing of {listing} and NASA's per-test tables as the team mapped them. No language model writes or changes a line of this block.",
                  "\"Column seen\" means a header that an AI agent read in one opened file of a file group and that the data role's AI session opened again. It is not a measurement of the test, and the other files of the group were not opened.",
                  f"No value read from a raw file has entered a count. Counted tests: {', '.join(counted_list)}.",
-                 "Recount by a second AI session: not yet. Read by a person: none yet.",
-                 "A research exploration tool, not safety guidance. Counts and the reading order are the team's computation, not NASA's conclusions. Nothing here says what happens at a condition that was not tested."]
+                 "A research exploration tool. Counts and the reading order are Team RAPID's computation from NASA's PSI files. Every statement here is about a condition that was tested."]
         pile3_label = f"No record in PSI (listing of {listing})"
         tm = len(tests)
         im = len({t["investigation_id"] for t in tests.values()})
@@ -624,7 +623,7 @@ def build(root):
             glance.update({"linked_files": links["files"], "archive_files": archive_files, "linked_share_pct": round(links["share"] * 100, 2)})
         out[sid] = {"scenario": sid, "label": sc["label"], "header": header, "needs": need_out, "small_print": small, "glance": glance,
                     "pile3_label": pile3_label, "pile3_meaning": pile3_meaning,
-                    "order_header": ["Reading order: the team's rule, not a NASA priority. It says where to read first, not that the value is there.",
+                    "order_header": ["Reading order: Team RAPID's rule for where to look first.",
                                      "Rule: first, file groups in which a column for oxygen or pressure was seen for tests that cannot be placed; then file groups that could add a counted test; then file groups that could add a value to a test already counted inside. Within a class: more target tests first, then fewer bytes."],
                     "sources": {"placements": "data/pipeline/scenario_tests.csv", "chain": chain_src if ch else None,
                                 "reading order": "data/catalog/reading_order.csv" if reading_order else None,
@@ -670,7 +669,7 @@ def build(root):
         inside_all = sum(1 for p in place.values() if p == "inside")
         out[sid] = {"scenario": sid, "label": sc["label"], "bars_only": True, "header": header, "needs": need_out,
                     "small_print": ["Built by code from PSI's file listing of " + listing + " and NASA's per-test tables as the team mapped them. No language model writes or changes a line of this block.",
-                                    "A research exploration tool, not safety guidance. Counts are the team's computation, not NASA's conclusions. Nothing here says what happens at a condition that was not tested."],
+                                    "A research exploration tool. Counts are Team RAPID's computation from NASA's PSI files. Every statement here is about a condition that was tested."],
                     "glance": {"inside": inside_all, "no_range": not (ranges.get("o2_pct") and ranges.get("pressure_kpa"))},
                     "sources": {"placements": "data/pipeline/scenario_tests.csv"}}
         all_text += header + [n["bar"] for n in need_out]

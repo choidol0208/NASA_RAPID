@@ -8,7 +8,7 @@
 <meta name="description" content="Tell it what you want to build: a spacecraft cabin, a Moon base, a rover. See the closest NASA microgravity fire investigations, what to consider and what their recorded tests say, and where the evidence stops. A research exploration tool built on NASA PSI data.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Fire Evidence Explorer">
-<meta property="og:description" content="Tell it what you want to build: a spacecraft cabin, a Moon base, a rover. See the closest NASA microgravity fire investigations, what their recorded tests say, and where the evidence stops. A research exploration tool, not safety guidance.">
+<meta property="og:description" content="Tell it what you want to build: a spacecraft cabin, a Moon base, a rover. See the closest NASA microgravity fire investigations, what their recorded tests say, and where the evidence stops. A research exploration tool built on NASA PSI data.">
 <meta property="og:url" content="https://choidol0208.github.io/NASA_RAPID/">
 <meta property="og:image" content="https://choidol0208.github.io/NASA_RAPID/og.png">
 <meta property="og:image:alt" content="Fire Evidence Explorer showing the closest NASA PSI investigations for a lunar habitat">
@@ -45,7 +45,7 @@
     <h1>Fire Evidence Explorer</h1>
     <p class="lede"><span class="lede-head">Tell us what you want to build: a spacecraft cabin, a Moon base, a rover.</span> See which NASA microgravity fire investigations come closest, what to consider and what their recorded tests say, and where the evidence stops.</p>
     <p class="challenge">The challenge says that the low-gravity combustion data in NASA's PSI database "can be hard to find, harder to compare, and harder yet to interpret". This page takes them in that order: <b>Find</b>, <b>Compare</b>, <b>Interpret</b>.</p>
-    <p class="notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data. It is not operational fire-safety guidance, and it is not endorsed by NASA.</p>
+    <p class="notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data.</p>
   </div>
 </header>
 
@@ -93,7 +93,7 @@
     <p class="kicker"><b>Find</b> · Information you need</p>
     <div class="section-head">
       <h2 id="top-title">Closest NASA investigations</h2>
-      <p class="team-note">Scores (0–100) and order are the team's similarity computation, not a NASA result, and not operational safety guidance. A score orders the investigations for this question only; scores of different questions cannot be compared. <a href="how.html#method">How the score works</a></p>
+      <p class="team-note">Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data. A match score ranks the investigations within this question. <a href="how.html#method">How the score works</a></p>
     </div>
     <ol id="results" class="results"></ol>
     <div id="other-notes" class="ai-block"></div>
@@ -104,7 +104,7 @@
     <p class="kicker"><b>Compare</b> · Points to consider</p>
     <div class="section-head">
       <h2 id="needs-title">What to consider, and what the recorded tests say</h2>
-      <p class="team-note">Status is the team's pipeline reading of each PSI experimental table, not a NASA assessment.</p>
+      <p class="team-note">Status is Team RAPID's pipeline reading of each PSI experimental table.</p>
     </div>
     <p class="intro">Fire-safety information needs, each defined from published NASA standards and studies. For each ranked investigation, the cell says whether its PSI table records the conditions and the outcome that need asks for. A test counts as evidence for a need only when the investigation's PSI record states that need as an objective. Click a cell to see the pipeline row behind it.</p>
     <div id="points" class="points ai-block"></div>
@@ -126,7 +126,7 @@
     <p class="kicker"><b>Interpret</b> · What NASA's documents report</p>
     <div class="section-head">
       <h2 id="results-first-title">What NASA's experiments and documents report, question by question</h2>
-      <p class="team-note">Quotations of NASA documents and of the investigators' papers. The groups and the order are a fixed rule by the conditions each statement gives, with no weights; they and the counts are the team's computation, not NASA's conclusions. Nothing is computed from the printed values and nothing is compared with a criterion. Not safety guidance.</p>
+      <p class="team-note">Quotations of NASA documents and of the investigators' papers. The groups and the order are a fixed rule by the conditions each statement gives, with no weights; they and the counts are Team RAPID's computation. Printed values are quoted as written, and criteria are quoted next to them, not applied to them.</p>
     </div>
     <div id="results-first-body"></div>
   </section>
@@ -187,13 +187,13 @@
 
   <section id="all" class="all" hidden aria-labelledby="all-title">
     <h2 id="all-title">All 24 investigations for this input</h2>
-    <p class="team-note table-note">Order is the team's ranking, not a NASA result. Scores within 3 points of the best remaining score are ordered by how much of the score rests on recorded values (recorded share), then by evidence quality, so a slightly lower score can sit higher. Highlighted rows are shown above; one of those places is kept for a test run at your oxygen level when the closest matches were tested at a different one.</p>
+    <p class="team-note table-note">Order is Team RAPID's ranking. Match scores within 3 points of the best remaining score are ordered by how much of the score rests on recorded values (recorded share), then by evidence quality, so a slightly lower score can sit higher. Highlighted rows are shown above; one of those places is kept for a test run at your oxygen level when the closest matches were tested at a different one.</p>
     <details class="more fold">
       <summary>Show the full ranking</summary>
       <p class="scroll-hint">Swipe the table sideways to see every column.</p>
       <div class="table-wrap">
         <table id="ranking">
-          <thead><tr><th scope="col">#</th><th scope="col">Investigation</th><th scope="col">Closest test configuration</th><th scope="col" class="num">Score</th><th scope="col">Match by dimension</th><th scope="col">PSI page</th><th scope="col">Dataset</th></tr></thead>
+          <thead><tr><th scope="col">#</th><th scope="col">Investigation</th><th scope="col">Closest test configuration</th><th scope="col" class="num" title="How closely this investigation's recorded conditions match your question, weighted by how much each condition matters (0–100).">Match score</th><th scope="col">Match by dimension</th><th scope="col">PSI page</th><th scope="col">Dataset</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
@@ -213,8 +213,8 @@
     <div class="foot-col foot-about">
       <p class="foot-brand">Fire Evidence Explorer</p>
       <p class="foot-team">Team RAPID · NASA Space Apps Challenge 2026</p>
-      <p class="foot-notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data. It is not operational fire-safety guidance, and it is not endorsed by NASA.</p>
-      <p class="foot-notice">Scores (0–100) and order are the team's similarity computation, not a NASA result, and not operational safety guidance.</p>
+      <p class="foot-notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data.</p>
+      <p class="foot-notice">Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data.</p>
     </div>
     <div class="foot-col foot-data">
       <p>Data: <a href="https://psi.nasa.gov/">NASA Physical Sciences Informatics</a>, 24 combustion investigations (dataset DOIs on each result; CC0-1.0 where stated in the record). Challenge: Flame in Freefall, NASA Space Apps Challenge 2026.</p>

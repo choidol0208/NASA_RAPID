@@ -6,7 +6,7 @@ Live: https://choidol0208.github.io/NASA_RAPID/
 
 A static web page. You describe a crewed environment ("ISS", "lunar habitat cotton fabric", "30% O2 at 10.2 psi"); the page shows which NASA PSI microgravity combustion investigations come closest, why, what their recorded tests can say about six fire-safety information needs, and where the recorded tests stop.
 
-It is a research exploration tool. It is not operational fire-safety guidance and it is not endorsed by NASA. Scores, rankings, statuses and counts are the team's computation.
+It is a research exploration tool. It is not operational fire-safety guidance. Scores, rankings, statuses and counts are the team's computation.
 
 ## How it works
 
@@ -19,7 +19,7 @@ It is a research exploration tool. It is not operational fire-safety guidance an
 | Deploy | `.github/workflows/pages.yml` | On every push to `catalog-filter` or `main`: unit tests, validation, integration check, parity, build, then GitHub Pages. |
 | Three piles | `raw_piles.py` | Run by `build.py`: for the lunar habitat and the ISS, the header line, a bar per question and the three piles (in NASA's tables / in the archive, not in a table / no record in PSI), as the fixed sentences of `docs/raw_data_design/pile_wording.md` filled from the team's files; stops the build when fixture F1, a bar sum, the word scan or a slot fails. |
 | Integration | `check_integration.py` | For representative queries, every top-3 result must reach its data: manifest entry and DOI, the experimental-table file, the catalog row the page links to, its rows in `capability_matrix.csv`, and the configuration's own tests in `tests.csv` (count equal, O2/pressure/flow inside the catalog range). It also checks that each scenario frame, shown as a lead and a folded rest, keeps all of its text. `--emit` writes what the page should show, for a browser comparison. |
-| Captures | `capture_media.mjs` | Run by hand on the public page (`node web/capture_media.mjs <url> [folder]`, Playwright from `NODE_PATH`): the stills, the slide captures (slides 1, 2, 3, 5, 6 and 7 of `docs/submission/slides_outline.md`) and the demo GIF, into `web/media/`. `CAPTURE_ONLY=a.png,b.png` retakes only the named files. Captures of the team's own page, not AI-generated images. |
+| Captures | `capture_media.mjs` | Run by hand on the public page (`node web/capture_media.mjs <url> [folder]`, Playwright from `NODE_PATH`): the stills, the slide captures (slides 1, 2, 3, 5, 6 and 7 of `docs/submission/slides_outline.md`; slide 6 from `how.html`) and the demo GIF, into `web/media/`. `CAPTURE_ONLY=a.png,b.png` retakes only the named files. Captures of the team's own page, not AI-generated images. |
 | Links | `check_links.py` | Run by hand before the freeze: every repository file the page links to exists; external pages answer (publishers that refuse scripts are listed to open by hand). |
 
 No language model runs in the page. No paid service, API key or server is involved; nothing is called on page load except the page's own files and Google Fonts.

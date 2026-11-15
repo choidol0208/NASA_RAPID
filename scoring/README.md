@@ -94,18 +94,18 @@ Dimensions the user did not give are left out of the score, and the remaining we
 4. **Unreported atmosphere:** when the record gives no O2, it is scored as ordinary air (21%). Pressure is filled as 101.3 kPa only for experiments that ran in the ISS cabin, the MSG or a Cygnus cabin. The catalog stays empty, and a result that uses the assumption carries the `fallback` warning.
 5. **Unknown never beats measured:** an empty fuel or O2 value scores the smaller of 0.5 and the best real match of the query.
 6. **Complementary slot:** if the user's O2 is not ordinary air (21 ± 2%) and none of the top 3 was tested at that O2, the third place goes to the best result that was, with the `complementary` warning.
-7. **Ties:** scores within 3 points count as tied and are ordered by evidence quality and by whether a 1 g comparison exists.
+7. **Ties (config 1.5.1):** each place is filled from the results within 3 points of the best remaining score. They are ordered by recorded share (the weight compared with values a NASA source states), then by evidence quality, then by score.
 8. **Reasons:** the reason text says "tested" only for values from an experimental table. Values from the record text, a test matrix or a team reading say so, and assumed values read "not recorded, assumed". When oxygen and pressure are both ranges, a result carries `ranges_separate`.
 
-## Checks (2026-11-14, config 1.4.0)
+## Checks (2026-11-15, config 1.5.2)
 
-- Validation scenarios 38 of 38 pass.
-- Unit tests 56 of 56 pass.
+- Validation scenarios 45 of 45 pass.
+- Unit tests 79 of 79 pass.
 - AHP consistency ratio of the literature judgements 0, 0.009 and 0.008 (limit 0.10); the config holds exactly the derived weights.
-- Python and JavaScript give the same results on 99 of 99 queries.
-- Each weight of each profile halved and raised by half: 146 of 152 variants keep the same top 3, and rank 1 changes in 1.
-- SMAA with only the order of importance: rank 1 holds in every draw for 8 of 12 queries; `lunar habitat cotton fabric` has no clear winner.
-- Each other value halved and raised by half: 129 of 136 runs keep the same top 3. The `ISS` and `lunar habitat` presets never change.
+- Python and JavaScript give the same results on 106 of 106 queries.
+- Each weight of each profile halved and raised by half: 146 of 152 variants keep the same top 3, and rank 1 changes in 3 (all in prevention, on the two lunar queries).
+- SMAA with only the order of importance: rank 1 holds in every draw for 7 of 12 queries and in 80% or more for 11 of 12; `lunar habitat cotton fabric` has no clear winner.
+- Each other value halved and raised by half: 124 of 136 runs keep the same top 3. `ISS` never changes; the changes are in `lunar habitat`, `ISS cotton fabric` and `lunar habitat cotton fabric`.
 - Against the NASA sources: 107 ranking values written in the source and 8 team readings; 24 of 24 range ends match; 135 of 135 numbers in the shown text are written in the source.
 
 The expected answers were written by an AI session for the team; their review by combustion researchers is the next step. Details are in `validation/report.md` and `validation/catalog_source_check.md`.

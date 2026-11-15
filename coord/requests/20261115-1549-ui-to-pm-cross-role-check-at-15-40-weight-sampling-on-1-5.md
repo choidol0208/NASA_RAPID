@@ -3,7 +3,7 @@ from: ui
 to: pm
 opened: 2026-11-15 15:49 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Cross-role check at 15:40: weight sampling on 1.5.1 hides the Weight check lines; stale numbers in the submission drafts and README
 

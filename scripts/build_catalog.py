@@ -782,6 +782,11 @@ SUMMARY_TABLES = {"PSI-68": "planned test matrix", "PSI-20": "test days", "PSI-2
                   "PSI-22": "test days", "PSI-23": "test days", "PSI-106": "test days"}
 
 
+# Hardware for records whose experimentHardware field is empty, in the record's own words (the approach text).
+# PSI-106 approach: "The SLICE apparatus consisted of a fan-driven flow duct, exchangeable burner tubes, and integrated sensors ..."
+HARDWARE_FROM_RECORD = {"PSI-106": "fan-driven flow duct (record approach text)"}
+
+
 def platform_of(d):
     hw = (d.get("experimentHardware") or "").lower()
     if d.get("projectType", "").lower().startswith("ground"):
@@ -825,7 +830,7 @@ def main():
             investigation_id=c["investigation_id"], psi_accession=acc,
             investigation_name=re.sub(r"\s+", " ", d.get("title", "")).strip(),
             project_group=c["project_group"], tier=c["tier"], platform=plat,
-            hardware=re.sub(r"\s+", " ", d.get("experimentHardware") or "").strip(),
+            hardware=re.sub(r"\s+", " ", d.get("experimentHardware") or "").strip() or HARDWARE_FROM_RECORD.get(acc, ""),
             operation_period=f"{start} to {end}".strip(" to") if (start or end) else "",
             objectives=c["objectives"], research_focus=c["research_focus"],
             fire_safety_role=c["fire_safety_role"], fire_scenario_tags=c["fire_scenario_tags"],

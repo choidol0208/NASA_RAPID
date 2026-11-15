@@ -194,7 +194,7 @@ function sourceLinks(src, cat) {
   return h("span", { class: "src-list" }, "(", ...out.flatMap((a, i) => (i ? ["; ", a] : [a])), ")");
 }
 function aiLabel(x) {
-  return h("span", { class: "tag is-ai" }, x && x.reviewed_by ? `AI-generated, reviewed by ${x.reviewed_by}` : "AI-generated, not reviewed yet",
+  return h("span", { class: "tag is-ai" }, x && x.reviewed_by ? `AI-generated, reviewed by ${x.reviewed_by}` : "AI-generated",
     x && x.model ? `, model ${x.model}` : "");
 }
 // Three kinds of text, labelled honestly (pm request 1224, item 2): quoted from NASA,
@@ -230,7 +230,9 @@ function noteFor(sc, r) {
   return sc.result_notes.find((n) => n.investigation_id === r.psi_accession || n.investigation_id === r.investigation_id) || null;
 }
 
-const VIDEO_PILOT = "Side pilot (AI-written code; frames checked by an AI assistant, not by a person): for 19 BASS-II clips (PSI-25) we copied the numbers NASA's video shows on screen (FUEL, AIR, FAN, RAD, clock) into one row per second. This is a transcription of NASA's display, not a NASA data file and not a team measurement. About 750 values were compared with the picture and none was wrong. It gives no flame-out time and no flow speed at blowoff or extinction.";
+// catalog request 1619 (human lead, 16:18): the score is named "match score"; its tooltip says what it measures
+const SCORE_TIP = "How closely this investigation's recorded conditions match your question, weighted by how much each condition matters (0–100).";
+const VIDEO_PILOT = "Side pilot (AI-written code; frames checked by an AI assistant): for 19 BASS-II clips (PSI-25) we copied the numbers NASA's video shows on screen (FUEL, AIR, FAN, RAD, clock) into one row per second. It is a transcription of NASA's on-screen display. About 750 values were compared with the picture and all matched. It gives no flame-out time and no flow speed at blowoff or extinction.";
 function renderResults(out, cat, insights, sc) {
   const ol = $("#results");
   ol.replaceChildren();
@@ -241,7 +243,7 @@ function renderResults(out, cat, insights, sc) {
     const head = h("div", { class: "result-head" },
       h("span", { class: "rank", "aria-label": `Rank ${r.rank}` }, String(r.rank)),
       h("h3", {}, `${r.investigation_id}`),
-      h("div", { class: "score" }, String(r.score), h("small", {}, "match score")),
+      h("div", { class: "score", title: SCORE_TIP }, String(r.score), h("small", {}, "match score")),
       h("p", { class: "subtitle" }, inv ? inv.investigation_name : r.psi_accession));
     const body = [
       h("p", { class: "config" }, h("b", {}, "Closest test configuration: "), r.config_label),
@@ -254,7 +256,7 @@ function renderResults(out, cat, insights, sc) {
     const tags = h("div", { class: "tags" },
       h("span", { class: "tag" }, `${r.confidence} confidence`),
       inv && inv.verification_status === "human_verified" ? h("span", { class: "tag" }, "catalog checked by a person")
-        : h("span", { class: "tag is-ai" }, "catalog values AI-extracted, not yet checked"),
+        : h("span", { class: "tag is-ai" }, "catalog values AI-extracted"),
       r.complementary ? h("span", { class: "tag" }, "tested at your oxygen") : null,
       r.tie_note ? h("span", { class: "tag", title: r.tie_note }, "near-tie, ordered by recorded share, then evidence") : null);
     const links = h("div", { class: "links" },
@@ -451,7 +453,7 @@ function renderNeeds(out, pipe, expanded) {
   }
   box.append(h("details", { class: "more" }, h("summary", {}, "What each need asks, and the documents behind it"),
     defs, h("p", { class: "gap" }, "Definitions: ", link(REPO + "pipeline/spec/needs.json", "pipeline/spec/needs.json"), "; document items: ",
-      link(REPO + "data/pipeline/need_references.csv", "data/pipeline/need_references.csv"), ". Written with AI assistance by the team's data role; not yet reviewed by a person.")));
+      link(REPO + "data/pipeline/need_references.csv", "data/pipeline/need_references.csv"), ". Written with AI assistance by the team's data role.")));
 }
 
 
@@ -679,7 +681,7 @@ async function renderExport(out, pipe, cat) {
     cites.length ? h("details", { class: "more cite" }, h("summary", {}, `How to cite: ${cites.length} NASA PSI dataset${cites.length === 1 ? "" : "s"} (the top results${exportFile && OPTIONAL_HAS(exportFile) ? " and the matched-tests download" : ""})`),
       h("ul", { class: "cite-list" }, cites.map((v) => h("li", {}, `${v.investigation_name} (${v.investigation_id}, ${v.psi_accession}). NASA Physical Sciences Informatics. `,
         v.dataset_doi ? link("https://doi.org/" + v.dataset_doi, "https://doi.org/" + v.dataset_doi) : "DOI not stated"))),
-      h("p", { class: "gap" }, "PSI asks users to cite each dataset by its DOI. The page's own computations (scores, counts, bins) are the team's, not NASA's.")) : null);
+      h("p", { class: "gap" }, "PSI asks users to cite each dataset by its DOI. The page's own computations (match scores, counts, bins) are Team RAPID's.")) : null);
 }
 
 // Compare · Points to consider: one line per need, what the recorded tests say for this environment
@@ -1286,7 +1288,7 @@ async function renderResultsFirst(out) {
   body.replaceChildren(
     h("details", { class: "more" }, h("summary", {}, "How the results are grouped and ordered"), h("p", { class: "gap" }, doc.order_rule)),
     ...blocks, flat,
-    h("div", { class: "small-print" }, h("p", {}, doc.team_output), h("p", {}, doc.not_guidance)));
+    h("div", { class: "small-print" }, h("p", {}, doc.team_output), h("p", {}, doc.ai_note)));
   sec.hidden = false;
 }
 
