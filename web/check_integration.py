@@ -170,11 +170,12 @@ def main():
                     if cat and pipe:
                         inside = cat[0] - TOL <= pipe[0] and pipe[1] <= cat[1] + TOL
                         equal = abs(cat[0] - pipe[0]) <= TOL and abs(cat[1] - pipe[1]) <= TOL
-                        mid = any(f"{'o2_pct' if label == 'O2' else 'pressure_kpa'}:range_in_source_midpoint_used" in t.get("flags", "") for t in sub)
                         if not inside:
                             problems.append(f"{tag}: {label} catalog {cat} does not contain tests.csv {pipe}")
                         elif not equal:
-                            line_notes.append(f"{label} catalog {cat[0]:g}-{cat[1]:g} wider than tests {pipe[0]:g}-{pipe[1]:g}" + (" (cell is a range; pipeline used its midpoint)" if mid else ""))
+                            # (a note on the flag range_in_source_midpoint_used was removed on 15 Nov: the pipeline
+                            # stopped writing that flag on 14 Nov, 14:40, so it could never fire; data's note 0927)
+                            line_notes.append(f"{label} catalog {cat[0]:g}-{cat[1]:g} wider than tests {pipe[0]:g}-{pipe[1]:g}")
                     elif pipe and not cat:
                         problems.append(f"{tag}: {label} {pipe} in tests.csv, missing in the catalog")
             if line_notes:

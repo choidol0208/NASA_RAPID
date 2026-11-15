@@ -1,10 +1,10 @@
 ---
 role: ui
-updated: 2026-11-15 09:39 KST
+updated: 2026-11-15 09:42 KST
 state: working
 blocked_on: none
 ---
-Now (15 Nov, 09:09): catalog's reading order is in pile 2 for both demo environments (ISS S1 row 3: BASS-II Summary Report, 44 target tests, as the design's fixture). Waiting only for data's 0035 files (data is on them since 09:25). 09:39: a phone-width fix (long NASA header names wrap; the lunar page was 403 px wide on a 390 px screen). Earlier (08:19): pm 0035 (the three piles) is live as the smallest version for the lunar habitat and the ISS. The rest follows data's 0035 files (`question_chain.csv`, `file_links_summary.json`, `test_files.json`), none of which is on a branch yet. The ui session was off from about 00:25 to 08:05.
+Now (15 Nov, 09:09): catalog's reading order is in pile 2 for both demo environments (ISS S1 row 3: BASS-II Summary Report, 44 target tests, as the design's fixture). Waiting only for data's 0035 files (data is on them since 09:25). 09:42: data's note 0927 read; the dead flag check in check_integration.py removed. 09:39: a phone-width fix (long NASA header names wrap; the lunar page was 403 px wide on a 390 px screen). Earlier (08:19): pm 0035 (the three piles) is live as the smallest version for the lunar habitat and the ISS. The rest follows data's 0035 files (`question_chain.csv`, `file_links_summary.json`, `test_files.json`), none of which is on a branch yet. The ui session was off from about 00:25 to 08:05.
 
 - **08:19, pm 0035, smallest version.** New section "Where the data are: in NASA's tables, in the archive, or no record".
   - It shows the header line, a bar per question, the three piles and the small print, all as fixed templates of `pile_wording.md`, filled by `web/raw_piles.py` at build time.
