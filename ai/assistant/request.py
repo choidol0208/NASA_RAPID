@@ -615,7 +615,17 @@ def agree(readings):
         agreement[PATH[f]] = "conflict"
         if f == "intent":
             vals = [v for _, v in conflicts[f]]
-            values[f] = "out_of_scope" if "out_of_scope" in vals else (raw.get("M1") or raw.get("M2") or raw.get("R"))
+            r_norm = readings.get("R") or {}
+            # a message in which the rule parser read both an environment and a material is about what this
+            # tool looks at: one model reading alone does not make it out of scope, and the rule parser's
+            # intent is taken ('lunar habitat cotton fabric', seen in a live run on 15 Nov)
+            r_in_scope = bool(r_norm.get("preset") and r_norm.get("material")
+                              and r_norm.get("intent") not in (None, "out_of_scope"))
+            if "out_of_scope" in vals and r_in_scope:
+                values[f] = r_norm["intent"]
+            else:
+                values[f] = "out_of_scope" if "out_of_scope" in vals else (raw.get("M1") or raw.get("M2")
+                                                                           or raw.get("R"))
         else:
             values[f] = raw["R"] if "R" in raw else (raw.get("M1") if "M1" in raw else raw.get("M2"))
     # questions: when both model readings name none and the rule parser matched a question's words, the rule
