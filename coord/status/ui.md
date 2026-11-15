@@ -1,9 +1,13 @@
 ---
 role: ui
-updated: 2026-11-15 16:49 KST
+updated: 2026-11-15 17:10 KST
 state: working
 blocked_on: none
 ---
+Now (15 Nov, 17:10): sync. Merged main `9be148e` (pm: one input; assistant after its red team) and catalog config 1.5.3 (weights and demo top 3s unchanged). Local build checked: build exit 0, 0 broken joins, parity 106/106, the example buttons and six presets at 1280 and 390 px without errors. **Config 1.5.3 against `robustness.json` sampled on 1.5.2 hides the Weight check lines again** until pm resamples: request 1710 to pm. Still waiting on pm: 1638 items 4 and 5, 1624, 1146.
+
+Now (15 Nov, 16:53): sync; no new request to ui. Waiting on pm: 1638 items 4 and 5 and 1624 (how.html lines 63 and 64, `data/insights` sentences, `pile_wording.md`), 1146 (`assistant_recorded.json`, not on main yet).
+
 Now (15 Nov, 16:49): human lead: "not operational fire-safety guidance" removed too. Masthead and footer notices on both pages are positive ("Research exploration tool built on NASA Physical Sciences Informatics (PSI) data."; "Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data."), meta descriptions likewise; request 1638 items 1 to 3 done by ui, 4 and 5 remain with pm.
 
 Now (15 Nov, 16:46): the human lead asked the ui session to remove "and it is not endorsed by NASA". Done in the masthead and footer notices of `index.html` and `how.html` and in the method page's meta description (the footer stays identical on both pages, build check passes); pm told in request 1638 (merge `catalog-filter` before editing those lines; `README.md` line 17 is pm's).
