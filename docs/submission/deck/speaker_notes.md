@@ -43,4 +43,4 @@ Note (60 words): We use SI in four places, each with a check. Rules rank; no mod
 
 Title on the slide: The page says where the evidence stops; review by combustion researchers comes next.
 
-Note (60 words): This is a research exploration tool, not safety guidance. Every test here ran in microgravity. The challenge suggests the two ends of the gravity scale could bound partial gravity; NASA drop-tower tests found lower oxygen limits at lunar gravity than at both, so we do not treat them as bounds. Next: review by combustion researchers and the assistant's measured results.
+Note (60 words): A research exploration tool built on NASA PSI data. Every test here ran in microgravity. The challenge suggests the two ends of the gravity scale could bound partial gravity; NASA drop-tower tests found lower oxygen limits at lunar gravity than at both, so we do not treat them as bounds. Next: review by combustion researchers and the assistant's measured results.

@@ -80,6 +80,16 @@ ASSISTANT_MEASURED = {
 # lead has resolved the "not recounted" label, which has not happened.
 VIDEO_FRAME_CHECK_ON_SLIDE = False
 
+# The team's logo: lockup B ("program", the stepped mark and the word RAPID) of the team lead's logo kit,
+# the version for light backgrounds, copied unchanged from the kit (outlined SVG, 509 x 172 at 1x, its clear
+# space of 28 px at 1x inside the file; the kit's minimum display width for B is 120 px). Shown on slide 1 in
+# the team block (in place of the word RAPID, which the lockup carries) and small on slide 7 beside the links.
+# None: no logo; slide 1 shows the team name as text and slide 7 shows the links alone. The file is not
+# committed until the team lead has said under which terms it goes into the public repository.
+TEAM_LOGO = None   # the human lead decided on 15 November (17:40 KST) to submit without the team logo
+TEAM_LOGO_SIZE = (509, 171.99)     # the SVG's viewBox, used for the aspect ratio
+TEAM_LOGO_MIN_WIDTH = 120          # the kit's minimum display width for lockup B, CSS px
+
 PUBLIC_URL = "https://choidol0208.github.io/NASA_RAPID/"
 METHOD_URL = PUBLIC_URL + "how.html"
 AI_MARK = "Built with AI assistance (Claude)"
@@ -105,11 +115,12 @@ WORDING = {
         "product": "Fire Evidence Explorer",
         "team_label": "Team",
         "team_placeholder": "[team name]",
+        "logo_alt": "Team {team} logo: a stepped mark and the word RAPID",
         "lead": "Type what you build and where. See the closest NASA investigations, what their recorded tests hold for {needs_word} fire-safety questions, where the data are, and where the evidence stops.",
         "link_label": "Public page, opens without a login",
         "link_hint": "Try the example \"{example_button}\".",
         "caption": "Capture of the team's own page, {capture_date}, one line quoting the challenge hidden; not AI-generated.",
-        "footer": "Research exploration tool, not safety guidance. Not endorsed by NASA.",
+        "footer": "Research exploration tool built on NASA PSI data. Match scores and counts are Team RAPID's computation from NASA PSI data.",
         "note": "We are {team}. NASA publishes its microgravity fire experiments as open data, but a designer cannot easily find, compare or interpret them. Our page starts from what you want to build. It finds the closest NASA investigations, shows what their recorded tests hold and where the data are, and says where the evidence stops.",
     },
     "s2": {
@@ -130,7 +141,7 @@ WORDING = {
         "bar2_day": ("{name_day}", "name a test day or session"),
         "bar2_none": ("{name_none}", "name neither"),
         "rest": "Outside the {exp_files} tables, only a file's name ties it to a test or a test day; {name_none} names carry neither.",
-        "caption": "By file name and PSI category; no file opened. Team computation, not NASA's.",
+        "caption": "By file name and PSI category; no file opened. Team RAPID's computation from NASA PSI data.",
         "footer": "Source: NASA PSI file listing, {listing_date}.",
         "note": "NASA's PSI archive lists {archive_tb} terabytes for {investigations} combustion investigations. Almost all of it is zip archives and video. The tables that list tests are {exp_files} small files; we read {tables_read} of them into {tests} tests. For everything else, the only link to a test is the NASA identifier or the test number in a file name.",
     },
@@ -161,7 +172,7 @@ WORDING = {
             "**Fuel:** the Saffire fabric matches; {top3} burns gas.",
         ],
         "shot_alt": "Head of result card {n} of the page for lunar habitat cotton fabric: {name}, {label} {score}, and its closest test configuration",
-        "footer": "Scores and order are the team's computation, not a NASA result. Card heads: captures of the team's own page (config {config_version}), {capture_date}; not AI-generated.",
+        "footer": "Match scores and order are Team RAPID's computation from NASA PSI data. Card heads: captures of the team's own page (config {config_version}), {capture_date}; not AI-generated.",
         "note": "Type lunar habitat cotton fabric. The preset fills {o2} percent oxygen and {kpa} kilopascals; your words give lunar gravity and the fabric. Rules, not a language model, compare it with {configs} test configurations. Two Saffire fabric tests lead; {top3} follows, tested at your oxygen. A query without a material ranks without a fuel comparison, and the page says so.",
     },
     "s4": {
@@ -184,11 +195,11 @@ WORDING = {
         "legend_zero": "No counted test in the range",
         "ranges": "Ranges under each column: the team's bins for counting.",
         "subtitle": "A counted test is a recorded test whose investigators or a NASA document state that purpose.",
-        "definition": "The {needs_word} questions are the team's draft from NASA and standards documents, not a NASA list.",
+        "definition": "The {needs_word} questions are Team RAPID's draft from NASA and standards documents.",
         "quoted_head": "Quoted first, per question",
         "quoted": "**{q_results}** results quoted from NASA documents and the investigators' papers, **{q_values}** with printed values; for the lunar habitat, **{q_lunar_at}** state its oxygen and pressure, **{q_lunar_about}** one of its conditions.",
         "quoted2": "Example, {q_need}: {q_quote} ({q_material}, simulated {q_gravity} gravity, {q_pressure_words}; LUCI slides, NTRS {q_ntrs}; a related NASA experiment, quoted, nothing computed from it).",
-        "footer": "Team counts from NASA PSI tables, not NASA conclusions. Quoted results in their authors' words; their order is the team's fixed rule, with no weights. Every test ran in microgravity; the page does not treat that as a bound for lunar gravity (slide 7).",
+        "footer": "Counts are Team RAPID's computation from NASA PSI tables. Quoted results in their authors' words; their order is the team's fixed rule, with no weights. Every test ran in microgravity; the page does not treat that as a bound for lunar gravity (slide 7).",
         "note": "Compared by counted tests, not by scores. A test counts for a question only if its investigators or a NASA document state that purpose. ISS cabin: {iss_needs_word} of {needs_word} questions, {iss_oxygen_only_word} on oxygen alone, as their tables record no pressure. Lunar habitat: {lunar_needs_word}, from {s1_tests} droplet tests just above {kpa} kilopascals. Ignition and smoke: no counted test in either.",
     },
     "s5": {
@@ -223,7 +234,7 @@ WORDING = {
         "strip1": "{videos} ({videos_gb} GB); two labels agree for {videos_agree}.",
         "strip2_head": "Archives:",
         "strip2": "directories of {archives} of {archives_in_listing} zip archives read; {fetched_gb} GB fetched for {archives_tb} TB.",
-        "footer": "Team computation from PSI's file listing and NASA's tables, not NASA's conclusions.",
+        "footer": "Counts are Team RAPID's computation from PSI's file listing and NASA's tables.",
         "note": "The page sorts each question's data into three piles. Code follows NASA's identifiers in file and folder names, without downloading the files; a link counts only where two labels agree. Videos are tied the same way. For the lunar habitat, the flammability gap is not unprocessed data: every counted test has its oxygen in NASA's table, below {o2} percent.",
     },
     "s6": {
@@ -279,7 +290,7 @@ WORDING = {
         "kicker": "Limits · and what comes next",
         "title": "The page says where the evidence stops; review by combustion researchers comes next.",
         "limits_head": "Limits",
-        "limits": "Microgravity tests only; no prediction for untested conditions; counts and rankings are the team's, not NASA's. Checked by code and AI sessions; reviewed by a person: {reviewed_person}.",
+        "limits": "Every test ran in microgravity; no prediction outside the recorded tests is offered; counts and rankings are Team RAPID's computation from NASA PSI data. Checked by code and AI sessions; reviewed by a person: {reviewed_person}.",
         "gravity_head": "Gravity",
         "gravity": "The challenge suggests that the two ends of the gravity scale could bound partial gravity. We do not treat them as bounds: NASA drop-tower tests found lower oxygen limits at lunar gravity than at both 0 g and 1 g, for all {of_materials_word} materials tested ({of_cite}).",
         "model_head": "Enough for a model?",
@@ -289,8 +300,8 @@ WORDING = {
         "caption_read": "Recorded tests by oxygen, all pressures; solid fuels end at {solid_o2}%. Gas-flame tests at {o2}% or more are recorded, none counted at {kpa} kPa or less (slide 4). Squares: Saffire flight samples from a paper, not in PSI, not counted. Numbered dashed lines: cited atmospheres (listed on the page).",
         "link_label": "Public page, opens without a login",
         "method_label": "Method: how AI is used and checked, how the score works",
-        "footer": "Research exploration tool, not safety guidance; not endorsed by NASA. References: the NASA PSI dataset DOI on every result; the full list is on the project page. Map: team plot from NASA PSI tables, a capture of the team's own page ({capture_date}); not AI-generated.",
-        "note": "This is a research exploration tool, not safety guidance. Every test here ran in microgravity. The challenge suggests the two ends of the gravity scale could bound partial gravity; NASA drop-tower tests found lower oxygen limits at lunar gravity than at both, so we do not treat them as bounds. Next: review by combustion researchers and the assistant's measured results.",
+        "footer": "Research exploration tool built on NASA PSI data. References: the NASA PSI dataset DOI on every result; the full list is on the project page. Map: Team RAPID's plot from NASA PSI tables, a capture of the team's own page ({capture_date}); not AI-generated.",
+        "note": "A research exploration tool built on NASA PSI data. Every test here ran in microgravity. The challenge suggests the two ends of the gravity scale could bound partial gravity; NASA drop-tower tests found lower oxygen limits at lunar gravity than at both, so we do not treat them as bounds. Next: review by combustion researchers and the assistant's measured results.",
     },
 }
 
@@ -602,7 +613,7 @@ def compute():
         m = re.search(r'r\.complementary \? h\("span", \{ class: "tag" \}, "([^"]+)"\)', fh.read())
     need(m, "web/app.js no longer writes the tag of a result included for its oxygen: reword slide 3 (tag3)")
     with open(path("web/app.js"), encoding="utf-8") as fh:
-        m2 = re.search(r'class: "score" \}, String\(r\.score\), h\("small", \{\}, "([^"]+)"\)', fh.read())
+        m2 = re.search(r'class: "score"(?:, title: [A-Z_]+)? \}, String\(r\.score\), h\("small", \{\}, "([^"]+)"\)', fh.read())
     need(m2, "web/app.js no longer writes the label under a result's score: reword slide 3 (rank_note)")
     put("score_label", m2.group(1), m2.group(1), [3], "web/app.js (renderResults)", "the label the page writes under a result's score; the slide uses the same words")
     put("tag3", m.group(1), m.group(1), [3], "web/app.js (renderResults)", "the tag text the page writes on a result whose field 'complementary' is set")
@@ -901,7 +912,7 @@ def compute():
         need(card["why"] == "Why: " + r["why"] and card["gap"] == "Largest gap: " + r["main_gap"],
              f"img/cotton_top3.png: the reason or the largest gap of result {i} differs from the scorer's: retake the capture")
         need(card["details_open"] == [False], f"img/cotton_top3.png: 'Details and sources' of card {i} is not closed: retake the capture")
-        need("team's similarity computation, not a NASA result" in card["note"], "img/cotton_top3.png lacks the note that scores and order are the team's computation")
+        need("and the order are Team RAPID's computation from NASA PSI data" in card["note"], "img/cotton_top3.png lacks the note that scores and order are the team's computation")
     need(V["tag3"] in cards[2]["tags"], f"img/cotton_top3.png: card 3 does not carry the tag '{V['tag3']}'")
     found = CAP["lunar_found.png"]["check"]
     need(len(found["items"]) >= q_position and found["items"][q_position - 1]["quote"] == ex["quote"] and found["items"][q_position - 1]["group"] == V["q_group"]
@@ -1098,6 +1109,9 @@ def slide(n, kicker, title, body, footer, subtitle=""):
 def slide1():
     w = WORDING["s1"]
     team = esc(TEAM_NAME) if TEAM_NAME else chip(w["team_placeholder"])
+    team_html = f'<div class="big">{team}</div>'
+    if TEAM_LOGO:
+        team_html = team_logo(300, w["logo_alt"].format(team=TEAM_NAME or ""), "teamlogo")
     link = PUBLIC_URL.replace("https://", "")
     ax0, _, ax1, _ = cap_box("top.png", "ask")
     _, _, _, vy1 = cap_box("top.png", "verbs")
@@ -1106,7 +1120,7 @@ def slide1():
     body = f'''<div class="cols">
 <div class="col" style="width:800px">
   <div class="pair"><div class="lbl">{esc(w["product_label"])}</div><div class="big">{esc(w["product"])}</div></div>
-  <div class="pair"><div class="lbl">{esc(w["team_label"])}</div><div class="big">{team}</div></div>
+  <div class="pair"><div class="lbl">{esc(w["team_label"])}</div>{team_html}</div>
   <p class="lead">{fmt(w["lead"])}</p>
   <div class="linkband"><div class="lbl">{esc(w["link_label"])}</div><a href="{esc(PUBLIC_URL)}">{esc(link)}</a><p>{fmt(w["link_hint"])}</p></div>
 </div>
@@ -1115,6 +1129,14 @@ def slide1():
   <p class="cap">{fmt(w["caption"])}</p>
 </div></div>'''
     return slide(1, w["kicker"], fmt(w["title"]), body, fmt(w["footer"]))
+
+
+def team_logo(width, alt, cls):
+    """The team's logo (TEAM_LOGO), unchanged, `width` CSS px wide; its clear space is inside the file."""
+    need(os.path.isfile(os.path.join(HERE, TEAM_LOGO)), f"TEAM_LOGO {TEAM_LOGO} is missing: copy it from the logo kit, or set TEAM_LOGO = None")
+    need(width >= TEAM_LOGO_MIN_WIDTH, f"The team logo is drawn {width} px wide, under the kit's minimum of {TEAM_LOGO_MIN_WIDTH} px")
+    h = width * TEAM_LOGO_SIZE[1] / TEAM_LOGO_SIZE[0]
+    return f'<img class="{cls}" src="{esc(TEAM_LOGO)}" alt="{esc(alt)}" width="{width}" height="{h:.1f}">'
 
 
 def stats(items):
@@ -1355,6 +1377,7 @@ def slide7():
   <div class="blk"><div class="lbl">{esc(w["limits_head"])}</div><p>{fmt(w["limits"])}</p></div>
   <div class="blk"><div class="lbl">{esc(w["gravity_head"])}</div><p>{fmt(w["gravity"])}</p></div>
   <div class="blk"><div class="lbl">{esc(w["model_head"])}</div><p>{fmt(w["model"])}</p></div>
+  {('<div class="logo7">' + team_logo(200, WORDING["s1"]["logo_alt"].format(team=TEAM_NAME or ""), "teamlogo7") + '</div>') if TEAM_LOGO else ""}
 </div>
 <div class="col" style="width:1060px">
   {shot("lunar_evidence_map.png", 0, ty0 - 4, cw, my1 + 6, 1040, "The evidence map of the page for lunar habitat cotton fabric: recorded tests on the oxygen axis for gas flames, fuel droplets and solid fuels; the solid-fuel tests end at " + V["solid_o2"] + " percent oxygen and the input is marked at " + V["o2"] + " percent")}
@@ -1423,6 +1446,10 @@ svg .ax{stroke:var(--ink2);stroke-width:2}
 /* slide 1 */
 .s1 .pair{margin-bottom:22px}
 .s1 .big{font-family:var(--display);font-size:44px;line-height:48px;font-weight:700}
+.teamlogo,.teamlogo7{display:block}
+.s1 .teamlogo{margin:-6px 0 0 -16px}
+.logo7{margin-top:auto;margin-left:-11px}
+.s7 .col:first-child .blk{margin-bottom:12px}
 .s1 .lead{font-size:32px;line-height:45px;margin:6px 0 0}
 .linkband{margin-top:auto;background:var(--white);border:2px solid var(--blue);border-radius:10px;padding:16px 26px 16px}
 .linkband a{display:block;font-family:var(--display);font-size:50px;line-height:56px;font-weight:700;color:var(--blue);text-decoration:underline;text-underline-offset:6px;white-space:nowrap}
@@ -1602,7 +1629,7 @@ def render(table):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fire Evidence Explorer: project demo, 7 slides</title>
-<meta name="description" content="Seven slides on Fire Evidence Explorer, a research exploration tool built on NASA PSI data. Not safety guidance; not endorsed by NASA. Built with AI assistance (Claude).">
+<meta name="description" content="Seven slides on Fire Evidence Explorer, a research exploration tool built on NASA PSI data. Match scores and counts are Team RAPID's computation from NASA PSI data. Built with AI assistance (Claude).">
 <meta name="generator" content="docs/submission/deck/build_deck.py (AI-generated code, Claude)">
 {font_links()}
 <style>{CSS}</style>
@@ -1737,7 +1764,7 @@ def main():
     need(not re.search(r'(?:src|href)="(?!img/|https://choidol0208\.github\.io/NASA_RAPID/|https://fonts\.googleapis\.com|https://fonts\.gstatic\.com)', page),
          "slides.html would need a file or URL outside img/, the public page and the two font hosts")
     meta = {
-        "what": "Every number shown on the seven slides, with the file it comes from and the way it was computed. Team computation from NASA PSI files and the team's own checks; not NASA's conclusions.",
+        "what": "Every number shown on the seven slides, with the file it comes from and the way it was computed. Team RAPID's computation from NASA PSI files and the team's own checks.",
         "AI-generated": True,
         "built_by": "docs/submission/deck/build_deck.py (AI-generated code, written with Claude; no language model ran to build it)",
         "built_at": datetime.datetime.now().astimezone().isoformat(timespec="seconds"),
