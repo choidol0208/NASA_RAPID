@@ -14,13 +14,13 @@ closed: false
 1. **Rerun the 8,000-draw weight sampling on config 1.5.2** (`data/insights/robustness.json`).
    - Every run there carries `config_version` 1.5.1, but the page reads config 1.5.2.
    - The page shows a card's "Weight check" line only when the two versions are equal (`robustRunFor` in `web/app.js`), so the public page shows **no Weight check line now**.
-   - `docs/submission/submission_text.md` line 335 says "Each result card shows the outcome as its 'Weight check' line", and `slides_outline.md` quotes 88.4% from that run.
+   - `docs/submission/submission_text.md` line 344 says "Each result card shows the outcome as its 'Weight check' line", and `slides_outline.md` quotes 88.4% from that run.
    - Catalog says the weights and the top 3s are unchanged in 1.5.2, so the numbers may stay the same. That has not been checked: please rerun it rather than relabel it.
 2. **Submission text and slides outline**, where they quote things that changed:
-   - "scoring config 1.5.1": 6 places in the submission text and 12 in the slides outline (the config is 1.5.2). The top 3s and scores they quote still match `rank()`. The ISS is BASS-II 93.4, SAFFIRE-I 92.1, SAFFIRE-II 92.1; the lunar habitat is FLEX 75.2, ACME-CFI-G 71.6, ACME-BRE 73.6; the smoke detector query is SAME 94.6, SAME-R 94.6, SAME-SIM 81.4.
+   - "1.5.1": 7 places in the submission text and 10 in the slides outline (recounted at 15:52 on main fb55e13 merged into catalog-filter; the config is 1.5.2). The top 3s and scores they quote still match `rank()`. The ISS is BASS-II 93.4, SAFFIRE-I 92.1, SAFFIRE-II 92.1; the lunar habitat is FLEX 75.2, ACME-CFI-G 71.6, ACME-BRE 73.6; the smoke detector query is SAME 94.6, SAME-R 94.6, SAME-SIM 81.4.
    - "104 of 104" queries in parity: `python -B web/parity_check.py` now prints **106/106**.
-   - Submission text line 706: "The lunar range reaches up to 85.8 kPa". Lines 145 and 760 and the page say "below 85.8 kPa", because `pipeline/spec/scenarios.json` has `max_inclusive: false`. The data role's answer files use the same "reaches up to 85.8 kPa" in `environment.caveat`. "Below" is the exact form.
-3. **`README.md`** (yours) still says "ACME-BRE, FLEX and ACME-CFI-G" (the lunar top 3 is now FLEX, ACME-CFI-G, ACME-BRE), "59 checks" and "99/99 queries" (now 106/106).
+   - Submission text line 746: "The lunar range reaches up to 85.8 kPa". Lines 150 and 802 and the page say "below 85.8 kPa", because `pipeline/spec/scenarios.json` has `max_inclusive: false`. The data role's answer files use the same "reaches up to 85.8 kPa" in `environment.caveat`. "Below" is the exact form.
+3. **`README.md`** (yours): after your update it no longer has the old lunar order, "59 checks" or "99/99", but it names config 1.5.1 in 5 places. Its line 84 describes the "Weight check" line, which item 1 brings back.
 
 ## Why
 
