@@ -128,3 +128,13 @@ The human lead: it is not clear at once how to read this part. `index.html` now 
 
 The human lead: the tab reads as a list of sentences, not as something sorted out. `app.js` now renders, from the same data: (1) one table over the six questions (recorded tests, and how many lie inside the ranges, outside by a recorded value, cannot be placed, or have their oxygen recorded for an oxidizer stream; a question's name opens its block); (2) the first line about the environment, with the other lines about the archive behind the fold "How the files were counted and matched"; (3) the four definitions behind the fold "What each part of a block means"; (4) under "Question by question" the blocks as before, each with its counts as chips. No sentence written by `web/raw_piles.py` is changed; the bar's sentence stays as the chips' tooltip.
 
+## Figures in place of sentences (15 November, 20:35)
+
+The human lead: the service is meant to spare the reader effort, and a list of information does not; and what the page says to read should be a link to it. In `app.js`, from the same data files:
+
+- **Where the data are.** A flow of four figures above the table (files in the archive, files that name a test inside the ranges, tests inside the ranges, questions with such a test; from `glance` and the segments). In a block, three figure tiles, one per part; a click shows that part, and the first part with something to say is shown. "Where to read first" is a table (file group, investigation, files, tests it could add to, read so far); a line that does not have the template's form is printed as before.
+- **Where the evidence stops.** Under the map, one card per kind of fuel: the tests at or above the input's oxygen out of all, a bar of the recorded oxygen range with the input marked, and links to the tests. The marked atmospheres and the notes on the picture are behind folds. Each gap is a card: its first sentence, the data that would close it, and the full statement with its sources behind a fold.
+- **Links.** A PSI accession number in these sentences (`PSI-69`) is a link to that investigation's record in NASA's archive (`linkPsi`), and so is the investigation of each file group.
+
+No sentence of the data is changed or dropped; each is on the page or one click away.
+

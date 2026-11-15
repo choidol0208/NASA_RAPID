@@ -21,6 +21,12 @@ function h(tag, attrs = {}, ...kids) {
   return el;
 }
 const link = (href, text) => h("a", { href, target: "_blank", rel: "noopener" }, text);
+// "PSI-69" in a sentence of the team's files: a link to that investigation's record in NASA's archive (wayfinding, 15 November)
+const PSI_RECORD = "https://psi.nasa.gov/physci/repo/data/investigations/";
+function linkPsi(text) {
+  const parts = String(text).split(/(PSI-\d+)/);
+  return parts.length === 1 ? text : parts.map((x) => (/^PSI-\d+$/.test(x) ? h("a", { href: PSI_RECORD + x, target: "_blank", rel: "noopener", class: "psi-link", title: "Open this investigation's record in NASA's PSI archive" }, x) : x));
+}
 // Element.append(null) prints the word "null": append only real children.
 const put = (el, ...kids) => el.append(...kids.flat().filter((k) => k !== null && k !== undefined && k !== false));
 
@@ -513,10 +519,16 @@ function renderScenarioText(out, sc, cat) {
   }
   if (Array.isArray(sc.gaps) && sc.gaps.length) {
     const L = listLabel(sc.gaps, sc);
-    put(gapsBox, h("ul", { class: "ai-list" }, sc.gaps.map((g) => h("li", {}, g.text,
-      Array.isArray(g.sources) && g.sources.length ? [" ", sourceLinks(g.sources, cat)] : null,
-      g.needed_data ? h("span", { class: "gap" }, " Data that would close it: ", g.needed_data) : null,
-      L.inline ? [" ", itemTag(g, sc)] : null))), L.tag);
+    // each gap as a card: its first sentence as the headline, the rest behind a fold, and what data would close it
+    put(gapsBox, h("div", { class: "gap-cards" }, sc.gaps.map((g, i) => {
+      const sents = String(g.text).trim().split(FRAME_SPLIT);
+      const lead = sents[0], more = sents.slice(1).join(" ");
+      return h("article", { class: "gap-card" }, h("span", { class: "gap-n", "aria-hidden": "true" }, String(i + 1)),
+        h("p", { class: "gap-lead" }, linkPsi(lead)),
+        g.needed_data ? h("p", { class: "gap-close" }, h("b", {}, "Data that would close it"), linkPsi(g.needed_data)) : null,
+        h("details", { class: "pile-fold" }, h("summary", {}, "The full statement and its sources"), more ? h("p", {}, linkPsi(more)) : null,
+          h("p", { class: "gap" }, Array.isArray(g.sources) && g.sources.length ? sourceLinks(g.sources, cat) : null, L.inline ? [" ", itemTag(g, sc)] : null)));
+    })), L.tag);
     $("#gaps-section").hidden = false;
   }
 }
@@ -1206,7 +1218,22 @@ async function renderPiles(out, pipe) {
   if (!doc || (out.scenario.preset || null) !== doc.scenario) { sec.hidden = true; body.replaceChildren(); pilesGlance(null); renderJump(); return; }
   pilesGlance(doc);
   const focus = { prevention: ["P1", "P2", "P3"], detection: ["D1", "D2"], suppression: ["S1"] }[out.scenario.concern] || [];
-  const list = (items) => (items && items.length ? h("ul", { class: "pile-list" }, items.map((s) => h("li", {}, s))) : null);
+  const list = (items) => (items && items.length ? h("ul", { class: "pile-list" }, items.map((s) => h("li", {}, linkPsi(s)))) : null);
+  // "Where to read first": each file group as a row with its investigation (a link to the NASA record), its size and
+  // whether a file of it was opened. A line that does not have the template's form is printed as it is.
+  const ORDER_RE = /^(\d+)\.\s+(.*)\s+\(([^()]+),\s*(PSI-\d+)\):\s*([\d,]+ files?),\s*([^;]+);\s*target tests\s*([\d,]+);\s*(.+?)\.?$/;
+  const orderOf = (items) => {
+    if (!items || !items.length) return null;
+    const rows = items.map((t) => ({ t, m: ORDER_RE.exec(t) }));
+    if (rows.some((r) => !r.m)) return list(items);
+    return h("div", { class: "order-wrap" }, h("table", { class: "order-table" },
+      h("thead", {}, h("tr", {}, h("th", { scope: "col", class: "num" }, "#"), h("th", { scope: "col" }, "File group"), h("th", { scope: "col" }, "Investigation"),
+        h("th", { scope: "col", class: "num" }, "Files"), h("th", { scope: "col", class: "num" }, "Tests it could add to"), h("th", { scope: "col" }, "Read so far"))),
+      h("tbody", {}, ...rows.map(({ m }) => h("tr", {}, h("td", { class: "num" }, m[1]), h("th", { scope: "row" }, m[2]),
+        h("td", {}, h("a", { href: PSI_RECORD + m[4], target: "_blank", rel: "noopener", class: "psi-link", title: "Open this investigation's record in NASA's PSI archive, where its files are listed" }, `${m[3]} (${m[4]})`)),
+        h("td", { class: "num" }, m[5], h("small", {}, " · " + m[6])), h("td", { class: "num" }, m[7]),
+        h("td", {}, h("span", { class: "read-chip " + (/^not opened/.test(m[8]) ? "is-not" : "is-read") }, m[8])))))));
+  };
   const barOf = (n) => h("div", { class: "pile-bar", role: "img", "aria-label": n.bar },
     ...n.segments.map((s) => h("span", { class: "seg " + (PILE_COLORS[s.placement] || ""), style: `flex-grow:${s.n}`, title: `${s.label}: ${s.n}` })));
   const legendOf = (segs) => h("p", { class: "pile-legend" }, ...[...new Set(segs)].map((k) =>
@@ -1262,14 +1289,29 @@ async function renderPiles(out, pipe) {
         : n.pile2_from_chain ? "No file group of the tests counted here has a column seen for a value this question lacks."
         : "The file groups of these tests are listed once the data role's question chain covers this environment."),
       n.order && n.order.length ? h("div", { class: "reading-order" }, h("h5", {}, "Where to read first"),
-        ...(doc.order_header || []).map((s) => h("p", { class: "gap" }, s)), list(n.order)) : null,
+        ...(doc.order_header || []).map((s) => h("p", { class: "gap" }, s)), orderOf(n.order)) : null,
       n.shelf.length ? h("div", { class: "shelf" }, h("h5", {}, "Not found in the files opened"), list(n.shelf)) : null);
     const p3 = n.pile3.length ? h("div", { class: "pile pile-none" }, h("h4", {}, doc.pile3_label), list(n.pile3)) : null;
     // open the first question of the user's kind, and any question with tests inside the ranges
     const open = n.id === focus[0] || inside > 0 || (!focus.length && i === 0);
+    // three figures, one per part; a click shows that part (the first part that has something to say is shown)
+    const groups = (n.order || []).length;
+    const tiles = [
+      { el: p1, cls: "tile-tables", k: "1", label: "In NASA's tables", fig: inside.toLocaleString("en-US"), unit: inside === 1 ? "test inside your ranges" : "tests inside your ranges", dim: !inside },
+      { el: p2, cls: "tile-archive", k: "2", label: "In the archive, not in a table", fig: groups ? String(groups) : String(pile2.length), unit: groups ? (groups === 1 ? "file group to read first" : "file groups to read first") : (pile2.length === 1 ? "line on the files" : "lines on the files"), dim: !groups && !pile2.length },
+      p3 ? { el: p3, cls: "tile-none", k: "3", label: doc.pile3_label, fig: String(n.pile3.length), unit: n.pile3.length === 1 ? "statement on PSI's record" : "statements on PSI's record", dim: false } : null,
+    ].filter(Boolean);
+    const first = inside ? tiles[0] : (tiles[2] || tiles[1]);
+    const tileRow = h("div", { class: "pile-tiles", role: "group", "aria-label": "The three parts of this question" }, tiles.map((t) => {
+      const b = h("button", { type: "button", class: "pile-tile " + t.cls + (t.dim ? " is-dim" : ""), "aria-pressed": String(t === first) },
+        h("span", { class: "tile-k" }, t.k), h("span", { class: "tile-label" }, t.label), h("span", { class: "tile-fig" }, t.fig), h("span", { class: "tile-unit" }, t.unit));
+      b.addEventListener("click", () => { tiles.forEach((x) => { x.el.hidden = x !== t; }); tileRow.querySelectorAll(".pile-tile").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); });
+      t.el.hidden = t !== first;
+      return b;
+    }));
     const d = h("details", { class: "pile-need" + (focus.includes(n.id) ? " is-focus" : "") },
       h("summary", {}, h("b", {}, `${n.name} (${n.id})`), " ", barEl),
-      chipsOf(n), p1, p2, p3);
+      chipsOf(n), tileRow, p1, p2, p3);
     d.id = "pile-" + n.id;
     if (open) d.open = true;
     return d;
@@ -1282,7 +1324,18 @@ async function renderPiles(out, pipe) {
     h("div", {}, h("dt", {}, "In the archive, not in a table"), h("dd", {}, "A test is recorded, and a value this question needs is not in NASA's table. Listed here: the file groups that name these tests, how many files were opened, and what was read. A listed file group is not shown to hold the value.")),
     h("div", {}, h("dt", {}, "Not found in the files opened"), h("dd", {}, "Not in a table, and no header accepted for it in any file opened so far. This is a statement about the files opened, not about the archive.")),
     h("div", {}, h("dt", {}, doc.pile3_label), h("dd", {}, doc.pile3_meaning)));
+  const g = doc.glance || {};
+  const withInside = doc.needs.filter((n) => segN(n, "inside")).length;
+  const step = (fig, words, cls) => h("div", { class: "flow-step " + (cls || "") }, h("span", { class: "flow-fig" }, fig), h("span", { class: "flow-words" }, words));
+  const arrow = () => h("span", { class: "flow-arrow", "aria-hidden": "true" }, "→");
+  const flow = (g.archive_files && !g.no_range) ? h("div", { class: "pile-flow", role: "img",
+    "aria-label": `From NASA's archive to this environment: ${g.archive_files} files in the archive, ${g.linked_files} files that name a test recorded inside these ranges, ${g.inside} tests inside these ranges, ${withInside} of ${doc.needs.length} questions with such a test` },
+    step(Number(g.archive_files).toLocaleString("en-US"), "files in NASA's PSI archive for combustion"), arrow(),
+    step(Number(g.linked_files).toLocaleString("en-US"), `files name a test recorded inside these ranges (${g.linked_share_pct}% of the bytes)`), arrow(),
+    step(Number(g.inside).toLocaleString("en-US"), g.inside === 1 ? "test recorded inside these ranges" : "tests recorded inside these ranges", "is-key"), arrow(),
+    step(`${withInside} of ${doc.needs.length}`, "fire-safety questions have such a test")) : null;
   body.replaceChildren(
+    flow,
     overviewOf(doc.needs, true),
     headerOf(doc.header),
     filesPicker(doc.scenario),
@@ -1522,21 +1575,34 @@ async function renderEvidenceMap(out, pipe) {
   }
 
   const head = h("p", { class: "emap-title" }, h("b", {}, labels.title || "Where the PSI test tables stop"), " ", computedTag());
-  const counts = h("ul", { class: "emap-counts" });
+  const counts = h("div", { class: "emap-cards" });
   for (const [id, name] of LANES) {
     const mine = lanePts[id] || [];
     const total = mine.reduce((a, p) => a + (+p.n_tests || 0), 0);
-    const li = h("li", {}, h("b", {}, `${name}: `));
+    const li = h("div", { class: "emap-card lane-" + id });
+    const o2s = mine.map((p) => p.o2_pct).filter((v) => typeof v === "number");
+    const lo = o2s.length ? Math.min(...o2s) : null, hi = o2s.length ? Math.max(...o2s) : null;
+    const AX = 45, pct = (v) => Math.max(0, Math.min(100, (v / AX) * 100));
+    const range = lo !== null ? h("div", { class: "lane-range", role: "img", "aria-label": `${name}: recorded from ${+lo.toFixed(1)}% to ${+hi.toFixed(1)}% oxygen${userO2 !== null ? `; your input ${userO2}%` : ""}` },
+      h("span", { class: "lane-span", style: `left:${pct(lo)}%;width:${Math.max(1.5, pct(hi) - pct(lo))}%` }),
+      userO2 !== null ? h("span", { class: "lane-you", style: `left:${pct(userO2)}%` }) : null,
+      h("span", { class: "lane-ends" }, h("span", {}, `${+lo.toFixed(1)}%`), h("span", {}, `${+hi.toFixed(1)}% oxygen`))) : null;
+    li.append(h("p", { class: "lane-name" }, name));
+    if (userO2 !== null) {
+      const nAt = mine.filter((p) => p.o2_pct >= userO2).reduce((a, p) => a + (+p.n_tests || 0), 0);
+      li.classList.add(nAt ? "has-tests" : "no-tests");
+      li.append(h("p", { class: "lane-fig" }, h("b", {}, String(nAt)), h("span", {}, ` of ${total}`)), h("p", { class: "lane-unit" }, `recorded tests at or above your ${userO2}% oxygen`), range, h("p", { class: "lane-links" }));
+    } else li.append(h("p", { class: "lane-fig" }, h("b", {}, String(total))), h("p", { class: "lane-unit" }, "recorded tests"), range, h("p", { class: "lane-links" }));
+    const linksBox = li.querySelector(".lane-links");
     if (userO2 !== null) {
       const at = mine.filter((p) => p.o2_pct >= userO2);
       const n = at.reduce((a, p) => a + (+p.n_tests || 0), 0);
       const byInv = new Map();
       for (const p of at) { const e = byInv.get(p.investigation_id) || { n: 0, id: null }; e.n += +p.n_tests || 0; e.id = e.id || (p.test_ids || [])[0]; byInv.set(p.investigation_id, e); }
-      li.append(`${n} of ${total} recorded tests at or above ${userO2}% oxygen`,
-        ...(byInv.size ? [" (", ...[...byInv].flatMap(([inv, e], i) => [i ? ", " : "", link(e.id ? testHref(e.id) : `https://psi.nasa.gov/physci/repo/data/investigations/${inv}`, `${inv} ${e.n}`)]), ")"] : []), ".");
-    } else li.append(`${total} recorded tests.`);
+      if (byInv.size) linksBox.append("Open: ", ...[...byInv].flatMap(([inv, e], i) => [i ? ", " : "", link(e.id ? testHref(e.id) : PSI_RECORD + inv, `${inv} (${e.n} tests)`)]));
+    }
     const note = labels.lane_notes && labels.lane_notes[id];
-    if (note) li.append(" ", h("span", { class: "gap" }, note[0].toUpperCase() + note.slice(1) + "."));
+    if (note) li.append(h("p", { class: "lane-note" }, linkPsi(note[0].toUpperCase() + note.slice(1) + ".")));
     counts.append(li);
   }
   const marks = targets.length ? h("ol", { class: "emap-targets" }, targets.map((t) =>
@@ -1560,9 +1626,11 @@ async function renderEvidenceMap(out, pipe) {
     h("p", { class: "gap emap-legend" }, "Filled dot: tests in nitrogen balance or balance not recorded. Hollow dot: carbon dioxide or helium added. Dot size grows with the number of tests. Each dot links to its row in the NASA table.",
       flights.length ? " Small squares: " + (labels.saffire_note && !(labels.caption || []).join(" ").includes(labels.saffire_note)
         ? labels.saffire_note : `${flights[0].label || "flight samples from a published paper (not in PSI, not counted)"}; see the note below the list.`) : ""),
-    toggle, counts, marks, textMarks,
-    missing.length ? h("p", { class: "gap" }, "Not in the picture: ", missing.join("; "), ".") : null,
-    Array.isArray(labels.caption) && labels.caption.length ? h("p", { class: "gap" }, labels.caption.join(" ")) : null,
+    toggle, counts,
+    marks ? h("details", { class: "pile-fold" }, h("summary", {}, `The ${targets.length} marked atmospheres and their sources`), marks, textMarks) : textMarks,
+    (missing.length || (Array.isArray(labels.caption) && labels.caption.length)) ? h("details", { class: "pile-fold" }, h("summary", {}, "What the picture leaves out, and how to read it"),
+      missing.length ? h("p", { class: "gap" }, "Not in the picture: ", missing.join("; "), ".") : null,
+      Array.isArray(labels.caption) && labels.caption.length ? h("p", { class: "gap" }, labels.caption.join(" ")) : null) : null,
     h("p", { class: "gap" }, "Points: ", link(REPO + "data/insights/evidence_map.json", "data/insights/evidence_map.json"), ", built by team code from ",
       link(REPO + "data/pipeline/tests.csv", "data/pipeline/tests.csv"), ".")].filter(Boolean));
   // On a narrow screen the picture scrolls inside its box: start with the input's marker in view.
