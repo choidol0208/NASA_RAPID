@@ -1,17 +1,15 @@
 ---
 role: catalog
-updated: 2026-11-15 11:15 KST
+updated: 2026-11-15 11:35 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-**Sync 11:15:**
-- Merged `catalog-filter` (fast-forward to `3d5776e`). It now holds the data role's `needs.json`, `process.json` and the catalog comparison, plus ui's three-piles fixes.
-- Reading order regenerated: the 53 rows are identical; only the `needs.json` hash in `reading_order.json` changed, so the fixture test runs again.
-- Inbox empty. pm 1012 (by 14:00) has no answer yet.
-- The data role's `catalog_comparison.csv` (read at 10:55): no catalog range conflicts with `tests.csv` once rounding is allowed, so no catalog change is needed.
+**Sync 11:35:**
+- No new commits on `main` or `catalog-filter` since 11:15. Inbox empty. pm 1012 (by 14:00) has no answer yet.
 - Checks: 76 unit tests, 43 of 43 scenarios, parity 104 of 104, source check clean, reading order up to date.
+- Waiting on the human lead for review items B1–B5 (gate, non-table values, solid default, cross-question scores, detection pressure). No config change before 18:00 without that decision.
 
 **10:13: config 1.5.1 on `catalog-scoring` (weights unchanged since 1.4.0).**
 - **1.5.0 (09:52):** the combined model of the catalog and the data role's raw-file method, at the human lead's request. Reasoning: `scoring/METHOD.md` 1.7, `scoring/BUILDUP.md` B7.
