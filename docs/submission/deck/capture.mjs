@@ -332,8 +332,8 @@ if (LIVE) {
   if (!health || health.mode !== "live" || !health.model) { console.error("capture.mjs: DECK_LIVE=1 needs the local assistant server in live mode at " + BASE + " (python3 -m ai.assistant.server)"); stop(); process.exit(2); }
   specs.push({
     live_model: { name: health.model.name, maker: health.model.maker, license: health.model.license, digest_prefix: health.model.digest_prefix },
-    file: LIVE_FILE, slide: 6, path: Q, width: 820,
-    shows: `One conversation with the SI assistant on the local install, the language model ${health.model.name} answering: the request '${QUERY}' typed into the assistant's box, how the request was read (each value a button that changes it), the answer with its citation numbers, its label, and the box for a follow-up.`,
+    file: LIVE_FILE, slide: 6, path: Q,
+    shows: `The whole card of one conversation with the SI assistant on the local install, the language model ${health.model.name} answering: the request '${QUERY}' typed into the assistant's box, the six steps with what each did, how the request was read (each value a button that changes it), the answer with its citation numbers, its label, the folds (what the checks removed, the facts, the data, how the answer was made), the suggested next questions and the box for a follow-up.`,
     selectors: ["#assistant"], pad: 0, padY: 0,
     prepare: `const sl = (m) => new Promise((r) => setTimeout(r, m));
       const A = document.querySelector("#assistant");

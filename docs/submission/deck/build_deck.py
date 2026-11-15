@@ -302,7 +302,8 @@ WORDING = {
         "live_alt_read": "How the request was read: each value is a button that changes it",
         "live_alt_answer": "The assistant's answer with citation numbers and the label that a local language model wrote it",
         "live_alt_form": "The box for a follow-up question, with the name of the connected model",
-        "live_cap": "Capture of the team's own page on the local install, {capture_date}; not AI-generated. The local model wrote the sentences, except where tagged \"team code\". Steps and fact lists are not shown.",
+        "live_alt_whole": "The whole card of one conversation with the assistant: the request, six steps with what each did, how the request was read with each value as a button, the answer with citation numbers and its label, folds for what the checks removed and for the facts, suggested next questions, and the box for a follow-up",
+        "live_cap": "The whole answer card on the local install, {capture_date}. Capture of the team's own page, not AI-generated; its sentences are by the local model or, where tagged, team code.",
         "shot_alt_question": "The question of the recorded turn as the page shows it",
         "shot_alt": "The recorded answer of the conversational assistant as the page replays it: two sentences with their citation numbers, the label that it was recorded with the local model, and the line of the checks",
         "shot_cap": "The steps and the panels of the answer are not shown. Captures of the team's own page, {capture_date}; the picture is not AI-generated, the two sentences in it were written by the local model after a clarifying question (\"Which environment is this for?\").",
@@ -1405,24 +1406,16 @@ def slide6():
 {"".join(rows)}
 <div class="modelband"><b>{esc(w["model_head"])}:</b> {fmt(w["model"])}</div>'''
     if "assistant_live.png" in CAP:
+        # the whole card, as a visitor sees it after an answer (the human lead: show the whole, not parts of it)
         L = "assistant_live.png"
-        rx0, ry0, rx1, ry1 = cap_box(L, "read")
-        _, uy0, _, uy1 = cap_box(L, "user")
-        _, ay0, _, _ = cap_box(L, "answer")
-        _, _, _, ly1 = cap_box(L, "label")
-        _, fy0, _, fy1 = cap_box(L, "form")
         lw, lh = cap_size(L)
-        x0, x1 = max(0, rx0 - 8), min(lw, rx1 + 8)
-        width = 560
-        gap = '<div style="height:8px"></div>'
+        max_w, max_h = 560, 566
+        width = min(max_w, max_h * lw / lh)
         body = f'''<div class="cols withshot">
 <div class="col" style="width:1120px">{uses}</div>
-<div class="col" style="width:{width}px"><div class="lbl">{esc(w["live_head"])}</div>
-  {shot(L, x0, uy0 - 6, x1, uy1 + 6, width, w["live_alt_user"])}{gap}
-  {shot(L, x0, ry0 - 2, x1, ry1 + 2, width, w["live_alt_read"])}{gap}
-  {shot(L, x0, ay0 - 6, x1, ly1 + 6, width, w["live_alt_answer"])}{gap}
-  {shot(L, x0, fy0 - 6, x1, min(lh, fy1 + 6), width, w["live_alt_form"])}
-  <p class="cap">{fmt(w["live_cap"])}</p></div>
+<div class="col" style="width:{max_w}px"><div class="lbl">{esc(w["live_head"])}</div>
+  {shot(L, 0, 0, lw, lh, width, w["live_alt_whole"])}
+  <p class="cap" style="font-size:19px;line-height:25px">{fmt(w["live_cap"])}</p></div>
 </div>'''
     elif picture:
         x0, _, x1, _ = cap_box("assistant_recorded.png", "chat")

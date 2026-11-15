@@ -124,3 +124,7 @@ Checked in a browser at 1280 px and 375 px: no sideways scroll; the section unde
 
 The human lead: it is not clear at once how to read this part. `index.html` now holds a static three-step guide above `#piles-body` (one block per question and what the bar's colours mean; the three parts of a block; what the lines under the guide are). In `app.js` the three parts of a block carry a class each (`pile-tables`, `pile-archive`, `pile-none`; the class `pile` stays), so that `shell.css` gives each its number and colour. No sentence that `web/raw_piles.py` writes was changed. The lines about the archive stay; the first one leads and the others are set smaller.
 
+## "Where the data are", organised (15 November, 20:10)
+
+The human lead: the tab reads as a list of sentences, not as something sorted out. `app.js` now renders, from the same data: (1) one table over the six questions (recorded tests, and how many lie inside the ranges, outside by a recorded value, cannot be placed, or have their oxygen recorded for an oxidizer stream; a question's name opens its block); (2) the first line about the environment, with the other lines about the archive behind the fold "How the files were counted and matched"; (3) the four definitions behind the fold "What each part of a block means"; (4) under "Question by question" the blocks as before, each with its counts as chips. No sentence written by `web/raw_piles.py` is changed; the bar's sentence stays as the chips' tooltip.
+

@@ -1211,12 +1211,41 @@ async function renderPiles(out, pipe) {
     ...n.segments.map((s) => h("span", { class: "seg " + (PILE_COLORS[s.placement] || ""), style: `flex-grow:${s.n}`, title: `${s.label}: ${s.n}` })));
   const legendOf = (segs) => h("p", { class: "pile-legend" }, ...[...new Set(segs)].map((k) =>
     h("span", {}, h("span", { class: "swatch " + PILE_COLORS[k] }), " ", PILE_WORDS[k])));
+  // ---- an organised view (15 November; the human lead: "it reads as a list of sentences, not as something sorted out").
+  // One table over the questions, from the same segments as the bars; the sentences about the archive behind a fold;
+  // the counts of a block as chips. No sentence of the data is changed.
+  const SEG_ORDER = ["inside", "outside_by_recorded_value", "cannot_be_placed_from_table", "oxygen_of_oxidizer_stream", "no_range_set"];
+  const segN = (n, k) => (n.segments.find((x) => x.placement === k) || { n: 0 }).n;
+  const overviewOf = (needs, linked) => {
+    const kinds = SEG_ORDER.filter((k) => needs.some((n) => segN(n, k)));
+    const open = (id) => (e) => { e.preventDefault(); const d = document.getElementById("pile-" + id); if (d) { d.open = true; d.scrollIntoView({ block: "start", behavior: "smooth" }); } };
+    return h("div", { class: "pile-overview-wrap" }, h("table", { class: "pile-overview" },
+      h("caption", {}, "Recorded tests per fire-safety question, placed against this environment's oxygen and pressure ranges"),
+      h("thead", {}, h("tr", {}, h("th", { scope: "col" }, "Question"), h("th", { scope: "col", class: "num" }, "Recorded tests"),
+        ...kinds.map((k) => h("th", { scope: "col", class: "num" }, h("span", { class: "swatch " + PILE_COLORS[k] }), " ", PILE_WORDS[k])),
+        h("th", { scope: "col" }, "Share"))),
+      h("tbody", {}, ...needs.map((n) => {
+        const link = h("a", { href: "#pile-" + n.id }, `${n.name} (${n.id})`);
+        if (linked) link.addEventListener("click", open(n.id));
+        return h("tr", {}, h("th", { scope: "row" }, linked ? link : `${n.name} (${n.id})`),
+          h("td", { class: "num" }, n.segments.reduce((a, x) => a + x.n, 0).toLocaleString("en-US")),
+          ...kinds.map((k) => h("td", { class: "num" + (k === "inside" && segN(n, k) ? " is-inside" : "") + (segN(n, k) ? "" : " is-zero") }, segN(n, k).toLocaleString("en-US"))),
+          h("td", { class: "bar-cell" }, barOf(n)));
+      }))));
+  };
+  const headerOf = (lines) => h("div", { class: "pile-header" }, h("p", {}, lines[0]),
+    lines.length > 1 ? h("details", { class: "pile-fold" }, h("summary", {}, `How the files were counted and matched (${lines.length - 1} ${lines.length === 2 ? "line" : "lines"})`),
+      ...lines.slice(1).map((x) => h("p", {}, x))) : null);
+  const chipsOf = (n) => {
+    const lead = (n.bar.split(": ")[0] || "").replace(/^[^,]*,\s*/, "");   // "1,824 tests of all fuel phases"
+    return h("p", { class: "bar-line seg-chips", title: n.bar }, lead ? h("span", { class: "seg-lead" }, lead + ":") : null,
+      ...SEG_ORDER.filter((k) => segN(n, k)).map((k) => h("span", { class: "seg-chip" }, h("span", { class: "swatch " + PILE_COLORS[k] }), " ", h("b", {}, segN(n, k).toLocaleString("en-US")), " ", PILE_WORDS[k])));
+  };
   if (doc.bars_only) {
     // the other environments: header line and one bar per question (pm 0035)
     body.replaceChildren(
-      h("div", { class: "pile-header" }, ...doc.header.map((s) => h("p", {}, s))),
-      legendOf(doc.needs.flatMap((n) => n.segments.map((s) => s.placement))),
-      ...doc.needs.map((n) => h("div", { class: "pile-need is-bars" }, h("div", { class: "bars-row" }, h("b", {}, `${n.name} (${n.id})`), " ", barOf(n)), h("p", { class: "bar-line" }, n.bar))),
+      overviewOf(doc.needs, false),
+      headerOf(doc.header),
       h("p", { class: "gap" }, "The three piles per question are built for the ISS cabin and the lunar habitat; for this environment the page shows the placement of the tests only."),
       h("div", { class: "small-print" }, ...doc.small_print.map((s) => h("p", {}, s))));
     sec.hidden = false;
@@ -1240,7 +1269,8 @@ async function renderPiles(out, pipe) {
     const open = n.id === focus[0] || inside > 0 || (!focus.length && i === 0);
     const d = h("details", { class: "pile-need" + (focus.includes(n.id) ? " is-focus" : "") },
       h("summary", {}, h("b", {}, `${n.name} (${n.id})`), " ", barEl),
-      h("p", { class: "bar-line" }, n.bar), p1, p2, p3);
+      chipsOf(n), p1, p2, p3);
+    d.id = "pile-" + n.id;
     if (open) d.open = true;
     return d;
   });
@@ -1253,9 +1283,12 @@ async function renderPiles(out, pipe) {
     h("div", {}, h("dt", {}, "Not found in the files opened"), h("dd", {}, "Not in a table, and no header accepted for it in any file opened so far. This is a statement about the files opened, not about the archive.")),
     h("div", {}, h("dt", {}, doc.pile3_label), h("dd", {}, doc.pile3_meaning)));
   body.replaceChildren(
-    h("div", { class: "pile-header" }, ...doc.header.map((s) => h("p", {}, s))),
+    overviewOf(doc.needs, true),
+    headerOf(doc.header),
     filesPicker(doc.scenario),
-    meanings, legend, ...blocks,
+    h("details", { class: "pile-fold" }, h("summary", {}, "What each part of a block means (4 definitions)"), meanings),
+    h("h3", { class: "pile-blocks-title" }, "Question by question"),
+    legend, ...blocks,
     h("div", { class: "small-print" }, ...doc.small_print.map((s) => h("p", {}, s)),
       h("p", {}, "Files read for this block: ", srcs, ". ", h("span", { class: "tag" }, "Computed by team code from NASA PSI tables and file listing"))));
   sec.hidden = false;
