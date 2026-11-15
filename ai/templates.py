@@ -769,7 +769,7 @@ def note_tie(names):
     return f"Tied with {join_and(names)} under the team's current weights."
 
 
-NOTE_NEAR = ("Listed because its team score is level with or close to the results shown, under the team's "
+NOTE_NEAR = ("Listed because its match score is level with or close to the results shown, under the team's "
              "current weights.")
 
 

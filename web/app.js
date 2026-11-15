@@ -241,7 +241,7 @@ function renderResults(out, cat, insights, sc) {
     const head = h("div", { class: "result-head" },
       h("span", { class: "rank", "aria-label": `Rank ${r.rank}` }, String(r.rank)),
       h("h3", {}, `${r.investigation_id}`),
-      h("div", { class: "score" }, String(r.score), h("small", {}, "team score")),
+      h("div", { class: "score" }, String(r.score), h("small", {}, "match score")),
       h("p", { class: "subtitle" }, inv ? inv.investigation_name : r.psi_accession));
     const body = [
       h("p", { class: "config" }, h("b", {}, "Closest test configuration: "), r.config_label),
@@ -924,7 +924,7 @@ function renderGlance(out, pipe) {
   if (out.status !== "ok" || !out.results.length) { box.hidden = true; return; }
   const top = h("p", {}, h("b", {}, "At a glance: "), "closest NASA investigations ",
     ...out.results.flatMap((r, i) => [i ? ", " : "", h("a", { href: "#top" }, r.investigation_id)]),
-    ` (team scores ${out.results.map((r) => r.score).join(", ")}).`);
+    ` (match scores ${out.results.map((r) => r.score).join(", ")}).`);
   const sid = scenarioId(out, pipe);
   const cov = sid && pipe.scenarioNeeds ? scenarioCoverage(pipe, sid) : null;
   const second = cov && cov.total
