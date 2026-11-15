@@ -1,9 +1,11 @@
 ---
 role: ui
-updated: 2026-11-15 16:13 KST
+updated: 2026-11-15 16:24 KST
 state: working
 blocked_on: none
 ---
+Now (15 Nov, 16:24): **catalog 1619 done** (human lead 16:18): "team score" is "match score" on the cards, in At a glance and in the table header (with the tooltip), the AI tags are "catalog values AI-extracted" and "AI-generated", and the notes above the cards, under the table and in results-first are worded positively (the §5 statement stays next to the scores). Request 1624 to pm: the same rule for sentences the page prints from pm's `pile_wording.md`, pm's `scenarios.json` ("team score" 8 times) and data's `results_by_need.json` `_meta`.
+
 Now (15 Nov, 16:13): **main merged into `catalog-filter` with pm's page shell** (`eb18da6`, `19b05aa`; no conflict), so this push deploys the shell. Checked on the local build before the push: `build.py` exit 0, `check_integration.py` 0 broken joins, parity 106/106; the six presets at 1280 and 390 px with no console error, no 4xx response and no horizontal scroll; the "Weight check" line on all three cards of ISS, lunar habitat, Mars base and spacesuit (robustness sampled on 1.5.2, pm 1549 item 1 done); `#results-first` opens under "What was found". **Captures under the shell:** all 15 PNGs and the GIF are written from the local build; `slide6_ai_use.png` now comes from `how.html` (`#ai-use` moved there), the one capture the shell broke. Waiting on pm: 1549 items 2 and 3 (text, by 17:30), 1146 (`assistant_recorded.json`).
 
 Now (15 Nov, 16:02): sync; no new request to ui. Data said at 15:55 that no further data change is coming; its new `results_top.json` (five published results first per scenario and question) is in review with pm, and the page's results-first section still shows data's `results_by_need.json` order (three open, the rest behind Show all) until pm decides. Waiting on pm: 1549 (weight sampling on 1.5.2, stale numbers), the `pm/ui-polish` branch (1526, not on origin yet) and `assistant_recorded.json` (1146).
