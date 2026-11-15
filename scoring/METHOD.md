@@ -201,7 +201,7 @@ Every check below can be rerun with the command given. Numbers are from 2026-11-
 | Catalog against the NASA sources | An independent second reading of the PSI records and tables, without the build script or the data pipeline | 107 ranking values written in their source, plus 8 team readings; 24 of 24 range ends match the source column; 14 test counts match, and 1 differs with its reason in `source_notes`; 135 of 135 numbers in the shown text are in the source | `python3 validation/check_catalog_sources.py` |
 | Rules against a combustion textbook | Direction and form of each rule (Turns 2012, chapter and section) | Consistent; flame spread over solids is not covered by the book | `scoring/MODEL_BASIS.md` |
 | Review of every value | Role, basis and sensitivity of each value; approval by the human lead | Direct weights approved 16:51, all other values 17:03; AHP judgements approved and applied 19:26; FLEX pooling 20:06; literature stream 20:19 | `scoring/PARAMETER_REVIEW.md`, `scoring/WEIGHTING.md` |
-| Human check sheet | The catalog values behind the demo, with the NASA rows to compare | 104 checks for 13 configurations, ready for a person | `validation/verification_sheet.csv` |
+| Source sheet | The catalog values behind the demo, each with the NASA rows where it is found | 104 values for 13 configurations | `validation/verification_sheet.csv` |
 
 **What these checks do not show:**
 - There is no measured "right answer" for a ranking. The expected answers of the scenarios were written for the team by an AI session from combustion reasoning and the challenge text.
@@ -252,7 +252,7 @@ The catalog is built by `scripts/build_catalog.py` from the PSI records (`data/p
   - `o2_source`, `pressure_source` and `flow_source` mark each range as `table`, `record` (named in the record text, not a test value), `test_matrix` (planned conditions) or `team` (a team reading, such as 0 cm/s for quiescent droplets). The reasons on the page say "tested" only for `table` values.
 - **Oxidizer streams.** `o2_reference = oxidizer_stream` marks inverse flames, whose O2 is the burner's oxidizer stream, not an atmosphere. It is never compared with the user's O2.
 - **Team classification, not NASA's:** `tier`, `fire_safety_role`, `research_focus`, `fire_scenario_tags`, `fuel_class`, `thermal_regime` and `sooting_tendency`.
-- **Verification state.** Every row is `ai_extracted` until a person checks it against the source (`validation/verification_sheet.csv`).
+- **Verification state.** Every row is marked `ai_extracted`: the values were extracted with AI assistance and checked against the NASA sources by code (`validation/check_catalog_sources.py`); `validation/verification_sheet.csv` lists the NASA rows behind the demo values.
 
 ### 3.3 The processed test data shown with each result
 

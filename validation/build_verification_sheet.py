@@ -2,14 +2,13 @@
 # AI-generated code: written with an AI assistant (Claude Code, catalog role) during the NASA Space Apps
 # Challenge 2026 hackathon (2026-11-14).
 """Write validation/verification_sheet.csv: the catalog values behind the demo rankings, each with
-where a person checks it in the NASA source (table rows and raw cells, or the PSI record text).
+where it is found in the NASA source (table rows and raw cells, or the PSI record text).
 
 Run:  python3 validation/build_verification_sheet.py
 
 The configurations come from the current ranking of the demo queries (DEMO below), so rerun it
-after any change to the catalog or the scorer. A person fills in `checked_by`, `matches_source`
-(Y or N) and `comment`. A catalog row becomes `human_verified` only after that, and only by
-changing `scripts/build_catalog.py` (data/catalog/README.md).
+after any change to the catalog or the scorer. The sheet has no sign-off columns (the human lead's
+decision, 2026-11-15): it is a reference from each value to its NASA source.
 
 Row numbers are CSV row numbers of the file in data/psi/experimental_tables/ (the header is row 1).
 data/pipeline/tests.csv (`source_row`) and the catalog's `source_notes` use the same numbers.
@@ -46,8 +45,7 @@ NUMERIC = [
     ("flow_min_cms", "flow_cms", "cm/s", min), ("flow_max_cms", "flow_cms", "cm/s", max),
 ]
 COLS = ["check_id", "config_id", "investigation_id", "psi_accession", "psi_url", "field", "catalog_value", "unit",
-        "basis", "source", "source_column", "source_rows", "raw_cells", "tests_csv_extreme", "how_to_check",
-        "checked_by", "matches_source", "comment"]
+        "basis", "source", "source_column", "source_rows", "raw_cells", "tests_csv_extreme", "how_to_check"]
 
 
 def _f(x):
@@ -154,7 +152,7 @@ def main():
                             psi_accession=c["psi_accession"], psi_url=inv["psi_url"], field=field,
                             catalog_value=value, unit=unit, basis=c["atmosphere_basis"], source=source,
                             source_column=column, source_rows=srows, raw_cells=raws, tests_csv_extreme=extreme,
-                            how_to_check=how, checked_by="", matches_source="", comment=""))
+                            how_to_check=how))
 
         # Fuel: the distinct raw cells of the fuel column.
         col = columns.get((table, "fuel_material"), "")
