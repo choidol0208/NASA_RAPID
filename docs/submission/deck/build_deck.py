@@ -108,7 +108,7 @@ TEAM_LOGO_MIN_WIDTH = 120          # the kit's minimum display width for lockup 
 
 PUBLIC_URL = "https://choidol0208.github.io/NASA_RAPID/"
 METHOD_URL = PUBLIC_URL + "how.html"
-AI_MARK = "Built with AI assistance (Claude)"
+AI_MARK = ""   # the corner mark was taken off at the human lead's request (15 Nov, 23:48); slide 6 says how AI was used
 
 # The quoted result shown as the example on slide 4: its id in data/pipeline/results_by_need.json
 # ("findings"). The quotation, its conditions, its group and its source are read from that file.
