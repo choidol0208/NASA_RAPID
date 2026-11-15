@@ -3,8 +3,8 @@
   "what": "Every number shown on the seven slides, with the file it comes from and the way it was computed. Team RAPID's computation from NASA PSI files and the team's own checks.",
   "AI-generated": true,
   "built_by": "docs/submission/deck/build_deck.py (AI-generated code, written with Claude; no language model ran to build it)",
-  "built_at": "2026-11-15T19:40:30+09:00",
-  "git_commit": "021fa88",
+  "built_at": "2026-11-15T20:00:05+09:00",
+  "git_commit": "a6be687",
   "reviewed_by_a_person": 0,
   "units": "TB, GB and MB are decimal (10^12, 10^9, 10^6 bytes)",
   "fonts": "Barlow Semi Condensed (headings and numbers) and Atkinson Hyperlegible (text), SIL Open Font License, loaded from Google Fonts with the <link> of web/index.html; slides.html needs the network for them, slides.pdf embeds them"
@@ -1250,6 +1250,35 @@
    "source": "data/insights/assistant_recorded.json; docs/submission/deck/img/captures.json",
    "how": "the recorded turn chosen in capture.mjs (RECORDED_CONVERSATION, RECORDED_TURN), as the page replayed it for the capture; shown as a picture, nothing is retyped"
   },
+  "live_answer_slide_6": {
+   "value": {
+    "model": {
+     "name": "gpt-oss:20b",
+     "maker": "OpenAI",
+     "license": "Apache-2.0",
+     "digest_prefix": "f38aa0c53da5"
+    },
+    "question": "You:\nlunar habitat cotton fabric",
+    "answer": "Closest to this input by the team's ranking, in order: SAFFIRE-II (PSI-99), SAFFIRE-I (PSI-98), ACME BRE (PSI-20).team code1 SAFFIRE-II (PSI-99) used a 0.37 mm SIBAL fabric sample of 75% cotton and 25% fiberglass, with concurrent flow 20 cm/s.2 SAFFIRE-I (PSI-98) tested a larger 0.94 x 0.4 m SIBAL fabric of the same cotton-fiberglass mix, also at 20 cm/s.3",
+    "citation_marks": 3,
+    "label": "Written by a local language model (gpt-oss:20b) from the facts shown; every sentence shown passed the code checks and a second model check. No person reviewed this answer. A research exploration tool built on NASA PSI data.",
+    "checks_line": "4 sentences written, 2 removed by the checks, 0 repaired.",
+    "answered": "Answered in 45 s with 4 model calls.",
+    "values_read": [
+     "Looking for: closest investigations",
+     "Environment: Lunar base or pressurized rover",
+     "Oxygen: 30%",
+     "Pressure: 70.3 kPa",
+     "Material: cotton"
+    ]
+   },
+   "shown_as": null,
+   "slides": [
+    6
+   ],
+   "source": "docs/submission/deck/img/captures.json (assistant_live.png)",
+   "how": "one turn asked on the local assistant server with the language model answering, as the page showed it for the capture; shown as a picture, nothing is retyped"
+  },
   "solid_o2_max_in_capture": {
    "value": 22.2,
    "shown_as": "22.2",
@@ -1299,6 +1328,16 @@
      "taken_at": "2026-11-15T09:28:35.265Z",
      "sha256": "8bc5f1d8cba6dd423a2dd9d22a8b393cea9ff56d934976d65d01e370d81bd1a1",
      "scoring_config": "1.5.3"
+    },
+    "dashboard.png": {
+     "taken_at": "2026-11-15T10:59:13.708Z",
+     "sha256": "501aef1d410f7d8eddbbcaf8c74d8ed110272896254e9d7fd7ffb7eb163b3882",
+     "scoring_config": "1.5.3"
+    },
+    "assistant_live.png": {
+     "taken_at": "2026-11-15T10:59:00.761Z",
+     "sha256": "0d8450877bbf820148da4f060725285c8aa767d762fcf3dac461ea891e41d19f",
+     "scoring_config": "1.5.3"
     }
    },
    "shown_as": null,
@@ -1309,7 +1348,7 @@
     6
    ],
    "source": "docs/submission/deck/img/captures.json",
-   "how": "the captures the build checks, each with its time, its SHA-256 and the scoring config of the page build it was taken from; top.png (slide 1), cotton_top3.png (slide 3), lunar_evidence_map.png (slide 7) and assistant_recorded.png (slide 6) are shown; lunar_found.png and lunar_piles_s1.png are not shown (too small to read at slide size) and only prove that the page prints the quotation of slide 4 and the counted tests of slide 5"
+   "how": "the captures the build checks, each with its time, its SHA-256 and the scoring config of the page build it was taken from; dashboard.png (slide 1; top.png when it is absent), cotton_top3.png (slide 3), lunar_evidence_map.png (slide 7) and assistant_live.png (slide 6; assistant_recorded.png when it is absent) are shown; lunar_found.png and lunar_piles_s1.png are not shown (too small to read at slide size) and only prove that the page prints the quotation of slide 4 and the counted tests of slide 5"
   }
  },
  "cross_checks_passed": [
@@ -1323,7 +1362,7 @@
   "archives: archive_summary_totals.json equals archive_summary.csv (rows, bytes fetched) and by_kind.archive.files",
   "quality.json: reviewed_ai_session = proposed - dropped_by_gates - removed_before_review.n",
   "slide 7 gravity: OF2012 Table I in findings.csv gives lunar limits below 0 g and 1 g for every material; reference listed in pipeline/spec/references.json",
-  "captures on the slides (top.png, cotton_top3.png, lunar_found.png, lunar_piles_s1.png, lunar_evidence_map.png, assistant_recorded.png): taken under scoring config 1.5.3, with the page's two fonts, the file equal to its manifest entry",
+  "captures on the slides (top.png, cotton_top3.png, lunar_found.png, lunar_piles_s1.png, lunar_evidence_map.png, assistant_recorded.png, dashboard.png, assistant_live.png): taken under scoring config 1.5.3, with the page's two fonts, the file equal to its manifest entry",
   "captures: cotton_top3.png shows the scorer's three results, scores, reasons and largest gaps with 'Details and sources' closed; lunar_found.png shows the example quotation in its group; lunar_piles_s1.png shows the counted extinction tests; lunar_evidence_map.png shows the solid-fuel end and the input; top.png shows the example button and not the challenge quotation"
  ]
 }

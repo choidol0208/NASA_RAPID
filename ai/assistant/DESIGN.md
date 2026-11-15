@@ -1116,7 +1116,7 @@ Run-time model calls log to `ai/assistant/_runtime/assistant_<YYYYMMDD>.jsonl` (
 
 1. The user's message (or the button or chip text) in `.as-user`.
 2. `.as-steps`: one line per step of 10.3, appearing as events arrive: the label while running, then the summary. In non-streaming and recorded modes, the steps appear in order from `trace.steps`.
-3. `.as-read`: "How your request was read (click to change)" and chips (12.4); the assumptions as "Assumed: {text}" lines; when the readings differed, the chip has the class `as-chip-uncertain` and the title "The readings differed".
+3. `.as-read`: "How your request was read", with the line "Each value is a button. Click one to change it, and the assistant answers again." and chips (12.4); the assumptions as "Assumed: {text}" lines; when the readings differed, the chip has the class `as-chip-uncertain` and the title "The readings differed".
 4. `.as-notices`: each notice text.
 5. Clarify: "One question before I look this up:" then the question and its options as buttons.
 6. `.as-answer`: the sentences in order; after each sentence its citations as superscript links `[1]`, `[2]`, numbered per turn by first appearance; a citation opens `fact.link` in a new tab and has `title` = the fact's context and text.
@@ -1151,7 +1151,7 @@ In recorded mode chips are shown but not editable (title "Recorded: not editable
 | mode notice, nothing to show | "The assistant needs its local server (./run.sh). The dashboard below works without it." |
 | recorded list heading | "Recorded conversations" |
 | clarify heading | "One question before I look this up:" |
-| read heading | "How your request was read (click to change)" |
+| read heading | "How your request was read", with the line "Each value is a button. Click one to change it, and the assistant answers again." |
 | assumption prefix | "Assumed: " |
 | gate line | "{written} sentences written, {removed} removed by the checks, {repaired} repaired." |
 | removed fold | "What the checks removed" |

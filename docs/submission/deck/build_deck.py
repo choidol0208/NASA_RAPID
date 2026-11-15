@@ -136,6 +136,8 @@ WORDING = {
         "link_label": "Public page, opens without a login",
         "link_hint": "Try the example \"{example_button}\".",
         "caption": "Capture of the team's own page, {capture_date}, one line quoting the challenge hidden; not AI-generated.",
+        "caption_dashboard": "The dashboard for \"{example_button}\": the input as read, three key figures, five tabs. Capture of the team's own page, {capture_date}; not AI-generated.",
+        "alt_dashboard": "The dashboard of Fire Evidence Explorer for the example lunar habitat cotton fabric: the request and how it was read, three key figures, a note on gravity, five tabs each with a one-line description, and the first result",
         "footer": "Research exploration tool built on NASA PSI data. Match scores and counts are Team RAPID's computation from NASA PSI data.",
         "note": "We are {team}. NASA publishes its microgravity fire experiments as open data, but a designer cannot easily find, compare or interpret them. Our page starts from what you want to build. It finds the closest NASA investigations, shows what their recorded tests hold and where the data are, and says where the evidence stops.",
     },
@@ -295,6 +297,12 @@ WORDING = {
         "model_head": "Model",
         "model": "OpenAI gpt-oss:20b (Apache-2.0), run locally through Ollama; no paid API; the public page runs no model.",
         "shot_head": "One recorded answer, replayed on the page",
+        "live_head": "A conversation on the local install",
+        "live_alt_user": "The request typed into the assistant: lunar habitat cotton fabric",
+        "live_alt_read": "How the request was read: each value is a button that changes it",
+        "live_alt_answer": "The assistant's answer with citation numbers and the label that a local language model wrote it",
+        "live_alt_form": "The box for a follow-up question, with the name of the connected model",
+        "live_cap": "Capture of the team's own page on the local install, {capture_date}; not AI-generated. The local model wrote the sentences, except where tagged \"team code\". Steps and fact lists are not shown.",
         "shot_alt_question": "The question of the recorded turn as the page shows it",
         "shot_alt": "The recorded answer of the conversational assistant as the page replays it: two sentences with their citation numbers, the label that it was recorded with the local model, and the line of the checks",
         "shot_cap": "The steps and the panels of the answer are not shown. Captures of the team's own page, {capture_date}; the picture is not AI-generated, the two sentences in it were written by the local model after a clarifying question (\"Which environment is this for?\").",
@@ -890,6 +898,9 @@ def compute():
     used = ["top.png", "cotton_top3.png", "lunar_found.png", "lunar_piles_s1.png", "lunar_evidence_map.png"]
     if "assistant_recorded.png" in CAP:
         used.append("assistant_recorded.png")
+    for extra in ("dashboard.png", "assistant_live.png"):   # the dashboard as a whole (slide 1); one live conversation (slide 6)
+        if extra in CAP:
+            used.append(extra)
     for f in used:
         need(f in CAP, f"img/captures.json has no entry for {f}: retake the captures (bash docs/submission/deck/refresh.sh)")
         c = CAP[f]
@@ -915,6 +926,21 @@ def compute():
                                                         "citation_marks": rec["check"]["citations"], "checks_line": rec["check"]["gates"]},
                                               "shown_as": None, "slides": [6], "source": "data/insights/assistant_recorded.json; docs/submission/deck/img/captures.json",
                                               "how": "the recorded turn chosen in capture.mjs (RECORDED_CONVERSATION, RECORDED_TURN), as the page replayed it for the capture; shown as a picture, nothing is retyped"}
+    if "dashboard.png" in CAP:
+        dash = CAP["dashboard.png"]["check"]
+        need(len(dash["tabs"]) == 5 and len(dash["tab_lines"]) == 5 and dash["first_card"] == res[0]["investigation_id"],
+             "img/dashboard.png does not show five tabs with their lines and the first result: retake the capture")
+    if "assistant_live.png" in CAP:
+        live = CAP["assistant_live.png"]
+        lc = live["check"]
+        need(live.get("live") is True and lc["mode"] == "live" and lc["by_model"] is True and lc["citations"] >= 1
+             and str(lc["label"]).startswith("Written by a local language model") and lc["editable_values"] >= 1 and query in str(lc["question"]),
+             "img/assistant_live.png does not show a model-written answer with citation numbers, its label and values that can be changed: take it again "
+             "(DECK_LIVE=1 node docs/submission/deck/capture.mjs http://127.0.0.1:<port of the local assistant server>/)")
+        NUMBERS["live_answer_slide_6"] = {"value": {"model": live.get("live_model"), "question": lc["question"], "answer": lc["answer"], "citation_marks": lc["citations"],
+                                                    "label": lc["label"], "checks_line": lc["gates"], "answered": lc.get("answered"), "values_read": lc["values"]},
+                                          "shown_as": None, "slides": [6], "source": "docs/submission/deck/img/captures.json (assistant_live.png)",
+                                          "how": "one turn asked on the local assistant server with the language model answering, as the page showed it for the capture; shown as a picture, nothing is retyped"}
     top = CAP["top.png"]["check"]
     need(top["challengeLineShown"] is False and V["example_button"] in top["examples"],
          "img/top.png shows the line that quotes the challenge statement, or lacks the example button of slide 3: retake the capture")
@@ -960,10 +986,10 @@ def compute():
     V["capture_date"] = long_date(CAP["top.png"]["taken_at"])
     need(all(long_date(CAP[f]["taken_at"]) == V["capture_date"] for f in used), "The captures on the slides were taken on different days: check the captions")
     NUMBERS["captures_on_slides"] = {"value": {f: {"taken_at": CAP[f]["taken_at"], "sha256": CAP[f]["sha256"], "scoring_config": CAP[f]["scoring_config"]} for f in used},
-                                     "shown_as": None, "slides": [1, 3, 7] + ([6] if "assistant_recorded.png" in used else []),
+                                     "shown_as": None, "slides": [1, 3, 7] + ([6] if ("assistant_recorded.png" in used or "assistant_live.png" in used) else []),
                                      "source": "docs/submission/deck/img/captures.json",
                                      "how": "the captures the build checks, each with its time, its SHA-256 and the scoring config of the page build it was taken from; "
-                                            "top.png (slide 1), cotton_top3.png (slide 3), lunar_evidence_map.png (slide 7) and assistant_recorded.png (slide 6) are shown; "
+                                            "dashboard.png (slide 1; top.png when it is absent), cotton_top3.png (slide 3), lunar_evidence_map.png (slide 7) and assistant_live.png (slide 6; assistant_recorded.png when it is absent) are shown; "
                                             "lunar_found.png and lunar_piles_s1.png are not shown (too small to read at slide size) and only prove that the page prints the quotation of slide 4 and the counted tests of slide 5"}
     return table
 
@@ -1135,6 +1161,18 @@ def slide1():
     cw, ch = cap_size("top.png")
     x0, x1 = max(0, ax0 - 24), min(cw, ax1 + 24)
     y0 = max(0, ey0 - 20)
+    picture = shot("top.png", x0, y0, x1, min(ch, vy1 + 2), 680, "The start page of Fire Evidence Explorer: the product name, the line on what to type, the notice line, the question What are you building, and where, six example buttons, and the three cards Find, Compare, Interpret")
+    caption = w["caption"]
+    if "dashboard.png" in CAP:
+        # the dashboard after the worked example says more about the product than the empty start page
+        gx0, _, gx1, _ = cap_box("dashboard.png", "glance")
+        _, cy0, _, _ = cap_box("dashboard.png", "card1")
+        dw, dh = cap_size("dashboard.png")
+        dx0, dx1 = max(0, gx0 - 24), min(dw, gx1 + 24)
+        pic_w, max_h = 840, 590
+        dy1 = min(dh, cy0 + 120, (dx1 - dx0) * max_h / pic_w)
+        picture = shot("dashboard.png", dx0, 0, dx1, dy1, pic_w, w["alt_dashboard"], "cut")
+        caption = w["caption_dashboard"]
     body = f'''<div class="cols">
 <div class="col" style="width:800px">
   <div class="pair"><div class="lbl">{esc(w["product_label"])}</div><div class="big">{esc(w["product"])}</div></div>
@@ -1143,8 +1181,8 @@ def slide1():
   <div class="linkband"><div class="lbl">{esc(w["link_label"])}</div><a href="{esc(PUBLIC_URL)}">{esc(link)}</a><p>{fmt(w["link_hint"])}</p></div>
 </div>
 <div class="col" style="width:840px">
-  {shot("top.png", x0, y0, x1, min(ch, vy1 + 2), 680, "The start page of Fire Evidence Explorer: the product name, the line on what to type, the notice line, the question What are you building, and where, six example buttons, and the three cards Find, Compare, Interpret")}
-  <p class="cap">{fmt(w["caption"])}</p>
+  {picture}
+  <p class="cap">{fmt(caption)}</p>
 </div></div>'''
     return slide(1, w["kicker"], fmt(w["title"]), body, fmt(w["footer"]))
 
@@ -1366,7 +1404,27 @@ def slide6():
     uses = f'''<div class="usehead"><span></span><span>{esc(w["col_use"])}</span><span>{esc(w["col_check"])}</span></div>
 {"".join(rows)}
 <div class="modelband"><b>{esc(w["model_head"])}:</b> {fmt(w["model"])}</div>'''
-    if picture:
+    if "assistant_live.png" in CAP:
+        L = "assistant_live.png"
+        rx0, ry0, rx1, ry1 = cap_box(L, "read")
+        _, uy0, _, uy1 = cap_box(L, "user")
+        _, ay0, _, _ = cap_box(L, "answer")
+        _, _, _, ly1 = cap_box(L, "label")
+        _, fy0, _, fy1 = cap_box(L, "form")
+        lw, lh = cap_size(L)
+        x0, x1 = max(0, rx0 - 8), min(lw, rx1 + 8)
+        width = 560
+        gap = '<div style="height:8px"></div>'
+        body = f'''<div class="cols withshot">
+<div class="col" style="width:1120px">{uses}</div>
+<div class="col" style="width:{width}px"><div class="lbl">{esc(w["live_head"])}</div>
+  {shot(L, x0, uy0 - 6, x1, uy1 + 6, width, w["live_alt_user"])}{gap}
+  {shot(L, x0, ry0 - 2, x1, ry1 + 2, width, w["live_alt_read"])}{gap}
+  {shot(L, x0, ay0 - 6, x1, ly1 + 6, width, w["live_alt_answer"])}{gap}
+  {shot(L, x0, fy0 - 6, x1, min(lh, fy1 + 6), width, w["live_alt_form"])}
+  <p class="cap">{fmt(w["live_cap"])}</p></div>
+</div>'''
+    elif picture:
         x0, _, x1, _ = cap_box("assistant_recorded.png", "chat")
         _, qy0, _, qy1 = cap_box("assistant_recorded.png", "question")
         _, ay0, _, _ = cap_box("assistant_recorded.png", "answer")

@@ -194,6 +194,7 @@ async function capture(spec) {
   const page = await Page.open();
   const url = BASE + (spec.path || "");
   try {
+    if (spec.width) await page.send("Emulation.setDeviceMetricsOverride", { width: spec.width, height: HEIGHT, deviceScaleFactor: SCALE, mobile: false });
     await openUrl(page, url);
     if (spec.prepare) { await page.eval(`(async () => { ${spec.prepare} })()`); await sleep(spec.settle || 1200); }
     const fonts = await page.eval(FONTS_LOADED);
@@ -215,7 +216,7 @@ async function capture(spec) {
     manifest.push({
       file: spec.file, on_slide: spec.slide ?? null, shows: spec.shows, url, selectors: spec.selectors, prepared: spec.preparedNote || null,
       clip_css_px: clip, pixel_size: { width: clip.width * SCALE, height: clip.height * SCALE }, boxes_css_px: boxes,
-      viewport: { width: WIDTH, height: HEIGHT, device_scale_factor: SCALE },
+      viewport: { width: spec.width || WIDTH, height: HEIGHT, device_scale_factor: SCALE },
       taken_at: new Date().toISOString(), scoring_config: site.scoring_config, page_built_at: site.built_at || null,
       fonts_loaded: fonts, outside_hosts: outside, sha256: createHash("sha256").update(png).digest("hex"), check,
       console_errors: errs.length ? errs : undefined,
@@ -309,6 +310,49 @@ specs.push(
   PILES("lunar_piles_p1.png", "Flammability limit", "cap-p1", null, "no counted test inside the ranges; the files in the archive; no record in PSI"),
 );
 
+// The dashboard as a visitor sees it after the worked example: the request and how it was read, the three key
+// figures, the notes, the five tabs and the head of the first result (slide 1).
+specs.push({
+  file: "dashboard.png", slide: 1, path: Q + "&tab=closest",
+  shows: `The dashboard for '${QUERY}', from the top of the page: the app bar with the request, how the request was read, the three key figures, the notes for the environment, the five tabs with their one-line descriptions, and the first result card.`,
+  selectors: ["#appbar", "header.masthead", "#request", "#glance", "#notes-band", "#tabs", "#top .kicker", "#top .section-head", CARD(1)], pad: 0, padY: 0,
+  prepare: `window.scrollTo(0, 0);`,
+  boxes: { appbar: "#appbar", request: "#request", glance: "#glance", tabs: "#tabs", head: "#top .section-head", card1: CARD(1) },
+  check: `({ title: (document.querySelector("#request h1, #request h2, #request .req-title") || {}).textContent, tabs: [...document.querySelectorAll("#tabs a:not([hidden]) .tab-name")].map((e) => e.textContent.trim()), tab_lines: [...document.querySelectorAll("#tabs a:not([hidden]) .tab-desc")].map((e) => e.textContent.trim()), tiles: [...document.querySelectorAll("#glance > p:not(.typed-note)")].map((p) => p.innerText.replace(/\\s+/g, " ").trim().slice(0, 120)), first_card: (document.querySelector(${JSON.stringify(CARD(1))} + " h3") || {}).textContent })`,
+});
+
+// One conversation with the assistant on the local install, with the language model answering (slide 6).
+// Taken only with DECK_LIVE=1 and DECK_ONLY=assistant_live.png, from the local assistant server
+// (python3 -m ai.assistant.server), never from the static build: the public page runs no model.
+const LIVE_FILE = "assistant_live.png";
+const LIVE = process.env.DECK_LIVE === "1";
+if (LIVE) {
+  let health = null;
+  try { health = await (await fetch(BASE + "api/health")).json(); } catch { /* handled below */ }
+  if (!health || health.mode !== "live" || !health.model) { console.error("capture.mjs: DECK_LIVE=1 needs the local assistant server in live mode at " + BASE + " (python3 -m ai.assistant.server)"); stop(); process.exit(2); }
+  specs.push({
+    live_model: { name: health.model.name, maker: health.model.maker, license: health.model.license, digest_prefix: health.model.digest_prefix },
+    file: LIVE_FILE, slide: 6, path: Q, width: 820,
+    shows: `One conversation with the SI assistant on the local install, the language model ${health.model.name} answering: the request '${QUERY}' typed into the assistant's box, how the request was read (each value a button that changes it), the answer with its citation numbers, its label, and the box for a follow-up.`,
+    selectors: ["#assistant"], pad: 0, padY: 0,
+    prepare: `const sl = (m) => new Promise((r) => setTimeout(r, m));
+      const A = document.querySelector("#assistant");
+      for (let i = 0; i < 100 && !(A && A.querySelector(".as-form:not([hidden])") && document.querySelector("#as-input")); i++) await sl(200);
+      document.querySelector("#as-input").value = ${JSON.stringify(QUERY)};
+      A.querySelector(".as-form").requestSubmit();
+      for (let i = 0; i < 1200; i++) { await sl(250); const t = [...A.querySelectorAll(".as-turn")].pop(); if (t && !t.classList.contains("as-working") && t.querySelector(".as-body") && t.querySelector(".as-body").children.length && !A.querySelector(".as-run")) break; }
+      await sl(800);
+      A.querySelectorAll(".as-chat, .as-panels").forEach((e) => { e.style.maxHeight = "none"; e.style.overflow = "visible"; });
+      const turns = [...A.querySelectorAll(".as-turn")];
+      turns[turns.length - 1].id = "cap-turn";
+      window.scrollTo(0, 0);`,
+    settle: 1500,
+    preparedNote: "Taken from the local assistant server with the language model answering (live mode), not from the static build. The script typed the request into the assistant's box and waited for the answer; for this capture only, the scroll box of the conversation is opened so that nothing is cut.",
+    boxes: { card: "#assistant", user: "#cap-turn .as-user", steps: "#cap-turn .as-steps", read: "#cap-turn .as-read", answer: "#cap-turn .as-answer", label: "#cap-turn .as-label", form: "#assistant .as-form" },
+    check: `(() => { const A = document.querySelector("#assistant"); const t = document.querySelector("#cap-turn"); const g = (s) => { const e = t && t.querySelector(s); return e ? e.innerText : null; }; return { mode: A.getAttribute("data-mode"), model_chip: (document.querySelector("#model-chip") || {}).innerText, question: g(".as-user"), read_title: g(".as-read .as-h4"), read_hint: g(".as-read-hint"), values: t ? [...t.querySelectorAll(".as-read .as-chip")].map((c) => c.innerText.trim()) : [], editable_values: t ? t.querySelectorAll(".as-read .as-chip-edit").length : 0, answer: g(".as-answer"), by_model: !!(t && t.querySelector(".as-answer.as-by-model")), citations: t ? [...t.querySelectorAll(".as-answer *")].filter((e) => !e.children.length && /^\\d+$/.test(e.textContent.trim())).length : 0, label: g(".as-label"), gates: g(".as-gates"), answered: g(".as-answered"), follow_up_box: (document.querySelector("#as-input") || {}).placeholder }; })()`,
+  });
+}
+
 // One recorded answer of the assistant (slide 6), only when the new recording is marked as ready.
 const RECORDED_READY = existsSync(join(REPO, "ai", "assistant", "_runtime", "RECORDED_READY"));
 if (RECORDED_READY) {
@@ -348,12 +392,12 @@ if (RECORDED_READY) {
   notTaken.push({ file: "assistant_recorded.png", why: "ai/assistant/_runtime/RECORDED_READY does not exist: the new recording of the assistant is not finished, so slide 6 shows no recorded answer" });
 }
 
-const only = process.env.DECK_ONLY ? process.env.DECK_ONLY.split(",").map((s) => s.trim()).filter(Boolean) : null;
+const only = LIVE ? [LIVE_FILE] : (process.env.DECK_ONLY ? process.env.DECK_ONLY.split(",").map((s) => s.trim()).filter(Boolean) : null);
 if (only) { const unknown = only.filter((f) => !specs.some((s) => s.file === f)); if (unknown.length) { console.error("capture.mjs: DECK_ONLY names no capture: " + unknown.join(", ") + ". Known: " + specs.map((s) => s.file).join(", ")); process.exit(2); } }
 let failed = 0;
 for (const s of specs) {
   if (only && !only.includes(s.file)) continue;
-  try { await capture(s); if (s.recorded_answer) Object.assign(manifest[manifest.length - 1], { recorded_at: s.recorded_at, recorded_model: s.recorded_model, conversation: RECORDED_CONVERSATION, turn: RECORDED_TURN, recorded_answer: s.recorded_answer }); }
+  try { await capture(s); if (s.live_model) Object.assign(manifest[manifest.length - 1], { live: true, live_model: s.live_model, note: "capture of the team's own page on the local install; the answer in it was written by the local language model" }); if (s.recorded_answer) Object.assign(manifest[manifest.length - 1], { recorded_at: s.recorded_at, recorded_model: s.recorded_model, conversation: RECORDED_CONVERSATION, turn: RECORDED_TURN, recorded_answer: s.recorded_answer }); }
   catch (e) {
     if (s.optional) { notTaken.push({ file: s.file, why: String(e.message || e) }); console.error("capture.mjs: optional capture not taken:", s.file, "-", e.message || e); }
     else { failed++; console.error("capture.mjs: FAILED", s.file, "-", e.message || e); }
@@ -363,8 +407,10 @@ for (const s of specs) {
 // ------------------------------------------------------------------ the manifest (img/captures.json)
 const mpath = join(OUT, "captures.json");
 let kept = [];
-if (only && existsSync(mpath)) {
-  try { kept = JSON.parse(readFileSync(mpath, "utf8")).captures.filter((c) => !manifest.some((m) => m.file === c.file) && specs.some((s) => s.file === c.file) && existsSync(join(OUT, c.file))); } catch { kept = []; }
+if (existsSync(mpath)) {
+  // a run of some captures keeps the other entries; the live capture's entry is kept by every run that does not retake it
+  const names = [...specs.map((s) => s.file), ...(LIVE ? (() => { try { return JSON.parse(readFileSync(mpath, "utf8")).captures.map((c) => c.file); } catch { return []; } })() : [])];
+  try { kept = JSON.parse(readFileSync(mpath, "utf8")).captures.filter((c) => !manifest.some((m) => m.file === c.file) && existsSync(join(OUT, c.file)) && (c.file === LIVE_FILE || (only && names.includes(c.file)))); } catch { kept = []; }
 }
 const order = specs.map((s) => s.file);
 const captures = [...kept, ...manifest].sort((a, b) => order.indexOf(a.file) - order.indexOf(b.file));

@@ -30,18 +30,19 @@
     inputLabel: "What are you building, and where? Or ask a question.",
     inputHint: "e.g. moon cotton fabric, 30% O2 at 10.2 psi, or: where are the raw data for the ISS?",
     recordedMark: "Recorded on {date} with the local language model (gpt-oss:20b) and replayed here; no model runs on this page.",
-    labelModel: "Written by a local language model (gpt-oss:20b) from the facts shown; every sentence shown passed the code checks and a second model check. No person reviewed this answer. A research exploration tool, not safety guidance.",
-    labelTemplate: "Put together by team code from the facts shown; no language model wrote it. A research exploration tool, not safety guidance.",
+    labelModel: "Written by a local language model (gpt-oss:20b) from the facts shown; every sentence shown passed the code checks and a second model check. No person reviewed this answer. A research exploration tool built on NASA PSI data.",
+    labelTemplate: "Put together by team code from the facts shown; no language model wrote it. A research exploration tool built on NASA PSI data.",
     sentByCode: "This sentence was put in by team code from its fact, not written by the model.",
     sentByCodeTag: "team code",
-    labelRecorded: "Recorded on {date} with the local language model (gpt-oss:20b) and replayed here; no model runs on this page. Every model sentence shown passed the code checks and a second model check when it was recorded. No person reviewed these answers. A research exploration tool, not safety guidance.",
+    labelRecorded: "Recorded on {date} with the local language model (gpt-oss:20b) and replayed here; no model runs on this page. Every model sentence shown passed the code checks and a second model check when it was recorded. No person reviewed these answers. A research exploration tool built on NASA PSI data.",
     modeLive: "Running on this computer with the local model gpt-oss:20b. Each answer: the model reads your request twice and a rule parser once; code looks up the facts; the model writes; code checks and a second model pass check every sentence, and what fails is removed and shown. About 1 to 2 minutes per question on this computer.",
     modeNoModel: "The local model is not available ({reason}), so answers are put together by team code from the facts.",
     modeRecorded: "This public page runs no language model. It replays conversations recorded with the local model, where code checks and a second model pass checked every sentence. To ask your own questions, install the project and run ./run.sh (see the README).",
     modeNothing: "The assistant needs its local server (./run.sh). The dashboard below works without it.",
     recordedList: "Recorded conversations",
     clarify: "One question before I look this up:",
-    read: "How your request was read (click to change)",
+    read: "How your request was read",
+    readHint: "Each value is a button. Click one to change it, and the assistant answers again.",
     assumed: "Assumed: ",
     gates: "{written} sentences written, {removed} removed by the checks, {repaired} repaired.",
     removedFold: "What the checks removed",
@@ -1001,7 +1002,9 @@
 
   function readChips(resp, recorded) {
     var req = resp.request;
-    var wrap = h("div", { class: "as-read" }, h("h4", { class: "as-h4" }, recorded ? L.readRecorded : L.read));
+    var wrap = h("div", { class: "as-read" + (recorded ? "" : " as-read-live") }, h("h4", { class: "as-h4" }, recorded ? L.readRecorded : L.read));
+    // the values can be changed: say so in words, next to the title (15 November: the feature was not seen at once)
+    if (!recorded) wrap.appendChild(h("p", { class: "as-read-hint" }, L.readHint));
     var editor = h("div", { class: "as-editor", hidden: true });
     var list = h("div", { class: "as-chips", role: "group", "aria-label": L.readRecorded });
     chipList(req).forEach(function (c) {
@@ -1011,8 +1014,11 @@
       var editable = !recorded && c.key !== "investigations";
       var cls = "as-chip" + (unc ? " as-chip-uncertain" : "") + (src === "preset" || src === "assumed" || src === "default" ? " as-chip-assumed" : "");
       var title = recorded ? L.recordedNotEditable : (unc ? L.uncertain : (src ? "From: " + src : null));
-      var chip = h("button", { type: "button", class: cls + (editable ? " as-act" : ""), title: title,
-        "aria-expanded": editable ? "false" : null, disabled: editable ? null : true }, c.text);
+      // "Material: cotton" as a label and a value, so that the value reads as the thing to change
+      var cut = c.text.indexOf(": ");
+      var inner = cut > 0 ? [h("span", { class: "as-chip-k" }, c.text.slice(0, cut + 2)), h("b", { class: "as-chip-v" }, c.text.slice(cut + 2))] : c.text;
+      var chip = h("button", { type: "button", class: cls + (editable ? " as-act as-chip-edit" : ""), title: title || (editable ? "Click to change" : null),
+        "aria-expanded": editable ? "false" : null, disabled: editable ? null : true }, inner);
       if (editable) chip.addEventListener("click", function () { openEditor(c, req, editor, chip, list); });
       list.appendChild(chip);
     });

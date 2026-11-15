@@ -389,3 +389,20 @@ html[data-theme="dark"] #assistant .as-btn-primary { color: #0d1320; }
   #assistant .as-send { flex: 1 1 100%; }
   #assistant .as-head { flex-wrap: wrap; }
 }
+
+/* ---- The values of "How your request was read" can be changed (15 November, 20:00; the human lead: "it is hard to
+   see at once that this is there"). A sentence says so, and each value that can be changed looks like a control:
+   the value in bold, a caret, a filled hover state. */
+#assistant .as-read-live { margin: 10px 0 12px; padding: 12px 14px; border: 1px solid var(--as-rule); border-radius: 10px; background: var(--as-paper); }
+#assistant .as-read-live .as-h4 { display: inline; margin: 0 10px 0 0; }
+#assistant .as-read-hint { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 13px; color: var(--as-blue); font-weight: 600; }
+#assistant .as-read-hint::before { content: ""; width: 14px; height: 14px; flex: none;
+  background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M10.8 2.6l2.6 2.6-7.6 7.6-3.3.7.7-3.3z' fill='none' stroke='%232346c4' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+#assistant .as-read-live .as-chips { margin-top: 10px; gap: 8px; }
+#assistant .as-chip .as-chip-k { color: var(--as-ink-2, #4a5565); font-weight: 400; }
+#assistant .as-chip .as-chip-v { font-weight: 700; }
+#assistant .as-chip-edit { min-height: 34px; padding: 4px 30px 4px 12px; border-radius: 8px; background-color: var(--as-card); box-shadow: 0 1px 1px rgba(23, 32, 43, 0.06);
+  background-repeat: no-repeat; background-position: right 10px center; background-size: 12px 12px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5' fill='none' stroke='%232346c4' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+#assistant .as-chip-edit:hover:not([disabled]), #assistant .as-chip-edit[aria-expanded="true"] { background-color: var(--as-blue-soft); border-color: var(--as-blue); box-shadow: 0 0 0 2px var(--as-blue-soft); }
+#assistant .as-read-live .as-editor { margin-top: 10px; background: var(--as-card); border-color: var(--as-blue); }
