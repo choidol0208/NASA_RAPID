@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 73,
+  "PASS": 77,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 73
+  "checks": 77
  },
  "checks": [
   {
@@ -1743,6 +1743,74 @@
     "quotes": 139,
     "listings_present": true,
     "rules": 54
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "Q1_chain_placements",
+   "verifies": "question_chain.csv: the placement of every test (scenario_tests.csv oxygen and pressure match, recomputed); the quantity rows of each scenario, need, role and variable sum to the tests in the need's scope and to its counted tests, per placement; fixtures of design.md section 10 (lunar habitat 26 / 676 / 63 / 1,059; solid 0 / 237 / 139; ISS 179 / 739 / 106 / 800; Mars habitat no range set for 1,824).",
+   "status": "PASS",
+   "numbers": {
+    "blocks": 318,
+    "rows": 3734,
+    "lunar_S1": {
+     "cannot_be_placed_from_table": 676,
+     "inside": 26,
+     "outside_by_recorded_value": 1059,
+     "oxygen_of_oxidizer_stream": 63
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "Q2_chain_locations",
+   "verifies": "question_chain.csv: the location of every quantity of every test recomputed from tests.csv, raw_values.csv, spec/raw_columns.json and spec/sources.json (table cell, value read, column seen, document sentence, not found), aggregated by scenario, need, role, variable, investigation, placement and location; summed over placement the rows equal need_gap_states.csv (required and outcome roles); lunar habitat P1 pressure: raw column 134, document only 129, not found 113.",
+   "status": "PASS",
+   "numbers": {
+    "keys": 3247,
+    "need_gap_state_rows": 426,
+    "lunar_P1_pressure": {
+     "documented_only": 129,
+     "column_in_sampled_raw_file": 134,
+     "not_in_sampled_files": 113
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "Q3_chain_inside_and_counts",
+   "verifies": "Counted tests placed inside equal tests_atmosphere of scenario_needs.csv; question_chain_counts.csv per scenario, need, placement and pair: tests in scope, counted, not counted split into objective not stated, no outcome in the table, a required condition missing (recomputed); claims.md: of the 9 CFI-G tests inside the lunar ranges 7 are not stated and 2 hold no outcome for S1; the 17 counted lunar S1 tests are FLEX.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 217,
+    "lunar_S1_inside_cfig_total_not_stated_no_outcome": [
+     9,
+     7,
+     2
+    ]
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "Q4_chain_video",
+   "verifies": "Video in the chain: the best link state of a video tied to each test, recomputed from pm's video index (video/data/video_links.csv), in the counts view; the video rows are the BASS-II main-view recordings (investigation PSI-25, view 'main'; files, bytes, transcribed) for flow_cms only, never for oxygen, pressure, CO, CO2, the CO to CO2 ratio, particle size or aging time; fixtures: ISS P1, oxygen inside and pressure not in the table, 55 counted: 42 / 4 / 0 / 9, main view 49 files, 3,515,643,202 bytes, 7 transcribed; lunar habitat inside 26, 8 with two agreeing labels (all CFI-G), 0 of 17 counted.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 202,
+    "video_group": [
+     135,
+     8148259876,
+     19
+    ],
+    "tests_with_a_video_by_best_state": {
+     "two_labels_agree": 463,
+     "one_label": 344,
+     "labels_disagree": 6
+    }
    },
    "failures": 0,
    "failing_examples": []

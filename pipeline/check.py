@@ -5742,6 +5742,345 @@ def check_p6(ctx):
 
 
 
+
+# ----------------------------------------------------------------------------
+# Q. the question chain (question_chain.csv, question_chain_counts.csv), written by
+#    pipeline/question_chain.py; recomputed here from the inputs with separate code
+# ----------------------------------------------------------------------------
+
+# Fixtures of docs/raw_data_design/design.md section 10 (placement of all tests, and of the solid-fuel
+# scope), of the video design (docs/video_design/design.md section 12) and of claims.md (the nine CFI-G
+# tests inside the lunar ranges: 7 not stated, 2 without an outcome).
+Q_PLACEMENT_FIXTURES = {
+    ("lunar_habitat", "S1"): {"inside": 26, "cannot_be_placed_from_table": 676, "oxygen_of_oxidizer_stream": 63,
+                              "outside_by_recorded_value": 1059},
+    ("lunar_habitat", "P1"): {"inside": 0, "cannot_be_placed_from_table": 237, "outside_by_recorded_value": 139},
+    ("iss", "S1"): {"inside": 179, "cannot_be_placed_from_table": 739, "oxygen_of_oxidizer_stream": 106,
+                    "outside_by_recorded_value": 800},
+    ("mars_habitat", "S1"): {"no_range_set": 1824},
+}
+Q_P1_PRESSURE_STATES = {"column_in_sampled_raw_file": 134, "documented_only": 129, "not_in_sampled_files": 113}
+Q_LOC_STATE = {"table_cell": "in_table", "raw_file_value_read": "column_in_sampled_raw_file",
+               "raw_file_column_seen": "column_in_sampled_raw_file", "document_sentence": "documented_only",
+               "not_found_in_files_opened": "not_in_sampled_files"}
+# a row of raw_values.csv gives a value for this variable (extraction -> key as written -> variable; '*' any key)
+Q_RAW_VARIABLE = {"saffire_ambient_pressure": {"*": "pressure_kpa"},
+                  "same_particle_size_statistics": {"*": "smoke_particle_size_um"},
+                  "flex_test_sheet": {"Dext (mm)": "extinction_diameter_mm", "Pressure (atm)": "pressure_kpa",
+                                      "O2 Mole Fraction": "o2_pct"}}
+Q_VIDEO_ORDER = ("two_labels_agree", "one_label", "labels_disagree")
+Q_NO_VIDEO_VARIABLES = ("o2_pct", "pressure_kpa", "co_produced_ppm", "co2_produced_pct_points",
+                        "co_to_co2_molar_ratio", "smoke_particle_size_um", "aging_time_s")
+
+
+def q_place(o2, p):
+    if (o2, p) == ("not_specified", "not_specified"):
+        return "no_range_set"
+    if "out" in (o2, p):
+        return "outside_by_recorded_value"
+    if (o2, p) == ("in", "in"):
+        return "inside"
+    return "oxygen_of_oxidizer_stream" if o2 == "not_ambient" else "cannot_be_placed_from_table"
+
+
+def q_inputs(ctx):
+    if not ctx.has("question_chain.csv"):
+        raise Skip("question_chain.csv not written")
+
+    def load():
+        tests = ctx.tests
+        marks = {(r["scenario_id"], r["test_id"]): r for r in ctx.table("scenario_tests.csv")}
+        link = {}
+        for r in ctx.table("need_tests.csv"):
+            link[(r["need_id"], r["test_id"])] = r["objective_link"]
+        scope = {}
+        for n in ctx.needs:
+            ph = (n.get("scope") or {}).get("fuel_phase")
+            scope[n["id"]] = [t for t in tests if not ph or t["fuel_phase"] in ph]
+        return {"tests": tests, "marks": marks, "link": link, "scope": scope,
+                "scenarios": [s["id"] for s in ctx.spec("scenarios")["scenarios"]],
+                "rows": ctx.table("question_chain.csv")}
+    return ctx._get("q_inputs", load)
+
+
+def q_location(ctx, test, var):
+    """Location of one quantity of one test, from the inputs (not from raw_gaps.py)."""
+    def raw_index():
+        idx = set()
+        for r in ctx.table("raw_values.csv"):
+            m = Q_RAW_VARIABLE.get(r["extraction"])
+            if m and r["test_id"]:
+                v = m.get(r["header_as_written"].strip(), m.get("*"))
+                if v:
+                    idx.add((r["test_id"], v))
+        return idx
+
+    def entries():
+        e = set()
+        for inv in ctx.spec("raw_columns")["investigations"]:
+            for x in inv["entries"]:
+                e.add((inv["investigation_id"], x["standard_variable"]))
+        return e
+
+    def docs():
+        d = set()
+        for s in ctx.sources:
+            for x in s.get("documented_elsewhere", []) or []:
+                d.add((s["investigation_id"], x["variable"]))
+        return d
+    if not o_blank(test.get(var)):
+        return "table_cell"
+    if (test["test_id"], var) in ctx._get("q_raw", raw_index):
+        return "raw_file_value_read"
+    inv = test["investigation_id"]
+    if (inv, var) in ctx._get("q_entries", entries):
+        return "raw_file_column_seen"
+    if (inv, var) in ctx._get("q_docs", docs):
+        return "document_sentence"
+    return "not_found_in_files_opened"
+
+
+@check("Q1_chain_placements",
+       "question_chain.csv: the placement of every test (scenario_tests.csv oxygen and pressure match, recomputed); "
+       "the quantity rows of each scenario, need, role and variable sum to the tests in the need's scope and to its "
+       "counted tests, per placement; fixtures of design.md section 10 (lunar habitat 26 / 676 / 63 / 1,059; solid "
+       "0 / 237 / 139; ISS 179 / 739 / 106 / 800; Mars habitat no range set for 1,824).")
+def check_q1(ctx):
+    res = Result()
+    Q = q_inputs(ctx)
+    got = {}
+    for r in Q["rows"]:
+        if r["row_kind"] != "quantity":
+            continue
+        k = (r["scenario_id"], r["need_id"], r["role"], r["variable"])
+        a = got.setdefault(k, {})
+        b = a.setdefault(r["placement"], [0, 0])
+        b[0] += int(r["in_scope_tests"])
+        b[1] += int(r["counted_tests"])
+        if q_place(r["o2_match"], r["pressure_match"]) != r["placement"]:
+            res.fail(problem="placement does not follow from the pair", row=k, pair=(r["o2_match"], r["pressure_match"]))
+    for sid in Q["scenarios"]:
+        for n in ctx.needs:
+            want = {}
+            for t in Q["scope"][n["id"]]:
+                m = Q["marks"][(sid, t["test_id"])]
+                w = want.setdefault(q_place(m["o2_match"], m["pressure_match"]), [0, 0])
+                w[0] += 1
+                w[1] += Q["link"].get((n["id"], t["test_id"])) == "stated"
+            roles = [("required", v) for v in n["conditions_required"]] + \
+                    [("useful", v) for v in n.get("conditions_useful", [])] + [("outcome", v) for v in n["outcomes_any"]]
+            for role, var in roles:
+                res.checked += 1
+                g = got.get((sid, n["id"], role, var), {})
+                if g != want:
+                    res.fail(problem="placement sums differ", scenario=sid, need=n["id"], variable=var, file=g, recount=want)
+            fx = Q_PLACEMENT_FIXTURES.get((sid, n["id"]))
+            if fx:
+                have = {k: v[0] for k, v in want.items()}
+                if {k: v for k, v in have.items() if v} != {k: v for k, v in fx.items() if v}:
+                    res.fail(problem="fixture of design.md section 10 not reproduced", scenario=sid, need=n["id"],
+                             recount=have, fixture=fx)
+    res.numbers = {"blocks": res.checked, "rows": len(Q["rows"]),
+                   "lunar_S1": {k: v[0] for k, v in sorted(got.get(("lunar_habitat", "S1", "required", "o2_pct"), {}).items())}}
+    return res
+
+
+@check("Q2_chain_locations",
+       "question_chain.csv: the location of every quantity of every test recomputed from tests.csv, raw_values.csv, "
+       "spec/raw_columns.json and spec/sources.json (table cell, value read, column seen, document sentence, not "
+       "found), aggregated by scenario, need, role, variable, investigation, placement and location; summed over "
+       "placement the rows equal need_gap_states.csv (required and outcome roles); lunar habitat P1 pressure: raw "
+       "column 134, document only 129, not found 113.")
+def check_q2(ctx):
+    res = Result()
+    Q = q_inputs(ctx)
+    file_agg, state_agg = {}, {}
+    for r in Q["rows"]:
+        if r["row_kind"] != "quantity":
+            continue
+        if Q_LOC_STATE.get(r["location"]) != r["state"]:
+            res.fail(problem="location and state do not agree", location=r["location"], state=r["state"])
+        k = (r["scenario_id"], r["need_id"], r["role"], r["variable"], r["investigation_id"], r["placement"], r["location"])
+        a = file_agg.setdefault(k, [0, 0])
+        a[0] += int(r["in_scope_tests"])
+        a[1] += int(r["counted_tests"])
+        k2 = (r["scenario_id"], r["need_id"], r["role"], r["variable"], r["state"],
+              r["column_is_or_doc"] if r["state"] == "column_in_sampled_raw_file" else "")
+        b = state_agg.setdefault(k2, [0, 0])
+        b[0] += int(r["in_scope_tests"])
+        b[1] += int(r["counted_tests"])
+    want = {}
+    for sid in Q["scenarios"]:
+        for n in ctx.needs:
+            roles = [("required", v) for v in n["conditions_required"]] + \
+                    [("useful", v) for v in n.get("conditions_useful", [])] + [("outcome", v) for v in n["outcomes_any"]]
+            for t in Q["scope"][n["id"]]:
+                m = Q["marks"][(sid, t["test_id"])]
+                p = q_place(m["o2_match"], m["pressure_match"])
+                c = Q["link"].get((n["id"], t["test_id"])) == "stated"
+                for role, var in roles:
+                    k = (sid, n["id"], role, var, t["investigation_id"], p, q_location(ctx, t, var))
+                    w = want.setdefault(k, [0, 0])
+                    w[0] += 1
+                    w[1] += c
+    for k in sorted(set(want) | set(file_agg)):
+        res.checked += 1
+        if want.get(k) != file_agg.get(k):
+            res.fail(problem="location count differs", key=k, file=file_agg.get(k), recount=want.get(k))
+    n_rows = 0
+    for r in ctx.table("need_gap_states.csv"):
+        n_rows += 1
+        k = (r["scenario_id"], r["need_id"], r["role"], r["variable"], r["state"], r["column_is"])
+        if state_agg.get(k) != [int(r["in_scope_tests_in_state"]), int(r["counted_tests_in_state"])]:
+            res.fail(problem="chain summed over placement differs from need_gap_states.csv", key=k,
+                     chain=state_agg.get(k), need_gap_states=[r["in_scope_tests_in_state"], r["counted_tests_in_state"]])
+    covered = {k for k in state_agg if k[2] in ("required", "outcome")}
+    if len(covered) != n_rows:
+        res.fail(problem="chain has state rows that need_gap_states.csv lacks, or the reverse", chain=len(covered), ngs=n_rows)
+    p1 = {}
+    for k, v in state_agg.items():
+        if k[:4] == ("lunar_habitat", "P1", "required", "pressure_kpa") and k[4] != "in_table":
+            p1[k[4]] = p1.get(k[4], 0) + v[0]
+    if p1 != Q_P1_PRESSURE_STATES:
+        res.fail(problem="P1 pressure fixture not reproduced", recount=p1, fixture=Q_P1_PRESSURE_STATES)
+    res.numbers = {"keys": res.checked, "need_gap_state_rows": n_rows, "lunar_P1_pressure": p1}
+    return res
+
+
+@check("Q3_chain_inside_and_counts",
+       "Counted tests placed inside equal tests_atmosphere of scenario_needs.csv; question_chain_counts.csv per "
+       "scenario, need, placement and pair: tests in scope, counted, not counted split into objective not stated, "
+       "no outcome in the table, a required condition missing (recomputed); claims.md: of the 9 CFI-G tests inside "
+       "the lunar ranges 7 are not stated and 2 hold no outcome for S1; the 17 counted lunar S1 tests are FLEX.")
+def check_q3(ctx):
+    res = Result()
+    Q = q_inputs(ctx)
+    inside = {}
+    for r in Q["rows"]:
+        if r["row_kind"] == "quantity" and r["placement"] == "inside" and r["variable"] == "o2_pct" and r["role"] in ("required", "useful"):
+            inside[(r["scenario_id"], r["need_id"])] = inside.get((r["scenario_id"], r["need_id"]), 0) + int(r["counted_tests"])
+    for r in ctx.table("scenario_needs.csv"):
+        res.checked += 1
+        if inside.get((r["scenario_id"], r["need_id"]), 0) != int(r["tests_atmosphere"]):
+            res.fail(problem="inside counted differs from scenario_needs.csv", scenario=r["scenario_id"], need=r["need_id"],
+                     chain=inside.get((r["scenario_id"], r["need_id"]), 0), scenario_needs=r["tests_atmosphere"])
+    if not ctx.has("question_chain_counts.csv"):
+        res.fail(problem="question_chain_counts.csv absent")
+        return res
+    file_rows = {(r["scenario_id"], r["need_id"], r["level"], r["placement"], r["o2_match"], r["pressure_match"]): r
+                 for r in ctx.table("question_chain_counts.csv")}
+    seen = set()
+    cfig = None
+    for sid in Q["scenarios"]:
+        for n in ctx.needs:
+            b = {}
+            for t in Q["scope"][n["id"]]:
+                m = Q["marks"][(sid, t["test_id"])]
+                p = q_place(m["o2_match"], m["pressure_match"])
+                for k in ((sid, n["id"], "placement", p, "", ""), (sid, n["id"], "placement_pair", p, m["o2_match"], m["pressure_match"])):
+                    b.setdefault(k, []).append(t)
+            for k, ts in b.items():
+                res.checked += 1
+                seen.add(k)
+                lk = [Q["link"].get((n["id"], t["test_id"])) for t in ts]
+                counted = sum(1 for x in lk if x == "stated")
+                not_stated = sum(1 for x in lk if x == "not_stated")
+                no_row = [t for t, x in zip(ts, lk) if x is None]
+                no_out = sum(1 for t in no_row if all(not o_blank(t.get(v)) for v in n["conditions_required"])
+                             and all(o_blank(t.get(v)) for v in n["outcomes_any"]))
+                want = (len(ts), counted, len(ts) - counted, not_stated, no_out, len(ts) - counted - not_stated - no_out)
+                r = file_rows.get(k)
+                got = None if r is None else tuple(int(r[c]) for c in ("in_scope_tests", "counted_tests", "not_counted_tests",
+                                                                          "n_not_stated", "n_no_outcome", "n_required_condition_missing"))
+                if got != want:
+                    res.fail(problem="counts view differs", key=k, file=got, recount=want)
+                if k == ("lunar_habitat", "S1", "placement", "inside", "", ""):
+                    cf = [t for t in ts if t["investigation_id"] == "PSI-159"]
+                    cfig = (len(cf), sum(1 for t in cf if Q["link"].get(("S1", t["test_id"])) == "not_stated"),
+                            sum(1 for t in cf if ("S1", t["test_id"]) not in Q["link"]))
+                    fl = {t["investigation_id"] for t in ts if Q["link"].get(("S1", t["test_id"])) == "stated"}
+                    if cfig != (9, 7, 2) or fl != {"PSI-69"} or counted != 17:
+                        res.fail(problem="claims.md fixture (9 CFI-G = 7 + 2; 17 counted FLEX) not reproduced",
+                                 cfig=cfig, counted_investigations=sorted(fl), counted=counted)
+    if set(file_rows) != seen:
+        res.fail(problem="counts view rows differ from the recount", extra=sorted(set(file_rows) - seen)[:5],
+                 missing=sorted(seen - set(file_rows))[:5])
+    res.numbers = {"rows": res.checked, "lunar_S1_inside_cfig_total_not_stated_no_outcome": cfig}
+    return res
+
+
+@check("Q4_chain_video",
+       "Video in the chain: the best link state of a video tied to each test, recomputed from pm's video index "
+       "(video/data/video_links.csv), in the counts view; the video rows are the BASS-II main-view recordings "
+       "(investigation PSI-25, view 'main'; files, bytes, transcribed) for flow_cms only, never for oxygen, "
+       "pressure, CO, CO2, the CO to CO2 ratio, particle size or aging time; fixtures: ISS P1, oxygen inside and "
+       "pressure not in the table, 55 counted: 42 / 4 / 0 / 9, main view 49 files, 3,515,643,202 bytes, 7 transcribed; "
+       "lunar habitat inside 26, 8 with two agreeing labels (all CFI-G), 0 of 17 counted.")
+def check_q4(ctx):
+    res = Result()
+    Q = q_inputs(ctx)
+    path = os.path.join(ROOT, "video", "data", "video_links.csv")
+    if not os.path.exists(path):
+        raise Skip("video/data/video_links.csv absent")
+    with open(path, encoding="utf-8", newline="") as f:
+        vids = list(csv.DictReader(l for l in f if not l.startswith("#")))
+    best, main = {}, {}
+    for v in vids:
+        if v["test_id"] and v["link_state"] in Q_VIDEO_ORDER:
+            b = best.get(v["test_id"])
+            if b is None or Q_VIDEO_ORDER.index(v["link_state"]) < Q_VIDEO_ORDER.index(b):
+                best[v["test_id"]] = v["link_state"]
+            if v["investigation"] == "PSI-25" and v["view_from_name"] == "main":
+                main.setdefault(v["test_id"], []).append(v)
+    grp = [v for v in vids if v["investigation"] == "PSI-25" and v["view_from_name"] == "main"]
+    g = (len(grp), sum(int(v["bytes"]) for v in grp), sum(1 for v in grp if v["transcribed"] == "yes"))
+    for r in Q["rows"]:
+        if r["row_kind"] != "video":
+            continue
+        res.checked += 1
+        if r["variable"] in Q_NO_VIDEO_VARIABLES or r["variable"] != "flow_cms" or r["location"] != "video_on_screen_text":
+            res.fail(problem="video row for a variable the screen does not show", variable=r["variable"])
+        if (int(r["files"]), int(r["bytes"]), int(r["files_opened"])) != g:
+            res.fail(problem="video group files, bytes or transcribed differ", file=(r["files"], r["bytes"], r["files_opened"]), recount=g)
+    for r in Q["rows"]:
+        if r["location"] == "video_on_screen_text" and r["row_kind"] != "video":
+            res.fail(problem="video location on a quantity row")
+    tid = {t["test_id"]: t for t in Q["tests"]}
+    for r in ctx.table("question_chain_counts.csv"):
+        res.checked += 1
+        ts = []
+        for t in Q["scope"][r["need_id"]]:
+            m = Q["marks"][(r["scenario_id"], t["test_id"])]
+            if q_place(m["o2_match"], m["pressure_match"]) == r["placement"] and \
+                    (r["level"] == "placement" or (m["o2_match"], m["pressure_match"]) == (r["o2_match"], r["pressure_match"])):
+                ts.append(t["test_id"])
+        c = [t for t in ts if Q["link"].get((r["need_id"], t)) == "stated"]
+        want = tuple(sum(1 for t in c if best.get(t) == s) for s in Q_VIDEO_ORDER) + (sum(1 for t in c if t not in best),)
+        want += tuple(sum(1 for t in ts if best.get(t) == s) for s in Q_VIDEO_ORDER)
+        mv = [v for t in c for v in main.get(t, [])]
+        want += (len(mv), sum(int(v["bytes"]) for v in mv), sum(1 for v in mv if v["transcribed"] == "yes"))
+        got = tuple(int(r[k]) for k in ("counted_with_video_two_labels_agree", "counted_with_video_one_label",
+                                        "counted_with_video_labels_disagree_only", "counted_without_video",
+                                        "in_scope_with_video_two_labels_agree", "in_scope_with_video_one_label",
+                                        "in_scope_with_video_labels_disagree_only", "counted_main_view_files",
+                                        "counted_main_view_bytes", "counted_main_view_files_transcribed"))
+        if got != want:
+            res.fail(problem="video counts differ", key=(r["scenario_id"], r["need_id"], r["level"], r["placement"], r["o2_match"], r["pressure_match"]),
+                     file=got, recount=want)
+        if (r["scenario_id"], r["need_id"], r["level"], r["o2_match"], r["pressure_match"]) == ("iss", "P1", "placement_pair", "in", "not_recorded"):
+            fx = (int(r["counted_tests"]),) + want[:4] + want[7:]
+            if fx != (55, 42, 4, 0, 9, 49, 3515643202, 7):
+                res.fail(problem="ISS P1 video fixture not reproduced", recount=fx)
+        if (r["scenario_id"], r["need_id"], r["level"], r["placement"]) == ("lunar_habitat", "S1", "placement", "inside"):
+            two = [t for t in ts if best.get(t) == "two_labels_agree"]
+            fx = (len(ts), len(two), {tid[t]["investigation_id"] for t in two}, want[0])
+            if fx != (26, 8, {"PSI-159"}, 0):
+                res.fail(problem="lunar video fixture not reproduced", recount=str(fx))
+    res.numbers = {"rows": res.checked, "video_group": g, "tests_with_a_video_by_best_state":
+                   {s: sum(1 for v in best.values() if v == s) for s in Q_VIDEO_ORDER}}
+    return res
+
+
 # ----------------------------------------------------------------------------
 # running
 # ----------------------------------------------------------------------------
