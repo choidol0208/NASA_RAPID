@@ -1,9 +1,11 @@
 ---
 role: ui
-updated: 2026-11-15 16:28 KST
+updated: 2026-11-15 16:38 KST
 state: working
 blocked_on: none
 ---
+Now (15 Nov, 16:38): **human lead's decision in the ui session (about 16:35): every notice worded positively, the footer included**; one positive statement that scores, order and counts are Team RAPID's computation stays (§5), AI labels stay (§4). ui rewrote its remaining disclaimer sentences (video side pilot, need-reference note, tests status note, three piles header, small print and reading-order header, results-first small print). Request 1638 to pm: the masthead and footer notices, how.html and `data/insights` text, and recording the decision in `coord/decisions.md`.
+
 Now (15 Nov, 16:28): sync. main `b75703b` (pm: "match score" in app.js and `data/insights`) merged; its two lines in `web/app.js` conflicted with ui's 1619 change of the same lines, resolved by keeping ui's version (pm's renames plus the tooltip and the shorter tags). pm's 16:26 decision says the "not a NASA result" notes stay, while catalog 1619 relays the human lead's 16:18 instruction to drop such negatives; ui followed 1619 and noted the difference in request 1624; pm's footer keeps the §5 "not a NASA result" clause. Build exit 0, 0 broken joins, parity 106/106.
 
 Now (15 Nov, 16:24): **catalog 1619 done** (human lead 16:18): "team score" is "match score" on the cards, in At a glance and in the table header (with the tooltip), the AI tags are "catalog values AI-extracted" and "AI-generated", and the notes above the cards, under the table and in results-first are worded positively (the §5 statement stays next to the scores). Request 1624 to pm: the same rule for sentences the page prints from pm's `pile_wording.md`, pm's `scenarios.json` ("team score" 8 times) and data's `results_by_need.json` `_meta`.

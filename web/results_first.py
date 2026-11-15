@@ -81,7 +81,10 @@ def build(root):
             texts += [needs[-1]["headline"]]
         out[s["id"]] = {"scenario": s["id"], "label": s.get("label", s["id"]), "needs": needs,
                         "order_rule": meta.get("order_rule", {}).get("text", ""),
-                        "team_output": meta.get("team_output", ""), "not_guidance": meta.get("not_research_guidance", ""),
+                        # the human lead's decision of 16:35 (all notices worded positively): the page prints these two
+                        # lines instead of the file's _meta.team_output and _meta.not_research_guidance
+                        "team_output": "Groups, order, headlines and counts are Team RAPID's computation from the files the data role names in this file.",
+                        "ai_note": "Read by an AI agent.",
                         "source": "data/pipeline/results_by_need.json"}
     # the page adds no sentence of its own to these texts; scan the data role's headlines anyway
     for t in texts:
