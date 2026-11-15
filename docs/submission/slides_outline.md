@@ -4,7 +4,7 @@ DRAFT written by an AI assistant (Claude Code, pm role) for the team to rewrite 
 >
 > **1. What this is.** One deck plan of seven slides, title slide included (the limit is seven). Each slide has a title that is a full-sentence claim, the words on the slide, the picture and where it comes from, and a speaker note of 60 words or fewer. The next job can build it without further decisions, except the markers below.
 >
-> **2. Markers left.** `[FILL: ...]` is for what only a person can supply (team name). `[ASSISTANT-MEASURED: ...]` is for a measured result of the conversational assistant, which is not final yet; fill it from `data/insights/assistant_eval.json` once the evaluation has run, never by estimate. `[NOT RECOUNTED: ...]` marks a number this job could not recount from a file. All markers are listed under "Open points".
+> **2. Markers left.** `[FILL: ...]` is for what only a person can supply (none is left in this file: the team name, RAPID, came from the human lead). `[ASSISTANT-MEASURED: ...]` is for a measured result of the conversational assistant, which is not final yet; fill it from `data/insights/assistant_eval.json` once the evaluation has run, never by estimate. `[NOT RECOUNTED: ...]` marks a number this job could not recount from a file. All markers are listed under "Open points".
 >
 > **3. Slide 6.** The earlier outline kept two versions of slide 6. The pm role now takes version A, "Four kinds of SI, each with its measured check", extended by the conversational assistant. You can still switch to version B ("Code computes every number; one local model writes cited summaries"); its plan is kept, short, under "Appendix: slide 6, version B". If the assistant markers of box 3 are not filled before you submit, retitle slide 6 "Four uses of SI and how each is checked" and write "measurement in progress" in box 3, so that the title claims no more than the slide shows.
 >
@@ -39,11 +39,11 @@ The four goals, and where each is shown: (1) classify and summarise the data: sl
 ## Slide 1
 
 - **Title:** Fire Evidence Explorer shows which NASA fire tests fit what you build, and where their evidence stops.
-- **Names on the slide:** Fire Evidence Explorer · [FILL: team name] · NASA Space Apps Challenge 2026, challenge "Flame in Freefall".
+- **Names on the slide:** Fire Evidence Explorer · Team RAPID · NASA Space Apps Challenge 2026, challenge "Flame in Freefall".
 - **Words on the slide:** Type what you build and where. See the closest NASA investigations, what their recorded tests hold for six fire-safety questions, where the data are, and where the evidence stops.
 - **Footer (small type):** Research exploration tool, not safety guidance. Not endorsed by NASA. Built with AI assistance (Claude).
 - **Picture:** the top of the public page: title, notice line, the question "What are you building, and where?" and the six example buttons. File `web/media/slide1_top.png` (2560 x 1084; it holds no score, so config 1.5.1 does not change it). Check it against the live page before use, and retake it with the ui role's `web/capture_media.mjs` if the top has changed. The capture prints a phrase of the challenge statement in quotation marks: crop that line off, or compare it with the official challenge page first.
-- **Speaker note (56 words):** We are [FILL: team name]. NASA publishes its microgravity fire experiments as open data, but a designer cannot easily find, compare or interpret them. Our page starts from what you want to build. It finds the closest NASA investigations, shows what their recorded tests hold and where the data are, and says where the evidence stops.
+- **Speaker note (55 words):** We are team RAPID. NASA publishes its microgravity fire experiments as open data, but a designer cannot easily find, compare or interpret them. Our page starts from what you want to build. It finds the closest NASA investigations, shows what their recorded tests hold and where the data are, and says where the evidence stops.
 
 ## Slide 2
 
@@ -162,7 +162,7 @@ Not to be used without a retake: `02_lunar_first_screen.png` and `01_iss_first_s
 
 ## Open points
 
-1. `[FILL: team name]`: slide 1, names and speaker note.
+1. The team name, RAPID, was given by the human lead on 15 November 2026 at 15:15 KST; it stands on slide 1 and in its speaker note.
 2. `[ASSISTANT-MEASURED: share correct, full pipeline]`: slide 6, box 3.
 3. `[ASSISTANT-MEASURED: questions in the set]`: slide 6, box 3.
 4. `[ASSISTANT-MEASURED: share correct, single_call arm]`: slide 6, box 3.
