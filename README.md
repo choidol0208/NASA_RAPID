@@ -8,6 +8,8 @@ Fire Evidence Explorer is a web page: you describe a crewed environment, and it 
 
 **Slides:** [docs/submission/slides.pdf](docs/submission/slides.pdf) (seven slides, the demo link of the submission; built by the pm AI session, source and build script in `docs/submission/deck/`)
 
+**Download:** two archives in the [latest release](https://github.com/choidol0208/NASA_RAPID/releases/latest), one per way of running it on your own computer (see "Download" below). The live page needs no download.
+
 **Start here:** open the "Lunar habitat, cotton fabric" demo, then the tab "What was found" (what NASA's documents report per question, then "ISS and lunar habitat, side by side") and the tab "Where the evidence stops". For the lunar habitat (30% oxygen or more and at or below 70.3 kPa), PSI has no counted test.
 
 Built during the 2026 NASA Space Apps Challenge (Seoul, 14–15 November 2026) for the challenge *Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data*. The data is NASA's Physical Sciences Informatics (PSI) archive: 24 combustion investigations.
@@ -44,13 +46,24 @@ Captures of the team's own page as it is now (not AI-generated images). The four
 
 Older screenshots and a short animation of 14 November, from before the page's redesign, are in `web/media/`.
 
+## Download
+
+The page is live and needs no download. To run it on your own computer (macOS or Linux, Python 3.10 or newer), take one of the two archives of the [latest release](https://github.com/choidol0208/NASA_RAPID/releases/latest), unzip it and run the script named in its `START_HERE.md`:
+
+| Archive | What you get | Start it with |
+|---|---|---|
+| `fire-evidence-explorer-rule-based.zip` | The dashboard and an assistant that answers at once from the team's files with fixed sentences. No language model is downloaded or run. | `./start-rule-based.sh` |
+| `fire-evidence-explorer-with-local-model.zip` | The same, with the assistant answered by the language model OpenAI gpt-oss:20b (Apache-2.0) on your computer. **The model is not inside the archive**: on the first start the install asks once, then fetches it through Ollama (about 13 GB; about 16 GB of memory is advised). | `./start-with-model.sh` |
+
+Both archives hold the same source at the same commit, about 28 MB; they differ in the `START_HERE.md` at their top. The model cannot be put into an archive: a file of a GitHub release may not exceed 2 GB. The two scripts run the commands of "Install and run" below (`./install.sh --no-model` and `./run.sh --no-model`, or `./install.sh` and `./run.sh`), and both open http://127.0.0.1:8765/.
+
 ## With and without the language model
 
 The dashboard is the same everywhere: code computes every count, rank and figure, and no language model touches a number. What changes is the SI assistant.
 
 | | Public page | Local install, no model | Local install with the model |
 |---|---|---|---|
-| How to open it | [the live page](https://choidol0208.github.io/NASA_RAPID/), nothing to install | `./install.sh --no-model`, then `./run.sh --no-model` | `./install.sh`, then `./run.sh` |
+| How to open it | [the live page](https://choidol0208.github.io/NASA_RAPID/), nothing to install | `./start-rule-based.sh` (`./install.sh --no-model`, then `./run.sh --no-model`) | `./start-with-model.sh` (`./install.sh`, then `./run.sh`) |
 | What it needs | a browser | Python 3.10 or newer | also Ollama and the model OpenAI gpt-oss:20b (Apache-2.0): about 13 GB to download, 12.7 GB loaded on the build machine |
 | Is the model in this repository? | no | no | no: `install.sh` asks once before it downloads the model through Ollama |
 | Reading of your request | rule parser | rule parser | the rule parser at once; the model then reads it twice, and the page says whether the reading was checked or corrected |
