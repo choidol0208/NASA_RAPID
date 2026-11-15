@@ -1,0 +1,1325 @@
+{
+ "_meta": {
+  "what": "Every number shown on the seven slides, with the file it comes from and the way it was computed. Team computation from NASA PSI files and the team's own checks; not NASA's conclusions.",
+  "AI-generated": true,
+  "built_by": "docs/submission/deck/build_deck.py (AI-generated code, written with Claude; no language model ran to build it)",
+  "built_at": "2026-11-15T17:18:06+09:00",
+  "git_commit": "9be148e",
+  "reviewed_by_a_person": 0,
+  "units": "TB, GB and MB are decimal (10^12, 10^9, 10^6 bytes)",
+  "fonts": "Barlow Semi Condensed (headings and numbers) and Atkinson Hyperlegible (text), SIL Open Font License, loaded from Google Fonts with the <link> of web/index.html; slides.html needs the network for them, slides.pdf embeds them"
+ },
+ "placeholders": {
+  "TEAM_NAME": "RAPID",
+  "ASSISTANT_MEASURED": {
+   "correct_full_pipeline": null,
+   "questions_in_set": null,
+   "correct_single_call": null
+  },
+  "note": "None means that the slide shows a visible placeholder chip instead of a value.",
+  "slide_6_title": "Four uses of SI and how each is checked",
+  "VIDEO_FRAME_CHECK_ON_SLIDE": false
+ },
+ "numbers": {
+  "investigations": {
+   "value": 24,
+   "shown_as": "24",
+   "slides": [
+    2,
+    3
+   ],
+   "source": "data/pipeline/raw_inventory.json; data/catalog/investigations.csv",
+   "how": "_meta.totals.investigations; equal to the investigations listed and to the rows of the catalog"
+  },
+  "archive_files": {
+   "value": 60866,
+   "shown_as": "60,866",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/raw_inventory.json",
+   "how": "_meta.totals.files; equal to the sum of 'files' in raw_file_groups.csv"
+  },
+  "archive_tb": {
+   "value": 13471850126356,
+   "shown_as": "13.47",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/raw_inventory.json",
+   "how": "_meta.totals.bytes / 10^12 (decimal terabytes), two decimals"
+  },
+  "listing_date": {
+   "value": "2026-11-14T05:57:17Z",
+   "shown_as": "14 November 2026",
+   "slides": [
+    2,
+    5
+   ],
+   "source": "data/pipeline/raw_inventory.json",
+   "how": "_meta.listings_fetched_at, date part"
+  },
+  "pct_archive": {
+   "value": 12999389379194,
+   "shown_as": "96.49",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/raw_inventory.json",
+   "how": "by_kind.archive.bytes / _meta.totals.bytes, in percent, two decimals"
+  },
+  "pct_video": {
+   "value": 426053691302,
+   "shown_as": "3.16",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/raw_inventory.json",
+   "how": "by_kind.video.bytes / _meta.totals.bytes, in percent, two decimals"
+  },
+  "pct_other": {
+   "value": 46407055860,
+   "shown_as": "0.34",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/raw_inventory.json",
+   "how": "bytes of the 6 other kinds (document, document_table, experimental_table, other, sensor_or_telemetry_table, still_image) / _meta.totals.bytes, in percent, two decimals"
+  },
+  "exp_files": {
+   "value": 22,
+   "shown_as": "22",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/raw_inventory.json",
+   "how": "_meta.totals.by_kind.experimental_table.files"
+  },
+  "exp_mb": {
+   "value": 211116,
+   "shown_as": "0.2",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/raw_inventory.json",
+   "how": "_meta.totals.by_kind.experimental_table.bytes / 10^6, one decimal"
+  },
+  "tests": {
+   "value": 1824,
+   "shown_as": "1,824",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/tests.csv",
+   "how": "rows"
+  },
+  "tables_read": {
+   "value": 14,
+   "shown_as": "14",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/tests.csv",
+   "how": "distinct values of source_file"
+  },
+  "name_test": {
+   "value": 12934,
+   "shown_as": "12,934",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/raw_file_groups.csv; data/pipeline/raw_layers_summary.json",
+   "how": "sum of files_tied_to_a_test; equal to overall.names.test.files"
+  },
+  "name_day": {
+   "value": 30634,
+   "shown_as": "30,634",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/raw_file_groups.csv; data/pipeline/raw_layers_summary.json",
+   "how": "sum of files_tied_to_a_day_or_session; equal to overall.names.day_or_session.files"
+  },
+  "name_none": {
+   "value": 17298,
+   "shown_as": "17,298",
+   "slides": [
+    2
+   ],
+   "source": "data/pipeline/raw_file_groups.csv; data/pipeline/raw_layers_summary.json",
+   "how": "sum of files_not_tied; equal to overall.names.none.files"
+  },
+  "iss_oxygen_only": {
+   "value": 3,
+   "shown_as": "3",
+   "slides": [
+    "note 4"
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "questions of scenario iss whose tests in range all have tests_oxygen_only (no test with oxygen and pressure)"
+  },
+  "needs": {
+   "value": 6,
+   "shown_as": "6",
+   "slides": [
+    1,
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "rows per scenario (iss, lunar_habitat)"
+  },
+  "iss_needs": {
+   "value": 4,
+   "shown_as": "4",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "questions of scenario iss with tests_atmosphere + tests_oxygen_only + tests_pressure_only above 0"
+  },
+  "table_iss_P1": {
+   "value": {
+    "in_range": 55,
+    "oxygen_and_pressure": 0,
+    "oxygen_only": 55
+   },
+   "shown_as": "55",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario iss, need P1 (Flammability limit): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "table_iss_P2": {
+   "value": {
+    "in_range": 0,
+    "oxygen_and_pressure": 0,
+    "oxygen_only": 0
+   },
+   "shown_as": "0",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario iss, need P2 (Ignition): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "table_iss_P3": {
+   "value": {
+    "in_range": 2,
+    "oxygen_and_pressure": 0,
+    "oxygen_only": 2
+   },
+   "shown_as": "2",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario iss, need P3 (Flame spread and growth): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "table_iss_S1": {
+   "value": {
+    "in_range": 63,
+    "oxygen_and_pressure": 56,
+    "oxygen_only": 7
+   },
+   "shown_as": "63",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario iss, need S1 (Extinction conditions): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "table_iss_D1": {
+   "value": {
+    "in_range": 45,
+    "oxygen_and_pressure": 0,
+    "oxygen_only": 45
+   },
+   "shown_as": "45",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario iss, need D1 (Combustion products): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "table_iss_D2": {
+   "value": {
+    "in_range": 0,
+    "oxygen_and_pressure": 0,
+    "oxygen_only": 0
+   },
+   "shown_as": "0",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario iss, need D2 (Smoke generation conditions): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "lunar_needs": {
+   "value": 1,
+   "shown_as": "1",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "questions of scenario lunar_habitat with tests_atmosphere + tests_oxygen_only + tests_pressure_only above 0"
+  },
+  "table_lunar_P1": {
+   "value": {
+    "in_range": 0,
+    "oxygen_and_pressure": 0,
+    "oxygen_only": 0
+   },
+   "shown_as": "0",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario lunar_habitat, need P1 (Flammability limit): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "table_lunar_P2": {
+   "value": {
+    "in_range": 0,
+    "oxygen_and_pressure": 0,
+    "oxygen_only": 0
+   },
+   "shown_as": "0",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario lunar_habitat, need P2 (Ignition): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "table_lunar_P3": {
+   "value": {
+    "in_range": 0,
+    "oxygen_and_pressure": 0,
+    "oxygen_only": 0
+   },
+   "shown_as": "0",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario lunar_habitat, need P3 (Flame spread and growth): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "table_lunar_S1": {
+   "value": {
+    "in_range": 17,
+    "oxygen_and_pressure": 17,
+    "oxygen_only": 0
+   },
+   "shown_as": "17",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario lunar_habitat, need S1 (Extinction conditions): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "table_lunar_D1": {
+   "value": {
+    "in_range": 0,
+    "oxygen_and_pressure": 0,
+    "oxygen_only": 0
+   },
+   "shown_as": "0",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario lunar_habitat, need D1 (Combustion products): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "table_lunar_D2": {
+   "value": {
+    "in_range": 0,
+    "oxygen_and_pressure": 0,
+    "oxygen_only": 0
+   },
+   "shown_as": "0",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "scenario lunar_habitat, need D2 (Smoke generation conditions): tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "iss_o2_range": {
+   "value": {
+    "min": 19,
+    "max": 23,
+    "max_inclusive": true
+   },
+   "shown_as": "19 to 23%",
+   "slides": [
+    4
+   ],
+   "source": "pipeline/spec/scenarios.json",
+   "how": "scenarios[iss].ranges.o2_pct (max exclusive unless max_inclusive, as in pipeline/check.py in_range)"
+  },
+  "iss_p_range": {
+   "value": {
+    "min": 85.8,
+    "max": 116.8
+   },
+   "shown_as": "85.8 to below 116.8 kPa",
+   "slides": [
+    4
+   ],
+   "source": "pipeline/spec/scenarios.json",
+   "how": "scenarios[iss].ranges.pressure_kpa (max exclusive unless max_inclusive)"
+  },
+  "lunar_o2_range": {
+   "value": {
+    "min": 30,
+    "max": 36,
+    "max_inclusive": true
+   },
+   "shown_as": "30 to 36%",
+   "slides": [
+    4
+   ],
+   "source": "pipeline/spec/scenarios.json",
+   "how": "scenarios[lunar_habitat].ranges.o2_pct (max exclusive unless max_inclusive, as in pipeline/check.py in_range)"
+  },
+  "lunar_p_range": {
+   "value": {
+    "min": null,
+    "max": 85.8
+   },
+   "shown_as": "below 85.8 kPa",
+   "slides": [
+    4,
+    5
+   ],
+   "source": "pipeline/spec/scenarios.json",
+   "how": "scenarios[lunar_habitat].ranges.pressure_kpa (max exclusive unless max_inclusive)"
+  },
+  "d2_pillar": {
+   "value": "detection",
+   "shown_as": "detection",
+   "slides": [
+    4
+   ],
+   "source": "pipeline/spec/needs.json",
+   "how": "needs[id = D2].pillar (Smoke generation conditions)"
+  },
+  "p2_pillar": {
+   "value": "prevention",
+   "shown_as": "prevention",
+   "slides": [
+    4
+   ],
+   "source": "pipeline/spec/needs.json",
+   "how": "needs[id = P2].pillar (Ignition)"
+  },
+  "config_version": {
+   "value": "1.5.2",
+   "shown_as": "1.5.2",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scoring_config.json",
+   "how": "version"
+  },
+  "o2": {
+   "value": 30.0,
+   "shown_as": "30",
+   "slides": [
+    3,
+    4,
+    5
+   ],
+   "source": "scoring/scorer.py (preset lunar_habitat)",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.o2_pct, source preset"
+  },
+  "kpa": {
+   "value": 70.3,
+   "shown_as": "70.3",
+   "slides": [
+    3,
+    4
+   ],
+   "source": "scoring/scorer.py (preset lunar_habitat)",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.pressure_kpa, source preset"
+  },
+  "psi": {
+   "value": 10.196153395979001,
+   "shown_as": "10.2",
+   "slides": [
+    3,
+    4
+   ],
+   "source": "scoring/scorer.py (preset lunar_habitat)",
+   "how": "scenario.pressure_kpa / 6.894757 kPa per psi, one decimal"
+  },
+  "flow": {
+   "value": "ventilated",
+   "shown_as": "ventilated",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py (preset lunar_habitat)",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.flow_state, source preset"
+  },
+  "gravity": {
+   "value": "lunar",
+   "shown_as": "lunar",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.gravity, source text (the user's words)"
+  },
+  "material": {
+   "value": "cotton",
+   "shown_as": "cotton",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.fuel_material, source text (the user's words)"
+  },
+  "fuel_class": {
+   "value": "fabric",
+   "shown_as": "fabric",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.fuel_class, source text (the user's words)"
+  },
+  "fuel_phase": {
+   "value": "solid",
+   "shown_as": "solid",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.fuel_phase, source text (the user's words)"
+  },
+  "melt": {
+   "value": "chars",
+   "shown_as": "chars",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.melt_behavior, source text (the user's words)"
+  },
+  "regime": {
+   "value": "thin",
+   "shown_as": "thin",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.thermal_regime, source text (the user's words)"
+  },
+  "shape": {
+   "value": "flat_sheet",
+   "shown_as": "flat sheet",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.sample_geometry, source text (the user's words)"
+  },
+  "concern": {
+   "value": "prevention",
+   "shown_as": "prevention",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": scenario.concern, source default"
+  },
+  "example_button": {
+   "value": "Lunar habitat, cotton fabric",
+   "shown_as": "Lunar habitat, cotton fabric",
+   "slides": [
+    1,
+    3
+   ],
+   "source": "web/index.html",
+   "how": "text of the example button whose data-q is 'lunar habitat cotton fabric'"
+  },
+  "top1": {
+   "value": "SAFFIRE-II",
+   "shown_as": "SAFFIRE-II",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py; scoring/scoring_config.json",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[0].investigation_id"
+  },
+  "score1": {
+   "value": 75.0,
+   "shown_as": "75.0",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py; scoring/scoring_config.json",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[0].score"
+  },
+  "why1": {
+   "value": "fuel match 1.00 (fuel SIBAL (75% cotton, 25% fiberglass)); flow match 0.90 (flow concurrent at 20 cm/s)",
+   "shown_as": "fuel match 1.00 (SIBAL, 75% cotton, 25% fiberglass); flow match 0.90 (concurrent at 20 cm/s)",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[0].why, with 'O2' written 'oxygen', the dimension word inside the brackets left out and an inner bracket turned into a comma"
+  },
+  "gap1": {
+   "value": "O2 0.24 (O2 tested 22.1%)",
+   "shown_as": "oxygen 0.24 (tested 22.1%)",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[0].main_gap, reworded in the same way"
+  },
+  "top2": {
+   "value": "SAFFIRE-I",
+   "shown_as": "SAFFIRE-I",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py; scoring/scoring_config.json",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[1].investigation_id"
+  },
+  "score2": {
+   "value": 74.5,
+   "shown_as": "74.5",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py; scoring/scoring_config.json",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[1].score"
+  },
+  "why2": {
+   "value": "fuel match 1.00 (fuel SIBAL (75% cotton, 25% fiberglass)); flow match 0.90 (flow concurrent at 20 cm/s)",
+   "shown_as": "fuel match 1.00 (SIBAL, 75% cotton, 25% fiberglass); flow match 0.90 (concurrent at 20 cm/s)",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[1].why, with 'O2' written 'oxygen', the dimension word inside the brackets left out and an inner bracket turned into a comma"
+  },
+  "gap2": {
+   "value": "O2 0.22 (O2 tested 21.5–21.7%)",
+   "shown_as": "oxygen 0.22 (tested 21.5 to 21.7%)",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[1].main_gap, reworded in the same way"
+  },
+  "top3": {
+   "value": "ACME-BRE",
+   "shown_as": "ACME-BRE",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py; scoring/scoring_config.json",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[2].investigation_id"
+  },
+  "score3": {
+   "value": 62.6,
+   "shown_as": "62.6",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py; scoring/scoring_config.json",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[2].score"
+  },
+  "why3": {
+   "value": "O2 match 1.00 (O2 tested 21–40%); fuel match 0.50 (fuel methane; ethylene (100% or 50% in N2))",
+   "shown_as": "oxygen match 1.00 (tested 21 to 40%); fuel match 0.50 (methane; ethylene, 100% or 50% in N2)",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[2].why, with 'O2' written 'oxygen', the dimension word inside the brackets left out and an inner bracket turned into a comma"
+  },
+  "gap3": {
+   "value": "sample shape 0.20 (porous_burner (regime n/a))",
+   "shown_as": "sample shape 0.20 (porous burner)",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[2].main_gap, reworded in the same way"
+  },
+  "rank3_by_score": {
+   "value": 6,
+   "shown_as": "6",
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": 1 + the number of entries of 'ranking' with a higher score than results[2]"
+  },
+  "score_label": {
+   "value": "match score",
+   "shown_as": "match score",
+   "slides": [
+    3
+   ],
+   "source": "web/app.js (renderResults)",
+   "how": "the label the page writes under a result's score; the slide uses the same words"
+  },
+  "tag3": {
+   "value": "tested at your oxygen",
+   "shown_as": "tested at your oxygen",
+   "slides": [
+    3
+   ],
+   "source": "web/app.js (renderResults)",
+   "how": "the tag text the page writes on a result whose field 'complementary' is set"
+  },
+  "compliance_slide_3": {
+   "value": [
+    {
+     "R1": [
+      "not_met",
+      "catalog"
+     ],
+     "R2": [
+      "not_met",
+      "table"
+     ],
+     "R3": [
+      "unverified",
+      "assumed"
+     ],
+     "R4": [
+      "near",
+      "catalog"
+     ],
+     "R5": [
+      "met",
+      "catalog"
+     ],
+     "R6": [
+      "met",
+      "catalog"
+     ],
+     "R7": [
+      "met",
+      "catalog"
+     ]
+    },
+    {
+     "R1": [
+      "not_met",
+      "catalog"
+     ],
+     "R2": [
+      "not_met",
+      "table"
+     ],
+     "R3": [
+      "unverified",
+      "assumed"
+     ],
+     "R4": [
+      "near",
+      "catalog"
+     ],
+     "R5": [
+      "met",
+      "catalog"
+     ],
+     "R6": [
+      "met",
+      "catalog"
+     ],
+     "R7": [
+      "met",
+      "catalog"
+     ]
+    },
+    {
+     "R1": [
+      "not_met",
+      "catalog"
+     ],
+     "R2": [
+      "met",
+      "table"
+     ],
+     "R3": [
+      "documented",
+      "record"
+     ],
+     "R4": [
+      "not_met",
+      "catalog"
+     ],
+     "R5": [
+      "not_met",
+      "catalog"
+     ],
+     "R6": [
+      "not_met",
+      "catalog"
+     ],
+     "R7": [
+      "met",
+      "catalog"
+     ]
+    }
+   ],
+   "shown_as": null,
+   "slides": [
+    3
+   ],
+   "source": "scoring/scorer.py",
+   "how": "python3 -c \"from scoring import scorer; scorer.rank('lunar habitat cotton fabric')\": results[i].compliance (status, basis) per requirement R1 to R7; the points to consider of slide 3 restate R1 to R5"
+  },
+  "configs": {
+   "value": 41,
+   "shown_as": "41",
+   "slides": [
+    6
+   ],
+   "source": "data/catalog/configurations.csv",
+   "how": "rows"
+  },
+  "q_results": {
+   "value": 212,
+   "shown_as": "212",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_summary.json; data/pipeline/results_by_need.json",
+   "how": "counts.results; equal to the findings of kind 'result'"
+  },
+  "q_values": {
+   "value": 168,
+   "shown_as": "168",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_summary.json; data/pipeline/results_by_need.json",
+   "how": "counts.results_with_printed_values; equal to the results that hold printed_values"
+  },
+  "q_lunar_at": {
+   "value": 5,
+   "shown_as": "5",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_summary.json; data/pipeline/results_by_need.json",
+   "how": "counts.per_scenario_group.lunar_habitat.at_environment; equal to the distinct results of that group in the lunar-habitat blocks"
+  },
+  "q_lunar_about": {
+   "value": 9,
+   "shown_as": "9",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_summary.json; data/pipeline/results_by_need.json",
+   "how": "counts.per_scenario_group.lunar_habitat.about_a_stated_condition; equal to the distinct results of that group in the lunar-habitat blocks"
+  },
+  "q_quote": {
+   "value": "Flame base spread rate = .92 mm/s.",
+   "shown_as": "\"Flame base spread rate = .92 mm/s.\"",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_by_need.json",
+   "how": "findings['LUCI25.sibal_spread'].quote, copied exactly, between quotation marks"
+  },
+  "q_need": {
+   "value": "Flame spread and growth",
+   "shown_as": "flame spread and growth",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_by_need.json",
+   "how": "need of the lunar-habitat block that lists the result (P3), in lower case"
+  },
+  "q_material": {
+   "value": "SIBAL cotton-fiberglass fabric",
+   "shown_as": "SIBAL cotton-fiberglass fabric",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_by_need.json",
+   "how": "findings['LUCI25.sibal_spread'].conditions.material"
+  },
+  "q_gravity": {
+   "value": "lunar",
+   "shown_as": "lunar",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_by_need.json",
+   "how": "findings['LUCI25.sibal_spread'].conditions.gravity_level; the item's text says the gravity was simulated by centrifugal acceleration"
+  },
+  "q_pressure_words": {
+   "value": "air at normal pressure",
+   "shown_as": "air at normal pressure",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_by_need.json",
+   "how": "findings['LUCI25.sibal_spread'].condition_words.pressure (no number is printed)"
+  },
+  "q_ntrs": {
+   "value": "20250010653",
+   "shown_as": "20250010653",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_by_need.json",
+   "how": "source.version of the entry (NTRS number); the same number ends source.url"
+  },
+  "q_group": {
+   "value": "about_a_stated_condition",
+   "shown_as": "About one stated condition of this environment",
+   "slides": [
+    4
+   ],
+   "source": "data/pipeline/results_by_need.json",
+   "how": "group of the entry in the lunar-habitat block P3; label from _meta.order_rule.groups"
+  },
+  "gap_counted": {
+   "value": 0,
+   "shown_as": "no counted test",
+   "slides": [
+    3,
+    4
+   ],
+   "source": "data/pipeline/tests.csv; data/pipeline/need_tests.csv",
+   "how": "tests with objective_link = stated, ambient o2_pct >= 30 and pressure_kpa <= 70.3: 0"
+  },
+  "gap_recorded_not_on_a_slide": {
+   "value": 20,
+   "shown_as": null,
+   "slides": [],
+   "source": "data/pipeline/tests.csv",
+   "how": "recorded tests (counted or not) with ambient o2_pct and pressure_kpa in the same region; the reason the deck says 'no counted test' and never 'no recorded test'"
+  },
+  "s1_tests": {
+   "value": 17,
+   "shown_as": "17",
+   "slides": [
+    4,
+    5
+   ],
+   "source": "data/pipeline/scenario_tests.csv; need_tests.csv; scenario_needs.csv",
+   "how": "lunar_habitat tests with o2_match = in and pressure_match = in that are counted for S1; equal to tests_atmosphere of S1"
+  },
+  "s1_pmin": {
+   "value": 71.2341,
+   "shown_as": "71.2",
+   "slides": [
+    4,
+    5
+   ],
+   "source": "data/pipeline/tests.csv",
+   "how": "lowest pressure_kpa of those tests, one decimal"
+  },
+  "s1_pmax": {
+   "value": 72.3674,
+   "shown_as": "72.4",
+   "slides": [
+    4,
+    5
+   ],
+   "source": "data/pipeline/tests.csv",
+   "how": "highest pressure_kpa of those tests, one decimal"
+  },
+  "inside_tests": {
+   "value": 26,
+   "shown_as": "26",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/scenario_tests.csv",
+   "how": "lunar_habitat rows with o2_match = in and pressure_match = in"
+  },
+  "inside_not_counted": {
+   "value": 9,
+   "shown_as": "9",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/scenario_tests.csv; data/pipeline/need_tests.csv",
+   "how": "tests inside the lunar ranges with no row objective_link = stated in need_tests.csv (inside_tests minus the counted extinction tests)"
+  },
+  "files": {
+   "value": 398,
+   "shown_as": "398",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/test_files.json",
+   "how": "distinct psi_file_id over the file lists of the tests of scenarios.lunar_habitat"
+  },
+  "files_gb": {
+   "value": 104358456350,
+   "shown_as": "104.4",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/test_files.json",
+   "how": "sum of bytes of those files / 10^9, one decimal"
+  },
+  "files_pct": {
+   "value": 0.007746408649977159,
+   "shown_as": "0.77",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/test_files.json; data/pipeline/raw_inventory.json",
+   "how": "bytes of those files / _meta.totals.bytes, in percent, two decimals"
+  },
+  "files_agree": {
+   "value": 336,
+   "shown_as": "336",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/test_files.json",
+   "how": "those files with link_state = two_labels_agree"
+  },
+  "sheets": {
+   "value": 17,
+   "shown_as": "17",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/flex_sheet_vs_table.csv",
+   "how": "distinct psi_file_name among the rows of the counted tests inside the lunar ranges"
+  },
+  "p1_tests": {
+   "value": 133,
+   "shown_as": "133",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/need_tests.csv",
+   "how": "rows with need_id = P1 and objective_link = stated"
+  },
+  "p1_inside": {
+   "value": 0,
+   "shown_as": "0",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/scenario_needs.csv",
+   "how": "lunar_habitat, P1: tests_atmosphere + tests_oxygen_only + tests_pressure_only"
+  },
+  "p1_o2min": {
+   "value": 13.6,
+   "shown_as": "13.6",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/tests.csv",
+   "how": "lowest o2_pct of the counted P1 tests"
+  },
+  "p1_o2max": {
+   "value": 22.2,
+   "shown_as": "22.2",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/tests.csv",
+   "how": "highest o2_pct of the counted P1 tests"
+  },
+  "videos": {
+   "value": 2623,
+   "shown_as": "2,623",
+   "slides": [
+    5
+   ],
+   "source": "video/data/video_links.csv",
+   "how": "rows"
+  },
+  "videos_gb": {
+   "value": 426053691302,
+   "shown_as": "426",
+   "slides": [
+    5
+   ],
+   "source": "video/data/video_links.csv",
+   "how": "sum of bytes / 10^9, no decimal"
+  },
+  "videos_agree": {
+   "value": 662,
+   "shown_as": "662",
+   "slides": [
+    5
+   ],
+   "source": "video/data/video_links.csv",
+   "how": "rows with link_state = two_labels_agree"
+  },
+  "archives": {
+   "value": 12600,
+   "shown_as": "12,600",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/archive_summary.csv",
+   "how": "rows (archives whose zip directory was read)"
+  },
+  "archives_in_listing": {
+   "value": 12689,
+   "shown_as": "12,689",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/archive_summary_totals.json; data/pipeline/raw_inventory.json",
+   "how": "overall.archives_in_listing; equal to by_kind.archive.files"
+  },
+  "fetched_gb": {
+   "value": 2053572781,
+   "shown_as": "2.05",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/archive_summary.csv",
+   "how": "sum of bytes_fetched / 10^9, two decimals"
+  },
+  "archives_tb": {
+   "value": 12808926048063,
+   "shown_as": "12.8",
+   "slides": [
+    5
+   ],
+   "source": "data/pipeline/archive_summary.csv",
+   "how": "sum of listing_bytes / 10^12, one decimal"
+  },
+  "val_pass": {
+   "value": 45,
+   "shown_as": "45",
+   "slides": [
+    6
+   ],
+   "source": "validation/run_validation.py; validation/scenarios.json",
+   "how": "run now with --report /dev/null (nothing written): scenarios passed"
+  },
+  "val_total": {
+   "value": 45,
+   "shown_as": "45",
+   "slides": [
+    6
+   ],
+   "source": "validation/run_validation.py; validation/scenarios.json",
+   "how": "the same run: scenarios in the set"
+  },
+  "par_ok": {
+   "value": 106,
+   "shown_as": "106",
+   "slides": [
+    6
+   ],
+   "source": "web/parity_check.py (web/scorer.js against scoring/scorer.py)",
+   "how": "run now: queries with identical results"
+  },
+  "par_total": {
+   "value": 106,
+   "shown_as": "106",
+   "slides": [
+    6
+   ],
+   "source": "web/parity_check.py",
+   "how": "the same run: queries compared"
+  },
+  "proposed": {
+   "value": 70,
+   "shown_as": "70",
+   "slides": [
+    6
+   ],
+   "source": "data/insights/quality.json",
+   "how": "proposed"
+  },
+  "removed": {
+   "value": 37,
+   "shown_as": "37",
+   "slides": [
+    6
+   ],
+   "source": "data/insights/quality.json",
+   "how": "dropped_by_gates (5) + removed_before_review.n (4) + removed_by_review (28)"
+  },
+  "shown": {
+   "value": 33,
+   "shown_as": "33",
+   "slides": [
+    6
+   ],
+   "source": "data/insights/quality.json",
+   "how": "shipped_model_sentences; equal to proposed minus removed"
+  },
+  "reviewed_ai": {
+   "value": 61,
+   "shown_as": "61",
+   "slides": [
+    6
+   ],
+   "source": "data/insights/quality.json",
+   "how": "reviewed_ai_session"
+  },
+  "reviewed_person": {
+   "value": 0,
+   "shown_as": "0",
+   "slides": [
+    6,
+    7
+   ],
+   "source": "data/insights/quality.json",
+   "how": "reviewed_person"
+  },
+  "of_materials": {
+   "value": 3,
+   "shown_as": "3",
+   "slides": [
+    7
+   ],
+   "source": "data/pipeline/findings.csv (OF2012.table1; NTRS-20130010991, AIAA 2012-3492)",
+   "how": "materials in Table I whose mean lunar ULOI*/MOC* is below both the 0 g and the 1 g mean (all of them)"
+  },
+  "clips": {
+   "value": 19,
+   "shown_as": "19",
+   "slides": [
+    6
+   ],
+   "source": "video/settings/bass2.json; video/data/team_transcription_bass2_onscreen_readings/*.csv",
+   "how": "clips in the settings; equal to the number of CSV files"
+  },
+  "video_rows": {
+   "value": 16019,
+   "shown_as": "16,019",
+   "slides": [
+    6
+   ],
+   "source": "video/data/team_transcription_bass2_onscreen_readings/*.csv",
+   "how": "data rows of the CSV files; equal to the rows in reading_manifest.json"
+  },
+  "frames": {
+   "value": 186,
+   "shown_as": "186",
+   "slides": [],
+   "source": "video/README.md, 'How it was checked'",
+   "how": "STATED, NOT RECOUNTED: read from the sentence 'Together: N frames, ... none wrong'; the per-frame check sheet is not in the repository"
+  },
+  "labels": {
+   "value": 9,
+   "shown_as": "9",
+   "slides": [
+    7
+   ],
+   "source": "data/insights/model_readiness.json",
+   "how": "rows (outcome labels assessed)"
+  },
+  "labels_pass": {
+   "value": 1,
+   "shown_as": "1",
+   "slides": [
+    7
+   ],
+   "source": "data/insights/model_readiness.json",
+   "how": "rows whose verdict says 'indicative' (a simple model beat the base rate)"
+  },
+  "recorded_answer_slide_6": {
+   "value": {
+    "conversation": "clarify_first",
+    "turn": 2,
+    "recorded_at": "2026-11-15T16:36:29+09:00",
+    "model": "gpt-oss:20b (f38aa0c53da5)",
+    "question": "You:\nA Mars base",
+    "answer": "The team's ranking lists BASS (PSI-26), BASS-II (PSI-25), and SAFFIRE-I (PSI-98) as the closest investigations for a Mars habitat.1 None of the 133 tests counted for the flammability limit need are recorded at Martian gravity.2",
+    "citation_marks": 2,
+    "checks_line": "4 sentences written, 2 removed by the checks, 0 repaired."
+   },
+   "shown_as": null,
+   "slides": [
+    6
+   ],
+   "source": "data/insights/assistant_recorded.json; docs/submission/deck/img/captures.json",
+   "how": "the recorded turn chosen in capture.mjs (RECORDED_CONVERSATION, RECORDED_TURN), as the page replayed it for the capture; shown as a picture, nothing is retyped"
+  },
+  "solid_o2_max_in_capture": {
+   "value": 22.2,
+   "shown_as": "22.2",
+   "slides": [
+    7
+   ],
+   "source": "data/pipeline/tests.csv; docs/submission/deck/img/captures.json",
+   "how": "highest ambient o2_pct of a solid-fuel test; the evidence-map capture prints the same value ('ends at ...')"
+  },
+  "gas_recorded_at_input_o2_not_on_a_slide": {
+   "value": 246,
+   "shown_as": null,
+   "slides": [
+    "7 caption, in words"
+   ],
+   "source": "data/pipeline/tests.csv",
+   "how": "gas-fuel tests with ambient o2_pct >= 30 (any pressure); the caption of slide 7 says they are recorded, and gap_counted says none at or below 70.3 kPa is counted"
+  },
+  "captures_on_slides": {
+   "value": {
+    "top.png": {
+     "taken_at": "2026-11-15T08:07:51.420Z",
+     "sha256": "c23db04c9da5d9940d52eda0b80f2283d16e4f9dc6c86518cc1ddd19c9f5f0df",
+     "scoring_config": "1.5.2"
+    },
+    "cotton_top3.png": {
+     "taken_at": "2026-11-15T07:53:12.649Z",
+     "sha256": "f9d9b10b63378d3ddb23371beb5088d6bd2ab7d1532c9544b758c57f237db777",
+     "scoring_config": "1.5.2"
+    },
+    "lunar_found.png": {
+     "taken_at": "2026-11-15T07:53:18.326Z",
+     "sha256": "4bf5ed2874e1f92fbccd6858f4bdd31037f12cd844ba12156d226765ac16dc11",
+     "scoring_config": "1.5.2"
+    },
+    "lunar_piles_s1.png": {
+     "taken_at": "2026-11-15T07:53:25.400Z",
+     "sha256": "23bcc9da22f080bacfd43a56dfe79380967907308c00129759953be27b066c41",
+     "scoring_config": "1.5.2"
+    },
+    "lunar_evidence_map.png": {
+     "taken_at": "2026-11-15T07:53:19.862Z",
+     "sha256": "afb40d9f8dfb24adba6703155159f2b3206b381b654e184778f6df36e4d5b8a9",
+     "scoring_config": "1.5.2"
+    },
+    "assistant_recorded.png": {
+     "taken_at": "2026-11-15T08:16:49.072Z",
+     "sha256": "eaf3967e72ab081eb7c3e4fb14b50d410f164aae18855ddc673ed9e768956073",
+     "scoring_config": "1.5.2"
+    }
+   },
+   "shown_as": null,
+   "slides": [
+    1,
+    3,
+    7,
+    6
+   ],
+   "source": "docs/submission/deck/img/captures.json",
+   "how": "the captures the build checks, each with its time, its SHA-256 and the scoring config of the page build it was taken from; top.png (slide 1), cotton_top3.png (slide 3), lunar_evidence_map.png (slide 7) and assistant_recorded.png (slide 6) are shown; lunar_found.png and lunar_piles_s1.png are not shown (too small to read at slide size) and only prove that the page prints the quotation of slide 4 and the counted tests of slide 5"
+  }
+ },
+ "cross_checks_passed": [
+  "60,866-style file total equal in raw_inventory.json, raw_file_groups.csv and raw_layers_summary.json; by_kind adds up",
+  "every row of tests.csv has gravity_level microgravity",
+  "files by name (test, day or session, none) add up to the file total and agree in two files",
+  "the scorer's lunar preset equals the nominal oxygen and pressure of lunar_habitat in pipeline/spec/scenarios.json",
+  "scorer, worked example: values from the preset, the user's words and the default as slide 3 says; results 1 and 2 are Saffire fabric tests; result 3 holds its place by the oxygen rule; gravity, oxygen, pressure, airflow and fuel statuses as the points to consider say; 'no_material' is raised for 'lunar habitat' and not for the example",
+  "quoted results: results_summary.json equals a recount of results_by_need.json (results, with printed values, the two lunar-habitat groups)",
+  "video_links.csv rows and bytes equal by_kind.video of raw_inventory.json",
+  "archives: archive_summary_totals.json equals archive_summary.csv (rows, bytes fetched) and by_kind.archive.files",
+  "quality.json: reviewed_ai_session = proposed - dropped_by_gates - removed_before_review.n",
+  "slide 7 gravity: OF2012 Table I in findings.csv gives lunar limits below 0 g and 1 g for every material; reference listed in pipeline/spec/references.json",
+  "captures on the slides (top.png, cotton_top3.png, lunar_found.png, lunar_piles_s1.png, lunar_evidence_map.png, assistant_recorded.png): taken under scoring config 1.5.2, with the page's two fonts, the file equal to its manifest entry",
+  "captures: cotton_top3.png shows the scorer's three results, scores, reasons and largest gaps with 'Details and sources' closed; lunar_found.png shows the example quotation in its group; lunar_piles_s1.png shows the counted extinction tests; lunar_evidence_map.png shows the solid-fuel end and the input; top.png shows the example button and not the challenge quotation"
+ ]
+}

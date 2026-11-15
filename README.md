@@ -6,7 +6,7 @@ Fire Evidence Explorer is a web page: you describe a crewed environment, and it 
 
 **Demo links:** [Lunar habitat, cotton fabric](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat%20cotton%20fabric) · [Lunar habitat](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat) · [ISS cabin](https://choidol0208.github.io/NASA_RAPID/?q=ISS) · [How it works](https://choidol0208.github.io/NASA_RAPID/how.html)
 
-**Slides:** [docs/submission/slides.pdf](docs/submission/slides.pdf) (seven slides; public at https://github.com/choidol0208/NASA_RAPID/blob/main/docs/submission/slides.pdf once it is committed)
+**Slides:** [docs/submission/slides.pdf](docs/submission/slides.pdf) (seven slides, a draft built by the pm AI session for the team to revise; source and build script in `docs/submission/deck/`)
 
 **Start here:** open the "Lunar habitat, cotton fabric" demo, then the tab "What was found" (what NASA's documents report per question, then "ISS and lunar habitat, side by side") and the tab "Where the evidence stops". For the lunar habitat (30% oxygen or more and at or below 70.3 kPa), PSI has no counted test.
 
