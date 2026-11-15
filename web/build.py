@@ -198,6 +198,21 @@ def main():
             sha = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
         except (OSError, subprocess.CalledProcessError):
             sha = "main"
+    # pm's SI assistant widget (request 20261115-1146, docs/assistant/for_ui.md). On the public page it runs
+    # no model and calls no API: it replays the recorded conversations. ui's choice (pm left it open): the
+    # widget is included only once the recorded conversations exist, so a reader never meets an empty box
+    # that asks for a local server. The test fixtures under ai/assistant/static/mock/ are never published.
+    assistant = False
+    a_js, a_css = os.path.join(ROOT, "ai/assistant/static/assistant.js"), os.path.join(ROOT, "ai/assistant/static/assistant.css")
+    a_rec, a_eval = os.path.join(ROOT, "data/insights/assistant_recorded.json"), os.path.join(ROOT, "data/insights/assistant_eval.json")
+    if os.path.exists(a_js) and os.path.exists(a_css) and (os.path.exists(a_rec) or os.environ.get("ASSISTANT_PREVIEW") == "1"):
+        os.makedirs(os.path.join(DIST, "assistant"), exist_ok=True)
+        for src, dst in ((a_js, "assistant.js"), (a_css, "assistant.css"), (a_rec, "recorded.json"), (a_eval, "eval.json")):
+            if os.path.exists(src):
+                shutil.copy(src, os.path.join(DIST, "assistant", dst))
+                OPTIONAL_BUILT.append(f"assistant/{dst}")
+        assistant = True
+    print("assistant widget: " + ("included" if assistant else "not included (data/insights/assistant_recorded.json not on this branch yet)"))
     # Optional files actually in this build: the page fetches only these (no 404 for a file not yet made).
     present = sorted(dst for dst in OPTIONAL.values() if os.path.exists(os.path.join(DIST, dst)))
     if os.path.exists(os.path.join(DIST, "data/scenario_tests.csv")):
@@ -209,7 +224,9 @@ def main():
     # deploy is read at once, and a page never mixes files from two builds.
     v = sha[:12] if sha != "main" else datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
     stamp = {
-        "index.html": [('href="style.css"', f'href="style.css?v={v}"'), ('src="app.js"', f'src="app.js?v={v}"')],
+        "index.html": [('href="style.css"', f'href="style.css?v={v}"'), ('src="app.js"', f'src="app.js?v={v}"')] + (
+            [("</head>", f'<link rel="stylesheet" href="assistant/assistant.css?v={v}">\n</head>'),
+             ("</body>", f'<script src="assistant/assistant.js?v={v}" defer></script>\n</body>')] if assistant else []),
         "app.js": [('from "./scorer.js"', f'from "./scorer.js?v={v}"'), ('const DATA_V = "__BUILD__";', f'const DATA_V = "{v}";')],
     }
     for name, pairs in stamp.items():
