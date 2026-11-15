@@ -179,6 +179,21 @@ def main():
             json.dump(doc, fh, ensure_ascii=False)
         OPTIONAL_BUILT.append(f"data/piles/{sid}.json")
     print("three piles: " + ", ".join(f"{k} ({len(v['needs'])} questions)" for k, v in piles.items()))
+    # Results first (pm request 20261115-1513): what NASA's documents report, per environment and question,
+    # from the data role's results_by_need.json; results_flat.csv is offered as a download.
+    import results_first  # noqa: E402
+    res = results_first.build(ROOT)
+    if res:
+        os.makedirs(os.path.join(DIST, "data", "results"), exist_ok=True)
+        for sid, doc in res.items():
+            with open(os.path.join(DIST, "data", "results", f"{sid}.json"), "w", encoding="utf-8") as fh:
+                json.dump(doc, fh, ensure_ascii=False, separators=(",", ":"))
+            OPTIONAL_BUILT.append(f"data/results/{sid}.json")
+        flat = os.path.join(ROOT, "data", "pipeline", "results_flat.csv")
+        if os.path.exists(flat):
+            shutil.copy(flat, os.path.join(DIST, "data", "results", "results_flat.csv"))
+            OPTIONAL_BUILT.append("data/results/results_flat.csv")
+        print("results first: " + ", ".join(f"{k} ({sum(len(n['entries']) for n in v['needs'])} results)" for k, v in res.items()))
     # the files of each test inside the ranges (data's test_files.json), loaded by the page on request
     for sid, doc in raw_piles.build_files(ROOT).items():
         with open(os.path.join(DIST, "data", "piles", f"{sid}_files.json"), "w", encoding="utf-8") as fh:
