@@ -1787,8 +1787,8 @@
   "counts": {
    "n_at": 0,
    "n_about": 4,
-   "n_general": 21,
-   "n_listed": 25,
+   "n_general": 24,
+   "n_listed": 28,
    "n_not_full_text": 5
   },
   "at_the_environment": [],
@@ -2315,6 +2315,40 @@
     "tagging_note": "The quote reads 'it is safe for all higher pressure atmospheres'; it is carried verbatim and is a sentence of the paper about a proposed test logic. The item's note says it rests on normal-gravity data; text and quote state no gravity level, so none is tagged."
    },
    {
+    "finding_id": "ICES15.hrr",
+    "item_id": "ICES15.hrr",
+    "row": null,
+    "kind": "result",
+    "applies": "general",
+    "list": "general",
+    "text": "Computed by the authors, not a measurement: using Huggett's oxygen consumption calorimetry (13.1 kJ/g O2) and the burn time of each test, the paper estimates the BASS-II heat release rate to be typically well below 100 W, increasing with ambient oxygen; one long opposed thick slab test released close to 100 W and a brief concurrent rod test almost 110 W.",
+    "quote": "we estimate the heat release rate to be typically well below 100 W",
+    "where": "III, text beside Figure 8, p. 7",
+    "reference_id": "ICES-2015-196",
+    "title": "Results from on-board CSA-CP and CDM Sensor Readings during the Burning and Suppression of Solids - II (BASS-II) Experiment in the Microgravity Science Glovebox (MSG) (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "ICES-2015-196 (12-16 July 2015, Bellevue, Washington; NTRS 20150019858)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20150019858",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": null
+    },
+    "matched_on": {},
+    "not_stated": [
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "A heat release estimate names no gas, smoke, spread, ignition or extinction; tagged general (the collecting agent proposed D1)."
+   },
+   {
     "finding_id": "SAF17.sensors",
     "item_id": "SAF17.sensors",
     "row": null,
@@ -2609,6 +2643,48 @@
     "item_note": "States no pressure."
    },
    {
+    "finding_id": "BASS2TM.rod_min_o2",
+    "item_id": "BASS2TM.rod_min_o2",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "For the BASS-II concurrent-flow PMMA rod tests, the report gives the minimum O2 concentration of the flammability boundary as 13.5 percent O2 at a stretch rate a of 8 to 12 s-1, lower than the upward flame spread limit of 15.4 percent O2 observed in normal gravity with an additional 4-cm/s forced flow.",
+    "quote": "The minimum O2 concentration of 13.5 percent O2 at a of 8 to 12 s–1 is significantly lower than the observed upward flame spread limit of 15.4 percent O2",
+    "where": "6.1.4.4 Flammability Boundary, p. 76 (PDF page 84); Figures 6.9 and 6.10",
+    "reference_id": "NASA-TM-20210011385",
+    "title": "Burning and Suppression of Solids-II (BASS-II) Summary Report (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "NASA/TM-20210011385, October 2021",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011385",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA rod"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "gravity_level"
+    ],
+    "states_conditions_in_words": true,
+    "condition_words": {
+     "gravity": [
+      "observed in normal gravity"
+     ],
+     "flow": [
+      "additional 4-cm/s forced flow"
+     ]
+    },
+    "item_note": "Different value in another document: ICES-2019-BASS2 (item ICES19.limits) prints 13.6% O2 as the minimum oxygen concentration in the flammability boundary from the concurrent rod tests; this report prints 13.5 percent. Both are kept as printed. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The O2 numbers are reported limits, not the atmosphere of a test. 'normal gravity' and the 4-cm/s flow are written for the comparison limit only. Tagged P1 as ICES19.limits; the collecting agent proposed S1."
+   },
+   {
     "finding_id": "OF2012.normoxic",
     "item_id": "OF2012.normoxic",
     "row": null,
@@ -2725,6 +2801,45 @@
     "item_note": "'it is possible'; one material; normal gravity."
    },
    {
+    "finding_id": "SAF17S.silicone_no_spread",
+    "item_id": "SAF17S.silicone_no_spread",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "None of the Saffire-2 silicone samples (sheets 0.27, 0.61, 1.03 and 0.37 mm thick, samples 2-1 to 2-4) burned: when the igniter was powered off a tiny gas phase flame remained but did not spread and quickly extinguished; the slide notes that even the thin sample had been entirely consumed in normal gravity.",
+    "quote": "When the igniter was powered off, a tiny gas phase flame remained but did not spread and quickly extinguished.",
+    "where": "Slide 12 'Saffire-2; Silicone Results'; thicknesses on slide 9",
+    "reference_id": "NTRS-20170008805",
+    "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+    "version": "2017 (36 slides)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20170008805",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "silicone"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "gravity_level"
+    ],
+    "states_conditions_in_words": true,
+    "condition_words": {
+     "gravity": [
+      "entirely consumed in normal gravity"
+     ]
+    },
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "Tagged P1 (flammability of a material) and P3 (no flame spread). 'normal gravity' is written for the comparison only."
+   },
+   {
     "finding_id": "THOMSEN18.care",
     "item_id": "THOMSEN18.care",
     "row": null,
@@ -2804,11 +2919,11 @@
    },
    {
     "id": "rung3.counts",
-    "text": "Results and caveats listed: 0 at the oxygen and pressure of this environment; 4 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 21 stated without an oxygen, pressure or gravity level that can be compared."
+    "text": "Results and caveats listed: 0 at the oxygen and pressure of this environment; 4 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 24 stated without an oxygen, pressure or gravity level that can be compared."
    },
    {
     "id": "rung3.access",
-    "text": "5 of the 25 listed come from a document that was not read in full text; each entry gives the access level of its document."
+    "text": "5 of the 28 listed come from a document that was not read in full text; each entry gives the access level of its document."
    },
    {
     "id": "rung3.limits",
@@ -3160,7 +3275,7 @@
   {
    "rung": "3",
    "id": "rung3.counts",
-   "text": "Results and caveats listed: 0 at the oxygen and pressure of this environment; 4 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 21 stated without an oxygen, pressure or gravity level that can be compared.",
+   "text": "Results and caveats listed: 0 at the oxygen and pressure of this environment; 4 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 24 stated without an oxygen, pressure or gravity level that can be compared.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.mars_habitat.needs.P1",
     "data/pipeline/findings_by_environment.json#environments.mars_habitat.needs.general"
@@ -3169,7 +3284,7 @@
   {
    "rung": "3",
    "id": "rung3.access",
-   "text": "5 of the 25 listed come from a document that was not read in full text; each entry gives the access level of its document.",
+   "text": "5 of the 28 listed come from a document that was not read in full text; each entry gives the access level of its document.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.mars_habitat.needs.P1",
     "data/pipeline/findings_by_environment.json#environments.mars_habitat.needs.general"
@@ -3264,6 +3379,6 @@
    "no_record": "mars_habitat__P1.no_record",
    "caveats": "mars_habitat__P1.caveats"
   },
-  "headline": "29 quoted results tagged for this question: 0 at the oxygen and pressure of this environment, 4 about one of its stated conditions, 11 stated without these conditions, 14 at other stated conditions; 16 with printed values. 44 more tagged for all questions: 0 at the oxygen and pressure of this environment, 0 about one of its stated conditions. 133 tests counted; this environment sets no oxygen or pressure range."
+  "headline": "35 quoted results tagged for this question: 0 at the oxygen and pressure of this environment, 4 about one of its stated conditions, 13 stated without these conditions, 18 at other stated conditions; 19 with printed values. 45 more tagged for all questions: 0 at the oxygen and pressure of this environment, 0 about one of its stated conditions. 133 tests counted; this environment sets no oxygen or pressure range."
  }
 }

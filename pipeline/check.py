@@ -7252,7 +7252,8 @@ def check_u2(ctx):
        "In every block, the entries of found, criteria and caveats are exactly the findings of that kind tagged "
        "for the need (or for all needs, in the second list), each in the group findings_by_environment.json "
        "lists it under (other_conditions when it lists it nowhere), and they follow the stated order: group, "
-       "names a material first, item id, order of findings.csv.")
+       "measured or not labelled before computed, simulated or preliminary (result_kind of the item), names a "
+       "material first, item id, order of findings.csv.")
 def check_u3(ctx):
     res = Result()
     doc, flat, summ = u_inputs(ctx)
@@ -7260,6 +7261,11 @@ def check_u3(ctx):
     rows = ctx.table("findings.csv")
     pos = {r["finding_id"]: i for i, r in enumerate(rows)}
     gi = {g: i for i, (g, _) in enumerate(U_GROUPS)}
+    after = set(ctx.spec("results")["result_kind"]["after_measured"])
+    items = ctx.reference_items
+
+    def rank(r):
+        return 1 if items[r["item_id"]][1].get("result_kind") in after else 0
     for s, b in u_blocks(doc):
         env = next(e for e in fbe["environments"] if e["id"] == s["id"])
         for kind, need_list, all_list in (("result", b["found"]["entries"], b["found"]["entries_tagged_for_all_questions"]),
@@ -7274,7 +7280,7 @@ def check_u3(ctx):
                         for e in block[src]:
                             listed[e["finding_id"]] = g
                 exp = [r for r in rows if r["kind"] == kind and key in r["needs"].split(";")]
-                exp = sorted(exp, key=lambda r: (gi[listed.get(r["finding_id"], "other_conditions")],
+                exp = sorted(exp, key=lambda r: (gi[listed.get(r["finding_id"], "other_conditions")], rank(r),
                                                  0 if r["material"] else 1, r["item_id"], pos[r["finding_id"]]))
                 res.checked += 1
                 if [e["finding_id"] for e in lst] != [r["finding_id"] for r in exp]:
@@ -7422,6 +7428,78 @@ def check_u4(ctx):
                 res.fail(problem="added value not printed in the item's words", item=iid, number=n)
     res.numbers = {"blocks": sum(1 for _ in u_blocks(doc)), "results": len(results),
                    "per_need": {n: c["per_need"][n]["results"] for n in c["per_need"]}}
+    return res
+
+
+@check("U5_results_kind_and_relation",
+       "Every reference item that carries 'result_kind' has one of the values of spec/results.json; an item whose "
+       "kind is not measured begins its text with the label of its kind, and that text is the text of its findings "
+       "and item views in results_by_need.json (the rendered sentence); results_by_need.json and results_flat.csv "
+       "carry the item's result_kind, investigation and relation; an item with 'relation' has 'investigation' null; "
+       "an item whose 'investigation' is not null names only PSI investigations of the catalogue (sources.json) and "
+       "has no 'relation'; an item with the field 'investigation' whose text names an experiment of the list "
+       "'non_psi_experiment_words' has 'investigation' null (no result of a non-PSI experiment is attributed to a "
+       "PSI investigation); in every found list no measured or unlabelled result follows a labelled one of the same "
+       "group.")
+def check_u5(ctx):
+    res = Result()
+    doc, flat, summ = u_inputs(ctx)
+    rk = ctx.spec("results")["result_kind"]
+    labels, allowed, after = rk["labels"], set(rk["values"]), set(rk["after_measured"])
+    psi = {s["investigation_id"] for s in ctx.spec("sources")["sources"]}
+    words = rk["non_psi_experiment_words"]
+    n_kind = n_rel = n_inv = 0
+    for iid, (ref, it) in sorted(ctx.reference_items.items()):
+        if not any(k in it for k in ("result_kind", "investigation", "relation")):
+            continue
+        res.checked += 1
+        kind = it.get("result_kind")
+        if kind is not None:
+            n_kind += 1
+            if kind not in allowed:
+                res.fail(item=iid, problem="result_kind not allowed", got=kind)
+            elif kind in labels and not it["text"].startswith(labels[kind]):
+                res.fail(item=iid, problem="text does not begin with the label of its result_kind", kind=kind)
+        inv = it.get("investigation")
+        if it.get("relation"):
+            n_rel += 1
+            if inv:
+                res.fail(item=iid, problem="item with relation is attributed to a PSI investigation", investigation=inv)
+        if inv:
+            n_inv += 1
+            if not isinstance(inv, list) or any(x not in psi for x in inv):
+                res.fail(item=iid, problem="investigation is not a list of PSI ids of the catalogue", investigation=inv)
+        if "investigation" in it and inv and any(w in it["text"] for w in words):
+            res.fail(item=iid, problem="text names a non-PSI experiment and the item is attributed to a PSI investigation")
+        if kind is not None and kind != "measured" and "investigation" not in it:
+            res.fail(item=iid, problem="labelled item without the field investigation")
+        view = doc["items"].get(iid)
+        if view is not None:
+            if view["text"] != it["text"] or any(view.get(k) != it.get(k) for k in ("result_kind", "investigation", "relation")):
+                res.fail(item=iid, problem="item view differs in text, result_kind, investigation or relation")
+    for fid, f in doc["findings"].items():
+        it = ctx.reference_items[f["item_id"]][1]
+        if any(f.get(k) != it.get(k) for k in ("result_kind", "investigation", "relation")):
+            res.fail(finding=fid, problem="finding differs in result_kind, investigation or relation")
+    for r in flat:
+        it = ctx.reference_items[r["item_id"]][1]
+        if r["result_kind"] != it.get("result_kind", "") or r["relation"] != it.get("relation", "") or \
+                r["investigation"] != ";".join(it.get("investigation") or []):
+            res.fail(finding=r["finding_id"], problem="flat row differs in result_kind, investigation or relation")
+    for s, b in u_blocks(doc):
+        for lst in (b["found"]["entries"], b["found"]["entries_tagged_for_all_questions"]):
+            last = {}
+            for e in lst:
+                res.checked += 1
+                r = 1 if ctx.reference_items[e["item_id"]][1].get("result_kind") in after else 0
+                if r < last.get(e["group"], 0):
+                    res.fail(block=b["block_id"], finding=e["finding_id"], problem="measured result after a labelled one")
+                last[e["group"]] = max(r, last.get(e["group"], 0))
+                if e.get("result_kind") != ctx.reference_items[e["item_id"]][1].get("result_kind"):
+                    res.fail(block=b["block_id"], finding=e["finding_id"], problem="entry result_kind")
+    res.numbers = {"items_with_result_kind": n_kind, "with_relation": n_rel, "attributed_to_psi": n_inv,
+                   "labelled_not_measured": sum(1 for _, it in ctx.reference_items.values()
+                                                if it.get("result_kind") in after)}
     return res
 
 

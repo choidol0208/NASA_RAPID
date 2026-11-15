@@ -34,7 +34,7 @@
  },
  "top_line": {
   "id": "tests.other_atmosphere+published.here",
-  "text": "Not judged here. None of the 2 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none inside one of the two ranges with the other value not in the table. Published results and caveats quoted for this need or for fire safety in general: 2 at the oxygen and pressure of this environment and 0 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+  "text": "Not judged here. None of the 2 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none inside one of the two ranges with the other value not in the table. Published results and caveats quoted for this need or for fire safety in general: 2 at the oxygen and pressure of this environment and 2 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
   "fields": {
    "status": "other_atmosphere",
    "usable_tests": 2,
@@ -44,8 +44,8 @@
    "matched": 0,
    "n_near_cells": 0,
    "n_at": 2,
-   "n_about": 0,
-   "n_published_here": 2
+   "n_about": 2,
+   "n_published_here": 4
   }
  },
  "frame": {
@@ -900,9 +900,9 @@
  "rung3_published": {
   "counts": {
    "n_at": 2,
-   "n_about": 0,
-   "n_general": 8,
-   "n_listed": 10,
+   "n_about": 2,
+   "n_general": 10,
+   "n_listed": 14,
    "n_not_full_text": 2
   },
   "at_the_environment": [
@@ -1029,7 +1029,111 @@
     "tagging_note": "The item states no gravity level, so none is tagged; the entry can be listed for an environment of any gravity level. The item's note says the paper does not say whether the pressure and oxygen are set points, values at ignition or averages."
    }
   ],
-  "about_a_stated_condition": [],
+  "about_a_stated_condition": [
+   {
+    "finding_id": "LUCI25.pmma_rod_spread",
+    "item_id": "LUCI25.pmma_rod_spread",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "In the Lunar Combustion Investigation (LUCI) on a spinning New Shepard sounding rocket, where centrifugal acceleration gave simulated Lunar gravity and the samples burned in air at normal pressure, a 4-mm-diameter PMMA rod burning upward had an approximately linear flame tip spread, with a flame spread rate of 1.5 mm/s; the flame base spread rate was not constant and steady spread was not achieved (total base spread of ~6cm until extinction), and the chamber O2 decreased from 20% to 14.3%.",
+    "quote": "Flame spread rate = 1.5 mm/s.",
+    "where": "Slides 20-22 'LUCI: PMMA Sample'; sample on slide 4; burning direction on slide 16",
+    "reference_id": "ASGSR-2025-LUCI",
+    "title": "Lunar Combustion Investigation: Flammability Results from a Rotating Sounding Rocket, presentation slides (Ferkul, Johnston, Kralik, Liao)",
+    "version": "2025 (NTRS 20250010653; slides; PDF page = slide number)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20250010653",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": "lunar",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "PMMA rod"
+    },
+    "matched_on": {
+     "gravity_level": {
+      "finding": [
+       "lunar"
+      ],
+      "scenario": "lunar",
+      "relation": "same"
+     }
+    },
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa"
+    ],
+    "condition_words": {
+     "pressure": [
+      "air at normal pressure"
+     ],
+     "oxygen": [
+      "chamber O2 decreased from 20% to 14.3%"
+     ],
+     "direction": [
+      "burning upward"
+     ]
+    },
+    "item_note": "Slide 21 prints 'Flame tip spread is approximately linear.' above 'Flame spread rate = 1.5 mm/s.' and does not say more about which spread the value refers to. Slide 22: the O2 rose back to 15.8% after a decrease in gravity at 125 s. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The gravity is simulated by centrifugal acceleration (11 RPM, effective radius 1.22 m, slide 12); the slides read print no g value. 'air at normal pressure' has no number and is kept as words."
+   },
+   {
+    "finding_id": "LUCI25.sibal_spread",
+    "item_id": "LUCI25.sibal_spread",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "about_a_stated_condition_of_the_environment",
+    "text": "In the Lunar Combustion Investigation (LUCI) on a spinning New Shepard sounding rocket, where centrifugal acceleration gave simulated Lunar gravity and the samples burned in air at normal pressure, a 5-cm-wide SIBAL cotton-fiberglass fabric burning downward had a flame base spread rate of .92 mm/s and a flame tip spread rate of 1.1 mm/s; the spread rates of char front, flame base and flame tip were all linear (steady state spread).",
+    "quote": "Flame base spread rate = .92 mm/s.",
+    "where": "Slide 19 'LUCI: SIBAL fabric'; sample on slide 4; burning direction on slide 16; flight on slide 12",
+    "reference_id": "ASGSR-2025-LUCI",
+    "title": "Lunar Combustion Investigation: Flammability Results from a Rotating Sounding Rocket, presentation slides (Ferkul, Johnston, Kralik, Liao)",
+    "version": "2025 (NTRS 20250010653; slides; PDF page = slide number)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20250010653",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": "lunar",
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "SIBAL cotton-fiberglass fabric"
+    },
+    "matched_on": {
+     "gravity_level": {
+      "finding": [
+       "lunar"
+      ],
+      "scenario": "lunar",
+      "relation": "same"
+     }
+    },
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa"
+    ],
+    "condition_words": {
+     "pressure": [
+      "air at normal pressure"
+     ],
+     "direction": [
+      "burning downward"
+     ]
+    },
+    "item_note": "The value is printed '.92'. The slides read state no oxygen value for this sample. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The gravity is simulated by centrifugal acceleration (11 RPM, effective radius 1.22 m, slide 12); the slides read print no g value. 'air at normal pressure' has no number and is kept as words."
+   }
+  ],
   "stated_without_these_conditions": [
    {
     "finding_id": "CH.hardware",
@@ -1070,6 +1174,42 @@
      ]
     },
     "tagging_note": "85% is the oxygen of a burner stream, not of an atmosphere; it is kept as words."
+   },
+   {
+    "finding_id": "ICES15.hrr",
+    "item_id": "ICES15.hrr",
+    "row": null,
+    "kind": "result",
+    "applies": "general",
+    "list": "general",
+    "text": "Computed by the authors, not a measurement: using Huggett's oxygen consumption calorimetry (13.1 kJ/g O2) and the burn time of each test, the paper estimates the BASS-II heat release rate to be typically well below 100 W, increasing with ambient oxygen; one long opposed thick slab test released close to 100 W and a brief concurrent rod test almost 110 W.",
+    "quote": "we estimate the heat release rate to be typically well below 100 W",
+    "where": "III, text beside Figure 8, p. 7",
+    "reference_id": "ICES-2015-196",
+    "title": "Results from on-board CSA-CP and CDM Sensor Readings during the Burning and Suppression of Solids - II (BASS-II) Experiment in the Microgravity Science Glovebox (MSG) (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "ICES-2015-196 (12-16 July 2015, Bellevue, Washington; NTRS 20150019858)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20150019858",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": null
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "A heat release estimate names no gas, smoke, spread, ignition or extinction; tagged general (the collecting agent proposed D1)."
    },
    {
     "finding_id": "SAF17.sensors",
@@ -1180,6 +1320,47 @@
       "reduced-pressure exploration atmospheres"
      ]
     }
+   },
+   {
+    "finding_id": "SAF17S.silicone_no_spread",
+    "item_id": "SAF17S.silicone_no_spread",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "None of the Saffire-2 silicone samples (sheets 0.27, 0.61, 1.03 and 0.37 mm thick, samples 2-1 to 2-4) burned: when the igniter was powered off a tiny gas phase flame remained but did not spread and quickly extinguished; the slide notes that even the thin sample had been entirely consumed in normal gravity.",
+    "quote": "When the igniter was powered off, a tiny gas phase flame remained but did not spread and quickly extinguished.",
+    "where": "Slide 12 'Saffire-2; Silicone Results'; thicknesses on slide 9",
+    "reference_id": "NTRS-20170008805",
+    "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+    "version": "2017 (36 slides)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20170008805",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "silicone"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa",
+     "gravity_level"
+    ],
+    "states_conditions_in_words": true,
+    "condition_words": {
+     "gravity": [
+      "entirely consumed in normal gravity"
+     ]
+    },
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "Tagged P1 (flammability of a material) and P3 (no flame spread). 'normal gravity' is written for the comparison only."
    },
    {
     "finding_id": "THOMSEN18.care",
@@ -1333,11 +1514,11 @@
    },
    {
     "id": "rung3.counts",
-    "text": "Results and caveats listed: 2 at the oxygen and pressure of this environment; 0 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 8 stated without an oxygen, pressure or gravity level that can be compared."
+    "text": "Results and caveats listed: 2 at the oxygen and pressure of this environment; 2 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 10 stated without an oxygen, pressure or gravity level that can be compared."
    },
    {
     "id": "rung3.access",
-    "text": "2 of the 10 listed come from a document that was not read in full text; each entry gives the access level of its document."
+    "text": "2 of the 14 listed come from a document that was not read in full text; each entry gives the access level of its document."
    },
    {
     "id": "rung3.limits",
@@ -1617,7 +1798,7 @@
   {
    "rung": "top",
    "id": "tests.other_atmosphere+published.here",
-   "text": "Not judged here. None of the 2 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none inside one of the two ranges with the other value not in the table. Published results and caveats quoted for this need or for fire safety in general: 2 at the oxygen and pressure of this environment and 0 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+   "text": "Not judged here. None of the 2 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none inside one of the two ranges with the other value not in the table. Published results and caveats quoted for this need or for fire safety in general: 2 at the oxygen and pressure of this environment and 2 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
    "sources": [
     "#top_line.fields"
    ]
@@ -1704,7 +1885,7 @@
   {
    "rung": "3",
    "id": "rung3.counts",
-   "text": "Results and caveats listed: 2 at the oxygen and pressure of this environment; 0 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 8 stated without an oxygen, pressure or gravity level that can be compared.",
+   "text": "Results and caveats listed: 2 at the oxygen and pressure of this environment; 2 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 10 stated without an oxygen, pressure or gravity level that can be compared.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.lunar_habitat.needs.P3",
     "data/pipeline/findings_by_environment.json#environments.lunar_habitat.needs.general"
@@ -1713,7 +1894,7 @@
   {
    "rung": "3",
    "id": "rung3.access",
-   "text": "2 of the 10 listed come from a document that was not read in full text; each entry gives the access level of its document.",
+   "text": "2 of the 14 listed come from a document that was not read in full text; each entry gives the access level of its document.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.lunar_habitat.needs.P3",
     "data/pipeline/findings_by_environment.json#environments.lunar_habitat.needs.general"
@@ -1885,6 +2066,6 @@
    "no_record": "lunar_habitat__P3.no_record",
    "caveats": "lunar_habitat__P3.caveats"
   },
-  "headline": "3 quoted results tagged for this question: 0 at the oxygen and pressure of this environment, 0 about one of its stated conditions, 2 stated without these conditions, 1 at other stated conditions; 2 with printed values. 44 more tagged for all questions: 2 at the oxygen and pressure of this environment, 0 about one of its stated conditions. 2 tests counted, 0 inside the oxygen and pressure ranges of this environment by recorded values."
+  "headline": "41 quoted results tagged for this question: 0 at the oxygen and pressure of this environment, 2 about one of its stated conditions, 3 stated without these conditions, 36 at other stated conditions; 40 with printed values. 45 more tagged for all questions: 2 at the oxygen and pressure of this environment, 0 about one of its stated conditions. 2 tests counted, 0 inside the oxygen and pressure ranges of this environment by recorded values."
  }
 }

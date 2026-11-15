@@ -34,7 +34,7 @@
  },
  "top_line": {
   "id": "tests.other_atmosphere+published.here",
-  "text": "Not judged here. None of the 2 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none inside one of the two ranges with the other value not in the table. Published results and caveats quoted for this need or for fire safety in general: 2 at the oxygen and pressure of this environment and 0 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+  "text": "Not judged here. None of the 2 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none inside one of the two ranges with the other value not in the table. Published results and caveats quoted for this need or for fire safety in general: 5 at the oxygen and pressure of this environment and 0 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
   "fields": {
    "status": "other_atmosphere",
    "usable_tests": 2,
@@ -43,9 +43,9 @@
    "pressure_only": 0,
    "matched": 0,
    "n_near_cells": 1,
-   "n_at": 2,
+   "n_at": 5,
    "n_about": 0,
-   "n_published_here": 2
+   "n_published_here": 5
   }
  },
  "frame": {
@@ -847,13 +847,67 @@
  },
  "rung3_published": {
   "counts": {
-   "n_at": 2,
+   "n_at": 5,
    "n_about": 0,
-   "n_general": 8,
-   "n_listed": 10,
+   "n_general": 10,
+   "n_listed": 15,
    "n_not_full_text": 2
   },
   "at_the_environment": [
+   {
+    "finding_id": "SAF45.iv2_v3_no_spread#V-3",
+    "item_id": "SAF45.iv2_v3_no_spread",
+    "row": "V-3",
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "Preliminary result: in the two concurrent PMMA samples of Saffire IV and V (IV-2: two-sided, 1 cm thick, at 100.0 kPa and 22.0 mol % oxygen; V-3: one-sided, 0.5 cm thick, at 71.3 kPa and 25.4 mol % oxygen; air flow 20 cm/s), the flames did not spread appreciably and remained fixed at the leading edge of the sample, advancing through surface regression only.",
+    "quote": "Both concurrent samples (IV-2 and V-3) did not spread appreciably and instead remained fixed at the leading edge of the sample",
+    "where": "III.D, p. 8; conditions in Table 1 and Figure 2, p. 3",
+    "reference_id": "ICES-2021-266",
+    "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+    "version": "ICES-2021-266 (12-15 July 2021)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011521",
+    "conditions": {
+     "o2_pct_min": 25.4,
+     "o2_pct_max": 25.4,
+     "pressure_kpa_min": 71.3,
+     "pressure_kpa_max": 71.3,
+     "pressure_as_written": "71.3 kPa",
+     "gravity_level": null,
+     "flow_cms": "20",
+     "fuel_phase": null,
+     "material": "1 sided PMMA"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 25.4,
+      "as_written": "25.4 mol % oxygen",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 71.3,
+      "as_written": "71.3 kPa",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [],
+    "condition_words": {
+     "flow": [
+      "concurrent PMMA samples"
+     ]
+    },
+    "row_values": {
+     "flight_sample": "V-3",
+     "material": "1 sided PMMA",
+     "thickness_cm": 0.5,
+     "flow_cms": 20,
+     "pressure_kpa": 71.3,
+     "o2_pct": 25.4
+    },
+    "item_note": "Materials as printed in Table 1 ('2-sided PMMA', '1 sided PMMA'); thicknesses from the Figure 2 labels. The paper adds that this is typical for thick fuels in low gravity but different from normal gravity. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person."
+   },
    {
     "finding_id": "SAF45.table2#V-2",
     "item_id": "SAF45.table2",
@@ -894,6 +948,107 @@
     },
     "not_stated": [],
     "item_note": "Whole-number values; the paper does not say whether they are rounded or nominal. They are less precise than 21.7 / 22.1 / 21.2 given by the same group in ICES-2017-224 and Combustion and Flame 248 (2023)."
+   },
+   {
+    "finding_id": "SAF45.table2_flame_size#V-2",
+    "item_id": "SAF45.table2_flame_size",
+    "row": "V-2",
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "Preliminary result: Table 2 of the Saffire IV and V paper lists, for six thin samples of Saffire I to V (I-1, II-5, II-6, III-1 and IV-1 at 100 kPa; V-2 at 70.7 kPa), the steady state and maximum flame size with air flow, oxygen, pressure, material, duct height and sample size; the paper calls the steady state sizes the steady state flame lengths and states that under a variety of conditions concurrent flames spreading over thin fuels achieved a limiting size.",
+    "quote": "The steady state flame lengths are summarized in Table 2.",
+    "where": "III.C, Table 2 'Test Conditions and flame size for thin samples', p. 8",
+    "reference_id": "ICES-2021-266",
+    "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+    "version": "ICES-2021-266 (12-15 July 2021)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011521",
+    "conditions": {
+     "o2_pct_min": 26.2,
+     "o2_pct_max": 26.2,
+     "pressure_kpa_min": 70.7,
+     "pressure_kpa_max": 70.7,
+     "pressure_as_written": "70.7 kPa",
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "Cotton jersey"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 26.2,
+      "as_written": "26.2",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 70.7,
+      "as_written": "70.7 kPa",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [],
+    "row_values": {
+     "flight_sample": "V-2",
+     "flow_cms": 20,
+     "o2_pct": 26.2,
+     "pressure_kpa": 70.7,
+     "material": "Cotton jersey",
+     "steady_state_size_cm": 10.0,
+     "maximum_size_cm": 14.0,
+     "duct_height_cm": 30,
+     "sample_width_cm": 41,
+     "sample_length_cm": 50
+    },
+    "item_note": "Item SAF45.table2 holds the oxygen and pressure columns of the same table; this item holds all columns. Rows I-1 to III-1 are Saffire-I to -III (PSI-98, PSI-99, PSI-100); IV-1 and V-2 are Saffire IV and V, which are not PSI investigations. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "The item states no gravity level. Rows I-1 to III-1 come from Saffire flights that are PSI investigations; the item as a whole is not attributed to one."
+   },
+   {
+    "finding_id": "SAF45.v3_pmma_flame_length",
+    "item_id": "SAF45.v3_pmma_flame_length",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "at_environment",
+    "text": "Preliminary result: in Saffire V-3, a one-sided PMMA sample (0.5 cm thick, 18 cm long) in concurrent air flow of 20 cm/s at 71.3 kPa, the flame (in 25.4% oxygen) grew to 11 cm after 450 seconds; the paper states that in these cases the flame length reached an upper limit, contrary to similar 1-g tests that did not reach a steady length.",
+    "quote": "In Saffire V-3, the one-sided PMMA sample flame (in 25.4% oxygen) grew to 11 cm after 450 seconds.",
+    "where": "III.D, pp. 8-9; conditions in Table 1 and Figure 2, p. 3",
+    "reference_id": "ICES-2021-266",
+    "title": "Fire Safety Implications of Preliminary Results from Saffire IV and V Experiments on Large Scale Spacecraft Fires (Urban, Ruff, Ferkul, Easton, et al.)",
+    "version": "ICES-2021-266 (12-15 July 2021)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20210011521",
+    "conditions": {
+     "o2_pct_min": 25.4,
+     "o2_pct_max": 25.4,
+     "pressure_kpa_min": 71.3,
+     "pressure_kpa_max": 71.3,
+     "pressure_as_written": "71.3 kPa",
+     "gravity_level": null,
+     "flow_cms": "20",
+     "fuel_phase": null,
+     "material": "one-sided PMMA sample"
+    },
+    "matched_on": {
+     "o2_pct": {
+      "finding": 25.4,
+      "as_written": "in 25.4% oxygen",
+      "relation": "inside"
+     },
+     "pressure_kpa": {
+      "finding": 71.3,
+      "as_written": "71.3 kPa",
+      "relation": "inside"
+     }
+    },
+    "not_stated": [],
+    "condition_words": {
+     "gravity": [
+      "similar 1-g tests"
+     ]
+    },
+    "item_note": "Pressure and flow are from Table 1 (V-3: 71.3 kPa, 25.4 mol %, 20 cm/s, concurrent); thickness from the Figure 2 label '1-sided PMMA (0.5 cm thick.)'. The title calls the results preliminary. Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "'1-g' is written for the comparison tests only and is kept as words; the item states no gravity level for V-3."
    },
    {
     "finding_id": "SAF456.conditions#V-2",
@@ -995,6 +1150,41 @@
      ]
     },
     "tagging_note": "85% is the oxygen of a burner stream, not of an atmosphere; it is kept as words."
+   },
+   {
+    "finding_id": "ICES15.hrr",
+    "item_id": "ICES15.hrr",
+    "row": null,
+    "kind": "result",
+    "applies": "general",
+    "list": "general",
+    "text": "Computed by the authors, not a measurement: using Huggett's oxygen consumption calorimetry (13.1 kJ/g O2) and the burn time of each test, the paper estimates the BASS-II heat release rate to be typically well below 100 W, increasing with ambient oxygen; one long opposed thick slab test released close to 100 W and a brief concurrent rod test almost 110 W.",
+    "quote": "we estimate the heat release rate to be typically well below 100 W",
+    "where": "III, text beside Figure 8, p. 7",
+    "reference_id": "ICES-2015-196",
+    "title": "Results from on-board CSA-CP and CDM Sensor Readings during the Burning and Suppression of Solids - II (BASS-II) Experiment in the Microgravity Science Glovebox (MSG) (Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien, Wichman)",
+    "version": "ICES-2015-196 (12-16 July 2015, Bellevue, Washington; NTRS 20150019858)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20150019858",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": null
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa"
+    ],
+    "states_conditions_in_words": false,
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "A heat release estimate names no gas, smoke, spread, ignition or extinction; tagged general (the collecting agent proposed D1)."
    },
    {
     "finding_id": "SAF17.sensors",
@@ -1102,6 +1292,46 @@
       "reduced-pressure exploration atmospheres"
      ]
     }
+   },
+   {
+    "finding_id": "SAF17S.silicone_no_spread",
+    "item_id": "SAF17S.silicone_no_spread",
+    "row": null,
+    "kind": "result",
+    "applies": "need",
+    "list": "general",
+    "text": "None of the Saffire-2 silicone samples (sheets 0.27, 0.61, 1.03 and 0.37 mm thick, samples 2-1 to 2-4) burned: when the igniter was powered off a tiny gas phase flame remained but did not spread and quickly extinguished; the slide notes that even the thin sample had been entirely consumed in normal gravity.",
+    "quote": "When the igniter was powered off, a tiny gas phase flame remained but did not spread and quickly extinguished.",
+    "where": "Slide 12 'Saffire-2; Silicone Results'; thicknesses on slide 9",
+    "reference_id": "NTRS-20170008805",
+    "title": "Results of Large-Scale Spacecraft Flammability Tests, presentation slides (Ferkul, Olson, Urban, Ruff, Easton, T'ien, Liao, Fernandez-Pello, Torero, Eigenbrod, Legros, Smirnov, Fujita, Rouvreau, Toth, Jomaas)",
+    "version": "2017 (36 slides)",
+    "access": "full_text_read",
+    "url": "https://ntrs.nasa.gov/citations/20170008805",
+    "conditions": {
+     "o2_pct_min": null,
+     "o2_pct_max": null,
+     "pressure_kpa_min": null,
+     "pressure_kpa_max": null,
+     "pressure_as_written": null,
+     "gravity_level": null,
+     "flow_cms": null,
+     "fuel_phase": null,
+     "material": "silicone"
+    },
+    "matched_on": {},
+    "not_stated": [
+     "o2_pct",
+     "pressure_kpa"
+    ],
+    "states_conditions_in_words": true,
+    "condition_words": {
+     "gravity": [
+      "entirely consumed in normal gravity"
+     ]
+    },
+    "item_note": "Quote and printed values re-found on 2026-11-15 by a second AI agent in the pdftotext text of the PDF (PDF page in 'where'); not checked by a person.",
+    "tagging_note": "Tagged P1 (flammability of a material) and P3 (no flame spread). 'normal gravity' is written for the comparison only."
    },
    {
     "finding_id": "THOMSEN18.care",
@@ -1251,11 +1481,11 @@
    },
    {
     "id": "rung3.counts",
-    "text": "Results and caveats listed: 2 at the oxygen and pressure of this environment; 0 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 8 stated without an oxygen, pressure or gravity level that can be compared."
+    "text": "Results and caveats listed: 5 at the oxygen and pressure of this environment; 0 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 10 stated without an oxygen, pressure or gravity level that can be compared."
    },
    {
     "id": "rung3.access",
-    "text": "2 of the 10 listed come from a document that was not read in full text; each entry gives the access level of its document."
+    "text": "2 of the 15 listed come from a document that was not read in full text; each entry gives the access level of its document."
    },
    {
     "id": "rung3.limits",
@@ -1486,7 +1716,7 @@
   {
    "rung": "top",
    "id": "tests.other_atmosphere+published.here",
-   "text": "Not judged here. None of the 2 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none inside one of the two ranges with the other value not in the table. Published results and caveats quoted for this need or for fire safety in general: 2 at the oxygen and pressure of this environment and 0 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
+   "text": "Not judged here. None of the 2 tests counted for this need was recorded with oxygen and pressure both inside the ranges of this environment, and none inside one of the two ranges with the other value not in the table. Published results and caveats quoted for this need or for fire safety in general: 5 at the oxygen and pressure of this environment and 0 about one of its conditions; they are quotes, not tests. What has not been found in these sources is listed.",
    "sources": [
     "#top_line.fields"
    ]
@@ -1609,7 +1839,7 @@
   {
    "rung": "3",
    "id": "rung3.counts",
-   "text": "Results and caveats listed: 2 at the oxygen and pressure of this environment; 0 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 8 stated without an oxygen, pressure or gravity level that can be compared.",
+   "text": "Results and caveats listed: 5 at the oxygen and pressure of this environment; 0 about at least one of its conditions (oxygen, pressure or gravity level) and none outside; 10 stated without an oxygen, pressure or gravity level that can be compared.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.exploration_10_2_26_5.needs.P3",
     "data/pipeline/findings_by_environment.json#environments.exploration_10_2_26_5.needs.general"
@@ -1618,7 +1848,7 @@
   {
    "rung": "3",
    "id": "rung3.access",
-   "text": "2 of the 10 listed come from a document that was not read in full text; each entry gives the access level of its document.",
+   "text": "2 of the 15 listed come from a document that was not read in full text; each entry gives the access level of its document.",
    "sources": [
     "data/pipeline/findings_by_environment.json#environments.exploration_10_2_26_5.needs.P3",
     "data/pipeline/findings_by_environment.json#environments.exploration_10_2_26_5.needs.general"
@@ -1782,6 +2012,6 @@
    "no_record": "exploration_10_2_26_5__P3.no_record",
    "caveats": "exploration_10_2_26_5__P3.caveats"
   },
-  "headline": "3 quoted results tagged for this question: 0 at the oxygen and pressure of this environment, 0 about one of its stated conditions, 2 stated without these conditions, 1 at other stated conditions; 2 with printed values. 44 more tagged for all questions: 2 at the oxygen and pressure of this environment, 0 about one of its stated conditions. 2 tests counted, 0 inside the oxygen and pressure ranges of this environment by recorded values."
+  "headline": "41 quoted results tagged for this question: 3 at the oxygen and pressure of this environment, 0 about one of its stated conditions, 3 stated without these conditions, 35 at other stated conditions; 40 with printed values. 45 more tagged for all questions: 2 at the oxygen and pressure of this environment, 0 about one of its stated conditions. 2 tests counted, 0 inside the oxygen and pressure ranges of this environment by recorded values."
  }
 }
