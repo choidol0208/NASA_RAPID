@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 83,
+  "PASS": 84,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 83
+  "checks": 84
  },
  "checks": [
   {
@@ -1922,6 +1922,18 @@
      "data_role_not_tied": 14,
      "data_role_day_only_pm_not": 2
     }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "S4_archive_members",
+   "verifies": "archive_members.csv (design step 12): one row per .zip archive whose name carries a label of a FLEX test inside the lunar ranges (test_files.json): 47 archives, 24,923,186,032 bytes; members parsed equal the count of the end record in every row; archive bytes equal file_links.csv; FLEX-19: 886 tif, 852 tif and 122 bmp frames.",
+   "status": "PASS",
+   "numbers": {
+    "archives": 47,
+    "bytes_fetched": 7623293,
+    "members": 47023
    },
    "failures": 0,
    "failing_examples": []

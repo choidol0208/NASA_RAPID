@@ -6484,6 +6484,35 @@ def check_q5(ctx):
     return res
 
 
+
+@check("S4_archive_members",
+       "archive_members.csv (design step 12): one row per .zip archive whose name carries a label of a FLEX test inside "
+       "the lunar ranges (test_files.json): 47 archives, 24,923,186,032 bytes; members parsed equal the count of the "
+       "end record in every row; archive bytes equal file_links.csv; FLEX-19: 886 tif, 852 tif and 122 bmp frames.")
+def check_s4(ctx):
+    res = Result()
+    if not ctx.has("archive_members.csv"):
+        raise Skip("archive_members.csv not written")
+    rows = ctx.table("archive_members.csv")
+    tf = ctx.json("test_files.json")["scenarios"]["lunar_habitat"]
+    want = {x["psi_file_id"]: (t, x["bytes"]) for t, v in tf.items() if v["investigation_id"] == "PSI-69"
+            for x in v["file_list"] if x["file_name"].lower().endswith(".zip")}
+    fl = {r["psi_file_id"]: int(r["bytes"]) for r in ctx.table("file_links.csv") if r["investigation_id"] == "PSI-69"}
+    for r in rows:
+        res.checked += 1
+        if r["members_declared"] != r["members_parsed"]:
+            res.fail(problem="members parsed differ from the end record", file_id=r["psi_file_id"])
+        if want.get(r["psi_file_id"]) != (r["test_id"], int(r["archive_bytes"])) or fl.get(r["psi_file_id"]) != int(r["archive_bytes"]):
+            res.fail(problem="archive not as in test_files.json or file_links.csv", file_id=r["psi_file_id"])
+    f19 = sorted(re.sub(r"; txt \d+", "", r["members_by_extension"]) for r in rows if r["test_id"] == "FLEX-19")
+    if len(rows) != 47 or set(want) != {r["psi_file_id"] for r in rows} or sum(int(r["archive_bytes"]) for r in rows) != 24923186032 \
+            or f19 != ["bmp 122", "tif 852", "tif 886"]:
+        res.fail(problem="fixture not reproduced", archives=len(rows), flex19=f19)
+    res.numbers = {"archives": len(rows), "bytes_fetched": sum(int(r["bytes_fetched"]) for r in rows),
+                   "members": sum(int(r["members_parsed"]) for r in rows)}
+    return res
+
+
 # ----------------------------------------------------------------------------
 # running
 # ----------------------------------------------------------------------------
