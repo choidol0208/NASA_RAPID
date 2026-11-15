@@ -35,7 +35,7 @@ Note (59 words): The page sorts each question's data into three piles. Code foll
 
 ## Slide 6
 
-Title on the slide: Four kinds of SI, each with its measured check.
+Title on the slide: SI with a measured check; code for every number.
 
 Note (59 words): We use SI only where a check can measure it. Rules rank; no model touches a number. One local open-weight model wrote card sentences; code gates and AI reviews removed 37 of 70. The assistant chains small model steps with code checks between them. The video reader copies NASA's on-screen numbers; its flame timing failed, so we dropped it.
 

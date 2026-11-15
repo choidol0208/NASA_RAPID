@@ -199,7 +199,7 @@
       chip.setAttribute("data-mode", mode);
       chip.setAttribute("data-dot", dot);
     }
-    document.addEventListener("fee-model", function (e) { showModel(e.detail); });
+    document.addEventListener("fee-model", function (e) { showModel(e.detail); window.setTimeout(function () { if (window.feeShell && window.feeShell.resync) window.feeShell.resync(); }, 0); });
     if (window.feeModel) showModel(window.feeModel);
     // a page without the assistant (or one whose assistant never reports): the rule-based state
     var noAssistant = function () { if (chip.getAttribute("data-mode") === "pending" && !document.getElementById("assistant")) showModel(null); };
@@ -422,6 +422,7 @@
         settleOn(arrived);
       } else resettle();
       stick();
+      syncBanner(ok);
       if (!loading && !state.booted) { state.booted = true; route(false); }
     }
     // The tab bar shows each tab's one-line description at its resting place and folds it away while the bar is
@@ -440,6 +441,24 @@
     }
     window.addEventListener("scroll", stick, { passive: true });
     window.addEventListener("resize", function () { root.classList.remove("tabs-stuck"); tabs.style.marginBottom = ""; stick(); });
+
+    // On the public page the assistant replays recorded answers in a card far down the page: one line under the
+    // request header says so and leads there (and opens the first recorded conversation).
+    var asstBanner = el("a", { id: "asst-banner", "class": "asst-banner", href: "#assistant", hidden: "" },
+      [el("b", {}, ["SI assistant"]), el("span", {}, ["This public page replays answers recorded with the local language model."]),
+        el("span", { "class": "asst-banner-go" }, ["See a recorded answer"])]);
+    if (glance && glance.parentNode) glance.insertAdjacentElement("beforebegin", asstBanner);
+    asstBanner.addEventListener("click", function (e) {
+      var card = document.querySelector('#assistant[data-mode="recorded"]');
+      if (!card) return;
+      e.preventDefault();
+      if (!card.querySelector(".as-turn")) { var b = card.querySelector(".as-btns .as-btn"); if (b) b.click(); }
+      scrollToNode(card);
+    });
+    function syncBanner(ok) {
+      var card = document.querySelector('#assistant[data-mode="recorded"]');
+      setHidden(asstBanner, !(ok && card && !card.hidden));
+    }
 
     var queued = false;
     function later() { if (!queued) { queued = true; setTimeout(function () { queued = false; sync(); }, 0); } }
@@ -586,7 +605,7 @@
 
     // app.js shows and hides sections as its files arrive: follow it.
     new MutationObserver(later).observe(main, { attributes: true, attributeFilter: ["hidden", "class"], subtree: true, childList: true });
-    window.feeShell = { reveal: reveal, setTab: setTab, tabOf: TAB_OF, setReading: setReading };
+    window.feeShell = { reveal: reveal, setTab: setTab, tabOf: TAB_OF, setReading: setReading, resync: later };
     sync();
   }
 

@@ -4,9 +4,13 @@ Fire Evidence Explorer is a web page: you describe a crewed environment, and it 
 
 **Live page:** https://choidol0208.github.io/NASA_RAPID/
 
+**The finding in one line:** for a lunar habitat (30% oxygen or more and 70.3 kPa or less), NASA's PSI tables hold no counted fire test, and the recorded solid-fuel tests end at 22.2% oxygen. [See where the evidence stops](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat%20cotton%20fabric&tab=stops).
+
+**Where SI (AI) is used:** an AI assistant extracted the catalog values from NASA's records (marked on every result card); a local language model wrote the summary sentences on the cards (70 written, 33 shown after checks, each citing NASA text); a conversational assistant answers on a local install and is replayed as recorded answers on the live page. Every count, rank and score is computed by plain code.
+
 **Demo links:** [Lunar habitat, cotton fabric](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat%20cotton%20fabric) · [Lunar habitat](https://choidol0208.github.io/NASA_RAPID/?q=lunar%20habitat) · [ISS cabin](https://choidol0208.github.io/NASA_RAPID/?q=ISS) · [How it works](https://choidol0208.github.io/NASA_RAPID/how.html)
 
-**Slides:** [docs/submission/slides.pdf](docs/submission/slides.pdf) (seven slides, the demo link of the submission; built by the pm AI session, source and build script in `docs/submission/deck/`)
+**Slides:** [docs/submission/slides.pdf](docs/submission/slides.pdf) (seven slides, the demo link of the submission; source and build script in `docs/submission/deck/`)
 
 **Download:** two archives in the [latest release](https://github.com/choidol0208/NASA_RAPID/releases/latest), one per way of running it on your own computer; the one with the local model is recommended (see "Download" below). The live page needs no download.
 
@@ -83,7 +87,7 @@ The picture of the conversation above is the third column. How one turn works, w
 
 ## What is implemented today
 
-Checked on 15 November 2026 at about 16:15 KST against the page built from commit `371150e` (`371150e` before the history rewrite of 15 November 2026, `docs/history_rewrite_20261115.md`) in a scratch folder (`python3 web/build.py`: `built 62 files`): the section headings of the built `index.html` and `how.html`, `web/SHELL.md` and the data files the page loads. The live site was not opened for this check.
+Checked on 15 November 2026 at about 16:15 KST against the page built from commit `371150e` (`371150e` before the history rewrite of 15 November 2026, `docs/history_rewrite_20261115.md`) in a scratch folder (`python3 web/build.py`: `built 62 files`): the section headings of the built `index.html` and `how.html`, `web/SHELL.md` and the data files the page loads. The live site was opened and checked after each change on 15 November, the last time at about 23:15 KST (`coord/status/pm.md`).
 
 - The shell (`web/SHELL.md`): a sticky top bar with the search, "Copy link", "How it works" and "Source code"; after a query, a row of summary tiles ("At a glance") and five tabs; a footer with the notices and the build stamp.
 - A query box with six presets: ISS cabin, Lunar habitat, Lunar habitat cotton fabric, Smoke detection on the ISS, Spacesuit, Mars base. `?q=` opens the page with a query.

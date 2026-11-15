@@ -107,6 +107,10 @@ def main():
     team = os.path.join(HERE, "media", "team")
     if os.path.isdir(team):
         shutil.copytree(team, os.path.join(DIST, "media", "team"))
+    # the pictures of the start page's tour (web/SHELL.md, "The start page shows the product")
+    tour = os.path.join(HERE, "media", "tour")
+    if os.path.isdir(tour):
+        shutil.copytree(tour, os.path.join(DIST, "media", "tour"))
     for src, dst in DATA.items():
         shutil.copy(os.path.join(ROOT, src), os.path.join(DIST, dst))
     for src, dst in OPTIONAL.items():

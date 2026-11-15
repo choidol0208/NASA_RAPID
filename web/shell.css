@@ -1064,3 +1064,33 @@ details.pile-need { scroll-margin-top: calc(var(--appbar-h) + var(--tabs-h) + 12
 #ranking .score-num { position: relative; font-weight: 700; font-variant-numeric: tabular-nums; }
 @media (max-width: 900px) { .rf-overview, .points-cards { grid-template-columns: 1fr; } }
 #ranking td.score-cell { vertical-align: middle; }
+
+/* ---- The start page shows the product (15 November, 23:05; for a judge who does not type): six pictures of the
+   worked example, each a link to that view; and on the public page one line that leads to the recorded answers. */
+.tour { display: none; }
+.shell-on main > .tour { order: -3; }
+.is-landing .tour { display: block; width: 100%; max-width: 1120px; margin: var(--s6) auto 0; text-align: center; }
+.tour h2 { margin: 0 0 var(--s1); font: 700 1.6rem/1.2 var(--display); }
+.tour-lead { margin: 0 auto var(--s3); max-width: 70ch; font-size: 15px; color: var(--ink-2); }
+.tour-cta { background: var(--blue); border-color: var(--blue); color: var(--white) !important; font-weight: 700; margin-bottom: var(--s4); }
+.tour-cta:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+.tour-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s4); text-align: left; }
+.tour-card { display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); overflow: hidden; text-decoration: none; color: var(--ink) !important; }
+.tour-card:hover { border-color: var(--blue); box-shadow: var(--shadow-lg); }
+.tour-card img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--line); }
+.tour-card b { padding: var(--s3) var(--s4) 2px; font: 700 16px/1.3 var(--display); }
+.tour-card span { padding: 0 var(--s4) var(--s4); font-size: 13.5px; line-height: 1.45; color: var(--ink-2); }
+.asst-banner { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: var(--s4) 0 0; padding: 10px var(--s4); background: var(--white); border: 1px solid #c9d4f7; border-left: 4px solid var(--blue); border-radius: var(--r-s); text-decoration: none; color: var(--ink) !important; font-size: 14px; }
+.asst-banner b { font: 700 14px/1.3 var(--display); letter-spacing: 0.04em; color: var(--blue-dark); }
+.asst-banner-go { margin-left: auto; font-weight: 700; color: var(--blue); white-space: nowrap; }
+.asst-banner-go::after { content: " ↓"; }
+.asst-banner:hover { background: #f6f8ff; }
+.is-landing .asst-banner, .is-loading .asst-banner { display: none; }
+@media (max-width: 900px) { .tour-grid { grid-template-columns: 1fr; } }
+@media print { .tour, .asst-banner { display: none !important; } }
+.tour-finding { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 0 auto var(--s6); max-width: 920px; padding: var(--s4) var(--s5); text-align: left; background: var(--t-stops-soft); border: 1px solid #f0d4b0; border-left: 4px solid var(--t-stops); border-radius: var(--r); text-decoration: none; color: var(--ink) !important; }
+.tour-finding b { flex: 0 0 100%; font: 700 13px/1.4 var(--display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--t-stops); }
+.tour-finding span { font-size: 16px; line-height: 1.5; }
+.tour-finding-go { font-weight: 700; color: var(--t-stops); white-space: nowrap; }
+.tour-finding-go::after { content: " →"; }
+.tour-finding:hover { border-color: var(--t-stops); }

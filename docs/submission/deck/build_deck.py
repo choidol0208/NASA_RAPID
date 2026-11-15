@@ -132,7 +132,7 @@ WORDING = {
         "team_label": "Team",
         "team_placeholder": "[team name]",
         "logo_alt": "Team {team} logo: a stepped mark and the word RAPID",
-        "lead": "Type what you build and where. See the closest NASA investigations, what their recorded tests hold for {needs_word} fire-safety questions, where the data are, and where the evidence stops.",
+        "lead": "Type what you build and where; see the closest NASA investigations and where the evidence stops. Example finding: for a lunar habitat ({o2}% oxygen or more and {kpa} kPa or less), PSI holds no counted fire test, and solid-fuel tests end at {solid_o2}% oxygen.",
         "link_label": "Public page, opens without a login",
         "link_hint": "Try the example \"{example_button}\".",
         "caption": "Capture of the team's own page, {capture_date}, one line quoting the challenge hidden; not AI-generated.",
@@ -257,15 +257,15 @@ WORDING = {
     },
     "s6": {
         "kicker": "SI · where it is used, and how it is checked",
-        "title_measured": "Four kinds of SI, each with its measured check.",
+        "title_measured": "SI with a measured check; code for every number.",
         "title_unmeasured": "Four uses of SI and how each is checked",
         "subtitle": "SI is the challenge's word for AI. Code computes every count and rank; the public page runs no model.",
-        "col_use": "SI use",
+        "col_use": "Use",
         "col_check": "Its check",
         "boxes": [
             {
                 "name": "Rule-based ranking",
-                "tag": "no language model",
+                "tag": "plain code, not SI",
                 "does": "Rules score {configs} test configurations against your input, with fixed weights per question type.",
                 "check": "**{val_pass} of {val_total}** test scenarios pass (expected answers written by an AI session). The page's scorer equals Python on **{par_ok} of {par_total}** queries.",
             },

@@ -146,3 +146,7 @@ No sentence of the data is changed or dropped; each is on the page or one click 
 
 Computed in the page from the same data; no sentence of the data is changed.
 
+## The start page shows the product (15 November, 23:00)
+
+The human lead asked for a last review with the eyes of a judge who installs nothing; an AI session that did not know the project read the slides, the live page and the README's first screen as a judge, and said that the main finding was buried and that the SI was not seen on the public page. On the start page, under the input: the example finding (for a lunar habitat, 30% oxygen or more and 70.3 kPa or less, no counted fire test in NASA's PSI tables; the recorded solid-fuel tests end at 22.2% oxygen; a link to the tab) and "See it without typing", six pictures of the worked example that each open that view (`web/media/tour/`, cut from captures of this page; `build.py` copies them). On the public page, under the request header, one line says that the page replays answers recorded with the local language model and leads to them (`#asst-banner` in `shell.js`; shown only in recorded mode). The key-figure tile says "fire-safety questions" where it said "needs".
+

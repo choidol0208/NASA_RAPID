@@ -969,7 +969,7 @@ function renderGlance(out, pipe) {
   const sid = scenarioId(out, pipe);
   const cov = sid && pipe.scenarioNeeds ? scenarioCoverage(pipe, sid) : null;
   const second = cov && cov.total
-    ? h("p", {}, glanceFig(`${cov.both.length} of ${cov.total}`, "needs with recorded tests, oxygen and pressure both in the scenario range"), coverageLine(cov), " ",
+    ? h("p", {}, glanceFig(`${cov.both.length} of ${cov.total}`, "fire-safety questions with recorded tests, oxygen and pressure both in the scenario range"), coverageLine(cov), " ",
       h("a", { href: "#compare" }, "Compare"), " · ", h("a", { href: "#stops" }, "Where the evidence stops"))
     : h("p", {}, h("a", { href: "#needs" }, "What the recorded tests say"), " · ", h("a", { href: "#stops" }, "Where the evidence stops"));
   box.append(top, second);
