@@ -234,6 +234,13 @@ def build(root):
 
     ro_path = P("data", "catalog", "reading_order.csv")
     reading_order = _csv(ro_path) if os.path.exists(ro_path) else []
+    fls_path = P("data", "pipeline", "file_links_summary.json")
+    fls = _json(fls_path) if os.path.exists(fls_path) else None
+    sheets_path = P("data", "pipeline", "flex_sheet_vs_table.csv")
+    sheets = collections.defaultdict(dict)  # test_id -> key -> row (the 272 FLEX test sheets, pm 0035 step 4)
+    if os.path.exists(sheets_path):
+        for r in _csv(sheets_path):
+            sheets[r["test_id"]][r["key"]] = r
 
     chain_path = P("data", "pipeline", "question_chain.csv")
     chain_src = "data/pipeline/question_chain.csv"
@@ -272,8 +279,23 @@ def build(root):
 
         # 1.3 and 1.4: file links (data's summary, else the lunar prototype)
         links = None
-        if os.path.exists(P("data", "pipeline", "file_links_summary.json")):
-            links = None  # field names are set by the data role; wired when the file lands (see the answer to pm 0035)
+        if fls and sid in fls.get("scenarios", {}):
+            # the data role's file links (pm 0035 step 3, data/pipeline/file_links_summary.json)
+            s = fls["scenarios"][sid]
+            ls = s.get("by_link_state", {})
+            pairs = collections.Counter(f.get("candidate_tests", "") for f in s.get("labels_disagree_files", []))
+            links = {"files": s["files_naming_inside_tests"], "bytes": s["bytes"], "share": s["bytes"] / archive_bytes,
+                     "small_files": s["small_files"], "small_bytes": s["small_bytes"],
+                     "agree": ls.get("two_labels_agree", {}).get("files", 0), "one": ls.get("one_label", {}).get("files", 0),
+                     "disagree": ls.get("labels_disagree", {}).get("files", 0), "pairs": pairs,
+                     "tests_inside": s["tests_inside"], "source": "data/pipeline/file_links_summary.json"}
+            if links["tests_inside"] != len(inside_all):
+                raise PileError(f"{sid} links: tests inside {links['tests_inside']} != {len(inside_all)} from scenario_tests.csv")
+            if s["small_files"] + s["archive_and_video_files"] != s["files_naming_inside_tests"]:
+                raise PileError(f"{sid} links: small plus archive files differ from the files naming the tests")
+            # fixture F3 (pile_wording.md section 0)
+            if sid == "lunar_habitat" and (links["files"], links["bytes"], links["agree"], links["one"], links["disagree"]) != (398, 104358456350, 336, 47, 15):
+                raise PileError(f"lunar links differ from fixture F3: {links['files']}, {links['bytes']}, {links['agree']} / {links['one']} / {links['disagree']}")
         elif sid == "lunar_habitat":
             s = _json(P("docs", "raw_data_design", "prototype", "lunar_summary.json"))
             l69 = _json(P("docs", "raw_data_design", "prototype", "lunar_links_PSI-69.json"))
@@ -300,13 +322,25 @@ def build(root):
         if links:
             big_files, big_bytes = links["files"] - links["small_files"], links["bytes"] - links["small_bytes"]
             header.append(f"{n_(links['files'])} of them ({size(links['bytes'])}, {links['share'] * 100:.2f}% of the bytes) carry in their name the NASA identifier or the test number of one of the {n_(links['tests_inside'])} tests recorded inside these oxygen and pressure ranges: {n_(links['small_files'])} files that are not an archive or a video recording ({size(links['small_bytes'])}) and {n_(big_files)} archives and video recordings ({size(big_bytes)}).")
-            clauses = [f"File name and PSI folder name the same test for {n_(links['agree'])} of them"]
-            if links["no_test"]:
-                clauses.append(f"{n_(links['no_test'])} {plural(links['no_test'], 'sits', 'sit')} in a folder that names no test")
-            if links["other_test"]:
-                det = joined([f"{n_(c)} files of FLEX-{a} in a folder named after FLEX-{b}" for (a, b), c in sorted(links["other_detail"].items())])
-                clauses.append(f"{n_(links['other_test'])} {plural(links['other_test'], 'sits', 'sit')} in a folder that names another test ({det})")
-            header.append("; ".join(clauses) + ". The team lists these cases and does not resolve them.")
+            if "pairs" in links:
+                # 1.4 in the data role's link states (its names win over the template's, pile_wording.md section 0)
+                clauses = [f"Two labels that NASA wrote (file name, PSI folder, or the identifier inside a test sheet) name the same test for {n_(links['agree'])} of them"]
+                if links["one"]:
+                    clauses.append(f"{n_(links['one'])} {plural(links['one'], 'carries', 'carry')} one label")
+                if links["disagree"]:
+                    top = links["pairs"].most_common(2)
+                    rest = links["disagree"] - sum(c for _, c in top)
+                    det = joined([f"{n_(c)} {plural(c, 'file', 'files')} naming {p.replace('+', ' and ')}" for p, c in top] + ([f"{n_(rest)} more"] if rest > 0 else []))
+                    clauses.append(f"for {n_(links['disagree'])} the labels name different tests ({det})")
+                header.append("; ".join(clauses) + ". The team lists these cases and does not resolve them.")
+            else:
+                clauses = [f"File name and PSI folder name the same test for {n_(links['agree'])} of them"]
+                if links["no_test"]:
+                    clauses.append(f"{n_(links['no_test'])} {plural(links['no_test'], 'sits', 'sit')} in a folder that names no test")
+                if links["other_test"]:
+                    det = joined([f"{n_(c)} files of FLEX-{a} in a folder named after FLEX-{b}" for (a, b), c in sorted(links["other_detail"].items())])
+                    clauses.append(f"{n_(links['other_test'])} {plural(links['other_test'], 'sits', 'sit')} in a folder that names another test ({det})")
+                header.append("; ".join(clauses) + ". The team lists these cases and does not resolve them.")
         # 1.5 the tests inside
         if inside_all:
             by_inv = collections.defaultdict(list)
@@ -344,7 +378,7 @@ def build(root):
             counted_in = [t for t in inside if t in stated]
             # cross-check with the chain where it exists
             if ch:
-                rows = [r for r in ch if r["need_id"] == nid and r["variable"] == "o2_pct"]
+                rows = [r for r in ch if r["need_id"] == nid and r["variable"] == "o2_pct" and r.get("row_kind", "quantity") == "quantity"]
                 if rows:
                     c_inside = sum(int(r["in_scope_tests"] or 0) for r in rows if r["placement"] == "inside")
                     c_counted = sum(int(r["counted_tests"] or 0) for r in rows if r["placement"] == "inside")
@@ -475,7 +509,41 @@ def build(root):
             for acc in sorted({tests[t]["investigation_id"] for t in counted_in}):
                 n_in = sum(1 for t in counted_in if tests[t]["investigation_id"] == acc)
                 rc = raw_cols.get(acc, {})
-                for r in [r for r in ch if r["need_id"] == nid and r["investigation_id"] == acc and r["placement"] == "inside" and int(r["counted_tests"] or 0) > 0]:
+                # 7.1 to 7.3: the per-test sheets read by the data role's code (flex_sheet_vs_table.csv)
+                tsh = [t for t in counted_in if tests[t]["investigation_id"] == acc and t in sheets]
+                if tsh and "extinction_diameter_mm" in nd.get("outcomes_any", []):
+                    agree = lambda t, k: (sheets[t].get(k) or {}).get("agreement", "").startswith("agrees")  # noqa: E731
+                    files = {sheets[t]["CIR Test Number"]["psi_file_name"]: int(sheets[t]["CIR Test Number"]["bytes"] or 0) for t in tsh if "CIR Test Number" in sheets[t]}
+                    read = len(files)
+                    p2.append(f"Per-test sheets of these {len(tsh)} tests (FLEX-nnn_TestSheet.txt, {read} {plural(read, 'file', 'files')}, {n_(sum(files.values()))} bytes; {read} of {read} read). "
+                              f"The identifier printed inside equals the table's in {sum(agree(t, 'CIR Test Number') for t in tsh)} of {read}. "
+                              f"Pressure agrees with NASA's table in {sum(agree(t, 'Pressure (atm)') for t in tsh)} of {read}, oxygen in {sum(agree(t, 'O2 Mole Fraction') for t in tsh)} of {read}.")
+                    TW = {"number": "a number above zero", "zero": "0", "blank": "blank", "dash": "a dash"}
+                    SW = {"number": "a number", "nan": "nan", "zero": "0.00", "text": "text"}
+                    cls = collections.defaultdict(list)
+                    for t in tsh:
+                        d = sheets[t].get("Dext (mm)")
+                        if d:
+                            cls[(d["table_form"], d["sheet_form"])].append((t, d["sheet_value_as_written"], d["table_cell_as_written"]))
+                    order_t = ["number", "zero", "blank", "dash"]
+                    order_s = ["number", "nan", "zero"]
+                    # fixture F5 (design.md section 7): the 17 lunar sheets against NASA's table
+                    if sid == "lunar_habitat" and acc == "PSI-69":
+                        got = {k: len(v) for k, v in cls.items()}
+                        want = {("number", "number"): 3, ("number", "nan"): 1, ("zero", "zero"): 2, ("blank", "number"): 2, ("blank", "nan"): 6, ("dash", "number"): 1, ("dash", "zero"): 1, ("dash", "nan"): 1}
+                        if got != want:
+                            raise PileError(f"lunar FLEX sheets against the table {got} differ from fixture F5")
+                    for (tf, sf) in sorted(cls, key=lambda k: (order_t.index(k[0]) if k[0] in order_t else 9, order_s.index(k[1]) if k[1] in order_s else 9)):
+                        items = cls[(tf, sf)]
+                        ids = ", ".join(f"{t} ({v})" if sf == "number" else f"{t} (“{v}”)" if sf == "text" else (f"{t} (table {c})" if tf == "number" else t)
+                                        for t, v, c in sorted(items, key=lambda x: int(x[0].split("-")[1])))
+                        p2.append(f"Extinction diameter: NASA's table writes {TW.get(tf, tf)}, the sheet's line Dext (mm) writes {SW.get(sf, sf)}: {ids}. Read from NASA's file, not adopted, not counted.")
+                    codes = [c for c in ("nan", "0.00") if any(sf == {"nan": "nan", "0.00": "zero"}[c] for (_, sf) in cls)] + \
+                            (["a text in the sheet"] if any(sf == "text" for (_, sf) in cls) else []) + \
+                            [c for c in ("a blank", "a dash") if any(tf == {"a blank": "blank", "a dash": "dash"}[c] for (tf, _) in cls)]
+                    if codes:
+                        p2.append(f"Read from NASA's raw files by the team's code. Not a table value, not counted. No file opened so far says what {joined(codes, 'or')} mean, or whether the sheet's line is the visible-flame extinction diameter of the table.")
+                for r in [r for r in ch if r["need_id"] == nid and r["investigation_id"] == acc and r["placement"] == "inside" and int(r["counted_tests"] or 0) > 0 and r.get("row_kind", "quantity") == "quantity"]:
                     v = r["variable"]
                     if r["location"] == "raw_file_column_seen":
                         groups = [g.strip() for g in (r.get("file_groups") or "").split("|") if g.strip()]
@@ -613,3 +681,53 @@ if __name__ == "__main__":
             for s in d["small_print"]:
                 print("S:", s)
     print("three piles: " + ", ".join(f"{k} ({len(v['needs'])} questions)" for k, v in res.items()))
+
+
+# ---------------------------------------------------------------- the files of one test (pm 0035, item 4)
+VIDEO_TIE = {  # docs/video_design/video_wording.md section 4 (tie phrases, per link state)
+    "two_labels_agree": "video of this test (file name and PSI folder name the same test)",
+    "day_only": "a video of that test day (which test is not known)",
+    "id_not_in_table": "carries an identifier that NASA's table does not list",
+    "none": "not tied to a test",
+}
+LINK_WORDS = {"two_labels_agree": "two labels agree", "one_label": "one label", "labels_disagree": "labels disagree",
+              "id_not_in_table": "identifier not in the table", "day_only": "tied to a day only", "none": "not tied"}
+
+
+def tie_phrase(f):
+    st = f.get("link_state", "")
+    if f.get("kind") != "video":
+        return LINK_WORDS.get(st, st)
+    if st == "one_label":
+        return "tied by the folder name only" if "folder" in (f.get("labels_found") or "") and "name_" not in (f.get("labels_found") or "") else "tied by the file name only"
+    if st == "labels_disagree":
+        return f"labels disagree: {f.get('labels_found', '')}"
+    return VIDEO_TIE.get(st, st)
+
+
+def build_files(root):
+    """Per scenario, the tests inside the ranges and the files whose name carries a label of each
+    (data/pipeline/test_files.json, written by the data role's pipeline/file_links.py)."""
+    path = os.path.join(root, "data", "pipeline", "test_files.json")
+    if not os.path.exists(path):
+        return {}
+    tf = _json(path)
+    out = {}
+    for sid in SCENARIOS:
+        tests = tf.get("scenarios", {}).get(sid)
+        if not tests:
+            continue
+        doc = {}
+        for tid, t in sorted(tests.items(), key=lambda kv: (kv[1].get("investigation_id", ""), kv[0])):
+            rows = t.get("file_list", [])
+            if len(rows) != int(t.get("files", len(rows))) or sum(int(r.get("bytes") or 0) for r in rows) != int(t.get("bytes", 0)):
+                raise PileError(f"test_files.json {sid} {tid}: the file list does not sum to its files and bytes")
+            big = [r for r in rows if r.get("kind") in ("archive", "video")]
+            doc[tid] = {"investigation_id": t.get("investigation_id"), "fuel_phase": t.get("fuel_phase"),
+                        "files": len(rows), "bytes": int(t.get("bytes", 0)),
+                        "summary": f"{n_(len(rows))} {plural(len(rows), 'file', 'files')}, {size(t.get('bytes', 0))}: "
+                                   f"{n_(len(rows) - len(big))} small {plural(len(rows) - len(big), 'file', 'files')} ({size(sum(int(r['bytes'] or 0) for r in rows if r not in big))}) and "
+                                   f"{n_(len(big))} {plural(len(big), 'archive or video recording', 'archives and video recordings')} ({size(sum(int(r['bytes'] or 0) for r in big))}).",
+                        "rows": [[r["file_name"], int(r.get("bytes") or 0), r.get("kind", ""), tie_phrase(r), r.get("labels_found", ""), r.get("psi_file_id", "")] for r in rows]}
+        out[sid] = doc
+    return out

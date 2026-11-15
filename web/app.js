@@ -1139,6 +1139,38 @@ function pilesGlance(doc) {
       : `${g.inside.toLocaleString("en-US")} ${g.inside === 1 ? "test is" : "tests are"} recorded inside these oxygen and pressure ranges.`;
   $("#glance").append(h("p", { class: "glance-piles" }, h("b", {}, "Raw data: "), words, " ", h("a", { href: "#piles" }, "Where the data are")));
 }
+// The files of one test inside the ranges (pm 0035, item 4): the data role's test_files.json, as built
+// into data/piles/<scenario>_files.json. Loaded when the reader opens the box.
+function filesPicker(sid) {
+  const file = `data/piles/${sid}_files.json`;
+  if (!OPTIONAL_HAS(file)) return null;
+  const out = h("div", { class: "files-out" });
+  const sel = h("select", { "aria-label": "Test inside the ranges" }, h("option", { value: "" }, "Choose a test…"));
+  let data = null;
+  const show = () => {
+    const t = data && data[sel.value];
+    if (!t) { out.replaceChildren(); return; }
+    const csvText = [["file_name", "bytes", "kind", "link", "labels_found", "psi_file_id"], ...t.rows]
+      .map((r) => r.map((c) => (/[",\n]/.test(String(c)) ? `"${String(c).replace(/"/g, '""')}"` : String(c))).join(",")).join("\n");
+    const dl = h("a", { href: URL.createObjectURL(new Blob([csvText + "\n"], { type: "text/csv" })), download: `${sel.value}_files.csv` }, "Download file list (CSV)");
+    out.replaceChildren(
+      h("p", {}, h("b", {}, `${sel.value} (${t.investigation_id}): `), t.summary, " ", dl),
+      h("div", { class: "table-wrap" }, h("table", { class: "files-table" },
+        h("thead", {}, h("tr", {}, ...["File name as NASA wrote it", "Bytes", "Kind", "Link to the test"].map((x) => h("th", { scope: "col" }, x)))),
+        h("tbody", {}, t.rows.map((r) => h("tr", {}, h("td", {}, r[0]), h("td", { class: "num" }, r[1].toLocaleString("en-US")), h("td", {}, r[2].replace(/_/g, " ")), h("td", { title: r[4] }, r[3])))))),
+      h("p", { class: "gap" }, "A file is listed when its name carries a label of the test. A file that names a test is not shown to hold what a question needs. Links: the data role's two-label rule (", link(REPO + "data/pipeline/file_links_summary.json", "file_links_summary.json"), ")."));
+  };
+  sel.addEventListener("change", show);
+  const box = h("details", { class: "more files-pick" }, h("summary", {}, "Files of one test inside these ranges"),
+    h("p", {}, sel), out);
+  box.addEventListener("toggle", async () => {
+    if (!box.open || data) return;
+    data = await loadJSON(file, null);
+    if (!data) { out.replaceChildren(h("p", { class: "gap" }, "File list: not available.")); return; }
+    for (const [tid, t] of Object.entries(data)) sel.append(h("option", { value: tid }, `${tid} (${t.files} files)`));
+  });
+  return box;
+}
 async function renderPiles(out, pipe) {
   const sec = $("#piles"), body = $("#piles-body");
   const sid = out.status === "ok" ? out.scenario.preset || null : null;
@@ -1194,6 +1226,7 @@ async function renderPiles(out, pipe) {
     h("div", {}, h("dt", {}, doc.pile3_label), h("dd", {}, doc.pile3_meaning)));
   body.replaceChildren(
     h("div", { class: "pile-header" }, ...doc.header.map((s) => h("p", {}, s))),
+    filesPicker(doc.scenario),
     meanings, legend, ...blocks,
     h("div", { class: "small-print" }, ...doc.small_print.map((s) => h("p", {}, s)),
       h("p", {}, "Files read for this block: ", srcs, ". ", h("span", { class: "tag" }, "Computed by team code from NASA PSI tables and file listing"))));

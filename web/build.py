@@ -179,6 +179,12 @@ def main():
             json.dump(doc, fh, ensure_ascii=False)
         OPTIONAL_BUILT.append(f"data/piles/{sid}.json")
     print("three piles: " + ", ".join(f"{k} ({len(v['needs'])} questions)" for k, v in piles.items()))
+    # the files of each test inside the ranges (data's test_files.json), loaded by the page on request
+    for sid, doc in raw_piles.build_files(ROOT).items():
+        with open(os.path.join(DIST, "data", "piles", f"{sid}_files.json"), "w", encoding="utf-8") as fh:
+            json.dump(doc, fh, ensure_ascii=False, separators=(",", ":"))
+        OPTIONAL_BUILT.append(f"data/piles/{sid}_files.json")
+        print(f"files of the tests inside: {sid} ({len(doc)} tests, {sum(t['files'] for t in doc.values())} files)")
     # Link preview image: web/media/og.png (1200 x 630, written by capture_media.mjs), else the old draft.
     for og in (os.path.join(HERE, "media", "og.png"), os.path.join(HERE, "media", "02_lunar_top.png")):
         if os.path.exists(og):

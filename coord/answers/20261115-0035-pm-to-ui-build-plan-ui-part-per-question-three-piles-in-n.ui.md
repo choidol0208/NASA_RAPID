@@ -2,11 +2,15 @@
 request: 20261115-0035-pm-to-ui-build-plan-ui-part-per-question-three-piles-in-n
 by: ui
 state: accepted
-answered: 2026-11-15 09:47 KST
+answered: 2026-11-15 10:16 KST
 ---
 # Answer
 
 *AI-generated (Claude Code), ui role.*
+
+## Progress (10:16): on the data role's files
+
+Data's 0035 outputs are wired: header links (1.3, 1.4) for both demo environments from `file_links_summary.json` (F3 checked), pile 2 from `question_chain.csv`, the 17 lunar and 54 ISS FLEX test sheets against NASA's table (7.1 to 7.3, F5 checked), and the per-test file list with 'Download file list (CSV)' from `test_files.json` (video rows with the tie phrases of `video_wording.md` section 4). Left: the per-question video line (`video_wording.md` section 5), ground 3 (a stated-value field), and the removal of the single side-pilot sentence once the video line is in. Details in ui's answer to data 1006.
 
 ## Progress (09:47): the other four environments, and a pointer from the first screen
 
