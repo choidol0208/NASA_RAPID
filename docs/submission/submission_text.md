@@ -493,7 +493,7 @@ Who checked the work: code checks and AI sessions, as listed in the table under 
 - The experimental tables are 22 files of 0.2 MB in a listing of 13.47 TB, and PSI's metadata does not say which file belongs to which test. That led to the raw-data chain: start from the question, follow NASA's own identifiers to the files, and say for each question whether the data are in a table, in the archive, or have no record in PSI.
 - The records and the investigators' papers state each experiment's purpose. That led to the counting rule: a test counts for a need only when that need is a stated purpose of the experiment.
 - The challenge asks for the results of the experiments to be summarised, ranked and interpreted, and no mapped column of PSI's tables holds some of the outcomes the needs ask for (ignition, smoke particle size), while the investigators' papers and NASA's reports print results. That led to the results-first layer: the published results quoted per question, before the counts and the gaps.
-- Every test in the common test table was run in microgravity. So the page warns that there are no partial-gravity data. Results at 0 g and 1 g are not bounds for lunar or Martian gravity.
+- Every test in the common test table was run in microgravity, so the page warns that there are no partial-gravity data. The challenge statement suggests that results at the two ends of the gravity scale could bound what occurs at intermediate gravity levels. The page does not treat them as bounds: in NASA drop-tower tests of three materials (Olson and Ferkul 2012, Table I), the oxygen limits at lunar gravity were lower than at both 0 g and 1 g, and at Martian gravity lower for two of the three; those 5.18 s drops used extinction criteria that differ from the 1 g test.
 - For BASS-II, PSI holds videos and no numeric log of the readings shown on screen. That led to the video reader.
 
 ## References
@@ -727,7 +727,7 @@ What the tool does not do:
 
 - It is a research exploration tool. It is not operational safety guidance and gives no safety verdict on a material, an atmosphere or a design.
 - It makes no prediction for an untested condition.
-- It does not treat results at 0 g and 1 g as bounds for lunar or Martian gravity. Every recorded test in the tables was run in microgravity.
+- It does not treat results at the two ends of the gravity scale as bounds for lunar or Martian gravity, although the challenge statement suggests they could bound intermediate levels: NASA's own drop-tower results (Olson and Ferkul 2012, Table I, quoted on the page) show oxygen limits at lunar gravity below both. Every recorded test in the tables was run in microgravity.
 - It does not judge any test against a criterion and sets no requirements of its own. A compliance line says what a value rests on, not that a design meets a requirement.
 - Its rankings, counts, placements, piles and reading orders are the team's computation. They are not conclusions by NASA. NASA does not endorse the tool, and it uses no NASA logo.
 - Its test counts cover only PSI's open experimental tables that have one row per test: 14 tables of 12 investigations. 8 more tables are not in the common table. 4 investigations have no experimental table in PSI. The ranking covers all 24 investigations through their records.

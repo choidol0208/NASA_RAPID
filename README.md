@@ -113,7 +113,7 @@ The team worked in four Claude Code sessions, one per role: pm, data, ui and cat
 
 *AI-generated section (Claude Code, pm role, 15 November 2026). The assistant's code in `ai/assistant/` was written with an AI assistant (Claude); every file says so in its first line.*
 
-The assistant is a chat box above the dashboard. You type what you are building and where, in your own words and in any language (it answers in English). It covers the four points of the challenge's Objectives:
+The assistant answers under the page's one input, above the dashboard. You type what you are building and where, or a question, in your own words and in any language (it answers in English); the same text updates the dashboard at once, and a box for follow-up questions appears with the first answer. It covers the four points of the challenge's Objectives:
 
 - the **investigations most relevant** to a crewed environment: spacecraft, station, lunar or Martian base, pressurized rover or spacesuit;
 - the **data that support predictive modelling**, and where they are: in NASA's tables, in the archive but unprocessed, or with no record in PSI;
@@ -164,9 +164,9 @@ The install needs Python 3.10 or newer, with the standard library only (no pip p
 
 Measured on the build machine (Apple M4 Pro, 48 GB): the model ran at 50.1 to 51.0 tokens per second (`ai/runs/smoke.jsonl`, 14 November). After one assistant turn, Ollama reported the loaded model at 12.7 GB, all of it on the GPU, with a context of 16,384 tokens (`GET /api/ps`, 15 November). The evaluation records the same reading as `loaded_model` in `data/insights/assistant_eval.json`. With 16 GB of memory or less the model may not fit beside the system; that is a rule of thumb, not a test. The server listens on 127.0.0.1 only and sends nothing off the machine. Conversations are not stored in the repository; run-time logs go to the git-ignored `ai/assistant/_runtime/`.
 
-**The public page** runs no language model. The page build (`python3 web/build.py`) includes the assistant in recorded mode: it replays conversations recorded with the local model on 15 November, each marked as recorded (`data/insights/assistant_recorded.json`, written by `python3 -m ai.assistant.record`). Recorded mode was checked with the assistant server stopped, on a copy of `web/dist` served by `python3 -m http.server`. The deployed GitHub Pages site was not checked from this session.
+**The public page** runs no language model. The page build (`python3 web/build.py`) includes the assistant in recorded mode: it replays conversations recorded with the local model on 15 November, each marked as recorded (`data/insights/assistant_recorded.json`, written by `python3 -m ai.assistant.record`). Of the ten scripted conversations, six are replayed. An AI session read every model sentence of the recording; four conversations were re-recorded once and still had a sentence that went beyond its facts or an answer that dropped part of the request, so they are left out and named with the reason under `left_out` in the file. Recorded mode was checked with no assistant server behind the page, on a copy of `web/dist` served by `python3 -m http.server`. The deployed GitHub Pages site was not checked from this session.
 
-Screens of recorded conversations (taken in that recorded mode, 15 November): [closest investigations for a lunar habitat](docs/assistant/screens/1_closest_investigations_lunar_habitat.jpg), [data for a predictive model of extinction](docs/assistant/screens/2_data_for_predictive_modelling.jpg), [research behind a smoke detector, asked in Korean](docs/assistant/screens/3_research_behind_smoke_detection.jpg), [a declined safety verdict](docs/assistant/screens/4_declined_safety_verdict.jpg).
+Screens of recorded conversations (taken in that recorded mode, 15 November): [closest investigations for a Mars base, after one clarifying question](docs/assistant/screens/1_closest_investigations_mars_base.jpg), [the raw files of one test](docs/assistant/screens/2_raw_files_of_one_test.jpg), [research behind a smoke detector, asked in Korean](docs/assistant/screens/3_research_behind_smoke_detection.jpg), [a declined request for a prediction](docs/assistant/screens/4_declined_prediction.jpg).
 
 ### What is measured
 
@@ -317,7 +317,7 @@ Data and pipeline (from `pipeline/README.md`):
 - The Saffire oxygen value is what the ISS reported about one day before the tests, not a reading at ignition.
 - The ISS ranges are the team's bins, not an ISS operating range.
 - Lunar habitat: the 17 counted tests in its oxygen range are FLEX droplet tests recorded at 71.2 to 72.4 kPa, 1 to 2 kPa above 70.3 kPa (10.2 psi). No counted test was recorded at 30% oxygen or more and at or below 70.3 kPa.
-- Every test in the PSI tables used here was run in microgravity. Results at 0 g and 1 g are not bounds for lunar or Martian gravity.
+- Every test in the PSI tables used here was run in microgravity. The challenge statement suggests that results at the two ends of the gravity scale could bound what occurs at intermediate gravity levels. The page does not treat them as bounds: in NASA drop-tower tests of three materials (Olson and Ferkul 2012, Table I), the oxygen limits at lunar gravity were lower than at both 0 g and 1 g, and at Martian gravity lower for two of the three; those 5.18 s drops used extinction criteria that differ from the 1 g test.
 
 Ranking (from `scoring/PARAMETER_REVIEW.md`, `scoring/METHOD.md` and, for config 1.5.2, `validation/report.md` of 15 November, 15:20):
 
