@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 90,
+  "PASS": 94,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 90
+  "checks": 94
  },
  "notes": [
   {
@@ -2021,6 +2021,60 @@
     "members": 12662354,
     "not_listed": 89,
     "disagree": 5
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "U1_results_sources",
+   "verifies": "results_by_need.json: every finding, item and entry points to an existing item of references.json; its text and quote equal the item's; every entry's source (document, title, version, where, url, access) is that of the item and its document; the findings of kind result, criterion and caveat are those of findings.csv with the same kind, needs and conditions; an entry from a document not read in full carries its access label; criteria items tied by the spec are of a criterion type and tied by needs.json or process.json.",
+   "status": "PASS",
+   "numbers": {
+    "findings": 156,
+    "items": 130,
+    "entries": 2676
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "U2_results_printed_values",
+   "verifies": "Every printed value of results_by_need.json (findings and items) equals the value at its path in the item's 'values' of references.json, written as held; the paths of a finding are those its entry of spec/findings.json selects (own walk of 'values'); results_flat.csv has one row per result and printed value (one empty row for a result without printed values) with the finding's conditions and source.",
+   "status": "PASS",
+   "numbers": {
+    "printed_values_of_findings": 172,
+    "flat_rows": 197,
+    "flat_rows_with_value": 162
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "U3_results_order",
+   "verifies": "In every block, the entries of found, criteria and caveats are exactly the findings of that kind tagged for the need (or for all needs, in the second list), each in the group findings_by_environment.json lists it under (other_conditions when it lists it nowhere), and they follow the stated order: group, names a material first, item id, order of findings.csv.",
+   "status": "PASS",
+   "numbers": {
+    "lists": 216
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "U4_results_counts_and_headlines",
+   "verifies": "Every count of a results block equals a recount of its entries; the headline fields equal the block counts and every number of the headline is one of its fields; the recorded block equals need_recorded_summary.csv, scenario_needs.csv and question_chain_counts.csv (tests counted inside the ranges = tests_atmosphere); unprocessed and no_record are the question_chain.csv rows of their piles; results_summary.json counts equal a recount; every answer file points to its block and carries its headline; no template of spec/results.json holds a digit (outside the pile 3 label) or a forbidden word.",
+   "status": "PASS",
+   "numbers": {
+    "blocks": 36,
+    "results": 89,
+    "per_need": {
+     "P1": 29,
+     "P2": 1,
+     "P3": 3,
+     "S1": 4,
+     "D1": 3,
+     "D2": 7,
+     "general": 44
+    }
    },
    "failures": 0,
    "failing_examples": []

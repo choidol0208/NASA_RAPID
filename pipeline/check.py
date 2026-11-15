@@ -7010,6 +7010,422 @@ T_RAW_LINES = {}
 
 
 # ----------------------------------------------------------------------------
+# U. results first (results_by_need.json, results_flat.csv, results_summary.json),
+#    written by pipeline/results.py (README "Results first"); added 2026-11-15
+# ----------------------------------------------------------------------------
+
+U_KINDS = ("result", "criterion", "caveat")
+U_GROUPS = (("at_environment", "at_environment"),
+            ("about_a_stated_condition", "about_a_stated_condition_of_the_environment"),
+            ("stated_without_these_conditions", "general"),
+            ("other_conditions", None))
+U_COND = ("o2_pct_min", "o2_pct_max", "pressure_kpa_min", "pressure_kpa_max", "pressure_as_written",
+          "gravity_level", "flow_cms", "fuel_phase", "material")
+U_PATH = re.compile(r"[^.\[\]]+|\[\d+\]")
+
+
+def u_inputs(ctx):
+    for name in ("results_by_need.json", "results_flat.csv", "results_summary.json"):
+        if not ctx.has(name):
+            raise Skip("data/pipeline/%s does not exist yet" % name)
+    return ctx.json("results_by_need.json"), ctx.table("results_flat.csv"), ctx.json("results_summary.json")
+
+
+def u_text(v):
+    if isinstance(v, (list, dict)):
+        return json.dumps(v, ensure_ascii=False)
+    return "" if v is None else str(v)
+
+
+def u_resolve(values, path):
+    cur = values
+    for part in U_PATH.findall(path):
+        if part.startswith("["):
+            i = int(part[1:-1])
+            if not isinstance(cur, list) or i >= len(cur):
+                return _MISSING
+            cur = cur[i]
+        else:
+            if not isinstance(cur, dict) or part not in cur:
+                return _MISSING
+            cur = cur[part]
+    return cur
+
+
+def u_leaves(values, labels):
+    """The paths of every printed value of an item's 'values' (own walk, README 'Results first')."""
+    out = []
+    if not isinstance(values, dict):
+        return out
+    for k, v in values.items():
+        if k in ("unit", "rounding") and "rows" in values:
+            continue
+        if k == "rows" and isinstance(v, list) and v and all(isinstance(r, dict) for r in v):
+            out += ["rows[%d].%s" % (i, f) for i, r in enumerate(v) for f in r if f not in labels]
+        elif isinstance(v, dict):
+            heads = [c for c in v if c.startswith("columns_")]
+            if len(heads) == 1:
+                out += ["%s.%s[%d]" % (k, m, j) for m, s in v.items() if m != heads[0] and isinstance(s, list)
+                        for j in range(len(s))]
+            else:
+                out += ["%s.%s" % (k, s) for s in v]
+        elif isinstance(v, list) and not k.endswith("_range"):
+            out += ["%s[%d]" % (k, i) for i in range(len(v))]
+        else:
+            out.append(k)
+    return out
+
+
+def u_expected_paths(entry, values, labels):
+    leaves = u_leaves(values, labels)
+    if "column_of" in entry:
+        pat = re.compile(r"%s\.[^\[\]]+\[%d\]$" % (re.escape(entry["column_of"]), entry["column_index"]))
+        return [p for p in leaves if pat.match(p)]
+    src = entry.get("row_source")
+    if src and src.startswith("rows["):
+        return [p for p in leaves if p.startswith(src + ".")]
+    if src:
+        key, i = re.match(r"(.+)\[(\d+)\]$", src).groups()
+        n = len(values[key])
+        return [p for p in leaves if re.fullmatch(r"[^.\[\]]+\[%s\]" % i, p)
+                and isinstance(values.get(p.split("[")[0]), list) and len(values[p.split("[")[0]]) == n]
+    if "row" in entry:
+        return []
+    return leaves
+
+
+def u_blocks(doc):
+    for s in doc.get("scenarios", []):
+        for b in s.get("needs", []):
+            yield s, b
+
+
+@check("U1_results_sources",
+       "results_by_need.json: every finding, item and entry points to an existing item of references.json; its "
+       "text and quote equal the item's; every entry's source (document, title, version, where, url, access) is "
+       "that of the item and its document; the findings of kind result, criterion and caveat are those of "
+       "findings.csv with the same kind, needs and conditions; an entry from a document not read in full carries "
+       "its access label; criteria items tied by the spec are of a criterion type and tied by needs.json or "
+       "process.json.")
+def check_u1(ctx):
+    res = Result()
+    doc, flat, summ = u_inputs(ctx)
+    items = ctx.reference_items
+    rs = ctx.spec("results")
+    fcsv = {r["finding_id"]: r for r in ctx.table("findings.csv")}
+    access = ctx.spec("references")["_meta"]["access_values"]
+    want = {k for k, r in fcsv.items() if r["kind"] in U_KINDS}
+    if set(doc["findings"]) != want:
+        res.fail(problem="findings differ from findings.csv", missing=sorted(want - set(doc["findings"]))[:5],
+                 extra=sorted(set(doc["findings"]) - want)[:5])
+    for fid, f in doc["findings"].items():
+        res.checked += 1
+        r = fcsv.get(fid)
+        if f["item_id"] not in items or r is None:
+            res.fail(finding=fid, problem="item or finding does not exist")
+            continue
+        ref, it = items[f["item_id"]]
+        if f["text"] != it["text"] or f["quote"] != it.get("quote"):
+            res.fail(finding=fid, problem="text or quote differs from references.json")
+        if f["kind"] != r["kind"] or ";".join(f["needs"]) != r["needs"] or any(
+                f["conditions"][c] != r[c] for c in U_COND):
+            res.fail(finding=fid, problem="kind, needs or conditions differ from findings.csv")
+    for iid, iv in doc["items"].items():
+        res.checked += 1
+        if iid not in items:
+            res.fail(item=iid, problem="item does not exist")
+            continue
+        ref, it = items[iid]
+        if iv["text"] != it["text"] or iv["quote"] != it.get("quote") or iv["document_id"] != ref["id"] \
+                or iv["where"] != it["where"] or iv["type"] != it["type"]:
+            res.fail(item=iid, problem="item fields differ from references.json")
+    for did, d in doc["documents"].items():
+        ref = next((x for x in ctx.spec("references")["references"] if x["id"] == did), None)
+        if ref is None or any(d[k] != ref[k] for k in ("title", "version", "url", "access")):
+            res.fail(document=did, problem="document fields differ")
+    needs = {n["id"]: n for n in ctx.needs}
+    process = ctx.spec("process")["steps"]
+    n_entries = 0
+    for s, b in u_blocks(doc):
+        lists = [b["found"]["entries"], b["found"]["entries_tagged_for_all_questions"], b["criteria"]["criterion_findings"],
+                 b["caveats"]["entries"], b["caveats"]["entries_tagged_for_all_questions"], b["criteria"]["items_tied_by_spec"]]
+        for lst in lists:
+            for e in lst:
+                n_entries += 1
+                res.checked += 1
+                if e["item_id"] not in items:
+                    res.fail(block=b["block_id"], item=e["item_id"], problem="item does not exist")
+                    continue
+                ref, it = items[e["item_id"]]
+                src = e["source"]
+                exp = {"item_id": it["id"], "document_id": ref["id"], "title": ref["title"], "version": ref["version"],
+                       "where": it["where"], "url": ref["url"], "access": ref["access"]}
+                if src != exp:
+                    res.fail(block=b["block_id"], item=e["item_id"], problem="source differs")
+                if (ref["access"] != "full_text_read") != ("access_label" in e) or \
+                        ("access_label" in e and e["access_label"] != access[ref["access"]]):
+                    res.fail(block=b["block_id"], item=e["item_id"], problem="access label")
+                if "finding_id" in e and (e["finding_id"] not in doc["findings"]
+                                          or doc["findings"][e["finding_id"]]["item_id"] != e["item_id"]):
+                    res.fail(block=b["block_id"], finding=e.get("finding_id"), problem="finding id")
+        need = needs[b["need_id"]]
+        steps = [st for st in process if st["id"] in need.get("informs_process_steps", [])]
+        tied = set(need.get("references", [])) | {i for st in steps for i in st.get("items", []) + st.get("measures", [])}
+        crit_items = {e["item_id"] for e in b["criteria"]["criterion_findings"]}
+        exp_extra = sorted(i for i in tied if items[i][1]["type"] in rs["criteria_item_types"] and i not in crit_items)
+        got_extra = [e["item_id"] for e in b["criteria"]["items_tied_by_spec"]]
+        if got_extra != exp_extra:
+            res.fail(block=b["block_id"], problem="criteria items tied by the spec", expected=exp_extra, got=got_extra)
+        for e in b["criteria"]["items_tied_by_spec"]:
+            if e["item_id"] not in doc["items"]:
+                res.fail(block=b["block_id"], item=e["item_id"], problem="tied item not in 'items'")
+    res.numbers = {"findings": len(doc["findings"]), "items": len(doc["items"]), "entries": n_entries}
+    return res
+
+
+@check("U2_results_printed_values",
+       "Every printed value of results_by_need.json (findings and items) equals the value at its path in the "
+       "item's 'values' of references.json, written as held; the paths of a finding are those its entry of "
+       "spec/findings.json selects (own walk of 'values'); results_flat.csv has one row per result and printed "
+       "value (one empty row for a result without printed values) with the finding's conditions and source.")
+def check_u2(ctx):
+    res = Result()
+    doc, flat, summ = u_inputs(ctx)
+    items = ctx.reference_items
+    labels = ctx.spec("results")["row_label_fields"]
+    entries = spec_findings(ctx)
+    n_values = 0
+    for fid, f in doc["findings"].items():
+        ref, it = items[f["item_id"]]
+        values = it.get("values") or {}
+        exp = u_expected_paths(entries[fid], values, labels)
+        got = [v["path"] for v in f["printed_values"]]
+        if got != exp:
+            res.fail(finding=fid, problem="printed value paths", expected=exp[:6], got=got[:6])
+        for v in f["printed_values"]:
+            n_values += 1
+            res.checked += 1
+            held = u_resolve(values, v["path"])
+            if held is _MISSING or u_text(held) != v["value_as_printed"]:
+                res.fail(finding=fid, path=v["path"], printed=v["value_as_printed"], held=u_text(held) if held is not _MISSING else None)
+    for iid, iv in doc["items"].items():
+        values = items[iid][1].get("values") or {}
+        if [v["path"] for v in iv["printed_values"]] != u_leaves(values, labels):
+            res.fail(item=iid, problem="item printed value paths")
+        for v in iv["printed_values"]:
+            res.checked += 1
+            held = u_resolve(values, v["path"])
+            if held is _MISSING or u_text(held) != v["value_as_printed"]:
+                res.fail(item=iid, path=v["path"], printed=v["value_as_printed"])
+    # flat file
+    fcsv = {r["finding_id"]: r for r in ctx.table("findings.csv")}
+    exp_rows = []
+    for fid, f in doc["findings"].items():
+        if f["kind"] != "result":
+            continue
+        for v in f["printed_values"] or [None]:
+            exp_rows.append((fid, v["path"] if v else "", v["value_as_printed"] if v else ""))
+    got_rows = [(r["finding_id"], r["value_path"], r["value_as_printed"]) for r in flat]
+    if got_rows != exp_rows:
+        res.fail(problem="results_flat.csv rows differ", expected=len(exp_rows), got=len(got_rows))
+    for r in flat:
+        res.checked += 1
+        fr = fcsv.get(r["finding_id"])
+        ref, it = items[r["item_id"]]
+        if fr is None or fr["kind"] != "result" or any(r[c] != fr[c] for c in U_COND if c != "material") \
+                or r["material_stated_by_finding"] != fr["material"] or r["reference_id"] != ref["id"] \
+                or r["url"] != ref["url"] or r["access"] != ref["access"] or r["where"] != it["where"]:
+            res.fail(problem="flat row differs from findings.csv or references.json", finding=r["finding_id"])
+        if r["value_path"]:
+            held = u_resolve(it.get("values") or {}, r["value_path"])
+            if held is _MISSING or u_text(held) != r["value_as_printed"]:
+                res.fail(problem="flat value differs", finding=r["finding_id"], path=r["value_path"])
+    n_results = sum(1 for r in fcsv.values() if r["kind"] == "result")
+    if len({r["finding_id"] for r in flat}) != n_results:
+        res.fail(problem="results in flat file", expected=n_results)
+    res.numbers = {"printed_values_of_findings": n_values, "flat_rows": len(flat),
+                   "flat_rows_with_value": sum(1 for r in flat if r["value_path"])}
+    return res
+
+
+@check("U3_results_order",
+       "In every block, the entries of found, criteria and caveats are exactly the findings of that kind tagged "
+       "for the need (or for all needs, in the second list), each in the group findings_by_environment.json "
+       "lists it under (other_conditions when it lists it nowhere), and they follow the stated order: group, "
+       "names a material first, item id, order of findings.csv.")
+def check_u3(ctx):
+    res = Result()
+    doc, flat, summ = u_inputs(ctx)
+    fbe = ctx.json("findings_by_environment.json")
+    rows = ctx.table("findings.csv")
+    pos = {r["finding_id"]: i for i, r in enumerate(rows)}
+    gi = {g: i for i, (g, _) in enumerate(U_GROUPS)}
+    for s, b in u_blocks(doc):
+        env = next(e for e in fbe["environments"] if e["id"] == s["id"])
+        for kind, need_list, all_list in (("result", b["found"]["entries"], b["found"]["entries_tagged_for_all_questions"]),
+                                          ("caveat", b["caveats"]["entries"], b["caveats"]["entries_tagged_for_all_questions"]),
+                                          ("criterion", [e for e in b["criteria"]["criterion_findings"] if e["applies"] == "need"],
+                                           [e for e in b["criteria"]["criterion_findings"] if e["applies"] == "general"])):
+            for key, lst in ((b["need_id"], need_list), ("general", all_list)):
+                block = env["needs"][key]
+                listed = {}
+                for g, src in U_GROUPS:
+                    if src:
+                        for e in block[src]:
+                            listed[e["finding_id"]] = g
+                exp = [r for r in rows if r["kind"] == kind and key in r["needs"].split(";")]
+                exp = sorted(exp, key=lambda r: (gi[listed.get(r["finding_id"], "other_conditions")],
+                                                 0 if r["material"] else 1, r["item_id"], pos[r["finding_id"]]))
+                res.checked += 1
+                if [e["finding_id"] for e in lst] != [r["finding_id"] for r in exp]:
+                    res.fail(block=b["block_id"], kind=kind, key=key, problem="entries or order differ",
+                             expected=[r["finding_id"] for r in exp][:5], got=[e["finding_id"] for e in lst][:5])
+                for e in lst:
+                    if e["group"] != listed.get(e["finding_id"], "other_conditions"):
+                        res.fail(block=b["block_id"], finding=e["finding_id"], problem="group differs")
+                    if e["names_material"] != bool(rows[pos[e["finding_id"]]]["material"]):
+                        res.fail(block=b["block_id"], finding=e["finding_id"], problem="names_material")
+        if [x["block_id"] for x in s["needs"]] != ["%s__%s" % (s["id"], n["id"]) for n in ctx.needs]:
+            res.fail(scenario=s["id"], problem="blocks not in need order")
+    res.numbers = {"lists": res.checked}
+    return res
+
+
+@check("U4_results_counts_and_headlines",
+       "Every count of a results block equals a recount of its entries; the headline fields equal the block "
+       "counts and every number of the headline is one of its fields; the recorded block equals "
+       "need_recorded_summary.csv, scenario_needs.csv and question_chain_counts.csv (tests counted inside the "
+       "ranges = tests_atmosphere); unprocessed and no_record are the question_chain.csv rows of their piles; "
+       "results_summary.json counts equal a recount; every answer file points to its block and carries its "
+       "headline; no template of spec/results.json holds a digit (outside the pile 3 label) or a forbidden word.")
+def check_u4(ctx):
+    res = Result()
+    doc, flat, summ = u_inputs(ctx)
+    rs = ctx.spec("results")
+    banned = rs["forbidden_words"]
+    texts = list(rs["headline"].items()) + list(rs["sentences"].items()) + list(rs["labels"].items())
+    for name, t in texts:
+        res.checked += 1
+        if name != "no_record" and re.search(r"\d", re.sub(r"\{\w+\}|\[\w+\|", " ", t)):
+            res.fail(problem="digit in template", template=name)
+        if forbidden_words_in(t, banned):
+            res.fail(problem="forbidden word in template", template=name, words=forbidden_words_in(t, banned))
+    summary_rows = {r["need_id"]: r for r in ctx.table("need_recorded_summary.csv")}
+    sn = {(r["scenario_id"], r["need_id"]): r for r in ctx.table("scenario_needs.csv")}
+    qc = ctx.table("question_chain_counts.csv")
+    chain = ctx.table("question_chain.csv")
+
+    def gcount(lst):
+        c = {g: sum(1 for e in lst if e["group"] == g) for g, _ in U_GROUPS}
+        c.update(n=len(lst), n_tagged_for_need=sum(1 for e in lst if e["applies"] == "need"),
+                 n_tagged_for_all_needs=sum(1 for e in lst if e["applies"] == "general"),
+                 n_with_printed_values=sum(1 for e in lst if doc["findings"][e["finding_id"]]["printed_values"]),
+                 n_not_full_text=sum(1 for e in lst if e["source"]["access"] != "full_text_read"))
+        return c
+    for s, b in u_blocks(doc):
+        k = {"block": b["block_id"]}
+        fc, fa = gcount(b["found"]["entries"]), gcount(b["found"]["entries_tagged_for_all_questions"])
+        if fc != b["found"]["counts"] or fa != b["found"]["counts_tagged_for_all_questions"]:
+            res.fail(problem="found counts", **k)
+        if gcount(b["caveats"]["entries"]) != b["caveats"]["counts"]:
+            res.fail(problem="caveat counts", **k)
+        h = b["headline"]["fields"]
+        sr = sn[(s["id"], b["need_id"])]
+        ins = next((r for r in qc if r["scenario_id"] == s["id"] and r["need_id"] == b["need_id"]
+                    and r["level"] == "placement" and r["placement"] == "inside"), None)
+        inside = int(ins["counted_tests"]) if ins else 0
+        exp_h = {"n_tagged": fc["n"], "n_at": fc["at_environment"], "n_about": fc["about_a_stated_condition"],
+                 "n_without": fc["stated_without_these_conditions"], "n_other": fc["other_conditions"],
+                 "n_with_values": fc["n_with_printed_values"], "n_general_need": fa["n"],
+                 "n_general_at": fa["at_environment"], "n_general_about": fa["about_a_stated_condition"],
+                 "counted": int(sr["usable_tests"]), "inside": inside}
+        res.checked += 1
+        if h != exp_h:
+            res.fail(problem="headline fields", expected=exp_h, got=h, **k)
+        if inside != int(sr["tests_atmosphere"]):
+            res.fail(problem="inside differs from tests_atmosphere", **k)
+        pool = {round(float(v), 9) for v in h.values()}
+        for n in text_numbers(b["headline"]["text"]):
+            res.checked += 1
+            if n not in pool:
+                res.fail(problem="headline number not a field", number=n, **k)
+        if forbidden_words_in(b["headline"]["text"], banned):
+            res.fail(problem="forbidden word in headline", **k)
+        rec = b["recorded"]
+        sm = summary_rows[b["need_id"]]
+        for c in ("tests_in_scope", "tests_in_scope_of_supported_investigations", "with_outcome_in_table_cell",
+                  "counted_tests", "counted_with_video_two_labels"):
+            if rec["need"][c] != int(sm[c]):
+                res.fail(problem="recorded need count", column=c, **k)
+        if rec["need"]["sentence"] != sm["sentence"]:
+            res.fail(problem="recorded need sentence", **k)
+        for c in ("usable_tests", "tests_atmosphere", "tests_oxygen_only", "tests_pressure_only", "tests_other"):
+            if rec["environment"][c] != int(sr[c]):
+                res.fail(problem="recorded environment count", column=c, **k)
+        if rec["environment"]["counted_inside_ranges"] != inside:
+            res.fail(problem="recorded inside", **k)
+        rows = [r for r in chain if r["scenario_id"] == s["id"] and r["need_id"] == b["need_id"]]
+        for part, piles in (("unprocessed", ("pile_2_in_archive", "pile_2_lower_shelf")), ("no_record", ("pile_3_no_record",))):
+            exp = [(r["variable"], r["investigation_id"], r["placement"], r["location"], r["pile"], r["pile3_ground"])
+                   for r in rows if r["pile"] in piles]
+            got = [(r["variable"], r["investigation_id"], r["placement"], r["location"], r["pile"], r["pile3_ground"])
+                   for r in b[part]["rows"]]
+            res.checked += 1
+            if exp != got or b[part]["counts"]["n_rows"] != len(exp):
+                res.fail(problem="pile rows differ", part=part, expected=len(exp), got=len(got), **k)
+        # answer file
+        name = os.path.join("answers", "%s.json" % b["block_id"])
+        if ctx.has(name):
+            rf = ctx.json(name).get("results_first")
+            if not rf or rf.get("block_id") != b["block_id"] or rf.get("headline") != b["headline"]["text"]:
+                res.fail(problem="answer file results_first", **k)
+        else:
+            res.fail(problem="answer file missing", **k)
+    # summary
+    results = [f for f in doc["findings"].values() if f["kind"] == "result"]
+    c = summ["counts"]
+    fcsv = ctx.table("findings.csv")
+    if c["results"] != sum(1 for r in fcsv if r["kind"] == "result") or c["results"] != len(results):
+        res.fail(problem="summary results")
+    for n in [x["id"] for x in ctx.needs] + ["general"]:
+        exp = sum(1 for r in fcsv if r["kind"] == "result" and n in r["needs"].split(";"))
+        if c["per_need"][n]["results"] != exp:
+            res.fail(problem="summary per need", need=n, expected=exp, got=c["per_need"][n]["results"])
+    if c["printed_value_rows"] != sum(1 for r in flat if r["value_path"]):
+        res.fail(problem="summary printed value rows")
+    if c["results_with_printed_values"] != sum(1 for f in results if f["printed_values"]):
+        res.fail(problem="summary results with printed values")
+    tagged = {e["item"] for e in ctx.spec("findings")["findings"]}
+    exp_nif = sorted(it["id"] for ref, it in ctx.reference_items.values()
+                     if it["type"] == "published_result" and it["id"] not in tagged)
+    got_nif = sorted(x["item_id"] for x in summ["not_structured"]["published_result_items_not_in_findings"])
+    if exp_nif != got_nif:
+        res.fail(problem="published results not in findings", expected=exp_nif, got=got_nif)
+    exp_added = sorted(it["id"] for ref, it in ctx.reference_items.values() if it.get("values_from"))
+    if exp_added != sorted(x["item_id"] for x in summ["not_structured"]["values_blocks_added_from_item_text"]):
+        res.fail(problem="values blocks added")
+    for iid in exp_added:
+        it = ctx.reference_items[iid][1]
+        words = (it.get("text") or "") + " " + (it.get("quote") or "")
+        held = set()
+        stack = [it.get("values")]
+        while stack:
+            v = stack.pop()
+            if isinstance(v, dict):
+                stack += list(v.values())
+            elif isinstance(v, list):
+                stack += v
+            else:
+                held |= numbers_of(v)
+        for n in sorted(held):
+            if n not in {round(abs(x), 9) for x in text_numbers(words)}:
+                res.fail(problem="added value not printed in the item's words", item=iid, number=n)
+    res.numbers = {"blocks": sum(1 for _ in u_blocks(doc)), "results": len(results),
+                   "per_need": {n: c["per_need"][n]["results"] for n in c["per_need"]}}
+    return res
+
+
+# ----------------------------------------------------------------------------
 # running
 # ----------------------------------------------------------------------------
 
