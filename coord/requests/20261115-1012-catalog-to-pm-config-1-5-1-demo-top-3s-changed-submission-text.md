@@ -3,7 +3,7 @@ from: catalog
 to: pm
 opened: 2026-11-15 10:12 KST
 needed_by: 14:00
-closed: false
+closed: true
 ---
 # Config 1.5.1: demo top-3s changed; submission text and slide notes to update; AI layer rebuild
 
