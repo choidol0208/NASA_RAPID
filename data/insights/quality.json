@@ -3,18 +3,18 @@
   "built_by": "ai/apply_review.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-15T11:35:23+09:00",
+  "generated_at": "2026-11-15T15:04:05+09:00",
   "inputs_sha256": {
    "ai/prompts/card_v3.txt": "e013dce7e2678ff2eadeebebc8659685a076112c92fc3a524bb27e6d0f604cd9",
    "ai/review/pm_prereview.json": "86369fdb2b5b5a6be878e8684d789bb7f0d728d4a49de2a0f14f05cf33a315e4",
-   "ai/review/review_sheet.csv": "79c2d37ffe72e6ac4b9afd482e62915b97e9133486fb958f37ee1c6ff331bd4f",
+   "ai/review/review_sheet.csv": "2df7e014af468176a28a928136f5872b06536926fb71f9f24252004556095917",
    "ai/runs/cards_20261114-v3-all24.jsonl": "e1cdc4fb4f3fdbdd3363a77cd7c72013f81dd0cdf7f7da16f5f81e052aafc851",
    "ai/runs/cards_20261114-v3-repair.jsonl": "ebd278cb7b7fae39c4b51263420c63e9cad1daedeea94008c9ffbd2fb38747dd",
-   "data/insights/cards.json": "ce3d7db19a01f90bb1f80e17a3a89a25150762d69fb5ed3e58d77447aecd87ab",
+   "data/insights/cards.json": "bba884d4a2fbf9a984c21cec8f3630f4a3289b3e81afc6792aafbca88e91e6f0",
    "data/insights/scenarios.json": "194a5bddeeeb6b9a13d55664794527e11760a078e9fb2a264f2dbf9e7366f502"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code); no language model ran to build it. Counts of the gpt-oss:20b card sentences, the code gates and the review verdicts, computed by code. Team output, not a NASA conclusion.",
-  "content_sha256": "5ed5eafc0d5ac34c899b934fe4a3457aa280cf0a46c0411ec7c2973bf53152bc"
+  "content_sha256": "6cf2ec62672ac34e964c9332ccb3b3a96924fcdb812ade22317c6f0831a8680f"
  },
  "description": "Measured counts for the model-written card sentences (gpt-oss:20b) and their checks, reproduced by ai/apply_review.py from ai/review/review_sheet.csv and the gate results of ai/apply_cards.py. Rates are measured before removal and carry their n. Rows read by an AI session are never counted as read by a person. The counts reviewed_person and reviewed_ai_session say who read the rows.",
  "proposed": 70,
@@ -109,7 +109,7 @@
  "quote_rows": 102,
  "quote_rows_shown": 92,
  "quote_verdicts": {
-  "relevant": 91,
+  "relevant": 92,
   "not_relevant": 10
  },
  "quotes_not_shown_by_review": {
@@ -253,27 +253,12 @@
  },
  "template_statements": 226,
  "template_verdicts": {
-  "wording_ok": 216
+  "wording_ok": 226
  },
  "rows_without_verdict": {
-  "n": 11,
-  "by_origin": {
-   "quote": 1,
-   "template": 10
-  },
-  "items": [
-   "card:PSI-69:key_point:PSI-69.objective:OBJ-4",
-   "scenario:iss:note:PSI-25",
-   "scenario:iss:note:PSI-98",
-   "scenario:iss:note:PSI-26",
-   "scenario:lunar_habitat:note:PSI-69",
-   "scenario:lunar_habitat:note:PSI-20",
-   "scenario:mars_habitat:note:PSI-26",
-   "scenario:mars_habitat:note:PSI-25",
-   "scenario:mars_habitat:note:PSI-98",
-   "scenario:mars_habitat:note:PSI-99",
-   "scenario:mars_habitat:note:PSI-100"
-  ],
+  "n": 0,
+  "by_origin": {},
+  "items": [],
   "rule": "rows that are new or whose sentence text changed (matched by item and sentence_sha) have no verdict and go back to the reviewer"
  },
  "recount_ok": true,
