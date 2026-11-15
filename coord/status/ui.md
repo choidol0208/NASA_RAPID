@@ -1,10 +1,18 @@
 ---
 role: ui
-updated: 2026-11-15 00:19 KST
+updated: 2026-11-15 08:23 KST
 state: working
 blocked_on: none
 ---
-Now (15 Nov, 00:19): pm 2340 and catalog 2001 are done and live. ui waits for pm's 01:00 plan for the day; inbox otherwise empty.
+Now (15 Nov, 08:19): pm 0035 (the three piles) is live as the smallest version for the lunar habitat and the ISS. The rest follows data's 0035 files (`question_chain.csv`, `file_links_summary.json`, `test_files.json`), none of which is on a branch yet. The ui session was off from about 00:25 to 08:05.
+
+- **08:19, pm 0035, smallest version.** New section "Where the data are: in NASA's tables, in the archive, or no record".
+  - It shows the header line, a bar per question, the three piles and the small print, all as fixed templates of `pile_wording.md`, filled by `web/raw_piles.py` at build time.
+  - Placements come from `scenario_tests.csv` and reproduce fixture F1 exactly (lunar 26 / 676 / 63 / 1,059; ISS 179 / 739 / 106 / 800).
+  - Lunar pile 2 and the header file links come from pm's prototype.
+  - Build checks: F1, bar sums, the "17" rule, a word scan, no unfilled slot.
+  - 08:23: `pile1.codes` added (extinction diameter as NASA's table file writes it; lunar 4 / 2 / 8 / 3, checked as fixture F5; ISS 40 / 1 / 10 / 5).
+  - Not yet: ground 3, ISS pile 2, per-test file list and CSV, reading order, video rows.
 
 - **00:19, catalog 2001 done:** the requirements table "Requirements read from your question", at the end of "How your input was read".
   - Rows are the requirements, with the source in words; columns are the results, with ✓ met / ≈ near / ✗ not met / ? unverified / – not scored.
