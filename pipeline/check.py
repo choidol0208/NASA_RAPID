@@ -15,6 +15,7 @@ and pipeline/README.md, then compares with the files in data/pipeline/.
 Exit code 1 when a check fails. The report carries no timestamp.
 """
 import argparse
+import collections
 import csv
 import hashlib
 import io
@@ -6285,6 +6286,175 @@ def check_r2(ctx):
     if not eff or eff["runs"] != len(runs) or any(eff["columns"][h]["rows"] != sum(1 for r in rows if r["header_as_written"] == h) for h in heads):
         res.fail(problem="effect block bass_as_run_cabin_block differs")
     res.numbers = {"rows": len(rows), "runs": len(runs), "tests": len(tids)}
+    return res
+
+
+
+# ----------------------------------------------------------------------------
+# S. file-to-test links (file_links.csv, file_links_summary.json, test_files.json,
+#    listing_snapshot.json, video_tie_differences.csv), written by pipeline/file_links.py
+# ----------------------------------------------------------------------------
+
+S_INVS = ("PSI-10", "PSI-25", "PSI-39", "PSI-69", "PSI-99", "PSI-159")
+S_VIDEO_FIXTURE = {"PSI-25": (244, 47, 5), "PSI-159": (314, 11, 2), "PSI-39": (101, 5, 2), "PSI-69": (3, 5, 1),
+                   "PSI-10": (0, 306, 0)}
+S_VIDEO_TOTALS = {"two_labels_agree": 662, "one_label": 374, "labels_disagree": 10, "day_only": 1217,
+                  "id_not_in_table": 330, "none": 30}
+S_STATES = ("two_labels_agree", "one_label", "labels_disagree", "id_not_in_table", "day_only", "none")
+
+
+@check("S1_file_links",
+       "file_links.csv: one row per file of the six linked investigations; files and bytes per investigation equal "
+       "raw_inventory.json and listing_snapshot.json (and the snapshot's sha256 equals the saved listing where it is "
+       "present); every link state is one of six; video rows equal pm's video index (state and test), with its "
+       "fixtures (PSI-25 244 / 47 / 5, PSI-159 314 / 11 / 2, PSI-39 101 / 5 / 2, PSI-69 3 / 5 / 1, PSI-10 306 with one "
+       "label; all videos 662 / 374 / 10 / 1,217 / 330 / 30); a two_labels_agree row of PSI-69 has a NASA identifier "
+       "among its labels or a folder validated by its test sheet.")
+def check_s1(ctx):
+    res = Result()
+    if not ctx.has("file_links.csv"):
+        raise Skip("file_links.csv not written")
+    rows = ctx.table("file_links.csv")
+    snap = ctx.json("listing_snapshot.json")["investigations"]
+    inv = {x["investigation_id"]: x for x in ctx.json("raw_inventory.json")["investigations"]}
+    for i in S_INVS:
+        rs = [r for r in rows if r["investigation_id"] == i]
+        res.checked += len(rs)
+        tot = (len(rs), sum(int(r["bytes"] or 0) for r in rs))
+        sn = snap.get(i, {})
+        srows = {x[0]: x for x in sn.get("rows", [])}
+        if tot != (inv[i]["files"], inv[i]["bytes"]) or tot != (sn.get("files"), sn.get("bytes")) or len(srows) != len(rs):
+            res.fail(problem="files or bytes differ from raw_inventory.json or the snapshot", investigation=i, file_links=tot,
+                     inventory=(inv[i]["files"], inv[i]["bytes"]))
+        for r in rs:
+            x = srows.get(r["psi_file_id"])
+            if x is None or (x[1], x[2], str(x[3] if x[3] is not None else "")) != (r["file_name"], int(r["bytes"] or 0), r["version"]):
+                res.fail(problem="row not as in the snapshot", file_id=r["psi_file_id"])
+            if r["link_state"] not in S_STATES:
+                res.fail(problem="unknown link state", state=r["link_state"])
+            if i == "PSI-69" and r["link_state"] == "two_labels_agree" and not r["source"].startswith("pm video"):
+                if not re.search(r"(name_identifier|folder_identifier|identifier_inside_file)=", r["labels_found"]) \
+                        and "test sheet" not in r["second_label_scope"]:
+                    res.fail(problem="FLEX file linked by FLEX numbers alone", file=r["file_name"])
+        lp = os.path.join(LISTINGS, i + ".json")
+        if os.path.exists(lp):
+            with open(lp, "rb") as f:
+                if hashlib.sha256(f.read()).hexdigest() != sn.get("listing_sha256"):
+                    res.fail(problem="snapshot sha256 differs from the saved listing", investigation=i)
+    path = os.path.join(ROOT, "video", "data", "video_links.csv")
+    with open(path, encoding="utf-8", newline="") as f:
+        vids = list(csv.DictReader(l for l in f if not l.startswith("#")))
+    vby = {v["psi_file_id"]: v for v in vids}
+    vrows = [r for r in rows if r["source"].startswith("pm video")]
+    for r in vrows:
+        v = vby.get(r["psi_file_id"])
+        if v is None or (v["link_state"], v["test_id"]) != (r["link_state"], r["test_id"]):
+            res.fail(problem="video row differs from pm's index", file_id=r["psi_file_id"])
+    if len(vrows) != sum(1 for v in vids if v["investigation"] in S_INVS):
+        res.fail(problem="video rows are not all videos of pm's index for the six investigations")
+    per = {}
+    for v in vids:
+        per.setdefault(v["investigation"], collections.Counter())[v["link_state"]] += 1
+    for i, (a, b, c) in S_VIDEO_FIXTURE.items():
+        got = (per[i]["two_labels_agree"], per[i]["one_label"], per[i]["labels_disagree"])
+        if got != (a, b, c):
+            res.fail(problem="video fixture not reproduced", investigation=i, recount=got)
+    tot = collections.Counter(v["link_state"] for v in vids)
+    if dict(tot) != S_VIDEO_TOTALS:
+        res.fail(problem="video totals not reproduced", recount=dict(tot))
+    res.numbers = {"rows": len(rows), "video_rows": len(vrows),
+                   "by_state": dict(collections.Counter(r["link_state"] for r in rows))}
+    return res
+
+
+@check("S2_file_links_lunar",
+       "Files whose name carries a label of the 26 tests inside the lunar ranges, recounted from file_links.csv with "
+       "own regexes for PSI-69 (identifier or FLEX number in the name) and PSI-159 (identifier in the name): 398 "
+       "files, 104,358,456,350 bytes, 316 small files of 86,853,632 bytes; PSI-69 299 files of 24,954,842,492 bytes; "
+       "PSI-159 99 files of 79,403,613,858 bytes; by second label 336 / 47 / 15; FLEX-19 17 files, 1,112,400,426 bytes; "
+       "identifier 193F001 on the rows of FLEX-70 and FLEX-73; file_links_summary.json and test_files.json agree.")
+def check_s2(ctx):
+    res = Result()
+    if not ctx.has("file_links.csv"):
+        raise Skip("file_links.csv not written")
+    rows = ctx.table("file_links.csv")
+    inside = sorted({m["test_id"] for m in ctx.table("scenario_tests.csv") if m["scenario_id"] == "lunar_habitat"
+                     and m["o2_match"] == "in" and m["pressure_match"] == "in"})
+    flex = r_flex_table()
+    num2id = {c["FLEX Test #"].strip(): c["FLEX Identifier"].strip() for _, c in flex}
+    id_rows = {}
+    for _, c in flex:
+        id_rows.setdefault(c["FLEX Identifier"].strip(), []).append(c["FLEX Test #"].strip())
+    lun_num = {t.split("-")[1] for t in inside if t.startswith("FLEX-")}
+    lun_id = {num2id[n]: n for n in lun_num}
+    cfig = {re.search(r"(\d{5}[A-Z]\d{1,2})$", t).group(1): t for t in inside if t.startswith("CFIG")}
+    hit = []
+    for r in rows:
+        name = re.sub(r"^PSI-\d+_[^_]+_", "", r["file_name"], count=1)
+        if r["investigation_id"] == "PSI-69":
+            m = re.search(r"FLEX[-_ ]?(\d{3})(?![0-9])", name, re.I)
+            n = str(int(m.group(1))) if m else None
+            ids = [k for k in lun_id if re.search(r"(?<![A-Za-z0-9])" + re.escape(k) + r"(?![0-9])", name)]
+            if (n in lun_num) or ids:
+                hit.append(r)
+        elif r["investigation_id"] == "PSI-159":
+            m = re.search(r"(?<!\d)(\d{5}[A-Z]\d{1,2})(?!\d)", name)
+            if m and m.group(1) in cfig:
+                hit.append(r)
+    big = ("archive", "video")
+    got = {"files": len(hit), "bytes": sum(int(r["bytes"]) for r in hit),
+           "small_files": sum(1 for r in hit if r["kind"] not in big),
+           "small_bytes": sum(int(r["bytes"]) for r in hit if r["kind"] not in big),
+           "flex": (sum(1 for r in hit if r["investigation_id"] == "PSI-69"), sum(int(r["bytes"]) for r in hit if r["investigation_id"] == "PSI-69")),
+           "cfig": (sum(1 for r in hit if r["investigation_id"] == "PSI-159"), sum(int(r["bytes"]) for r in hit if r["investigation_id"] == "PSI-159")),
+           "second_label": tuple(sum(1 for r in hit if r["link_state"] == s) for s in ("two_labels_agree", "one_label", "labels_disagree"))}
+    want = {"files": 398, "bytes": 104358456350, "small_files": 316, "small_bytes": 86853632,
+            "flex": (299, 24954842492), "cfig": (99, 79403613858), "second_label": (336, 47, 15)}
+    if got != want:
+        res.fail(problem="lunar link fixture not reproduced", recount=str(got))
+    f19 = [r for r in hit if r["investigation_id"] == "PSI-69" and ("FLEX-19" in r["name_names_test"].split("+"))]
+    if (len(f19), sum(int(r["bytes"]) for r in f19)) != (17, 1112400426):
+        res.fail(problem="FLEX-19 fixture not reproduced", recount=(len(f19), sum(int(r["bytes"]) for r in f19)))
+    if sorted(id_rows.get("193F001", []), key=int) != ["70", "73"]:
+        res.fail(problem="193F001 not on the rows of FLEX-70 and FLEX-73", rows=id_rows.get("193F001"))
+    s = ctx.json("file_links_summary.json")["scenarios"]["lunar_habitat"]
+    if (s["files_naming_inside_tests"], s["bytes"], s["small_files"], s["small_bytes"]) != (got["files"], got["bytes"], got["small_files"], got["small_bytes"]):
+        res.fail(problem="summary differs from the recount")
+    tf = ctx.json("test_files.json")["scenarios"]["lunar_habitat"]
+    ids = {x["psi_file_id"] for t in tf.values() for x in t["file_list"]}
+    if set(tf) != set(inside) or ids != {r["psi_file_id"] for r in hit}:
+        res.fail(problem="test_files.json differs from the recount", tests=len(tf), files=len(ids))
+    res.checked = len(rows)
+    res.numbers = {"lunar": got}
+    return res
+
+
+@check("S3_video_tie_differences",
+       "video_tie_differences.csv: every video of pm's index is compared with the data role's own first name tie "
+       "(raw_names.py, the level and tests behind test_files.csv); every row has a known class that follows from its "
+       "two sides, its pm side equals pm's index, and the counts equal file_links_summary.json.")
+def check_s3(ctx):
+    res = Result()
+    if not ctx.has("video_tie_differences.csv"):
+        raise Skip("video_tie_differences.csv not written")
+    rows = ctx.table("video_tie_differences.csv")
+    known = {"different_tests", "data_role_day_only", "data_role_not_tied", "data_role_ties_a_test_pm_does_not",
+             "pm_day_only_data_role_not_tied", "data_role_day_only_pm_not"}
+    path = os.path.join(ROOT, "video", "data", "video_links.csv")
+    with open(path, encoding="utf-8", newline="") as f:
+        vby = {v["psi_file_id"]: v for v in csv.DictReader(l for l in f if not l.startswith("#"))}
+    for r in rows:
+        res.checked += 1
+        v = vby.get(r["psi_file_id"])
+        if r["difference"] not in known or v is None or (v["link_state"], v["test_id"]) != (r["pm_link_state"], r["pm_test_id"]):
+            res.fail(problem="difference row not consistent", file_id=r["psi_file_id"])
+        pm_test = r["pm_link_state"] in ("two_labels_agree", "one_label", "labels_disagree")
+        if ((r["data_role_level"] == "test") and pm_test) != (r["difference"] == "different_tests"):
+            res.fail(problem="class does not follow from the two sides", file_id=r["psi_file_id"])
+    summ = ctx.json("file_links_summary.json")["video_tie_differences"]
+    if summ["rows"] != len(rows) or summ["by_difference"] != dict(sorted(collections.Counter(r["difference"] for r in rows).items())):
+        res.fail(problem="summary counts differ")
+    res.numbers = {"rows": len(rows), "by_difference": dict(collections.Counter(r["difference"] for r in rows))}
     return res
 
 

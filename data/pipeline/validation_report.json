@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 79,
+  "PASS": 82,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 79
+  "checks": 82
  },
  "checks": [
   {
@@ -1845,6 +1845,68 @@
     "rows": 242,
     "runs": 121,
     "tests": 121
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "S1_file_links",
+   "verifies": "file_links.csv: one row per file of the six linked investigations; files and bytes per investigation equal raw_inventory.json and listing_snapshot.json (and the snapshot's sha256 equals the saved listing where it is present); every link state is one of six; video rows equal pm's video index (state and test), with its fixtures (PSI-25 244 / 47 / 5, PSI-159 314 / 11 / 2, PSI-39 101 / 5 / 2, PSI-69 3 / 5 / 1, PSI-10 306 with one label; all videos 662 / 374 / 10 / 1,217 / 330 / 30); a two_labels_agree row of PSI-69 has a NASA identifier among its labels or a folder validated by its test sheet.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 17737,
+    "video_rows": 1379,
+    "by_state": {
+     "none": 1203,
+     "day_only": 359,
+     "one_label": 3962,
+     "two_labels_agree": 8936,
+     "id_not_in_table": 1450,
+     "labels_disagree": 1827
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "S2_file_links_lunar",
+   "verifies": "Files whose name carries a label of the 26 tests inside the lunar ranges, recounted from file_links.csv with own regexes for PSI-69 (identifier or FLEX number in the name) and PSI-159 (identifier in the name): 398 files, 104,358,456,350 bytes, 316 small files of 86,853,632 bytes; PSI-69 299 files of 24,954,842,492 bytes; PSI-159 99 files of 79,403,613,858 bytes; by second label 336 / 47 / 15; FLEX-19 17 files, 1,112,400,426 bytes; identifier 193F001 on the rows of FLEX-70 and FLEX-73; file_links_summary.json and test_files.json agree.",
+   "status": "PASS",
+   "numbers": {
+    "lunar": {
+     "files": 398,
+     "bytes": 104358456350,
+     "small_files": 316,
+     "small_bytes": 86853632,
+     "flex": [
+      299,
+      24954842492
+     ],
+     "cfig": [
+      99,
+      79403613858
+     ],
+     "second_label": [
+      336,
+      47,
+      15
+     ]
+    }
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "S3_video_tie_differences",
+   "verifies": "video_tie_differences.csv: every video of pm's index is compared with the data role's own first name tie (raw_names.py, the level and tests behind test_files.csv); every row has a known class that follows from its two sides, its pm side equals pm's index, and the counts equal file_links_summary.json.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 59,
+    "by_difference": {
+     "pm_day_only_data_role_not_tied": 43,
+     "data_role_not_tied": 14,
+     "data_role_day_only_pm_not": 2
+    }
    },
    "failures": 0,
    "failing_examples": []
