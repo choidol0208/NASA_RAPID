@@ -1,6 +1,6 @@
 # Fire Evidence Explorer (NASA_RAPID)
 
-Fire Evidence Explorer is a web page: you describe a crewed environment, and it shows which of NASA's microgravity fire investigations come closest, what their recorded tests can say about six fire-safety information needs, and where the evidence stops.
+Fire Evidence Explorer is a web page: you describe a crewed environment, and it shows which of NASA's microgravity fire investigations come closest, what their recorded tests can say about six fire-safety questions, and where the evidence stops.
 
 **Live page (demo version):** https://choidol0208.github.io/NASA_RAPID/ . The live page is a demo: the dashboard works in full, but no language model runs on it, so the SI assistant only replays recorded answers. For the full version, with the assistant answered by the language model on your computer, download it below.
 
@@ -20,7 +20,7 @@ Built during the 2026 NASA Space Apps Challenge (Seoul, 14–15 November 2026) f
 
 Team: RAPID
 
-It is a research exploration tool. It is not operational fire-safety guidance, and it is not endorsed by NASA. Scores, rankings and counts are the team's computation, not NASA's conclusions. Nothing on the page predicts what happens under conditions that were not tested.
+It is a research exploration tool built on NASA PSI data. Match scores, rankings and counts are Team RAPID's computation from NASA PSI data. The page shows what was tested and where the recorded tests end; it makes no prediction for conditions that were not tested.
 
 *Most of this repository was written with an AI assistant (Claude Code). Each generated file says so at the top. `compliance/AI_USAGE_LOG.md` lists every use; see "How AI was used" below.*
 
@@ -100,7 +100,7 @@ Checked on 15 November 2026 at about 16:15 KST against the page built from commi
 - The shell (`web/SHELL.md`): a sticky top bar with the search, "Copy link", "How it works" and "Source code"; after a query, a row of summary tiles ("At a glance") and five tabs; a footer with the notices and the build stamp.
 - A query box with six presets: ISS cabin, Lunar habitat, Lunar habitat cotton fabric, Smoke detection on the ISS, Spacesuit, Mars base. `?q=` opens the page with a query.
 - "How your input was read": each value, marked as typed by you, taken from a preset, or a default. A table "Requirements read from your question" checks each condition against each result and says what the check rests on ("met", "documented", "near", "not met", "unverified").
-- Tab "Closest investigations", "Closest NASA investigations": the top three with the team's score (0–100), similarity per dimension, the reason, the largest gap and a confidence label. Behind "Details and sources" on each card: the source links, a summary of PSI's file listing for that investigation, and, for the "ISS", "lunar habitat", "spacesuit" and "Mars base" queries, a "Weight check" line on how stable the rank is when the team's weights are varied (sampled on config 1.5.2).
+- Tab "Closest investigations", "Closest NASA investigations": the top three with the match score (0–100), similarity per dimension, the reason, the largest gap and a confidence label. Behind "Details and sources" on each card: the source links, a summary of PSI's file listing for that investigation, and, for the "ISS", "lunar habitat", "spacesuit" and "Mars base" queries, a "Weight check" line on how stable the rank is when the team's weights are varied (sampled on config 1.5.2).
 - Tab "What was found", first: "What NASA's experiments and documents report, question by question" (ui role, `web/results_first.py`), for the ISS cabin, the lunar habitat, the spacesuit and the Mars base. Per question, a headline of counts, three quoted results and the rest behind "Show all", each with its printed values, the team's group and its source, and a CSV of every quoted result. See "Results first" below.
 - Tab "What was found", then: "What to consider, and what the recorded tests say": six needs against the ranked investigations, one status per cell from the data pipeline, and the ISS cabin and the lunar habitat side by side.
 - "Recorded tests in the scenario range", "What is known, need by need" (fixed sentences built by code, no language model), "What NASA's recorded tests showed" and "Criteria in NASA documents".
