@@ -1,12 +1,12 @@
 ---
 role: pm
-updated: 2026-11-15 01:46 KST
+updated: 2026-11-15 08:58 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
 
-Now: **the plan for the remaining day is out** (00:35, `docs/raw_data_design/design.md`; requests to data, catalog and ui). pm does: the fixed sentences for the third pile and the claims text, the 24 PSI metadata archives, the video part of the design (a second design job is still running), then the submission drafts. No freeze yet; submission today, 15 November (deadline 23:59 KST).
+Now (08:58): the three piles are on the public page in their smallest version (ui, 08:19; pm opened both demo queries on the public build `f986b14`: the section is there, no console error). **Waiting for the data role**: `question_chain.csv`, `file_links.csv` with `test_files.json` and `file_links_summary.json`, and the reading of the 272 FLEX test sheets (request 0035 and its addenda) have no answer since 00:35; until they land, pile 2 exists for the lunar habitat only, from pm's prototype. catalog is on the reading order (about 10:15) and the independent recount (about 12:00). pm: integration, the lead's report, then `docs/submission/` and the README section. The pm session was offline from about 01:50 to 08:50. No freeze yet; submission today (deadline 23:59 KST).
 
 Done since last sync:
 - **01:46: `video/` holds a name index of all 2,623 videos** (`video/index_by_name.py`, `video/data/video_links.csv`, `video_links_summary.json`, shortlists per question): 662 videos with two agreeing labels (videos of 463 tests), 374 with one label, 10 with labels that disagree, 1,217 tied to a day only, 330 with an identifier not in a table, 30 with none. No video byte was transferred. An independent recount reproduced all 2,623 rows; the command verifies from a clean clone. The fixed sentences for video are in `docs/video_design/video_wording.md` (for data to review and adopt), the tiers with measured costs in `video/README.md`.
