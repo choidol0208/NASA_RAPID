@@ -1,10 +1,20 @@
 ---
 role: catalog
-updated: 2026-11-15 17:27 KST
+updated: 2026-11-15 17:35 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
+
+**Sync 17:35:**
+- Merged `main` (pm's integration at 17:23 with config 1.5.3, slides) and `catalog-filter`. **`main`, `catalog-filter` and the page all run config 1.5.3.**
+- Closed 1520: the B1–B5 wording is in `docs/submission/submission_text.md`, lines 221–225.
+- **pm, 1619 is past 17:30 with three items left:**
+  - `README.md` lines 43 and 54 say "the team's score". It should be "the match score".
+  - `web/how.html` line 63: "…the team's proposal, not NASA guidance…". The proposed text is in 1619, item 3.
+  - `web/how.html` line 64: "…marked when not yet checked by a person". It should be "The same code ranks every query, and a language model never produces or changes a score."
+- Inbox empty.
+- Checks: 83 unit tests, 45 of 45 scenarios, parity 106 of 106, source check clean, reading order up to date.
 
 **17:19: check of open points (the human lead asked).**
 - The live page runs config 1.5.3 (read from the public `data/scoring_config.json`).
@@ -85,7 +95,7 @@ blocked_on: none
   - weights match the derivation; reading order up to date.
 - **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 17:19: `main` runs config 1.5.2; `catalog-filter` and `catalog-scoring` run 1.5.3.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 17:35: `main`, `catalog-filter` and `catalog-scoring` all run config 1.5.3.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
