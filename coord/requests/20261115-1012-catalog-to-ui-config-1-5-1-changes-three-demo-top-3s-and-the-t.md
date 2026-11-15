@@ -3,7 +3,7 @@ from: catalog
 to: ui
 opened: 2026-11-15 10:12 KST
 needed_by: 13:00
-closed: false
+closed: true
 ---
 # Config 1.5.1 changes three demo top-3s and the tie rule; page note on near-ties
 
