@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fire Evidence Explorer</title>
+<title>Fire Evidence Explorer: the closest NASA microgravity fire investigations, and where the evidence stops</title>
 <meta name="description" content="Tell it what you want to build: a spacecraft cabin, a Moon base, a rover. See the closest NASA microgravity fire investigations, what to consider and what their recorded tests say, and where the evidence stops. A research exploration tool built on NASA PSI data.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Fire Evidence Explorer">
@@ -13,17 +13,37 @@
 <meta property="og:image" content="https://choidol0208.github.io/NASA_RAPID/og.png">
 <meta property="og:image:alt" content="Fire Evidence Explorer showing the closest NASA PSI investigations for a lunar habitat">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231b2230'/%3E%3Cpath d='M5 24h22' stroke='%23fff' stroke-width='2'/%3E%3Ccircle cx='10' cy='18' r='3' fill='%234a64d8'/%3E%3Ccircle cx='17' cy='14' r='3' fill='%234a64d8'/%3E%3Cpath d='M23 8v16' stroke='%23e0a33a' stroke-width='2' stroke-dasharray='3 2'/%3E%3C/svg%3E">
+<meta property="og:site_name" content="Fire Evidence Explorer">
+<meta name="theme-color" content="#17202b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2317202b'/%3E%3Ccircle cx='13' cy='16' r='7' fill='%232346c4'/%3E%3Ccircle cx='13' cy='16' r='3' fill='%23dfe6fb'/%3E%3Cpath d='M25 6v20' stroke='%23e0a33a' stroke-width='2.4' stroke-linecap='round' stroke-dasharray='3.2 3.6'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
 <link rel="stylesheet" href="style.css">
+<!-- Page shell (web/SHELL.md): remove the next two tags to turn it off. -->
+<link rel="stylesheet" href="shell.css">
+<script src="shell.js"></script>
 </head>
 <body>
+<header class="appbar" id="appbar">
+  <div class="wrap appbar-in">
+    <a class="wordmark" href="./">Fire Evidence Explorer</a>
+    <form id="shell-search" class="appbar-search" role="search" autocomplete="off" hidden>
+      <label for="shell-q" class="visually-hidden">What are you building, and where?</label>
+      <span class="appbar-field"><input id="shell-q" name="q" type="text" placeholder="What are you building, and where?" aria-keyshortcuts="/"><kbd aria-hidden="true">/</kbd></span>
+      <button type="submit" class="icon-btn" aria-label="Find evidence" title="Find evidence"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12.8 12.8 17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <button type="button" id="copy-link" class="icon-btn copy-link" title="Copy link"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><rect x="7" y="7" width="9.5" height="9.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 12.5h-.2A1.8 1.8 0 0 1 2.5 10.7V4.3c0-1 .8-1.8 1.8-1.8h6.4c1 0 1.8.8 1.8 1.8v.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="copy-label">Copy link</span></button>
+    </form>
+    <nav class="appbar-nav" aria-label="About this page">
+      <a class="appbar-how" href="how.html">How it works</a>
+      <a class="appbar-repo" href="https://github.com/choidol0208/NASA_RAPID" target="_blank" rel="noopener">Source code<svg viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M6 3H3v10h10v-3M9 3h4v4M13 3 7.5 8.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </nav>
+  </div>
+</header>
 <header class="masthead">
   <div class="wrap">
     <h1>Fire Evidence Explorer</h1>
-    <p class="lede">Tell us what you want to build: a spacecraft cabin, a Moon base, a rover. See which NASA microgravity fire investigations come closest, what to consider and what their recorded tests say, and where the evidence stops.</p>
+    <p class="lede"><span class="lede-head">Tell us what you want to build: a spacecraft cabin, a Moon base, a rover.</span> See which NASA microgravity fire investigations come closest, what to consider and what their recorded tests say, and where the evidence stops.</p>
     <p class="challenge">The challenge says that the low-gravity combustion data in NASA's PSI database "can be hard to find, harder to compare, and harder yet to interpret". This page takes them in that order: <b>Find</b>, <b>Compare</b>, <b>Interpret</b>.</p>
     <p class="notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data. It is not operational fire-safety guidance, and it is not endorsed by NASA.</p>
   </div>
@@ -67,7 +87,7 @@
     <p class="kicker"><b>Find</b> · Information you need</p>
     <div class="section-head">
       <h2 id="top-title">Closest NASA investigations</h2>
-      <p class="team-note">Scores (0–100) and order are the team's similarity computation, not a NASA result, and not operational safety guidance. A score orders the investigations for this question only; scores of different questions cannot be compared. <a href="#method">How the score works</a></p>
+      <p class="team-note">Scores (0–100) and order are the team's similarity computation, not a NASA result, and not operational safety guidance. A score orders the investigations for this question only; scores of different questions cannot be compared. <a href="how.html#method">How the score works</a></p>
     </div>
     <ol id="results" class="results"></ol>
     <div id="other-notes" class="ai-block"></div>
@@ -165,37 +185,32 @@
     </details>
   </section>
 
-  <section id="ai-use" class="method ai-use" hidden aria-labelledby="ai-use-title">
-    <h2 id="ai-use-title">How AI is used here, and how it was checked</h2>
-    <p>No number on this page comes from a language model: counts and scores are computed by the team's code, and values are copied from NASA's files. A language model wrote short summary sentences only, and what it wrote was measured. Two more analyses say where the evidence stops for a predictive model and for the ranking. The text below is read from the team's files.</p>
-    <div id="ai-use-body"></div>
-  </section>
-
-  <section id="method" class="method" aria-labelledby="method-title">
-    <h2 id="method-title">How the score works</h2>
-    <p>This page, the catalog, the ranking code and the data pipeline were written with an AI assistant (Claude) under the team's direction. Text written by a language model carries an "AI-generated" label that says whether a person has checked it against its source. The repository lists every AI use and every source.</p>
-    <details class="more fold">
-    <summary>Read the method: dimensions, weights, gates and evidence quality</summary>
-    <p>Each of the 41 test configurations in the team's catalog is compared with your input on up to seven dimensions: oxygen, pressure, flow, fuel, sample shape, research purpose and, for suppression questions, the diluent gas. Each comparison gives a similarity from 0 to 1, shown as the strip on each result.</p>
-    <p>Weights depend on the kind of question (prevention, detection or suppression). They are derived by the analytic hierarchy process (AHP) from pairwise comparisons of the dimensions, each with a cited source: combustion textbooks, papers and NASA records; for suppression they are also pooled with how much each condition mattered in NASA's FLEX measurements. Flow matters because a microgravity flame has no buoyancy and gets its oxygen only from forced flow. A wrong fuel phase or a far-off oxygen level cannot be made up by other matches. The total is then scaled by evidence quality (raw data, flight duration, human check). <a data-repo-path="scoring/BUILDUP.md" href="https://github.com/choidol0208/NASA_RAPID">How the weights were set, with sources</a></p>
-    <ul id="weights-now" class="weights-now"></ul>
-    <p>The weights and the other scoring values are the team's proposal, not NASA guidance. The pairwise judgements were filled in by an AI session from the cited sources; a team member approved each step of the derivation, and the other scoring values after an AI review of each value, as they are.</p>
-    <p>The same code ranks every query. A language model never produces or changes a score. Catalog values are extracted from the PSI records and tables and are marked when not yet checked by a person.</p>
-    <dl class="legend">
-      <div><dt><span class="swatch s-hi"></span>Close</dt><dd>similarity 0.9 or more</dd></div>
-      <div><dt><span class="swatch s-mid"></span>Partial</dt><dd>0.5 to 0.9</dd></div>
-      <div><dt><span class="swatch s-lo"></span>Far</dt><dd>below 0.5</dd></div>
-      <div><dt><span class="swatch s-unk"></span>Not reported</dt><dd>the record has no value</dd></div>
-      <div><dt><span class="swatch s-asm"></span>Assumed</dt><dd>scored as ordinary cabin air</dd></div>
-    </dl>
-    </details>
+  <!-- Shell (web/SHELL.md): the method is on its own page, web/how.html. The sentences here are copied from it; web/build.py checks that. -->
+  <section id="how" class="how-strip" aria-label="How it works">
+    <p data-from-how>The same code ranks every query. A language model never produces or changes a score.</p>
+    <p data-from-how>A language model wrote short summary sentences only, and what it wrote was measured.</p>
+    <a class="btn" href="how.html">How it works<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   </section>
 </main>
 
 <footer class="foot">
-  <div class="wrap">
-    <p>Data: <a href="https://psi.nasa.gov/">NASA Physical Sciences Informatics</a>, 24 combustion investigations (dataset DOIs on each result; CC0-1.0 where stated in the record). Challenge: Flame in Freefall, NASA Space Apps Challenge 2026.</p>
-    <p>Built during the hackathon with AI assistance (Claude). Catalog values are AI-extracted from the PSI records unless marked as checked. Source code: <a href="https://github.com/choidol0208/NASA_RAPID">github.com/choidol0208/NASA_RAPID</a>.</p>
+  <div class="wrap foot-grid">
+    <div class="foot-col foot-about">
+      <p class="foot-brand">Fire Evidence Explorer</p>
+      <p class="foot-team">Team RAPID · NASA Space Apps Challenge 2026</p>
+      <p class="foot-notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data. It is not operational fire-safety guidance, and it is not endorsed by NASA.</p>
+      <p class="foot-notice">Scores (0–100) and order are the team's similarity computation, not a NASA result, and not operational safety guidance.</p>
+    </div>
+    <div class="foot-col foot-data">
+      <p>Data: <a href="https://psi.nasa.gov/">NASA Physical Sciences Informatics</a>, 24 combustion investigations (dataset DOIs on each result; CC0-1.0 where stated in the record). Challenge: Flame in Freefall, NASA Space Apps Challenge 2026.</p>
+      <p>Built during the hackathon with AI assistance (Claude). Catalog values are AI-extracted from the PSI records unless marked as checked. Source code: <a href="https://github.com/choidol0208/NASA_RAPID">github.com/choidol0208/NASA_RAPID</a>.</p>
+    </div>
+    <nav class="foot-col foot-links" aria-label="Footer">
+      <a href="how.html">How it works</a>
+      <a href="https://github.com/choidol0208/NASA_RAPID" target="_blank" rel="noopener">Source code</a>
+      <a href="https://github.com/choidol0208/NASA_RAPID/blob/main/LICENSE" target="_blank" rel="noopener">Licence: Apache-2.0</a>
+      <span id="build-stamp" class="build-stamp"></span>
+    </nav>
   </div>
 </footer>
 

@@ -22,8 +22,10 @@ const skipped = [];
 
 const browser = await chromium.launch();
 
-async function open(page, q) {
-  await page.goto(BASE + "?q=" + encodeURIComponent(q));
+// The page shell (web/SHELL.md) shows one tab at a time: reveal() opens the tab that holds an element.
+const reveal = (page, sel) => page.evaluate((s) => { if (window.feeShell) window.feeShell.reveal(s, { scroll: false }); }, sel);
+async function open(page, q) { // q === null: the start page, before a query
+  await page.goto(q === null ? BASE : BASE + "?q=" + encodeURIComponent(q));
   await page.waitForFunction(() => document.querySelector("#glance") && !document.querySelector("#glance").hidden, null, { timeout: 30000 });
   await page.waitForTimeout(1500);
 }
@@ -34,6 +36,7 @@ async function shot(name, q, { width = 1280, height = 800, scale = 2, section = 
   if (openSel) await page.evaluate((s) => document.querySelectorAll(s).forEach((d) => { d.open = true; }), openSel);
   await page.waitForTimeout(openSel ? 1500 : 200);
   if (section) {
+    await reveal(page, section);
     const el = await page.$(section);
     const visible = el && (await el.evaluate((e) => !e.closest("[hidden]") && e.getBoundingClientRect().height > 30));
     if (!visible) { skipped.push(`${name} (${section} not on the page)`); await page.close(); return; }
@@ -62,6 +65,7 @@ await shot("og.png", "lunar habitat", { width: 1200, height: 630, scale: 1 });
 async function unionShot(name, q, sels, prepare = null) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 2 });
   await open(page, q);
+  await reveal(page, sels[0]);
   if (prepare) { await page.evaluate(prepare); await page.waitForTimeout(1000); }
   const clip = await page.evaluate((sels) => {
     const rs = sels.map((s) => document.querySelector(s)).filter((e) => e && !e.closest("[hidden]")).map((e) => e.getBoundingClientRect());
@@ -76,7 +80,7 @@ async function unionShot(name, q, sels, prepare = null) {
   await page.close();
   console.log("wrote", name, `${Math.round(clip.width * 2)}x${Math.round(clip.height * 2)}`);
 }
-await unionShot("slide1_top.png", "ISS", ["header.masthead", "section.ask"]);
+await unionShot("slide1_top.png", null, ["header.masthead", "section.ask"]);
 await unionShot("slide2_iss_result.png", "ISS", ["#top .kicker", "#top .section-head", "#results > li:first-child"]);
 await unionShot("slide3_iss_needs.png", "ISS", ["#needs .kicker", "#needs .section-head", "#needs-body .table-wrap"], () => {
   // the slide shows the table alone: hide the blocks that sit between the heading and the table, for this capture only
@@ -99,15 +103,17 @@ const page = await browser.newPage({ viewport: { width: 1100, height: 720 }, dev
 let n = 0;
 const frame = async (hold = 1) => { for (let i = 0; i < hold; i++) await page.screenshot({ path: join(FRAMES, `f${String(n++).padStart(4, "0")}.png`) }); };
 const typeQuery = async (q) => {
-  await page.fill("#q", "");
-  for (const ch of q) { await page.type("#q", ch); await frame(1); }
-  await page.click("button[type=submit]");
+  const box = (await page.isVisible("#q")) ? "#q" : "#shell-q"; // the start page has the large input, a result page the one in the app bar
+  await page.fill(box, "");
+  for (const ch of q) { await page.type(box, ch); await frame(1); }
+  await page.press(box, "Enter");
   await page.waitForTimeout(700);
   await frame(10);
 };
 const scrollTo = async (sel, steps = 8) => {
   const ok = await page.evaluate((s) => { const e = document.querySelector(s); return Boolean(e && !e.closest("[hidden]")); }, sel);
   if (!ok) return false;
+  await reveal(page, sel);
   const y0 = await page.evaluate(() => window.scrollY);
   const y1 = await page.evaluate((s) => document.querySelector(s).getBoundingClientRect().top + window.scrollY - 20, sel);
   for (let i = 1; i <= steps; i++) { await page.evaluate((y) => window.scrollTo(0, y), y0 + ((y1 - y0) * i) / steps); await frame(1); }
