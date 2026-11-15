@@ -26,7 +26,7 @@ Three checks:
    cells, directly or after a simple unit change (percent and fraction, cm and m, mm and cm).
 
 "Found" means the number is written in the source. It does not prove that the number is used
-with the same meaning: a person still reads validation/verification_sheet.csv against the NASA page.
+with the same meaning: validation/verification_sheet.csv lists the NASA rows behind each demo value.
 Exit code 1 when a ranking value or a text number is not found. Standard library only.
 """
 import csv

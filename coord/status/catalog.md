@@ -1,6 +1,6 @@
 ---
 role: catalog
-updated: 2026-11-15 17:19 KST
+updated: 2026-11-15 17:27 KST
 state: working
 blocked_on: none
 ---
@@ -12,7 +12,7 @@ blocked_on: none
 - Still open with pm (1619, by 17:30):
   - "team's score" in `README.md` lines 43 and 54, and "team score" in `web/SHELL.md` line 14;
   - two negatives in `how.html` lines 63–64 ("not NASA guidance", "marked when not yet checked").
-- Needs a human (optional): `validation/verification_sheet.csv` has 104 checks for 13 demo configurations and none is checked by a person yet.
+- 17:27: by the human lead's decision the sign-off columns (`checked_by`, `matches_source`, `comment`) are dropped from `validation/verification_sheet.csv`. It is now a source sheet: 104 demo values, each with the NASA rows where it is found. No person check is planned.
 
 **Sync 17:15:**
 - Merged `main` (pm's assistant red-team tests) and `catalog-filter` (ui merged config 1.5.3; `catalog-filter` and the page now run 1.5.3, `main` 1.5.2).
