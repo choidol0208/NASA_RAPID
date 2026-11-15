@@ -1,0 +1,538 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-15. Not human-reviewed.",
+  "written_by": "python3 pipeline/results.py",
+  "content": "Counts of the results of results_by_need.json and results_flat.csv, and the audit of the reference items whose numbers cannot be filtered.",
+  "audit_rule": "A number of an item's text or quote is a token of the words that reads as a number (an optional sign, digits, an optional decimal part, an optional '%'), after the punctuation around it is removed. A token joined to letters by a hyphen (HT90-40, 0-g, 5-cm-wide) and a token after one of 'label_words' is a label, not a printed value. A number is 'not in values' if no number held by the item's values equals it.",
+  "added_values": "Values blocks were added by hand (field 'values_from' = 'item text') only to items without values whose text or quote prints a number about solid-material flammability limits, flame spread rates, extinction conditions, combustion products or smoke particle size, copying the number exactly as printed.",
+  "team_output": "Counts are the team's computation; they are not NASA's conclusions."
+ },
+ "counts": {
+  "results": 89,
+  "results_with_printed_values": 54,
+  "results_without_printed_values": 35,
+  "printed_value_rows": 162,
+  "flat_rows": 197,
+  "per_need": {
+   "P1": {
+    "results": 29,
+    "with_printed_values": 16,
+    "without_printed_values": 13
+   },
+   "P2": {
+    "results": 1,
+    "with_printed_values": 0,
+    "without_printed_values": 1
+   },
+   "P3": {
+    "results": 3,
+    "with_printed_values": 2,
+    "without_printed_values": 1
+   },
+   "S1": {
+    "results": 4,
+    "with_printed_values": 1,
+    "without_printed_values": 3
+   },
+   "D1": {
+    "results": 3,
+    "with_printed_values": 1,
+    "without_printed_values": 2
+   },
+   "D2": {
+    "results": 7,
+    "with_printed_values": 1,
+    "without_printed_values": 6
+   },
+   "general": {
+    "results": 44,
+    "with_printed_values": 34,
+    "without_printed_values": 10
+   }
+  },
+  "per_scenario_group": {
+   "iss": {
+    "at_environment": 9,
+    "about_a_stated_condition": 38,
+    "stated_without_these_conditions": 26,
+    "other_conditions": 16,
+    "distinct_results": 89
+   },
+   "lunar_habitat": {
+    "at_environment": 2,
+    "about_a_stated_condition": 7,
+    "stated_without_these_conditions": 26,
+    "other_conditions": 54,
+    "distinct_results": 89
+   },
+   "mars_habitat": {
+    "at_environment": 0,
+    "about_a_stated_condition": 4,
+    "stated_without_these_conditions": 26,
+    "other_conditions": 59,
+    "distinct_results": 89
+   },
+   "spacesuit": {
+    "at_environment": 0,
+    "about_a_stated_condition": 2,
+    "stated_without_these_conditions": 26,
+    "other_conditions": 61,
+    "distinct_results": 89
+   },
+   "exploration_8_2_34": {
+    "at_environment": 0,
+    "about_a_stated_condition": 2,
+    "stated_without_these_conditions": 26,
+    "other_conditions": 61,
+    "distinct_results": 89
+   },
+   "exploration_10_2_26_5": {
+    "at_environment": 2,
+    "about_a_stated_condition": 6,
+    "stated_without_these_conditions": 26,
+    "other_conditions": 55,
+    "distinct_results": 89
+   }
+  },
+  "per_document": {
+   "AIAA-2011-5067": 3,
+   "ASGSR-2013-BASS": 1,
+   "CNF-2023-SAFFIRE": 4,
+   "FSJ-2018-SAME": 3,
+   "ICES-2014-179": 2,
+   "ICES-2015-196": 1,
+   "ICES-2015-293": 1,
+   "ICES-2017-224": 16,
+   "ICES-2018-SAFFIRE2-PMMA": 2,
+   "ICES-2019-BASS2": 5,
+   "ICES-2021-266": 3,
+   "ICES-2024-365": 5,
+   "JTE-2006-HIRSCH": 7,
+   "MST-2014-FLEX": 1,
+   "NASA-CP-2003-212103": 1,
+   "NASA-CR-2005-213689": 1,
+   "NASA-TM-20210011385": 3,
+   "NP-2015-10-034-JSC": 2,
+   "NTRS-20070018178": 1,
+   "NTRS-20130010991": 5,
+   "NTRS-20150000894": 2,
+   "NTRS-20170008805": 2,
+   "NTRS-20180005168": 6,
+   "NTRS-20200000557": 1,
+   "PROCI-2018-THOMSEN": 1,
+   "SAE-2008-01-2055": 4,
+   "SAFFIRE-2017": 3,
+   "SAME-FSR-2010": 1,
+   "SAMER-FR-2014": 1,
+   "WP-2021-FIRE-DETECTION": 1
+  },
+  "per_material_as_printed": {
+   "10 mm PMMA slab": {
+    "results": 1,
+    "printed_value_rows": 2
+   },
+   "Buna N": {
+    "results": 3,
+    "printed_value_rows": 3
+   },
+   "Buna S": {
+    "results": 3,
+    "printed_value_rows": 3
+   },
+   "Cotton Jersey": {
+    "results": 1,
+    "printed_value_rows": 5
+   },
+   "Delrin": {
+    "results": 3,
+    "printed_value_rows": 3
+   },
+   "EPDM Rubber": {
+    "results": 3,
+    "printed_value_rows": 3
+   },
+   "Kapton smoke; Teflon smoke": {
+    "results": 1,
+    "printed_value_rows": 0
+   },
+   "Kapton; Teflon": {
+    "results": 1,
+    "printed_value_rows": 0
+   },
+   "Kapton; lamp wick; silicone; Teflon": {
+    "results": 1,
+    "printed_value_rows": 0
+   },
+   "Kel-F 81": {
+    "results": 3,
+    "printed_value_rows": 3
+   },
+   "Mylar G": {
+    "results": 1,
+    "printed_value_rows": 12
+   },
+   "Mylar G; Nomex HT90-40": {
+    "results": 1,
+    "printed_value_rows": 3
+   },
+   "Neoprene": {
+    "results": 3,
+    "printed_value_rows": 3
+   },
+   "Nomex HT90-40": {
+    "results": 2,
+    "printed_value_rows": 12
+   },
+   "One-Sided PMMA": {
+    "results": 1,
+    "printed_value_rows": 5
+   },
+   "PMMA": {
+    "results": 1,
+    "printed_value_rows": 4
+   },
+   "PTFE": {
+    "results": 3,
+    "printed_value_rows": 3
+   },
+   "Polyethylene": {
+    "results": 3,
+    "printed_value_rows": 3
+   },
+   "SIBAL Cloth": {
+    "results": 2,
+    "printed_value_rows": 10
+   },
+   "SIBAL composite fabric": {
+    "results": 1,
+    "printed_value_rows": 0
+   },
+   "Silicone": {
+    "results": 4,
+    "printed_value_rows": 5
+   },
+   "Two-Sided PMMA": {
+    "results": 1,
+    "printed_value_rows": 5
+   },
+   "Ultem 1000": {
+    "results": 1,
+    "printed_value_rows": 12
+   },
+   "Viton A": {
+    "results": 3,
+    "printed_value_rows": 3
+   },
+   "Zytel 42": {
+    "results": 3,
+    "printed_value_rows": 3
+   },
+   "cotton-fiberglass fabric": {
+    "results": 1,
+    "printed_value_rows": 1
+   },
+   "cotton-fiberglass fabric 40.6 x 94 cm": {
+    "results": 1,
+    "printed_value_rows": 3
+   },
+   "methanol; heptane": {
+    "results": 1,
+    "printed_value_rows": 4
+   },
+   "structured PMMA; flat PMMA": {
+    "results": 1,
+    "printed_value_rows": 0
+   },
+   "thin PMMA sheets": {
+    "results": 1,
+    "printed_value_rows": 1
+   }
+  },
+  "values_scope": {
+   "column_of_table": 3,
+   "element_of_lists": 3,
+   "not_split_by_row": 5,
+   "row_of_table": 29,
+   "whole_item": 49
+  }
+ },
+ "needs_without_quoted_result": [],
+ "not_structured": {
+  "published_result_items_not_in_findings": [
+   {
+    "item_id": "SAF17S.table1",
+    "document_id": "NTRS-20170008805",
+    "reason_left_out": "Says only that a slide reproduces Table I of ICES-2017-224 with identical cells; the cells are carried by SAF17.table1_o2."
+   },
+   {
+    "item_id": "PSISAF.o2_traces",
+    "document_id": "PSI-SAFFIRE-FILES",
+    "reason_left_out": "Graph readings made by eye by an AI from images in PSI raw-data files; the item's note says they must be replaced by the telemetry numbers before any use as data. Not a statement of a publication."
+   },
+   {
+    "item_id": "PSISAF.pressure_column",
+    "document_id": "PSI-SAFFIRE-FILES",
+    "reason_left_out": "Lowest and highest cells of a PSI raw-data column, extracted by the team; it is a reading of raw data, not a statement of a publication, and this layer says of its entries that they were not checked against the raw data."
+   },
+   {
+    "item_id": "PSISAF.pressure_figures",
+    "document_id": "PSI-SAFFIRE-FILES",
+    "reason_left_out": "Says that the PSI telemetry documents contain a pressure graph; no value and no observation."
+   },
+   {
+    "item_id": "RU16.transducer",
+    "document_id": "ICES-2016-SAFFIRE",
+    "reason_left_out": "A plan written before the flights (future tense) that names an instrument; it reports no observation and no condition of a test."
+   },
+   {
+    "item_id": "ICES15.cstr",
+    "document_id": "ICES-2015-196",
+    "reason_left_out": "An assumption of a dilution model and an input of a calculation (P = 1 atm), not an observation; tagging 1 atm would turn a calculation input into a test condition."
+   },
+   {
+    "item_id": "BASS2SUM.cstr",
+    "document_id": "NASA-TM-20210011385",
+    "reason_left_out": "An assumption of a dilution model; no value and no observation."
+   },
+   {
+    "item_id": "BASS2SUM.idealgas",
+    "document_id": "NASA-TM-20210011385",
+    "reason_left_out": "An input of a calculation (P = 1 atm, T = 300 K), not a reported measurement; tagging 1 atm would turn a calculation input into a test condition."
+   }
+  ],
+  "items_with_numbers_not_in_values": [
+   {
+    "item_id": "ICES19.pressure",
+    "document_id": "ICES-2019-BASS2",
+    "type": "published_result",
+    "has_values": false,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     13,
+     22,
+     1
+    ]
+   },
+   {
+    "item_id": "OF2012.margin",
+    "document_id": "NTRS-20130010991",
+    "type": "published_result",
+    "has_values": true,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     10.2,
+     5
+    ]
+   },
+   {
+    "item_id": "OF2012.table1",
+    "document_id": "NTRS-20130010991",
+    "type": "published_result",
+    "has_values": true,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     5.18
+    ]
+   },
+   {
+    "item_id": "SAE2008.table1",
+    "document_id": "SAE-2008-01-2055",
+    "type": "published_result",
+    "has_values": false,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     14.7,
+     10.2,
+     30
+    ]
+   },
+   {
+    "item_id": "SAF.result",
+    "document_id": "SAFFIRE-2017",
+    "type": "published_result",
+    "has_values": true,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     40.6,
+     94
+    ]
+   },
+   {
+    "item_id": "SAME.detector",
+    "document_id": "FSJ-2018-SAME",
+    "type": "published_result",
+    "has_values": false,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     0.6
+    ]
+   },
+   {
+    "item_id": "MST14.loi",
+    "document_id": "MST-2014-FLEX",
+    "type": "published_result",
+    "has_values": true,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     1
+    ]
+   },
+   {
+    "item_id": "SAF17.pressure",
+    "document_id": "ICES-2017-224",
+    "type": "published_result",
+    "has_values": false,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     1
+    ]
+   },
+   {
+    "item_id": "SAF17.starting",
+    "document_id": "ICES-2017-224",
+    "type": "published_result",
+    "has_values": false,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     22.1,
+     21.7
+    ]
+   },
+   {
+    "item_id": "SAF17S.table1",
+    "document_id": "NTRS-20170008805",
+    "type": "published_result",
+    "has_values": false,
+    "result_finding": false,
+    "numbers_in_words_not_in_values": [
+     29
+    ]
+   },
+   {
+    "item_id": "SAF2PMMA.hatch",
+    "document_id": "ICES-2018-SAFFIRE2-PMMA",
+    "type": "published_result",
+    "has_values": true,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     43
+    ]
+   },
+   {
+    "item_id": "SAF2PMMA.order",
+    "document_id": "ICES-2018-SAFFIRE2-PMMA",
+    "type": "published_result",
+    "has_values": false,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     9,
+     600,
+     900
+    ]
+   },
+   {
+    "item_id": "SAF45.table2",
+    "document_id": "ICES-2021-266",
+    "type": "published_result",
+    "has_values": true,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     22,
+     26.2,
+     70.7
+    ]
+   },
+   {
+    "item_id": "THOMSEN19.conditions",
+    "document_id": "NTRS-20200000557",
+    "type": "published_result",
+    "has_values": true,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     10,
+     200
+    ]
+   },
+   {
+    "item_id": "PSISAF.o2_traces",
+    "document_id": "PSI-SAFFIRE-FILES",
+    "type": "published_result",
+    "has_values": false,
+    "result_finding": false,
+    "numbers_in_words_not_in_values": [
+     0.05,
+     22.65,
+     22.3,
+     21.55,
+     21.5,
+     21.45,
+     0.43,
+     0.63,
+     0.36,
+     0.51
+    ]
+   },
+   {
+    "item_id": "SAMEFSR.results",
+    "document_id": "SAME-FSR-2010",
+    "type": "published_result",
+    "has_values": false,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     720
+    ]
+   },
+   {
+    "item_id": "BASS2SUM.sibal_1atm",
+    "document_id": "NASA-TM-20210011385",
+    "type": "published_result",
+    "has_values": false,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     1
+    ]
+   },
+   {
+    "item_id": "BASS2SUM.idealgas",
+    "document_id": "NASA-TM-20210011385",
+    "type": "published_result",
+    "has_values": true,
+    "result_finding": false,
+    "numbers_in_words_not_in_values": [
+     300,
+     82.05
+    ]
+   },
+   {
+    "item_id": "H2011.linear",
+    "document_id": "AIAA-2011-5067",
+    "type": "published_result",
+    "has_values": true,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     25,
+     35
+    ]
+   },
+   {
+    "item_id": "THOMSEN18.saffire",
+    "document_id": "PROCI-2018-THOMSEN",
+    "type": "published_result",
+    "has_values": true,
+    "result_finding": true,
+    "numbers_in_words_not_in_values": [
+     20
+    ]
+   }
+  ],
+  "values_blocks_added_from_item_text": [
+   {
+    "item_id": "SAE2008.uloi",
+    "values_from": "item text",
+    "values": {
+     "o2_mole_fraction_pct_1g_above_0g_up_to": 4
+    }
+   }
+  ]
+ }
+}

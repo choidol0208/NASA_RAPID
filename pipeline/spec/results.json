@@ -1,0 +1,89 @@
+{
+ "_meta": {
+  "generated_by": "AI-generated (Claude Code), 2026-11-15. Not human-reviewed.",
+  "purpose": "Fixed sentences, labels and rules of pipeline/results.py, which writes data/pipeline/results_by_need.json, results_flat.csv and results_summary.json. Nothing in this file is a quote of a NASA document; the quotes are copied by results.py from references.json.",
+  "templates": "A template holds no digit. {slot} is replaced by a count of the block; [slot|one|many] prints 'one' if the slot equals 1 and 'many' otherwise. The only text with digits is the label of pile 3, which carries the listing date as the team lead worded it."
+ },
+ "order_rule": {
+  "text": "Results are ranked by the conditions their own words state, against the ranges of the environment, with no weights and no assumed values: first the results that state an oxygen and a pressure inside the ranges of the environment; then those that state at least one of its conditions (oxygen, pressure, gravity level) inside its range and none outside; then those that state no oxygen, pressure or gravity level; last those listed for this environment under other conditions. Inside a group: a result that names a material comes first; then by item id; then in the order of findings.csv. The groups are those of findings_by_environment.json; this file does not place a result again.",
+  "groups": [
+   {"id": "at_environment", "from": "at_environment", "label": "At the oxygen and pressure of this environment"},
+   {"id": "about_a_stated_condition", "from": "about_a_stated_condition_of_the_environment", "label": "About one stated condition of this environment"},
+   {"id": "stated_without_these_conditions", "from": "general", "label": "Stated without oxygen, pressure or gravity level"},
+   {"id": "other_conditions", "from": "other_conditions", "label": "At other stated conditions (not listed for this environment by findings_by_environment.json)"}
+  ]
+ },
+ "criteria_item_types": ["requirement", "acceptance_criterion", "exposure_limit", "monitoring_range", "design_value"],
+ "row_label_fields": ["material", "flight_sample", "flight", "sample", "file", "flow_direction"],
+ "units": {
+  "note": "The unit of a printed value is taken from the item's 'values' field 'unit' where it has one; otherwise from the key of the value by the first rule below whose token is in the key (the keys are the team's names for the printed columns; the unit is the unit those names carry). A key that matches no rule has no unit.",
+  "rules": [
+   ["spread_rate_mm_s", "mm/s"],
+   ["moc_slope_pct_o2_per_psia", "% O2 per psia"],
+   ["moc_vol_pct", "vol %"],
+   ["o2_pct_by_vol", "% by volume"],
+   ["o2_mole_fraction_pct", "% O2 (mole fraction)"],
+   ["delta_o2_pct", "% O2"],
+   ["delta_pct_o2", "% O2"],
+   ["o2_pct", "% O2"],
+   ["co_to_co2_molar_ratio", "ratio"],
+   ["loi_", "fraction as printed"],
+   ["particle_nm", "nm"],
+   ["flow_cms", "cm/s"],
+   ["pressure_kpa", "kPa"],
+   ["pressure_psia", "psia"],
+   ["pressure_atm", "atm"],
+   ["columns_kpa", "kPa"],
+   ["free_volume_m3", "m3"],
+   ["length_cm", "cm"],
+   ["_ppm", "ppm"],
+   ["_mg", "mg"],
+   ["heating_time_s", "s"],
+   ["burn_length_cm", "cm"],
+   ["_cm", "cm"]
+  ]
+ },
+ "values_rules": {
+  "rows": "A 'rows' list: one printed value per field of a row that is not a row label ('row_label_fields'); the row labels are kept with each value.",
+  "matrix": "An object with one 'columns_*' list and lists of the same length under other keys: one printed value per key and column; the key is the material as printed, the column is printed with its own unit.",
+  "list": "A list under a key that ends in '_range' is one printed value (the range as held); any other list gives one printed value per element.",
+  "object": "An object of plain values: one printed value per key.",
+  "scalar": "A number or a text: one printed value.",
+  "entry_rows": "An entry made from one row of a table (row_source 'rows[i]') takes the values of that row; an entry made from one column of a table (column_of) takes that column; an entry made from element i of a list (row_source 'key[i]') takes element i of that list and of every other top-level list of the item with the same length. An entry with a row but neither takes no printed value ('values_scope' not_split_by_row): the item's values stay in 'items'. An entry without a row takes all values of the item."
+ },
+ "labels": {
+  "found": "What NASA's experiments found",
+  "criteria": "What NASA's documents state as criteria, requirements, definitions and limits for this question",
+  "process": "Where this question sits in NASA's fire-safety process",
+  "recorded": "What PSI's tables record",
+  "unprocessed": "In the archive, not in a table",
+  "lower_shelf": "Not found in the files opened",
+  "no_record": "No record in PSI (listing of 14 November 2026)",
+  "caveats": "What the documents say limits these results"
+ },
+ "sentences": {
+  "found": "Quoted from the documents of the reference list. The grouping and the order are the team's, by a fixed rule on the conditions each statement states; they are not NASA's conclusions. A result is not carried from the condition where it was stated to another one.",
+  "printed_values": "Printed values are the numbers of the item exactly as held in references.json, each with the column or quantity it was printed under. The team computes nothing with them.",
+  "criteria": "A criterion is quoted next to the results. The team compares nothing with it.",
+  "process": "Measures are quoted from NASA documents for the case they describe. The team recommends nothing.",
+  "recorded": "Counts of tests in PSI's experimental tables as the team mapped them; the counts are the team's computation, not NASA's.",
+  "unprocessed": "A test is recorded, and a value this question needs is not in NASA's table. Listed here: the file groups that name these tests, how many files were opened, and what was read. A listed file group is not shown to hold the value.",
+  "lower_shelf": "Not in a table, and no header accepted for it in any file opened so far. This is a statement about the files opened, not about the archive.",
+  "no_record": "No test at this condition is in PSI's per-test tables as the team mapped them, on one of the stated grounds, each printed with its source. The statement describes PSI's record on that date.",
+  "caveats": "Quoted from the documents of the reference list, in the same groups and order as the results.",
+  "found_all_questions": "Results tagged for all questions are listed after the results tagged for this question, in the same groups and order.",
+  "not_research_guidance": "A research exploration tool, not safety guidance. Read by an AI agent; not checked by a person."
+ },
+ "headline": {
+  "results": "{n_tagged} quoted [n_tagged|result|results] tagged for this question: {n_at} at the oxygen and pressure of this environment, {n_about} about one of its stated conditions, {n_without} stated without these conditions, {n_other} at other stated conditions; {n_with_values} with printed values.",
+  "all_questions": "{n_general_need} more tagged for all questions: {n_general_at} at the oxygen and pressure of this environment, {n_general_about} about one of its stated conditions.",
+  "tests_ranges": "{counted} [counted|test|tests] counted, {inside} inside the oxygen and pressure ranges of this environment by recorded values.",
+  "tests_no_ranges": "{counted} [counted|test|tests] counted; this environment sets no oxygen or pressure range."
+ },
+ "forbidden_words": ["safe", "unsafe", "safer", "acceptable", "sufficient", "insufficient", "representative", "proven", "prove", "proves", "confirm", "confirms", "confirmed", "recommend", "recommended", "should", "predict", "predicts", "likely", "dangerous", "flammable"],
+ "audit": {
+  "number_rule": "A number of an item's text or quote is a token of the words that reads as a number (an optional sign, digits, an optional decimal part, an optional '%'), after the punctuation around it is removed. A token joined to letters by a hyphen (HT90-40, 0-g, 5-cm-wide) and a token after one of 'label_words' is a label, not a printed value. A number is 'not in values' if no number held by the item's values equals it.",
+  "label_words": ["Table", "table", "TABLE", "section", "Section", "Eq.", "Fig.", "Figure", "Appendix", "sample", "samples", "Sample", "Samples", "Test", "test", "flight", "Flight"],
+  "added_values_topics": "Values blocks were added by hand (field 'values_from' = 'item text') only to items without values whose text or quote prints a number about solid-material flammability limits, flame spread rates, extinction conditions, combustion products or smoke particle size, copying the number exactly as printed."
+ }
+}
