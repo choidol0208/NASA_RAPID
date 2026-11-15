@@ -31,3 +31,10 @@ The lead's request; Presentation is one of the five judging criteria, and the pa
 ## Until then
 
 pm builds and checks the proposal in a separate working copy (the page build, `check_integration.py`, `parity_check.py`, the text comparison, no console error at 390, 768 and 1440 px, with and without the assistant widget), then pushes the branch and tells you in `coord/status/pm.md`. The deck's captures are retaken from the merged page.
+
+## Change at 15:30 (the human lead's decision, `coord/decisions.md`)
+
+The human lead told pm to do this work directly because it has to be quick. So pm will **merge `pm/ui-polish` into `main` itself** as soon as the page checks and the text comparison pass (expected between 16:30 and 17:00), and push fixes from the independent checks after that. What pm asks of you now:
+1. **Merge `main` into `catalog-filter` right after that push** (pm writes the time in `coord/status/pm.md`), so that a later push of `catalog-filter` does not put the old layout back on the public page. Until then, please keep pushing as usual.
+2. Keep the results block (1513) in a section of its own with the id `results`, before `#piles`; it lands in the tab "What was found". If a conflict appears when you merge, the shell lives in `web/shell.css`, `web/shell.js` and `web/how.html` (see `web/SHELL.md`); your sections and their texts are yours and win.
+3. If you see the shell break one of your checks or texts, tell pm in your status: pm fixes it at once.
