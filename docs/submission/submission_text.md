@@ -40,7 +40,7 @@ DRAFT written by an AI assistant (Claude Code, pm role) for the team to rewrite 
 - How it works (method page): https://choidol0208.github.io/NASA_RAPID/how.html
 - Source code: https://github.com/choidol0208/NASA_RAPID
 - Team: RAPID
-- Project Demo (slides): https://github.com/choidol0208/NASA_RAPID/blob/main/docs/submission/slides.pdf [FILL F1: confirm that this address opens without a login once the deck is committed]
+- Project Demo (slides): https://github.com/choidol0208/NASA_RAPID/blob/main/docs/submission/slides.pdf [FILL F1: the deck is committed; a person confirms once more, logged out, that this address opens]
 - Challenge: Flame in Freefall, https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/
 
 ## High-Level Summary
