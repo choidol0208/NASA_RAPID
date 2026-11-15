@@ -113,8 +113,8 @@ def not_understood(query, cfg):
     t = " " + text.lower().strip() + " "
     kw = cfg["keywords"]
     keys = [a for p in cfg["presets"].values() for a in p["aliases"] + p.get("weak_aliases", [])]
-    for group in ("gravity", "flow_state", "concern", "diluent"):
-        keys += [k for v in kw[group].values() for k in v]
+    for group in ("gravity", "flow_state", "concern", "diluent", "signature"):
+        keys += [k for v in kw.get(group, {}).values() for k in v]
     keys += [k for m in kw["materials"] for k in m["keys"]]
     for group in ("thin", "thick", "rod", "out_of_scope", "generic"):
         keys += kw.get(group, [])
@@ -236,12 +236,27 @@ def interpret(query, cfg):
         put("concern", cfg["default_profile"], "default")
     if q.get("profile"):
         put("concern", q["profile"], "input")
+    if sc.get("concern") == "detection":  # fire signature of a detection question (similarity.role.signatures)
+        if q.get("signature"):
+            put("signature", q["signature"], "input")
+        else:
+            put("signature", _signature(t, kw.get("signature", {})), "text")
+        # In a detection question a carbon dioxide word names a fire signature, not a diluent (scored for suppression only).
+        if sc.get("signature") in ("gas", "gas_and_particulate") and src.get("diluent") == "text" and sc.get("diluent") == "CO2":
+            del sc["diluent"], src["diluent"]
 
     assumptions = [{"field": k, "value": sc[k], "source": s} for k, s in src.items()
                    if s.startswith("preset") or s in ("default", "derived")]
     informative = [k for k in sc if k != "preset" and src.get(k) in ("text", "input")] or \
         ([k for k in sc if src.get(k, "").startswith("preset")])
     return sc, src, assumptions, out_of_scope, informative
+
+
+def _signature(t, keys):
+    """'gas', 'particulate', 'gas_and_particulate' or None, from the signature keywords."""
+    t = re.sub(r"(?<![a-z0-9])co-(?=[a-z])", "co", t)  # "co-flow" is not carbon monoxide
+    found = [g for g in ("gas", "particulate") if _any(t, keys.get(g, []))]
+    return "gas_and_particulate" if len(found) == 2 else (found[0] if found else None)
 
 
 def _match_material(t, materials):
@@ -369,16 +384,39 @@ def s_geometry(sc, c, p):
     return p["solid_other"]
 
 
-def s_role(concern, c, p):
+def role_match(concern, c, p, signature=None):
+    """(similarity, note). Detection questions: purpose x outcome per fire signature (similarity.role.signatures).
+    Purpose = the team label OR a NASA-stated purpose of measuring that signature; outcome = the signature was
+    measured (measured_outputs, research_focus). Both: same_axis; one: related_focus; neither: fundamental/other."""
     inv = c["_inv"]
     roles, focus = _split(inv.get("fire_safety_role")), _split(inv.get("research_focus"))
+    sg = p.get("signatures")
+    if concern == "detection" and sg:
+        sigs = [signature] if signature in ("gas", "particulate") else ["gas", "particulate"]
+        stated = (sg.get("stated_purpose") or {}).get(c["investigation_id"])
+        by_label = "detection" in roles
+        by_statement = bool(stated) and stated.get("signature") in sigs
+        outs = {re.sub(r"\s*\(.*\)$", "", x) for x in _split(c.get("measured_outputs"))}
+        measured = [g for g in sigs if outs & set(sg["outputs"].get(g, [])) or set(focus) & set(sg["focus"].get(g, []))]
+        purpose = "detection label" if by_label else f"NASA-stated {stated['signature']} measurement purpose" if by_statement else ""
+        outcome = f"measured {' and '.join(measured)} signature" if measured else ""
+        note = "; ".join(x for x in (purpose, outcome) if x) or "no detection purpose or signature measurement"
+        if purpose and outcome:
+            return p["same_axis"], note
+        if purpose or outcome:
+            return p["related_focus"], note
+        return (p["fundamental"] if "fundamental" in roles else p["other"]), note
     if concern in roles:
-        return p["same_axis"]
+        return p["same_axis"], ""
     if set(focus) & set(p["related_focus_by_axis"].get(concern, [])):
-        return p["related_focus"]
+        return p["related_focus"], ""
     if "fundamental" in roles:
-        return p["fundamental"]
-    return p["other"]
+        return p["fundamental"], ""
+    return p["other"], ""
+
+
+def s_role(concern, c, p, signature=None):
+    return role_match(concern, c, p, signature)[0]
 
 
 def s_diluent(dil, c, p):
@@ -414,7 +452,10 @@ def _with_fallback(c, cfg):
     if fb.get("pressure_kpa") is not None and _range(c, "pressure_min_kpa", "pressure_max_kpa") is None and \
             c["investigation_id"] in fb.get("pressure_applies_to_investigations", []):
         c2["pressure_min_kpa"] = c2["pressure_max_kpa"] = fb["pressure_kpa"]
-        used.append("pressure")
+        if c["investigation_id"] in (fb.get("pressure_published") or {}):
+            c2["pressure_source"] = "published"  # stated in a published paper: documented, not assumed
+        else:
+            used.append("pressure")
     return c2, used
 
 
@@ -436,14 +477,15 @@ def similarities(sc, c, cfg):
         S["fuel"] = s_fuel(sc, c, sim["fuel"])
     if sc.get("sample_geometry") or sc.get("thermal_regime"):
         S["geometry"] = s_geometry(sc, c, sim["geometry"])
-    S["role"] = s_role(sc["concern"], c, sim["role"])
+    S["role"] = s_role(sc["concern"], c, sim["role"], sc.get("signature"))
     if sc["concern"] == "suppression" and sc.get("diluent"):
         S["diluent"] = s_diluent(sc["diluent"], c, sim["diluent"])
     return S, fallback, speed_in_range, c
 
 
 def score_config(sc, c, cfg, weights, raw_S, caps, assumed=()):
-    """assumed: dimensions whose catalog value was filled by the atmosphere fallback ("o2", "pressure")."""
+    """assumed: dimensions compared with a value that no NASA source states (filled by the atmosphere
+    fallback, or a team reading): scored, but not counted in the coverage (see value_basis)."""
     sim = cfg["similarity"]
     S, unknown = {}, []
     for d, v in raw_S.items():
@@ -467,8 +509,8 @@ def score_config(sc, c, cfg, weights, raw_S, caps, assumed=()):
     M = evidence(c, cfg["evidence"])
     score = 100.0 * M * gate * raw
     full = sum(v for k, v in weights.items() if v > 0 and (k != "diluent" or sc["concern"] == "suppression"))
-    # Confidence counts only what was compared with a recorded value: an assumed (fallback) value
-    # is scored, but it is not evidence that the configuration matches.
+    # Confidence counts only what was compared with a value a NASA source states: an assumed (fallback)
+    # value or a team reading is scored, but it is not evidence that the configuration matches.
     known_w = sum(weights[d] for d in w if d not in unknown and d not in assumed)
     coverage = known_w / full if full else 0.0
     return dict(score=score, raw=raw, gate=gate, evidence=M, similarity=S, weights=w,
@@ -496,7 +538,25 @@ def _is_span(c, lo, hi):
 
 # How a number is worded by where it comes from (the catalog's o2_source, pressure_source, flow_source).
 SOURCE_NOTE = {"record": "named in the PSI record, not a test value", "test_matrix": "from the test matrix, not individual tests",
-               "team": "team reading, not in the table"}
+               "team": "team reading, not in the table", "published": "stated in a published paper, not a test value"}
+# Bases a compliance line can name (value_basis). NOT_RECORDED: no NASA source states the value.
+NOT_RECORDED = ("assumed", "team")
+
+
+def value_basis(sc, c, S, fallback):
+    """Where the catalog value of each scored dimension comes from: table, record, test_matrix, published,
+    team, assumed (atmosphere fallback), none (not reported), or catalog (a classification column)."""
+    out = {}
+    for d, v in S.items():
+        if v is None:
+            out[d] = "none"
+        elif d in ("o2", "pressure"):
+            out[d] = "assumed" if {"o2": "O2", "pressure": "pressure"}[d] in fallback else (c.get(f"{d}_source") or "none")
+        elif d == "flow" and sc.get("flow_cms") is not None and _range(c, "flow_min_cms", "flow_max_cms") is not None:
+            out[d] = c.get("flow_source") or "table"  # a speed was compared
+        else:
+            out[d] = "catalog"
+    return out
 
 
 def _fmt_value(c, var, label, lo, hi, unit, assumed):
@@ -517,8 +577,8 @@ def _fmt_flow(c):
     return f"{text}, {note}" if note else text
 
 
-def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
-    """Deterministic one-line reasons (no LLM)."""
+def explain(sc, c, s, cfg, fallback=(), speed_in_range=None, unrecorded=None):
+    """Deterministic one-line reasons (no LLM). unrecorded: dimensions whose value no NASA source states."""
     sim, W = s["similarity"], cfg["warnings"]
     labels = {"o2": "O2", "pressure": "pressure", "flow": "flow", "fuel": "fuel", "geometry": "sample shape",
               "role": "research purpose", "diluent": "diluent"}
@@ -526,6 +586,8 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
     assumed = {"o2"} if "O2" in fallback else set()
     if "pressure" in fallback:
         assumed.add("pressure")
+    if unrecorded is not None:
+        assumed = set(unrecorded)
     # Reasons come from recorded values first; an assumed (not recorded) value is a reason only if nothing else is left.
     best = sorted(known, key=lambda d: (d in assumed, -s["contributions"][d]))[:2]
     gaps = sorted(known, key=lambda d: sim[d])[:1]
@@ -536,7 +598,8 @@ def explain(sc, c, s, cfg, fallback=(), speed_in_range=None):
         "flow": _fmt_flow(c),
         "fuel": f"fuel {c.get('fuel_material')}",
         "geometry": f"{c.get('sample_geometry')} ({c.get('thermal_regime') or 'regime n/a'})",
-        "role": f"role {c['_inv'].get('fire_safety_role')}",
+        "role": "; ".join(x for x in (f"role {c['_inv'].get('fire_safety_role')}",
+                                      role_match(sc.get("concern"), c, cfg["similarity"]["role"], sc.get("signature"))[1]) if x),
         "diluent": f"diluent {c.get('diluent') or 'none'}",
     }
     why = "; ".join(f"{labels[d]} match {sim[d]:.2f} ({detail[d]})" for d in best)
@@ -603,22 +666,29 @@ def requirements(sc, src, cfg):
 
 
 def compliance(reqs, r, sc, cfg):
+    """One line per requirement: status and the basis of the value checked (config requirements.why).
+    met: a per-test table value or a catalog classification covers it; documented: covered by a value a
+    NASA document states (record text, test matrix, published paper) but no per-test table value shows."""
     thr = cfg.get("outside_range_threshold", 0.9)
     assumed = {{"O2": "o2", "pressure": "pressure"}.get(x, x) for x in r.get("assumed_dims", [])}
+    basis = r.get("value_basis") or {}
     out = []
     for q in reqs:
         d = q["dimension"]
+        b = ""
         if d == "gravity":
-            g = sc.get("gravity")
+            g, b = sc.get("gravity"), "catalog"
             st = "met" if g == "microgravity" else "near" if g == "earth" and r.get("has_1g_comparison") else "not_met"
         elif d not in r["similarity"]:
             st = "not_scored"
-        elif d in r["unknown_dims"] or d in assumed:
-            st = "unverified"
         else:
-            s = r["similarity"][d]
-            st = "met" if s >= 0.999 else "near" if s >= thr else "not_met"
-        out.append({"id": q["id"], "status": st})
+            b = "none" if d in r["unknown_dims"] else "assumed" if d in assumed else basis.get(d, "catalog")
+            if b == "none" or b in NOT_RECORDED:
+                st = "unverified"
+            else:
+                s = r["similarity"][d]
+                st = ("met" if b in ("table", "catalog") else "documented") if s >= 0.999 else "near" if s >= thr else "not_met"
+        out.append({"id": q["id"], "status": st, "basis": b})
     return out
 
 
@@ -667,16 +737,17 @@ def rank(query, catalog_dir=None, config=None, top_k=None, weights_override=None
             caps[d] = max(known)
     scored = []
     for c, S, fallback, speed, c_eff in pre:
-        assumed = {{"O2": "o2", "pressure": "pressure"}[x] for x in fallback}
-        s = score_config(sc, c, cfg, weights, S, caps, assumed)
-        why, gap, warns = explain(sc, c_eff, s, cfg, fallback, speed)
+        basis = value_basis(sc, c_eff, S, fallback)
+        unrecorded = {d for d, b in basis.items() if b in NOT_RECORDED}
+        s = score_config(sc, c, cfg, weights, S, caps, unrecorded)
+        why, gap, warns = explain(sc, c_eff, s, cfg, fallback, speed, unrecorded)
         scored.append(dict(
             config_id=c["config_id"], investigation_id=c["investigation_id"], psi_accession=c["psi_accession"],
             config_label=c["config_label"], score=_r(s["score"], 1), raw=_r(s["raw"], 3), gate=_r(s["gate"], 3),
             evidence=_r(s["evidence"], 3), similarity={k: _r(v, 3) for k, v in s["similarity"].items()},
             contributions={k: _r(v, 3) for k, v in s["contributions"].items()},
             weights_used={k: _r(v, 3) for k, v in s["weights"].items()}, unknown_dims=s["unknown"],
-            assumed_dims=fallback, coverage=_r(s["coverage"], 2), why=why, main_gap=gap, warnings=warns,
+            assumed_dims=fallback, value_basis=basis, coverage=_r(s["coverage"], 2), why=why, main_gap=gap, warnings=warns,
             psi_url=c["_inv"]["psi_url"], dataset_doi=c["_inv"]["dataset_doi"],
             key_findings=c.get("key_findings") or c["_inv"].get("key_findings"),
             has_1g_comparison=c["_inv"].get("has_1g_comparison") == "Y",

@@ -1,12 +1,31 @@
 ---
 role: catalog
-updated: 2026-11-15 09:12 KST
+updated: 2026-11-15 09:52 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. `main`, `catalog-filter` and the live site all run config 1.4.0. ui shows the requirements table (2001 done) and merged before pushing (0007 done); both are closed. **Working on pm 0035 (accepted 08:33; the human lead widened the catalog's scope for this work):** **step 6 done (09:09, `e8c5bc5`):** `data/catalog/reading_order.csv` (53 rows) and `reading_order.json`, built by `scoring/reading_order.py`; the fixture "S1 at the ISS: class 2 is only the BASS-II Summary Report, 44 tests" reproduces; 4 unit tests. Step 7 `validation/raw_chain_recount.py` (with the video block) is running in a separate AI session that does not import the pipeline; the human lead approved downloading the 24 PSI listings and the 272 FLEX test sheets for it (kept out of git); by about 12:00. Sync 09:12: merged main 09:00 and catalog-filter (ui shows the reading order as "Where to read first"); inbox: 0035 in progress; 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean. **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
+**09:52: config 1.5.0 on `catalog-scoring` (weights unchanged).** The human lead asked catalog to judge, on theory, three differences between the catalog and the data role's raw-file method, and to combine the two where both hold. Reasoning: `scoring/METHOD.md` 1.7 and `scoring/BUILDUP.md` B7.
+1. **Detection per fire signature.**
+   - NASA defines fire signatures as gaseous species and particulate properties (Ruff, NASA/TM-2011-217036).
+   - Role similarity for detection is now purpose × outcome. Purpose is the detection label OR a NASA-stated measurement purpose. Outcome is a measured signature.
+   - Effect: gas questions ("CO detection on ISS", "combustion gas detection") rank BASS-II first, with SAME 2nd or 3rd. Smoke questions are unchanged.
+2. **Compliance basis.**
+   - Every line has `basis`. `met` only for per-test table values or catalog classifications; `documented` for record text, test matrix and published values.
+   - Team readings are `unverified` and leave the confidence. FLEX and CFI go from medium to low on quiescent questions.
+   - Request 0945 to ui: show `documented` and the basis.
+3. **BASS-II pressure is `published`**, from ICES 2019, "Pressure was not varied from 1 atmosphere". It is no longer assumed, and the score is unchanged.
+
+Checks: 71 unit tests, 41 of 41 scenarios (D03, D04, F08 new; F06's expectation changed from SAME to BASS-II, with the reason recorded), parity 102 of 102, weights match the derivation, reading order up to date.
+
+For pm:
+- Rebuild the AI layer at integration: detection rankings changed.
+- `ai/test_robustness.py` was not run here (no numpy in this checkout). The functions it calls kept their signatures.
+- Two quotes (the BASS-II report 1.2 and ICES 2019 Section II) are used as the data role recorded them; catalog could not open either full text (over 10 MB; HTTP 403).
+
+
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. `main` and `catalog-filter` run config 1.4.0 (read 09:50); `catalog-scoring` runs 1.5.0. ui shows the requirements table (2001 done) and merged before pushing (0007 done); both are closed. **Working on pm 0035 (accepted 08:33; the human lead widened the catalog's scope for this work):** **step 6 done (09:09, `e8c5bc5`):** `data/catalog/reading_order.csv` (53 rows) and `reading_order.json`, built by `scoring/reading_order.py`; the fixture "S1 at the ISS: class 2 is only the BASS-II Summary Report, 44 tests" reproduces; 4 unit tests. Step 7 `validation/raw_chain_recount.py` (with the video block) is running in a separate AI session that does not import the pipeline; the human lead approved downloading the 24 PSI listings and the 272 FLEX test sheets for it (kept out of git); by about 12:00. Sync 09:12: merged main 09:00 and catalog-filter (ui shows the reading order as "Where to read first"); inbox: 0035 in progress; 56 unit tests, 38 of 38 scenarios, parity 99 of 99, source check clean. **Building up the weighting model (the human lead's direction, 19:40): less dependence on AI judgement, requirements read in a systems-engineering way, weights from NASA data and combustion science.** Inbox empty.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.

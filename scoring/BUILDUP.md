@@ -105,11 +105,12 @@ Three configurations, run through the same code and the same checks; only the we
 - its source: **stated** (typed by the user), **implied** (by a preset such as the ISS cabin), **derived** (for example a flow state from a speed) or **assumed** (a default);
 - the catalog columns that verify it (`verified_by`).
 
-Each result carries a `compliance` line per requirement:
-- **met:** the configuration's recorded conditions cover it;
+Each result carries a `compliance` line per requirement, with the `basis` of the value it checked (since 1.5.0, see B7):
+- **met:** a per-test table value, or a catalog classification, covers it;
+- **documented** (1.5.0): a value that a NASA document states covers it (record text, test matrix, published paper), but no per-test table value shows it;
 - **near:** similarity of 0.9 or more;
 - **not_met**;
-- **unverified:** no recorded value, or an assumed atmosphere;
+- **unverified:** no recorded value, an assumed atmosphere, or a team reading;
 - **not_scored.**
 
 Example, `ISS cotton fabric`:
@@ -332,6 +333,29 @@ All are in `python3 validation/sensitivity.py` and `validation/report.md`.
 
 ---
 
+## B7. Combined model 1.5.0: the catalog and the data role's raw-file method
+
+**What it does.** It settles three differences between the catalog and the data role's raw-file layer (`data/pipeline/`, `pipeline/spec/`). Each difference is judged on theory; the reasoning is in `METHOD.md` 1.7. No weight changes.
+
+| Difference | More valid side, and why | Combined rule (code) |
+|---|---|---|
+| Detection purpose: one label against an outcome-specific link | The data role's link, for a named signature: fire signatures are gaseous species *and* particulate properties [N1]. Relevance is judged per outcome (GRADE indirectness [D7]). | Purpose × outcome per signature. Purpose is the label OR a NASA-stated measurement purpose [N2]. Outcome is a measured signature (`role_match`; `similarity.role.signatures`). |
+| Compliance "met": a documented value against a per-test table value | Both, for different estimands. Ranking: documented values, because constant conditions go untabulated (missingness depends on the value [D8]). The word "met": per-test values, because the verification method differs (test against inspection) [SE1, 5.3]. | `basis` on every line; `documented` instead of `met` for record, test matrix and published values; team readings are `unverified` and leave the confidence (`value_basis`, `compliance`). |
+| BASS-II pressure: assumed against "cannot be placed" | Neither as it stood: a published paper states 1 atm [N3]. | Basis `published` (`atmosphere_fallback.pressure_published`); no score change. |
+
+**Concepts and techniques:**
+- **Indirectness of evidence** [D7]: evidence is downgraded one level when it differs from the question in one element (here, the measured outcome or the purpose). The 2 × 2 maps both elements matching to same_axis (1.0), one matching to related_focus (0.7), and neither to the usual values.
+- **Union (OR) of positive evidence:** the label and the stated purpose are two sources for one category. A missing label is not evidence against a stated purpose, so averaging them would penalise silence.
+- **Missing not at random** [D8]: when the value decides whether it is recorded, a complete-case analysis is biased. Ranking therefore uses the documented value (informed imputation), and the compliance line says that it is one.
+- **Verification method per requirement** [SE1]: test, analysis, inspection and demonstration are different methods. The `basis` field records which one stands behind each line.
+
+**Checks:**
+- 71 unit tests (`FireSignatures`, `ComplianceBasis`).
+- 41 validation scenarios (D03, D04, F08 new; F06's expectation changed from SAME to BASS-II, with the reason in `scenarios.json`).
+- Python/JS parity 102/102.
+
+---
+
 ## 7. References
 
 Each entry gives where to read it; **open** = free full text.
@@ -394,6 +418,13 @@ Each entry gives where to read it; **open** = free full text.
 - [C17] Fenimore, C. P., Martin, F. J. (1966). Flammability of polymers. *Combustion and Flame* 10(2), 135–139. doi:10.1016/0010-2180(66)90059-9. The limiting oxygen index.
 - [C18F] Walters, R. N., Lyon, R. E. (2001). *Calculating Polymer Flammability from Molar Group Contributions*. DOT/FAA/AR-01/31, US Federal Aviation Administration. Table 1: heat release capacity of PMMA (about 460 to 510 J/(g·K)), PTFE (35), Nomex (52) and polyimide (25). **Open:** https://rosap.ntl.bts.gov/view/dot/92724
 - [C19] Jomaas, G. et al. (2015). Fire safety in space – beyond flammability testing of small samples. *Acta Astronautica* 109, 208–216. doi:10.1016/j.actaastro.2014.11.025
+
+**Combined model 1.5.0 (B7)**
+- [D7] Guyatt, G. H., Oxman, A. D., Kunz, R., Woodcock, J., et al. (2011). GRADE guidelines: 8. Rating the quality of evidence—indirectness. *Journal of Clinical Epidemiology* 64(12), 1303–1310. doi:10.1016/j.jclinepi.2011.04.014 (details checked against Crossref, 2026-11-15)
+- [D8] Rubin, D. B. (1976). Inference and missing data. *Biometrika* 63(3), 581–592. doi:10.1093/biomet/63.3.581 (details checked against Crossref, 2026-11-15)
+- [N1] Ruff, G. A. (2011). *Final Report: Fire Prevention, Detection, and Suppression Project, Exploration Technology Development Program*. NASA/TM-2011-217036, 1.2.2, p. 4. **Open:** https://ntrs.nasa.gov/citations/20110020262. Also NASA OCHMO, *NASA-STD-3001 Technical Brief: Fire Protection* (OCHMO-TB-008), Fire Detection. **Open:** https://www.nasa.gov/wp-content/uploads/2023/12/ochmo-tb-008-fire-protection.pdf. Quotes as recorded by the data role from the full text (`pipeline/spec/references.json`).
+- [N2] Olson, S. L., Ferkul, P. V., Bhattacharjee, S., Miller, F. J., Fernandez-Pello, C., Link, S., T'ien, J. S., Wichman, I. (2021). *Burning and Suppression of Solids-II (BASS-II) Summary Report*. NASA TM, NTRS 20210011385, 1.2, p. 5. **Open:** https://ntrs.nasa.gov/citations/20210011385. The NTRS entry was checked by this session. The quote is as recorded by the data role; the PDF (over 10 MB) was not re-read. The PSI-25 record (read by this session) lists the publication "Results from on-board CSA-CP and CDM Sensor Readings during the Burning and Suppression of Solids - II (BASS-II) Experiment in the Microgravity Science Glovebox (MSG)".
+- [N3] Olson, S. L., Ferkul, P. V., Fernandez-Pello, C., Miller, F. J., Wichman, I. S., Bhattacharjee, S., T'ien, J. S. (2019). Flammability limits from BASS-II testing in microgravity compared to normal gravity limits. *49th International Conference on Environmental Systems*, Section II. **Open:** https://hdl.handle.net/2346/84505. The quote is as recorded by the data role; the repository refused this session (HTTP 403).
 
 **NASA data**
 - NASA Physical Sciences Informatics, FLEX experimental table, PSI-69 (CC0-1.0): https://psi.nasa.gov/

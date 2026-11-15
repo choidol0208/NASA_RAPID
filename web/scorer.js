@@ -93,7 +93,7 @@ export function notUnderstood(query, cfg) { // mirrors not_understood in scorer.
   const t = " " + text.toLowerCase().trim() + " ";
   const kw = cfg.keywords;
   let keys = Object.values(cfg.presets).flatMap((p) => p.aliases.concat(p.weak_aliases || []));
-  for (const g of ["gravity", "flow_state", "concern", "diluent"]) keys = keys.concat(Object.values(kw[g]).flat());
+  for (const g of ["gravity", "flow_state", "concern", "diluent", "signature"]) keys = keys.concat(Object.values(kw[g] || {}).flat());
   keys = keys.concat(kw.materials.flatMap((m) => m.keys));
   for (const g of ["thin", "thick", "rod", "out_of_scope", "generic"]) keys = keys.concat(kw[g] || []);
   const covered = keys.flatMap((k) => spans(t, k));
@@ -111,6 +111,11 @@ export function notUnderstood(query, cfg) { // mirrors not_understood in scorer.
   }
   if (cur.length) phrases.push(cur.join(" "));
   return phrases;
+}
+function signatureOf(t, keys) { // mirrors _signature: "gas", "particulate", "gas_and_particulate" or null
+  t = t.replace(/(?<![a-z0-9])co-(?=[a-z])/g, "co"); // "co-flow" is not carbon monoxide
+  const found = ["gas", "particulate"].filter((g) => any(t, keys[g] || []));
+  return found.length === 2 ? "gas_and_particulate" : found.length ? found[0] : null;
 }
 function matchMaterial(t, materials) {
   for (const m of materials) if (any(t, m.keys)) return m;
@@ -179,6 +184,14 @@ export function interpret(query, cfg) {
   if (sc.flow_state === "quiescent" && !("flow_cms" in sc)) put("flow_cms", 0.0, "derived");
   if (!("concern" in sc)) put("concern", cfg.default_profile, "default");
   if (q.profile) put("concern", q.profile, "input");
+  if (sc.concern === "detection") { // fire signature of a detection question (similarity.role.signatures)
+    if (q.signature) put("signature", q.signature, "input");
+    else put("signature", signatureOf(t, kw.signature || {}), "text");
+    // In a detection question a carbon dioxide word names a fire signature, not a diluent (scored for suppression only).
+    if ((sc.signature === "gas" || sc.signature === "gas_and_particulate") && src.diluent === "text" && sc.diluent === "CO2") {
+      delete sc.diluent; delete src.diluent;
+    }
+  }
 
   const assumptions = Object.entries(src).filter(([, s]) => s.startsWith("preset") || s === "default" || s === "derived")
     .map(([k, s]) => ({ field: k, value: sc[k], source: s }));
@@ -274,15 +287,31 @@ function sGeometry(sc, c, p) {
   if (sameG === null && sameR === null) return null;
   return p.solid_other;
 }
-function sRole(concern, c, p) {
+function roleMatch(concern, c, p, signature = null) { // mirrors role_match: [similarity, note]
   const inv = c._inv;
   const roles = split(inv.fire_safety_role), focus = split(inv.research_focus);
-  if (roles.includes(concern)) return p.same_axis;
+  const sg = p.signatures;
+  if (concern === "detection" && sg) {
+    const sigs = signature === "gas" || signature === "particulate" ? [signature] : ["gas", "particulate"];
+    const stated = get(sg.stated_purpose || {}, c.investigation_id, null);
+    const byLabel = roles.includes("detection");
+    const byStatement = !!stated && sigs.includes(stated.signature);
+    const outs = new Set(split(c.measured_outputs).map((x) => x.replace(/\s*\(.*\)$/, "")));
+    const measured = sigs.filter((g) => (sg.outputs[g] || []).some((x) => outs.has(x)) || focus.some((x) => (sg.focus[g] || []).includes(x)));
+    const purpose = byLabel ? "detection label" : byStatement ? `NASA-stated ${stated.signature} measurement purpose` : "";
+    const outcome = measured.length ? `measured ${measured.join(" and ")} signature` : "";
+    const note = [purpose, outcome].filter((x) => x).join("; ") || "no detection purpose or signature measurement";
+    if (purpose && outcome) return [p.same_axis, note];
+    if (purpose || outcome) return [p.related_focus, note];
+    return [roles.includes("fundamental") ? p.fundamental : p.other, note];
+  }
+  if (roles.includes(concern)) return [p.same_axis, ""];
   const rel = get(p.related_focus_by_axis, concern, []);
-  if (focus.some((x) => rel.includes(x))) return p.related_focus;
-  if (roles.includes("fundamental")) return p.fundamental;
-  return p.other;
+  if (focus.some((x) => rel.includes(x))) return [p.related_focus, ""];
+  if (roles.includes("fundamental")) return [p.fundamental, ""];
+  return [p.other, ""];
 }
+function sRole(concern, c, p, signature = null) { return roleMatch(concern, c, p, signature)[0]; }
 function sDiluent(dil, c, p) {
   const cd = split(c.diluent);
   if (!cd.length) return p.none;
@@ -316,7 +345,8 @@ function withFallback(c, cfg) {
   if (fb.pressure_kpa !== undefined && fb.pressure_kpa !== null && !range(c, "pressure_min_kpa", "pressure_max_kpa") &&
       (fb.pressure_applies_to_investigations || []).includes(c.investigation_id)) {
     c2.pressure_min_kpa = c2.pressure_max_kpa = fb.pressure_kpa;
-    used.push("pressure");
+    if (Object.prototype.hasOwnProperty.call(fb.pressure_published || {}, c.investigation_id)) c2.pressure_source = "published"; // documented, not assumed
+    else used.push("pressure");
   }
   return [c2, used];
 }
@@ -334,11 +364,11 @@ function similarities(sc, c, cfg) {
   }
   if (sc.fuel_phase || sc.fuel_class || sc.fuel_material) S.fuel = sFuel(sc, ce, sim.fuel);
   if (sc.sample_geometry || sc.thermal_regime) S.geometry = sGeometry(sc, ce, sim.geometry);
-  S.role = sRole(sc.concern, ce, sim.role);
+  S.role = sRole(sc.concern, ce, sim.role, get(sc, "signature", null));
   if (sc.concern === "suppression" && sc.diluent) S.diluent = sDiluent(sc.diluent, ce, sim.diluent);
   return [S, fallback, speed, ce];
 }
-function scoreConfig(sc, c, cfg, weights, rawS, caps, assumed = []) { // assumed: fallback dims ("o2", "pressure")
+function scoreConfig(sc, c, cfg, weights, rawS, caps, assumed = []) { // assumed: dims whose value no NASA source states
   const sim = cfg.similarity;
   const S = {}, unknown = [];
   for (const [d, v] of Object.entries(rawS)) {
@@ -365,7 +395,7 @@ function scoreConfig(sc, c, cfg, weights, rawS, caps, assumed = []) { // assumed
   let full = 0;
   for (const [k, v] of Object.entries(weights)) if (v > 0 && (k !== "diluent" || sc.concern === "suppression")) full += v;
   let knownW = 0;
-  // Confidence counts only what was compared with a recorded value (mirrors score_config).
+  // Confidence counts only what was compared with a value a NASA source states (mirrors score_config).
   for (const d of Object.keys(w)) if (!unknown.includes(d) && !assumed.includes(d)) knownW += weights[d];
   const coverage = full ? knownW / full : 0.0;
   const contributions = {};
@@ -383,7 +413,18 @@ function fmtRange(c, lo, hi, unit) {
 }
 // How a number is worded by where it comes from (mirrors SOURCE_NOTE in scorer.py).
 const SOURCE_NOTE = { record: "named in the PSI record, not a test value", test_matrix: "from the test matrix, not individual tests",
-  team: "team reading, not in the table" };
+  team: "team reading, not in the table", published: "stated in a published paper, not a test value" };
+const NOT_RECORDED = ["assumed", "team"]; // bases with no NASA source for the value (mirrors scorer.py)
+function valueBasis(sc, c, S, fallback) { // mirrors value_basis
+  const out = {};
+  for (const [d, v] of Object.entries(S)) {
+    if (v === null) out[d] = "none";
+    else if (d === "o2" || d === "pressure") out[d] = fallback.includes(d === "o2" ? "O2" : "pressure") ? "assumed" : (c[`${d}_source`] || "none");
+    else if (d === "flow" && sc.flow_cms !== undefined && sc.flow_cms !== null && range(c, "flow_min_cms", "flow_max_cms")) out[d] = c.flow_source || "table";
+    else out[d] = "catalog";
+  }
+  return out;
+}
 function fmtValue(c, v, label, lo, hi, unit, assumed) { // mirrors _fmt_value
   const r = fmtRange(c, lo, hi, unit);
   if (assumed) return `${label} not recorded, assumed ${r}`;
@@ -399,12 +440,12 @@ function fmtFlow(c) { // mirrors _fmt_flow
   return note ? `${text}, ${note}` : text;
 }
 function fill(tpl, vars) { return tpl.replace(/\{(\w+)\}/g, (_, k) => vars[k]); }
-function explain(sc, c, s, cfg, fallback, speed) {
+function explain(sc, c, s, cfg, fallback, speed, unrecorded = null) {
   const sim = s.similarity, W = cfg.warnings;
   const labels = { o2: "O2", pressure: "pressure", flow: "flow", fuel: "fuel", geometry: "sample shape", role: "research purpose", diluent: "diluent" };
   const known = Object.keys(s.contributions).filter((d) => !s.unknown.includes(d));
   const fb = fallback || [];
-  const assumed = new Set([...(fb.includes("O2") ? ["o2"] : []), ...(fb.includes("pressure") ? ["pressure"] : [])]);
+  const assumed = unrecorded ? new Set(unrecorded) : new Set([...(fb.includes("O2") ? ["o2"] : []), ...(fb.includes("pressure") ? ["pressure"] : [])]);
   // Reasons come from recorded values first; an assumed (not recorded) value is a reason only if nothing else is left.
   const best = [...known].sort((a, b) => (assumed.has(a) - assumed.has(b)) || (-s.contributions[a] - -s.contributions[b])).slice(0, 2);
   const gaps = [...known].sort((a, b) => sim[a] - sim[b]).slice(0, 1);
@@ -415,7 +456,7 @@ function explain(sc, c, s, cfg, fallback, speed) {
     flow: fmtFlow(c),
     fuel: `fuel ${c.fuel_material}`,
     geometry: `${c.sample_geometry} (${c.thermal_regime || "regime n/a"})`,
-    role: `role ${c._inv.fire_safety_role}`,
+    role: [`role ${c._inv.fire_safety_role}`, roleMatch(sc.concern, c, cfg.similarity.role, get(sc, "signature", null))[1]].filter((x) => x).join("; "),
     diluent: `diluent ${c.diluent || "none"}`,
   };
   const why = best.map((d) => `${labels[d]} match ${sim[d].toFixed(2)} (${detail[d]})`).join("; ");
@@ -470,22 +511,27 @@ export function requirements(sc, src, cfg) {
   }
   return out;
 }
-function compliance(reqs, r, sc, cfg) {
+function compliance(reqs, r, sc, cfg) { // mirrors compliance: status and the basis of the value checked
   const thr = get(cfg, "outside_range_threshold", 0.9);
   const assumed = new Set((r.assumed_dims || []).map((x) => ({ O2: "o2", pressure: "pressure" })[x] || x));
+  const basis = r.value_basis || {};
   return reqs.map((q) => {
     const d = q.dimension;
-    let st;
+    let st, b = "";
     if (d === "gravity") {
       const g = sc.gravity;
+      b = "catalog";
       st = g === "microgravity" ? "met" : g === "earth" && r.has_1g_comparison ? "near" : "not_met";
     } else if (!(d in r.similarity)) st = "not_scored";
-    else if (r.unknown_dims.includes(d) || assumed.has(d)) st = "unverified";
     else {
-      const v = r.similarity[d];
-      st = v >= 0.999 ? "met" : v >= thr ? "near" : "not_met";
+      b = r.unknown_dims.includes(d) ? "none" : assumed.has(d) ? "assumed" : get(basis, d, "catalog");
+      if (b === "none" || NOT_RECORDED.includes(b)) st = "unverified";
+      else {
+        const v = r.similarity[d];
+        st = v >= 0.999 ? (b === "table" || b === "catalog" ? "met" : "documented") : v >= thr ? "near" : "not_met";
+      }
     }
-    return { id: q.id, status: st };
+    return { id: q.id, status: st, basis: b };
   });
 }
 
@@ -531,14 +577,15 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
       if (known.length) caps[d] = Math.max(...known);
     }
     const scored = pre.map(([c, S, fallback, speed, ce]) => {
-      const assumed = fallback.map((x) => ({ O2: "o2", pressure: "pressure" })[x]);
-      const s = scoreConfig(sc, c, cfg, weights, S, caps, assumed);
-      const [why, gap, warns] = explain(sc, ce, s, cfg, fallback, speed);
+      const basis = valueBasis(sc, ce, S, fallback);
+      const unrecorded = Object.keys(basis).filter((d) => NOT_RECORDED.includes(basis[d]));
+      const s = scoreConfig(sc, c, cfg, weights, S, caps, unrecorded);
+      const [why, gap, warns] = explain(sc, ce, s, cfg, fallback, speed, unrecorded);
       return {
         config_id: c.config_id, investigation_id: c.investigation_id, psi_accession: c.psi_accession,
         config_label: c.config_label, score: pyRound(s.score, 1), raw: pyRound(s.raw, 3), gate: pyRound(s.gate, 3),
         evidence: pyRound(s.evidence, 3), similarity: roundMap(s.similarity, 3), contributions: roundMap(s.contributions, 3),
-        weights_used: roundMap(s.weights, 3), unknown_dims: s.unknown, assumed_dims: fallback,
+        weights_used: roundMap(s.weights, 3), unknown_dims: s.unknown, assumed_dims: fallback, value_basis: basis,
         coverage: pyRound(s.coverage, 2), why, main_gap: gap, warnings: warns,
         psi_url: c._inv.psi_url, dataset_doi: c._inv.dataset_doi,
         key_findings: c.key_findings || c._inv.key_findings,

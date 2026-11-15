@@ -62,7 +62,7 @@ The question type comes from words in the query: "smoke" and "detector" give det
 | Flow | Flow type matrix: quiescent, opposed, concurrent, coflow, counterflow or radial.<br>Speed: Gaussian in log speed.<br>A one-sided range ("up to 40 cm/s") scores unknown on its open side | ventilated against opposed or concurrent: 0.9; ventilated against quiescent: 0.4; speed σ = ln 2, offset 1 cm/s |
 | Fuel | A hierarchy | same material 1.0; same class and melt behaviour 0.8; same class 0.7; same phase 0.5; gas burner emulating a solid 0.5; liquid against gas 0.3; other 0.1 |
 | Sample shape | Shape and thermal thickness (thin or thick) | same shape 1.0; other shape, same thickness 0.7; same shape, other thickness 0.6; other solid 0.4; solid against non-solid 0.2 |
-| Research purpose | The investigation's fire-safety axis (team classification of the PSI record) | same axis 1.0; related focus 0.7; fundamental 0.4; other 0.2 |
+| Research purpose | The investigation's fire-safety axis (team classification of the PSI record).<br>Detection questions (since 1.5.0) are matched per fire signature, gas or particulate: purpose (detection label, or a NASA-stated purpose of measuring that signature) × outcome (that signature was measured). See 1.7 | same axis 1.0 (purpose and outcome); related focus 0.7 (one of the two); fundamental 0.4; other 0.2 |
 | Diluent (suppression only) | Same gas: 1.<br>Another inert: the ratio of molar heat capacities at 298 K, squared | CO2 37.198, N2 29.071, He 20.786 kJ/kmol·K: CO2–N2 0.61, N2–He 0.51, CO2–He 0.31 |
 | Not recorded | The catalog has no value | 0.5. For O2 and fuel it is capped at the best recorded match of the query ("unknown never beats measured") |
 
@@ -81,7 +81,14 @@ The question type comes from words in the query: "smoke" and "detector" give det
   - When a record gives no O2, it is scored as 21%.
   - Pressure is filled as 101.3 kPa only for experiments that ran in the ISS cabin, the MSG or a Cygnus cabin.
   - Such a result carries the `fallback` warning. Its confidence leaves the assumed values out, and its reasons say "not recorded, assumed".
-- **Confidence:** the share of the profile's weight that was compared with a recorded value: high 0.75 or more, medium 0.45 or more, low below.
+  - Exception (1.5.0): for BASS-II a published paper states the pressure ("Pressure was not varied from 1 atmosphere", ICES 2019, Section II). It is filled as 101.3 kPa with the basis `published`. It is not an assumption, and no `fallback` warning is raised (`atmosphere_fallback.pressure_published`).
+- **Confidence:** the share of the profile's weight compared with a value that a NASA source states (a table, the record text, a test matrix or a published paper). High is 0.75 or more, medium 0.45 or more, low below. Assumed values and team readings are scored but not counted (1.5.0; team readings were counted before).
+- **Compliance lines** (requirements layer; no score effect): each line gives a status and the `basis` of the value it checked.
+  - `met`: a per-test table value, or a catalog classification, covers the requirement.
+  - `documented`: a NASA document covers it (record text, test matrix or published paper), but no per-test table value shows it.
+  - `near`, `not_met`.
+  - `unverified`: no value, an assumed atmosphere, or a team reading.
+  - `not_scored`.
 
 ### 1.6 Reading the query
 
@@ -91,6 +98,38 @@ The question type comes from words in the query: "smoke" and "detector" give det
   - "30% O2" and "O2 30%" are read, but not "CO2 30%".
   - Pressure is read in kPa, psi, psia, atm, bar or mmHg; flow speed in cm/s, mm/s or m/s.
 - **Words not read:** they are listed in `not_understood`, and the page says they change nothing.
+- **Fire signature (detection questions only, 1.5.0):** `keywords.signature`.
+  - Gas words: CO, CO2, HCN, HCl, combustion gases or products, toxic gas, gas sensor.
+  - Particulate words: smoke, aerosol, particle, soot.
+  - Both kinds give `gas_and_particulate`, which accepts either signature.
+  - In a detection question "CO2" names the signature and is not read as a diluent.
+  - "co-flow" is not read as CO.
+
+### 1.7 Combined model 1.5.0: the catalog and the data role's raw-file method
+
+The data role's raw-file layer ranks and counts NASA tests from table values only. The catalog ranks experiments with the best documented value. They differed in three places. Each was judged on theory, and the combined rule keeps what holds on each side. No weight changed.
+
+1. **Detection purpose: one label against an outcome-specific link.**
+   - NASA defines fire signatures as "the gaseous species and particulate properties produced by a fire" (Ruff, NASA/TM-2011-217036, 1.2.2). Detection evidence therefore has two outcomes.
+   - Under the GRADE indirectness domain (Guyatt et al. 2011), evidence is direct when it measures the outcome asked about.
+   - The catalog's one-word label is a good test of purpose, but it ignored the outcome. BASS-II (measured CO and CO2, with a stated purpose of evaluating combustion products) scored 0.2 for a CO question. SAME (smoke particles only) scored 1.0. In 1.4.0 particulate evidence (soot focus) already earned 0.7 for detection and gas evidence earned nothing. That asymmetry contradicts the NASA definition.
+   - The data role's per-need link (`objective_link = stated`) is outcome-specific, so it is more valid for a named signature.
+   - Combined rule: purpose × outcome, as in the table above. Purpose is a union (OR) of the label and a NASA-stated purpose, because a missing label is not evidence against a stated purpose. Its evidence is in `similarity.role.signatures`.
+2. **Compliance "met": ranking against counting.**
+   - The two methods answer different questions.
+   - For ranking, the catalog is more valid. Constant conditions are often not tabulated *because* they were constant. That missingness depends on the value itself (not missing at random, Rubin 1976). A complete-case rule would drop exactly the constant-pressure ISS experiments.
+   - For the word "met", the data role is more valid. NASA/SP-2016-6105 Rev2 (5.3) names the verification method of each requirement. A test value per test is not the same evidence as a document read by inspection.
+   - Combined rule: scores keep the documented values. The compliance line says `documented` instead of `met` when the value is not a per-test table value, and it names the basis. A team reading is not a NASA statement, so it is `unverified` and leaves the confidence.
+3. **BASS-II pressure: assumption against "cannot be placed".**
+   - A published paper states the value, so the catalog's "assumed" was too weak.
+   - The data role's "cannot be placed from the table" stays right for table placement.
+   - Combined rule: basis `published`; the score is unchanged.
+
+Effects on the demo queries:
+- Gas-signature detection questions now rank BASS-II first, with SAME second or third (validation D03, F06, F08). Smoke questions are unchanged.
+- FLEX and CFI drop from medium to low confidence on quiescent questions (their flow is a team reading).
+- ACME-BRE pressure and BASS flow read `documented`.
+- The full list is in `validation/report.md`.
 
 ---
 
