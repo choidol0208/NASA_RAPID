@@ -1,9 +1,11 @@
 ---
 role: ui
-updated: 2026-11-15 16:49 KST
+updated: 2026-11-15 16:53 KST
 state: working
 blocked_on: none
 ---
+Now (15 Nov, 16:53): sync; no new request to ui. Waiting on pm: 1638 items 4 and 5 and 1624 (how.html lines 63 and 64, `data/insights` sentences, `pile_wording.md`), 1146 (`assistant_recorded.json`, not on main yet).
+
 Now (15 Nov, 16:49): human lead: "not operational fire-safety guidance" removed too. Masthead and footer notices on both pages are positive ("Research exploration tool built on NASA Physical Sciences Informatics (PSI) data."; "Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data."), meta descriptions likewise; request 1638 items 1 to 3 done by ui, 4 and 5 remain with pm.
 
 Now (15 Nov, 16:46): the human lead asked the ui session to remove "and it is not endorsed by NASA". Done in the masthead and footer notices of `index.html` and `how.html` and in the method page's meta description (the footer stays identical on both pages, build check passes); pm told in request 1638 (merge `catalog-filter` before editing those lines; `README.md` line 17 is pm's).
