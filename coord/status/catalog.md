@@ -1,17 +1,20 @@
 ---
 role: catalog
-updated: 2026-11-15 15:14 KST
+updated: 2026-11-15 15:22 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
 
-**Sync 15:14:**
-- Merged `main` (pm's integration at 15:08: `data/insights/` rebuilt) and `catalog-filter` (ui status).
-- No change to the catalog, the scorer or the reading-order inputs. All three branches run config 1.5.1.
-- Inbox and outbox empty.
-- Checks: 76 unit tests, 43 of 43 scenarios, parity 104 of 104, source check clean, reading order up to date.
-- Waiting on the human lead for review items B1–B5. No config change after 18:00 without that decision.
+**15:22: config 1.5.2 on `catalog-scoring`: the human lead's decisions on review items B1–B5 (recommendations taken at 15:16; weights unchanged).**
+- B3: a new top-level warning `no_material` when no fuel is named. The ranking is unchanged.
+- B1: the gate is kept; "decisive is a large weight, not a veto" (`gate.decisive_is_not_a_veto`).
+- B2: documented values keep their similarity (no 0.8 cap).
+- B4: scores are compared within one question only (`_about.formula_scope`).
+- B5: detection pressure stays in class 3, with the scope stated: smoke of overheated materials (`profiles.detection.scope`).
+- Reasons are in METHOD 1.2, 1.5, 1.7 and 1.8, WEIGHTING 4.2 and 6, and BUILDUP B7.
+- Requests 1520 to ui (show the warning; one line on comparing scores) and pm (texts; rebuild the AI layer).
+- Checks: 79 unit tests, 45 of 45 scenarios (F11, F12 new), parity 106 of 106, source check clean, `web/check_integration.py` 0 broken joins. No demo top-3 change.
 
 **10:13: config 1.5.1 on `catalog-scoring` (weights unchanged since 1.4.0).**
 - **1.5.0 (09:52):** the combined model of the catalog and the data role's raw-file method, at the human lead's request. Reasoning: `scoring/METHOD.md` 1.7, `scoring/BUILDUP.md` B7.
@@ -35,7 +38,7 @@ blocked_on: none
   - weights match the derivation; reading order up to date.
 - **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 15:14: `main`, `catalog-filter` and `catalog-scoring` all run config 1.5.1.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 15:22: `main` and `catalog-filter` run config 1.5.1; `catalog-scoring` runs 1.5.2.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
@@ -122,20 +125,22 @@ Next:
 - Weights change only through the stream files and `scoring/derive_weights.py --write`, with the human lead's decision. After any change, rerun the tests, validation, sensitivity, parity and the verification sheet, and tell pm the numbers.
 
 Published for others:
-- `scoring/scoring_config.json` 1.5.1. Weights are unchanged from 1.4.0: AHP over literature-based judgements; suppression pooled with FLEX. New since 1.4.0:
+- `scoring/scoring_config.json` 1.5.2. Weights are unchanged from 1.4.0: AHP over literature-based judgements; suppression pooled with FLEX. New since 1.4.0:
   - `similarity.role.signatures` (keywords, outputs, stated purpose, `not_from_a_fire`);
   - `keywords.signature`;
   - a generic `solid` material entry;
   - `atmosphere_fallback.pressure_published`;
   - `selection.tie_rule`;
   - `confidence.why`;
-  - the role requirement fields `concern, signature`.
+  - the role requirement fields `concern, signature`;
+  - since 1.5.2: `warnings.no_material`, `gate.decisive_is_not_a_veto`, `profiles.detection.scope`, `_about.formula_scope`.
 - `scoring.scorer.rank` and `web/scorer.js`: the same code path (parity 104 of 104). Output fields:
   - `requirements`;
   - `compliance` per result, now `{id, status, basis}`, with the statuses met, documented, near, not_met, unverified and not_scored;
   - `value_basis` per result;
   - `scenario.signature` for detection questions;
-  - `tie_note` with the new wording.
+  - `tie_note` with the new wording;
+  - since 1.5.2, a top-level warning `no_material` when no fuel is named.
 - `data/catalog/investigations.csv`: `data_availability` of PSI-20 to 23 and PSI-106 is `summary_table` (10:05). `data/catalog/reading_order.csv` and `.json` (pm 0035 step 6).
 - `validation/raw_chain_recount.py`, `_report.md`, `.json` and `_netlog.jsonl` (pm 0035 step 7).
 
