@@ -10,11 +10,17 @@
   }
  },
  "summary": {
-  "PASS": 84,
+  "PASS": 85,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 84
+  "checks": 85
  },
+ "notes": [
+  {
+   "id": "T1_catalog_comparison",
+   "note": "22 configuration-variable rows differ between the catalog and the pipeline (12 with the tolerance of rounding to the catalog's printed digits); information for the catalog role, not a failure (catalog_comparison_summary.json)"
+  }
+ ],
  "checks": [
   {
    "id": "A1_trace_source_cells",
@@ -1937,6 +1943,20 @@
    },
    "failures": 0,
    "failing_examples": []
+  },
+  {
+   "id": "T1_catalog_comparison",
+   "verifies": "catalog_comparison.csv and its summary reproduce from data/catalog/configurations.csv and tests.csv: the mapped tests, n, min, max and the states with and without the tolerance per configuration and variable. Differences between the catalog and the pipeline are reported as a NOTE and never fail the check.",
+   "status": "PASS",
+   "numbers": {
+    "configurations": 41,
+    "rows": 164,
+    "differences_exact": 22,
+    "differences_with_tolerance": 12
+   },
+   "failures": 0,
+   "failing_examples": [],
+   "note": "22 configuration-variable rows differ between the catalog and the pipeline (12 with the tolerance of rounding to the catalog's printed digits); information for the catalog role, not a failure (catalog_comparison_summary.json)"
   }
  ]
 }

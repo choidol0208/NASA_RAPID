@@ -6514,6 +6514,188 @@ def check_s4(ctx):
 
 
 # ----------------------------------------------------------------------------
+# T. comparison with the catalog (another role's file; differences are NOTES)
+# ----------------------------------------------------------------------------
+
+T_CATALOG = os.path.join(ROOT, "data", "catalog", "configurations.csv")
+T_STATES = ("equal", "catalog_wider", "catalog_narrower", "overlap_neither_contains", "pipeline_has_no_value",
+            "catalog_has_no_value", "both_have_no_value", "not_comparable")
+T_DIFF = ("catalog_wider", "catalog_narrower", "overlap_neither_contains", "pipeline_has_no_value",
+          "catalog_has_no_value")
+
+
+def t_num(x):
+    try:
+        return float(x)
+    except (TypeError, ValueError):
+        return None
+
+
+def t_family(cid, m):
+    m = m.lower()
+    if cid.startswith("BASS-II"):
+        for key, fam in (("sibal", "sibal"), ("nomex", "nomex"), ("rod", "rod")):
+            if key in m:
+                return fam
+        if "spher" in m or "wax" in m or "candle" in m:
+            return "other"
+        return "film" if ("film" in m or "micron" in m or re.search(r"0\.[1-4] mm", m)) else "slab"
+    if "sibal" in m:
+        return "sibal"
+    if "nomex" in m or "ultem" in m:
+        return "sheet"
+    for key in ("wax", "candle"):
+        if key in m:
+            return "wax"
+    return "sphere" if "sphere" in m else ("skip" if "soot" in m else "slab")
+
+
+T_FAMILY = {"BASS-II-C01": "film", "BASS-II-C02": "slab", "BASS-II-C03": "rod", "BASS-II-C04": "sibal",
+            "BASS-II-C05": "nomex", "BASS-II-C06": "other", "BASS-C01": "sibal", "BASS-C02": "slab",
+            "BASS-C03": "sphere", "BASS-C04": "wax", "BASS-C05": "sheet"}
+
+
+def t_round(text, places):
+    from decimal import Decimal, ROUND_HALF_UP
+    return float(Decimal(text).quantize(Decimal(1).scaleb(-places), rounding=ROUND_HALF_UP))
+
+
+def t_state(c, p):
+    if c == p:
+        return "equal"
+    if c[0] <= p[0] and p[1] <= c[1]:
+        return "catalog_wider"
+    if p[0] <= c[0] and c[1] <= p[1]:
+        return "catalog_narrower"
+    return "overlap_neither_contains"
+
+
+@check("T1_catalog_comparison",
+       "catalog_comparison.csv and its summary reproduce from data/catalog/configurations.csv and tests.csv: the "
+       "mapped tests, n, min, max and the states with and without the tolerance per configuration and variable. "
+       "Differences between the catalog and the pipeline are reported as a NOTE and never fail the check.")
+def check_t1(ctx):
+    res = Result()
+    if not os.path.exists(T_CATALOG):
+        raise Skip("data/catalog/ is absent (another role's folder): nothing to compare")
+    if not ctx.has("catalog_comparison.csv"):
+        raise Skip("catalog_comparison.csv not written (run pipeline/catalog_compare.py)")
+    configs = read_csv(T_CATALOG)
+    unit = {s["file"]: s.get("row_unit", "") for s in ctx.sources}
+    rows = {(r["config_id"], r["variable"]): r for r in ctx.table("catalog_comparison.csv")}
+    seen = 0
+    for c in configs:
+        ref = c["tests_table_ref"].strip()
+        file = ref.split(" (")[0].strip()
+        note = ref[len(file):].strip(" ()")
+        sub = [t for t in ctx.tests if ref and t["source_file"] == file]
+        cid = c["config_id"]
+        if cid in T_FAMILY:
+            sub = [t for t in sub if t_family(cid, t_raw_cell(file, t["source_row"], 5)) == T_FAMILY[cid]]
+        elif note.startswith("Fuel ="):
+            sub = [t for t in sub if note.split("=", 1)[1].strip().lower() in t["fuel_material"].lower()]
+        elif re.fullmatch(r"S\d", note):
+            sub = [t for t in sub if t["test_id"].endswith("-" + note)]
+        elif re.match(r"2-\d", note):
+            ns = [int(n) for n in re.findall(r"2-(\d)", note)]
+            want = set(range(ns[0], ns[-1] + 1)) if " to " in note else set(ns)
+            sub = [t for t in sub if int(t["test_id"].rsplit("-", 1)[1]) in want]
+        gate = (not ref) or (not sub)
+        for var, lo, hi, cols in (("o2_pct", "o2_min_pct", "o2_max_pct", ("o2_pct",)),
+                                  ("pressure_kpa", "pressure_min_kpa", "pressure_max_kpa", ("pressure_kpa",)),
+                                  ("flow_cms", "flow_min_cms", "flow_max_cms", ("flow_cms", "flow_min_cms")),
+                                  ("test_count", None, None, ())):
+            r = rows.get((cid, var))
+            res.checked += 1
+            seen += 1
+            if r is None:
+                res.fail(problem="row missing", config_id=cid, variable=var)
+                continue
+            if int(r["mapped_tests"]) != len(sub) or r["table_row_unit"] != (unit.get(file, "") if ref else ""):
+                res.fail(problem="mapped tests or row unit differ", config_id=cid, variable=var)
+            if var == "test_count":
+                cnt = c["test_count_config"].strip()
+                if gate and (ref or cnt):
+                    want = "not_comparable"
+                elif not cnt:
+                    want = "both_have_no_value" if not sub else "catalog_has_no_value"
+                else:
+                    want = ("equal" if float(cnt) == len(sub) else
+                            "catalog_wider" if float(cnt) > len(sub) else "catalog_narrower")
+                if r["state_exact"] != want or r["state_with_tolerance"] != want:
+                    res.fail(problem="test_count state", config_id=cid, want=want, got=r["state_exact"])
+                continue
+            vals = [(t_num(t[k]), t[k]) for t in sub for k in cols if t_num(t[k]) is not None]
+            n = sum(1 for t in sub if any(t_num(t[k]) is not None for k in cols))
+            pmin, pmax = (min(vals)[1], max(vals)[1]) if vals else ("", "")
+            if (int(r["pipeline_n_recorded"]), r["pipeline_min"], r["pipeline_max"]) != (n, pmin, pmax):
+                res.fail(problem="n, min or max differ", config_id=cid, variable=var)
+            ls, hs = c[lo].strip(), c[hi].strip()
+            basis = sorted({t.get("o2_basis", "") or "(empty)" for t in sub if t_num(t["o2_pct"]) is not None})
+            if gate:
+                want = ("not_comparable",) * 2
+            elif not (ls or hs):
+                want = ("both_have_no_value",) * 2 if not vals else ("catalog_has_no_value",) * 2
+            elif not vals:
+                want = ("pipeline_has_no_value",) * 2
+            elif not (ls and hs) or t_num(ls) is None or t_num(hs) is None:
+                want = ("not_comparable",) * 2
+            elif var == "o2_pct" and basis != [c.get("o2_reference", "").strip() or "(empty)"]:
+                want = ("not_comparable",) * 2
+            else:
+                cat = (float(ls), float(hs))
+                want = (t_state(cat, (min(vals)[0], max(vals)[0])),
+                        t_state(cat, (t_round(pmin, len(ls.split(".")[1]) if "." in ls else 0),
+                                      t_round(pmax, len(hs.split(".")[1]) if "." in hs else 0))))
+            if (r["state_exact"], r["state_with_tolerance"]) != want:
+                res.fail(problem="state differs", config_id=cid, variable=var, want=list(want),
+                         got=[r["state_exact"], r["state_with_tolerance"]])
+    if seen != len(rows):
+        res.fail(problem="rows in the file that no configuration produces", rows=len(rows), expected=seen)
+    summ = ctx.json("catalog_comparison_summary.json")
+    for key in ("state_exact", "state_with_tolerance"):
+        for var, cnts in summ["counts_by_state"][key].items():
+            for st in T_STATES:
+                if cnts.get(st, 0) != sum(1 for r in rows.values() if r["variable"] == var and r[key] == st):
+                    res.fail(problem="summary count differs", key=key, variable=var, state=st)
+        nd = sum(1 for r in rows.values() if r[key] in T_DIFF)
+        if summ["differences"][key] != nd or len(summ["difference_list"][key]) != nd:
+            res.fail(problem="difference count differs", key=key)
+    ex, tol = summ["differences"]["state_exact"], summ["differences"]["state_with_tolerance"]
+    res.numbers = {"configurations": len(configs), "rows": len(rows), "differences_exact": ex,
+                   "differences_with_tolerance": tol}
+    res.note = ("%d configuration-variable rows differ between the catalog and the pipeline (%d with the "
+                "tolerance of rounding to the catalog's printed digits); information for the catalog role, "
+                "not a failure (catalog_comparison_summary.json)" % (ex, tol))
+    return res
+
+
+def t_raw_cell(file, source_row, col):
+    """Cell <col> of the raw table row that starts on line <source_row> (header = line 1)."""
+    cache = T_RAW_LINES.setdefault(file, None)
+    if cache is None:
+        data = read_bytes(os.path.join(RAW, file))
+        for enc in ("utf-8-sig", "cp1252", "latin-1"):
+            try:
+                text = data.decode(enc)
+                break
+            except UnicodeDecodeError:
+                continue
+        rd = csv.reader(io.StringIO(text))
+        next(rd)
+        cache, start = {}, rd.line_num + 1
+        for row in rd:
+            cache[start] = row
+            start = rd.line_num + 1
+        T_RAW_LINES[file] = cache
+    row = cache.get(int(source_row)) if str(source_row).isdigit() else None
+    return row[col] if row and len(row) > col else ""
+
+
+T_RAW_LINES = {}
+
+
+# ----------------------------------------------------------------------------
 # running
 # ----------------------------------------------------------------------------
 
@@ -6539,6 +6721,8 @@ def run_checks(ctx):
             entry["failing_examples"] = res.failures[:MAX_EXAMPLES]
             if res.details:
                 entry["details"] = res.details
+            if getattr(res, "note", None):
+                entry["note"] = res.note
         except Skip as exc:
             entry.update(status="SKIP", numbers={}, failures=0, failing_examples=[], reason=str(exc))
         except Exception as exc:        # a check that cannot run is a failed check
@@ -6550,6 +6734,8 @@ def run_checks(ctx):
             line += " " + entry["reason"]
         else:
             line += " failures=%d %s" % (entry["failures"], compact(entry["numbers"]))
+            if entry.get("note"):
+                line += "\n     NOTE " + entry["note"]
         print(line)
     return report
 
@@ -6574,6 +6760,7 @@ def main():
             "tolerances": {"converted_values": ROUND_TOL, "derived_formulas": DERIVED_TOL, "indicator_statistics": STAT_TOL},
         },
         "summary": dict(counts, checks=len(report)),
+        "notes": [{"id": e["id"], "note": e["note"]} for e in report if e.get("note")],
         "checks": report,
     }
     out = os.path.join(ctx.data_dir, "validation_report.json")
