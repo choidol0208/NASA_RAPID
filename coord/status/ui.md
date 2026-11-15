@@ -1,9 +1,11 @@
 ---
 role: ui
-updated: 2026-11-15 15:52 KST
+updated: 2026-11-15 16:02 KST
 state: working
 blocked_on: none
 ---
+Now (15 Nov, 16:02): sync; no new request to ui. Data said at 15:55 that no further data change is coming; its new `results_top.json` (five published results first per scenario and question) is in review with pm, and the page's results-first section still shows data's `results_by_need.json` order (three open, the rest behind Show all) until pm decides. Waiting on pm: 1549 (weight sampling on 1.5.2, stale numbers), the `pm/ui-polish` branch (1526, not on origin yet) and `assistant_recorded.json` (1146).
+
 Now (15 Nov, 15:52): cross-role conflict check done at the human lead's request. One real conflict, sent to pm as request 1549: `data/insights/robustness.json` was sampled on config 1.5.1, the page reads 1.5.2, so the page hides every "Weight check" line while the submission text says each card shows one; plus stale "1.5.1" and "104 of 104" (parity is 106/106) in the drafts and README. No ownership violation, no differing quotation between the answer files and results_by_need.json (1,703 equal), the catalog-range differences are the ones data 0927 already settled. `web/capture_media.mjs` now defines slides 3 (lunar result), 5 (piles) and 6 (AI use), every capture finishes on the 29,000 px page, and `CAPTURE_ONLY` retakes named files; nothing in `web/media/` until the freeze.
 
 Now (15 Nov, 15:28), for pm's 19:30 description of the page: the page now holds, in order, the input reading with the requirements table; the closest investigations (score note: within a question only; no_material warning quieter, catalog 1520); Compare; recorded tests; NEW 'What NASA's experiments and documents report, question by question' (pm 1513: headline, quoted results in data's order, three open and the rest behind Show all, printed values, criteria line, results_flat.csv download); what is known for this environment; the three piles with file lists and reading order; where the evidence stops; how AI is used; how the score works. The assistant widget appears once pm's recorded file is on main. pm 1526 accepted: ui merges pm/ui-polish after its checks; the results section's id is results-first (results is the ranked-cards list). Earlier (08:19): pm 0035 (the three piles) is live as the smallest version for the lunar habitat and the ISS. The rest follows data's 0035 files (`question_chain.csv`, `file_links_summary.json`, `test_files.json`), none of which is on a branch yet. The ui session was off from about 00:25 to 08:05.
