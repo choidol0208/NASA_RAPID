@@ -56,6 +56,17 @@ html[data-theme="dark"] #assistant, #assistant[data-theme="dark"] {
 #assistant .as-small { font-size: .85rem; color: var(--as-ink-2); }
 #assistant .as-empty { color: var(--as-ink-2); font-size: .95rem; margin: 6px 0; }
 
+/* before a first question: a short section (what the assistant is, the mode line, the example questions) */
+#assistant[data-state="idle"] .as-sub { max-width: 100ch; }
+#assistant[data-state="idle"] .as-mode { margin-bottom: 12px; }
+#assistant[data-state="idle"] { padding-bottom: 16px; }
+/* a request the dashboard shows that this conversation does not cover: one button, no model turn by itself */
+#assistant .as-offer { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 12px; }
+#assistant .as-offer-q { min-width: 0; font-weight: 700; overflow-wrap: anywhere; }
+#assistant .as-offer-q::before { content: "\201C"; }
+#assistant .as-offer-q::after { content: "\201D"; }
+#assistant .as-recmark { margin: -4px 0 8px; }
+
 /* mode notice */
 #assistant .as-mode { font-size: .9rem; padding: 6px 10px; border-radius: 4px; margin: 0 0 14px; background: var(--as-blue-soft); }
 #assistant .as-mode:empty { display: none; }
@@ -63,18 +74,28 @@ html[data-theme="dark"] #assistant, #assistant[data-theme="dark"] {
 
 /* grid: chat and panels */
 #assistant .as-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
-#assistant .as-chat, #assistant .as-panels { min-width: 0; }
+#assistant .as-conv, #assistant .as-chat, #assistant .as-panels { min-width: 0; }
+/* the conversation column: the turns, then the follow-up box (shown once an answer is on screen) */
+#assistant .as-conv { display: flex; flex-direction: column; }
 @media (min-width: 900px) {
   #assistant .as-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
-  #assistant .as-chat { max-height: min(78vh, 920px); overflow-y: auto; padding-right: 6px; overscroll-behavior: contain; }
   #assistant .as-panels { position: sticky; top: 12px; max-height: min(78vh, 920px); overflow-y: auto; overscroll-behavior: contain; }
 }
 #assistant .as-panels { background: var(--as-card); border: 1px solid var(--as-rule); border-radius: 6px; padding: 12px 14px; }
+/* in one column the panels scroll in their own box, so the dashboard stays within reach under the answer */
+@media (max-width: 899px) { #assistant .as-panels { max-height: 72vh; overflow-y: auto; } }
 
 /* a turn */
 #assistant .as-turn { padding: 0 0 14px; margin: 0 0 14px; border-bottom: 1px dashed var(--as-rule); }
 #assistant .as-turn:last-child { border-bottom: 0; }
 #assistant .as-turn.as-current .as-user { box-shadow: inset 3px 0 0 var(--as-blue); }
+/* an earlier turn folds to its question; a click opens it again */
+#assistant .as-turn.as-old > .as-user { cursor: pointer; }
+#assistant .as-turn.as-old > .as-user::after { content: "\25BE"; margin-left: 8px; opacity: .8; }
+#assistant .as-turn.as-folded > .as-user::after { content: "\25B8"; }
+#assistant .as-turn.as-folded > :not(.as-user) { display: none; }
+#assistant .as-turn.as-folded { padding-bottom: 0; margin-bottom: 8px; border-bottom: 0; }
+#assistant .as-turn.as-folded > .as-user { margin-bottom: 0; opacity: .85; }
 #assistant .as-user { background: var(--as-ink); color: var(--as-paper); padding: 8px 12px; border-radius: 12px 12px 2px 12px;
   margin: 0 0 8px auto; max-width: 92%; width: fit-content; white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (prefers-color-scheme: dark) { #assistant:not([data-theme="light"]) .as-user { background: #2b3747; color: var(--as-ink); } }
@@ -85,6 +106,7 @@ html[data-theme="dark"] #assistant .as-user { background: #2b3747; color: var(--
 #assistant .as-step-label { font-weight: 700; color: var(--as-ink); white-space: nowrap; }
 #assistant .as-step-sum { min-width: 0; overflow-wrap: anywhere; }
 #assistant .as-ms { color: var(--as-ink-2); font-size: .92em; opacity: .85; }
+#assistant .as-wait { margin: 0 0 8px; padding: 6px 10px; border-left: 3px solid var(--as-amber-mark); font-size: .88rem; color: var(--as-ink-2); }
 #assistant .as-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; background: var(--as-grey); transform: translateY(-1px); }
 #assistant .as-done .as-dot { background: var(--as-blue); }
 #assistant .as-run .as-dot { background: var(--as-amber-mark); animation: as-pulse 1s ease-in-out infinite; }
@@ -164,15 +186,18 @@ html[data-theme="dark"] #assistant .as-user { background: #2b3747; color: var(--
 #assistant .as-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
 #assistant .as-follow { margin: 8px 0 0; }
 
-/* input */
-#assistant .as-form { display: flex; gap: 8px; align-items: stretch; margin: 16px 0 10px; }
-#assistant .as-form textarea { flex: 1; min-width: 0; resize: vertical; min-height: 52px; padding: 10px 12px; border: 2px solid var(--as-ink);
-  border-radius: 6px; background: var(--as-card); color: var(--as-ink); }
-#assistant .as-send { flex: none; padding: 0 22px; border: 0; border-radius: 6px; background: var(--as-blue); color: #fff; font-weight: 700; cursor: pointer; min-height: 44px; }
+/* the follow-up box: the last part of the conversation column */
+#assistant .as-form { display: flex; gap: 8px; align-items: stretch; margin: 0; padding: 12px 0 0; border-top: 1px solid var(--as-rule); }
+#assistant .as-form textarea { flex: 1; min-width: 0; resize: vertical; min-height: 44px; padding: 9px 12px; border: 1px solid var(--as-ink-2);
+  border-radius: 6px; background: var(--as-card); color: var(--as-ink); line-height: 1.4; }
+#assistant .as-form textarea:focus { border-color: var(--as-blue); }
+#assistant .as-send { flex: none; padding: 0 20px; border: 0; border-radius: 6px; background: var(--as-blue); color: #fff; font-weight: 700; cursor: pointer; min-height: 44px; }
 @media (prefers-color-scheme: dark) { #assistant:not([data-theme="light"]) .as-send { color: #0d1320; } }
 html[data-theme="dark"] #assistant .as-send { color: #0d1320; }
 #assistant .as-send[disabled] { opacity: .7; cursor: progress; }
 #assistant .as-examples { margin: 6px 0 4px; }
+#assistant[data-state="talk"] .as-examples { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--as-rule); }
+#assistant .as-turn:last-child { margin-bottom: 0; }
 
 /* panels */
 #assistant .as-panels-for { font-size: .84rem; color: var(--as-ink-2); margin: -2px 0 10px; overflow-wrap: anywhere; }
@@ -235,8 +260,11 @@ html[data-theme="dark"] #assistant .as-send { color: #0d1320; }
 @media (max-width: 600px) {
   #assistant { padding: 16px 12px 14px; margin: 20px 0 28px; }
   #assistant h2#as-title { font-size: 1.45rem; }
-  #assistant .as-form { flex-direction: column; }
-  #assistant .as-send { min-height: 44px; }
+  #assistant .as-send { min-height: 44px; padding: 0 16px; }
   #assistant .as-user { max-width: 100%; }
 }
 #assistant .as-sent-code { font-style: italic; }
+
+/* A visible tag on a team-code sentence inside a model answer (added after the grounding audit of 15 Nov). */
+.as-code-tag { display: inline-block; margin: 0 0.25em; padding: 0 0.35em; border: 1px solid currentColor; border-radius: 3px;
+  font-size: 0.75em; font-style: normal; opacity: 0.75; vertical-align: 0.1em; }

@@ -50,7 +50,9 @@ def all_calls():
               ("equipment_research", {"kind": "suppression"}), ("earth_applications", {}),
               ("search_records", {"keywords": ["smoke", "detector"]}), ("criteria", {"questions": ["P1", "D1"]}),
               ("files_of_test", {"test_id": "FLEX-21"}), ("investigation_card", {"accession": "PSI-25"}),
-              ("explain", {"term": "counted test"}), ("explain", {"term": "inverse flame"})]
+              ("explain", {"term": "counted test"}), ("explain", {"term": "inverse flame"}),
+              ("published_results", {"env": env("lunar_habitat"), "questions": ["P3"]}),
+              ("published_results", {"env": env("iss"), "questions": []})]
     return calls
 
 
@@ -196,7 +198,9 @@ class RecountTest(unittest.TestCase):
     def test_modelling(self):
         mr = json.loads((ROOT / "data/insights/model_readiness.json").read_text())
         out = tools.run_tool("modelling_data", {"questions": ["S1"]}, D)
-        self.assertEqual(out["facts"][0]["text"], mr["fixed_line"])
+        # the fixed line is said with what 'none' counts (changed after the clean-clone check of 15 Nov)
+        self.assertTrue(out["facts"][0]["text"].endswith(mr["fixed_line"][len("None is "):]))
+        self.assertFalse(out["facts"][0]["text"].startswith("None is "))
         n = sum(1 for r in rows("data/pipeline/need_tests.csv") if r["need_id"] == "S1" and r["objective_link"] == "stated")
         self.assertTrue(any(f["text"].startswith(f"Extinction conditions (S1): {n} counted tests") for f in out["facts"]))
         self.assertEqual(out["panels"][1]["download"]["total_rows"], n)
@@ -219,6 +223,104 @@ class RecountTest(unittest.TestCase):
         out = tools.run_tool("explain", {"term": "counted test"}, D)
         self.assertTrue(meta["reading_rule"].startswith(out["facts"][0]["text"][:40]))
         self.assertEqual(tools.run_tool("explain", {"term": "flux capacitor"}, D)["facts"], [])
+
+
+class PublishedResultsTest(unittest.TestCase):
+    """published_results (added 15 November) against data/pipeline/results_by_need.json, read here directly."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.doc = json.loads((ROOT / "data/pipeline/results_by_need.json").read_text(encoding="utf-8"))
+        cls.blocks = {n["block_id"]: n for s in cls.doc["scenarios"] for n in s["needs"]}
+
+    def expected(self, sid, q, per_q=4):
+        """The file's own order: the entries in the three groups that carry a quote, then (if fewer than 2) those
+        tagged for all questions."""
+        groups = ("at_environment", "about_a_stated_condition", "stated_without_these_conditions")
+        f = self.blocks[f"{sid}__{q}"]["found"]
+        out = []
+        for part in ("entries", "entries_tagged_for_all_questions"):
+            if part != "entries" and len(out) >= 2:
+                break
+            out += [e["finding_id"] for e in f[part] if e["group"] in groups
+                    and self.doc["findings"][e["finding_id"]].get("quote")][:per_q - len(out)]
+        return out
+
+    def run_one(self, sid, q):
+        out = tools.run([{"tool": "published_results", "args": {"env": env(sid), "questions": [q]}, "why": ""}], D)
+        return out, [f for f in out["facts"] if f["kind"] == "published_result"]
+
+    def test_quotes_order_and_counts(self):
+        for sid, q in (("lunar_habitat", "P1"), ("lunar_habitat", "P3"), ("lunar_habitat", "S1"), ("iss", "D2")):
+            with self.subTest(block=f"{sid}__{q}"):
+                out, qf = self.run_one(sid, q)
+                self.assertTrue(qf)
+                ids = [f["ref"].rsplit("/", 1)[1] for f in qf]
+                self.assertEqual(ids, self.expected(sid, q))
+                for f, fid in zip(qf, ids):
+                    self.assertIn('"' + self.doc["findings"][fid]["quote"] + '"', f["text"])
+                    self.assertTrue(f["quote"])
+                b = self.blocks[f"{sid}__{q}"]
+                ents = b["found"]["entries"]
+                cnt = next(f for f in out["facts"] if f["kind"] == "count")
+                g = Counter(e["group"] for e in ents)
+                n_vals = sum(1 for e in ents if e["n_printed_values"] > 0)
+                for n in (len(ents), n_vals, g["at_environment"], g["about_a_stated_condition"],
+                          g["stated_without_these_conditions"]):
+                    self.assertIn(n, [int(x["value"]) for x in cnt["numbers"]])
+                self.assertTrue(cnt["text"].startswith(f"Question {q}, "))
+                self.assertIn(f"{len(ents)} quoted results", cnt["text"])
+                self.assertIn(f"and {n_vals} of them carry printed values", cnt["text"])
+                rows = out["panels"][0]["rows"]
+                self.assertEqual([r["finding_id"] for r in rows], ids)
+                for r in rows:
+                    held = self.doc["findings"][r["finding_id"]]["printed_values"]
+                    self.assertEqual([(x["value"], x["unit"]) for x in r["printed_values"]],
+                                     [(x["value_as_printed"], x["unit"]) for x in held])
+                self.assertEqual(out["panels"][0]["type"], "quotes")
+                self.assertIn("results_flat.csv", out["panels"][0]["note"])
+
+    def test_kind_and_relation_said(self):
+        """A result labelled simulation, computed or preliminary, or one whose experiment is not a PSI investigation,
+        says so in its fact (one run per scenario and question)."""
+        labels = self.doc["_meta"]["result_kind"]["labels"]
+        kinds, rels = Counter(), 0
+        for s in self.doc["scenarios"]:
+            for n in s["needs"]:
+                out = tools.run_tool("published_results", {"env": {"scenario_id": s["id"], "label": s["label"]},
+                                                           "questions": [n["need_id"]]}, D)
+                by_ref = {f["ref"]: f for f in out["facts"]}
+                for e in n["found"]["entries"] + n["found"]["entries_tagged_for_all_questions"]:
+                    f = by_ref.get(f"results_by_need.json#{n['block_id']}/{e['finding_id']}")
+                    if not f:
+                        continue
+                    if e.get("result_kind") in labels:
+                        self.assertTrue(f["text"].startswith(labels[e["result_kind"]]), f["text"])
+                        kinds[e["result_kind"]] += 1
+                    else:
+                        self.assertFalse(any(f["text"].startswith(x) for x in labels.values()), f["text"])
+                    if e.get("relation"):
+                        self.assertIn(f"({e['relation']})", f["text"])
+                        rels += 1
+        self.assertGreater(kinds["simulation"], 0)   # iss P2 picks a numerical simulation
+        self.assertGreater(rels, 0)
+
+    def test_limits_per_turn(self):
+        out = tools.run([{"tool": "published_results", "args": {"env": env("iss"), "questions": []}, "why": ""}], D)
+        self.assertLessEqual(len([f for f in out["facts"] if f["kind"] == "published_result"]), tools.RESULTS_PER_TURN)
+        self.assertEqual(tools.run_tool("published_results", {"env": CELL}, D)["notes"], ["missing argument env.scenario_id"])
+
+    def test_plan_and_writer_cap(self):
+        from ai.assistant import plan as PL
+        req = {"intent": "question_evidence", "environment": env("lunar_habitat"), "questions": ["P3"],
+               "item": {"material": None, "fuel_phase": None}, "investigations": [], "tests": []}
+        steps, dropped = PL.plan(req, V)
+        names = [s["tool"] for s in steps]
+        self.assertEqual(names[names.index("counts_per_question") + 1], "published_results")
+        out = tools.run(steps, D)
+        wf = tools.writer_facts(out["facts"])
+        self.assertTrue(any(f["tool"] == "published_results" and f["kind"] == "published_result" for f in wf))
+        self.assertTrue(all(f in wf for f in out["facts"] if f["tool"] == "counts_per_question"))
 
 
 if __name__ == "__main__":

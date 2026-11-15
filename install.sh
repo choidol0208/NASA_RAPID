@@ -78,7 +78,7 @@ PROBE="$STORE"; while [ ! -d "$PROBE" ] && [ "$PROBE" != "/" ]; do PROBE=$(dirna
 FREE_KB=$(df -Pk "$PROBE" | awk 'NR==2 {print $4}')
 FREE_GB=$(( FREE_KB / 1048576 ))
 say "  free disk where Ollama keeps models ($STORE): ${FREE_GB} GB"
-say "  the repository itself takes under 100 MB; the built page under 5 MB"
+say "  the repository itself takes under 100 MB; the built page about 6 MB"
 
 # ---------------------------------------------------------------- 3. Ollama
 ollama_up() {

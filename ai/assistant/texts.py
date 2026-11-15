@@ -80,6 +80,7 @@ ASSUME_CONFLICT_RULES = "Read as {a} (the readings differed; the rule parser's r
 ASSUME_CONFLICT_MODEL = "Read as {a} (the readings differed; the first model reading is used)."
 ASSUME_CELL = ("Counts use the cell of the team's coverage grid that holds your oxygen and pressure, because "
                "they lie outside the ranges of the {preset} preset.")
+ASSUME_COMPARE_ONLY = "Looked up {label} only; ask again for {others}."
 ASSUME_NAMES = "Investigations: {names} all match the name {name}."
 ASSUME_UNGROUNDED = "Left out: {field} {value}, because the message does not state it."
 
@@ -103,6 +104,12 @@ NOTICES = {
              "NASA's recorded tests and documents in the team's files and answer with their sources."),
     "fallback": ("The language model's sentences did not pass the checks, so this answer is put together by team "
                  "code from the facts."),
+    # separate texts by the reason of the fallback (added after the red-team run of 15 Nov: the one text above was
+    # also shown when the model's reply was not in the required form, which said something untrue)
+    "fallback_write": ("The language model's reply was missing or not in the required form, so this answer is put "
+                       "together by team code from the facts."),
+    "fallback_check": ("The model checker's reply was missing or not in the required form, so the model's sentences "
+                       "are not shown and this answer is put together by team code from the facts."),
     "no_model": "No language model ran for this answer: it is put together by team code from the facts.",
 }
 
@@ -138,18 +145,20 @@ SUMMARY = {
     "check": "{written} sentences written, {removed} removed by the checks, {repaired} repaired.",
     "check_model": " Model check: {yes} of {checked} supported.",
     "check_none": "No model sentences to check.",
-    "check_skipped": " No model check: the last model call went to the repair; the code checks still ran.",
+    "check_skipped": " No model check was possible, so no model sentence is shown.",
     "deliver": "Done in {seconds} s with {calls} model calls.",
     "clarify": "One question before looking anything up.",
 }
 
 ANSWER_LABELS = {
-    "model": ("Written by a local language model (gpt-oss:20b) from the facts shown, and checked by code. A research "
-              "exploration tool, not safety guidance."),
+    "model": ("Written by a local language model (gpt-oss:20b) from the facts shown; every sentence shown passed the "
+              "code checks and a second model check. No person reviewed this answer. A research exploration tool, "
+              "not safety guidance."),
     "template": ("Put together by team code from the facts shown; no language model wrote it. A research "
                  "exploration tool, not safety guidance."),
     "recorded": ("Recorded on {date} with the local language model (gpt-oss:20b) and replayed here; no model runs "
-                 "on this page. A research exploration tool, not safety guidance."),
+                 "on this page. Every model sentence shown passed the code checks and a second model check when it "
+                 "was recorded. No person reviewed these answers. A research exploration tool, not safety guidance."),
 }
 
 # ---------------------------------------------------------------- tools (7)
@@ -164,6 +173,7 @@ TOOL_LABELS = {
     "earth_applications": "what the records say about Earth",
     "search_records": "a keyword search of the NASA record sentences",
     "criteria": "criteria in NASA documents",
+    "published_results": "results quoted from NASA's documents for this question",
     "files_of_test": "the raw files of a test",
     "investigation_card": "the investigation's record",
     "explain": "definitions from the team's specifications",
@@ -187,6 +197,12 @@ LIMITS = {
     "search_records": ("A keyword search over the {n} numbered sentences of the {k} PSI records; a sentence that "
                        "does not use these words is not found."),
     "criteria": "Criteria are quoted from the documents listed; this tool does not apply them to your design.",
+    # published_results (added 15 November, after the question set was frozen)
+    "published_results": ("These are quotations of NASA documents and of the investigators' papers. The order is "
+                          "the team's fixed rule by the conditions each statement gives, with no weights; the team compares nothing with a "
+                          "criterion and computes nothing from these values."),
+    "published_results_panel": ("{limit} A research exploration tool, not safety guidance. Every quoted result and printed value can be filtered in "
+                                "data/pipeline/results_flat.csv: {url}"),
     "files_of_test": ("A file that names a test is not known to hold a given quantity; no file was opened for this "
                       "list."),
 }
@@ -203,9 +219,11 @@ T = {
                  "{lo} to {hi}%{your}."),
     "range_o2_none": "{phase} in the team's tables: oxygen of the surrounding atmosphere recorded for {k} of {n}{your}.",
     "range_o2_your": "; your {value}% is {position}",
+    "range_o2_preset": "; the preset's {value}% is {position}",
     "range_p": "{phase}: pressure recorded for {k} of {n}{span}{your}.",
     "range_p_span": ", from {lo} to {hi} kPa",
     "range_p_your": "; your {value} kPa is {position}",
+    "range_p_preset": "; the preset's {value} kPa is {position}",
     "range_stream": ("{m} {phase_lower} record the oxygen of an oxidizer stream (an inverse flame), not of a "
                      "surrounding atmosphere; they are left out of the oxygen span."),
     # where_the_data_are (gap states)
@@ -234,11 +252,20 @@ T = {
     # criteria
     "criterion_quote": "{ref}, {where}: \"{quote}\"",
     "criterion_text": "{ref}, {where}, as the team's reference list states it: {text}",
+    # published_results (added 15 November)
+    "result_quote": "{kind}{doc}, {where}{relation}: \"{quote}\" The team's group for {env}: {group}.",
+    "result_relation": " ({relation})",
+    "result_counts": ("Question {nid}, {env}: {n} quoted results of NASA's documents are tagged for this question "
+                      "and {v} of them carry printed values; by the team's grouping, {a} state oxygen and pressure "
+                      "inside this environment's ranges, {b} state one of its conditions inside and none outside, "
+                      "and {c} state none of these conditions."),
+    "result_none": "Question {nid}, {env}: no quoted result of NASA's documents in the team's file is in these groups.",
     # files_of_test
     "files_level": ("{files} files ({size}) carry the identifier or the test number of {test} in their name, at "
                     "the level '{level}'."),
     "files_kinds": "By kind: {kinds}.",
-    "files_none": "No file of the PSI listing carries the identifier or the test number of {test} in its name.",
+    "files_none": ("No file of the PSI listing (listing of 14 November 2026) carries the identifier or the test "
+                   "number of {test} in its name."),
     # investigation_card
     "card": "{name} ({acc}): {title}; platform {platform}; operations {period}; {tests} tests listed in the catalog{ai}.",
     "card_no_tests": "{name} ({acc}): {title}; platform {platform}; operations {period}; no test count in the catalog{ai}.",
@@ -272,7 +299,7 @@ FOLLOWUPS = {
     "modelling_data": ["Where are the raw data of the extinction tests?",
                        "What does the readiness verdict mean?"],
     "equipment_research": ["Which recorded tests hold combustion products?",
-                           "What do NASA documents state as criteria for smoke detection?"],
+                           "Which recorded tests hold extinction conditions?"],
     "earth_applications": ["Which NASA investigations study smoke detection?",
                            "Which data could support a model of flame extinction?"],
     "explain": ["Which NASA investigations are closest to a lunar habitat?",

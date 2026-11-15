@@ -34,7 +34,7 @@ DATA_FILES = (
     "data/pipeline/atmosphere_cells.csv", "data/pipeline/need_gap_states.csv", "data/pipeline/retrieval_queue.csv",
     "data/pipeline/test_files.csv", "data/pipeline/raw_file_groups.csv", "data/pipeline/findings.csv",
     "data/pipeline/need_references.csv", "data/insights/model_readiness.json", "data/insights/evidence.json",
-    "data/insights/cards.json",
+    "data/insights/cards.json", "data/pipeline/results_by_need.json",
 )
 
 
@@ -467,6 +467,15 @@ def _position(v, vals):
     return texts.POSITION["within"]
 
 
+def _bar_text(nb):
+    """'... solid fuels: cannot be placed from the tables 237 | outside by a recorded value 139.' is the page's bar
+    label; said as a sentence, each count comes before its words (changed after the clean-clone check of 15 Nov)."""
+    bar, segs = nb.get("bar") or "", nb.get("segments") or []
+    if not segs or ":" not in bar or not all(isinstance(x.get("n"), int) and x.get("label") for x in segs):
+        return bar
+    return bar.split(":", 1)[0] + ": " + "; ".join(f"{x['n']} {x['label']}" for x in segs) + "."
+
+
 def tested_range(args, data):
     env = args.get("env") or {}
     T = "tested_range"
@@ -479,7 +488,9 @@ def tested_range(args, data):
     for ph in phases:
         st = _range_stats(data, ph)
         pw = texts.PHASE_WORDS[ph]
-        your = texts.T["range_o2_your"].format(value=_g(o2v), position=_position(o2v, st["o2"])) if o2v is not None else ""
+        pre = args.get("preset_values") or []
+        your = texts.T["range_o2_preset" if "o2" in pre else "range_o2_your"].format(
+            value=_g(o2v), position=_position(o2v, st["o2"])) if o2v is not None else ""
         if st["o2"]:
             t = texts.T["range_o2"].format(phase=pw, k=len(st["o2"]), n=st["n"], lo=_rd(min(st["o2"])),
                                            hi=_rd(max(st["o2"])), your=your)
@@ -488,7 +499,8 @@ def tested_range(args, data):
         F.append(fact(T, "range", t, ref=f"tests.csv#o2_pct/{ph}", file=src, key=f"o2_pct, fuel_phase={ph}, o2_basis=ambient",
                       link=link, lead=leads < 2))
         leads += 1
-        yp = texts.T["range_p_your"].format(value=_g(pv), position=_position(pv, st["p"])) if pv is not None else ""
+        yp = texts.T["range_p_preset" if "p" in pre else "range_p_your"].format(
+            value=_g(pv), position=_position(pv, st["p"])) if pv is not None else ""
         span = texts.T["range_p_span"].format(lo=_rd(min(st["p"])), hi=_rd(max(st["p"]))) if st["p"] else ""
         F.append(fact(T, "range", texts.T["range_p"].format(phase=pw, k=len(st["p"]), n=st["n"], span=span, your=yp),
                       ref=f"tests.csv#pressure_kpa/{ph}", file=src, key=f"pressure_kpa, fuel_phase={ph}", link=link,
@@ -597,14 +609,14 @@ def where_the_data_are(args, data):
             if nb["id"] not in qs:
                 continue
             ctx = f"{label}; {nb['name']} ({nb['id']})"
-            F.append(fact(T, "pile", nb["bar"], ref=f"piles/{sid}.json#{nb['id']}/bar", file=rel,
+            F.append(fact(T, "pile", _bar_text(nb), ref=f"piles/{sid}.json#{nb['id']}/bar", file=rel,
                           key=f"needs[{nb['id']}].bar", context=ctx, link=link, lead=leads < 2))
             leads += 1
             for k in ("pile1", "pile2", "shelf", "pile3"):
                 for j, line in enumerate(nb.get(k) or []):
                     F.append(fact(T, "pile", line, ref=f"piles/{sid}.json#{nb['id']}/{k}/{j}", file=rel,
                                   key=f"needs[{nb['id']}].{k}[{j}]", context=ctx, link=link, invs=_accs_in(line)))
-            rows.append({"question": nb["id"], "bar": nb["bar"], "tables": (nb.get("pile1") or []) + (nb.get("shelf") or []),
+            rows.append({"question": nb["id"], "bar": _bar_text(nb), "tables": (nb.get("pile1") or []) + (nb.get("shelf") or []),
                          "archive": nb.get("pile2") or [], "no_record": nb.get("pile3") or []})
         for i, s in enumerate(doc["small_print"]):
             F.append(fact(T, "limit", s, ref=f"piles/{sid}.json#small_print/{i}", file=rel, key=f"small_print[{i}]",
@@ -735,7 +747,13 @@ def modelling_data(args, data):
     rel = "data/insights/model_readiness.json"
     mr = data.json(rel)
     link = data.link(rel)
-    F = [fact(T, "readiness", mr["fixed_line"], ref="model_readiness.json#fixed_line", file=rel, key="fixed_line",
+    # the fixed line 'None is a cabin-material flammability model.' does not stand alone as a lead sentence (a
+    # judge read it as a leaked Python None): it is said with what 'none' counts (changed after the clean-clone
+    # check of 15 Nov)
+    fl = mr["fixed_line"]
+    if fl.startswith("None is "):
+        fl = f"None of the team's {len(mr['rows'])} statistical diagnostics on NASA PSI tables is " + fl[len("None is "):]
+    F = [fact(T, "readiness", fl, ref="model_readiness.json#fixed_line", file=rel, key="fixed_line",
               link=link, lead=True),
          fact(T, "limit", mr["labels_and_limits"], ref="model_readiness.json#labels_and_limits", file=rel,
               key="labels_and_limits", link=link, limit=True)]
@@ -976,6 +994,104 @@ def criteria(args, data):
     return _out(F, P)
 
 
+# ---------------------------------------------------------------- 7.10a published_results (added 15 November)
+RESULTS_FILE = "data/pipeline/results_by_need.json"
+RESULT_GROUPS = ("at_environment", "about_a_stated_condition", "stated_without_these_conditions")  # not other_conditions
+RESULTS_PER_QUESTION, RESULTS_PER_TURN = 4, 6
+
+
+def _printed(pv):
+    """One printed value as the file holds it: quantity (with column and row label), value as printed, unit."""
+    q = " ".join(x for x in (pv.get("quantity") or pv.get("path") or "", pv.get("column") or "") if x).replace("_", " ")
+    lbl = pv.get("material_as_printed") or pv.get("row_label") or ""
+    return {"quantity": q + (f" ({lbl})" if lbl else ""), "value": pv.get("value_as_printed"), "unit": pv.get("unit")}
+
+
+def _item_invs(doc, item_id):
+    inv = (doc["items"].get(item_id) or {}).get("investigation")
+    inv = [inv] if isinstance(inv, str) else inv or []
+    return [a for a in inv if isinstance(a, str)]
+
+
+def published_results(args, data):
+    """Quoted results of NASA's experiments for the environment's scenario and the questions, in the order of
+    data/pipeline/results_by_need.json (the data role's fixed rule; DESIGN.md 7.10a)."""
+    e = args.get("env") or {}
+    sid = e.get("scenario_id")
+    if not sid:
+        return missing("env.scenario_id")
+    T = "published_results"
+    doc = data.json(RESULTS_FILE)
+    meta = doc["_meta"]
+    glabel = {g["id"]: g["label"] for g in meta["order_rule"]["groups"]}
+    klabel = meta["result_kind"]["labels"]
+    blocks = {n["block_id"]: n for s in doc["scenarios"] for n in s["needs"]}
+    scen = next((s for s in doc["scenarios"] if s["id"] == sid), None)
+    if scen is None:
+        return _out([], notes=[f"published_results: no scenario {sid} in {RESULTS_FILE}"])
+    qs = [q for q in (args.get("questions") or []) if f"{sid}__{q}" in blocks] or [n["need_id"] for n in scen["needs"]]
+    per_q = min(RESULTS_PER_QUESTION, max(1, math.ceil(RESULTS_PER_TURN / len(qs))))
+    envl = e.get("label") or scen["label"]
+    F, rows, seen = [], [], set()
+    link_flat = data.link("data/pipeline/results_flat.csv")
+    for q in qs:
+        b = blocks[f"{sid}__{q}"]
+        bid = b["block_id"]
+        h = b["headline"]["fields"]
+        ctx = f"{b['need']} ({q})"
+        F.append(fact(T, "count", texts.T["result_counts"].format(nid=q, env=envl, n=h["n_tagged"],
+                      v=h["n_with_values"], a=h["n_at"], b=h["n_about"], c=h["n_without"]),
+                      ref=f"results_by_need.json#{bid}/headline", file=RESULTS_FILE, key=f"{bid}.headline.fields",
+                      context=ctx,
+                      link=data.link(RESULTS_FILE), lead=not F, what="a count of quoted results (team's computation)"))
+        found = b["found"]
+        picked = []
+        for part in ("entries", "entries_tagged_for_all_questions"):
+            if part == "entries_tagged_for_all_questions" and len(picked) >= 2:
+                break
+            for i, en in enumerate(found.get(part) or []):
+                if len(picked) >= per_q or len(seen) >= RESULTS_PER_TURN:
+                    break
+                if en["group"] not in RESULT_GROUPS or en["finding_id"] in seen \
+                        or not doc["findings"][en["finding_id"]].get("quote"):  # a result held without a quote is left out
+                    continue
+                seen.add(en["finding_id"])
+                picked.append((part, i, en))
+        for part, i, en in picked:
+            fd = doc["findings"][en["finding_id"]]
+            src = en["source"]
+            kind = en.get("result_kind")
+            rel = en.get("relation")
+            text = texts.T["result_quote"].format(
+                kind=(klabel[kind] + " ") if kind in klabel else "", doc=src["document_id"], where=src["where"],
+                relation=texts.T["result_relation"].format(relation=rel) if rel else "", quote=fd["quote"],
+                env=envl, group=glabel[en["group"]][:1].lower() + glabel[en["group"]][1:])
+            F.append(fact(T, "published_result", text, ref=f"results_by_need.json#{bid}/{en['finding_id']}",
+                          file=RESULTS_FILE, key=f"{bid}.found.{part}[{i}]", context=ctx,
+                          link=src.get("url") or data.link(RESULTS_FILE), quote=True,
+                          invs=_item_invs(doc, en["item_id"]), what="a value in the quoted result"))
+            pv = [_printed(x) for x in fd.get("printed_values") or []]
+            rows.append({"question": q, "investigation": f"{src['document_id']}: {src['title']}", "field": src["where"],
+                         "sentence": fd["quote"], "kind": klabel.get(kind, "").rstrip(":") or (kind or "not labelled"),
+                         "relation": rel, "group": glabel[en["group"]],
+                         "values": [f"{x['quantity']}: {x['value']}" + (f" {x['unit']}" if x["unit"] and not str(
+                             x["value"]).endswith(x["unit"]) else "") for x in pv],
+                         "printed_values": pv, "finding_id": en["finding_id"],
+                         "record": {"text": src["document_id"], "href": src["url"]} if src.get("url") else None})
+        if not picked:
+            F.append(fact(T, "count", texts.T["result_none"].format(nid=q, env=envl),
+                          ref=f"results_by_need.json#{bid}/none", file=RESULTS_FILE, key=f"{bid}.found", context=ctx,
+                          link=data.link(RESULTS_FILE)))
+    F.append(fact(T, "limit", texts.LIMITS[T], ref="texts#published_results_limit", file="ai/assistant/texts.py",
+                  key="LIMITS.published_results", link=data.link("ai/assistant/texts.py"), limit=True))
+    P = [panel("quotes", "What NASA's documents report for this question (quoted)",
+               [col("question", "question"), col("investigation", "document"), col("field", "place"),
+                col("sentence", "quote"), col("values", "printed values", "list"), col("kind", "kind of result"),
+                col("relation", "experiment"), col("group", "team's group"), col("record", "source", "link")],
+               rows, note=texts.LIMITS["published_results_panel"].format(limit=texts.LIMITS[T], url=link_flat))]
+    return _out(F, P)
+
+
 # ---------------------------------------------------------------- 7.11 files_of_test
 def files_of_test(args, data):
     tid = data.vocab["test_ids"].get(str(args.get("test_id") or "").lower())
@@ -1039,7 +1155,10 @@ def investigation_card(args, data):
     cards = {c["investigation_id"]: c for c in data.json("data/insights/cards.json")}
     for i, kp in enumerate((cards.get(acc) or {}).get("key_points") or []):
         F.append(fact(T, "card", kp["text"], ref=f"cards.json#{acc}/key_points/{i}", file="data/insights/cards.json",
-                      key=f"[{acc}].key_points[{i}]", link=data.psi_url(acc), quote=True, invs=[acc]))
+                      key=f"[{acc}].key_points[{i}]", link=data.psi_url(acc), quote=True, invs=[acc],
+                      # the record field the key point quotes ('PSI-10.hypothesis'), so the aim/hypothesis frame
+                      # check applies to it as to a record sentence (added after the grounding audit of 15 Nov)
+                      field=(str(kp.get("source") or "").split(".", 1)[1:] or [None])[0]))
     rows = [{"name": k, "value": v} for k, v in (("investigation", r["investigation_name"]), ("accession", acc),
             ("platform", r["platform"]), ("operations", r["operation_period"]), ("tests in catalog", r["test_count"]),
             ("fire-safety role", r["fire_safety_role"]), ("research focus", r["research_focus"]),
@@ -1134,6 +1253,7 @@ TOOLS = OrderedDict([
     ("earth_applications", (earth_applications, ["data/insights/evidence.json"])),
     ("search_records", (search_records, ["data/insights/evidence.json"])),
     ("criteria", (criteria, ["data/pipeline/findings.csv", "data/pipeline/need_references.csv"])),
+    ("published_results", (published_results, ["data/pipeline/results_by_need.json"])),  # added 15 November
     ("files_of_test", (files_of_test, ["data/pipeline/test_files.csv", "data/pipeline/raw_file_groups.csv"])),
     ("investigation_card", (investigation_card, ["data/insights/cards.json", "data/catalog/investigations.csv",
                                                  "data/insights/evidence.json"])),
