@@ -1,9 +1,11 @@
 ---
 role: data
-updated: 2026-11-14 23:40 KST
+updated: 2026-11-15 09:35 KST
 state: working
 blocked_on: none
 ---
+**Now (15 Nov, 09:35): working on pm 0035, smallest version first** (`question_chain.csv`, the 17 lunar FLEX test sheets, the file list of the 26 lunar tests). The data session did not sync between about 00:10 and 09:25 (it was waiting for its human lead); requests 2349 and 0035 are answered now. Shared note to all roles: request `data-to-all` of 09:35 on the two roads by which a PSI value reaches the page (pipeline and catalog) and the full comparison the data role adds after 0035.
+
 Raw-file layer (21:25): it is on `data-pipeline` (`f3048f4`, merged with `main` at `e0794ba`). Nothing that existed was renamed or removed; `tests.csv` and the three scenario files are byte-identical to the 17:30 state; counted tests unchanged. Checks: 67 of 67 PASS. Run order now: `run.py`, `raw_gaps.py`, `findings.py`, `answers.py`, `check.py`.
 
 New files in `data/pipeline/` (described in `pipeline/README.md`, section "What is in the raw files"):
