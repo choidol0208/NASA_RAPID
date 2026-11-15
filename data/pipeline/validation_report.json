@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 89,
+  "PASS": 90,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 89
+  "checks": 90
  },
  "notes": [
   {
@@ -2007,6 +2007,20 @@
    "numbers": {
     "rows": 71,
     "items": 3
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "T6_archive_summary",
+   "verifies": "archive_summary.csv and archive_summary_totals.json: the totals overall and per investigation equal the sums of the CSV; every psi_file_id of the CSV and of the not-listed list is an archive of the saved PSI listing of its investigation with equal bytes; archives listed plus not listed equal the archives of the listings; member classes add up to the members; raw_layers_summary.json carries the same totals (SKIP without the listings).",
+   "status": "PASS",
+   "numbers": {
+    "archives_listed": 12600,
+    "archives_in_listing": 12689,
+    "members": 12662354,
+    "not_listed": 89,
+    "disagree": 5
    },
    "failures": 0,
    "failing_examples": []

@@ -6920,6 +6920,70 @@ def check_t5(ctx):
     return res
 
 
+@check("T6_archive_summary",
+       "archive_summary.csv and archive_summary_totals.json: the totals overall and per investigation equal the sums of "
+       "the CSV; every psi_file_id of the CSV and of the not-listed list is an archive of the saved PSI listing of its "
+       "investigation with equal bytes; archives listed plus not listed equal the archives of the listings; member "
+       "classes add up to the members; raw_layers_summary.json carries the same totals (SKIP without the listings).")
+def check_t6(ctx):
+    res = Result()
+    if not ctx.has("archive_summary.csv"):
+        raise Skip("archive_summary.csv not written (python3 pipeline/archive_summary.py <folder>)")
+    rows = ctx.table("archive_summary.csv")
+    tot = ctx.json("archive_summary_totals.json")
+    classes = ("still_image", "camera_frame_hobj", "text", "other")
+    ival = lambda r, k: int(r[k])
+
+    def sums(rs):
+        return {"archives_listed": len(rs), "bytes_of_listed_archives": sum(ival(r, "listing_bytes") for r in rs),
+                "bytes_fetched": sum(ival(r, "bytes_fetched") for r in rs), "members": sum(ival(r, "members") for r in rs),
+                "directories": sum(ival(r, "directories") for r in rs),
+                "members_by_class": {c: sum(ival(r, "members_" + c) for r in rs) for c in classes},
+                "uncompressed_bytes": sum(ival(r, "uncompressed_bytes") for r in rs)}
+    for scope, block, rs in [("overall", tot["overall"], rows)] + [
+            (inv, b, [r for r in rows if r["investigation_id"] == inv]) for inv, b in tot["investigations"].items()]:
+        res.checked += 1
+        want = sums(rs)
+        if any(block[k] != v for k, v in want.items()):
+            res.fail(problem="totals differ from the CSV sums", scope=scope)
+        rel = collections.Counter(r["identifier_relation"] for r in rs)
+        if any(block["identifier_relation"].get(k, 0) != n for k, n in rel.items()) or \
+                sum(block["identifier_relation"].values()) != len(rs):
+            res.fail(problem="identifier relations differ", scope=scope)
+    for r in rows:
+        if sum(ival(r, "members_" + c) for c in classes) + ival(r, "directories") != ival(r, "members"):
+            res.fail(problem="member classes do not add up", file_id=r["psi_file_id"])
+    dis = {x["psi_file_id"] for x in tot["archives_whose_member_identifiers_disagree_with_the_archive_name"]}
+    if dis != {r["psi_file_id"] for r in rows if r["identifier_relation"] == "disagree"}:
+        res.fail(problem="list of disagreeing archives differs")
+    nl = tot["archives_not_listed"]
+    o = tot["overall"]
+    if o["archives_not_listed"] != len(nl) or o["archives_listed"] + len(nl) != o["archives_in_listing"]:
+        res.fail(problem="listed plus not listed differ from the archives of the listings")
+    rl = ctx.json("raw_layers_summary.json").get("overall", {}).get("archive_directories_all")
+    if rl is None or any(rl.get(k) != o[k] for k in ("archives_in_listing", "archives_listed", "bytes_fetched", "members")):
+        res.fail(problem="raw_layers_summary.json lacks or differs in archive_directories_all")
+    numbers = {"archives_listed": o["archives_listed"], "archives_in_listing": o["archives_in_listing"],
+               "members": o["members"], "not_listed": len(nl), "disagree": len(dis)}
+    try:
+        listing = {}
+        for inv in tot["investigations"]:
+            for f in p_listing_files(ctx, inv):
+                if f["kind"] == "archive":
+                    listing[f["id"]] = (inv, f["bytes"])
+    except Skip as exc:
+        res.numbers = numbers
+        res.details = {"listing_part": "SKIP: " + str(exc)}
+        return res
+    for r in rows + nl:
+        if listing.get(r["psi_file_id"]) != (r["investigation_id"], int(r["listing_bytes"])):
+            res.fail(problem="file id not an archive of the listing with equal bytes", file_id=r["psi_file_id"])
+    if len(listing) != o["archives_in_listing"]:
+        res.fail(problem="archives in the listings differ", listing=len(listing), totals=o["archives_in_listing"])
+    res.numbers = numbers
+    return res
+
+
 def t_raw_cell(file, source_row, col):
     """Cell <col> of the raw table row that starts on line <source_row> (header = line 1)."""
     cache = T_RAW_LINES.setdefault(file, None)

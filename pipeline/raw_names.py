@@ -52,6 +52,7 @@ KINDS = os.path.join(HERE, "spec", "raw_kinds.json")
 LISTINGS = os.path.join(ROOT, "data", "psi", "file_listings")
 TABLES = os.path.join(ROOT, "data", "psi", "experimental_tables")
 OUT = os.path.join(ROOT, "data", "pipeline")
+ARCHIVE_TOTALS = os.path.join(OUT, "archive_summary_totals.json")
 GENERATED_BY = "AI-generated (Claude Code), 2026-11-14. Not human-reviewed."
 FORBIDDEN = re.compile(r"\b(safe|safely|acceptable|sufficient|sufficiently|representative|proven|proves)\b", re.I)
 LEVELS = ("test", "day_or_session", "none")
@@ -582,6 +583,18 @@ def summary(spec, linked, raw_columns, raw_values, zip_sample):
         overall[key] = {"files": sum(e[key]["files"] for e in invs), "bytes": sum(e[key]["bytes"] for e in invs)}
     overall["archive_directories_listed"] = {k: sum(e["archive_directories_listed"][k] for e in invs)
                                              for k in invs[0]["archive_directories_listed"]}
+    allz = read_json(ARCHIVE_TOTALS) if os.path.exists(ARCHIVE_TOTALS) else None
+    if allz:    # added 2026-11-15: totals of archive_summary.py (member lists of all listed archives)
+        keys = ("archives_in_listing", "archive_bytes_in_listing", "archives_listed", "bytes_of_listed_archives",
+                "bytes_fetched", "members", "directories", "members_by_class", "uncompressed_bytes")
+        for e in invs:
+            b = allz["investigations"].get(e["investigation_id"])
+            if b:
+                e["archive_directories_all"] = {k: b[k] for k in keys}
+        overall["archive_directories_all"] = dict({k: allz["overall"][k] for k in keys},
+                                                  archives_not_listed=allz["overall"]["archives_not_listed"],
+                                                  not_listed_by_reason=allz["overall"]["not_listed_by_reason"],
+                                                  source="data/pipeline/archive_summary_totals.json")
     o = overall
     sent = [S["tie_by_name"],
             S["names"].format(files=o["files"], t=o["names"]["test"]["files"], d=o["names"]["day_or_session"]["files"],
@@ -602,7 +615,10 @@ def summary(spec, linked, raw_columns, raw_values, zip_sample):
             "quote_relation": spec["_meta"]["quote_relation"],
             "several_rows_and_other_ties": spec["_meta"]["several_rows_and_other_ties"],
             "open_points": spec["_meta"]["open_points"]}
-    return {"_meta": meta, "sentences": sent, "overall": overall, "investigations": invs}
+    doc = {"_meta": meta, "sentences": sent, "overall": overall, "investigations": invs}
+    if allz:
+        doc["sentences_archive_directories_all"] = allz["sentences"]
+    return doc
 
 
 def main():
