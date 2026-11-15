@@ -9,7 +9,7 @@
   --paper: #f5f6f2;
   --line: #dde2dc;            /* hairline */
   --line-soft: #e9ece7;
-  --ink-3: #6b7482;
+  --ink-3: #5a6372;
   --blue-dark: #1b389f;
   --shadow: 0 1px 2px rgba(23, 32, 43, 0.05), 0 8px 20px -12px rgba(23, 32, 43, 0.18);
   --shadow-lg: 0 2px 4px rgba(23, 32, 43, 0.06), 0 18px 40px -18px rgba(23, 32, 43, 0.35);
@@ -101,13 +101,17 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
 /* "#results-first" (the ui role's results block) comes first under "What was found" */
 .shell-on main > :is(section#results-first, section#results) { order: 1; }
 .shell-on main > :is(#needs, #tests, #answers, #piles, #shown, #criteria, #stops, #all, #how) { order: 2; }
+/* "How your input was read" follows the ranked cards; its cautions are also copied above the tab bar (.shell-warnings) */
+.shell-on main > #read { order: 1; }
+.is-query main > #assistant { order: 3; }
+.shell-on main > #how { order: 4; }
 
 .ask { margin: var(--s5) 0 0; }
 .ask-label { font: 700 1.25rem/1.2 var(--display); margin-bottom: var(--s3); }
 .ask-row { gap: var(--s2); }
 .ask-row input { font-size: 1.08rem; padding: 13px 16px; border: 1px solid #b9c1c9; border-radius: var(--r-s); box-shadow: inset 0 1px 2px rgba(23, 32, 43, 0.06); }
 .ask-row input:hover { border-color: var(--ink-2); }
-.ask-row input:focus { border-color: var(--blue); outline: 3px solid var(--blue-soft); outline-offset: 0; }
+.ask-row input:focus { border-color: var(--blue); outline: 2px solid var(--blue); outline-offset: 2px; box-shadow: 0 0 0 5px var(--blue-soft); }
 .ask-row button { padding: 0 var(--s5); min-height: 50px; border: 1px solid var(--blue); border-radius: var(--r-s); font-size: 1.08rem; box-shadow: 0 1px 2px rgba(35, 70, 196, 0.35); }
 .ask-row button:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
 .ask-row button:active { transform: translateY(1px); }
@@ -154,23 +158,30 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
 .skeleton span.wide { grid-column: 1 / -1; height: 150px; }
 @keyframes shell-shimmer { to { background-position: -200% 0; } }
 .is-loading.is-query main > section:not(#status):not(.ask):not(#assistant), .is-loading.is-query .tabs { display: none; }
+.is-loading.is-query .skeleton { min-height: 100vh; }
+.is-loading.is-query .foot, .is-loading.is-query .how-strip, .is-loading.is-query main > #assistant { visibility: hidden; }
 
 /* ---------------------------------------------------------------- start page: the three verbs, nothing else below the input */
 .verbs { display: none; }
-.is-landing .verbs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s4); margin: var(--s2) 0 0; }
-.verb { padding: var(--s4) var(--s5); background: var(--white); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); }
+.is-landing .verbs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s4) 0; margin: var(--s5) 0 0; }
+.verb { padding: var(--s1) var(--s5); }
+.verb:first-child { padding-left: 0; }
+.verb + .verb { border-left: 1px solid var(--line); }
 .verb .kicker { margin: 0 0 var(--s1); font-size: 0.8rem; }
 .verb .kicker b { margin-right: 2px; font: 700 1.5rem/1.2 var(--display); letter-spacing: 0; text-transform: none; color: var(--blue); }
 .verb .verb-title { margin: var(--s2) 0 0; font-size: 0.98rem; color: var(--ink); }
 .is-landing main > section[id]:not(#status):not(#assistant):not(#how), .is-landing .tabs, .is-landing #jump { display: none; }
 
 /* ---------------------------------------------------------------- summary row (at a glance) */
-.glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--s3); margin: var(--s4) 0 0; padding: 0; background: none; border: 0; border-radius: 0; }
+.glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--s3); margin: var(--s4) 0 0; padding: 0; background: none; border: 0; border-radius: 0; }
 .glance p { margin: 0; padding: var(--s3) var(--s4) var(--s4); background: var(--white); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); font-size: 0.94rem; line-height: 1.5; }
-.glance p:first-child { border-top: 3px solid var(--blue); }
+.glance p:nth-child(2) { border-top: 3px solid var(--blue); }
 .glance p > b:first-child { display: block; margin-bottom: var(--s1); font: 600 0.78rem/1.4 var(--display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
 .glance p.typed-note { grid-column: 1 / -1; padding: 0 var(--s1); background: none; border: 0; box-shadow: none; font-size: 0.86rem; }
-.glance a { font-weight: 700; }
+.glance a { font-weight: 700; white-space: nowrap; }
+/* the copy of the input's cautions, under every tab */
+.shell-warnings { display: grid; gap: var(--s2); margin: var(--s3) 0 0; }
+.tabs-anchor { display: block; height: 0; }
 .shell-on #jump { display: none; }
 
 /* ---------------------------------------------------------------- tabs */
@@ -188,10 +199,12 @@ main > section[id] { scroll-margin-top: calc(var(--appbar-h) + var(--tabs-h) + 1
 
 /* ---------------------------------------------------------------- sections */
 .read, .top, .needs, .tests, .criteria, .piles, .stops, .all { margin: var(--s6) 0 0; }
+/* any other section of a tab (for example the ui role's #results-first) gets the same spacing */
+.shell-on main > section[id]:where(:not(#status, #glance, #assistant, #how)) { margin: var(--s6) 0 0; }
 section h2 { font-size: 1.55rem; line-height: 1.15; margin: 0 0 var(--s3); letter-spacing: -0.005em; }
-.kicker { margin: 0 0 var(--s1); font-size: 0.8rem; letter-spacing: 0.08em; color: var(--ink-3); }
+.kicker { margin: 0 0 var(--s1); font-size: 0.85rem; letter-spacing: 0.08em; color: var(--ink-2); }
 .section-head { align-items: flex-start; gap: var(--s2) var(--s6); margin-bottom: var(--s4); padding-bottom: var(--s3); border-bottom: 1px solid var(--line); }
-.team-note { font-size: 0.86rem; line-height: 1.45; max-width: 58ch; color: var(--ink-2); }
+.team-note { font-size: 0.9rem; line-height: 1.45; max-width: 58ch; color: var(--ink-2); }
 .section-head .team-note { padding-left: var(--s3); border-left: 2px solid var(--line); }
 .intro { font-size: 0.97rem; color: var(--ink-2); max-width: 80ch; }
 .ai-block h3, .export h3, .cov-block h3, .stops .gaps > h3, .stops .coverage > h3, .requirements h3 { font: 700 1.2rem/1.2 var(--display); margin: 0 0 var(--s2); }
@@ -212,11 +225,6 @@ section h2 { font-size: 1.55rem; line-height: 1.15; margin: 0 0 var(--s3); lette
 .warn.is-stop { background: #fcebe8; }
 .warn.is-soft { border-left-color: #c2c9c2; background: #f4f5f1; }
 .requirements { margin-top: var(--s4); padding-top: var(--s2); border-top: 1px solid var(--line-soft); }
-.req-fold > summary, .note-fold > summary { display: flex; align-items: center; padding: var(--s2) 0; margin: 0; }
-.req-fold > summary h3 { display: inline; margin: 0; font: 600 1rem/1.3 var(--display); color: var(--blue); }
-.note-fold > summary h3 { display: inline; margin: 0; font: 700 1.2rem/1.2 var(--display); color: var(--ink); }
-.req-fold[open] > summary, .note-fold[open] > summary { margin-bottom: var(--s1); }
-.ai-block > details.note-fold { margin: 0 0 var(--s2); }
 
 /* result cards: summary open, detail one click away */
 .results { gap: var(--s4); }
@@ -241,7 +249,7 @@ section h2 { font-size: 1.55rem; line-height: 1.15; margin: 0 0 var(--s3); lette
 .result .warnings { margin-top: var(--s3); gap: 6px; }
 .result .warn { padding: 6px 12px; font-size: 0.86rem; line-height: 1.4; }
 .result .tags { margin: var(--s3) 0 0; }
-.tag { padding: 2px 9px; font-size: 0.78rem; line-height: 1.5; border-color: var(--line); background: #fafbf9; }
+.tag { display: inline-block; max-width: 100%; padding: 2px 9px; font-size: 0.78rem; line-height: 1.5; border-color: var(--line); border-radius: 10px; background: #fafbf9; vertical-align: baseline; }
 .tag.is-ai { border-color: #d9a94a; color: var(--amber); background: #fffaf0; }
 .card-more { margin: var(--s4) calc(-1 * var(--s5)) 0; padding: 0 var(--s5); border-top: 1px solid var(--line-soft); }
 .card-more > summary { display: flex; align-items: center; gap: var(--s1); padding: var(--s3) 0; font: 600 1rem/1.2 var(--display); color: var(--blue); cursor: pointer; border-radius: 6px; }
@@ -262,9 +270,18 @@ details:not(#assistant *) > summary::before { content: ""; flex: none; display: 
 details[open]:not(#assistant *) > summary::before { transform: rotate(90deg); }
 details.more > summary, details.fold > summary { font: 600 1rem/1.3 var(--display); color: var(--blue); }
 details.more > summary:hover, details.fold > summary:hover { color: var(--blue-dark); }
+details.more.ans > summary { font: inherit; color: inherit; }
+details.more.ans > summary > b:first-of-type { font: 700 1.05rem/1.3 var(--display); color: var(--blue); }
+details.more.ans > summary:hover > b:first-of-type { color: var(--blue-dark); }
 details.ans, .pile-need { margin: var(--s2) 0; padding: var(--s3) var(--s4); border: 1px solid var(--line); border-radius: var(--r-s); background: var(--white); }
 details.ans[open], .pile-need[open] { box-shadow: var(--shadow); }
 .pile-need.is-focus { border-color: var(--blue); }
+
+/* running text keeps a readable line length; headings, tables and the strips keep the full width */
+.shell-on :is(.result .ai-note p, .card-more p, .card-more li, .result details.more p, .read li, .stops li, .stops p, .needs li, .piles p, .tests p, #answers p) { max-width: 82ch; }
+
+/* "All investigations" is a tab of its own: its table is open there, the control that folds it is not needed */
+.shell-on #all details.fold > summary { display: none; }
 
 /* buttons */
 .btn, .more-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 var(--s4); border-radius: var(--r-s); cursor: pointer; text-decoration: none;
@@ -302,6 +319,8 @@ main table:not(.table-wrap table):not(#assistant table) { display: block; max-wi
 
 /* ---------------------------------------------------------------- the method page */
 .page-how .wrap { max-width: 960px; }
+.page-how .appbar .wrap, .page-how .foot .wrap { max-width: 1160px; }
+@media (min-width: 721px) { .page-how .ai-funnel { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 .page-how .method { max-width: none; margin: var(--s5) 0 0; padding: var(--s5) var(--s6) var(--s6); background: var(--white); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); }
 .page-how .method h2 { font-size: 1.6rem; padding-bottom: var(--s3); border-bottom: 1px solid var(--line); }
 .page-how .ai-use h3 { font: 700 1.15rem/1.25 var(--display); margin: var(--s5) 0 var(--s2); }
@@ -343,19 +362,30 @@ main table:not(.table-wrap table):not(#assistant table) { display: block; max-wi
   .appbar-in { flex-wrap: wrap; padding-top: 9px; padding-bottom: 9px; min-height: 0; gap: var(--s2) var(--s3); }
   .appbar-search { order: 3; flex: 1 0 100%; max-width: none; }
 }
+@media (max-width: 1000px) {
+  .tabs-in, .is-query .ask .presets { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); padding-right: 28px; }
+}
 @media (max-width: 860px) {
   .foot-grid { grid-template-columns: 1fr; gap: var(--s5); }
   .how-strip { grid-template-columns: 1fr; }
   .how-strip p + p { padding-left: 0; border-left: 0; }
   .how-strip .btn { justify-self: start; }
-  .is-landing .verbs { grid-template-columns: 1fr; gap: var(--s3); }
+  .is-landing .verbs { grid-template-columns: 1fr; gap: 0; }
+  .verb { padding: var(--s3) 0; }
+  .verb + .verb { border-left: 0; border-top: 1px solid var(--line); }
   .section-head .team-note { padding-left: 0; border-left: 0; }
 }
 @media (max-width: 720px) {
   body { font-size: 15.5px; }
   .wrap { padding: 0 var(--s4); }
+  .appbar-in { padding-top: 9px; padding-bottom: 9px; }
   .wordmark { font-size: 1.15rem; }
-  .appbar-nav a { height: 34px; padding: 0 9px; font-size: 0.92rem; }
+  .appbar-nav a { height: 40px; padding: 0 10px; font-size: 0.92rem; }
+  .presets button, .is-query .ask .presets button { min-height: 40px; }
+  details:not(#assistant *) > summary { min-height: 40px; padding-top: 10px; padding-bottom: 10px; box-sizing: border-box; }
+  .card-more > summary { padding: 10px 0; }
+  .foot-links a { min-height: 40px; display: inline-flex; align-items: center; }
+  .is-query .masthead .notice { font-size: 0.86rem; }
   .appbar-nav .appbar-repo { font-size: 0; gap: 0; }
   .appbar-nav .appbar-repo svg { width: 16px; height: 16px; }
   .is-landing .masthead { padding: var(--s6) 0 calc(var(--s6) + 64px); }
@@ -373,16 +403,23 @@ main table:not(.table-wrap table):not(#assistant table) { display: block; max-wi
   .score small { font-size: 0.68rem; }
   section h2 { font-size: 1.35rem; }
   .tabs a { padding: 12px 10px 9px; font-size: 0.98rem; }
-  .tabs-in { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent); padding-right: 28px; }
   .skeleton span { height: 64px; }
   .is-loading.is-query .skeleton { grid-template-columns: 1fr; }
   .glance { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 480px) {
+  /* the method page: the name and "Back to the dashboard" on one row */
+  .page-how .wordmark { font-size: 0.95rem; gap: 8px; }
+  .page-how .wordmark::before { width: 8px; height: 8px; box-shadow: 0 0 0 3px rgba(91, 123, 255, 0.25); }
+  .page-how .appbar-nav { gap: var(--s1); }
+  .page-how .appbar-nav a.back-link { padding: 0 7px; font-size: 0.8rem; gap: 4px; }
+}
+
 /* ---------------------------------------------------------------- print: every tab, no chrome */
 @media print {
   body { background: #fff; display: block; }
-  .appbar, .tabs, .skeleton, .verbs, .how-strip .btn, .presets, .ask, .foot-links { display: none !important; }
+  .appbar, .tabs, .skeleton, .verbs, .how-strip .btn, .presets, .ask, .foot-links, .shell-warnings { display: none !important; }
   .tab-off { display: block !important; }
   .masthead { background: none; color: #000; padding: 0 0 8px; }
   .masthead .notice { color: #000; }

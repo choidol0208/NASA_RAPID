@@ -265,7 +265,7 @@ function renderResults(out, cat, insights, sc) {
       conf ? sourceFileLink(conf.tests_table_ref) : null,
       conf ? link(`${REPO}data/catalog/configurations.csv?plain=1#L${conf._line}`, `Catalog row (${r.config_id})`) : null,
       inv ? link(`${REPO}data/catalog/investigations.csv?plain=1#L${inv._line}`, "Investigation row") : null);
-    const more = h("details", { class: "more", open: "" }, h("summary", {}, "What the record says"),
+    const more = h("details", { class: "more" }, h("summary", {}, "What the record says"),
       h("p", {}, h("b", {}, "Objective (catalog summary): "), inv ? inv.objectives : "—"),
       h("p", {}, h("b", {}, "Findings stated in the record or table: "), r.key_findings || "Not stated in the PSI record."),
       card ? h("div", { class: "ai-text" }, h("p", {}, h("b", {}, "Summary: "), card.summary, " ",
@@ -285,10 +285,11 @@ function renderResults(out, cat, insights, sc) {
       h("a", { href: "how.html#ai-use" }, "(team computation)")) : null;
     const note = noteFor(sc, r);
     const noteEl = note ? h("div", { class: "ai-note" }, h("p", {}, h("b", {}, "Team note: "), note.text, " ", sourceLinks(note.sources, cat)), itemTag(note, sc)) : null;
-    // Shell (web/SHELL.md): the summary lines, the cautions and the tags stay open; the team note, the source links,
-    // the raw-data lines, the weight check and the record text open in place behind one disclosure per card.
-    const detail = h("details", { class: "card-more" }, h("summary", {}, "Details and sources"), noteEl, links, rawLine, videoEl, robustEl, more);
-    ol.append(h("li", { class: "result" }, head, ...body, warns, tags, detail));
+    // Shell (web/SHELL.md): the summary lines, the team note (it opens with a caution), the cautions, the tags and the
+    // weight check (a team-computation label) stay open, in the order they always had; the source links and the
+    // raw-data lines open in place behind one disclosure per card; "What the record says" keeps its own, as before.
+    const detail = links || rawLine || videoEl ? h("details", { class: "card-more" }, h("summary", {}, "Details and sources"), links, rawLine, videoEl) : null;
+    ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, detail, robustEl, more));
   }
 }
 
@@ -1300,8 +1301,10 @@ function renderJump() {
   const nav = $("#jump");
   if (!nav) return;
   const seen = new Set();
-  const links = JUMP.filter(([id, label]) => { const s = $(id); if (!s || s.hidden || seen.has(label)) return false; seen.add(label); return true; })
-    .map(([id, label]) => h("a", { href: id }, label));
+  // the two method sections live on web/how.html (the page shell): their entries lead there
+  const away = (id) => !$(id) && (id === "#ai-use" || id === "#method");
+  const links = JUMP.filter(([id, label]) => { const s = $(id); if (!away(id) && (!s || s.hidden) || seen.has(label)) return false; seen.add(label); return true; })
+    .map(([id, label]) => h("a", { href: away(id) ? "how.html" + id : id }, label));
   nav.replaceChildren(h("span", { class: "jump-label" }, "On this page:"), ...links);
   nav.hidden = !$("#glance") || $("#glance").hidden || links.length < 3;
 }
