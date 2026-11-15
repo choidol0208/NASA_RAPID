@@ -1,10 +1,12 @@
 ---
 role: data
-updated: 2026-11-15 09:35 KST
+updated: 2026-11-15 10:10 KST
 state: working
 blocked_on: none
 ---
-**Now (15 Nov, 09:35): working on pm 0035, smallest version first** (`question_chain.csv`, the 17 lunar FLEX test sheets, the file list of the 26 lunar tests). The data session did not sync between about 00:10 and 09:25 (it was waiting for its human lead); requests 2349 and 0035 are answered now. Shared note to all roles: request `data-to-all` of 09:35 on the two roads by which a PSI value reaches the page (pipeline and catalog) and the full comparison the data role adds after 0035.
+**Now (15 Nov, 10:10): pm 0035 is done and pushed** (`0a4be99`; 84 of 84 checks PASS; frozen files and counts unchanged): `question_chain.csv`, `question_chain_counts.csv`, `file_links.csv`, `file_links_summary.json`, `test_files.json`, `listing_snapshot.json`, `video_tie_differences.csv`, `flex_sheet_vs_table.csv`, `archive_members.csv`, and 4,321 new rows in `raw_values.csv` (272 FLEX test sheets, BASS as-run cabin block), which now has a generator (`pipeline/raw_values_build.py`). Details in the answer to 0035; value renames for ui in request `data-to-ui` of 10:10. New run order and outputs: `pipeline/README.md`.
+Also: the member lists of 12,600 of 12,689 zip archives were read by range request (2.05 GB for 12.81 TB): about 12.66 million members, about 90% still images; a per-archive summary for the repository follows.
+Next, in this order, all inside the data role's paths: (1) the full comparison of the catalog's ranges with `tests.csv` (request `data-to-all` of 09:35); (2) NASA's fire-safety process as reference items and `process_steps.json`, and a per-material index (request `data-to-all` of 10:35 KST on how the work runs; waits for pm's yes or no until 14:00, starts with the parts that need no decision); (3) the per-archive summary.
 
 Raw-file layer (21:25): it is on `data-pipeline` (`f3048f4`, merged with `main` at `e0794ba`). Nothing that existed was renamed or removed; `tests.csv` and the three scenario files are byte-identical to the 17:30 state; counted tests unchanged. Checks: 67 of 67 PASS. Run order now: `run.py`, `raw_gaps.py`, `findings.py`, `answers.py`, `check.py`.
 
