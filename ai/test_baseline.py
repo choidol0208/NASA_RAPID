@@ -313,7 +313,17 @@ class BuiltFiles(unittest.TestCase):
         self.assertEqual((note["facts"]["o2_setting_min"], note["facts"]["o2_setting_max"]), (21.0, 40.0))
         self.assertEqual(note["facts"]["o2_cells_as_written"], ["3400%", "2100%"])
         self.assertIn("'not identified in this summary table'", note["text"])
-        self.assertIn("Tied with FLEX", note["text"])
+        # the tie sentence follows the live ranking (scoring config 1.4.0 had ACME-BRE level with FLEX;
+        # 1.5.1 does not): it is expected exactly when another result has the same displayed score
+        from scoring import scorer
+        ranking = scorer.rank(self.sc["lunar_habitat"]["query"])["ranking"]
+        own = next(r for r in ranking if r["psi_accession"] == "PSI-20")
+        level = [r for r in ranking
+                 if r["psi_accession"] != "PSI-20" and round(r["score"], 1) == round(own["score"], 1)]
+        if level:
+            self.assertIn("Tied with", note["text"])
+        else:
+            self.assertNotIn("Tied with", note["text"])
 
     # ---------------------------------------------------------------- wording
     BANNED = [r"\bcovered\b", r"\bunsafe\b", r"\bsafe\b", r"\bpredict", r"\bnever tested\b", r"\bbest\b",

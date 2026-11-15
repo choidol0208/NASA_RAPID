@@ -3,12 +3,12 @@
   "built_by": "ai/robustness.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-14T23:35:06+09:00",
+  "generated_at": "2026-11-15T11:35:22+09:00",
   "inputs_sha256": {
    "data/catalog/configurations.csv": "8b03b6d1403c3bbfe7d392ea0622038f7128243905ff9ee40e98d6c1aa67efb8",
-   "data/catalog/investigations.csv": "840e0266945d73b2482b74338c9924adc1d5c8a17696804b83c71d95ce1b10e2",
-   "scoring/scorer.py": "052666956fac887eaff838d565f785c8b7271bf887f72b0c3d4d9b12c62476bd",
-   "scoring/scoring_config.json": "83f3cff13cc4aa232574ae84500ca281483cae8129330c2dea2ffa7e176cf2f5"
+   "data/catalog/investigations.csv": "e5384f1e6dce09f37d3b69451aa9243c7d7329b63004852c309cbfb78e3cc390",
+   "scoring/scorer.py": "7290571df2e2d53385d113dd0e978086ebff1df0f0024b83ea9263445b72b3fd",
+   "scoring/scoring_config.json": "9cb0836ed5199c677b1692e72ea6536d141960864731b4299cc3b5d43e06f8ab"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). No language model ran to build it. Shares are computed by code from the team's ranking (scoring.scorer) under sampled weights. Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
   "params": {
@@ -19,7 +19,7 @@
    "tie_tolerance": 1e-09,
    "numpy": "2.1.3"
   },
-  "content_sha256": "6247efde39da55cef318781f8ee3a1b2031ce5c6f9ac05118e7b039397627376"
+  "content_sha256": "e36a73f72b888d9912695c288e0c34a43803e092cb670ccd013a66071f3db367"
  },
  "description": "Rank stability of the team's ranking (scoring.scorer.rank) for the four preset queries under sampled weights, tie-aware. Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
  "label": "Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
@@ -44,7 +44,7 @@
    "scenario_id": "iss",
    "query": "ISS",
    "profile": "prevention",
-   "config_version": "1.4.0",
+   "config_version": "1.5.1",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -87,7 +87,7 @@
    },
    "live_top3": [
     "BASS-II",
-    "BASS",
+    "SAFFIRE-I",
     "SAFFIRE-II"
    ],
    "default_check": {
@@ -107,8 +107,8 @@
     },
     {
      "investigations": [
-      "SAFFIRE-II",
-      "SAFFIRE-I"
+      "SAFFIRE-I",
+      "SAFFIRE-II"
      ],
      "first_or_tied_in_every_draw": false,
      "why": "their best configurations have the same similarity on every scored dimension (O2, pressure, flow, research purpose) and the same evidence and gate factor, so no weighting separates them",
@@ -143,17 +143,13 @@
       "BASS",
       "SAFFIRE-III"
      ],
-     "assumed_dims": [
-      "pressure"
-     ],
-     "assumed_dims_scored": [
-      "pressure"
-     ],
+     "assumed_dims": [],
+     "assumed_dims_scored": [],
      "unknown_dims": [],
      "shown_in_results_share_local": 1.0,
      "listed_first_share_local": 1.0,
-     "display_line": "Level with BASS and SAFFIRE-III in every one of the team's 16,000 sampled weightings (a tie, not an order); the rank uses an assumed atmosphere for values the team's catalog does not report (pressure).",
-     "display_rule": "assumed_atmosphere_and_tie",
+     "display_line": "Level with BASS and SAFFIRE-III in every one of the team's 16,000 sampled weightings: a tie, not an order.",
+     "display_rule": "tie_in_every_draw",
      "display_text_origin": "template",
      "display_facts": {
       "draws_per_run": 8000,
@@ -172,9 +168,93 @@
      }
     },
     {
-     "investigation_id": "BASS",
+     "investigation_id": "SAFFIRE-I",
      "live_rank": 2,
      "live_position_in_ranking": 2,
+     "live_config_id": "SAFFIRE-I-C01",
+     "first_or_tied_share_local": 0.0,
+     "top3_share_local": 0.0,
+     "first_or_tied_share_uniform": 0.0,
+     "top3_share_uniform": 0.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 0.0,
+     "tied_for_first_with": [],
+     "tied_in_every_draw_with": [
+      "SAFFIRE-II"
+     ],
+     "assumed_dims": [
+      "pressure"
+     ],
+     "assumed_dims_scored": [
+      "pressure"
+     ],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 0.0,
+     "listing_note": "Listed by the scorer's near-tie rule (scoring_config.json selection.tie_points), which orders close scores by evidence quality; BASS-II, BASS and SAFFIRE-III score more at the profile weights.",
+     "display_line": "Level with SAFFIRE-II in every one of the team's 16,000 sampled weightings (a tie, not an order); the rank uses an assumed atmosphere for values the team's catalog does not report (pressure).",
+     "display_rule": "assumed_atmosphere_and_tie",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 8000,
+      "draws_both_runs": 16000,
+      "top_k": 3,
+      "group_size": 2,
+      "shares_pct": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "SAFFIRE-II",
+     "live_rank": 3,
+     "live_position_in_ranking": 3,
+     "live_config_id": "SAFFIRE-II-C01",
+     "first_or_tied_share_local": 0.0,
+     "top3_share_local": 0.0,
+     "first_or_tied_share_uniform": 0.0,
+     "top3_share_uniform": 0.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 0.0,
+     "tied_for_first_with": [],
+     "tied_in_every_draw_with": [
+      "SAFFIRE-I"
+     ],
+     "assumed_dims": [
+      "pressure"
+     ],
+     "assumed_dims_scored": [
+      "pressure"
+     ],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 0.0,
+     "listing_note": "Listed by the scorer's near-tie rule (scoring_config.json selection.tie_points), which orders close scores by evidence quality; BASS-II, BASS and SAFFIRE-III score more at the profile weights.",
+     "display_line": "Level with SAFFIRE-I in every one of the team's 16,000 sampled weightings (a tie, not an order); the rank uses an assumed atmosphere for values the team's catalog does not report (pressure).",
+     "display_rule": "assumed_atmosphere_and_tie",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 8000,
+      "draws_both_runs": 16000,
+      "top_k": 3,
+      "group_size": 2,
+      "shares_pct": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "BASS",
+     "live_rank": null,
+     "live_position_in_ranking": 4,
      "live_config_id": "BASS-C01",
      "first_or_tied_share_local": 1.0,
      "top3_share_local": 1.0,
@@ -207,73 +287,16 @@
       "pressure"
      ],
      "unknown_dims": [],
-     "shown_in_results_share_local": 1.0,
+     "shown_in_results_share_local": 0.0,
      "listed_first_share_local": 0.0,
-     "display_line": "Level with BASS-II and SAFFIRE-III in every one of the team's 16,000 sampled weightings (a tie, not an order); the rank uses an assumed atmosphere for values the team's catalog does not report (O2 and pressure).",
-     "display_rule": "assumed_atmosphere_and_tie",
-     "display_text_origin": "template",
-     "display_facts": {
-      "draws_per_run": 8000,
-      "draws_both_runs": 16000,
-      "top_k": 3,
-      "group_size": 3,
-      "shares_pct": [
-       100.0,
-       100.0,
-       100.0,
-       100.0,
-       0.0,
-       100.0,
-       100.0
-      ]
-     }
-    },
-    {
-     "investigation_id": "SAFFIRE-II",
-     "live_rank": 3,
-     "live_position_in_ranking": 3,
-     "live_config_id": "SAFFIRE-II-C01",
-     "first_or_tied_share_local": 0.0,
-     "top3_share_local": 0.0,
-     "first_or_tied_share_uniform": 0.0,
-     "top3_share_uniform": 0.0,
-     "first_alone_share_local": 0.0,
-     "first_or_tied_share_local_at_displayed_precision": 0.0,
-     "tied_for_first_with": [],
-     "tied_in_every_draw_with": [
-      "SAFFIRE-I"
-     ],
-     "assumed_dims": [
-      "pressure"
-     ],
-     "assumed_dims_scored": [
-      "pressure"
-     ],
-     "unknown_dims": [],
-     "shown_in_results_share_local": 0.9978,
-     "listed_first_share_local": 0.0,
-     "listing_note": "Listed by the scorer's near-tie rule (scoring_config.json selection.tie_points), which orders close scores by evidence quality; BASS-II, BASS and SAFFIRE-III score more at the profile weights.",
-     "display_line": "Level with SAFFIRE-I in every one of the team's 16,000 sampled weightings (a tie, not an order); the rank uses an assumed atmosphere for values the team's catalog does not report (pressure).",
-     "display_rule": "assumed_atmosphere_and_tie",
-     "display_text_origin": "template",
-     "display_facts": {
-      "draws_per_run": 8000,
-      "draws_both_runs": 16000,
-      "top_k": 3,
-      "group_size": 2,
-      "shares_pct": [
-       0.0,
-       0.0,
-       0.0,
-       0.0,
-       0.0
-      ]
-     }
+     "note": "Level with the top score in every sampled weighting but not one of the results the page lists: the scorer orders equal scores by evidence factor, 1 g comparison and configuration id, and its near-tie rule (scoring_config.json selection.tie_points) moved SAFFIRE-I and SAFFIRE-II up.",
+     "display_line": null,
+     "display_rule": null
     },
     {
      "investigation_id": "SAFFIRE-III",
      "live_rank": null,
-     "live_position_in_ranking": 4,
+     "live_position_in_ranking": 5,
      "live_config_id": "SAFFIRE-III-C01",
      "first_or_tied_share_local": 1.0,
      "top3_share_local": 1.0,
@@ -308,7 +331,7 @@
      "unknown_dims": [],
      "shown_in_results_share_local": 0.0,
      "listed_first_share_local": 0.0,
-     "note": "Level with the top score in every sampled weighting but not one of the results the page lists: the scorer orders equal scores by evidence factor, 1 g comparison and configuration id, and its near-tie rule (scoring_config.json selection.tie_points) moved SAFFIRE-II up.",
+     "note": "Level with the top score in every sampled weighting but not one of the results the page lists: the scorer orders equal scores by evidence factor, 1 g comparison and configuration id, and its near-tie rule (scoring_config.json selection.tie_points) moved SAFFIRE-I and SAFFIRE-II up.",
      "display_line": null,
      "display_rule": null
     }
@@ -317,7 +340,7 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 21.9
+    "rank_seconds": 34.2
    },
    "seed_check": {
     "seed": 43,
@@ -337,7 +360,7 @@
    "scenario_id": "lunar_habitat",
    "query": "lunar habitat",
    "profile": "prevention",
-   "config_version": "1.4.0",
+   "config_version": "1.5.1",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -379,118 +402,55 @@
     "concern": "prevention"
    },
    "live_top3": [
-    "ACME-BRE",
     "FLEX",
-    "ACME-CFI-G"
+    "ACME-CFI-G",
+    "ACME-BRE"
    ],
    "default_check": {
     "profile_weights_reproduce_live_top3": true,
     "numpy_rescore_equals_ranking_scores": true
    },
-   "structural_ties": [
-    {
-     "investigations": [
-      "ACME-BRE",
-      "FLEX"
-     ],
-     "first_or_tied_in_every_draw": false,
-     "why": "their best configurations have the same similarity on every scored dimension (O2, pressure, flow, research purpose) and the same evidence and gate factor, so no weighting separates them",
-     "same_similarity_and_factor": true
-    }
-   ],
+   "structural_ties": [],
    "results": [
     {
-     "investigation_id": "ACME-BRE",
+     "investigation_id": "FLEX",
      "live_rank": 1,
      "live_position_in_ranking": 1,
-     "live_config_id": "ACME-BRE-C01",
-     "first_or_tied_share_local": 0.8845,
-     "top3_share_local": 0.8974,
-     "first_or_tied_share_uniform": 0.6927,
-     "top3_share_uniform": 0.6969,
-     "first_alone_share_local": 0.0,
-     "first_or_tied_share_local_at_displayed_precision": 0.8852,
-     "tied_for_first_with": [
-      {
-       "investigation_id": "FLEX",
-       "share": 0.8845,
-       "share_uniform": 0.6927
-      }
-     ],
-     "tied_in_every_draw_with": [
-      "FLEX"
-     ],
-     "assumed_dims": [],
-     "assumed_dims_scored": [],
-     "unknown_dims": [],
-     "shown_in_results_share_local": 1.0,
-     "listed_first_share_local": 0.8852,
-     "display_line": "Level with FLEX in every one of the team's 16,000 sampled weightings (a tie, not an order); the two are first together in 88.4% of the 8,000 drawn close to the team's default weights.",
-     "display_rule": "tie_in_every_draw",
-     "display_text_origin": "template",
-     "display_facts": {
-      "draws_per_run": 8000,
-      "draws_both_runs": 16000,
-      "top_k": 3,
-      "group_size": 2,
-      "shares_pct": [
-       88.4,
-       89.7,
-       69.3,
-       69.7,
-       0.0,
-       88.4
-      ]
-     }
-    },
-    {
-     "investigation_id": "FLEX",
-     "live_rank": 2,
-     "live_position_in_ranking": 2,
      "live_config_id": "FLEX-C01",
      "first_or_tied_share_local": 0.8845,
      "top3_share_local": 0.8974,
      "first_or_tied_share_uniform": 0.6927,
      "top3_share_uniform": 0.6969,
-     "first_alone_share_local": 0.0,
+     "first_alone_share_local": 0.8845,
      "first_or_tied_share_local_at_displayed_precision": 0.8852,
-     "tied_for_first_with": [
-      {
-       "investigation_id": "ACME-BRE",
-       "share": 0.8845,
-       "share_uniform": 0.6927
-      }
-     ],
-     "tied_in_every_draw_with": [
-      "ACME-BRE"
-     ],
+     "tied_for_first_with": [],
+     "tied_in_every_draw_with": [],
      "assumed_dims": [],
      "assumed_dims_scored": [],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.8884,
-     "listed_first_share_local": 0.0,
-     "display_line": "Level with ACME-BRE in every one of the team's 16,000 sampled weightings (a tie, not an order); the two are first together in 88.4% of the 8,000 drawn close to the team's default weights.",
-     "display_rule": "tie_in_every_draw",
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 0.8832,
+     "display_line": "First in 88.4% of the 8,000 sampled weightings drawn close to the team's default weights, and among the first three in 89.7%.",
+     "display_rule": "first_share",
      "display_text_origin": "template",
      "display_facts": {
       "draws_per_run": 8000,
       "draws_both_runs": 16000,
       "top_k": 3,
-      "group_size": 2,
+      "group_size": 1,
       "shares_pct": [
        88.4,
        89.7,
        69.3,
        69.7,
-       0.0,
        88.4
       ]
      }
     },
     {
      "investigation_id": "ACME-CFI-G",
-     "live_rank": 3,
-     "live_position_in_ranking": 3,
+     "live_rank": 2,
+     "live_position_in_ranking": 2,
      "live_config_id": "ACME-CFI-G-C01",
      "first_or_tied_share_local": 0.0,
      "top3_share_local": 0.6358,
@@ -503,8 +463,9 @@
      "assumed_dims": [],
      "assumed_dims_scored": [],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.7309,
+     "shown_in_results_share_local": 0.8295,
      "listed_first_share_local": 0.0,
+     "listing_note": "Listed by the scorer's near-tie rule (scoring_config.json selection.tie_points), which orders close scores by evidence quality; ACME-BRE and FLEX score more at the profile weights.",
      "display_line": "Among the first three in 63.6% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
      "display_rule": "top3_share",
      "display_text_origin": "template",
@@ -523,6 +484,41 @@
      }
     },
     {
+     "investigation_id": "ACME-BRE",
+     "live_rank": 3,
+     "live_position_in_ranking": 3,
+     "live_config_id": "ACME-BRE-C01",
+     "first_or_tied_share_local": 0.0,
+     "top3_share_local": 0.8542,
+     "first_or_tied_share_uniform": 0.0,
+     "top3_share_uniform": 0.656,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 0.0,
+     "tied_for_first_with": [],
+     "tied_in_every_draw_with": [],
+     "assumed_dims": [],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 0.8397,
+     "listed_first_share_local": 0.0,
+     "display_line": "Among the first three in 85.4% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
+     "display_rule": "top3_share",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 8000,
+      "draws_both_runs": 16000,
+      "top_k": 3,
+      "group_size": 1,
+      "shares_pct": [
+       0.0,
+       85.4,
+       0.0,
+       65.6,
+       0.0
+      ]
+     }
+    },
+    {
      "investigation_id": "BASS-II",
      "live_rank": null,
      "live_position_in_ranking": 6,
@@ -530,20 +526,16 @@
      "first_or_tied_share_local": 0.1155,
      "top3_share_local": 0.22,
      "first_or_tied_share_uniform": 0.3073,
-     "top3_share_uniform": 0.3526,
+     "top3_share_uniform": 0.3575,
      "first_alone_share_local": 0.1155,
      "first_or_tied_share_local_at_displayed_precision": 0.1168,
      "tied_for_first_with": [],
      "tied_in_every_draw_with": [],
-     "assumed_dims": [
-      "pressure"
-     ],
-     "assumed_dims_scored": [
-      "pressure"
-     ],
+     "assumed_dims": [],
+     "assumed_dims_scored": [],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.2691,
-     "listed_first_share_local": 0.1148,
+     "shown_in_results_share_local": 0.245,
+     "listed_first_share_local": 0.1168,
      "display_line": null,
      "display_rule": null
     }
@@ -552,15 +544,15 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 23.5
+    "rank_seconds": 33.2
    },
    "seed_check": {
     "seed": 43,
-    "max_abs_diff_points": 1.19,
+    "max_abs_diff_points": 1.17,
     "largest_at": "ACME-CFI-G.top3_share_uniform",
-    "max_abs_diff_points_local": 0.96,
-    "largest_at_local": "BASS-II.top3_share_local",
-    "max_abs_diff_points_uniform": 1.19,
+    "max_abs_diff_points_local": 1.04,
+    "largest_at_local": "ACME-BRE.top3_share_local",
+    "max_abs_diff_points_uniform": 1.17,
     "largest_at_uniform": "ACME-CFI-G.top3_share_uniform",
     "limit_points": 2.0,
     "within_limit": true,
@@ -572,7 +564,7 @@
    "scenario_id": "spacesuit",
    "query": "spacesuit",
    "profile": "prevention",
-   "config_version": "1.4.0",
+   "config_version": "1.5.1",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -627,20 +619,20 @@
      "live_position_in_ranking": 1,
      "live_config_id": "ACME-BRE-C01",
      "first_or_tied_share_local": 0.0,
-     "top3_share_local": 0.9994,
+     "top3_share_local": 0.9972,
      "first_or_tied_share_uniform": 0.0,
-     "top3_share_uniform": 0.9131,
+     "top3_share_uniform": 0.8775,
      "first_alone_share_local": 0.0,
-     "first_or_tied_share_local_at_displayed_precision": 0.0001,
+     "first_or_tied_share_local_at_displayed_precision": 0.0,
      "tied_for_first_with": [],
      "tied_in_every_draw_with": [],
      "assumed_dims": [],
      "assumed_dims_scored": [],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.9998,
-     "listed_first_share_local": 0.6859,
+     "shown_in_results_share_local": 0.9639,
+     "listed_first_share_local": 0.6044,
      "listing_note": "Listed by the scorer's near-tie rule (scoring_config.json selection.tie_points), which orders close scores by evidence quality; ACME-CFI-G score more at the profile weights.",
-     "display_line": "Among the first three in 99.9% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
+     "display_line": "Among the first three in 99.7% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
      "display_rule": "top3_share",
      "display_text_origin": "template",
      "display_facts": {
@@ -650,9 +642,9 @@
       "group_size": 1,
       "shares_pct": [
        0.0,
-       99.9,
+       99.7,
        0.0,
-       91.3,
+       87.8,
        0.0
       ]
      }
@@ -675,8 +667,8 @@
      "unknown_dims": [
       "o2"
      ],
-     "shown_in_results_share_local": 0.9855,
-     "listed_first_share_local": 0.2469,
+     "shown_in_results_share_local": 0.859,
+     "listed_first_share_local": 0.0283,
      "display_line": "First in 92.8% of the 8,000 sampled weightings drawn close to the team's default weights, and among the first three in 100%.",
      "display_rule": "first_share",
      "display_text_origin": "template",
@@ -710,8 +702,8 @@
      "assumed_dims": [],
      "assumed_dims_scored": [],
      "unknown_dims": [],
-     "shown_in_results_share_local": 0.6466,
-     "listed_first_share_local": 0.0,
+     "shown_in_results_share_local": 0.6528,
+     "listed_first_share_local": 0.2669,
      "listing_note": "Listed by the scorer's near-tie rule (scoring_config.json selection.tie_points), which orders close scores by evidence quality; ACME-FLAME-DESIGN, ACME-BRE and ACME-CFI-G score more at the profile weights.",
      "display_line": "Among the first three in 22.9% of the 8,000 sampled weightings drawn close to the team's default weights, and first in none of them.",
      "display_rule": "top3_share",
@@ -733,7 +725,7 @@
     {
      "investigation_id": "ACME-FLAME-DESIGN",
      "live_rank": null,
-     "live_position_in_ranking": 4,
+     "live_position_in_ranking": 6,
      "live_config_id": "ACME-FLAME-DESIGN-C02",
      "first_or_tied_share_local": 0.0725,
      "top3_share_local": 0.7715,
@@ -748,8 +740,8 @@
      "unknown_dims": [
       "o2"
      ],
-     "shown_in_results_share_local": 0.3534,
-     "listed_first_share_local": 0.0673,
+     "shown_in_results_share_local": 0.1829,
+     "listed_first_share_local": 0.0194,
      "display_line": null,
      "display_rule": null
     }
@@ -758,16 +750,16 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 22.6
+    "rank_seconds": 31.5
    },
    "seed_check": {
     "seed": 43,
-    "max_abs_diff_points": 0.82,
-    "largest_at": "FLEX.top3_share_uniform",
+    "max_abs_diff_points": 0.99,
+    "largest_at": "ACME-BRE.top3_share_uniform",
     "max_abs_diff_points_local": 0.31,
     "largest_at_local": "FLEX.top3_share_local",
-    "max_abs_diff_points_uniform": 0.82,
-    "largest_at_uniform": "FLEX.top3_share_uniform",
+    "max_abs_diff_points_uniform": 0.99,
+    "largest_at_uniform": "ACME-BRE.top3_share_uniform",
     "limit_points": 2.0,
     "within_limit": true,
     "local_within_limit": true,
@@ -778,7 +770,7 @@
    "scenario_id": "mars_habitat",
    "query": "Mars base",
    "profile": "prevention",
-   "config_version": "1.4.0",
+   "config_version": "1.5.1",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -816,9 +808,9 @@
     "concern": "prevention"
    },
    "live_top3": [
+    "BASS",
     "BASS-II",
-    "SAFFIRE-II",
-    "BASS"
+    "SAFFIRE-I"
    ],
    "default_check": {
     "profile_weights_reproduce_live_top3": true,
@@ -827,10 +819,10 @@
    "structural_ties": [
     {
      "investigations": [
-      "BASS-II",
-      "SAFFIRE-II",
       "BASS",
+      "BASS-II",
       "SAFFIRE-I",
+      "SAFFIRE-II",
       "SAFFIRE-III"
      ],
      "first_or_tied_in_every_draw": true,
@@ -840,143 +832,9 @@
    ],
    "results": [
     {
-     "investigation_id": "BASS-II",
+     "investigation_id": "BASS",
      "live_rank": 1,
      "live_position_in_ranking": 1,
-     "live_config_id": "BASS-II-C01",
-     "first_or_tied_share_local": 1.0,
-     "top3_share_local": 1.0,
-     "first_or_tied_share_uniform": 1.0,
-     "top3_share_uniform": 1.0,
-     "first_alone_share_local": 0.0,
-     "first_or_tied_share_local_at_displayed_precision": 1.0,
-     "tied_for_first_with": [
-      {
-       "investigation_id": "SAFFIRE-II",
-       "share": 1.0,
-       "share_uniform": 1.0
-      },
-      {
-       "investigation_id": "BASS",
-       "share": 1.0,
-       "share_uniform": 1.0
-      },
-      {
-       "investigation_id": "SAFFIRE-I",
-       "share": 1.0,
-       "share_uniform": 1.0
-      },
-      {
-       "investigation_id": "SAFFIRE-III",
-       "share": 1.0,
-       "share_uniform": 1.0
-      }
-     ],
-     "tied_in_every_draw_with": [
-      "SAFFIRE-II",
-      "BASS",
-      "SAFFIRE-I",
-      "SAFFIRE-III"
-     ],
-     "assumed_dims": [
-      "pressure"
-     ],
-     "assumed_dims_scored": [],
-     "unknown_dims": [],
-     "shown_in_results_share_local": 1.0,
-     "listed_first_share_local": 1.0,
-     "display_line": "Level with SAFFIRE-II, BASS, SAFFIRE-I and SAFFIRE-III in every one of the team's 16,000 sampled weightings: a tie, not an order.",
-     "display_rule": "tie_in_every_draw",
-     "display_text_origin": "template",
-     "display_facts": {
-      "draws_per_run": 8000,
-      "draws_both_runs": 16000,
-      "top_k": 3,
-      "group_size": 5,
-      "shares_pct": [
-       100.0,
-       100.0,
-       100.0,
-       100.0,
-       0.0,
-       100.0,
-       100.0,
-       100.0,
-       100.0
-      ]
-     }
-    },
-    {
-     "investigation_id": "SAFFIRE-II",
-     "live_rank": 2,
-     "live_position_in_ranking": 2,
-     "live_config_id": "SAFFIRE-II-C01",
-     "first_or_tied_share_local": 1.0,
-     "top3_share_local": 1.0,
-     "first_or_tied_share_uniform": 1.0,
-     "top3_share_uniform": 1.0,
-     "first_alone_share_local": 0.0,
-     "first_or_tied_share_local_at_displayed_precision": 1.0,
-     "tied_for_first_with": [
-      {
-       "investigation_id": "BASS-II",
-       "share": 1.0,
-       "share_uniform": 1.0
-      },
-      {
-       "investigation_id": "BASS",
-       "share": 1.0,
-       "share_uniform": 1.0
-      },
-      {
-       "investigation_id": "SAFFIRE-I",
-       "share": 1.0,
-       "share_uniform": 1.0
-      },
-      {
-       "investigation_id": "SAFFIRE-III",
-       "share": 1.0,
-       "share_uniform": 1.0
-      }
-     ],
-     "tied_in_every_draw_with": [
-      "BASS-II",
-      "BASS",
-      "SAFFIRE-I",
-      "SAFFIRE-III"
-     ],
-     "assumed_dims": [
-      "pressure"
-     ],
-     "assumed_dims_scored": [],
-     "unknown_dims": [],
-     "shown_in_results_share_local": 1.0,
-     "listed_first_share_local": 0.0,
-     "display_line": "Level with BASS-II, BASS, SAFFIRE-I and SAFFIRE-III in every one of the team's 16,000 sampled weightings: a tie, not an order.",
-     "display_rule": "tie_in_every_draw",
-     "display_text_origin": "template",
-     "display_facts": {
-      "draws_per_run": 8000,
-      "draws_both_runs": 16000,
-      "top_k": 3,
-      "group_size": 5,
-      "shares_pct": [
-       100.0,
-       100.0,
-       100.0,
-       100.0,
-       0.0,
-       100.0,
-       100.0,
-       100.0,
-       100.0
-      ]
-     }
-    },
-    {
-     "investigation_id": "BASS",
-     "live_rank": 3,
-     "live_position_in_ranking": 3,
      "live_config_id": "BASS-C01",
      "first_or_tied_share_local": 1.0,
      "top3_share_local": 1.0,
@@ -991,12 +849,12 @@
        "share_uniform": 1.0
       },
       {
-       "investigation_id": "SAFFIRE-II",
+       "investigation_id": "SAFFIRE-I",
        "share": 1.0,
        "share_uniform": 1.0
       },
       {
-       "investigation_id": "SAFFIRE-I",
+       "investigation_id": "SAFFIRE-II",
        "share": 1.0,
        "share_uniform": 1.0
       },
@@ -1008,8 +866,8 @@
      ],
      "tied_in_every_draw_with": [
       "BASS-II",
-      "SAFFIRE-II",
       "SAFFIRE-I",
+      "SAFFIRE-II",
       "SAFFIRE-III"
      ],
      "assumed_dims": [
@@ -1019,8 +877,73 @@
      "assumed_dims_scored": [],
      "unknown_dims": [],
      "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 1.0,
+     "display_line": "Level with BASS-II, SAFFIRE-I, SAFFIRE-II and SAFFIRE-III in every one of the team's 16,000 sampled weightings: a tie, not an order.",
+     "display_rule": "tie_in_every_draw",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 8000,
+      "draws_both_runs": 16000,
+      "top_k": 3,
+      "group_size": 5,
+      "shares_pct": [
+       100.0,
+       100.0,
+       100.0,
+       100.0,
+       0.0,
+       100.0,
+       100.0,
+       100.0,
+       100.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "BASS-II",
+     "live_rank": 2,
+     "live_position_in_ranking": 2,
+     "live_config_id": "BASS-II-C01",
+     "first_or_tied_share_local": 1.0,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 1.0,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 1.0,
+     "tied_for_first_with": [
+      {
+       "investigation_id": "BASS",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-I",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-III",
+       "share": 1.0,
+       "share_uniform": 1.0
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "BASS",
+      "SAFFIRE-I",
+      "SAFFIRE-II",
+      "SAFFIRE-III"
+     ],
+     "assumed_dims": [],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
      "listed_first_share_local": 0.0,
-     "display_line": "Level with BASS-II, SAFFIRE-II, SAFFIRE-I and SAFFIRE-III in every one of the team's 16,000 sampled weightings: a tie, not an order.",
+     "display_line": "Level with BASS, SAFFIRE-I, SAFFIRE-II and SAFFIRE-III in every one of the team's 16,000 sampled weightings: a tie, not an order.",
      "display_rule": "tie_in_every_draw",
      "display_text_origin": "template",
      "display_facts": {
@@ -1043,8 +966,8 @@
     },
     {
      "investigation_id": "SAFFIRE-I",
-     "live_rank": null,
-     "live_position_in_ranking": 4,
+     "live_rank": 3,
+     "live_position_in_ranking": 3,
      "live_config_id": "SAFFIRE-I-C01",
      "first_or_tied_share_local": 1.0,
      "top3_share_local": 1.0,
@@ -1053,6 +976,11 @@
      "first_alone_share_local": 0.0,
      "first_or_tied_share_local_at_displayed_precision": 1.0,
      "tied_for_first_with": [
+      {
+       "investigation_id": "BASS",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
       {
        "investigation_id": "BASS-II",
        "share": 1.0,
@@ -1064,7 +992,69 @@
        "share_uniform": 1.0
       },
       {
+       "investigation_id": "SAFFIRE-III",
+       "share": 1.0,
+       "share_uniform": 1.0
+      }
+     ],
+     "tied_in_every_draw_with": [
+      "BASS",
+      "BASS-II",
+      "SAFFIRE-II",
+      "SAFFIRE-III"
+     ],
+     "assumed_dims": [
+      "pressure"
+     ],
+     "assumed_dims_scored": [],
+     "unknown_dims": [],
+     "shown_in_results_share_local": 1.0,
+     "listed_first_share_local": 0.0,
+     "display_line": "Level with BASS, BASS-II, SAFFIRE-II and SAFFIRE-III in every one of the team's 16,000 sampled weightings: a tie, not an order.",
+     "display_rule": "tie_in_every_draw",
+     "display_text_origin": "template",
+     "display_facts": {
+      "draws_per_run": 8000,
+      "draws_both_runs": 16000,
+      "top_k": 3,
+      "group_size": 5,
+      "shares_pct": [
+       100.0,
+       100.0,
+       100.0,
+       100.0,
+       0.0,
+       100.0,
+       100.0,
+       100.0,
+       100.0
+      ]
+     }
+    },
+    {
+     "investigation_id": "SAFFIRE-II",
+     "live_rank": null,
+     "live_position_in_ranking": 4,
+     "live_config_id": "SAFFIRE-II-C01",
+     "first_or_tied_share_local": 1.0,
+     "top3_share_local": 1.0,
+     "first_or_tied_share_uniform": 1.0,
+     "top3_share_uniform": 1.0,
+     "first_alone_share_local": 0.0,
+     "first_or_tied_share_local_at_displayed_precision": 1.0,
+     "tied_for_first_with": [
+      {
        "investigation_id": "BASS",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "BASS-II",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-I",
        "share": 1.0,
        "share_uniform": 1.0
       },
@@ -1075,9 +1065,9 @@
       }
      ],
      "tied_in_every_draw_with": [
-      "BASS-II",
-      "SAFFIRE-II",
       "BASS",
+      "BASS-II",
+      "SAFFIRE-I",
       "SAFFIRE-III"
      ],
      "assumed_dims": [
@@ -1104,17 +1094,12 @@
      "first_or_tied_share_local_at_displayed_precision": 1.0,
      "tied_for_first_with": [
       {
-       "investigation_id": "BASS-II",
-       "share": 1.0,
-       "share_uniform": 1.0
-      },
-      {
-       "investigation_id": "SAFFIRE-II",
-       "share": 1.0,
-       "share_uniform": 1.0
-      },
-      {
        "investigation_id": "BASS",
+       "share": 1.0,
+       "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "BASS-II",
        "share": 1.0,
        "share_uniform": 1.0
       },
@@ -1122,13 +1107,18 @@
        "investigation_id": "SAFFIRE-I",
        "share": 1.0,
        "share_uniform": 1.0
+      },
+      {
+       "investigation_id": "SAFFIRE-II",
+       "share": 1.0,
+       "share_uniform": 1.0
       }
      ],
      "tied_in_every_draw_with": [
-      "BASS-II",
-      "SAFFIRE-II",
       "BASS",
-      "SAFFIRE-I"
+      "BASS-II",
+      "SAFFIRE-I",
+      "SAFFIRE-II"
      ],
      "assumed_dims": [
       "O2",
@@ -1147,7 +1137,7 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 20.6
+    "rank_seconds": 36.0
    },
    "seed_check": {
     "seed": 43,
