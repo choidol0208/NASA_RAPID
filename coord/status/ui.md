@@ -1,10 +1,10 @@
 ---
 role: ui
-updated: 2026-11-15 10:24 KST
+updated: 2026-11-15 10:55 KST
 state: working
 blocked_on: none
 ---
-Now (15 Nov, 10:16): the three piles run on the data role's files (merged origin/data-pipeline cb54f84): header links for both demo environments, the FLEX test sheets against the table, and the per-test file list with CSV download. Left for 0035: the per-question video line and ground 3. 10:24: config 1.5.1 merged (catalog 1012: the tie-rule note and the near-tie tag reworded); data 0953 read. Earlier (08:19): pm 0035 (the three piles) is live as the smallest version for the lunar habitat and the ISS. The rest follows data's 0035 files (`question_chain.csv`, `file_links_summary.json`, `test_files.json`), none of which is on a branch yet. The ui session was off from about 00:25 to 08:05.
+Now (15 Nov, 10:16): the three piles run on the data role's files (merged origin/data-pipeline cb54f84): header links for both demo environments, the FLEX test sheets against the table, and the per-test file list with CSV download. Left for 0035: the per-question video line and ground 3. 10:24: config 1.5.1 merged (catalog 1012: the tie-rule note and the near-tie tag reworded); data 0953 read. 10:55: merged data's comparison, process steps, material index and archive summary (874c046); the page builds and runs on them unchanged (validation 43/43, parity 104/104, integration 0 broken joins). Earlier (08:19): pm 0035 (the three piles) is live as the smallest version for the lunar habitat and the ISS. The rest follows data's 0035 files (`question_chain.csv`, `file_links_summary.json`, `test_files.json`), none of which is on a branch yet. The ui session was off from about 00:25 to 08:05.
 
 - **08:19, pm 0035, smallest version.** New section "Where the data are: in NASA's tables, in the archive, or no record".
   - It shows the header line, a bar per question, the three piles and the small print, all as fixed templates of `pile_wording.md`, filled by `web/raw_piles.py` at build time.
