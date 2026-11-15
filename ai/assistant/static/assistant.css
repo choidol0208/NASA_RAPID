@@ -268,3 +268,27 @@ html[data-theme="dark"] #assistant .as-send { color: #0d1320; }
 /* A visible tag on a team-code sentence inside a model answer (added after the grounding audit of 15 Nov). */
 .as-code-tag { display: inline-block; margin: 0 0.25em; padding: 0 0.35em; border: 1px solid currentColor; border-radius: 3px;
   font-size: 0.75em; font-style: normal; opacity: 0.75; vertical-align: 0.1em; }
+
+/* ---- Page design, version 2 (web/SHELL.md): one calm card. Neutral surfaces from the same variables (so the dark set
+   still holds); a caution is a 3 px amber rule, never a filled panel; no dashed lines. */
+#assistant { border-top: 1px solid var(--as-rule); border-radius: 10px; }
+#assistant .as-mode, #assistant .as-mode-no_model, #assistant .as-mode-recorded, #assistant .as-mode-mock, #assistant .as-mode-nothing,
+#assistant .as-notice, #assistant .as-notice-info { background: var(--as-paper); border-left: 3px solid var(--as-rule); border-radius: 0 8px 8px 0; font-size: 13px; }
+#assistant .as-mode-no_model, #assistant .as-mode-recorded, #assistant .as-mode-mock, #assistant .as-mode-nothing, #assistant .as-notice { border-left-color: var(--as-amber-mark); }
+#assistant .as-notice-error { background: var(--as-paper); color: var(--as-ink); border-left-color: var(--as-red); }
+#assistant .as-answer { background: var(--as-paper); border-left: 0; border-radius: 8px; padding: 12px 16px; font-size: 15px; line-height: 1.55; }
+#assistant .as-turn { border-bottom-style: solid; }
+#assistant .as-chip-assumed { border-style: solid; }
+#assistant .as-chip-uncertain { border: 1px solid var(--as-amber-mark); background: var(--as-card); }
+#assistant .as-btn { border: 1px solid var(--as-rule); background: var(--as-card); border-radius: 8px; }
+#assistant .as-btn:hover:not([disabled]) { background: var(--as-paper); color: var(--as-ink); border-color: var(--as-blue); }
+#assistant .as-table thead th { background: var(--as-paper); }
+/* the steps: one compact progress row, the detail under "Steps" */
+#assistant .as-steps-fold { margin: 0 0 8px; font-size: 13px; color: var(--as-ink-2); }
+#assistant .as-steps-fold > summary { display: flex; align-items: baseline; gap: 8px; cursor: pointer; padding: 4px 0; list-style: none; }
+#assistant .as-steps-fold > summary::-webkit-details-marker { display: none; }
+#assistant .as-steps-fold > summary::before { content: "\25B8"; color: var(--as-blue); }
+#assistant .as-steps-fold[open] > summary::before { content: "\25BE"; }
+#assistant .as-steps-word { font-weight: 700; color: var(--as-blue); }
+#assistant .as-steps-now { min-width: 0; overflow-wrap: anywhere; }
+#assistant .as-steps-fold > .as-steps { margin: 4px 0 0; padding: 8px 12px; background: var(--as-paper); border-radius: 8px; font-size: 13px; }

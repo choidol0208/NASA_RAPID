@@ -119,11 +119,83 @@
     [["#top"], ["#needs"], ["#stops"]].forEach(function (v) {
       var sec = $(v[0]), k = sec && $(".kicker", sec), h2 = sec && $("h2", sec);
       if (!k || !h2) return;
-      var kk = el("p", { "class": "kicker" });
-      kk.innerHTML = k.innerHTML;
-      verbs.append(el("div", { "class": "verb" }, [kk, el("p", { "class": "verb-title" }, [h2.textContent])]));
+      // version 2: the verb, the section's heading, then the rest of the kicker as a small line (the page's own words)
+      var name = $("b", k), nameText = name ? name.textContent : "";
+      var rest = k.textContent.replace(nameText, "").replace(/^[\s·]+/, "");
+      verbs.append(el("div", { "class": "verb" }, [el("p", { "class": "verb-name" }, [nameText]),
+        el("p", { "class": "verb-title" }, [h2.textContent]), el("p", { "class": "verb-sub" }, [rest])]));
     });
     if (verbs.children.length === 3) ask.insertAdjacentElement("afterend", verbs);
+
+    // ---- the model indicator (SHELL.md, "Model indicator"): which language model answers here, or none, in the
+    // manner of a chat application that names its model under the message box. assistant.js reports its mode with
+    // the event "fee-model" (and window.feeModel); a page without the assistant shows the rule-based state.
+    var chip = el("a", { id: "model-chip", "class": "model-chip", href: "how.html#ai-use", "data-mode": "pending" },
+      [el("span", { "class": "mc-main" }, [el("span", { "class": "mc-dot", "aria-hidden": "true" }), el("span", { "class": "mc-name" })]),
+        el("span", { "class": "mc-sub" })]);
+    // Version 2: on the start page it stands under the input at the right end of the help line (index.html keeps the
+    // place, #ask-model); once a query is shown, in the request header next to the reading status.
+    var meta = $("#ask-model", form);
+    if (meta) meta.append(chip);
+    else {
+      meta = el("div", { "class": "ask-meta" }, [chip]);
+      var row = $(".ask-row", form);
+      if (row) row.insertAdjacentElement("afterend", meta); else form.prepend(meta);
+    }
+    function placeChip(landing) {
+      var side = $("#request .request-side");
+      if (!landing && side) { if (chip.parentNode !== side) side.prepend(chip); }
+      else if (chip.parentNode !== meta) meta.append(chip);
+    }
+    // the reason the local server gives (ai/llm.py), in plain words; the exact reason is in the title
+    function reasonWords(r) {
+      if (!r) return "";
+      if (/AI_NO_MODEL_CALLS=1/.test(r)) return "model calls switched off for this run";
+      if (/not reachable/i.test(r)) return "the model server did not answer";
+      if (/not installed/i.test(r)) return "the model is not installed";
+      if (/digest/i.test(r)) return "the installed model is not the expected version";
+      if (/not an allowed model/i.test(r)) return "the model is not on the team's list";
+      return r;
+    }
+    function showModel(d) {
+      d = d || {};
+      var mode = d.mode || "none", name, ext = "", sub = "", title, dot = "hollow";
+      var more = " Opens: how AI is used here.";
+      if (mode === "live") {
+        name = d.model || "Local model"; ext = d.model ? " · local model" : ""; dot = "filled";
+        sub = "Runs on this computer through Ollama";
+        title = (d.model || "The local model") + (d.maker ? " by " + d.maker : "") + (d.license ? ", licence " + d.license : "") +
+          ". It runs on this computer through Ollama" + (d.digest ? "; its digest " + d.digest + " is the one the team's code expects" : "") + "." + more;
+      } else if (mode === "no_model") {
+        var why = reasonWords(d.reason);
+        name = "Rule-based"; ext = " mode";
+        sub = "Answers put together by team code from the facts" + (why ? " · " + why : "");
+        title = "Answers are put together by team code from the facts." + (d.reason ? " The local server says: " + d.reason + "." : "") + more;
+      } else if (mode === "mock") {
+        name = "Mock"; ext = " mode"; sub = "Fixed test answers";
+        title = "Every answer is a fixed test file." + more;
+      } else { // the public page or a static copy: recorded, nothing, or no assistant on the page
+        name = "Rule-based"; ext = " mode";
+        if (mode === "recorded" && d.recordedModel) {
+          sub = "Recorded answers of " + d.recordedModel + (d.recordedDate ? ", " + d.recordedDate : "");
+          title = "The dashboard is computed by team code. The assistant replays answers recorded with the local model " +
+            d.recordedModel + (d.recordedDate ? " on " + d.recordedDate : "") + "." + more;
+        } else { sub = "Dashboard computed by team code"; title = "The dashboard is computed by team code from NASA PSI data." + more; }
+      }
+      var nm = $(".mc-name", chip), sb = $(".mc-sub", chip);
+      nm.replaceChildren(name, el("span", { "class": "mc-ext" }, [ext]));
+      sb.textContent = sub;
+      chip.title = title;
+      chip.setAttribute("aria-label", name + ext + (sub ? ". " + sub : "") + "." + more);
+      chip.setAttribute("data-mode", mode);
+      chip.setAttribute("data-dot", dot);
+    }
+    document.addEventListener("fee-model", function (e) { showModel(e.detail); });
+    if (window.feeModel) showModel(window.feeModel);
+    // a page without the assistant (or one whose assistant never reports): the rule-based state
+    var noAssistant = function () { if (chip.getAttribute("data-mode") === "pending" && !document.getElementById("assistant")) showModel(null); };
+    if (document.readyState === "complete") noAssistant(); else window.addEventListener("load", noAssistant);
+    setTimeout(function () { if (chip.getAttribute("data-mode") === "pending") showModel(null); }, 8000);
 
     // ---- loading placeholder for a page opened with a query (the results take its place)
     var skeleton = el("div", { "class": "skeleton", "aria-hidden": "true" },
@@ -144,10 +216,69 @@
     // the resting place of the tab bar (the bar itself is sticky, so its own position says where it is stuck)
     var anchor = el("span", { id: "tabs-anchor", "class": "tabs-anchor", "aria-hidden": "true" });
     tabs.insertAdjacentElement("beforebegin", anchor);
-    // The cautions of "How your input was read" (#scenario-warnings) stay in view under every tab: a copy of them,
-    // rebuilt whenever app.js renders them, sits between the summary row and the tab bar. The soft line is not copied.
-    var warnCopy = el("div", { "class": "warnings shell-warnings", hidden: "" });
+    // Version 2: the notices of "How your input was read" (#scenario-warnings) are shown under every tab as ONE
+    // neutral band between the summary row and the tab bar, rebuilt whenever app.js renders them. Each notice is cut
+    // to its first sentence; "Read the full note" opens the rest in place (the full text is in the band's markup).
+    var warnCopy = el("aside", { id: "notes-band", "class": "notes-band", "aria-label": "Notes for this environment", hidden: "" });
     anchor.insertAdjacentElement("beforebegin", warnCopy);
+    function firstSentence(t) {
+      var m = /^([\s\S]*?[.!?])\s+(?=[A-Z(])([\s\S]+)$/.exec(t);
+      return m && m[1].length >= 24 ? [m[1], m[2]] : [t, ""];
+    }
+    function buildNotes(src) {
+      var ul = el("ul", { "class": "notes-list" });
+      src.forEach(function (w, i) {
+        var parts = firstSentence(w.textContent.trim());
+        var li = el("li", { "class": "note" }, [el("span", { "class": "note-first" }, [parts[0]])]);
+        if (parts[1]) {
+          var more = el("span", { "class": "note-rest", id: "note-rest-" + i, hidden: "" }, [" " + parts[1]]);
+          var btn = el("button", { type: "button", "class": "text-btn note-more", "aria-expanded": "false", "aria-controls": "note-rest-" + i }, ["Read the full note"]);
+          btn.addEventListener("click", function () {
+            var open = more.hidden;
+            more.hidden = !open;
+            btn.setAttribute("aria-expanded", String(open));
+            btn.textContent = open ? "Show less" : "Read the full note";
+          });
+          li.append(more, " ", btn);
+        }
+        ul.append(li);
+      });
+      warnCopy.replaceChildren(el("p", { "class": "notes-title" }, ["Notes for this environment"]), ul);
+    }
+
+    // ---- version 2: the request header. A white band under the app bar: what was read as the title (the environment's
+    // label, then the material when one is named), the reading chips (#conditions, moved here), the reading status,
+    // and the block "How your input was read" (#read, moved into a fold that is closed while the notes band shows
+    // its notices). app.js finds both by id, so it renders into them where they now are.
+    var read = $("#read"), conds = $("#conditions");
+    var request = el("div", { id: "request", "class": "request", hidden: "" });
+    var reqTitle = el("h2", { "class": "request-title" });
+    var reqStatus = el("span", { id: "reading-status", "class": "reading-status", "data-state": "rule" }, ["Rule-based reading"]);
+    var readFold = el("details", { "class": "more read-fold" }, [el("summary", {}, ["How this was read"])]);
+    if (read && conds) {
+      request.append(el("div", { "class": "request-top" }, [reqTitle, el("div", { "class": "request-side" }, [reqStatus])]), conds, readFold);
+      ask.insertAdjacentElement("afterend", request);
+      readFold.append(read);
+    }
+    function chipValue(label) {
+      var li = $$("li", conds).filter(function (x) { var b = $("b", x); return b && b.textContent === label; })[0];
+      if (!li) return "";
+      return $$("b, .src", li).reduce(function (t, n) { return t.replace(n.textContent, ""); }, li.textContent).trim();
+    }
+    function readingTitle() {
+      var env = chipValue("Environment"), mat = chipValue("Material");
+      return [env, mat].filter(Boolean).join(" · ") || (q.value.trim() || query() || "").trim();
+    }
+    // The reading status. Without a model: "Rule-based reading". The assistant sets the other states when a local
+    // model has checked the reading (window.feeShell.setReading, called from ai/assistant/static/assistant.js).
+    var READING = { rule: "Rule-based reading", checking: "Checking the reading with {m}", checked: "Reading checked by {m}",
+      corrected: "Reading corrected by {m}", question: "The assistant has a question" };
+    function setReading(st, model, detail) {
+      if (!READING[st]) st = "rule";
+      reqStatus.setAttribute("data-state", st);
+      reqStatus.textContent = READING[st].replace("{m}", model || "the local model");
+      if (detail) reqStatus.setAttribute("title", detail); else reqStatus.removeAttribute("title");
+    }
 
     // pending: a tab or a section id asked for by the address, opened as soon as app.js has shown it
     // "All investigations" is a tab of its own: its table is open there (the fold stays for the page without the shell)
@@ -208,6 +339,7 @@
       root.classList.toggle("is-landing", landing);
       root.classList.toggle("is-query", !landing);
       if (search) search.hidden = landing;
+      placeChip(landing);
 
       if (!loading && landing && query() === null) {
         // Without a query app.js runs its ISS example; the start page shows the input empty instead.
@@ -235,13 +367,22 @@
       setHidden(tabs, !ok || !first);
 
       var sw = $("#scenario-warnings");
-      var src = sw ? $$(":scope > .warn:not(.is-soft)", sw) : [];
+      var src = sw ? $$(":scope > .warn", sw) : [];
       var sig = src.map(function (w) { return w.className + "|" + w.textContent; }).join("\n");
       if (sig !== warnCopy.getAttribute("data-sig")) {
-        warnCopy.replaceChildren.apply(warnCopy, src.map(function (w) { return w.cloneNode(true); }));
+        buildNotes(src);
         warnCopy.setAttribute("data-sig", sig);
       }
       setHidden(warnCopy, !ok || !src.length);
+      root.classList.toggle("has-notes", ok && src.length > 0); // the band carries them: #read does not repeat them
+      if (request.parentNode) {
+        var showReq = !landing && !loading && !read.hidden;
+        setHidden(request, !showReq);
+        var title = showReq ? readingTitle() : "";
+        if (reqTitle.textContent !== title) reqTitle.textContent = title;
+        // no ranking for this input: the notices are in the block itself, so it opens (once per input)
+        if (showReq && !ok && state.readOpened !== q.value) { readFold.open = true; state.readOpened = q.value; }
+      }
       TABS.forEach(function (t) {
         var a = tabLinks[t[0]], on = ok && t[0] === state.tab;
         setHidden(a, !open[t[0]]);
@@ -366,6 +507,7 @@
       // The assistant marks its own submit (the dashboard follows an answer that arrives a minute or two after
       // the question): the visitor's tab and scroll position stay as they are.
       if (form.hasAttribute("data-quiet")) { later(); return; }
+      setReading("rule");
       state.resetTab = true;
       var u = new URL(location.href);
       if (u.searchParams.has("tab") || u.hash) { u.searchParams.delete("tab"); u.hash = ""; history.replaceState(null, "", u); }
@@ -405,9 +547,12 @@
       else done(false);
     });
 
+    // print shows everything: the fold that holds "How your input was read" opens for it
+    window.addEventListener("beforeprint", function () { readFold.open = true; });
+
     // app.js shows and hides sections as its files arrive: follow it.
     new MutationObserver(later).observe(main, { attributes: true, attributeFilter: ["hidden", "class"], subtree: true, childList: true });
-    window.feeShell = { reveal: reveal, setTab: setTab, tabOf: TAB_OF };
+    window.feeShell = { reveal: reveal, setTab: setTab, tabOf: TAB_OF, setReading: setReading };
     sync();
   }
 

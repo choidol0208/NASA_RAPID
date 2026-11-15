@@ -210,6 +210,34 @@
     S.root.setAttribute("data-mode", mode);
     if (answers()) setInputWords();
     refresh();
+    announceModel();
+  }
+
+  // The page shell's model indicator (web/SHELL.md, "Model indicator") names the model that answers here, or none.
+  // Everything it shows comes from the health reply of the local server or from the recorded file.
+  function announceModel() {
+    var hl = S.health || {}, m = hl.model || {}, rec = S.recorded || {};
+    var d = { mode: S.mode, reason: S.reason, model: m.name || null, maker: m.maker || null, license: m.license || null,
+      digest: m.digest_ok ? (m.digest_prefix || null) : null,
+      recordedModel: rec.model ? String(rec.model).replace(/\s*\(.*\)\s*$/, "") : null, recordedDate: S.recordedDate || null };
+    window.feeModel = d;
+    try { document.dispatchEvent(new CustomEvent("fee-model", { detail: d })); } catch (e) { /* no CustomEvent: the shell keeps its default */ }
+  }
+
+  // The local server's mode can change while the page is open (the model server stops or starts): health is read
+  // again when the page comes back into view, after each answer, and once a minute while the page is in view.
+  var lastHealth = 0;
+  function recheckHealth() {
+    if (S.mode !== "live" && S.mode !== "no_model") return;
+    if (Date.now() - lastHealth < 15000) return;
+    lastHealth = Date.now();
+    fetchJSON("/api/health", { cache: "no-store" }, 3000).then(function (hl) {
+      if (!hl || !hl.ok) return;
+      S.health = hl;
+      var mode = hl.mode === "live" ? "live" : "no_model";
+      if (mode !== S.mode || (hl.reason || null) !== S.reason) setMode(mode, hl.reason);
+      else announceModel();
+    }).catch(function () { /* the server did not answer this time: the mode stays as it was */ });
   }
 
   // Where a server answers (live, no-model, mock), the page's one input also invites a question. On the public
@@ -339,7 +367,10 @@
     if (!local) { startRecorded("assistant/recorded.json", "assistant/eval.json"); return; }
     fetchJSON("/api/health", { cache: "no-store" }, 1500).then(function (hl) {
       if (!hl || !hl.ok) throw new Error("health");
+      S.health = hl; lastHealth = Date.now();
       setMode(hl.mode === "live" ? "live" : "no_model", hl.reason);
+      document.addEventListener("visibilitychange", function () { if (!document.hidden) recheckHealth(); });
+      setInterval(function () { if (!document.hidden && !S.busy) recheckHealth(); }, 60000);
       loadExamples("/api/examples");
       loadEval("assistant/eval.json");
     }).catch(function () { startRecorded("assistant/recorded.json", "assistant/eval.json"); });
@@ -371,8 +402,12 @@
       // ("Environments", "Questions"); the shell shows that group on the start page and this one after it.
       var host = document.querySelector("#ask-form .ask-examples");
       if (host && document.documentElement.classList.contains("shell-on") && !host.querySelector(".as-qgroup")) {
-        host.appendChild(h("div", { class: "ex-group as-qgroup" }, h("span", { class: "ex-label", id: "as-qlabel" }, L.questions),
-          h("div", { class: "ex-list", role: "group", "aria-labelledby": "as-qlabel" }, buttons("ex-q"))));
+        // Page design v2: at most three questions as text links; the others open under "More examples".
+        var qb = buttons("ex-q");
+        var qlist = h("div", { class: "ex-list ex-links", role: "group", "aria-labelledby": "as-qlabel" }, qb.slice(0, 3));
+        if (qb.length > 3) qlist.appendChild(h("details", { class: "more ex-more" }, h("summary", {}, "More examples"),
+          h("div", { class: "ex-list ex-links" }, qb.slice(3))));
+        host.appendChild(h("div", { class: "ex-group as-qgroup" }, h("span", { class: "ex-label", id: "as-qlabel" }, L.questions), qlist));
         box.classList.add("as-twin");
       }
       S.hasList = true;
@@ -417,6 +452,7 @@
     S.handled.push(norm(turn.dashQ));
     if (!opts || opts.dashQ === undefined) showTurn(turn); // asked from inside the conversation
     setBusy(true);
+    if (S.mode === "live") readingStatus("checking");
     var payload = {
       message: body.message || null, request: body.request || null, state: S.state,
       answer_mode: body.answer_mode || null
@@ -427,7 +463,45 @@
       renderResponse(turn, resp, { streamed: turn.streamed });
     }).catch(function (e) {
       renderError(turn, e && e.response);
-    }).then(function () { setBusy(false); });
+      if (S.mode === "live") readingStatus("rule");
+    }).then(function () { setBusy(false); recheckHealth(); });
+  }
+
+  // ---- Page design v2, "Model-checked reading" (web/SHELL.md). With the local model connected, the dashboard is
+  // brought to the reading the assistant agreed on (resp.dashboard.q, which arrives with the answer), and the request
+  // header of the page says whether that reading is the one the rule parser showed at once or a corrected one.
+  function readingStatus(st, detail) {
+    var sh = window.feeShell;
+    if (sh && typeof sh.setReading === "function") sh.setReading(st, (S.health && S.health.model && S.health.model.name) || null, detail || null);
+  }
+  // a reading chip without its origin words ("(you)", "(from the preset)"): the check compares what was read
+  function chipText(li) {
+    var src = li.querySelector(".src"), t = li.textContent;
+    if (src) t = t.replace(src.textContent, "");
+    return t.replace(/\s+/g, " ").trim();
+  }
+  function chipTexts() { return Array.prototype.map.call(document.querySelectorAll("#conditions li"), chipText); }
+  function checkReading(turn, dq) {
+    // only while the dashboard still shows what it showed when the turn began (or already shows the agreed request)
+    var cur = norm(currentQ());
+    if (cur !== norm(turn.dashQ) && cur !== norm(dq)) { S.handled.push(norm(dq)); readingStatus("rule"); return; }
+    var before = chipTexts();
+    var compare = function () {
+      var after = chipTexts();
+      var changed = after.filter(function (t) { return before.indexOf(t) < 0; });
+      var gone = before.filter(function (t) { return after.indexOf(t) < 0; });
+      if (!changed.length && !gone.length) { readingStatus("checked"); return; }
+      readingStatus("corrected", "Changed by the check: " + changed.concat(gone.map(function (t) { return "no longer read: " + t; })).join("; "));
+      Array.prototype.forEach.call(document.querySelectorAll("#conditions li"), function (li) {
+        if (changed.indexOf(chipText(li)) < 0) return;
+        li.classList.add("is-changed");
+        setTimeout(function () { li.classList.remove("is-changed"); }, 6000);
+      });
+    };
+    S.handled.push(norm(dq));
+    if (cur === norm(dq)) { compare(); return; }
+    driveDashboard(dq, null, false);
+    setTimeout(compare, 900); // after app.js has rendered the new reading
   }
 
   function liveAnswer(payload, turn) {
@@ -562,11 +636,15 @@
     // live mode only: the model needs a minute or two, and the dashboard is already usable
     var wait = S.mode === "live" ? h("p", { class: "as-wait" }, L.waitLive) : null;
     var user = h("div", { class: "as-user" }, h("span", { class: "as-vh" }, "You: "), text);
-    var el = h("article", { class: "as-turn", "data-turn": idx }, user, steps, wait, body);
+    // Page design v2: the steps are one compact progress row; their detail opens under "Steps".
+    var stepsNow = h("span", { class: "as-steps-now", "aria-live": "polite" }, "");
+    var stepsFold = h("details", { class: "as-steps-fold" },
+      h("summary", {}, h("span", { class: "as-steps-word" }, "Steps"), h("span", { class: "as-dot", "aria-hidden": "true" }), stepsNow), steps);
+    var el = h("article", { class: "as-turn", "data-turn": idx }, user, stepsFold, wait, body);
     // The latest answer is shown in full; the earlier turns fold to their question (a click opens one again).
     S.turns.forEach(function (t) { foldTurn(t, true); });
     chat.appendChild(el);
-    var turn = { el: el, user: user, steps: steps, body: body, idx: idx, streamed: false, stepEls: {}, resp: null, wait: wait, dashQ: "" };
+    var turn = { el: el, user: user, steps: steps, stepsNow: stepsNow, stepsFold: stepsFold, body: body, idx: idx, streamed: false, stepEls: {}, resp: null, wait: wait, dashQ: "" };
     var toggle = function () { if (el.classList.contains("as-old")) foldTurn(turn, !el.classList.contains("as-folded")); };
     user.addEventListener("click", toggle);
     user.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
@@ -617,12 +695,21 @@
       sum.replaceChildren(document.createTextNode(ev.summary || ""));
       if (meta.length) sum.appendChild(h("span", { class: "as-ms" }, " " + meta.join(", ")));
     }
+    // the compact row: the step that runs now, then the last step's own summary
+    if (turn.stepsNow) {
+      var label = li.querySelector(".as-step-label").textContent;
+      var running = ev.status === "start";
+      turn.stepsNow.textContent = running ? label + " ..." : (ev.step === "deliver" && ev.summary ? ev.summary : label);
+      turn.stepsFold.classList.toggle("as-run", running);
+      turn.stepsFold.classList.toggle("as-done", !running);
+    }
     scrollChatTo(turn.el);
   }
 
   function renderError(turn, j) {
     if (turn.wait) { turn.wait.remove(); turn.wait = null; }
     Object.keys(turn.stepEls).forEach(function (k) { turn.stepEls[k].classList.remove("as-run"); });
+    if (turn.stepsFold) turn.stepsFold.classList.remove("as-run");
     add(turn.body, h("p", { class: "as-notice as-notice-error", role: "alert" }, L.error));
     if (j && j.trace) add(turn.body, traceFold(j.trace));
   }
@@ -718,9 +805,11 @@
       // A turn asked from the page's input leaves the dashboard (and the input) on the visitor's own words; the
       // button above offers the answer's request. A follow-up or a recording opened from the list drives the
       // dashboard as before, unless the visitor has moved the dashboard on since.
-      if (!turn.fromInput && norm(currentQ()) === norm(turn.dashQ)) { S.handled.push(norm(dq)); driveDashboard(dq, null, false); }
+      if (S.mode === "live" && resp.kind !== "clarify") checkReading(turn, dq); // page design v2: the model-checked reading
+      else if (!turn.fromInput && norm(currentQ()) === norm(turn.dashQ)) { S.handled.push(norm(dq)); driveDashboard(dq, null, false); }
       else if (turn.fromInput) S.handled.push(norm(dq));
-    }
+    } else if (S.mode === "live" && resp.kind !== "clarify") readingStatus("rule");
+    if (S.mode === "live" && resp.kind === "clarify") readingStatus("question");
     refresh();
     scrollChatTo(turn.el);
   }
@@ -1309,7 +1398,16 @@
     return String(v);
   }
   function loadEval(url) {
-    fetchJSON(url, { cache: "no-cache" }).then(function (ev) {
+    // A built page lists the measurement file in data/build.json only when the build has it: no request for a file
+    // that is not there (it showed as an error in the console). The mock files are always present.
+    var listed = url.indexOf(S.mockPrefix) === 0 ? Promise.resolve(true) :
+      fetchJSON("data/build.json", { cache: "no-cache" }).then(function (bj) {
+        return !bj || !Array.isArray(bj.optional) || bj.optional.indexOf("assistant/eval.json") >= 0;
+      }, function () { return false; });
+    listed.then(function (ok) {
+      if (!ok) throw new Error("not in this build");
+      return fetchJSON(url, { cache: "no-cache" });
+    }).then(function (ev) {
       if (!ev || !ev.arms) throw new Error("no arms");
       var cols = [["reading_accuracy", "reading accuracy"], ["citation_valid", "sentences with a valid citation"],
         ["numbers_unsupported", "numbers not in the cited facts"], ["forbidden_wording", "forbidden wording"],

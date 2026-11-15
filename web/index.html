@@ -43,9 +43,14 @@
 <header class="masthead">
   <div class="wrap">
     <h1>Fire Evidence Explorer</h1>
+    <p class="eyebrow">NASA Space Apps Challenge 2026 · Team RAPID</p>
     <p class="lede"><span class="lede-head">Tell us what you want to build: a spacecraft cabin, a Moon base, a rover.</span> See which NASA microgravity fire investigations come closest, what to consider and what their recorded tests say, and where the evidence stops.</p>
-    <p class="challenge">The challenge says that the low-gravity combustion data in NASA's PSI database "can be hard to find, harder to compare, and harder yet to interpret". This page takes them in that order: <b>Find</b>, <b>Compare</b>, <b>Interpret</b>.</p>
     <p class="notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data.</p>
+    <!-- Page design v2: the paragraph that quotes the challenge statement, one click away on the start page. -->
+    <details class="about-fold">
+      <summary>About this page</summary>
+      <p class="challenge">The challenge says that the low-gravity combustion data in NASA's PSI database "can be hard to find, harder to compare, and harder yet to interpret". This page takes them in that order: <b>Find</b>, <b>Compare</b>, <b>Interpret</b>.</p>
+    </details>
   </div>
 </header>
 
@@ -58,11 +63,15 @@
         <input id="q" name="q" type="text" placeholder="e.g. moon cotton fabric, ISS smoke detector, 30% O2 at 10.2 psi" aria-describedby="ask-help">
         <button type="submit">Find evidence</button>
       </div>
-      <p id="ask-help" class="ask-help">Rough input is fine. Anything you leave out is filled from a preset or a default, and listed below so you can see it.</p>
+      <!-- Page design v2: the help line at the left; the model indicator (when a script adds one) at the right. -->
+      <div class="ask-meta">
+        <p id="ask-help" class="ask-help">Rough input is fine. Anything you leave out is filled from a preset or a default, and listed below so you can see it.</p>
+        <span id="ask-model" class="ask-model"></span>
+      </div>
       <!-- One set of examples. The assistant's example questions join it as a second group ("Questions") where a local server answers. -->
       <div class="ask-examples">
         <div class="ex-group">
-          <span class="ex-label" aria-hidden="true">Environments</span>
+          <span class="ex-label" aria-hidden="true">Try</span>
           <div class="presets" role="group" aria-label="Example environments">
             <button type="button" data-q="ISS">ISS cabin</button>
             <button type="button" data-q="lunar habitat">Lunar habitat</button>
@@ -212,7 +221,7 @@
   <div class="wrap foot-grid">
     <div class="foot-col foot-about">
       <p class="foot-brand">Fire Evidence Explorer</p>
-      <p class="foot-team">Team RAPID · NASA Space Apps Challenge 2026</p>
+      <p class="foot-team"><span>Team RAPID · NASA Space Apps Challenge 2026</span></p>
       <p class="foot-notice">Research exploration tool built on NASA Physical Sciences Informatics (PSI) data.</p>
       <p class="foot-notice">Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data.</p>
     </div>

@@ -150,6 +150,13 @@ function renderWarnings(box, warnings) {
   for (const w of warnings) box.append(h("p", { class: "warn" + (STOP.has(w.code) ? " is-stop" : SOFT.has(w.code) ? " is-soft" : "") }, w.message));
 }
 
+// Page design v2 (web/SHELL.md): the match profile as thin meters. Same values and the same tooltip as before;
+// the fill is blue from 0.70, slate from 0.40, amber below; an assumed value is hatched and says "assumed".
+function meterCls(v, unknown, assumed) {
+  if (unknown) return "m-unk";
+  const base = v >= 0.7 ? "m-hi" : v >= 0.4 ? "m-mid" : "m-lo";
+  return assumed ? base + " m-asm" : base;
+}
 function strip(r) {
   const dims = Object.keys(r.weights_used);
   const s = h("div", { class: "strip", style: `--n:${dims.length}`, role: "list", "aria-label": "Match by dimension" });
@@ -157,9 +164,12 @@ function strip(r) {
     const unknown = r.unknown_dims.includes(d);
     const assumed = (d === "o2" && r.assumed_dims.includes("O2")) || (d === "pressure" && r.assumed_dims.includes("pressure"));
     const v = r.similarity[d];
-    s.append(h("div", { class: "cell " + cls(v, unknown, assumed), role: "listitem",
+    const pct = unknown ? 0 : Math.max(0, Math.min(1, v)) * 100;
+    s.append(h("div", { class: "cell " + meterCls(v, unknown, assumed), role: "listitem",
       title: `${DIMS[d]}: ${unknown ? "not reported" : v.toFixed(2)}${assumed ? " (assumed cabin air)" : ""}, weight ${r.weights_used[d].toFixed(2)}` },
-      h("span", { class: "dim" }, DIMS[d]), h("span", { class: "val" }, unknown ? "n/r" : v.toFixed(2))));
+      h("span", { class: "dim" }, DIMS[d]), h("span", { class: "val" }, unknown ? "n/r" : v.toFixed(2)),
+      h("span", { class: "meter", "aria-hidden": "true" }, h("i", { style: `width:${pct.toFixed(0)}%` })),
+      assumed ? h("span", { class: "asm-word" }, "assumed") : null));
   }
   return s;
 }
@@ -246,13 +256,18 @@ function renderResults(out, cat, insights, sc) {
       h("div", { class: "score", title: SCORE_TIP }, String(r.score), h("small", {}, "match score")),
       h("p", { class: "subtitle" }, inv ? inv.investigation_name : r.psi_accession));
     const body = [
-      h("p", { class: "config" }, h("b", {}, "Closest test configuration: "), r.config_label),
+      h("p", { class: "config", title: r.config_label }, h("b", {}, "Closest test configuration: "), r.config_label),
       strip(r),
-      h("p", { class: "why" }, h("b", {}, "Why: "), r.why || "—"),
-      r.main_gap ? h("p", { class: "gap" }, h("b", {}, "Largest gap: "), r.main_gap) : null,
+      h("div", { class: "why-gap" },
+        h("p", { class: "why" }, h("b", {}, "Why: "), r.why || "—"),
+        r.main_gap ? h("p", { class: "gap" }, h("b", {}, "Largest gap: "), r.main_gap) : null),
     ];
+    // Page design v2: the card's cautions as a short list; two are shown, the others open in place.
     const warns = h("div", { class: "warnings" });
     renderWarnings(warns, r.warnings);
+    const extra = [...warns.children].slice(2);
+    if (extra.length) warns.append(h("details", { class: "more more-cautions" },
+      h("summary", {}, `${extra.length} more caution${extra.length === 1 ? "" : "s"}`), ...extra));
     const tags = h("div", { class: "tags" },
       h("span", { class: "tag" }, `${r.confidence} confidence`),
       inv && inv.verification_status === "human_verified" ? h("span", { class: "tag" }, "catalog checked by a person")
@@ -285,11 +300,12 @@ function renderResults(out, cat, insights, sc) {
       h("a", { href: "how.html#ai-use" }, "(team computation)")) : null;
     const note = noteFor(sc, r);
     const noteEl = note ? h("div", { class: "ai-note" }, h("p", {}, h("b", {}, "Team note: "), note.text, " ", sourceLinks(note.sources, cat)), itemTag(note, sc)) : null;
-    // Shell (web/SHELL.md): the summary lines, the team note (it opens with a caution), the cautions, the tags and the
-    // weight check (a team-computation label) stay open, in the order they always had; the source links and the
-    // raw-data lines open in place behind one disclosure per card; "What the record says" keeps its own, as before.
-    const detail = links || rawLine || videoEl ? h("details", { class: "card-more" }, h("summary", {}, "Details and sources"), links, rawLine, videoEl) : null;
-    ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, detail, robustEl, more));
+    // Page design v2 (web/SHELL.md): the summary lines, two cautions and the tags stay open. The team note (with its
+    // label), the source links, the raw-data lines and the weight check (a team-computation label) open in place behind
+    // "Details and sources", in the order they always had; "What the record says" keeps its own disclosure.
+    const detail = h("details", { class: "card-more" }, h("summary", {}, "Details and sources"), noteEl, links, rawLine, videoEl, robustEl);
+    const foot = h("div", { class: "card-foot" }, tags, detail, more);
+    ol.append(h("li", { class: "result" }, head, ...body, warns, foot));
   }
 }
 
@@ -921,17 +937,20 @@ function typedNote(out, pipe, sid) {
   const parts = [r.o2_pct ? `oxygen ${rangeText(r.o2_pct, "%")}` : null, r.pressure_kpa ? `pressure ${rangeText(r.pressure_kpa, " kPa")}` : null].filter(Boolean);
   return h("p", { class: "gap typed-note" }, `Counted for the ${spec.label} range${parts.length ? ` (${parts.join(", ")})` : ""}, not for the value you typed.`);
 }
+const glanceFig = (figure, unit) => h("span", { class: "fig" }, figure, " ", h("small", {}, unit), " ");
 function renderGlance(out, pipe) {
   const box = $("#glance");
   box.replaceChildren();
   if (out.status !== "ok" || !out.results.length) { box.hidden = true; return; }
-  const top = h("p", {}, h("b", {}, "At a glance: "), "closest NASA investigations ",
+  // Page design v2: each tile leads with its key figure. The figures are the ones the sentence under them states.
+  const top = h("p", {}, h("b", {}, "At a glance: "), glanceFig(String(out.results[0].score), `match score · ${out.results[0].investigation_id}`),
+    "closest NASA investigations ",
     ...out.results.flatMap((r, i) => [i ? ", " : "", h("a", { href: "#top" }, r.investigation_id)]),
     ` (match scores ${out.results.map((r) => r.score).join(", ")}).`);
   const sid = scenarioId(out, pipe);
   const cov = sid && pipe.scenarioNeeds ? scenarioCoverage(pipe, sid) : null;
   const second = cov && cov.total
-    ? h("p", {}, coverageLine(cov), " ",
+    ? h("p", {}, glanceFig(`${cov.both.length} of ${cov.total}`, "needs with recorded tests, oxygen and pressure both in the scenario range"), coverageLine(cov), " ",
       h("a", { href: "#compare" }, "Compare"), " · ", h("a", { href: "#stops" }, "Where the evidence stops"))
     : h("p", {}, h("a", { href: "#needs" }, "What the recorded tests say"), " · ", h("a", { href: "#stops" }, "Where the evidence stops"));
   box.append(top, second);
@@ -1145,7 +1164,8 @@ function pilesGlance(doc) {
   const words = g.no_range ? "this environment sets no oxygen or pressure range, so no test is placed."
     : g.linked_files ? `${g.inside.toLocaleString("en-US")} tests are recorded inside these ranges; ${g.linked_files.toLocaleString("en-US")} of the ${g.archive_files.toLocaleString("en-US")} files in PSI (${g.linked_share_pct}% of the bytes) carry their names.`
       : `${g.inside.toLocaleString("en-US")} ${g.inside === 1 ? "test is" : "tests are"} recorded inside these oxygen and pressure ranges.`;
-  $("#glance").append(h("p", { class: "glance-piles" }, h("b", {}, "Raw data: "), words, " ", h("a", { href: "#piles" }, "Where the data are")));
+  const fig = g.no_range ? null : glanceFig(g.inside.toLocaleString("en-US"), g.inside === 1 ? "test recorded inside these ranges" : "tests recorded inside these ranges");
+  $("#glance").append(h("p", { class: "glance-piles" }, h("b", {}, "Raw data: "), fig, words, " ", h("a", { href: "#piles" }, "Where the data are")));
 }
 // The files of one test inside the ranges (pm 0035, item 4): the data role's test_files.json, as built
 // into data/piles/<scenario>_files.json. Loaded when the reader opens the box.

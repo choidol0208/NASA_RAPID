@@ -89,6 +89,10 @@ def check_shell():
     foot = [re.search(r'<footer class="foot">.*?</footer>', t, re.S) for t in (index, how)]
     if not all(foot) or foot[0].group(0) != foot[1].group(0):
         raise SystemExit("build: index.html and how.html must carry the same footer")
+    # the team logo in the footer (web/media/team/, copied from the team's logo kit): every file it names must exist
+    for src in re.findall(r'(?:src|srcset)="(media/team/[^"]+)"', foot[0].group(0)):
+        if not os.path.exists(os.path.join(HERE, src)):
+            raise SystemExit(f"build: the footer names {src}, which is not in web/")
     print(f"shell: {len(strip)} strip sentences found on how.html; footer identical on both pages")
 
 
@@ -99,6 +103,10 @@ def main():
     os.makedirs(os.path.join(DIST, "data", "insights"))
     for f in PAGE:
         shutil.copy(os.path.join(HERE, f), os.path.join(DIST, f))
+    # the team logo shown in the footer (web/SHELL.md, "Team logo"); remove web/media/team/ to take it out
+    team = os.path.join(HERE, "media", "team")
+    if os.path.isdir(team):
+        shutil.copytree(team, os.path.join(DIST, "media", "team"))
     for src, dst in DATA.items():
         shutil.copy(os.path.join(ROOT, src), os.path.join(DIST, dst))
     for src, dst in OPTIONAL.items():
