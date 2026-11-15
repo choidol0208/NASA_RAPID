@@ -573,6 +573,9 @@ export function createScorer({ config, investigationsCsv, configurationsCsv }) {
     const g = sc.gravity;
     if (g === "lunar" || g === "martian" || g === "planetary") warnings.push({ code: "partial_gravity", message: W.partial_gravity });
     else if (g === "earth") warnings.push({ code: "earth_gravity", message: W.earth_gravity });
+    if (W.no_material && !["fuel_phase", "fuel_class", "fuel_material"].some((f) => sc[f])) {
+      warnings.push({ code: "no_material", message: W.no_material }); // mirrors scorer.py (review B3): the fuel is not compared
+    }
     let maxO2 = null, maxC = null;
     // Highest O2 of any surrounding atmosphere tested (oxidizer streams of inverse flames excluded).
     for (const c of cfgs) {

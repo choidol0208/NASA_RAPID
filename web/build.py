@@ -17,7 +17,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 DIST = os.path.join(HERE, "dist")
 
-PAGE = ["index.html", "style.css", "app.js", "scorer.js"]
+PAGE = ["index.html", "style.css", "app.js", "scorer.js",
+        "how.html", "shell.css", "shell.js"]  # the page shell and the method page (web/SHELL.md)
 DASH_SCENARIOS = {"iss", "lunar_habitat"}  # the only scenarios the page shows (same set as app.js)
 DATA = {
     "scoring/scoring_config.json": "data/scoring_config.json",
@@ -65,7 +66,34 @@ def slim_csv(src, dst, columns, keep=lambda row: True, line_column=None):
 OPTIONAL_BUILT = []  # optional files written by this script (listed in build.json)
 
 
+def check_shell():
+    """Build-time checks of the page shell (web/SHELL.md): the method lives on how.html only, the strip on the
+    dashboard repeats sentences of the method page word for word, and both pages carry the same footer."""
+    import re
+    index = open(os.path.join(HERE, "index.html"), encoding="utf-8").read()
+    how = open(os.path.join(HERE, "how.html"), encoding="utf-8").read()
+    for sid in ("ai-use", "method"):
+        if f'<section id="{sid}"' in index or f'<section id="{sid}"' not in how:
+            raise SystemExit(f"build: section #{sid} must be in how.html and not in index.html")
+        if f'href="#{sid}"' in index:
+            raise SystemExit(f"build: index.html links to #{sid}; the section is on how.html (use how.html#{sid})")
+    if 'href="#ai-use"' in open(os.path.join(HERE, "app.js"), encoding="utf-8").read():
+        raise SystemExit("build: app.js links to #ai-use; the section is on how.html")
+    strip = re.findall(r"<p data-from-how>(.*?)</p>", index, re.S)
+    if not strip:
+        raise SystemExit("build: the strip that leads to how.html has no sentence")
+    how_text = re.sub(r"\s+", " ", how)
+    for sentence in strip:
+        if re.sub(r"\s+", " ", sentence) not in how_text:
+            raise SystemExit(f"build: the strip sentence is not on how.html word for word: {sentence!r}")
+    foot = [re.search(r'<footer class="foot">.*?</footer>', t, re.S) for t in (index, how)]
+    if not all(foot) or foot[0].group(0) != foot[1].group(0):
+        raise SystemExit("build: index.html and how.html must carry the same footer")
+    print(f"shell: {len(strip)} strip sentences found on how.html; footer identical on both pages")
+
+
 def main():
+    check_shell()
     if os.path.isdir(DIST):
         shutil.rmtree(DIST)
     os.makedirs(os.path.join(DIST, "data", "insights"))
@@ -223,8 +251,10 @@ def main():
     # Stamp the build into every asset URL (Pages lets browsers cache files for 10 minutes): a new
     # deploy is read at once, and a page never mixes files from two builds.
     v = sha[:12] if sha != "main" else datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+    shell = [('href="shell.css"', f'href="shell.css?v={v}"'), ('src="shell.js"', f'src="shell.js?v={v}"')]
     stamp = {
-        "index.html": [('href="style.css"', f'href="style.css?v={v}"'), ('src="app.js"', f'src="app.js?v={v}"')] + (
+        "how.html": [('href="style.css"', f'href="style.css?v={v}"'), ('src="app.js"', f'src="app.js?v={v}"')] + shell,
+        "index.html": [('href="style.css"', f'href="style.css?v={v}"'), ('src="app.js"', f'src="app.js?v={v}"')] + shell + (
             [("</head>", f'<link rel="stylesheet" href="assistant/assistant.css?v={v}">\n</head>'),
              ("</body>", f'<script src="assistant/assistant.js?v={v}" defer></script>\n</body>')] if assistant else []),
         "app.js": [('from "./scorer.js"', f'from "./scorer.js?v={v}"'), ('const DATA_V = "__BUILD__";', f'const DATA_V = "{v}";')],

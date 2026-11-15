@@ -145,7 +145,9 @@ function renderAssumptions(out, cfg) {
 
 function renderWarnings(box, warnings) {
   box.replaceChildren();
-  for (const w of warnings) box.append(h("p", { class: "warn" + (STOP.has(w.code) ? " is-stop" : "") }, w.message));
+  // catalog 1520: no_material shows on every query without a material (presets included), so it is quieter
+  const SOFT = new Set(["no_material"]);
+  for (const w of warnings) box.append(h("p", { class: "warn" + (STOP.has(w.code) ? " is-stop" : SOFT.has(w.code) ? " is-soft" : "") }, w.message));
 }
 
 function strip(r) {
@@ -261,7 +263,7 @@ function renderResults(out, cat, insights, sc) {
       conf ? sourceFileLink(conf.tests_table_ref) : null,
       conf ? link(`${REPO}data/catalog/configurations.csv?plain=1#L${conf._line}`, `Catalog row (${r.config_id})`) : null,
       inv ? link(`${REPO}data/catalog/investigations.csv?plain=1#L${inv._line}`, "Investigation row") : null);
-    const more = h("details", { class: "more" }, h("summary", {}, "What the record says"),
+    const more = h("details", { class: "more", open: "" }, h("summary", {}, "What the record says"),
       h("p", {}, h("b", {}, "Objective (catalog summary): "), inv ? inv.objectives : "—"),
       h("p", {}, h("b", {}, "Findings stated in the record or table: "), r.key_findings || "Not stated in the PSI record."),
       card ? h("div", { class: "ai-text" }, h("p", {}, h("b", {}, "Summary: "), card.summary, " ",
@@ -278,10 +280,13 @@ function renderResults(out, cat, insights, sc) {
       ? h("p", { class: "raw-line" }, VIDEO_PILOT, " ", link(REPO + "video/README.md", "(video/README.md)")) : null;
     const robust = robustLine(insights.robustRun, r);
     const robustEl = robust ? h("p", { class: "raw-line rob-line" }, h("b", {}, "Weight check: "), robust, " ",
-      h("a", { href: "#ai-use" }, "(team computation)")) : null;
+      h("a", { href: "how.html#ai-use" }, "(team computation)")) : null;
     const note = noteFor(sc, r);
     const noteEl = note ? h("div", { class: "ai-note" }, h("p", {}, h("b", {}, "Team note: "), note.text, " ", sourceLinks(note.sources, cat)), itemTag(note, sc)) : null;
-    ol.append(h("li", { class: "result" }, head, ...body, noteEl, warns, tags, links, rawLine, videoEl, robustEl, more));
+    // Shell (web/SHELL.md): the summary lines, the cautions and the tags stay open; the team note, the source links,
+    // the raw-data lines, the weight check and the record text open in place behind one disclosure per card.
+    const detail = h("details", { class: "card-more" }, h("summary", {}, "Details and sources"), noteEl, links, rawLine, videoEl, robustEl, more);
+    ol.append(h("li", { class: "result" }, head, ...body, warns, tags, detail));
   }
 }
 
@@ -1265,8 +1270,11 @@ function robustLine(run, r) {
   return x && typeof x.display_line === "string" && x.display_line ? x.display_line : null;
 }
 const countTag = () => h("span", { class: "tag" }, "Counted by team code");
+// web/how.html (the method page of the shell) sets data-page="how": the two method sections are filled, no query is run.
+const METHOD_ONLY = document.documentElement.dataset.page === "how";
 function renderAiUse(ai, onQuery) {
   const body = $("#ai-use-body");
+  if (!body) return; // the section lives on the method page (web/how.html)
   const parts = [];
   const q = ai.quality;
   if (q && typeof q.proposed === "number") {
@@ -1302,7 +1310,7 @@ function renderAiUse(ai, onQuery) {
       stale
         ? h("p", {}, `This sampling was run on scoring configuration ${runVersions.join(", ")}; the ranking on this page uses ${ai.configVersion}. Its lines are not shown on the result cards until it is run again on ${ai.configVersion}.`)
         : h("p", {}, "Each result card of these queries shows its line, under \"Weight check\": ",
-          ...qs.flatMap((x, i) => [i ? ", " : "", h("a", { href: "?q=" + encodeURIComponent(x), "data-q": x }, x)]), "."),
+          ...qs.flatMap((x, i) => [i ? ", " : "", h("a", { href: (METHOD_ONLY ? "./" : "") + "?q=" + encodeURIComponent(x), "data-q": x }, x)]), "."),
       h("p", { class: "gap" }, "Sampling: ", link(REPO + "data/insights/robustness.json", "data/insights/robustness.json"), " ", countTag())));
   }
   body.replaceChildren(...parts);
@@ -1581,7 +1589,11 @@ async function main() {
   }
   // Static links to repository files point at the built commit (like every other source link).
   document.querySelectorAll("a[data-repo-path]").forEach((a) => { a.href = REPO + a.dataset.repoPath; a.target = "_blank"; a.rel = "noopener"; });
-  renderAiUse({ quality: aiQuality, readiness: aiReadiness, robust: aiRobust, configVersion: config.version }, (q2) => { run(q2); $("#top").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  renderAiUse({ quality: aiQuality, readiness: aiReadiness, robust: aiRobust, configVersion: config.version }, (q2) => {
+    if (METHOD_ONLY) { location.href = "./?q=" + encodeURIComponent(q2); return; } // on the method page a query opens the dashboard
+    run(q2); $("#top").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  if (METHOD_ONLY) { setStatus(""); return; }
   $("#ask-form").addEventListener("submit", (e) => { e.preventDefault(); run($("#q").value.trim()); });
   // "How the score works" links open the folded method text.
   document.querySelectorAll('a[href="#method"]').forEach((a) => a.addEventListener("click", () => { const d = $("#method details"); if (d) d.open = true; }));
