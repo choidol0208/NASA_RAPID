@@ -1,7 +1,7 @@
 # Catalog filter validation report
 
-- Run: 2026-11-14 21:28 · target `scoring.scorer:rank`
-- Result: **38/38 scenarios passed**
+- Run: 2026-11-15 09:46 · target `scoring.scorer:rank`
+- Result: **41/41 scenarios passed**
 
 | ID | Group | Query | Top 3 | Warnings | Result |
 |---|---|---|---|---|---|
@@ -20,6 +20,8 @@
 | P06 | prevention | propane 40% oxygen | ACME-CFI-G, ACME-BRE, ACME-FLAME-DESIGN |  | PASS |
 | D01 | detection | smoke detector on ISS | SAME, SAME-R, DAFT |  | PASS |
 | D02 | detection | wire insulation overheating smoke | SAME, SAME-R, SAME-SIM |  | PASS |
+| D03 | detection | CO detection on ISS | BASS-II, SAME, SAME-R |  | PASS |
+| D04 | detection | toxic gas and smoke detection in a spacecraft | BASS-II, SAME, SAME-R |  | PASS |
 | S01 | suppression | CO2 suppression of heptane fire | FLEX, FLEX-2, CFI |  | PASS |
 | S02 | suppression | nitrogen extinguish fabric fire ISS | BASS, BASS-II, ACME-BRE |  | PASS |
 | L01 | liquid | liquid fuel leak heptane ISS | FLEX, FLEX-2, CFI |  | PASS |
@@ -28,7 +30,8 @@
 | F03 | fuel_phase | droplet | FLEX, CFI, FLEX-2 |  | PASS |
 | F04 | fuel_phase | liquid fuel lunar habitat | FLEX, FLEX-2, ACME-BRE | partial_gravity | PASS |
 | F05 | fuel_phase | inert gas suppression ISS | BASS, FLEX, BASS-II |  | PASS |
-| F06 | fuel_phase | combustion gas detection | SAME, SAME-R, DAFT | not_understood | PASS |
+| F06 | fuel_phase | combustion gas detection | BASS-II, SAFFIRE-II, SAME |  | PASS |
+| F08 | fuel_phase | CO2 detection | BASS-II, SAFFIRE-II, SAME |  | PASS |
 | F07 | rough_input | CO2 30% suppression ISS | FLEX, BASS, BASS-II | not_understood | PASS |
 | E01 | equipment | smoke detector for a lunar rover | SAME, SAME-R, FLEX-2 | partial_gravity | PASS |
 | E02 | equipment | fire extinguisher for a Mars habitat | BASS, FLEX, BASS-II | partial_gravity, mars_atmosphere | PASS |
@@ -54,7 +57,7 @@
 | S01 | FLEX | stable |
 | L01 | FLEX | stable |
 
-## Weight sensitivity (each prevention weight x0.5 and x1.5, rescaled to sum 1; config 1.4.0)
+## Weight sensitivity (each prevention weight x0.5 and x1.5, rescaled to sum 1; config 1.5.0)
 
 - 44 of 48 variants keep the same top 3 in the same order; 1 keep the same three in another order; rank 1 changes in 1.
 
@@ -65,7 +68,7 @@
 | lunar habitat cotton fabric | o2 | x1.5 | SAFFIRE-II, ACME-BRE, SAFFIRE-I (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | same set |
 | lunar habitat cotton fabric | fuel | x0.5 | SAFFIRE-II, BASS-II, ACME-BRE (was SAFFIRE-II, SAFFIRE-I, ACME-BRE) | changed |
 
-## Sensitivity to the other values (each x0.5 and x1.5 on the four demo queries; config 1.4.0)
+## Sensitivity to the other values (each x0.5 and x1.5 on the four demo queries; config 1.5.0)
 
 - 129 of 136 runs keep the same top 3 in the same order; 3 keep the same three in another order; rank 1 changes in 3.
 
@@ -89,7 +92,7 @@
 | research-purpose table (`similarity.role`) | 8 | — |
 | data-availability table (`evidence.data_availability`) | 8 | — |
 
-## Weighting by purpose (config 1.4.0)
+## Weighting by purpose (config 1.5.0)
 
 | Profile | Queries read as this purpose | One-at-a-time x0.5/x1.5: same top 3 | rank 1 changes | Scheme | Same top 3 | Same rank 1 |
 |---|---|---|---|---|---|---|
@@ -125,7 +128,7 @@ Rows where another scheme changes the top 3:
 - suppression, prevention weights, "inert gas suppression ISS": BASS, BASS-II, SAME (configured: BASS, FLEX, BASS-II)
 - suppression, detection weights, "nitrogen extinguish fabric fire ISS": BASS, BASS-II, SAFFIRE-III (configured: BASS, BASS-II, ACME-BRE)
 
-## Weight uncertainty: SMAA with the order of importance only (config 1.4.0, 300 draws per profile, seed 20261114)
+## Weight uncertainty: SMAA with the order of importance only (config 1.5.0, 300 draws per profile, seed 20261114)
 
 | Profile | Query | Top 3 with the profile's weights | Same rank 1 | Same top 3 (as a set) | Top-3 acceptability of each investigation (10% or more) |
 |---|---|---|---|---|---|

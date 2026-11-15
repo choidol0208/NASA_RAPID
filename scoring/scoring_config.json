@@ -1,11 +1,11 @@
 {
   "_about": {
     "what": "Scoring rules for ranking PSI test configurations against a user scenario. Read by scoring/scorer.py; the dashboard can read the same file (e.g., to draw weight sliders).",
-    "status": "Team proposal (2026-11-14), not NASA guidance. Config 1.4.0: the profile weights come from scoring/derive_weights.py, which combines the streams named in scoring/weight_streams.json. Judgement stream: AHP over literature-based pairwise judgements, filled in by an AI session from evidence classes with cited textbooks, papers and NASA records (scoring/literature_evidence.json; CR 0, 0.009 and 0.008). Suppression is further pooled, over o2, pressure, diluent and fuel, with the relative importance of those conditions in the NASA FLEX measurements (scoring/data_weights.json). The human lead approved the AHP (19:26), the FLEX pooling (20:06) and the literature stream (20:19). All other values are unchanged from 1.1.0 and were approved after the AI review in scoring/PARAMETER_REVIEW.md. The model's build-up and its sources are in scoring/BUILDUP.md. Change values here only, never in code; change the weights only through the stream files and derive_weights.py --write.",
-    "generated_by": "AI-assisted (Claude), reviewed: profile weights of 1.0.0-1.1.0 (direct point allocation) approved as-is by the human lead (team member), 2026-11-14 16:51 KST; all other values approved as-is by the same reviewer, 2026-11-14 17:03 KST, after the AI review in scoring/PARAMETER_REVIEW.md; config 1.2.0 (2026-11-14 19:26 KST): profile weights replaced by the AHP derivation, pairwise judgements approved as-is and applied by decision of the same reviewer; config 1.3.0 (2026-11-14 20:06 KST): suppression weights pooled with the NASA FLEX data stream, by decision of the same reviewer; config 1.4.0 (2026-11-14 20:19 KST): judgement stream replaced by the literature-based judgements, by decision of the same reviewer",
+    "status": "Team proposal (2026-11-14), not NASA guidance. Config 1.5.0 (weights unchanged from 1.4.0): the profile weights come from scoring/derive_weights.py, which combines the streams named in scoring/weight_streams.json. Judgement stream: AHP over literature-based pairwise judgements, filled in by an AI session from evidence classes with cited textbooks, papers and NASA records (scoring/literature_evidence.json; CR 0, 0.009 and 0.008). Suppression is further pooled, over o2, pressure, diluent and fuel, with the relative importance of those conditions in the NASA FLEX measurements (scoring/data_weights.json). The human lead approved the AHP (19:26), the FLEX pooling (20:06) and the literature stream (20:19). All other values are unchanged from 1.1.0 and were approved after the AI review in scoring/PARAMETER_REVIEW.md. The model's build-up and its sources are in scoring/BUILDUP.md. Change values here only, never in code; change the weights only through the stream files and derive_weights.py --write. Config 1.5.0 changes no weight. (1) Detection questions are matched by fire signature, gas or particulate (similarity.role.signatures). (2) Each compliance line states the basis of the value it checked, and 'met' is kept for per-test table values and catalog classifications ('documented' otherwise). (3) The BASS-II pressure is a published value, no longer an assumption (atmosphere_fallback.pressure_published). The reasoning is in scoring/METHOD.md, section 'Combined model 1.5.0'.",
+    "generated_by": "AI-assisted (Claude), reviewed: profile weights of 1.0.0-1.1.0 (direct point allocation) approved as-is by the human lead (team member), 2026-11-14 16:51 KST; all other values approved as-is by the same reviewer, 2026-11-14 17:03 KST, after the AI review in scoring/PARAMETER_REVIEW.md; config 1.2.0 (2026-11-14 19:26 KST): profile weights replaced by the AHP derivation, pairwise judgements approved as-is and applied by decision of the same reviewer; config 1.3.0 (2026-11-14 20:06 KST): suppression weights pooled with the NASA FLEX data stream, by decision of the same reviewer; config 1.4.0 (2026-11-14 20:19 KST): judgement stream replaced by the literature-based judgements, by decision of the same reviewer; config 1.5.0 (2026-11-15 KST): signature-aware detection purpose, compliance basis and the published BASS-II pressure, built by the catalog AI session after the human lead asked it to judge, on theory, the three differences between the catalog and the data role's raw-file method and to combine the two where both hold. Weights unchanged.",
     "formula": "score = 100 * M * G * sum_i(w_i * S_i) over active dimensions; weights renormalized to sum 1 over active dimensions"
   },
-  "version": "1.4.0",
+  "version": "1.5.0",
   "default_profile": "prevention",
   "profiles": {
     "prevention": {
@@ -135,14 +135,40 @@
           "burning_rate",
           "extinction_limit"
         ],
-        "detection": [
-          "smoke_soot",
-          "detection"
-        ],
         "suppression": [
           "suppression",
           "extinction_limit"
         ]
+      },
+      "signatures": {
+        "why": "Detection questions are matched by fire signature. A NASA project report defines fire signatures as the gaseous species and particulate properties produced by a fire (Ruff, NASA/TM-2011-217036, 1.2.2, p. 4). NASA OCHMO-TB-008 lists combustion gases and particulates (smoke) among the signatures that detectors respond to. Relevance is judged per outcome, as in the GRADE indirectness domain. An investigation is direct (same_axis) for a signature when two things hold: its purpose is detection or the characterisation of that signature, and it measured that signature. It is one step indirect (related_focus) when only one of the two holds. Otherwise the usual fundamental and other values apply. Purpose evidence is the union (OR) of two sources: the team label (fire_safety_role contains detection) and a NASA-stated purpose of measuring the signature (stated_purpose). Silence in one source is not evidence against the other. Outcome evidence is read from the catalog columns measured_outputs and research_focus. A question that names no signature, or both, accepts either. Used only for the detection profile; prevention and suppression keep related_focus_by_axis.",
+        "outputs": {
+          "gas": [
+            "gas_species"
+          ],
+          "particulate": [
+            "particle_size",
+            "particle_count"
+          ]
+        },
+        "focus": {
+          "gas": [],
+          "particulate": [
+            "smoke_soot",
+            "detection"
+          ]
+        },
+        "stated_purpose": {
+          "BASS-II": {
+            "signature": "gas",
+            "source": "Olson, Ferkul, Bhattacharjee, Miller, Fernandez-Pello, Link, T'ien and Wichman, Burning and Suppression of Solids-II (BASS-II) Summary Report, NASA TM, NTRS 20210011385 (2021)",
+            "url": "https://ntrs.nasa.gov/citations/20210011385",
+            "where": "1.2 Experiment Description, p. 5",
+            "quote": "To evaluate the levels of combustion products produced during microgravity fires, BASS–II requested the use of available onboard sensors to measure the O2 depletion and the completeness of combustion (CO and CO2)",
+            "also": "The PSI-25 record lists the publication 'Results from on-board CSA-CP and CDM Sensor Readings during the Burning and Suppression of Solids - II (BASS-II) Experiment in the Microgravity Science Glovebox (MSG)', and its objective says BASS-II results contribute to the models used in the design of fire detection and suppression systems.",
+            "read": "PSI-25 text read by the catalog role in data/psi/catalog/PSI-25.json. The report quote was recorded by the data role from the full text (pipeline/spec/references.json, BASS2TM.products). The catalog role confirmed the NTRS entry (title, authors, number) on 2026-11-15, but did not re-read the PDF (over 10 MB)."
+          }
+        }
       }
     },
     "diluent": {
@@ -201,10 +227,11 @@
   },
   "confidence": {
     "high": 0.75,
-    "medium": 0.45
+    "medium": 0.45,
+    "why": "Coverage counts the weight of the dimensions compared with a value that a NASA source states: a table, the record text, a test matrix or a published paper. Unknown values, assumed atmospheres and team readings are scored, but not counted."
   },
   "requirements": {
-    "why": "Systems-engineering view of a query (NASA Systems Engineering Handbook, NASA/SP-2016-6105 Rev2: stakeholder expectations become technical requirements, each verifiable and traceable). Each condition the scorer reads becomes one requirement with its source (stated by the user, implied by a preset, derived, or assumed by default) and the catalog columns that verify it. Each result gets a compliance line per requirement: met (the configuration's recorded conditions cover it), near (similarity at or above outside_range_threshold), not_met, unverified (no recorded value, or an assumed atmosphere), or not_scored. The requirements do not change any score.",
+    "why": "Systems-engineering view of a query (NASA Systems Engineering Handbook, NASA/SP-2016-6105 Rev2: stakeholder expectations become technical requirements, each verifiable and traceable). Each condition the scorer reads becomes one requirement with its source (stated by the user, implied by a preset, derived, or assumed by default) and the catalog columns that verify it. Each result gets a compliance line per requirement, with the basis of the value it checked (table, record, test_matrix, published, team, assumed, none, or catalog for a classification). The statuses are: met (a per-test table value or the catalog's classification covers it); documented (covered by a value that a NASA document states, but that no per-test table value shows: the PSI record text, a planned test matrix, or a published paper); near (similarity at or above outside_range_threshold); not_met; unverified (no recorded value, an assumed atmosphere, or a team reading with no number in the table or the record); not_scored. The split between met and documented follows how NASA/SP-2016-6105 Rev2 names the verification method of each requirement. A test verifies a value per test; a document read by inspection verifies it for the investigation. The requirements do not change any score.",
     "groups": [
       {
         "dimension": "gravity",
@@ -286,11 +313,12 @@
       {
         "dimension": "role",
         "fields": [
-          "concern"
+          "concern",
+          "signature"
         ],
         "kind": "purpose",
         "label": "Purpose of the question",
-        "verified_by": "investigations.fire_safety_role, research_focus (team classification of the PSI record)"
+        "verified_by": "investigations.fire_safety_role, research_focus (team classification of the PSI record); for detection questions also configurations.measured_outputs and similarity.role.signatures (fire signature, gas or particulate)"
       }
     ],
     "source_class": {
@@ -1229,7 +1257,68 @@
       "농도": "concentration",
       "대한": "about",
       "관련": "related",
-      "위해": "for"
+      "위해": "for",
+      "일산화탄소": "carbon monoxide",
+      "연소 가스": "combustion gas",
+      "연소가스": "combustion gas",
+      "유독 가스": "toxic gas",
+      "유독가스": "toxic gas",
+      "연소 생성물": "combustion products",
+      "연소생성물": "combustion products",
+      "가스 센서": "gas sensor",
+      "가스센서": "gas sensor",
+      "입자": "particle",
+      "그을음": "soot",
+      "매연": "soot, smoke",
+      "에어로졸": "aerosol"
+    },
+    "signature": {
+      "gas": [
+        "co",
+        "carbon monoxide",
+        "co2",
+        "carbon dioxide",
+        "hcn",
+        "hydrogen cyanide",
+        "hcl",
+        "hydrogen chloride",
+        "combustion gas",
+        "combustion gases",
+        "combustion product",
+        "combustion products",
+        "gas species",
+        "toxic gas",
+        "toxic gases",
+        "gas sensor",
+        "gas sensors",
+        "o2 depletion",
+        "oxygen depletion",
+        "일산화탄소",
+        "이산화탄소",
+        "연소 가스",
+        "연소가스",
+        "유독 가스",
+        "유독가스",
+        "연소 생성물",
+        "연소생성물",
+        "가스 센서",
+        "가스센서"
+      ],
+      "particulate": [
+        "smoke",
+        "aerosol",
+        "aerosols",
+        "particle",
+        "particles",
+        "particulate",
+        "particulates",
+        "soot",
+        "연기",
+        "입자",
+        "그을음",
+        "매연",
+        "에어로졸"
+      ]
     }
   },
   "warnings": {
@@ -1265,7 +1354,16 @@
       "SPICE",
       "SLICE"
     ],
-    "why": "Unusual atmospheres are always stated in PSI records, so a configuration with no reported O2 is scored as ordinary air (21%). Pressure is filled (101.3 kPa) only for experiments that ran in the ISS cabin, the MSG work volume, or a Cygnus cabin. Scoring only: the catalog stays blank and each use is flagged on screen."
+    "why": "Unusual atmospheres are always stated in PSI records, so a configuration with no reported O2 is scored as ordinary air (21%). Pressure is filled (101.3 kPa) only for experiments that ran in the ISS cabin, the MSG work volume, or a Cygnus cabin. Scoring only: the catalog stays blank and each use is flagged on screen. For an investigation in pressure_published, a published paper states the pressure. The value is then marked 'published' (a documented value, not a test value in a table) and is not an assumption.",
+    "pressure_published": {
+      "BASS-II": {
+        "source": "Olson, Ferkul, Fernandez-Pello, Miller, Wichman, Bhattacharjee and T'ien, Flammability Limits from BASS-II Testing in Microgravity Compared to Normal Gravity Limits, ICES 2019 (49th International Conference on Environmental Systems)",
+        "url": "https://hdl.handle.net/2346/84505",
+        "where": "Section II",
+        "quote": "Pressure was not varied from 1 atmosphere.",
+        "read": "Quote recorded by the data role from the full text (pipeline/spec/references.json, ICES19.pressure). The catalog role could not open the repository page on 2026-11-15 (HTTP 403)."
+      }
+    }
   },
   "complementary_slot": {
     "enabled": true,

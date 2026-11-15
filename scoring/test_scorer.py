@@ -453,6 +453,97 @@ class Requirements(unittest.TestCase):
             self.assertEqual(a, b, q)
 
 
+class FireSignatures(unittest.TestCase):
+    """Config 1.5.0: detection questions are matched per fire signature (gas or particulate).
+    Purpose = team label OR NASA-stated measurement purpose; outcome = the signature was measured."""
+
+    def role_of(self, out, inv):
+        r = next(x for x in out["ranking"] if x["investigation_id"] == inv)
+        return r["similarity"]["role"]
+
+    def test_query_signature(self):
+        for q, sig in (("CO detection on ISS", "gas"), ("smoke detector on ISS", "particulate"),
+                       ("toxic gas and smoke detection in a spacecraft", "gas_and_particulate"),
+                       ("fire detection on ISS", None), ("smoke detection in a co-flow", "particulate")):
+            self.assertEqual(scorer.interpret(q, CFG)[0].get("signature"), sig, q)
+        self.assertNotIn("signature", scorer.interpret("CO2 30% suppression ISS", CFG)[0])  # not a detection question
+
+    def test_co2_is_a_signature_in_detection_only(self):
+        self.assertNotIn("diluent", scorer.interpret("CO2 detection", CFG)[0])
+        self.assertEqual(scorer.interpret("CO2 30% suppression ISS", CFG)[0]["diluent"], "CO2")
+
+    def test_gas_question_two_by_two(self):
+        out = scorer.rank("CO detection on ISS")
+        self.assertEqual(out["results"][0]["investigation_id"], "BASS-II")
+        p = CFG["similarity"]["role"]
+        self.assertEqual(self.role_of(out, "BASS-II"), p["same_axis"])        # stated purpose and measured gas
+        self.assertEqual(self.role_of(out, "SAME"), p["related_focus"])       # detection label, other signature
+        self.assertEqual(self.role_of(out, "SAFFIRE-II"), p["related_focus"])  # measured gas, no stated purpose
+        self.assertEqual(self.role_of(out, "ACME-CLD"), p["fundamental"])     # soot only: neither, for a gas question
+
+    def test_particulate_question_keeps_the_smoke_experiments_first(self):
+        out = scorer.rank("smoke detector on ISS")
+        self.assertIn(out["results"][0]["investigation_id"], ("SAME", "SAME-R"))
+        self.assertEqual(self.role_of(out, "BASS-II"), CFG["similarity"]["role"]["other"])
+
+    def test_purpose_is_a_union(self):
+        # Without the NASA-stated purpose, BASS-II keeps only the outcome evidence: one step indirect.
+        cfg = copy.deepcopy(CFG)
+        cfg["similarity"]["role"]["signatures"]["stated_purpose"] = {}
+        out = scorer.rank("CO detection on ISS", config=cfg)
+        self.assertEqual(self.role_of(out, "BASS-II"), CFG["similarity"]["role"]["related_focus"])
+
+    def test_other_profiles_unchanged(self):
+        cfg = copy.deepcopy(CFG)
+        cfg["similarity"]["role"].pop("signatures")
+        for q in ("ISS", "lunar habitat cotton fabric", "CO2 suppression of heptane fire"):
+            a, b = scorer.rank(q), scorer.rank(q, config=cfg)
+            self.assertEqual([r["score"] for r in a["ranking"]], [r["score"] for r in b["ranking"]], q)
+
+
+class ComplianceBasis(unittest.TestCase):
+    """Config 1.5.0: each compliance line names the basis of the value; 'met' needs a per-test table
+    value or a catalog classification, 'documented' is a value a NASA document states."""
+
+    def lines(self, q, inv):
+        out = scorer.rank(q)
+        rid = {x["id"]: x["dimension"] for x in out["requirements"]}
+        r = next(x for x in out["results"] if x["investigation_id"] == inv)
+        return r, {rid[c["id"]]: (c["status"], c["basis"]) for c in r["compliance"]}
+
+    def test_bass2_pressure_is_published_not_assumed(self):
+        r, lines = self.lines("ISS cabin fire", "BASS-II")
+        self.assertEqual(lines["pressure"], ("documented", "published"))
+        self.assertEqual(lines["o2"], ("met", "table"))
+        self.assertNotIn("pressure", r["assumed_dims"])
+        self.assertNotIn("fallback", [w["code"] for w in r["warnings"]])
+        self.assertNotIn("assumed", r["why"] + r["main_gap"])
+
+    def test_assumed_pressure_stays_unverified(self):
+        r, lines = self.lines("ISS cabin fire", "BASS")
+        self.assertEqual(lines["pressure"], ("unverified", "assumed"))
+
+    def test_record_value_is_documented(self):
+        r, lines = self.lines("ISS at 30% O2 and 10.2 psi", "ACME-BRE")
+        self.assertEqual(lines["pressure"], ("documented", "record"))
+
+    def test_team_reading_is_unverified_and_not_counted(self):
+        r, lines = self.lines("quiescent droplet fire", "FLEX")
+        self.assertEqual(lines["flow"], ("unverified", "team"))
+        w = CFG["profiles"]["prevention"]["weights"]
+        counted = sum(w[d] for d in r["weights_used"] if d not in r["unknown_dims"] and d != "flow")
+        full = sum(v for k, v in w.items() if v > 0 and k != "diluent")
+        self.assertAlmostEqual(r["coverage"], round(counted / full, 2), places=2)
+
+    def test_basis_changes_no_score(self):
+        cfg = copy.deepcopy(CFG)
+        cfg["atmosphere_fallback"].pop("pressure_published")
+        for q in ("ISS", "ISS cabin fire", "PMMA in ISS air"):
+            a, b = scorer.rank(q), scorer.rank(q, config=cfg)
+            self.assertEqual([(r["config_id"], r["score"]) for r in a["ranking"]],
+                             [(r["config_id"], r["score"]) for r in b["ranking"]], q)
+
+
 class AhpWeights(unittest.TestCase):
     """Config 1.2.0: the profile weights are the AHP derivation of scoring/ahp_judgements.json."""
 
