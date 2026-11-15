@@ -153,6 +153,12 @@
       while (node && node.parentElement !== main) node = node.parentElement;
       return node && node.matches && node.matches("section[id]") && tabOf(node) ? node : null;
     }
+    // An id in the address: a section of a tab first (index.html also has a list with the id "results"), then any element.
+    function byId(id) {
+      if (!id) return null;
+      var secs = sections().filter(function (x) { return x.id === id; });
+      return secs[0] || document.getElementById(id);
+    }
     function barsHeight() { return (appbar ? appbar.offsetHeight : 0) + (tabs.hidden ? 0 : tabs.offsetHeight); }
     function scrollToNode(node) {
       var y = node.getBoundingClientRect().top + window.scrollY - barsHeight() - 12;
@@ -214,7 +220,7 @@
       if (state.resetTab) { state.tab = first; state.resetTab = false; state.pending = null; }
       var arrived = null;
       if (state.pending && ok) {
-        var p = state.pending, node = p.id ? document.getElementById(p.id) : null, sec = node ? holderOf(node) : null;
+        var p = state.pending, node = p.id ? byId(p.id) : null, sec = node ? holderOf(node) : null;
         if (sec && !sec.hidden) { state.tab = tabOf(sec); arrived = node; state.pending = null; }
         else if (p.tab && open[p.tab]) { state.tab = p.tab; arrived = p.scroll ? tabs : null; state.pending = null; }
         else if (Date.now() > p.until) state.pending = null;
@@ -274,7 +280,7 @@
     // The address decides: #section-id opens the tab that holds it and scrolls there; ?tab=<name> opens a tab.
     function route(fromHistory) {
       var id = decodeURIComponent(location.hash.slice(1)), t = wantedTab();
-      if (id && TAB_OF[id] || (id && document.getElementById(id) && holderOf(document.getElementById(id))))
+      if (id && byId(id) && holderOf(byId(id)))
         state.pending = { id: id, until: Date.now() + 6000 };
       else if (t) state.pending = { tab: t, scroll: fromHistory, until: Date.now() + 6000 };
       else if (fromHistory) state.resetTab = true;
@@ -297,7 +303,7 @@
         return;
       }
       if (href.charAt(0) !== "#" || href.length < 2) return;
-      var node = document.getElementById(decodeURIComponent(href.slice(1)));
+      var node = byId(decodeURIComponent(href.slice(1)));
       if (!node || !holderOf(node)) return;
       e.preventDefault();
       var u = new URL(location.href);

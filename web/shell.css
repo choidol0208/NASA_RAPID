@@ -177,6 +177,8 @@ main > section[id] { scroll-margin-top: calc(var(--appbar-h) + var(--tabs-h) + 1
 
 /* ---------------------------------------------------------------- sections */
 .read, .top, .needs, .tests, .criteria, .piles, .stops, .all { margin: var(--s6) 0 0; }
+/* any other section of a tab (for example the ui role's #results-first) gets the same spacing */
+.shell-on main > section[id]:where(:not(#status, #glance, #assistant, #how)) { margin: var(--s6) 0 0; }
 section h2 { font-size: 1.55rem; line-height: 1.15; margin: 0 0 var(--s3); letter-spacing: -0.005em; }
 .kicker { margin: 0 0 var(--s1); font-size: 0.8rem; letter-spacing: 0.08em; color: var(--ink-3); }
 .section-head { align-items: flex-start; gap: var(--s2) var(--s6); margin-bottom: var(--s4); padding-bottom: var(--s3); border-bottom: 1px solid var(--line); }
