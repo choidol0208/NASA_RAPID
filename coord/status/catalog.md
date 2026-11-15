@@ -1,10 +1,17 @@
 ---
 role: catalog
-updated: 2026-11-15 10:13 KST
+updated: 2026-11-15 10:19 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
+
+**Sync 10:19:**
+- Merged `main` (no change) and `catalog-filter` (fast-forward to `086a0f8`: ui merged `catalog-scoring`, so `catalog-filter` now runs 1.5.1).
+- Inbox empty. Requests 1012 to ui and pm are not answered yet.
+- Checks: 76 unit tests, 43 of 43 scenarios, parity 104 of 104, source check clean, reading order up to date. No demo top-3 change since 10:13.
+- `data/pipeline/question_chain.csv` has landed. The fixed rule of design.md 3.3 needs no new input from it. Next: use it as a cross-check of `reading_order.csv`, counted per investigation and placement.
+- The Pages deploy of `catalog-filter` was not checked: no `gh` in this checkout.
 
 **10:13: config 1.5.1 on `catalog-scoring` (weights unchanged since 1.4.0).**
 - **1.5.0 (09:52):** the combined model of the catalog and the data role's raw-file method, at the human lead's request. Reasoning: `scoring/METHOD.md` 1.7, `scoring/BUILDUP.md` B7.
@@ -28,10 +35,9 @@ blocked_on: none
   - weights match the derivation; reading order up to date.
 - **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 10:13:
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 10:19:
 - `main` runs config 1.4.0;
-- `catalog-filter` runs 1.5.0 (ui merged it at 09:47);
-- `catalog-scoring` runs 1.5.1.
+- `catalog-filter` and `catalog-scoring` run 1.5.1.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
