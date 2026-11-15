@@ -25,12 +25,15 @@ import os
 import re
 
 SCENARIOS = ["lunar_habitat", "iss"]  # the two demo environments get the full block (pm 0035)
+# the other environments get the header line and the bars only (pm 0035: "the other four environments the bars only")
+BARS_ONLY = ["mars_habitat", "spacesuit", "exploration_8_2_34", "exploration_10_2_26_5"]
 
 PLACEMENT_LABEL = {
     "inside": "inside",
     "cannot_be_placed_from_table": "cannot be placed from the tables",
     "oxygen_of_oxidizer_stream": "oxygen recorded for an oxidizer stream",
     "outside_by_recorded_value": "outside by a recorded value",
+    "no_range_set": "no range set",
 }
 PLACEMENT_ORDER = list(PLACEMENT_LABEL)
 # the prototype chain's names, mapped to the names of pile_wording.md section 2
@@ -42,6 +45,7 @@ F1 = {
     ("lunar_habitat", "all"): {"inside": 26, "cannot_be_placed_from_table": 676, "oxygen_of_oxidizer_stream": 63, "outside_by_recorded_value": 1059},
     ("lunar_habitat", "solid"): {"inside": 0, "cannot_be_placed_from_table": 237, "outside_by_recorded_value": 139},
     ("iss", "all"): {"inside": 179, "cannot_be_placed_from_table": 739, "oxygen_of_oxidizer_stream": 106, "outside_by_recorded_value": 800},
+    ("mars_habitat", "all"): {"no_range_set": 1824},
 }
 
 VAR_WORDS = {
@@ -132,6 +136,8 @@ def joined(parts, last="and"):
 
 def placement_of(o2, p):
     """Placement of a test in an environment (design.md 3.1, link 2), from scenario_tests.csv."""
+    if o2 == "not_specified" and p == "not_specified":
+        return "no_range_set"
     if o2 == "in" and p == "in":
         return "inside"
     if o2 == "out" or p == "out":
@@ -525,7 +531,10 @@ def build(root):
         im = len({t["investigation_id"] for t in tests.values()})
         pile3_meaning = (f"No test at this condition is in PSI's per-test tables as the team mapped them ({n_(tm)} tests of {im} investigations), on one of three stated grounds, each printed with its source. "
                          f"The statement describes PSI's record on that date. The {n_inv - im} investigations that have no row per test are outside it.")
-        out[sid] = {"scenario": sid, "label": sc["label"], "header": header, "needs": need_out, "small_print": small,
+        glance = {"inside": len(inside_all), "no_range": False}
+        if links:
+            glance.update({"linked_files": links["files"], "archive_files": archive_files, "linked_share_pct": round(links["share"] * 100, 2)})
+        out[sid] = {"scenario": sid, "label": sc["label"], "header": header, "needs": need_out, "small_print": small, "glance": glance,
                     "pile3_label": pile3_label, "pile3_meaning": pile3_meaning,
                     "order_header": ["Reading order: the team's rule, not a NASA priority. It says where to read first, not that the value is there.",
                                      "Rule: first, file groups in which a column for oxygen or pressure was seen for tests that cannot be placed; then file groups that could add a counted test; then file groups that could add a value to a test already counted inside. Within a class: more target tests first, then fewer bytes."],
@@ -535,6 +544,48 @@ def build(root):
         all_text += header + small + [pile3_label, pile3_meaning] + out[sid]["order_header"] + \
             [x for n in need_out for x in [n["bar"]] + n["pile1"] + n["pile2"] + n["shelf"] + n["pile3"] + n["order"]]
 
+    # ---- the other environments: header line and bars only
+    for sid in BARS_ONLY:
+        sc = scen.get(sid)
+        if not sc:
+            continue
+        ranges = sc.get("ranges") or {}
+        st = [r for r in st_all if r["scenario_id"] == sid]
+        if not st:
+            continue
+        place = {r["test_id"]: placement_of(r["o2_match"], r["pressure_match"]) for r in st}
+        for scope, want in ((s, w) for (s_id, s), w in F1.items() if s_id == sid):
+            got = collections.Counter(place[t] for t in place if scope == "all" or tests[t]["fuel_phase"] == scope)
+            if dict(got) != want:
+                raise PileError(f"{sid} {scope}: placements {dict(got)} differ from fixture F1 {want}")
+        grav = sc.get("gravity_level") or ""
+        gw = (f", {grav if grav.endswith('gravity') else grav + ' gravity'}" if grav else "")
+        if ranges.get("o2_pct") and ranges.get("pressure_kpa"):
+            header = [f"{sc['label']}: oxygen {range_words(rw, 'o2_pct', ranges['o2_pct'])}, pressure {range_words(rw, 'pressure_kpa', ranges['pressure_kpa'])}{gw}."]
+        else:
+            if any(p != "no_range_set" for p in place.values()):
+                raise PileError(f"{sid}: no ranges, but a test is placed")
+            header = [f"{sc['label']}: this environment sets no oxygen range and no pressure range, so no test is placed and no file is listed."]
+        header.append(f"NASA's PSI archive lists {n_(archive_files)} files ({size(archive_bytes)}) for {n_(n_inv)} combustion investigations (listing of {listing}).")
+        need_out = []
+        for nd in needs:
+            nid, scope = nd["id"], (nd.get("scope") or {}).get("fuel_phase")
+            pool = [t for t in place if not scope or tests[t]["fuel_phase"] in scope]
+            scope_words = "all fuel phases" if not scope else joined([f"{p} fuels" for p in scope])
+            seg = collections.Counter(place[t] for t in pool)
+            if sum(seg.values()) != len(pool):
+                raise PileError(f"{sid} {nid}: bar segments do not sum to the tests in scope")
+            segs = [(k, seg[k]) for k in PLACEMENT_ORDER if seg.get(k)]
+            bar = f"{nd['name']} ({nid}), {n_(len(pool))} tests of {scope_words}: " + " | ".join(f"{PLACEMENT_LABEL[k]} {n_(v)}" for k, v in segs) + "."
+            need_out.append({"id": nid, "name": nd["name"], "bar": bar, "segments": [{"placement": k, "label": PLACEMENT_LABEL[k], "n": v} for k, v in segs],
+                             "in_scope": len(pool), "pile1": [], "pile2": [], "shelf": [], "pile3": [], "order": [], "pile2_from_chain": False})
+        inside_all = sum(1 for p in place.values() if p == "inside")
+        out[sid] = {"scenario": sid, "label": sc["label"], "bars_only": True, "header": header, "needs": need_out,
+                    "small_print": ["Built by code from PSI's file listing of " + listing + " and NASA's per-test tables as the team mapped them. No language model writes or changes a line of this block.",
+                                    "A research exploration tool, not safety guidance. Counts are the team's computation, not NASA's conclusions. Nothing here says what happens at a condition that was not tested."],
+                    "glance": {"inside": inside_all, "no_range": not (ranges.get("o2_pct") and ranges.get("pressure_kpa"))},
+                    "sources": {"placements": "data/pipeline/scenario_tests.csv"}}
+        all_text += header + [n["bar"] for n in need_out]
     # word scan (whole words; "safety" is not "safe")
     for s in all_text:
         for w in BANNED + forbidden:

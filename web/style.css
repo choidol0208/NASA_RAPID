@@ -391,3 +391,17 @@ td.st small.gaps-codes { margin-top: 3px; font-style: italic; }
 
 /* Long names without spaces (file names, NASA headers) wrap instead of widening the page on a phone */
 .piles, .answers, .criteria, .requirements, .gap, .raw-line, .small-print { overflow-wrap: anywhere; }
+
+/* Jump menu: one link per section shown; sticky so it stays reachable on a long page */
+.jump { position: sticky; top: 0; z-index: 5; display: flex; gap: 4px 14px; align-items: center; overflow-x: auto; white-space: nowrap;
+  background: var(--paper, #f5f6f3); border-bottom: 1px solid var(--rule); padding: 8px 0; margin: 0 0 8px; font-size: 0.9rem; }
+.jump .jump-label { color: var(--ink-2); }
+.jump a { text-decoration: none; border-bottom: 1px solid transparent; }
+.jump a:hover, .jump a:focus { border-bottom-color: currentColor; }
+section[id] { scroll-margin-top: 48px; }
+.glance-piles { margin-top: 4px; }
+.seg-none { background: #c9ced6; }
+.pile-need.is-bars { padding: 6px 12px; }
+.bars-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.req-table .cmp-documented { background: #eaf1fb; }
+.req-table .basis { color: var(--ink-2); font-size: 0.82rem; }

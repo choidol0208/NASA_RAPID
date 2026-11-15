@@ -208,7 +208,8 @@ def main():
 
     # catalog request 2001: the requirements table needs one compliance entry per requirement, in the
     # same order, with a status the page knows, for every result.
-    known = {"met", "near", "not_met", "unverified", "not_scored"}
+    known = {"met", "near", "not_met", "unverified", "not_scored", "documented"}  # "documented": catalog 0945, config 1.5.0
+    known_basis = {"table", "record", "test_matrix", "published", "team", "assumed", "none", "catalog", ""}
     n_cells = 0
     for q in QUERIES:
         o = rank(q)
@@ -220,6 +221,9 @@ def main():
             bad = [c["status"] for c in comp if c["status"] not in known]
             if bad:
                 problems.append(f"{q!r} {res['investigation_id']}: unknown compliance status {bad}")
+            badb = [c.get("basis") for c in comp if (c.get("basis") or "") not in known_basis]
+            if badb:
+                problems.append(f"{q!r} {res['investigation_id']}: compliance basis with no wording on the page {badb}")
             n_cells += len(comp)
     print(f"requirements table: {n_cells} cells checked")
 
