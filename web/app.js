@@ -72,8 +72,11 @@ function renderConditions(out, cfg) {
 // catalog request 2001: rank() returns the conditions it read as requirements, and for each result a
 // compliance line. Shown as a table: requirements as rows, the results as columns. Text marks, not colour alone.
 const COMPLIANCE = {
-  met: ["✓", "met"], near: ["≈", "near"], not_met: ["✗", "not met"], unverified: ["?", "unverified"], not_scored: ["–", "not scored"],
+  met: ["✓", "met"], near: ["≈", "near"], documented: ["◐", "documented"], not_met: ["✗", "not met"], unverified: ["?", "unverified"], not_scored: ["–", "not scored"],
 };
+// where each compliance line rests (catalog 0945, config 1.5.0)
+const BASIS_WORDS = { table: "per-test table", record: "PSI record text", test_matrix: "test matrix", published: "published paper",
+  team: "team reading", assumed: "assumed", none: "not reported", catalog: "catalog" };
 function requirementSource(r, cfg) {
   if (r.source_class === "stated") return "you";
   if (r.source_class === "implied") {
@@ -94,7 +97,9 @@ function renderRequirements(out, cfg) {
   const cell = (r, id) => {
     const c = r.compliance.find((x) => x.id === id);
     const [mark, word] = c && COMPLIANCE[c.status] ? COMPLIANCE[c.status] : ["", c ? c.status : "—"];
-    return h("td", { class: "cmp cmp-" + (c ? c.status : "none") }, h("span", { class: "mark", "aria-hidden": "true" }, mark), " ", word);
+    const basis = c && c.basis ? BASIS_WORDS[c.basis] || c.basis : "";
+    return h("td", { class: "cmp cmp-" + (c ? c.status : "none"), title: basis ? `${word}: ${basis}` : word },
+      h("span", { class: "mark", "aria-hidden": "true" }, mark), " ", word, basis ? h("span", { class: "basis" }, ` (${basis})`) : null);
   };
   const table = h("table", { class: "req-table" },
     h("thead", {}, h("tr", {}, h("th", { scope: "col" }, "Requirement"), h("th", { scope: "col" }, "Value (where it came from)"),
@@ -105,7 +110,7 @@ function renderRequirements(out, cfg) {
       ...res.map((r) => cell(r, q.id))))));
   box.append(
     h("h3", {}, "Requirements read from your question"),
-    h("p", { class: "gap" }, "Requirements read from your question, and whether each result's NASA tests cover them. \"Unverified\" means the record gives no value, or the value was assumed. \"Near\" means a similarity of 0.9 or more."),
+    h("p", { class: "gap" }, "Requirements read from your question, and whether each result covers them. Met: a per-test table value or the catalog's classification covers it. Documented: a NASA document states it (record text, test matrix or published paper), but no per-test value shows it. Unverified: no value, an assumed value, or a team reading. Near: a similarity of 0.9 or more."),
     h("div", { class: "table-wrap" }, table),
     h("p", { class: "gap" }, h("span", { class: "tag" }, "Computed by team code from the catalog"), " ",
       link(REPO + "scoring/scoring_config.json", "Requirement rules (scoring_config.json, requirements)")));
