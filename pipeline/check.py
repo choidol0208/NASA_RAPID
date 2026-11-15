@@ -7503,6 +7503,138 @@ def check_u5(ctx):
     return res
 
 
+@check("U6_results_top_five",
+       "results_top.json (pipeline/results_top.py, added 2026-11-15): per scenario x need the entries equal the "
+       "rule of spec/results.json top_five applied again to results_by_need.json (stable sorts, kinds and "
+       "relation read from references.json), at most two per document, positions and skipped results as the walk "
+       "gives them; every line equals the item text of references.json, every values line and conditions line "
+       "equals a rebuild from the item's printed values and the finding's conditions, every source line equals "
+       "the document; header counts equal the block counts; no team sentence holds a forbidden word; "
+       "results_top.csv equals the JSON row by row.")
+def check_u6(ctx):
+    res = Result()
+    if not ctx.has("results_top.json") or not ctx.has("results_top.csv"):
+        raise Skip("data/pipeline/results_top.json does not exist yet")
+    rbn, top_doc = ctx.json("results_by_need.json"), ctx.json("results_top.json")
+    rs = ctx.spec("results")
+    t5 = rs["top_five"]
+    banned = rs["forbidden_words"]
+    labels = {g["id"]: g["label"] for g in rs["order_rule"]["groups"]}
+    gidx = {g: i for i, g in enumerate(t5["group_order"])}
+    kidx = {k: i for i, k in enumerate(t5["kind_order"])}
+    items = rbn["items"]
+    for name in ("footer", "no_result", "skip_reason", "header_template", "selection_rule", "values_more"):
+        if forbidden_words_in(t5[name], banned):
+            res.fail(problem="forbidden word in top_five sentence", name=name)
+    got = {b["block_id"]: b for b in top_doc["blocks"]}
+    expected_csv = []
+    hits = 0
+    for scen in rbn["scenarios"]:
+        for nb in scen["needs"]:
+            res.checked += 1
+            b = got.get(nb["block_id"])
+            if b is None:
+                res.fail(block=nb["block_id"], problem="block missing")
+                continue
+            own = list(nb["found"]["entries"])
+            ref = lambda e: ctx.reference_items[e["item_id"]][1]
+            # stable sorts from the last key to the first
+            order = sorted(own, key=lambda e: e["item_id"])
+            order = sorted(order, key=lambda e: 0 if rbn["findings"][e["finding_id"]]["printed_values"] else 1)
+            order = sorted(order, key=lambda e: 1 if ref(e).get("relation") else 0)
+            order = sorted(order, key=lambda e: kidx[ref(e).get("result_kind") or "measured"])
+            order = sorted(order, key=lambda e: gidx[e["group"]])
+            want, count, skipped = [], collections.Counter(), []
+            for i, e in enumerate(order):
+                if len(want) >= t5["take"]:
+                    break
+                d = e["source"]["document_id"]
+                if count[d] == t5["per_document"]:
+                    skipped.append((i + 1, e["finding_id"]))
+                    continue
+                count[d] += 1
+                want.append((i + 1, e, skipped))
+                skipped = []
+            entries = b["entries"]
+            if [(p, e["finding_id"]) for p, e, _ in want] != [(x["position"], x["finding_id"]) for x in entries]:
+                res.fail(block=nb["block_id"], problem="entries differ from the rule",
+                         want=[e["finding_id"] for _, e, _ in want], got=[x["finding_id"] for x in entries])
+                continue
+            if max(collections.Counter(e["source"]["document_id"] for _, e, _ in want).values() or [0]) > 2:
+                res.fail(block=nb["block_id"], problem="more than two per document")
+            for rank, ((pos, e, sk), x) in enumerate(zip(want, entries), 1):
+                res.checked += 1
+                it = ref(e)
+                f = rbn["findings"][e["finding_id"]]
+                cells = []
+                for pv in f["printed_values"]:
+                    held = items[e["item_id"]]["printed_values"][pv["id"]]
+                    if held != pv:
+                        res.fail(finding=e["finding_id"], problem="printed value differs from item")
+                    lab = ", ".join([s for s in (held["row_label"], held["quantity"], held["column"]) if s != ""])
+                    cells.append(("%s: %s %s" % (lab, held["value_as_printed"], held["unit"])).rstrip())
+                vl = "; ".join(cells[:6])
+                if len(cells) > 6:
+                    vl += "; and %d more in the source table" % (len(cells) - 6)
+                c = f["conditions"]
+                cl = []
+                if c["o2_pct_min"]:
+                    cl.append("oxygen: " + (c["o2_pct_min"] if c["o2_pct_max"] in ("", c["o2_pct_min"])
+                                            else c["o2_pct_min"] + " to " + c["o2_pct_max"]) + "% O2")
+                for key, word, suffix in (("pressure_as_written", "pressure", ""), ("gravity_level", "gravity level", ""),
+                                          ("flow_cms", "flow", " cm/s"), ("material", "material", "")):
+                    if c[key]:
+                        cl.append(word + ": " + (c[key].replace(";", ", ") if key == "gravity_level" else c[key]) + suffix)
+                s = e["source"]
+                doc_ = rbn["documents"][s["document_id"]]
+                want_x = {"scenario_id": scen["id"], "need_id": nb["need_id"], "rank": rank, "position": pos,
+                          "finding_id": e["finding_id"], "item_id": e["item_id"], "line": it["text"],
+                          "values_line": vl, "conditions_line": "; ".join(cl), "group": labels[e["group"]],
+                          "result_kind": it.get("result_kind") or "", "relation": it.get("relation") or "",
+                          "investigation_id": "; ".join(it.get("investigation") or []),
+                          "source_line": "%s, %s, %s" % (doc_["title"], doc_["version"], s["where"]),
+                          "url": doc_["url"], "access": doc_["access"],
+                          "skipped_before": [{"position": p, "finding_id": fid,
+                                              "document_id": next(y["source"]["document_id"] for y in own
+                                                                  if y["finding_id"] == fid),
+                                              "reason": t5["skip_reason"]} for p, fid in sk]}
+                if x != want_x:
+                    res.fail(block=nb["block_id"], finding=e["finding_id"], problem="entry differs",
+                             fields=sorted(k for k in set(x) | set(want_x) if x.get(k) != want_x.get(k)))
+                hits += len(forbidden_words_in(x["line"], banned))
+            n = len(own)
+            a = sum(e["group"] == "at_environment" for e in own)
+            bb = sum(e["group"] == "about_a_stated_condition" for e in own)
+            hdr = "%d quoted result%s for this question; showing %d. %d at the oxygen and pressure of this " \
+                  "environment, %d about one of its stated conditions." % (n, "" if n == 1 else "s", len(want), a, bb)
+            if b["header"] != hdr or b["more"]["n"] != n - len(want) or b["footer"] != t5["footer"]:
+                res.fail(block=nb["block_id"], problem="header, more or footer")
+            if (n == 0) != ("no_result" in b) or (n == 0 and b["no_result"] != t5["no_result"]):
+                res.fail(block=nb["block_id"], problem="no_result sentence")
+            for x in entries:
+                row = {k: ("" if v is None else str(v)) for k, v in x.items() if k != "skipped_before"}
+                row.update(block_id=nb["block_id"], header=hdr, more_n=str(n - len(want)),
+                           skipped_before=json.dumps(x["skipped_before"], ensure_ascii=False))
+                expected_csv.append(row)
+            if n == 0:
+                expected_csv.append({"block_id": nb["block_id"], "scenario_id": scen["id"], "need_id": nb["need_id"],
+                                     "line": t5["no_result"], "header": hdr, "more_n": "0", "skipped_before": "[]"})
+    if len(got) != sum(len(s["needs"]) for s in rbn["scenarios"]):
+        res.fail(problem="block count")
+    rows = ctx.table("results_top.csv")
+    if len(rows) != len(expected_csv):
+        res.fail(problem="csv row count", csv=len(rows), json=len(expected_csv))
+    for r, w in zip(rows, expected_csv):
+        if any(r.get(k, "") != w.get(k, "") for k in set(r) | set(w)):
+            res.fail(problem="csv row differs from json", block=w["block_id"], finding=w.get("finding_id", ""))
+    if hits != len(top_doc["_meta"]["forbidden_word_hits_in_lines"]):
+        res.fail(problem="forbidden-word hits in lines not reported as found")
+    res.numbers = {"blocks": len(got), "entries": sum(len(b["entries"]) for b in got.values()),
+                   "blocks_under_five": sum(len(b["entries"]) < 5 for b in got.values()),
+                   "forbidden_word_hits_in_lines": hits}
+    return res
+
+
 # ----------------------------------------------------------------------------
 # running
 # ----------------------------------------------------------------------------
