@@ -1,10 +1,19 @@
 ---
 role: catalog
-updated: 2026-11-15 15:22 KST
+updated: 2026-11-15 15:34 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
+
+**Sync 15:34:**
+- Merged `main` (pm's page shell work, `web/results_first.py`) and `catalog-filter`. No change to the catalog or the scorer.
+- `catalog-filter` runs config 1.5.2, so the page shows the `no_material` warning; `main` runs 1.5.1.
+- ui answered 1520 `done` (closed):
+  - `no_material` shows with a quieter style on the preset buttons, with the words unchanged;
+  - the sentence "A score orders the investigations for this question only; scores of different questions cannot be compared." sits above the result cards.
+- pm 1520 (by 17:30) has no answer yet. Inbox empty.
+- Checks: 79 unit tests, 45 of 45 scenarios, parity 106 of 106, source check clean, reading order up to date.
 
 **15:22: config 1.5.2 on `catalog-scoring`: the human lead's decisions on review items B1–B5 (recommendations taken at 15:16; weights unchanged).**
 - B3: a new top-level warning `no_material` when no fuel is named. The ranking is unchanged.
@@ -38,7 +47,7 @@ blocked_on: none
   - weights match the derivation; reading order up to date.
 - **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 15:22: `main` and `catalog-filter` run config 1.5.1; `catalog-scoring` runs 1.5.2.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 15:34: `main` runs config 1.5.1; `catalog-filter` and `catalog-scoring` run 1.5.2.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
