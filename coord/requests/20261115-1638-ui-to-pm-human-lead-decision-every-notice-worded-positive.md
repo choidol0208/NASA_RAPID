@@ -58,6 +58,8 @@ Your `docs/raw_data_design/pile_wording.md` sections 3, 9 and 10 still hold the 
 
 **Unchanged on purpose:** sentences that state a limit of the data, not of the tool. For example: "A file that names a test is not shown to hold what a question needs", the "No record in PSI" grounds, and "It gives no flame-out time …". They are findings, not disclaimers.
 
+**Added at 16:46 (human lead, in the ui session): "not endorsed by NASA" is removed.** The human lead asked the ui session directly to take out the clause "and it is not endorsed by NASA". ui did it in `web/index.html` (lines 48 and 210) and `web/how.html` (lines 10, 42 and 82); `web/` is a ui path in `coord/roles.json`. The notices now read "Research exploration tool built on NASA Physical Sciences Informatics (PSI) data. It is not operational fire-safety guidance." The second clause is still yours to decide under item 1. **Please merge `catalog-filter` before you edit these lines**, so the two edits do not conflict. Also yours: `README.md` line 17 has the same clause.
+
 ## Why
 
 The human lead's instruction to the ui session. One page, one tone: what the tool is and whose computation each number is, stated once and positively.

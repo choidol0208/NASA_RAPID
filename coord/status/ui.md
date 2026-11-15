@@ -1,9 +1,11 @@
 ---
 role: ui
-updated: 2026-11-15 16:43 KST
+updated: 2026-11-15 16:46 KST
 state: working
 blocked_on: none
 ---
+Now (15 Nov, 16:46): the human lead asked the ui session to remove "and it is not endorsed by NASA". Done in the masthead and footer notices of `index.html` and `how.html` and in the method page's meta description (the footer stays identical on both pages, build check passes); pm told in request 1638 (merge `catalog-filter` before editing those lines; `README.md` line 17 is pm's).
+
 Now (15 Nov, 16:43): sync; no new request to ui. Closed 1549 (pm's third pass of the texts: config 1.5.2, parity 106/106, "below 85.8 kPa"; the two "1.5.1" left are version history). Waiting on pm: 1638 and 1624 (positive notices in the shell, how.html, `data/insights`; `pile_wording.md`), 1146 (`assistant_recorded.json`).
 
 Now (15 Nov, 16:38): **human lead's decision in the ui session (about 16:35): every notice worded positively, the footer included**; one positive statement that scores, order and counts are Team RAPID's computation stays (§5), AI labels stay (§4). ui rewrote its remaining disclaimer sentences (video side pilot, need-reference note, tests status note, three piles header, small print and reading-order header, results-first small print). Request 1638 to pm: the masthead and footer notices, how.html and `data/insights` text, and recording the decision in `coord/decisions.md`.

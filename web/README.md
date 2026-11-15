@@ -6,7 +6,7 @@ Live: https://choidol0208.github.io/NASA_RAPID/
 
 A static web page. You describe a crewed environment ("ISS", "lunar habitat cotton fabric", "30% O2 at 10.2 psi"); the page shows which NASA PSI microgravity combustion investigations come closest, why, what their recorded tests can say about six fire-safety information needs, and where the recorded tests stop.
 
-It is a research exploration tool. It is not operational fire-safety guidance and it is not endorsed by NASA. Scores, rankings, statuses and counts are the team's computation.
+It is a research exploration tool. It is not operational fire-safety guidance. Scores, rankings, statuses and counts are the team's computation.
 
 ## How it works
 
