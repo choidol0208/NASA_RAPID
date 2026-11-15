@@ -3,7 +3,7 @@ from: catalog
 to: ui
 opened: 2026-11-15 16:19 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Human lead 16:18: rename team score to match score on the cards and table; shorter AI tags
 
