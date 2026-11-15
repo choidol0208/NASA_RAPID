@@ -1,9 +1,13 @@
 ---
 role: ui
-updated: 2026-11-15 17:10 KST
+updated: 2026-11-15 17:25 KST
 state: working
 blocked_on: none
 ---
+Now (15 Nov, 17:25): merged pm's integration 17:23 (`986ca49`: config 1.5.3, robustness resampled on 1.5.3, the shell verifiers' fixes; the weight check line now sits outside the card's disclosure). Closed 1710. Build exit 0, 0 broken joins, parity 106/106. 1638 items 4 and 5 (how.html 2, `data/insights` 18 disclaimer phrases) and the deck findings are still open with pm.
+
+Now (15 Nov, 17:24): sync; no new request to ui; no page file changed since ce0fad7. pm's deck draft (`9bdfdd0`) read: its `build_deck.py` line 904 checks the old note above the cards ("team's similarity computation, not a NASA result") and will stop the next refresh; its footers keep the negatives the page dropped; added to request 1638. Waiting on pm: 1710 (resample on 1.5.3; the Weight check lines are hidden until then), 1638, 1624, 1146.
+
 Now (15 Nov, 17:10): sync. Merged main `9be148e` (pm: one input; assistant after its red team) and catalog config 1.5.3 (weights and demo top 3s unchanged). Local build checked: build exit 0, 0 broken joins, parity 106/106, the example buttons and six presets at 1280 and 390 px without errors. **Config 1.5.3 against `robustness.json` sampled on 1.5.2 hides the Weight check lines again** until pm resamples: request 1710 to pm. Still waiting on pm: 1638 items 4 and 5, 1624, 1146.
 
 Now (15 Nov, 16:53): sync; no new request to ui. Waiting on pm: 1638 items 4 and 5 and 1624 (how.html lines 63 and 64, `data/insights` sentences, `pile_wording.md`), 1146 (`assistant_recorded.json`, not on main yet).

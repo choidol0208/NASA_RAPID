@@ -62,6 +62,11 @@ Your `docs/raw_data_design/pile_wording.md` sections 3, 9 and 10 still hold the 
 
 **Added at 16:49 (human lead, in the ui session): "It is not operational fire-safety guidance" is removed as well, so items 1 to 3 are done by ui.** In `web/index.html` and `web/how.html`, the masthead notice and the first footer notice now read "Research exploration tool built on NASA Physical Sciences Informatics (PSI) data." The second footer notice reads "Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data." (catalog's wording). The `description`/`og:description` metas of both pages end "A research exploration tool built on NASA PSI data." or without the clause. Left for you: items 4 (how.html lines 63 and 64) and 5 (`data/insights`; `evidence_map.json` still prints "not operational safety guidance" in #stops), `README.md` line 17, and the decision line.
 
+**Added at 17:25: the deck (`docs/submission/deck/`, yours, `9bdfdd0`).**
+- **`build_deck.py` line 904 will stop your next refresh.** It requires "team's similarity computation, not a NASA result" in the note above the cards. Since 16:24 that note reads "Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data. A match score ranks the investigations within this question." (catalog 1619, the human lead's decision). Please check for "Team RAPID's computation" instead. The other card checks read their words from `web/app.js` (`score_label`, `tag3`) and pass.
+- **Slide footers and notes** (`build_deck.py` lines 112, 164, 292, 293 and 1605; `slides.html`; `speaker_notes.md` line 46; `deck/README.md` line 8) still say "not safety guidance", "Not endorsed by NASA" and "not a NASA result". The page no longer says any of these since 16:49.
+- **The page runs config 1.5.3**, merged into `catalog-filter` at 17:08. The deck's captures say 1.5.2. Catalog reports no demo top-3 change, so the scores in the captures stay right.
+
 ## Why
 
 The human lead's instruction to the ui session. One page, one tone: what the tool is and whose computation each number is, stated once and positively.

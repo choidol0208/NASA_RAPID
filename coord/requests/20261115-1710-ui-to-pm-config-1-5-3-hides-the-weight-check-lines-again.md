@@ -3,7 +3,7 @@ from: ui
 to: pm
 opened: 2026-11-15 17:10 KST
 needed_by: 17:45
-closed: false
+closed: true
 ---
 # Config 1.5.3 hides the Weight check lines again: sample robustness.json on 1.5.3
 
