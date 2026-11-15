@@ -309,7 +309,7 @@ WORDING = {
         "shot_cap": "The steps and the panels of the answer are not shown. Captures of the team's own page, {capture_date}; the picture is not AI-generated, the two sentences in it were written by the local model after a clarifying question (\"Which environment is this for?\").",
         "note_measured": "We use SI only where a check can measure it. Rules rank; no model touches a number. One local open-weight model wrote card sentences; code gates and AI reviews removed {removed} of {proposed}. The assistant chains small model steps with code checks between them. The video reader copies NASA's on-screen numbers; its flame timing failed, so we dropped it.",
         "note_unmeasured": "We use SI in four places, each with a check. Rules rank; no model touches a number. One local open-weight model wrote card sentences; gates and AI reviews removed {removed} of {proposed}. The assistant chains small model steps with code checks; its measurement is in progress. The video reader copies NASA's on-screen numbers; its flame timing failed and was dropped.",
-        "footer": "Code written with Claude Code (Anthropic); every file says so. Model sentences reviewed by a second AI session: {reviewed_ai} of {proposed} (those left after code gates and a first reading).",
+        "footer": "Model sentences reviewed by a second AI session: {reviewed_ai} of {proposed} (those left after code gates and a first reading).",
     },
     "s7": {
         "kicker": "Limits · and what comes next",
