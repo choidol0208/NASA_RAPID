@@ -87,7 +87,7 @@
     <p class="kicker"><b>Find</b> · Information you need</p>
     <div class="section-head">
       <h2 id="top-title">Closest NASA investigations</h2>
-      <p class="team-note">Scores (0–100) and order are the team's similarity computation, not a NASA result, and not operational safety guidance. A score orders the investigations for this question only; scores of different questions cannot be compared. <a href="how.html#method">How the score works</a></p>
+      <p class="team-note">Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data. A match score ranks the investigations within this question. <a href="how.html#method">How the score works</a></p>
     </div>
     <ol id="results" class="results"></ol>
     <div id="other-notes" class="ai-block"></div>
@@ -120,7 +120,7 @@
     <p class="kicker"><b>Interpret</b> · What NASA's documents report</p>
     <div class="section-head">
       <h2 id="results-first-title">What NASA's experiments and documents report, question by question</h2>
-      <p class="team-note">Quotations of NASA documents and of the investigators' papers. The groups and the order are a fixed rule by the conditions each statement gives, with no weights; they and the counts are the team's computation, not NASA's conclusions. Nothing is computed from the printed values and nothing is compared with a criterion. Not safety guidance.</p>
+      <p class="team-note">Quotations of NASA documents and of the investigators' papers. The groups and the order are a fixed rule by the conditions each statement gives, with no weights; they and the counts are Team RAPID's computation. Printed values are quoted as written, and criteria are quoted next to them, not applied to them.</p>
     </div>
     <div id="results-first-body"></div>
   </section>
@@ -181,13 +181,13 @@
 
   <section id="all" class="all" hidden aria-labelledby="all-title">
     <h2 id="all-title">All 24 investigations for this input</h2>
-    <p class="team-note table-note">Order is the team's ranking, not a NASA result. Scores within 3 points of the best remaining score are ordered by how much of the score rests on recorded values (recorded share), then by evidence quality, so a slightly lower score can sit higher. Highlighted rows are shown above; one of those places is kept for a test run at your oxygen level when the closest matches were tested at a different one.</p>
+    <p class="team-note table-note">Order is Team RAPID's ranking. Match scores within 3 points of the best remaining score are ordered by how much of the score rests on recorded values (recorded share), then by evidence quality, so a slightly lower score can sit higher. Highlighted rows are shown above; one of those places is kept for a test run at your oxygen level when the closest matches were tested at a different one.</p>
     <details class="more fold">
       <summary>Show the full ranking</summary>
       <p class="scroll-hint">Swipe the table sideways to see every column.</p>
       <div class="table-wrap">
         <table id="ranking">
-          <thead><tr><th scope="col">#</th><th scope="col">Investigation</th><th scope="col">Closest test configuration</th><th scope="col" class="num">Score</th><th scope="col">Match by dimension</th><th scope="col">PSI page</th><th scope="col">Dataset</th></tr></thead>
+          <thead><tr><th scope="col">#</th><th scope="col">Investigation</th><th scope="col">Closest test configuration</th><th scope="col" class="num" title="How closely this investigation's recorded conditions match your question, weighted by how much each condition matters (0–100).">Match score</th><th scope="col">Match by dimension</th><th scope="col">PSI page</th><th scope="col">Dataset</th></tr></thead>
           <tbody></tbody>
         </table>
       </div>
