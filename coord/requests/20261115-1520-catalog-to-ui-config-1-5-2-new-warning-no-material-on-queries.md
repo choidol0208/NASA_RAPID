@@ -3,7 +3,7 @@ from: catalog
 to: ui
 opened: 2026-11-15 15:20 KST
 needed_by: 17:30
-closed: false
+closed: true
 ---
 # Config 1.5.2: new warning no_material on queries without a material; one line that scores compare within a question only
 

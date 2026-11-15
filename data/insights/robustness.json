@@ -3,12 +3,12 @@
   "built_by": "ai/robustness.py",
   "code_written_with": "AI assistant (Claude Code)",
   "language_model_used_at_build": "none",
-  "generated_at": "2026-11-15T11:35:22+09:00",
+  "generated_at": "2026-11-15T16:02:49+09:00",
   "inputs_sha256": {
    "data/catalog/configurations.csv": "8b03b6d1403c3bbfe7d392ea0622038f7128243905ff9ee40e98d6c1aa67efb8",
    "data/catalog/investigations.csv": "e5384f1e6dce09f37d3b69451aa9243c7d7329b63004852c309cbfb78e3cc390",
-   "scoring/scorer.py": "7290571df2e2d53385d113dd0e978086ebff1df0f0024b83ea9263445b72b3fd",
-   "scoring/scoring_config.json": "9cb0836ed5199c677b1692e72ea6536d141960864731b4299cc3b5d43e06f8ab"
+   "scoring/scorer.py": "0515ac5bd6182b7d603ba362e0d2ee80bf0a035f9f2b6a1b00cc9c6022354f94",
+   "scoring/scoring_config.json": "2c5409016f8cbdfa368ee2bfd24333064c91630a1fbfcadfc24f1e0d93c1004d"
   },
   "label": "AI-generated data file: built by code written with an AI assistant (Claude Code). No language model ran to build it. Shares are computed by code from the team's ranking (scoring.scorer) under sampled weights. Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
   "params": {
@@ -19,7 +19,7 @@
    "tie_tolerance": 1e-09,
    "numpy": "2.1.3"
   },
-  "content_sha256": "e36a73f72b888d9912695c288e0c34a43803e092cb670ccd013a66071f3db367"
+  "content_sha256": "8383e38bf5444821b5b2a7368916aa14960fc1386ab90c4f520cd0ffcbe567ae"
  },
  "description": "Rank stability of the team's ranking (scoring.scorer.rank) for the four preset queries under sampled weights, tie-aware. Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
  "label": "Sensitivity of the team's ranking to the team's own weights. Not a probability that a study is relevant, and not a NASA result. Weight sampling cannot show that a rank rests on an assumed atmosphere; that is stated separately (assumed_dims).",
@@ -44,7 +44,7 @@
    "scenario_id": "iss",
    "query": "ISS",
    "profile": "prevention",
-   "config_version": "1.5.1",
+   "config_version": "1.5.2",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -340,7 +340,7 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 34.2
+    "rank_seconds": 29.0
    },
    "seed_check": {
     "seed": 43,
@@ -360,7 +360,7 @@
    "scenario_id": "lunar_habitat",
    "query": "lunar habitat",
    "profile": "prevention",
-   "config_version": "1.5.1",
+   "config_version": "1.5.2",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -544,7 +544,7 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 33.2
+    "rank_seconds": 28.4
    },
    "seed_check": {
     "seed": 43,
@@ -564,7 +564,7 @@
    "scenario_id": "spacesuit",
    "query": "spacesuit",
    "profile": "prevention",
-   "config_version": "1.5.1",
+   "config_version": "1.5.2",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -750,7 +750,7 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 31.5
+    "rank_seconds": 27.2
    },
    "seed_check": {
     "seed": 43,
@@ -770,7 +770,7 @@
    "scenario_id": "mars_habitat",
    "query": "Mars base",
    "profile": "prevention",
-   "config_version": "1.5.1",
+   "config_version": "1.5.2",
    "seed": 42,
    "draws": 8000,
    "draws_uniform": 8000,
@@ -1137,7 +1137,7 @@
     "rank_calls": 16000,
     "investigation_scores_compared": 384000,
     "mismatches": 0,
-    "rank_seconds": 36.0
+    "rank_seconds": 23.9
    },
    "seed_check": {
     "seed": 43,

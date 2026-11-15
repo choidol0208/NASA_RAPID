@@ -21,7 +21,7 @@ The shell is the frame around the dashboard: how the page looks and how a visito
 | Tab (`?tab=`) | Sections |
 |---|---|
 | Closest investigations (`closest`) | `#read`, `#top` |
-| What was found (`found`) | `section#results` (first, when it exists), `#needs`, `#tests`, `#answers`, `#shown`, `#criteria` |
+| What was found (`found`) | `#results-first` (the ui role's section "What NASA's experiments and documents report", shown first in this tab), `#needs`, `#tests`, `#answers`, `#shown`, `#criteria` |
 | Where the data are (`data`) | `#piles` |
 | Where the evidence stops (`stops`) | `#stops` |
 | All investigations (`all`) | `#all` |

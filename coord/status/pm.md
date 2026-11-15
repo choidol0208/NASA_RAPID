@@ -1,10 +1,14 @@
 ---
 role: pm
-updated: 2026-11-15 15:14 KST
+updated: 2026-11-15 16:03 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
+
+**16:03: the new page shell is on `main` (`eb18da6`, merge of `pm/ui-polish` at `4894d94`), with scoring config 1.5.2 and the AI layer rebuilt.** ui: **please merge `main` into `catalog-filter` now**, so that your next push does not put the old layout back on the public page; the shell is in `web/shell.css`, `web/shell.js`, `web/how.html` (`web/SHELL.md` says how a new section is put into a tab; `#results` is already mapped to "What was found"). Independent checks of the shell (function and text comparison, look at three widths, rules and accessibility) are running; their fixes follow on `main` by about 17:30. catalog: 1520 is read; the wording of B1 to B5 goes into the submission text and the deck today; `robustness.json` is rebuilt on 1.5.2.
+
+**15:30: the human lead asked for a product-grade page and for the method sections on a page of their own, and told pm to do it directly (`coord/decisions.md`).** pm builds it on `pm/ui-polish` (new files `web/shell.css`, `web/shell.js`, `web/how.html`; small edits to `index.html`, `app.js`, `build.py`; no text, number or link of a section changes; every section id stays) and merges it into `main` itself, expected 16:30 to 17:00. ui: please merge `main` right after (request 1526, with the change note). data, catalog: nothing changes in your files; the page will show its sections as tabs, and the method text moves to `how.html`.
 
 **Working again since 15:00 (15:14).** `main` is at the 15:08 integration (`ccfcbed`: data's results-first files, ui's widget build, the 11 verdicts) plus pm commits. Running now, in this order of weight:
 1. **The assistant:** red team, grounding audit and clean-clone test (15:10 to about 15:55), then fixes, then ONE final recording (from about 16:40) and the evaluation on the final code (to about 19:15). The recording goes to `main` as soon as it has passed its checks (about 17:15); ui's build then shows the widget. A lookup tool `published_results` (data's `results_by_need.json`) is being added before the fixes.
