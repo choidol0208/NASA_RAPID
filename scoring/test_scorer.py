@@ -497,6 +497,43 @@ class AhpWeights(unittest.TestCase):
             self.assertAlmostEqual(sum(r["weights"].values()), 1.0, places=9, msg=prof)
 
 
+class ReadingOrder(unittest.TestCase):
+    """Order of pile 2 (scoring/reading_order.py; design.md 3.3 and the fixture of design.md 6 and 7)."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scoring import reading_order
+        cls.ro = reading_order
+        cls.rows = reading_order.build()
+
+    def test_fixture_iss_s1_class_2_is_the_bass2_summary_report(self):
+        c2 = [r for r in self.rows if r["scenario_id"] == "iss" and r["need_id"] == "S1" and r["class"] == 2]
+        self.assertEqual([(r["investigation_id"], r["file_group"], r["target_tests"]) for r in c2],
+                         [("PSI-25", "r2_summary_report", 44)])
+
+    def test_deterministic(self):
+        self.assertEqual(self.rows, self.ro.build())
+
+    def test_sets_and_groups_counted_once(self):
+        seen = set()
+        for r in self.rows:
+            ids = r["target_test_ids"].split(";")
+            self.assertEqual(len(ids), len(set(ids)))
+            self.assertEqual(r["target_tests"], len(ids))
+            key = (r["scenario_id"], r["need_id"], r["investigation_id"], r["file_group"])
+            self.assertNotIn(key, seen)
+            seen.add(key)
+
+    def test_order_follows_the_rule(self):
+        by = {}
+        for r in self.rows:
+            by.setdefault((r["scenario_id"], r["need_id"]), []).append(r)
+        for rows in by.values():
+            self.assertEqual([r["order"] for r in rows], list(range(1, len(rows) + 1)))
+            keys = [(r["class"], -r["target_tests"], int(r["bytes"]) if r["bytes"] else float("inf")) for r in rows]
+            self.assertEqual(keys, sorted(keys))
+
+
 class WeightStreams(unittest.TestCase):
     """Pooling of the judgement and data streams (scoring/weight_streams.json, scoring/data_weights.json)."""
 
