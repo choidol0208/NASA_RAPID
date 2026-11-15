@@ -27,6 +27,8 @@ score = 100 × M × G × Σ_d ( w_d × S_d )
 | `G` | Gate, 0.5 to 1: cuts the score when fuel or oxygen is far off, because other dimensions must not make up for it |
 | `M` | Evidence factor: data availability and microgravity duration of the investigation. The formula allows 0.7 to 1, but because the verification term is fixed at 0.7 (1.5), the reachable range is 0.85 to 0.97. The catalog's investigations take 0.88, 0.95 or 0.97 |
 
+**Name on the page: match score** (0–100; the human lead's naming, 2026-11-15). It says how closely an investigation's recorded conditions match the question, weighted by how much each condition matters for that kind of question. The output field of `rank()` stays `score`.
+
 **Seven dimensions:** oxygen (`o2`), pressure, flow, fuel, sample shape (`geometry`), research purpose (`role`), diluent gas.
 - A dimension counts only if the user's query gives it; the research purpose always counts.
 - **A score orders the investigations for one question only.**

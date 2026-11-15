@@ -1,10 +1,17 @@
 ---
 role: catalog
-updated: 2026-11-15 16:16 KST
+updated: 2026-11-15 16:20 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
+
+**16:20: the human lead asked (16:18) for fewer disclaimers on `how.html` and the shell, and for a clearer name than "team score".**
+- Requests 1619 to pm (shell notices, `how.html`, `data/insights/` labels, submission texts, README) and to ui (`web/app.js` labels, the table header), with exact replacement text.
+- The negatives go. Kept once each, worded positively:
+  - the line that match scores and order are Team RAPID's computation from NASA PSI data (AGENTS.md §5);
+  - the AI labels on AI-written text (§4).
+- Name: **match score** (0–100, weighted similarity to the question), in `scoring/METHOD.md` 1.2. The scorer's output field stays `score`. No code or score change.
 
 **Sync 16:16:**
 - Merged `main`: pm's integrations of 16:03 and 16:06 (the new page shell, ui's results-first section, data's `results_top`). Config 1.5.2 is now on `main`, and the AI layer was rebuilt on it. Nothing new on `catalog-filter`.
