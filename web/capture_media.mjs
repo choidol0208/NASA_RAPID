@@ -19,6 +19,9 @@ const OUT = process.argv[3] || join(dirname(fileURLToPath(import.meta.url)), "me
 const FRAMES = join(OUT, ".frames");
 mkdirSync(OUT, { recursive: true });
 const skipped = [];
+// CAPTURE_ONLY=slide3_lunar_result.png,og.png retakes only the named files (default: all)
+const ONLY = (process.env.CAPTURE_ONLY || "").split(",").map((s) => s.trim()).filter(Boolean);
+const want = (name) => !ONLY.length || ONLY.includes(name);
 
 const browser = await chromium.launch();
 
@@ -28,7 +31,18 @@ async function open(page, q) {
   await page.waitForTimeout(1500);
 }
 
-async function shot(name, q, { width = 1280, height = 800, scale = 2, section = null, open: openSel = null, full = false, clip = null } = {}) {
+// The page is over 29,000 px tall at 1280 px since the results-first and three-piles sections: a 2x full-page
+// capture of it does not finish in 30 s. For one capture only, hide the page blocks that hold none of the
+// captured elements, so the page is short; the captured blocks keep their width (the layout is one column).
+const isolate = (sels) => {
+  const keep = sels.map((s) => document.querySelector(s)).filter(Boolean);
+  for (const b of document.querySelectorAll("body > *, main > *")) {
+    if (b.tagName !== "SCRIPT" && !keep.some((k) => b.contains(k))) b.style.display = "none";
+  }
+};
+
+async function shot(name, q, { width = 1280, height = 800, scale = 2, section = null, open: openSel = null, full = false, clip = null, maxHeight = 0 } = {}) {
+  if (!want(name)) return;
   const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: scale });
   await open(page, q);
   if (openSel) await page.evaluate((s) => document.querySelectorAll(s).forEach((d) => { d.open = true; }), openSel);
@@ -37,9 +51,14 @@ async function shot(name, q, { width = 1280, height = 800, scale = 2, section = 
     const el = await page.$(section);
     const visible = el && (await el.evaluate((e) => !e.closest("[hidden]") && e.getBoundingClientRect().height > 30));
     if (!visible) { skipped.push(`${name} (${section} not on the page)`); await page.close(); return; }
-    await el.scrollIntoViewIfNeeded();
-    await page.waitForTimeout(200);
-    await el.screenshot({ path: join(OUT, name) });
+    await page.evaluate(isolate, [section]);
+    await page.waitForTimeout(300);
+    // a page clip, not an element screenshot: a section thousands of pixels tall never passes the element "stable" wait
+    const box = await el.evaluate((e, maxH) => {
+      const r = e.getBoundingClientRect();
+      return { x: Math.max(0, r.left), y: r.top + window.scrollY, width: Math.min(r.width, document.documentElement.clientWidth), height: maxH ? Math.min(r.height, maxH) : r.height };
+    }, maxHeight);
+    await page.screenshot({ path: join(OUT, name), clip: box, fullPage: true });
   } else {
     await page.screenshot({ path: join(OUT, name), fullPage: full, clip: clip || undefined });
   }
@@ -52,7 +71,7 @@ await shot("01_iss_first_screen.png", "ISS");
 await shot("02_lunar_first_screen.png", "lunar habitat");
 await shot("03_compare_iss_lunar.png", "lunar habitat", { section: "#compare" });
 await shot("04_lunar_evidence_map.png", "lunar habitat", { section: "#stops-map .emap-wrap" });
-await shot("05_lunar_constraints.png", "lunar habitat", { section: "#answers:not([hidden]), #shown:not([hidden])", open: "#answers details.ans:first-of-type" });
+await shot("05_lunar_constraints.png", "lunar habitat", { section: "#answers:not([hidden]), #shown:not([hidden])", open: "#answers details.ans:first-of-type", maxHeight: 1600 });
 await shot("06_lunar_coverage_solid.png", "lunar habitat cotton fabric", { section: "#coverage .cov-block" });
 await shot("07_lunar_phone.png", "lunar habitat", { width: 390, height: 844, scale: 3 });
 // Link preview (Open Graph): 1200 x 630, the first screen of the lunar habitat query.
@@ -60,9 +79,12 @@ await shot("og.png", "lunar habitat", { width: 1200, height: 630, scale: 1 });
 
 // Slide captures (pm request 1630): several elements in one picture, at 2x so they are over 1600 px wide.
 async function unionShot(name, q, sels, prepare = null) {
+  if (!want(name)) return;
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, deviceScaleFactor: 2 });
   await open(page, q);
   if (prepare) { await page.evaluate(prepare); await page.waitForTimeout(1000); }
+  await page.evaluate(isolate, sels);
+  await page.waitForTimeout(300);
   const clip = await page.evaluate((sels) => {
     const rs = sels.map((s) => document.querySelector(s)).filter((e) => e && !e.closest("[hidden]")).map((e) => e.getBoundingClientRect());
     if (!rs.length) return null;
@@ -91,8 +113,25 @@ await unionShot("slide7_iss_tests.png", "ISS", ["#tests .section-head", "#tests-
   const notes = [...document.querySelectorAll("#tests-body > p.gap")];
   if (notes.length) notes[notes.length - 1].id = "capture-tests-links";
 });
+// slides 3, 5 and 6 of docs/submission/slides_outline.md ("Captures" table)
+await unionShot("slide3_lunar_result.png", "lunar habitat", ["#top .kicker", "#top .section-head", "#results > li:nth-child(3)"], () => {
+  // the slide asks for the score note, each card's reason line and largest gap: the long team note, the raw-file
+  // line and the record summary are left out of this capture only (as the slide 3 ISS capture leaves out its intro)
+  for (const e of document.querySelectorAll("#results > li > .ai-note, #results > li > .raw-line, #results > li > details.more")) e.style.display = "none";
+});
+await unionShot("slide5_lunar_piles.png", "lunar habitat", ["#piles .section-head", "#capture-pile-p1", "#capture-pile-s1"], () => {
+  // the slide shows the extinction conditions (S1) and flammability limit (P1) questions open, the others closed
+  for (const d of document.querySelectorAll("#piles-body details.pile-need")) {
+    const s = d.querySelector("summary b")?.textContent || "";
+    d.open = /\((P1|S1)\)$/.test(s);
+    if (s.endsWith("(P1)")) d.id = "capture-pile-p1";
+    if (s.endsWith("(S1)")) d.id = "capture-pile-s1";
+  }
+});
+await unionShot("slide6_ai_use.png", "lunar habitat", ["#ai-use-title", "#ai-use > p", "#ai-use-body"]);
 
 // GIF of the demo story: ISS, then lunar habitat, the comparison, the evidence map.
+if (want("demo_iss_to_lunar.gif")) {
 if (existsSync(FRAMES)) rmSync(FRAMES, { recursive: true });
 mkdirSync(FRAMES);
 const page = await browser.newPage({ viewport: { width: 1100, height: 720 }, deviceScaleFactor: 1 });
@@ -126,7 +165,6 @@ if (await scrollTo("#compare")) await frame(18);
 if (await scrollTo("#stops-map .emap-wrap")) await frame(22);
 else if (await scrollTo("#coverage")) await frame(18);
 await page.close();
-await browser.close();
 
 const gif = join(OUT, "demo_iss_to_lunar.gif");
 execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", "6", "-i", join(FRAMES, "f%04d.png"),
@@ -134,4 +172,6 @@ execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", "6", "-i", joi
   gif]);
 rmSync(FRAMES, { recursive: true });
 console.log("wrote", gif);
+}
+await browser.close();
 if (skipped.length) console.log("skipped:", skipped.join("; "));
