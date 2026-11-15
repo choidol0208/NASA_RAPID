@@ -10,10 +10,10 @@
   }
  },
  "summary": {
-  "PASS": 87,
+  "PASS": 89,
   "FAIL": 0,
   "SKIP": 0,
-  "checks": 87
+  "checks": 89
  },
  "notes": [
   {
@@ -1984,6 +1984,29 @@
     "S1": "524/299/298",
     "D1": "129/122/122",
     "D2": "113/0/0"
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "T4_material_tests",
+   "verifies": "material_tests.csv recounted from tests.csv, need_tests.csv, scenario_tests.csv and file_links.csv: one row per material_id x investigation x sample form; tests, names as written, how the name is known, n/min/max of oxygen, pressure and flow, counted tests per need, scenario counts and videos tied by two labels.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 67,
+    "materials": 23,
+    "tests": 1824
+   },
+   "failures": 0,
+   "failing_examples": []
+  },
+  {
+   "id": "T5_material_published",
+   "verifies": "material_published.csv: every value equals the value at the same place of the item's 'values' in references.json, every table of a per-material shape is listed, and a literal match is given only where the material names are equal after removing case, spaces and hyphens.",
+   "status": "PASS",
+   "numbers": {
+    "rows": 71,
+    "items": 3
    },
    "failures": 0,
    "failing_examples": []

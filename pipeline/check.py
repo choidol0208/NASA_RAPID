@@ -6802,6 +6802,124 @@ def check_t3(ctx):
     return res
 
 
+@check("T4_material_tests",
+       "material_tests.csv recounted from tests.csv, need_tests.csv, scenario_tests.csv and file_links.csv: one row "
+       "per material_id x investigation x sample form; tests, names as written, how the name is known, n/min/max of "
+       "oxygen, pressure and flow, counted tests per need, scenario counts and videos tied by two labels.")
+def check_t4(ctx):
+    res = Result()
+    if not ctx.has("material_tests.csv"):
+        raise Skip("material_tests.csv not written")
+    form = ("sample_geometry", "sample_thickness_mm", "sample_width_cm", "rod_diameter_mm")
+    groups = collections.defaultdict(list)
+    for t in ctx.tests:
+        groups[(t["material_id"], t["investigation_id"]) + tuple(t[f] for f in form)].append(t)
+    counted = collections.defaultdict(set)
+    for r in ctx.table("need_tests.csv"):
+        if r["objective_link"] == "stated":
+            counted[r["test_id"]].add(r["need_id"])
+    scen = collections.defaultdict(dict)
+    for r in ctx.table("scenario_tests.csv"):
+        scen[r["test_id"]][r["scenario_id"]] = (r["o2_match"] == "in", r["o2_match"] == "in" and r["pressure_match"] == "in")
+    vid = collections.defaultdict(set)
+    for r in ctx.table("file_links.csv"):
+        if r["kind"] == "video" and r["link_state"] == "two_labels_agree" and r["test_id"]:
+            vid[r["test_id"]].add(r["psi_file_id"])
+    rows = ctx.table("material_tests.csv")
+    seen = set()
+    for r in rows:
+        res.checked += 1
+        k = (r["material_id"], r["investigation_id"]) + tuple(r[f] for f in form)
+        g = groups.get(k)
+        if g is None or k in seen:
+            res.fail(problem="row not a group of tests.csv or repeated", key=list(k))
+            continue
+        seen.add(k)
+        if r["test_ids"].split() != [t["test_id"] for t in g] or int(r["tests"]) != len(g):
+            res.fail(problem="tests differ", key=list(k))
+        if r["materials_as_written"].split("; ") != sorted({t["fuel_material"] for t in g}):
+            res.fail(problem="names as written differ", key=list(k))
+        rd = sum("fuel_material:not_written_in_cell_named_in_readme" in t["flags"] for t in g)
+        ab = sum("fuel_material:blank_in_source_value_of_row_above_used" in t["flags"] for t in g)
+        if (int(r["name_from_readme_flag"]), int(r["name_from_row_above_flag"]), int(r["name_in_table_cell"])) != (rd, ab, len(g) - rd - ab):
+            res.fail(problem="name source counts differ", key=list(k))
+        for v in ("o2_pct", "pressure_kpa", "flow_cms"):
+            vals = [t_num(t[v]) for t in g if t_num(t[v]) is not None]
+            got = (int(r[v + "_n"]), t_num(r[v + "_min"]), t_num(r[v + "_max"]))
+            if got != ((len(vals), min(vals), max(vals)) if vals else (0, None, None)):
+                res.fail(problem="range differs", key=list(k), variable=v)
+        for n in ctx.needs:
+            if int(r["counted_" + n["id"]]) != sum(n["id"] in counted[t["test_id"]] for t in g):
+                res.fail(problem="counted differs", key=list(k), need_id=n["id"])
+        for sc in ctx.spec("scenarios")["scenarios"]:
+            a = sum(scen[t["test_id"]].get(sc["id"], (0, 0))[0] for t in g)
+            b = sum(scen[t["test_id"]].get(sc["id"], (0, 0))[1] for t in g)
+            if (int(r["scenario_%s_o2_in" % sc["id"]]), int(r["scenario_%s_o2_and_pressure_in" % sc["id"]])) != (a, b):
+                res.fail(problem="scenario counts differ", key=list(k), scenario=sc["id"])
+        if int(r["tests_with_video_two_labels"]) != sum(t["test_id"] in vid for t in g) or \
+                int(r["videos_two_labels"]) != len(set().union(*[vid[t["test_id"]] for t in g])):
+            res.fail(problem="video counts differ", key=list(k))
+    if seen != set(groups) or sum(int(r["tests"]) for r in rows) != len(ctx.tests):
+        res.fail(problem="groups missing", missing=len(set(groups) - seen))
+    res.numbers = {"rows": len(rows), "materials": len({r["material_id"] for r in rows}), "tests": len(ctx.tests)}
+    return res
+
+
+@check("T5_material_published",
+       "material_published.csv: every value equals the value at the same place of the item's 'values' in "
+       "references.json, every table of a per-material shape is listed, and a literal match is given only where the "
+       "material names are equal after removing case, spaces and hyphens.")
+def check_t5(ctx):
+    res = Result()
+    if not ctx.has("material_published.csv"):
+        raise Skip("material_published.csv not written")
+    items = {it["id"]: it for d in ctx.spec("references")["references"] for it in d["items"]}
+    norm = lambda x: re.sub(r"[\s\-]+", "", x).lower()
+    names = collections.defaultdict(set)
+    mats = {m["id"]: m for m in ctx.spec("materials")["materials"]}
+    for r in ctx.table("material_tests.csv"):
+        m = mats.get(r["material_id"], {})
+        for c in [r["material_id"], m.get("label", "")] + m.get("aliases", []) + r["materials_as_written"].split("; "):
+            if c:
+                names[norm(c)].add(r["material_id"])
+    js = lambda v: json.dumps(v, ensure_ascii=False) if isinstance(v, (list, dict)) else str(v)
+    listed = set()
+    for r in ctx.table("material_published.csv"):
+        res.checked += 1
+        listed.add(r["item_id"])
+        it = items.get(r["item_id"])
+        if it is None:
+            res.fail(problem="item not in references.json", item_id=r["item_id"])
+            continue
+        v, i = it["values"], int(r["table_row"]) - 1
+        if r["table_shape"] == "rows":
+            row = v["rows"][i]
+            ok = row.get("material") == r["material_as_printed"] and (
+                (r["quantity"] == "" and r["value_as_printed"] == "") or js(row.get(r["quantity"])) == r["value_as_printed"])
+            for part in [p for p in r["condition"].split("; ") if p]:
+                k, val = part.split("=", 1)
+                ok = ok and js(row.get(k)) == val
+        else:
+            tab = v[r["quantity"]]
+            col = [k for k in tab if k.startswith("columns_")][0]
+            ck, cv = r["condition"].split("=", 1)
+            ok = ck == col[len("columns_"):] and r["material_as_printed"] in tab and \
+                cv in [js(x) for x in tab[col]] and js(tab[r["material_as_printed"]][[js(x) for x in tab[col]].index(cv)]) == r["value_as_printed"]
+        if not ok:
+            res.fail(problem="value differs from the item", item_id=r["item_id"], row=r["table_row"], quantity=r["quantity"])
+        want = "; ".join(sorted(names.get(norm(r["material_as_printed"]), ()))) or "no literal match"
+        if r["normalised_material_match"] != want:
+            res.fail(problem="literal match differs", material=r["material_as_printed"], want=want)
+    shaped = {it["id"] for it in items.values() if isinstance(it.get("values"), dict) and (
+        (isinstance(it["values"].get("rows"), list) and it["values"]["rows"] and
+         all(isinstance(x, dict) and "material" in x for x in it["values"]["rows"])) or
+        any(isinstance(t, dict) and sum(k.startswith("columns_") for k in t) == 1 for t in it["values"].values()))}
+    if shaped != listed:
+        res.fail(problem="per-material tables not listed or listed wrongly", missing=sorted(shaped - listed), extra=sorted(listed - shaped))
+    res.numbers = {"rows": res.checked, "items": len(listed)}
+    return res
+
+
 def t_raw_cell(file, source_row, col):
     """Cell <col> of the raw table row that starts on line <source_row> (header = line 1)."""
     cache = T_RAW_LINES.setdefault(file, None)
