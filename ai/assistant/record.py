@@ -34,9 +34,10 @@ SCRIPT = HERE / "eval" / "record_script.json"
 OUT_JSON = config.INSIGHTS_DIR / "assistant_recorded.json"
 LABEL = ("AI-generated data file: built by code written with an AI assistant (Claude Code). Conversations recorded "
          "with the local language model gpt-oss:20b (f38aa0c53da5): the answers were written by the model only from "
-         "facts that code looked up in the team's files, checked by code gates and a model checker, and are "
-         "replayed on the public page marked as recorded. Team output, not a NASA conclusion, and not safety "
-         "guidance.")
+         "facts that code looked up in the team's files; every model sentence kept passed the code gates and, in "
+         "{checked} of {model} answers written by the model, a model checker; and they are replayed on the public "
+         "page marked as recorded. Checked by code and AI sessions; reviewed by a person: none. Team output, not a "
+         "NASA conclusion, and not safety guidance.")
 LABEL_FAKE = ("AI-generated data file: built by code written with an AI assistant (Claude Code). A test run of the "
               "recording code with a fake model; no language model ran. Not for the public page.")
 
@@ -164,10 +165,14 @@ def record(only=None, fake=False, out_dir=None, quiet=False, script_path=SCRIPT,
         for p in problems:
             print("PROBLEM:", p, file=sys.stderr)
         raise SystemExit(f"not written: {len(problems)} problem(s)")
+    # the label says in how many model answers the model checker ran (changed after the grounding audit of 15 Nov)
+    model_turns = [t["response"] for c in out for t in c["turns"]
+                   if ((t["response"].get("answer") or {}).get("origin") == "model")]
+    checked = sum(1 for r in model_turns if not ((r.get("trace") or {}).get("gate_report") or {}).get("checker_skipped"))
     target = (out_dir / "assistant_recorded.json") if out_dir else OUT_JSON
     metamod.write_json(target, payload, metamod.meta(
         "ai/assistant/record.py", config.NO_MODEL if fake else config.MODEL_LABEL, inputs=[script_path],
-        label=LABEL_FAKE if fake else LABEL))
+        label=LABEL_FAKE if fake else LABEL.format(checked=checked, model=len(model_turns))))
     say(f"wrote {EV._rel(target)}: {len(out)} conversations, {sum(len(c['turns']) for c in out)} turns")
     return payload
 

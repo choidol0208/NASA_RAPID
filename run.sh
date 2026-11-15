@@ -80,7 +80,7 @@ then
 fi
 
 URL="http://127.0.0.1:${PORT}/"
-echo "Fire Evidence Explorer with the assistant: $URL"
+# the server prints the address itself once it listens
 echo "Stop with Ctrl+C."
 
 cleanup() {

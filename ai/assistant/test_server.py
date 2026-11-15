@@ -103,8 +103,9 @@ class ServerTest(unittest.TestCase):
         self.assertEqual(st, 200)
         text = body.decode()
         if (server.DIST / "index.html").exists():
-            self.assertIn('<script src="assistant/assistant.js" defer></script>', text)
-            self.assertIn('<link rel="stylesheet" href="assistant/assistant.css">', text)
+            # the built page may carry the tags itself with a cache-busting ?v= query (web/dist since 15 November)
+            self.assertRegex(text, r'<script src="assistant/assistant\.js(\?v=[0-9a-f]+)?" defer></script>')
+            self.assertRegex(text, r'<link rel="stylesheet" href="assistant/assistant\.css(\?v=[0-9a-f]+)?">')
         else:
             self.assertEqual(text, server.NOT_BUILT)
         self.assertEqual(server.inject("<html><head></head><body></body></html>").count("assistant.js"), 1)

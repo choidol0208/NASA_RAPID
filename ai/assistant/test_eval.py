@@ -48,7 +48,8 @@ class QuestionFile(unittest.TestCase):
         qids = set(reading["properties"]["questions"]["items"]["enum"])
         tools = {"rank_investigations", "counts_per_question", "tested_range", "where_the_data_are", "tests_table",
                  "modelling_data", "equipment_research", "earth_applications", "search_records", "criteria",
-                 "files_of_test", "videos_of_test", "investigation_card", "explain"}
+                 "files_of_test", "videos_of_test", "investigation_card", "explain",
+                 "published_results"}  # added 15 November; no frozen question names it
         for q in data["questions"]:
             e = q["expect"]
             with self.subTest(q=q["id"]):

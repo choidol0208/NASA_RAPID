@@ -310,6 +310,9 @@
 
     // ---- a new query from the input or an example starts on the first tab, at the top
     function newQuery() {
+      // The assistant marks its own submit (the dashboard follows an answer that arrives a minute or two after
+      // the question): the visitor's tab and scroll position stay as they are.
+      if (form.hasAttribute("data-quiet")) { later(); return; }
       state.resetTab = true;
       var u = new URL(location.href);
       if (u.searchParams.has("tab") || u.hash) { u.searchParams.delete("tab"); u.hash = ""; history.replaceState(null, "", u); }

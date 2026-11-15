@@ -116,9 +116,20 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
 .presets button { padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; font-size: 0.95rem; background: var(--white); color: var(--ink); }
 .presets button:hover { border-color: var(--blue); color: var(--blue); background: #f6f8ff; }
 .presets button[aria-pressed="true"] { border-color: var(--blue); background: var(--blue-soft); color: var(--blue-dark); }
+/* the examples under the input: one set in two labelled groups. "Environments" is the page's own; "Questions" is
+   added by the assistant (ai/assistant/static/assistant.js) where a local server answers. */
+.ask-examples { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s2); }
+.ex-group { min-width: 0; display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: var(--s1) var(--s3); align-items: start; }
+.ex-label { padding-top: 9px; font: 600 0.78rem/1.4 var(--display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+.ex-list { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.ex-list button { padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; font: 600 0.95rem var(--display); text-align: left; cursor: pointer; background: var(--white); color: var(--ink); }
+.ex-list button:hover:not([disabled]) { border-color: var(--blue); color: var(--blue); background: #f6f8ff; }
+.ex-list button[disabled] { opacity: 0.55; cursor: default; }
 .is-landing .ask { position: relative; z-index: 2; margin: -72px 0 0; padding: var(--s5) var(--s5) var(--s5); background: var(--white); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-lg); }
 .is-query .ask { margin: var(--s4) 0 0; }
 .is-query .ask .ask-label, .is-query .ask .ask-row, .is-query .ask .ask-help { display: none; }
+.is-query .ask .ex-group { display: block; }
+.is-query .ask .ex-label, .is-query .ask .ex-group.as-qgroup { display: none; }
 .is-query .ask .presets { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: 2px; margin: -2px; }
 .is-query .ask .presets::-webkit-scrollbar { display: none; }
 .is-query .ask .presets button { flex: none; font-size: 0.88rem; padding: 4px 12px; }
@@ -306,6 +317,10 @@ main table:not(.table-wrap table):not(#assistant table) { display: block; max-wi
 /* ---------------------------------------------------------------- the assistant (pm's widget): frame, spacing and fonts only */
 .shell-on main > #assistant { margin: var(--s5) 0 0; border-radius: var(--r); box-shadow: var(--shadow); font-family: var(--body); }
 .shell-on main > #assistant h2#as-title { font-family: var(--display); font-size: 1.55rem; }
+/* one input: on the start page the assistant's example questions sit with the input (above), not here as well */
+.is-landing #assistant .as-examples.as-twin { display: none; }
+/* the panels column stays below the sticky app bar */
+@media (min-width: 900px) { .shell-on main > #assistant .as-panels { top: calc(var(--appbar-h) + 12px); } }
 
 /* ---------------------------------------------------------------- footer */
 .foot { margin-top: var(--s8); padding: var(--s7) 0 var(--s6); font-size: 0.86rem; line-height: 1.55; color: #b4bdca; }
@@ -345,6 +360,8 @@ main table:not(.table-wrap table):not(#assistant table) { display: block; max-wi
   .appbar-nav .appbar-repo svg { width: 16px; height: 16px; }
   .is-landing .masthead { padding: var(--s6) 0 calc(var(--s6) + 64px); }
   .is-landing .ask { margin-top: -64px; padding: var(--s4); border-radius: var(--r); }
+  .ex-group { grid-template-columns: minmax(0, 1fr); }
+  .ex-label { padding-top: 0; }
   .ask-row button { min-height: 46px; }
   .read, .result, .page-how .method { padding-left: var(--s4); padding-right: var(--s4); }
   .result { padding-top: var(--s4); }

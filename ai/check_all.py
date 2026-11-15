@@ -1276,18 +1276,30 @@ def _assistant_recorded(rep, EV):
                                      resp.get("request"), turn_ids=set(facts), cited_ids=ids)
                     for g, r in fails:
                         rep.fail("assistant", f"{where}: sentence {s.get('n')} fails gate {g}: {r}")
+            if answer.get("origin") == "model" and \
+                    (((resp.get("trace") or {}).get("gate_report") or {}).get("checker_skipped")):
+                # a model sentence is shown only after the code gates and the model checker (DESIGN.md 18a)
+                rep.fail("assistant", f"{where}: model sentences shown without the model checker")
             req = resp.get("request")
-            if resp.get("kind") == "answer" and isinstance(req, dict) and cited_refs:
-                fresh = TL.run(PL.plan(req), data)
-                now = {f.get("ref"): f.get("text") for f in fresh.get("facts") or []}
+            # every fact of the turn is re-run, not only the cited ones: the page shows all of them under 'Also
+            # looked up' and in the facts fold (changed after the grounding audit of 15 Nov)
+            if resp.get("kind") == "answer" and isinstance(req, dict) and facts:
+                fresh = TL.run(PL.plan(req, data.vocab)[0], data)  # plan() returns (steps, dropped)
+                now = defaultdict(set)  # one ref can give several texts (the same tool run for two environments)
+                for f in fresh.get("facts") or []:
+                    now[f.get("ref")].add(f.get("text"))
                 for f in facts.values():
-                    if f.get("ref") in cited_refs and now.get(f.get("ref")) != f.get("text"):
+                    if f.get("text") not in now.get(f.get("ref"), set()):
                         stale.append(f"{where} {f.get('ref')}")
     for s_ in stale[:6]:
         rep.fail("assistant", f"recorded answer is stale: run python3 -m ai.assistant.record ({s_})")
+    if len(stale) > 6:
+        rep.fail("assistant", f"recorded answers: {len(stale)} stale facts in all, "
+                              f"{len({x.rsplit(' ', 1)[0] for x in stale})} turns")
     if len(rep.failures()) == before:
         rep.ok("assistant", f"assistant_recorded.json: {n_turns} turns, {n_model} model sentences pass the gates "
-                            "against their recorded facts, every cited fact re-runs to the same text")
+                            "against their recorded facts, every fact re-runs to the same text, the model checker ran "
+                            "in every model answer")
 
 
 def check_assistant(rep):

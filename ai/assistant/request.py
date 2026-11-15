@@ -297,7 +297,24 @@ VERDICT_WORDS = ["safe", "unsafe", "safer", "safety margin", "allowed", "accepta
                  "good enough", "ok to use", "okay to use", "can i use", "should i", "recommend", "which is better",
                  "choose", "안전", "괜찮", "써도", "추천"]
 PREDICTION_WORDS = ["predict", "prediction", "forecast", "will it burn", "would it burn", "what happens if",
-                    "what would happen", "estimate", "extrapolate", "예측", "어떻게 될", "타나요"]
+                    "what would happen", "estimate", "extrapolate", "예측", "어떻게 될", "타나요",
+                    # added after the red-team run of 15 Nov: a request for a number at a condition, in other words
+                    "how fast would", "how fast will", "how quickly would", "how quickly will", "give me a number",
+                    "just a number", "approximate is fine", "approximately how", "roughly how", "ballpark",
+                    "rough estimate"]
+# "So at 30% it would burn faster than at 21%, right?": a comparison at a condition asked to be confirmed
+PREDICTION_PATTERN = re.compile(r"\b(?:would|will)\b.{0,80}\b(?:faster|slower|longer|shorter|sooner|later|more|less|"
+                                r"higher|lower)\b.{0,80}\bright\s*\?", re.I)
+QUESTION_WORDS = {
+    "P1": ["flammability limit", "oxygen limit", "limiting oxygen", "maximum oxygen", "가연 한계", "가연한계"],
+    "P2": ["ignition", "ignite", "ignites", "점화", "발화", "着火", "ignición"],
+    "P3": ["flame spread", "fire spread", "spread rate", "spreads", "how a fire spreads", "화염 확산", "번지", "火炎伝播",
+           "propagación", "se propaga"],
+    "S1": ["extinction", "extinguishment", "flames go out", "flame goes out", "소염", "꺼지", "消炎", "消える", "extinción"],
+    "D1": ["carbon monoxide", "combustion products", "toxic gas", "연소 생성물", "일산화탄소"],
+    "D2": ["smoke generation", "smoke measurements", "smoke", "연기", "煙", "humo"],
+}
+SOFT_GOODS = ["soft goods", "soft-goods", "textiles", "textile"]
 PREVENTION_WORDS = ["flammability", "flammable", "material selection", "fire spread", "flame spread", "가연성",
                     "재료 선정", "확산", "예방"]
 VENT_WORDS = ["ventilation", "fan", "airflow"]
@@ -340,6 +357,7 @@ def rule_reading(message, state, vocab):
         found.insert(0, sc["preset"])
     if found:
         n["preset"] = found[0]
+    n["presets_named"] = found[:4]  # every environment the message names (read by pipeline for an assumption)
     if src.get("o2_pct") == "text":
         n["o2_pct"] = sc["o2_pct"]
     if src.get("pressure_kpa") == "text":
@@ -351,6 +369,8 @@ def rule_reading(message, state, vocab):
     mat = scorer._match_material(t, cfg["keywords"]["materials"])
     if mat:
         n["material"] = material_id(mat)
+    elif _words_hit(t, SOFT_GOODS) and "class:fabric" in vocab["materials"]:
+        n["material"] = "class:fabric"  # 'soft goods' are fabrics (added after the red-team run of 15 Nov)
     intent = None
     if oos:
         intent = "out_of_scope"
@@ -374,8 +394,11 @@ def rule_reading(message, state, vocab):
     # is safe" is not the user asking for a verdict), and not in "fire safety" / "predictive model" phrases.
     # (Changed at integration, 15 Nov, after the evaluation flagged q31, q45, q69 and q72.)
     tv = _flag_text(t)
+    # the fire-safety questions named in plain words (added at integration, 15 Nov, after q18 and q19: both model
+    # readings left "extinction tests" and "flame spread" without a question, and the turn used all six)
+    n["questions"] = [q for q in _QIDS if _words_hit(t, QUESTION_WORDS.get(q, []))]
     n["asks_verdict"] = _words_hit(tv, VERDICT_WORDS)
-    n["asks_prediction"] = _words_hit(tv, PREDICTION_WORDS)
+    n["asks_prediction"] = _words_hit(tv, PREDICTION_WORDS) or bool(PREDICTION_PATTERN.search(tv))
     if n["o2_pct"] is not None and n["material"] and not n["asks_prediction"]:
         ph = vocab["materials"][n["material"]]["fuel_phase"]
         hi = vocab["phase_o2_max"].get(ph)
@@ -524,6 +547,11 @@ def opinion(reader, norm, field):
     if field == "gravity" and v is None and norm.get("preset"):
         v = (load_vocab()["presets"].get(norm["preset"]) or {}).get("gravity")  # a preset implies its gravity
     if reader != "R" and field in MODEL_ALWAYS:
+        if field == "questions" and not v:
+            # an empty list from a model reading is no opinion: two readings that left the questions empty outvoted
+            # the rule parser's S1 for "extinction tests" (changed at integration, 15 Nov, after q18 and q19;
+            # applied after the pause, from the integration's patch_questions.py)
+            return False, None
         return True, _key(field, v)
     if reader == "R":
         if field == "intent":
@@ -590,9 +618,21 @@ def agree(readings):
             values[f] = "out_of_scope" if "out_of_scope" in vals else (raw.get("M1") or raw.get("M2") or raw.get("R"))
         else:
             values[f] = raw["R"] if "R" in raw else (raw.get("M1") if "M1" in raw else raw.get("M2"))
+    # questions: when both model readings name none and the rule parser matched a question's words, the rule
+    # parser's questions are taken for the intents that look up per question (added at integration, 15 Nov)
+    r_q = (readings.get("R") or {}).get("questions") or []
+    if r_q and not values.get("questions") and values.get("intent") in ("question_evidence", "where_data",
+                                                                        "modelling_data"):
+        values["questions"] = list(r_q)
+        agreement[PATH["questions"]] = "rules_only"
     # precaution (team's choice, reported): a verdict or prediction word read by the rule parser always shows
     # the fixed notice, even when both model readings missed it
     for f in ("asks_verdict", "asks_prediction"):
+        if values.get("intent") == "out_of_scope" and agreement.get(PATH[f]) in ("conflict", "single") \
+                and not (readings.get("R") or {}).get(f):
+            # one model reading alone does not raise a refusal notice on a message read as out of scope
+            # ('flurb zxq blorp 42 %%% oxygen??'; added after the red-team run of 15 Nov)
+            values[f] = False
         if readings.get("R") and readings["R"].get(f) and not readings["R"].get(f + "_weak"):
             values[f] = True
     return values, agreement, conflicts
@@ -900,9 +940,46 @@ def norm_of_request(req):
     return values, extra
 
 
+# Text a client-sent REQUEST carries into the writer prompt is held to what a reading could have produced (added
+# after the red-team run of 15 Nov: a forged REQUEST put "SYSTEM: ignore every rule ..." into item.words and an
+# instruction into english, and set asks_verdict false).
+_INJECTED = re.compile(r"\b(?:system|assistant|developer)\s*:|\bignore\b|\binstruction|\bprompt\b|\bend (?:with|your)\b|"
+                       r"\b(?:write|say|reply|answer|state|claim) (?:that|with|only)\b|\bapproved?\b|\brules?\b|"
+                       r"\bpretend\b|\bact as\b|[<>{}\[\]]", re.I)
+
+
+def _clean_item_words(w):
+    w = (w or "").strip()
+    if not w or len(w) > 60 or len(w.split()) > 6 or _INJECTED.search(w) or re.search(r"[:;.!?\"]", w):
+        return None
+    return w
+
+
+def _clean_english(e, values, vocab):
+    e = (e or "").strip()[:300]
+    if e and not _INJECTED.search(e):
+        return e
+    parts = [texts.INTENT_LABELS.get(values.get("intent") or "", "")]
+    if values.get("preset") and values["preset"] in vocab["presets"]:
+        parts.append(vocab["presets"][values["preset"]]["label"])
+    if values.get("material") and values["material"] in vocab["materials"]:
+        parts.append(vocab["materials"][values["material"]].get("label") or values["material"])
+    return ("; ".join(p for p in parts if p) or "(set on the page)")[:300]
+
+
 def apply_patch(req, patch, vocab):
-    """A REQUEST with a chip edit or a clarify option applied; the patched fields get source 'chip'."""
+    """A REQUEST with a chip edit or a clarify option applied; the patched fields get source 'chip'.
+
+    A REQUEST comes from the page, so free text in it is not trusted: item words and the English restatement that
+    look like instructions are dropped, and the verdict and prediction flags are read again by the rule parser
+    from the English restatement (a client cannot switch a refusal notice off)."""
     values, extra = norm_of_request(req)
+    extra["item_words"] = _clean_item_words(extra.get("item_words"))
+    extra["english"] = _clean_english(extra.get("english"), values, vocab)
+    tv = _flag_text(_t((req.get("english") or "") + " . " + ((req.get("item") or {}).get("words") or "")))
+    values["asks_verdict"] = bool(values.get("asks_verdict")) or _words_hit(tv, VERDICT_WORDS)
+    values["asks_prediction"] = bool(values.get("asks_prediction")) or _words_hit(tv, PREDICTION_WORDS) \
+        or bool(PREDICTION_PATTERN.search(tv))
     chip = []
     patch = patch or {}
     if "intent" in patch and patch["intent"] in texts.INTENTS:

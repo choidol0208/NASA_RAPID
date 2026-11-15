@@ -465,10 +465,10 @@ Then code calls `scorer.interpret(q, cfg)` and compares `preset`, `o2_pct`, `pre
 |---|---|
 | `find_investigations` | `rank_investigations(q=dashboard_q)`; `counts_per_question(env, questions or all)`; (if env has oxygen or pressure) `tested_range(env, phase=item.fuel_phase)`; (if keywords) `search_records(keywords, limit=3)` |
 | `compare_environments` | `counts_per_question` for each environment (the request's and each `compare_with`); `tested_range` for each environment with oxygen or pressure |
-| `question_evidence` | `counts_per_question(env, questions)`; `criteria(questions)`; `tests_table(env, question=first of questions)` |
+| `question_evidence` | `counts_per_question(env, questions)`; (if env has a scenario) `published_results(env, questions)`; `criteria(questions)`; `tests_table(env, question=first of questions)` |
 | `where_data` | `where_the_data_are(env, questions)`; `tests_table(env, question=first)`; (if tests) `files_of_test(test)` and `videos_of_test(test)` for each |
-| `modelling_data` | `modelling_data(questions, investigations)`; (if env has oxygen or pressure) `tested_range(env, phase)` |
-| `equipment_research` | `equipment_research(kind=equipment)`; `criteria(questions of that kind)` |
+| `modelling_data` | `modelling_data(questions, investigations)`; (if env has a scenario) `published_results(env, questions)`; (if env has oxygen or pressure) `tested_range(env, phase)` |
+| `equipment_research` | `equipment_research(kind=equipment)`; `criteria(questions of that kind)`; (if env has a scenario) `published_results(env, questions of that kind)` |
 | `earth_applications` | `earth_applications(investigations)` |
 | `explain` | `explain(term)` |
 | `help` | none (fixed text, examples) |
@@ -480,7 +480,7 @@ Added for every intent except `help` and `out_of_scope`:
 - (if `asks_prediction`) `tested_range(env, phase)` if not already planned;
 - (if `asks_verdict`) nothing extra: the fixed notice is shown and the intent's own tools offer what can be shown.
 
-`NEEDED_FIELDS` is the table of 4.6. A plan runs at most 6 tool calls; extra rows are dropped from the end and listed in the trace.
+`NEEDED_FIELDS` is the table of 4.6. A plan runs at most 6 tool calls; extra rows are dropped from the end and listed in the trace. `published_results` (added 15 November, 7.10a) is not counted against the 6, so that it pushes out no step planned before it was added.
 
 ---
 
@@ -499,7 +499,8 @@ Added for every intent except `help` and `out_of_scope`:
     "ref": {"type": "string", "maxLength": 200},
     "tool": {"type": "string"},
     "kind": {"type": "string", "enum": ["ranking", "count", "statement", "range", "pile", "test_row", "readiness",
-             "nasa_sentence", "criterion", "file_group", "video", "card", "definition", "limit"]},
+             "nasa_sentence", "criterion", "file_group", "video", "card", "definition", "limit",
+             "published_result"]},
     "context": {"type": ["string", "null"], "maxLength": 160},
     "text": {"type": "string", "minLength": 1, "maxLength": 900},
     "numbers": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["value", "unit", "what"],
@@ -694,6 +695,18 @@ Example (15 November files): `"Solid-fuel tests in the team's tables: oxygen of 
 - Facts (at most 4 per question; the first is lead): for a findings row with a quote: `"{reference_id}, {where}: \"{quote}\""` (`quote` true, link `url`); for a need_references row: `"{reference_id}, {where}, as the team's reference list states it: {text}"` (`quote` false).
 - Panel `criteria` (document, version, section, text, link); `dashboard_section` `#criteria`.
 - Limit (always): "Criteria are quoted from the documents listed; this tool does not apply them to your design."
+
+### 7.10a `published_results` (added 15 November, after the question set was frozen)
+
+- Label: "results quoted from NASA's documents for this question".
+- When: `question_evidence` (after the counts), `modelling_data`, `equipment_research`; only when the environment has a scenario.
+- Args: `{"env": ENV, "questions": [...]}` (all questions of the scenario when none is given).
+- Reads: `data/pipeline/results_by_need.json` (the data role's "results first" file, pipeline/README.md): the block `<scenario>__<question>`, its `headline.fields`, `found.entries` and `found.entries_tagged_for_all_questions`, and the shared dictionaries `findings`, `items` and `_meta` (group labels of `order_rule.groups`, kind labels of `result_kind.labels`).
+- Selection, in the file's own order: the entries in the groups `at_environment`, `about_a_stated_condition` and `stated_without_these_conditions` (not `other_conditions`) whose finding has a quote; at most 4 per question and 6 per turn (with several questions, ceil(6 / number of questions) each); entries tagged for all questions are added only when fewer than 2 were found for the question.
+- Facts: one `count` per question (team-computed, from `headline.fields`: tagged, with printed values, and per group), first one lead; one `published_result` per entry: `"{kind label}{document_id}, {where} ({relation}): \"{quote}\" The team's group for {env}: {group label}."` (`quote` true, link the document's url). The kind label (simulation, computed by the authors, preliminary) and the relation (an experiment that is not a PSI investigation of this catalogue) come from the file and are always said.
+- Panel `quotes` titled "What NASA's documents report for this question (quoted)": question, document, place, quote, printed values (as printed, with unit; a list column), kind of result, experiment, team's group, source link. Rows also hold `printed_values` (quantity, value, unit as held) and `finding_id`. Note: the limit, "A research exploration tool, not safety guidance", and a link to `data/pipeline/results_flat.csv` where all rows can be filtered.
+- Limit (always): "These are quotations of NASA documents and of the investigators' papers. The order is the team's fixed rule by the conditions each statement gives, with no weights; the team compares nothing with a criterion and computes nothing from these values."
+- Evaluation: in `OPTIONAL_TOOLS` of `evaluate.py` (left out of the plan score), because the frozen question set cannot name it.
 
 ### 7.11 `files_of_test` (REQUIRED)
 
@@ -1387,10 +1400,29 @@ Cut first to last if time runs short: `videos_of_test`; the `compare` panel type
 What the first live evaluation questions showed, and what changed in the code (each change is commented where it is made):
 - **Fact kinds in the writer's prompt.** Each fact line says `record:` (a NASA record's words) or `team:` (the team's ranking, counts, ranges, notes), and the writer prompt says how to frame each: a record's objective, hypothesis or approach as such, team output as the team's, never "the record states" for team facts. Before this, the writer wrote "The record states that SAFFIRE-II is the closest" (a team ranking) and the turn fell back to the template answer.
 - **Narrower citations instead of removal.** A sentence that fails only the record-frame gate because it also cites a record's aim, hypothesis or approach next to team facts is gated again without those record facts; when every gate then passes, the citations are narrowed and the sentence is kept (`gate_report.citations_narrowed`). The model checker then judges the sentence against the narrowed facts.
-- **The last call may go to the repair.** With two readings, a turn has one call left after writing: it went to the checker, so no repair was ever possible. Now, in `full`, when the code gates would leave nothing or under half of the written sentences, the last call repairs and the checker is skipped for that turn (`gate_report.checker_skipped`, and the check step says so); otherwise the last call stays with the checker.
+- ~~**The last call may go to the repair.**~~ Withdrawn on 15 November after the independent checks (see below): the checker was skipped on 3 of 22 red-team turns with model text, and a wrong definition and a sentence against the catalog were shown unchecked.
 - **Refusal notices on a clarifying turn.** A verdict or prediction request that also needs a clarifying question now shows the refusal notice with the question (before, a clarifying turn showed no notice).
 - **Evaluation subsets.** `evaluate.py --subset-arms` runs the ablation arms on a fixed random half (seed 20261115, with the questions a picked follow-up needs); full and single_call are also scored on that half (`metrics_on_subset`) so the arms compare on the same questions. `check_all.py` accepts an arm that has exactly its subset.
 - **Recording.** `record.py --resume --skip-failed`: a conversation with a problem is left out and named under `left_out` instead of nothing being written; recorded conversations are kept in the git-ignored progress file. The script has ten conversations.
+
+### Added 15 November 15:20 KST: `published_results`
+
+- New lookup tool `published_results` (7.10a) over `data/pipeline/results_by_need.json`: quoted results of NASA's experiments in the data role's fixed order, with a team-computed count fact per question and a `quotes` panel with printed values. Planned for `question_evidence` (after the counts), `modelling_data` and `equipment_research` when the environment has a scenario; not counted against the 6 tool calls of a plan. Fact kind `published_result` added to the FACT schema (6.1). `evaluate.py`: in `OPTIONAL_TOOLS`, because the question set was frozen before it existed. Writer facts: its facts come after the counts in plan order, so the 24-fact cap of `tools.writer_facts` keeps the count facts first.
+
+### Changed 15 November after three independent checks (red team, grounding audit, clean clone and judge)
+
+- **The model checker always runs before a model sentence is shown.** A repair is made only when a call is left for the checker after it (the sequences of the Budget paragraph hold again: U1, U2, W, C or U1, W, R, C; at most four calls). If no checker call is left, or the checker's reply is missing or invalid, the answer is the team-code template answer (`fallback_reason` "no checker call left" / "check failed"). No fifth call is used. `check_all.py` fails a recorded model answer with `checker_skipped`.
+- **Reading.** An empty model list of `questions` is no opinion (from `patch_questions.py`, not applied before the pause). New prediction words ("how fast would", "give me a number", "approximate is fine", "ballpark", ...) and the pattern "would ... faster than ..., right?". On an out-of-scope message, one model reading alone does not raise a refusal notice. "Soft goods" and "textiles" read as `class:fabric`.
+- **A client-sent REQUEST** (`server.py` -> `request.apply_patch`): item words and the English restatement that look like instructions are dropped (the English is rebuilt from the intent, environment and material); the verdict and prediction flags are read again by the rule parser from the restatement and item words and OR-ed with the client's values.
+- **Writer reply out of form.** When the only schema errors are too many sentences or too many fact ids in a sentence, the reply is kept: sentences past the limit are dropped and a sentence citing more than 4 facts fails the citation gate (`gate_report.salvaged`). The writer prompt asks for at most 30 words and 4 facts per sentence.
+- **Notices by fallback reason**: `fallback_write` (reply missing or not in the required form), `fallback_check` (checker reply missing or invalid, or no checker call left), the old `fallback` text only when the checks removed the sentences, and no fallback notice when there were no facts.
+- **Gate 15 `scope`** (`check.g_scope`): a sentence resting only on counts for a question names the question and says "counted" when it states an absence; "ranking" only with a ranking fact; no count or ranking credited to PSI or NASA; "no data exist" / "not tested" only with PSI, the tables or the records named; "outside" not where the range fact says "not comparable"; no "belong to" for file links. Gate `numbers`: the user's value only where the sentence says it is the user's, or where a cited fact is computed for the user's input (ranking, tested range). Gate `hedge`: keeps "indicative". Gate `extra`: "representative". Gate `modality`: card key points carry the record field they quote (`field`), so a quoted objective or hypothesis needs its frame; the writer sees them as `record:`. The checker prompt says that "counted for one question" is not "recorded", that "not compared" is not "none inside", and that counts and rankings are the team's.
+- **Follow-ups** written by the model pass the names gate over the turn's facts, carry no presumed effect or cause ("affect", "differences", "why"), and repeat a value with a unit only when a fact holds it with that unit.
+- **Two environments in a message that is not a comparison**: an assumption says "Looked up X only; ask again for Y."
+- **Texts and facts**: the readiness lead fact says what "none" counts; pile bars read "237 cannot be placed from the tables; 139 outside by a recorded value"; a preset value is "the preset's 30%", not "your 30%"; `files_none` names the listing date; the lead sentence prefers the files of a named test and puts pile bars last. Labels: the model and recorded labels say that every shown sentence passed the code checks and a second model check and that no person reviewed the answer; the recorded file's label counts the answers the checker ran on.
+- **Page**: one line under the banner in live mode on how a turn works and that it takes about 1 to 2 minutes; a visible "team code" tag on a team-code sentence inside a model answer; step labels for cached turns; the trace says when the checker did not run; the empty chat says which box is the assistant.
+- **Install**: `run.sh` no longer prints the address twice (the server prints it); `install.sh` says the built page is about 6 MB; `server.py` ignores a client that left before the reply.
+- **Not changed**: `files_of_test` still reads `data/pipeline/test_files.csv`, which lists 15 FLEX-1 files where `file_links.csv` names 23 (a gap between two data-role files, reported, not fixed here). The pairing of each number with its label in the numbers gate (D2 written as P2) and the explain routing of "what does X mean" before the environment check are left open.
 
 ## 19. Points left open
 
