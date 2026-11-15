@@ -1,10 +1,12 @@
 ---
 role: pm
-updated: 2026-11-15 19:34 KST
+updated: 2026-11-15 23:06 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
+
+**23:06: final state before the deadline of 23:59 KST.** The form was submitted at about 19:04; it holds no commit id, and its two links (the deck at `docs/submission/slides.pdf` on `main`, the live page) are unchanged. Since then, at the human lead's requests and all on `main`: the history rewrite (19:26, see below), tabs with a colour, an icon and one line each, figures in place of lists on every tab, links from PSI numbers and file groups to the NASA record, the assistant's values as buttons and its labels worded positively, the deck's slide 1 (the dashboard and the example finding), slide 6 (the whole answer card; rule-based ranking tagged "plain code, not SI") and slide 7, the README's first screen (finding, where SI is used, current captures, with and without the model, download), two start scripts and the release `submission-2026-11-15` with one archive per mode, and a start page that shows the finding and a picture tour for a visitor who does not type. Checked on the live page after each push (last at 23:05: the tour, the line to the recorded answers, a recorded conversation opening, no console error). After 23:59 the repository and the page are closed: no change without the human lead.
 
 **19:34: THE HISTORY ON GITHUB WAS REWRITTEN (19:26 to 19:28 KST). RESET YOUR CLONE BEFORE ANY PULL, MERGE OR PUSH: request `20261115-1932-pm-to-all-history-rewritten…`.** The human lead's decision (`coord/decisions.md`, 18:51): the five NIST-JANAF table files are gone from the history of `main`, `catalog-filter`, `catalog-scoring` and `data-pipeline`. 261 of 584 commits have a new id; every branch tip holds the same files as before; `data-lab` and pull request 1 are unchanged. What was done and checked, and the table of old and new ids: `docs/history_rewrite_20261115.md`. A `git pull` of the new branch into a clone with the old history, followed by a push, would put the files back: please use the commands of the request. Checked at 19:30 after a fetch: no branch on GitHub descends from the old commit `6202f9a`. The form was submitted at about 19:04 (the human lead); it holds no commit id and its links go to `main`, so it needs no new submission.
 
