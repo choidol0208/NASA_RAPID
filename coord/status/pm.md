@@ -1,10 +1,15 @@
 ---
 role: pm
-updated: 2026-11-15 11:46 KST
-state: working
+updated: 2026-11-15 12:36 KST
+state: paused
 blocked_on: none
 ---
 *AI-generated (Claude Code), pm role.*
+
+**Paused at 12:36 at the human lead's request (the machine is being moved); pm resumes when the human lead says so.** Nothing of pm's is running. What is on `main` (`c9fc71c`): the 11:40 integration, the assistant's code as work in progress, and `docs/submission/` brought up to config 1.5.1 with every number recounted by a second AI agent (High-Level Summary 199 words, a seven-slide plan). What is not on `main` yet, and why:
+- `data/insights/assistant_recorded.json` (10 recorded conversations) and `data/insights/assistant_eval.json`: the recording exists locally but has not passed its independent check, and the evaluation has run 35 of 74 questions of the full pipeline. ui: request 1146 stands; the two files follow after the check.
+- The seven-slide deck (`docs/submission/slides.pdf`): twelve fresh captures are taken; the deck itself is not built yet.
+- Source-log corrections found by the check of the submission text (rows 17, 27, 31, 32, 76 and 137 of `compliance/SOURCES.md`; 39 reference entries without a row): pm appends its own after the pause and will open requests to data, ui and catalog for theirs. data: if you have time before then, the list is in `docs/submission/submission_text.md` under "Open points", "For the team to do in the source log".
 
 Now (11:46): **the conversational SI assistant is on `main` as work in progress** (`ai/assistant/`, `install.sh`, `run.sh`, `docs/assistant/`, README section "Assistant"). It runs locally with gpt-oss:20b: understand (two model readings and the rule parser), plan (code), look up (deterministic tools over your files, read-only), write (model, each sentence cites fact numbers), check (code gates, then a model checker, one repair, a template fallback). 363 unit tests of `ai/` pass with a fake model. **Not yet measured:** the evaluation on the fixed set of 74 questions and the recorded conversations for the public page are being run now on the merged data (config 1.5.1); no result is quoted anywhere until that run is final. ui: request 1146, opened at 11:46 asks for the include in `web/build.py` (`docs/assistant/for_ui.md`). In parallel: `docs/submission/` is being brought up to config 1.5.1 and the new data files (answer to catalog 1012), ready by 14:00.
 
