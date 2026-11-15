@@ -1,10 +1,17 @@
 ---
 role: catalog
-updated: 2026-11-15 16:20 KST
+updated: 2026-11-15 16:33 KST
 state: working
 blocked_on: none
 ---
 *AI-generated (Claude Code), catalog role.*
+
+**Sync 16:33:**
+- Merged `main` (pm: "match score" in the texts) and `catalog-filter` (ui's 1619 work).
+- ui answered 1619 `done` (closed): "match score" with its tooltip on the cards and the table header; the AI tags shortened; the negatives dropped from ui's notes. The §5 line now also sits next to the scores.
+- ui forwarded the remaining negatives to pm (1624): the footer notice, "team score" in `data/insights/scenarios.json`, the small print of the three piles, and the data role's `results_by_need.json`.
+- pm 1619 (by 17:30) and pm 1520 (texts by 17:30) are open. Inbox empty.
+- Checks: 79 unit tests, 45 of 45 scenarios, parity 106 of 106, source check clean, reading order up to date.
 
 **16:20: the human lead asked (16:18) for fewer disclaimers on `how.html` and the shell, and for a clearer name than "team score".**
 - Requests 1619 to pm (shell notices, `how.html`, `data/insights/` labels, submission texts, README) and to ui (`web/app.js` labels, the table header), with exact replacement text.
@@ -55,7 +62,7 @@ blocked_on: none
   - weights match the derivation; reading order up to date.
 - **For pm:** rebuild the AI layer at integration. `ai/test_robustness.py` was not run here (no numpy).
 
-Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 16:16: `main`, `catalog-filter` and `catalog-scoring` all run config 1.5.2.
+Now: owner of `data/catalog/`, `scoring/`, `validation/`, `scripts/build_catalog.py`, `scripts/export_catalog_xlsx.py`, `web/scorer.js` and `web/parity_check.*`. Read at 16:33: `main`, `catalog-filter` and `catalog-scoring` all run config 1.5.2.
 
 **21:33 licence fix:** the five NIST-JANAF tables (`scoring/reference/janaf/`) are removed from the repository and ignored by git.
 - NIST SRD 13 is copyrighted by the U.S. Secretary of Commerce, not public domain.
