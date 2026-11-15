@@ -75,6 +75,17 @@
     noDashboardPanel: "This part of the dashboard is not shown for this input.",
     recordedPlay: "Play",
     evalNone: "No measurement file was found.",
+    // The assistant seen working, as a conversation (15 November, 18:40; web/SHELL.md, "The assistant at work").
+    who: "SI assistant",
+    workLive: "The figures and cards below are computed at once by rules. The assistant is now reading your request with the language model, looking up the facts, writing an answer and checking every sentence; this takes about 1 to 2 minutes on this computer.",
+    workCode: "The figures and cards below are computed at once by rules. The assistant is now looking up the facts and putting its answer together with team code.",
+    answered: "Answered in {n} s with {m} model call{s}.",
+    answeredRecorded: "Recorded: answered in {n} s with {m} model call{s}.",
+    dataFold: "Data for this answer ({n})",
+    newConv: "New conversation",
+    boxHint: "Ask a follow-up, for example: and for the ISS?",
+    boxBusy: "The assistant is answering; the box opens again when the answer is here.",
+    sendMsg: "Send",
     mockEval: "Mock file: the values are placeholders for testing the page, not measurements."
   };
 
@@ -92,6 +103,17 @@
   };
   var QIDS = ["P1", "P2", "P3", "S1", "D1", "D2"];
   var STEP_ORDER = ["understand", "plan", "lookup", "write", "check", "deliver"];
+  // Who answers, in the words of the health reply or of the recorded file (no model name is typed here).
+  function byWords() {
+    var m = S.health && S.health.model && S.health.model.name, rec = S.recorded || {};
+    if (S.mode === "live") return m ? m + " · local model" : "local model";
+    if (S.mode === "recorded") {
+      var rm = rec.model ? String(rec.model).replace(/\s*\(.*\)\s*$/, "") : "";
+      return "recorded" + (rm ? " with " + rm : "") + (S.recordedDate ? " on " + S.recordedDate : "");
+    }
+    if (S.mode === "mock") return "mock mode";
+    return "rule-based mode";
+  }
   var READER = { M1: "model reading 1", M2: "model reading 2", R: "rule parser" };
   var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
     "November", "December"];
@@ -175,18 +197,21 @@
     els.mode = h("div", { class: "as-mode", role: "status" });
     els.offer = h("p", { class: "as-offer", hidden: true });
     els.chat = h("div", { class: "as-chat", role: "log", "aria-live": "polite", "aria-label": "Conversation" });
-    els.panelList = h("div", { class: "as-panel-list" }, h("p", { class: "as-empty" }, L.emptyPanels));
-    els.panels = h("aside", { class: "as-panels", "aria-label": L.panels }, h("h3", { class: "as-h" }, L.panels), els.panelList);
+    els.newConv = h("button", { type: "button", class: "as-link as-act", hidden: true,
+      onclick: function () { if (!S.busy) { newConversation(); refresh(); } } }, L.newConv);
+    els.head = h("div", { class: "as-head" }, els.title, els.newConv);
     // The follow-up box: part of the conversation, shown only once an answer is on screen.
-    els.input = h("textarea", { id: "as-input", rows: 1, maxlength: 1000, placeholder: L.followUp, autocomplete: "off" });
-    els.send = h("button", { type: "submit", class: "as-send" }, L.send);
+    els.input = h("textarea", { id: "as-input", rows: 1, maxlength: 1000, placeholder: L.boxHint, autocomplete: "off" });
+    els.send = h("button", { type: "submit", class: "as-send" }, L.sendMsg);
     els.form = h("form", { class: "as-form", autocomplete: "off", hidden: true },
       h("label", { for: "as-input", class: "as-vh" }, L.followUp), els.input, els.send);
-    els.grid = h("div", { class: "as-grid", hidden: true }, h("div", { class: "as-conv" }, els.chat, els.form), els.panels);
+    // One thread: the turns, then the message box with the model indicator under it at the right.
+    els.grid = h("div", { class: "as-thread", hidden: true }, els.chat);
+    els.byline = h("p", { class: "as-byline", hidden: true });
     els.examples = h("div", { class: "as-examples", hidden: true });
     els.evalBody = h("div", { class: "as-eval-body" });
     els.evalFold = h("details", { class: "as-eval", hidden: true }, h("summary", {}, L.evalFold), els.evalBody);
-    add(root, [els.title, els.sub, els.mode, els.offer, els.grid, els.examples, els.evalFold]);
+    add(root, [els.head, els.sub, els.mode, els.offer, els.examples, els.grid, els.form, els.byline, els.evalFold]);
     var ask = main.querySelector(":scope > section.ask");
     if (ask) ask.insertAdjacentElement("afterend", root); else main.appendChild(root);
     S.root = root;
@@ -208,6 +233,8 @@
     S.els.mode.textContent = t || "";
     S.els.mode.className = "as-mode as-mode-" + mode;
     S.root.setAttribute("data-mode", mode);
+    S.root.hidden = mode === "nothing"; // no server and no recording: the card is not shown
+    S.els.byline.textContent = byWords();
     if (answers()) setInputWords();
     refresh();
     announceModel();
@@ -254,7 +281,9 @@
   function setBusy(b) {
     S.busy = b;
     S.els.send.disabled = b;
-    S.els.send.textContent = b ? L.waiting : L.send;
+    S.els.send.textContent = b ? L.waiting : L.sendMsg;
+    S.els.input.disabled = b;
+    S.els.input.setAttribute("placeholder", b ? L.boxBusy : L.boxHint);
     // the example questions next to the page's input are outside this section
     document.querySelectorAll("#assistant .as-act, .as-qgroup .as-act").forEach(function (x) { x.disabled = b; });
     syncOffer();
@@ -265,12 +294,16 @@
     if (!S.root) return;
     var els = S.els, talk = S.turns.length > 0, rec = S.mode === "recorded", can = answers();
     S.root.setAttribute("data-state", talk ? "talk" : "idle");
-    els.title.textContent = rec ? L.titleRecorded : (talk && can ? L.titleAnswer : L.titleIdle);
-    els.sub.hidden = !can || talk;
+    var shown = !!currentQ();
+    els.title.textContent = rec ? L.titleRecorded : (shown && can ? L.who : L.titleIdle);
+    els.sub.hidden = !can || talk || shown;
+    els.mode.hidden = can && talk; // in a thread each answer names who wrote it
     els.grid.hidden = !talk;
-    // the follow-up box: only once an answer of this conversation is on screen
-    els.form.hidden = !can || !S.turns.some(function (t) { return t.resp && t.resp.kind !== "error"; });
-    els.examples.hidden = !S.hasList || (talk && !rec);
+    // the message box: with a thread, and on a page that shows a request (a conversation can start there)
+    els.form.hidden = !can || !(talk || shown);
+    els.byline.hidden = els.form.hidden;
+    els.newConv.hidden = !can || !talk;
+    els.examples.hidden = !S.hasList || (!rec && (talk || shown)); // a page that shows a request keeps the card short
     syncOffer();
   }
 
@@ -285,7 +318,7 @@
     if (box.hidden || box.getAttribute("data-q") !== q || box.getAttribute("data-busy") !== String(S.busy)) {
       box.setAttribute("data-q", q);
       box.setAttribute("data-busy", String(S.busy));
-      box.replaceChildren(h("span", { class: "as-offer-q" }, q), h("button", { type: "button", class: "as-btn as-act",
+      box.replaceChildren(h("span", { class: "as-offer-q" }, q), h("button", { type: "button", class: "as-btn as-btn-primary as-act",
         disabled: S.busy, onclick: function () { if (!S.busy) { newConversation(); ask({ message: q }, q, { dashQ: q }); } } }, L.offer));
       if (S.busy) box.appendChild(h("span", { class: "as-small as-offer-wait" }, L.offerBusy));
     }
@@ -293,9 +326,9 @@
   }
 
   function newConversation() {
+    S.turns.forEach(stopWork);
     S.state = null; S.turns = []; S.handled = [];
     S.els.chat.replaceChildren();
-    S.els.panelList.replaceChildren(h("p", { class: "as-empty" }, L.emptyPanels));
     S.els.input.value = "";
   }
 
@@ -313,7 +346,7 @@
       });
     }
     var cond = document.getElementById("conditions"); // app.js fills it again on every run
-    var soon = function () { setTimeout(syncOffer, 0); };
+    var soon = function () { setTimeout(refresh, 0); };
     if (cond && typeof MutationObserver === "function") new MutationObserver(soon).observe(cond, { childList: true });
     window.addEventListener("popstate", soon);
   }
@@ -609,13 +642,9 @@
     turn.dashQ = dashQ !== undefined ? dashQ : currentQ();
     turn.fromInput = dashQ !== undefined;
     if (dashQ === undefined && S.turns.length === 1) showTurn(turn); // opened from the list
-    var chain = Promise.resolve();
-    ((resp.trace && resp.trace.steps) || []).forEach(function (st) {
-      var wait = Math.min(600, Math.max(60, Math.round((st.ms || 0) / 10)));
-      chain = chain.then(function () { onStepEvent(turn, { step: st.step, status: "start", label: st.label }); return sleep(wait); })
-        .then(function () { onStepEvent(turn, { step: st.step, status: "done", summary: st.summary, ms: st.ms, model_calls: st.model_calls }); });
-    });
-    return chain.then(function () { turn.streamed = true; renderResponse(turn, resp, { streamed: true }); });
+    // A recording is shown at once, with its steps as they were recorded: no step runs on this page.
+    renderResponse(turn, resp, { streamed: false });
+    return Promise.resolve();
   }
 
   function findRecorded(text) {
@@ -631,27 +660,44 @@
   function newTurn(text) {
     var chat = S.els.chat;
     var idx = S.turns.length;
+    var running = S.mode !== "recorded";
     var steps = h("ol", { class: "as-steps", "aria-label": "Steps" });
     var body = h("div", { class: "as-body" });
-    // live mode only: the model needs a minute or two, and the dashboard is already usable
-    var wait = S.mode === "live" ? h("p", { class: "as-wait" }, L.waitLive) : null;
+    // While the turn runs: who answers, the seconds, the steps, one sentence that sets the rules' figures apart
+    // from the assistant's work, and three grey lines where the answer will stand.
+    var clock = h("span", { class: "as-clock", role: "timer" }, running ? "0 s" : "");
+    var who = h("div", { class: "as-who" }, h("span", { class: "as-avatar", "aria-hidden": "true" }), h("b", {}, L.who),
+      h("span", { class: "as-by" }, byWords()), clock);
+    var wait = running ? h("p", { class: "as-wait" }, S.mode === "live" ? L.workLive : L.workCode) : null;
+    var skel = running ? h("div", { class: "as-skel", "aria-hidden": "true" }, h("span"), h("span"), h("span")) : null;
     var user = h("div", { class: "as-user" }, h("span", { class: "as-vh" }, "You: "), text);
-    // Page design v2: the steps are one compact progress row; their detail opens under "Steps".
-    var stepsNow = h("span", { class: "as-steps-now", "aria-live": "polite" }, "");
-    var stepsFold = h("details", { class: "as-steps-fold" },
-      h("summary", {}, h("span", { class: "as-steps-word" }, "Steps"), h("span", { class: "as-dot", "aria-hidden": "true" }), stepsNow), steps);
-    var el = h("article", { class: "as-turn", "data-turn": idx }, user, stepsFold, wait, body);
-    // The latest answer is shown in full; the earlier turns fold to their question (a click opens one again).
+    var first = h("p", { class: "as-firstline" });
+    var el = h("article", { class: "as-turn" + (running ? " as-working" : ""), "data-turn": idx }, user, first, who, steps, wait, skel, body);
+    // The latest answer is shown in full; the earlier turns fold to their question and the answer's first line.
     S.turns.forEach(function (t) { foldTurn(t, true); });
     chat.appendChild(el);
-    var turn = { el: el, user: user, steps: steps, stepsNow: stepsNow, stepsFold: stepsFold, body: body, idx: idx, streamed: false, stepEls: {}, resp: null, wait: wait, dashQ: "" };
+    var turn = { el: el, user: user, first: first, steps: steps, clock: clock, skel: skel, body: body, idx: idx, streamed: false,
+      stepEls: {}, resp: null, wait: wait, dashQ: "", t0: Date.now(), timer: null };
+    STEP_ORDER.forEach(function (k) { stepEl(turn, k, null); });
+    if (running) turn.timer = setInterval(function () { clock.textContent = Math.round((Date.now() - turn.t0) / 1000) + " s"; }, 1000);
     var toggle = function () { if (el.classList.contains("as-old")) foldTurn(turn, !el.classList.contains("as-folded")); };
     user.addEventListener("click", toggle);
+    first.addEventListener("click", toggle);
     user.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
     S.turns.push(turn);
     refresh();
     scrollChatTo(el);
     return turn;
+  }
+
+  // The turn is over (an answer or an error): the clock stops, the sentence and the grey lines give way.
+  function stopWork(turn) {
+    if (turn.timer) { clearInterval(turn.timer); turn.timer = null; }
+    if (turn.wait) { turn.wait.remove(); turn.wait = null; }
+    if (turn.skel) { turn.skel.remove(); turn.skel = null; }
+    turn.clock.textContent = "";
+    turn.el.classList.remove("as-working");
+    Object.keys(turn.stepEls).forEach(function (k) { turn.stepEls[k].classList.remove("as-run"); });
   }
 
   function foldTurn(turn, fold) {
@@ -674,49 +720,48 @@
     if (chat.scrollHeight > chat.clientHeight + 4) chat.scrollTop = el.offsetTop - chat.offsetTop - 8;
   }
 
-  function onStepEvent(turn, ev) {
-    var li = turn.stepEls[ev.step];
+  // The steps are one row of labelled steps: waiting (a ring), running (blue, moving), done (a check mark and the
+  // one-line summary the stream gives).
+  function stepEl(turn, key, label) {
+    var li = turn.stepEls[key];
     if (!li) {
-      li = h("li", { class: "as-step as-run", "data-step": ev.step },
-        h("span", { class: "as-dot", "aria-hidden": "true" }),
-        h("span", { class: "as-step-label" }, ev.label || STEP_LABELS[ev.step] || ev.step),
+      li = h("li", { class: "as-step as-todo", "data-step": key },
+        h("span", { class: "as-mark", "aria-hidden": "true" }),
+        h("span", { class: "as-step-label" }, label || STEP_LABELS[key] || key),
         h("span", { class: "as-step-sum" }, ""));
-      turn.stepEls[ev.step] = li;
+      turn.stepEls[key] = li;
       turn.steps.appendChild(li);
-    }
+    } else if (label) li.querySelector(".as-step-label").textContent = label;
+    return li;
+  }
+
+  function onStepEvent(turn, ev) {
+    var li = stepEl(turn, ev.step, ev.label);
+    var sum = li.querySelector(".as-step-sum");
     if (ev.status === "start") {
       li.className = "as-step as-run";
-      li.querySelector(".as-step-sum").textContent = "...";
+      sum.textContent = "";
     } else {
       li.className = "as-step as-done";
       var meta = [];
       if (isNum(ev.ms) && ev.step !== "deliver") meta.push(ev.ms >= 1000 ? (Number((ev.ms / 1000).toFixed(1)) + " s") : (ev.ms + " ms"));
-      var sum = li.querySelector(".as-step-sum");
       sum.replaceChildren(document.createTextNode(ev.summary || ""));
+      if (ev.summary) li.setAttribute("title", ev.summary);
       if (meta.length) sum.appendChild(h("span", { class: "as-ms" }, " " + meta.join(", ")));
-    }
-    // the compact row: the step that runs now, then the last step's own summary
-    if (turn.stepsNow) {
-      var label = li.querySelector(".as-step-label").textContent;
-      var running = ev.status === "start";
-      turn.stepsNow.textContent = running ? label + " ..." : (ev.step === "deliver" && ev.summary ? ev.summary : label);
-      turn.stepsFold.classList.toggle("as-run", running);
-      turn.stepsFold.classList.toggle("as-done", !running);
     }
     scrollChatTo(turn.el);
   }
 
   function renderError(turn, j) {
-    if (turn.wait) { turn.wait.remove(); turn.wait = null; }
-    Object.keys(turn.stepEls).forEach(function (k) { turn.stepEls[k].classList.remove("as-run"); });
-    if (turn.stepsFold) turn.stepsFold.classList.remove("as-run");
+    stopWork(turn);
     add(turn.body, h("p", { class: "as-notice as-notice-error", role: "alert" }, L.error));
     if (j && j.trace) add(turn.body, traceFold(j.trace));
   }
 
   function renderResponse(turn, resp, opt) {
     turn.resp = resp;
-    if (turn.wait) { turn.wait.remove(); turn.wait = null; }
+    var measured = Date.now() - turn.t0;
+    stopWork(turn);
     if (!resp || typeof resp !== "object") { renderError(turn, null); return; }
     if (!opt.streamed) {
       ((resp.trace && resp.trace.steps) || []).forEach(function (st) {
@@ -740,6 +785,8 @@
 
     var nums = {}, order = [];
     var ans = resp.answer;
+    turn.first.textContent = (ans && ans.sentences && ans.sentences[0] && ans.sentences[0].text) ||
+      (resp.clarify && resp.clarify.question) || ((resp.notices || [])[0] || {}).text || "";
     if (ans && ans.sentences && ans.sentences.length) {
       ans.sentences.forEach(function (st) {
         (st.facts || []).forEach(function (id) { if (!(id in nums) && byId[id]) { order.push(id); nums[id] = order.length; } });
@@ -777,7 +824,17 @@
       }
     }
     if (facts.length) add(b, factsFold(facts, order, nums));
+    // The tool panels of this answer: a fold of the turn, not a second column.
+    if ((resp.panels || []).length) {
+      add(b, h("details", { class: "as-fold as-data" }, h("summary", {}, fill(L.dataFold, { n: resp.panels.length })),
+        h("div", { class: "as-panel-list" }, resp.panels.map(function (p) { return panelView(p, byId, resp); }))));
+    }
     if (resp.trace) add(b, traceFold(resp.trace));
+    var tr = resp.trace || {}, ms = isNum(tr.total_ms) ? tr.total_ms : (recorded ? null : measured);
+    if (ms !== null && isNum(tr.model_calls)) {
+      add(b, h("p", { class: "as-answered" }, fill(recorded ? L.answeredRecorded : L.answered,
+        { n: ms >= 10000 ? Math.round(ms / 1000) : (ms < 1000 ? "less than 1" : Number((ms / 1000).toFixed(1))), m: tr.model_calls, s: tr.model_calls === 1 ? "" : "s" })));
+    }
 
     var dq = resp.dashboard && resp.dashboard.q;
     var row = h("p", { class: "as-row" });
@@ -785,11 +842,6 @@
       add(row, h("button", { type: "button", class: "as-btn as-btn-ghost", onclick: function () {
         driveDashboard(dq, resp.dashboard.section, true);
       } }, L.dashboard));
-    }
-    if ((resp.panels || []).length) {
-      add(row, h("button", { type: "button", class: "as-btn as-btn-ghost as-showpanels", onclick: function () {
-        renderPanels(turn); S.els.panels.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      } }, L.showPanels));
     }
     if (row.childNodes.length) add(b, row);
     // The follow-up suggestions come last in the turn, right above the follow-up box.
@@ -800,7 +852,6 @@
           return h("button", { type: "button", class: "as-btn as-act", onclick: function () { followUp(f, turn); } }, f.text);
         }))));
     }
-    renderPanels(turn);
     if (dq) {
       // A turn asked from the page's input leaves the dashboard (and the input) on the visitor's own words; the
       // button above offers the answer's request. A follow-up or a recording opened from the list drives the
@@ -1151,18 +1202,6 @@
   }
 
   // ------------------------------------------------------------------ panels
-  function renderPanels(turn) {
-    var resp = turn.resp, list = S.els.panelList;
-    var panels = (resp && resp.panels) || [];
-    S.root.querySelectorAll(".as-turn.as-current").forEach(function (x) { x.classList.remove("as-current"); });
-    if (!panels.length) return;
-    turn.el.classList.add("as-current");
-    var facts = {};
-    (resp.facts || []).forEach(function (f) { facts[f.id] = f; });
-    list.replaceChildren(h("p", { class: "as-panels-for" }, "For: " + (turn.el.querySelector(".as-user").textContent.replace(/^You: /, ""))));
-    panels.forEach(function (p) { list.appendChild(panelView(p, facts, resp)); });
-  }
-
   function colOf(p, names) {
     var cs = p.columns || [];
     for (var i = 0; i < names.length; i++) {

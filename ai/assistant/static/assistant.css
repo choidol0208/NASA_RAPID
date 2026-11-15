@@ -93,7 +93,7 @@ html[data-theme="dark"] #assistant, #assistant[data-theme="dark"] {
 #assistant .as-turn.as-old > .as-user { cursor: pointer; }
 #assistant .as-turn.as-old > .as-user::after { content: "\25BE"; margin-left: 8px; opacity: .8; }
 #assistant .as-turn.as-folded > .as-user::after { content: "\25B8"; }
-#assistant .as-turn.as-folded > :not(.as-user) { display: none; }
+#assistant .as-turn.as-folded > :not(.as-user):not(.as-firstline) { display: none; }
 #assistant .as-turn.as-folded { padding-bottom: 0; margin-bottom: 8px; border-bottom: 0; }
 #assistant .as-turn.as-folded > .as-user { margin-bottom: 0; opacity: .85; }
 #assistant .as-user { background: var(--as-ink); color: var(--as-paper); padding: 8px 12px; border-radius: 12px 12px 2px 12px;
@@ -292,3 +292,100 @@ html[data-theme="dark"] #assistant .as-send { color: #0d1320; }
 #assistant .as-steps-word { font-weight: 700; color: var(--as-blue); }
 #assistant .as-steps-now { min-width: 0; overflow-wrap: anywhere; }
 #assistant .as-steps-fold > .as-steps { margin: 4px 0 0; padding: 8px 12px; background: var(--as-paper); border-radius: 8px; font-size: 13px; }
+
+/* ---- The assistant at work, as a conversation (15 November, 18:40; web/SHELL.md). One thread: the visitor's words at
+   the right, the assistant under them. While a turn runs: who answers, the seconds, a row of labelled steps (the
+   running one moves, in blue), one sentence, and three grey lines where the answer will stand. */
+#assistant[hidden] { display: none; }
+#assistant .as-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 0 12px; }
+#assistant .as-head h2#as-title { margin: 0; }
+#assistant .as-link { flex: none; border: 0; background: none; padding: 4px 0; color: var(--as-blue); font-size: 13px; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 2px; }
+#assistant .as-link[disabled] { opacity: .5; cursor: default; }
+#assistant .as-thread { display: block; }
+#assistant .as-turn { padding: 0 0 16px; margin: 0 0 16px; }
+#assistant .as-turn:last-child { padding-bottom: 0; }
+#assistant .as-user { background: var(--as-blue-soft); color: var(--as-ink); padding: 8px 14px; border-radius: 14px 14px 4px 14px;
+  max-width: min(92%, 70ch); font-size: 15px; }
+html[data-theme="dark"] #assistant .as-user { background: var(--as-blue-soft); }
+#assistant .as-turn.as-folded > .as-user { opacity: 1; }
+#assistant .as-firstline { display: none; margin: 4px 0 0; font-size: 13px; color: var(--as-ink-2); cursor: pointer;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#assistant .as-turn.as-folded > .as-firstline:not(:empty) { display: block; }
+#assistant .as-turn.as-folded { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--as-rule); }
+
+#assistant .as-who { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 12px 0 12px; font-size: 13px; color: var(--as-ink-2); }
+#assistant .as-who b { font-family: var(--as-display); font-size: 17px; line-height: 1.2; color: var(--as-ink); letter-spacing: .01em; }
+#assistant .as-avatar { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--as-blue); }
+#assistant .as-working .as-avatar { animation: as-pulse 1s ease-in-out infinite; }
+#assistant .as-clock { margin-left: auto; font-variant-numeric: tabular-nums; }
+#assistant .as-working .as-clock { font-family: var(--as-display); font-size: 22px; line-height: 1; font-weight: 700; color: var(--as-blue); }
+
+#assistant .as-steps { list-style: none; margin: 0 0 12px; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px; font-size: 13px; line-height: 1.4; color: var(--as-ink-2); }
+#assistant .as-step { display: block; position: relative; min-width: 0; padding: 12px 0 0;
+  background: linear-gradient(var(--as-rule), var(--as-rule)) 0 0 / 100% 3px no-repeat; }
+#assistant .as-step-label { font-weight: 700; color: var(--as-ink-2); white-space: normal; overflow-wrap: anywhere; }
+#assistant .as-step-sum { display: block; min-width: 0; margin: 2px 0 0; overflow-wrap: anywhere; }
+#assistant .as-step-sum:empty { display: none; }
+@media (min-width: 900px) { /* a long summary is cut to three lines in the row; the whole of it is in the title and under "How this answer was made" */
+  #assistant .as-step-sum { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; }
+}
+#assistant .as-mark { display: inline-grid; place-items: center; width: 16px; height: 16px; margin: 0 6px 0 0; border-radius: 50%;
+  border: 1.5px solid var(--as-grey); vertical-align: -3px; font-size: 11px; line-height: 1; color: var(--as-card); }
+#assistant .as-done { background-image: linear-gradient(var(--as-blue), var(--as-blue)); }
+#assistant .as-done .as-step-label, #assistant .as-run .as-step-label { color: var(--as-ink); }
+#assistant .as-done .as-mark { background: var(--as-blue); border-color: var(--as-blue); }
+#assistant .as-done .as-mark::before { content: "\2713"; font-weight: 700; }
+#assistant .as-run { background-image: linear-gradient(var(--as-blue), var(--as-blue)), linear-gradient(var(--as-blue-soft), var(--as-blue-soft));
+  background-size: 40% 3px, 100% 3px; background-repeat: no-repeat; background-position: 0 0, 0 0; animation: as-slide 1.2s ease-in-out infinite alternate; }
+#assistant .as-run .as-mark { background: var(--as-blue); border-color: var(--as-blue); animation: as-ring 1.2s ease-out infinite; }
+#assistant .as-run .as-step-label { color: var(--as-blue); }
+@keyframes as-slide { from { background-position: 0 0, 0 0; } to { background-position: 100% 0, 0 0; } }
+@keyframes as-ring { 0% { box-shadow: 0 0 0 0 rgba(35, 70, 196, .45); } 100% { box-shadow: 0 0 0 8px rgba(35, 70, 196, 0); } }
+
+#assistant .as-wait { margin: 0 0 12px; padding: 8px 12px; max-width: 100ch; border-left: 3px solid var(--as-blue); border-radius: 0 8px 8px 0;
+  background: var(--as-paper); font-size: 15px; line-height: 1.5; color: var(--as-ink); }
+#assistant .as-skel { display: grid; gap: 10px; padding: 16px; border-radius: 8px; background: var(--as-paper); }
+#assistant .as-skel span { display: block; height: 12px; border-radius: 6px;
+  background: linear-gradient(90deg, var(--as-rule) 25%, var(--as-card) 50%, var(--as-rule) 75%) 0 0 / 200% 100%; animation: as-shimmer 1.6s linear infinite; }
+#assistant .as-skel span:nth-child(2) { width: 92%; }
+#assistant .as-skel span:nth-child(3) { width: 64%; }
+@keyframes as-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) {
+  #assistant .as-run, #assistant .as-run .as-mark, #assistant .as-skel span, #assistant .as-working .as-avatar { animation: none; }
+  #assistant .as-run { background-size: 100% 3px, 100% 3px; }
+}
+
+#assistant .as-answered { margin: 8px 0 0; font-size: 13px; color: var(--as-ink-2); }
+#assistant .as-data > .as-panel-list { margin: 8px 0 4px; padding: 12px 16px; border: 1px solid var(--as-rule); border-radius: 8px; background: var(--as-card); }
+#assistant .as-follow .as-btn { border-radius: 999px; padding: 5px 14px; }
+#assistant .as-btn-primary, #assistant .as-btn-primary:hover:not([disabled]) { background: var(--as-blue); border-color: var(--as-blue); color: #fff; font-weight: 700; min-height: 40px; padding: 8px 16px; }
+html[data-theme="dark"] #assistant .as-btn-primary { color: #0d1320; }
+
+/* the message box: the last part of the thread, with the model indicator under it at the right */
+#assistant .as-form { display: flex; gap: 8px; align-items: stretch; margin: 16px 0 0; padding: 0; border-top: 0; }
+#assistant .as-form textarea { min-height: 48px; padding: 12px 14px; border: 1px solid var(--as-grey); border-radius: 10px; font-size: 15px; resize: none; }
+#assistant .as-form textarea:focus { border-color: var(--as-blue); }
+#assistant .as-form textarea[disabled] { background: var(--as-paper); border-color: var(--as-rule); }
+#assistant .as-send { min-height: 48px; border-radius: 10px; font-size: 15px; }
+#assistant .as-byline { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin: 6px 0 0; font-size: 13px; color: var(--as-ink-2); }
+#assistant .as-byline::before { content: ""; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid currentColor; }
+#assistant[data-mode="live"] .as-byline::before { background: var(--as-blue); border-color: var(--as-blue); }
+#assistant[data-state="talk"] .as-examples { margin: 0 0 16px; padding: 0 0 12px; border-top: 0; border-bottom: 1px solid var(--as-rule); }
+#assistant[data-state="idle"] .as-mode { margin-bottom: 12px; }
+
+@media (max-width: 899px) {
+  #assistant .as-steps { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  #assistant .as-step, #assistant .as-done { padding: 6px 8px 6px 32px; border-radius: 6px; background: none; animation: none; }
+  #assistant .as-run { background: var(--as-blue-soft); animation: none; }
+  #assistant .as-step .as-mark { position: absolute; left: 8px; top: 7px; margin: 0; }
+  #assistant .as-step-sum { display: inline; margin: 0 0 0 6px; }
+  #assistant .as-working .as-clock { font-size: 17px; }
+}
+@media (max-width: 600px) {
+  #assistant .as-form { flex-wrap: wrap; }
+  #assistant .as-form textarea { flex: 1 1 100%; min-height: 72px; }
+  #assistant .as-send { flex: 1 1 100%; }
+  #assistant .as-head { flex-wrap: wrap; }
+}
