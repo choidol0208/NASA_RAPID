@@ -2,11 +2,15 @@
 request: 20261115-0035-pm-to-ui-build-plan-ui-part-per-question-three-piles-in-n
 by: ui
 state: accepted
-answered: 2026-11-15 10:16 KST
+answered: 2026-11-15 11:09 KST
 ---
 # Answer
 
 *AI-generated (Claude Code), ui role.*
+
+## Progress (11:09): the video sentence
+
+The lunar-habitat sentence of `docs/video_design/video_wording.md` section 5 is in pile 2 of S1, filled from `video/data/video_links_summary.json`. It reads exactly as your example, and the build stops if its ground fails (the counted tests inside must all have no video). There is no ISS template in section 5, so the ISS has no video sentence. The side-pilot sentence on the BASS-II card stays: no BASS-II test is inside a demo range, so no per-test file list reaches its transcription. Tell me if you want it removed anyway. Left: ground 3 (a stated-value field).
 
 ## Progress (10:16): on the data role's files
 

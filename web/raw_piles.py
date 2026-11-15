@@ -234,6 +234,8 @@ def build(root):
 
     ro_path = P("data", "catalog", "reading_order.csv")
     reading_order = _csv(ro_path) if os.path.exists(ro_path) else []
+    vs_path = P("video", "data", "video_links_summary.json")
+    vsum = _json(vs_path) if os.path.exists(vs_path) else None
     fls_path = P("data", "pipeline", "file_links_summary.json")
     fls = _json(fls_path) if os.path.exists(fls_path) else None
     sheets_path = P("data", "pipeline", "flex_sheet_vs_table.csv")
@@ -567,6 +569,24 @@ def build(root):
                             ub = sum(int(g.get("bytes_in_listing") or 0) for g in un)
                             tail = f" Not opened: {n_(uf)} {plural(uf, 'file', 'files')} ({size(ub)}) in {len(un)} document {plural(len(un), 'group', 'groups')} of {inv_label(acc)}."
                         shelf.append(f"{cap(VAR_WORDS.get(v, v))}: not in NASA's table for {r['in_scope_tests']} of the {n_in} tests; no header in the files opened so far was accepted for it{clause}.{tail}")
+            # ---- pile 2, the video sentence of docs/video_design/video_wording.md section 5 (lunar habitat, S1),
+            # filled from pm's video/data/video_links_summary.json
+            if vsum and sid == "lunar_habitat" and nid == "S1":
+                q = vsum.get("scenarios", {}).get(sid, {})
+                ins = q.get("by_question_and_placement", {}).get("S1", {}).get("inside", {})
+                tin = q.get("tests_inside_the_ranges", {})
+                flex = vsum.get("by_investigation", {}).get("PSI-69", {})
+                ga = (tin.get("videos", {}).get("by_link_state", {}).get("two_labels_agree", {}))
+                if ins and ins.get("no_video_tied_to_the_test") == ins.get("tests") == len(counted_in) and flex and ga:
+                    gas_with = len({f["test_id"] for f in tin.get("two_labels_agree_files", [])})
+                    gas_in = tin.get("by_investigation", {}).get("PSI-159", 0)
+                    p2.append(f"Video. None of the {ins['tests']} counted droplet tests recorded inside these ranges has a video file tied to it. "
+                              f"FLEX holds {n_(flex['files'])} video files ({flex['bytes'] / 1e9:.1f} GB); {n_(flex.get('id_not_in_table', 0))} of them carry 2013-2014 test points that NASA's table (2009 to 2011) does not list; "
+                              f"their atmosphere is not stated in any file opened; they are not counted for any environment. "
+                              f"{gas_with} of the {gas_in} gas-flame tests inside the ranges (CFI-G) have a video of the test ({n_(ga['files'])} files, {ga['bytes'] / 1e9:.2f} GB), "
+                              f"but CFI-G counts for no question, and no readings were seen in the sampled CFI-G frames.")
+                elif ins:
+                    raise PileError("video_links_summary.json: the lunar S1 video sentence no longer applies (its ground in video_wording.md section 5 fails)")
             # ---- pile 2, the reading order (pile_wording.md section 9; catalog's data/catalog/reading_order.csv)
             order = []
             for r in sorted((r for r in reading_order if r["scenario_id"] == sid and r["need_id"] == nid), key=lambda r: int(r["order"])):
