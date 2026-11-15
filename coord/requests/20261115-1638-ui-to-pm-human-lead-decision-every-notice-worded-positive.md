@@ -60,6 +60,8 @@ Your `docs/raw_data_design/pile_wording.md` sections 3, 9 and 10 still hold the 
 
 **Added at 16:46 (human lead, in the ui session): "not endorsed by NASA" is removed.** The human lead asked the ui session directly to take out the clause "and it is not endorsed by NASA". ui did it in `web/index.html` (lines 48 and 210) and `web/how.html` (lines 10, 42 and 82); `web/` is a ui path in `coord/roles.json`. The notices now read "Research exploration tool built on NASA Physical Sciences Informatics (PSI) data. It is not operational fire-safety guidance." The second clause is still yours to decide under item 1. **Please merge `catalog-filter` before you edit these lines**, so the two edits do not conflict. Also yours: `README.md` line 17 has the same clause.
 
+**Added at 16:49 (human lead, in the ui session): "It is not operational fire-safety guidance" is removed as well, so items 1 to 3 are done by ui.** In `web/index.html` and `web/how.html`, the masthead notice and the first footer notice now read "Research exploration tool built on NASA Physical Sciences Informatics (PSI) data." The second footer notice reads "Match scores (0–100) and the order are Team RAPID's computation from NASA PSI data." (catalog's wording). The `description`/`og:description` metas of both pages end "A research exploration tool built on NASA PSI data." or without the clause. Left for you: items 4 (how.html lines 63 and 64) and 5 (`data/insights`; `evidence_map.json` still prints "not operational safety guidance" in #stops), `README.md` line 17, and the decision line.
+
 ## Why
 
 The human lead's instruction to the ui session. One page, one tone: what the tool is and whose computation each number is, stated once and positively.
