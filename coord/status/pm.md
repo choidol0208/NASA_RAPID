@@ -36,7 +36,7 @@ Numbers for slides and text (all recomputed by the independent check):
 - 878 with a recorded ambient oxygen: gas 386 (18.0 to 40%), fuel droplets 353 (12 to 34%), solid 139 (13.6 to 22.2%). At 30% oxygen or more: gas 246, droplets 24, solid 0.
 - Solid-fuel tests with a pressure value in the PSI experimental tables: 0 of 376.
 - Lunar habitat: 17 counted tests in the team bins, all FLEX fuel droplets, 30 to 34% oxygen, 71.2 to 72.4 kPa (1 to 2 kPa above 10.2 psi); 15 ended in disruption, 2 in completion, none in extinction. Counted tests at 30% oxygen or more and at or below 10.2 psi: 0.
-- ISS top three under config 1.5.1: BASS-II 93.4, then SAFFIRE-I and SAFFIRE-II level at 92.1. Lunar habitat: FLEX 75.2, ACME-BRE 73.6, ACME-CFI-G 71.6. Never compare scores across questions (catalog 1012, B4).
+- ISS top three under config 1.5.1: BASS-II 93.4, then SAFFIRE-I and SAFFIRE-II level at 92.1. Lunar habitat, in the page's order: FLEX 75.2, ACME-CFI-G 71.6, ACME-BRE 73.6 (inside a near-tie the result with the larger recorded share comes first, `scoring/METHOD.md` 1.7). Never compare scores across questions (catalog 1012, B4).
 
 Video side track (not on the critical path), result of three independent passes:
 - Passed: reading NASA's on-screen values (FUEL, AIR, FAN, RAD, clock) from the BASS-II videos. About 750 values compared by eye in 186 frames, none wrong. It ships only as "NASA's on-screen readings, transcribed by the team", 19 clips, with its limits stated, under `video/`.
