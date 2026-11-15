@@ -254,7 +254,7 @@ function renderResults(out, cat, insights, sc) {
       inv && inv.verification_status === "human_verified" ? h("span", { class: "tag" }, "catalog checked by a person")
         : h("span", { class: "tag is-ai" }, "catalog values AI-extracted, not yet checked"),
       r.complementary ? h("span", { class: "tag" }, "tested at your oxygen") : null,
-      r.tie_note ? h("span", { class: "tag" }, "near-tie, ordered by evidence quality") : null);
+      r.tie_note ? h("span", { class: "tag", title: r.tie_note }, "near-tie, ordered by recorded share, then evidence") : null);
     const links = h("div", { class: "links" },
       link(r.psi_url, `PSI page (${r.psi_accession})`),
       link("https://doi.org/" + r.dataset_doi, `Dataset DOI ${r.dataset_doi}`),
